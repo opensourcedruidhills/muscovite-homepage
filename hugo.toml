@@ -23,7 +23,7 @@ theme = "PaperMod"
 
 Muscovite transforms `.ddd` domain models into PostgreSQL schemas, C++ services, gRPC APIs, Qt desktop clients, and CMake build systems — from a single source of truth.
 
-11,500 lines of DSL → 55,000+ lines of production code. 9 targets. Zero manual edits.
+12,000 lines of DSL → 1.1 million lines of production code. ~97× amplification. 9 targets. Zero manual edits.
 """
 
   [[params.socialIcons]]

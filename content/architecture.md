@@ -109,15 +109,17 @@ Every DSL element has a UUID. The migration engine compares two model versions b
 
 No ambiguity. No guesswork. The UUID is the stable identity across all schema versions.
 
-## Project Metrics (v1.41.0)
+## Project Metrics (v1.42.0)
 
 | Metric | Value |
 |--------|-------|
-| DSL model lines | 11,582 |
-| Generated output lines | 55,755 |
-| DSL amplification | ~5× |
+| DSL model lines | 11,746 |
+| Generated output (FHIR Health) | 293,395 lines |
+| Generated output (Geosciences) | 809,067 lines |
+| Combined generated output | 1,102,462 lines |
+| DSL amplification | ~97× |
 | Generator targets | 9 |
-| Racket source | 111,309 lines |
+| Racket source | 112,490 lines |
 | C++ framework | 34,615 lines |
-| Architecture Decision Records | 167 |
-| Git commits | 1,048 |
+| Architecture Decision Records | 171 |
+| Git commits | 1,072 |

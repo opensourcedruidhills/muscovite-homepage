@@ -1,9 +1,9 @@
 ---
-title: "I Built a 160,000-Line Software Modernization Framework for €300"
+title: "I Built a Million-Line Software Modernization Framework for €300"
 date: 2026-03-02
 draft: false
 tags: ["ai", "code-generation", "ddd", "legacy-modernization"]
-description: "How one architect used AI agents to build Muscovite — a DDD code generation framework — entirely through prompting, in 4 months for the cost of a nice dinner."
+description: "How one architect used AI agents to build Muscovite — a DDD code generation framework — entirely through prompting, in 3.5 months for the cost of a nice dinner."
 ShowToc: true
 ---
 
@@ -13,7 +13,7 @@ ShowToc: true
 
 In November 2025, I started an experiment. I had been carrying ideas about legacy software modernization for roughly 20 years — partial implementations, architectural sketches, patterns I'd validated across dozens of enterprise engagements. With AI coding agents becoming genuinely capable, I decided to test a thesis: **could I build the framework I'd always wanted, entirely through prompting?**
 
-Six weeks and approximately €300 in API credits later, I had Muscovite: a domain-driven code generation framework at version 1.41, with 1,048 git commits, 111,000 lines of Racket generators, a 34,600-line C++ framework, 170 Architecture Decision Records, and a 26-bounded-context geosciences domain model derived from USGS best practices.
+Three and a half months and approximately €300 in API credits later, I had Muscovite: a domain-driven code generation framework at version 1.42, with 1,072 git commits, 112,000 lines of Racket generators, a 34,600-line C++ framework, 171 Architecture Decision Records, and a 26-bounded-context geosciences domain model derived from USGS best practices.
 
 ## What Muscovite Does
 
@@ -37,7 +37,7 @@ CONTEXT Volcanology @uuid "f763d73f-..." {
 
 From this, Muscovite generates: PostgreSQL schemas with constraints and seed data, C++ entity structs with strong types, gRPC service definitions with pagination, Qt desktop views, CMake build targets, and Sqitch deploy/revert/verify scripts.
 
-**The amplification ratio**: 11,582 lines of `.ddd` model generate 55,755 lines of deployable code. That's roughly 5× — but the real metric is what it costs to *produce* the `.ddd` model, which with AI assistance is measured in hours, not months.
+**The amplification ratio**: 12,000 lines of `.ddd` model generate over 1.1 million lines of deployable code across the two main example projects. That's roughly 97× — but the real metric is what it costs to *produce* the `.ddd` model, which with AI assistance is measured in hours, not months.
 
 ## The Architecture That Makes It Work
 

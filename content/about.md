@@ -33,7 +33,7 @@ Muscovite eliminates this duplication. A single `.ddd` file describes your domai
 
 ## Who Built It
 
-**Johannes Lochmann** — Staff Engineer with 20+ years in enterprise systems, specializing in DDD, CQRS, and legacy software modernization. Muscovite was built entirely through AI-assisted development: zero lines of code written by hand, approximately €300 in API credits, 1,000+ commits over 4 months.
+**Johannes Lochmann** — Staff Engineer with 20+ years in enterprise systems, specializing in DDD and legacy software modernization. Muscovite was built entirely through AI-assisted development: zero lines of code written by hand, approximately €300 in API credits, 1,072 commits over 3.5 months.
 
 ## The Thesis
 

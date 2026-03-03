@@ -82,7 +82,7 @@ Each bounded context compiles into its own shared library. Changing one context 
 
 ## Climate-Efficient Computation
 
-C++ generates native machine code with no JIT warmup, no GC pauses, and minimal memory pressure. When a domain model generates 300,000+ lines across 26 contexts, the efficiency gains compound: fewer servers, lower energy per transaction, smaller carbon footprint.
+C++ generates native machine code with no JIT warmup, no GC pauses, and minimal memory pressure. When a domain model generates 800,000+ lines across 26 contexts, the efficiency gains compound: fewer servers, lower energy per transaction, smaller carbon footprint.
 
 ## Brownfield Legacy Extraction
 
@@ -90,4 +90,4 @@ Point an AI agent at a live legacy database → it discovers the schema, identif
 
 ## AI-Native Development Workflow
 
-170+ Architecture Decision Records serve as persistent context for AI agents. Auto-generated documentation (CONTEXT.md, GROUND-TRUTH.md, DSL.md) ensures every agent session inherits accumulated architectural intent. The project was built 100% through AI-assisted prompting as a proof of concept.
+171 Architecture Decision Records serve as persistent context for AI agents. Auto-generated documentation (CONTEXT.md, GROUND-TRUTH.md, DSL.md) ensures every agent session inherits accumulated architectural intent. The project was built 100% through AI-assisted prompting as a proof of concept.
