@@ -95,4 +95,4 @@ Muscovite is dual-licensed: **AGPL-3.0** for open-source use, **commercial licen
 
 [Source code on GitHub](https://github.com/opensourcedruidhills/muscovite) · [Commercial licensing](mailto:muscovite-licensing@johanneslochmann.net)
 
-*Johannes Lochmann is a Staff Engineer specializing in DDD, CQRS, and legacy software modernization. He has been building enterprise systems for 20 years and prompting AI agents to build them for approximately 4 months.*
+*Johannes Lochmann is a Staff Engineer specializing in legacy software modernization but doesn't shy away from gereefield projects, either. He has been building enterprise systems for 20+ years and prompting AI agents to build them for approximately 6 months.*
