@@ -72,16 +72,10 @@ Muscovite transforms `.ddd` domain models into PostgreSQL schemas, C++ services,
     weight = 50
 
   [[menu.main]]
-    identifier = "roadmap"
-    name = "Roadmap"
-    url = "/roadmap/"
-    weight = 60
-
-  [[menu.main]]
     identifier = "license"
     name = "License"
     url = "/license/"
-    weight = 70
+    weight = 60
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
