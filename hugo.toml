@@ -1,0 +1,94 @@
+baseURL = "https://muscovite.johanneslochmann.net/"
+languageCode = "en-us"
+title = "Muscovite"
+theme = "PaperMod"
+
+[params]
+  description = "A declarative DDD code generation framework — write the domain model once, generate the entire stack."
+  author = "Johannes Lochmann"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  env = "production"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+
+  [params.homeInfoParams]
+    Title = "Muscovite"
+    Content = """
+**Declare your domain model. Generate the entire stack.**
+
+Muscovite transforms `.ddd` domain models into PostgreSQL schemas, C++ services, gRPC APIs, Qt desktop clients, and CMake build systems — from a single source of truth.
+
+11,500 lines of DSL → 55,000+ lines of production code. 9 targets. Zero manual edits.
+"""
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/opensourcedruidhills/muscovite"
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:muscovite-licensing@johanneslochmann.net"
+
+  [params.assets]
+    favicon = "/favicon.ico"
+
+  [params.label]
+    text = "Muscovite"
+
+[menu]
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "features"
+    name = "Features"
+    url = "/features/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "architecture"
+    name = "Architecture"
+    url = "/architecture/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog/"
+    weight = 40
+
+  [[menu.main]]
+    identifier = "docs"
+    name = "Documentation"
+    url = "/docs/"
+    weight = 50
+
+  [[menu.main]]
+    identifier = "roadmap"
+    name = "Roadmap"
+    url = "/roadmap/"
+    weight = 60
+
+  [[menu.main]]
+    identifier = "license"
+    name = "License"
+    url = "/license/"
+    weight = 70
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = "monokai"
