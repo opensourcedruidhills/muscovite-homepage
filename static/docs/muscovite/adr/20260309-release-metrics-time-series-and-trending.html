@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Release Metrics Time Series and
+Trending — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Release Metrics Time Series and Trending</span>
+</nav>
+
+<h1>ADR: Release Metrics Time Series and Trending</h1>
+
+
+<h1 id="adr-release-metrics-time-series-and-trending">ADR: Release
+Metrics Time Series and Trending</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-09</li>
+<li><strong>Supersedes</strong>: None</li>
+<li><strong>Extends</strong>: ADR
+20260206-build-profiling-instrumentation, ADR
+20260307-mandatory-multi-layer-test-gates, ADR
+20260210-racket-generator-test-suite</li>
+<li><strong>Implements</strong>: Iteration v1.60.0 (metrics track)</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Muscovite has three categories of release-time metrics:</p>
+<ol type="1">
+<li><p><strong>Test timing</strong> — well-implemented (FTR-086).
+<code>collect-release-metrics.sh</code> runs 8 test layers, records
+per-layer wall-clock seconds, and saves versioned baselines to
+<code>metrics/baselines/vX.Y.Z.json</code>. The system brief (Section
+11) displays these.</p></li>
+<li><p><strong>Build timing</strong> — tools exist but are dormant.
+<code>extract-ninja-metrics.py</code> and
+<code>merge-build-metrics.py</code> (FTR-010, v1.6.0) parse Ninja logs
+and produce JSON, but <code>release.sh</code> never calls them.
+<code>build-history.jsonl</code> has exactly one entry from February
+2026. The system brief Section 10 usually shows "Build metrics not
+available."</p></li>
+<li><p><strong>Code coverage</strong> — infrastructure exists, zero
+execution. CMake <code>coverage</code> preset with gcov flags,
+<code>coverage-report</code> lcov target, and <code>raco cover</code>
+are all defined in ADRs and CMake files. No coverage data has ever been
+collected. Not mentioned in <code>release.sh</code>.</p></li>
+</ol>
+<p>The original plan (ADR 20260206) explicitly called for time-series
+trending with regression detection at a 15% threshold. This was
+partially implemented for build timing but never activated. Test timing
+baselines are saved per release but no trend analysis exists — each
+release only compares against the previous baseline for pass/fail
+regressions, not for timing trends.</p>
+<p><strong>The gap</strong>: We collect pass/fail per release but not
+<em>how fast</em> things are getting or <em>how much code is
+covered</em>. Without trends, we cannot detect gradual performance
+degradation or coverage erosion.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-baseline-files-are-the-time-series">1. Baseline Files Are the
+Time Series</h3>
+<p>Each <code>metrics/baselines/vX.Y.Z.json</code> becomes the canonical
+per-release metrics record. The schema is extended to include build
+timing and coverage data alongside the existing test layer data.</p>
+<p><strong>Extended baseline schema</strong> (new fields marked with
+<code>+</code>):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;vX.Y.Z&quot;</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;ISO8601&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;git_sha&quot;</span><span class="fu">:</span> <span class="st">&quot;8-char&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;all_green&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;totals&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;layers_passed&quot;</span><span class="fu">:</span> <span class="dv">8</span><span class="fu">,</span> <span class="dt">&quot;layers_failed&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">&quot;layers_skipped&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">&quot;regressions&quot;</span><span class="fu">:</span> <span class="dv">0</span> <span class="fu">},</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;racket_detail&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;suites&quot;</span><span class="fu">:</span> <span class="dv">93</span><span class="fu">,</span> <span class="dt">&quot;passed&quot;</span><span class="fu">:</span> <span class="dv">93</span><span class="fu">,</span> <span class="dt">&quot;failed&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">&quot;wall_time_ms&quot;</span><span class="fu">:</span> <span class="dv">439783</span> <span class="fu">},</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cpp_detail&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;tests&quot;</span><span class="fu">:</span> <span class="dv">28</span><span class="fu">,</span> <span class="dt">&quot;passed&quot;</span><span class="fu">:</span> <span class="dv">27</span><span class="fu">,</span> <span class="dt">&quot;failed&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">&quot;wall_time_s&quot;</span><span class="fu">:</span> <span class="fl">11.1</span> <span class="fu">},</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;layers&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;layer-name&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="st">&quot;pass|fail|skip&quot;</span><span class="fu">,</span> <span class="dt">&quot;wall_s&quot;</span><span class="fu">:</span> <span class="er">N</span> <span class="fu">}</span> <span class="fu">},</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;regressions_detail&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;baseline_compared&quot;</span><span class="fu">:</span> <span class="st">&quot;vX.Y.Z&quot;</span><span class="fu">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="er">+</span> <span class="dt">&quot;build_detail&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s1_framework_wall_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s1_compile_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s1_link_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s2_generation_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s3_project_wall_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s3_compile_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;s3_link_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;total_build_wall_ms&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;nproc&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;ram_gb&quot;</span><span class="fu">:</span> <span class="er">N.N</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="er">+</span> <span class="fu">},</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="er">+</span> <span class="dt">&quot;coverage_detail&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;cpp_line_pct&quot;</span><span class="fu">:</span> <span class="er">N.N</span><span class="fu">,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;cpp_branch_pct&quot;</span><span class="fu">:</span> <span class="er">N.N</span><span class="fu">,</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;cpp_function_pct&quot;</span><span class="fu">:</span> <span class="er">N.N</span><span class="fu">,</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;racket_module_pct&quot;</span><span class="fu">:</span> <span class="er">N.N</span><span class="fu">,</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;racket_expression_pct&quot;</span><span class="fu">:</span> <span class="er">N.N</span><span class="fu">,</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;racket_coverable_modules&quot;</span><span class="fu">:</span> <span class="er">N</span><span class="fu">,</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="er">+</span>   <span class="dt">&quot;racket_covered_modules&quot;</span><span class="fu">:</span> <span class="er">N</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="er">+</span> <span class="fu">}</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="2-build-profiling-wired-into-release-ceremony">2. Build
+Profiling Wired into Release Ceremony</h3>
+<p><code>release.sh</code> calls <code>merge-build-metrics.py</code>
+after the C++ build gate passes. This:</p>
+<ul>
+<li>Appends to <code>metrics/build-history.jsonl</code> (high-frequency,
+non-release snapshots continue to work)</li>
+<li>Feeds <code>build_detail</code> into the baseline via
+<code>collect-release-metrics.sh</code></li>
+</ul>
+<h3 id="3-c-coverage-collected-every-release">3. C++ Coverage Collected
+Every Release</h3>
+<p>After the standard test gates pass (using the <code>debug</code>
+preset), <code>release.sh</code> runs a second build+test cycle with the
+<code>coverage</code> preset, then extracts lcov summary percentages.
+This adds ~5 minutes to the release ceremony but provides
+line/branch/function coverage.</p>
+<p><strong>Sequence</strong>: <code>cmake --preset coverage</code> →
+<code>cmake --build --preset coverage</code> →
+<code>ctest --preset coverage</code> →
+<code>cmake --build --preset coverage --target coverage-report</code> →
+parse lcov summary.</p>
+<h3 id="4-racket-coverage-best-effort">4. Racket Coverage
+Best-Effort</h3>
+<p><code>raco cover</code> is run on the subset of test suites that are
+rackunit-compatible. As tests are migrated (ADR 20260210 Phase 3),
+coverage increases. The metric tracks <code>coverable_modules</code>
+(denominator) and <code>covered_modules</code> (numerator) so the
+percentage is always meaningful even with partial compatibility.</p>
+<h3 id="5-coverage-is-tracked-not-gated">5. Coverage Is Tracked, Not
+Gated</h3>
+<p>Coverage percentages are recorded in baselines and displayed in the
+system brief, but coverage thresholds do NOT block releases. Only the
+trend direction matters:</p>
+<ul>
+<li><strong>Improving or stable</strong>: ✅ no action</li>
+<li><strong>Declining &gt;5% from previous release</strong>: ⚠️ warning
+in system brief</li>
+<li><strong>Declining &gt;15% from previous release</strong>: 🔴 alert
+(still not blocking — investigation required)</li>
+</ul>
+<p>This avoids the "coverage theater" antipattern where teams game
+percentages. The time series lets the project owner spot real
+trends.</p>
+<h3 id="6-trend-analysis-tool">6. Trend Analysis Tool</h3>
+<p><code>tools/metrics-trend.sh</code> reads all
+<code>metrics/baselines/v*.json</code> files (sorted by version) and
+produces a trend report:</p>
+<ul>
+<li>Last 10 releases in a table with ▲/▼ deltas for each metric</li>
+<li>Regression flags for &gt;15% build time increase or &gt;5% coverage
+decrease</li>
+<li>Output format: both human-readable (terminal table) and JSON (for
+system brief consumption)</li>
+</ul>
+<h3 id="7-system-brief-enhancement">7. System Brief Enhancement</h3>
+<p><code>generate-system-brief.sh</code> Sections 10 and 11 are enhanced
+to:</p>
+<ul>
+<li>Show build timing trends (last 5 releases)</li>
+<li>Show coverage trends (last 5 releases)</li>
+<li>Show timing trends per test layer (last 5 releases)</li>
+<li>Flag regressions with ⚠️/🔴 indicators</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Every release produces a complete metrics snapshot: test pass/fail,
+test timing, build timing, code coverage</li>
+<li>Time series enables trend analysis — gradual degradation becomes
+visible</li>
+<li>System brief becomes a living dashboard, not a snapshot</li>
+<li><code>build-history.jsonl</code> continues for development-time
+profiling; baselines are the release-time authority</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Release ceremony adds ~5 minutes for coverage build+test cycle</li>
+<li>Racket coverage will be partial until test migration completes (ADR
+20260210)</li>
+<li>More data in baselines means more to maintain in schema
+evolution</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><code>build-history.jsonl</code> retains its role for
+high-frequency, non-release snapshots (manual
+<code>merge-build-metrics.py</code> calls during development)</li>
+<li>FTR-010 is retroactively marked complete — tools shipped, wiring was
+the missing piece</li>
+<li>FTR-304 (v1.63.0, DECIDE branch coverage) is unaffected — it
+measures a different thing (logic branch coverage of generated code, not
+source code coverage)</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20260206-build-profiling-instrumentation (build timing
+architecture)</li>
+<li>ADR 20260307-mandatory-multi-layer-test-gates (test gate
+enforcement)</li>
+<li>ADR 20260210-racket-generator-test-suite (raco cover plan)</li>
+<li>FTR-010 (build profiling tools — implemented, not wired)</li>
+<li>FTR-086 (test timing — fully operational)</li>
+<li>FTR-304 (DECIDE branch coverage — v1.63.0, different scope)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

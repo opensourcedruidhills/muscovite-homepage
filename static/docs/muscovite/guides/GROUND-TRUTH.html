@@ -689,6 +689,112 @@ on <code>GetXxxRequest</code> | | gRPC |
 <code>Q_PROPERTY(QDateTime validAt)</code> +
 <code>Q_PROPERTY(QDateTime systemAt)</code> (system-versioned only)
 |</p>
+<h3 id="18-expression-ast-ftr-284-adr-20260307-tier-1">18. Expression
+AST (FTR-284, ADR 20260307 Tier 1)</h3>
+<p>Expression nodes for CHECK constraints, guards, and lifecycle hooks.
+9 base nodes + 5 collection predicate nodes.</p>
+<p><strong>Base expression nodes</strong>
+(<code>ddd-types.rkt:807-852</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Struct</th>
+<th>Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>binary-expr</code></td>
+<td><code>op left right</code></td>
+<td>Binary: <code>=</code>, <code>!=</code>, <code>&lt;</code>,
+<code>&gt;</code>, <code>AND</code>, <code>OR</code>, <code>+</code>,
+<code>-</code>, <code>*</code>, <code>/</code>,
+<code>matches</code></td>
+</tr>
+<tr>
+<td><code>unary-expr</code></td>
+<td><code>op operand</code></td>
+<td>Unary: <code>not</code>, <code>-</code></td>
+</tr>
+<tr>
+<td><code>field-ref</code></td>
+<td><code>entity field</code></td>
+<td>Field reference: <code>entity.field</code> or <code>field</code>
+(entity=#f)</td>
+</tr>
+<tr>
+<td><code>literal-expr</code></td>
+<td><code>value</code></td>
+<td>Literal: number, string, boolean, <code>'null</code></td>
+</tr>
+<tr>
+<td><code>match-expr</code></td>
+<td><code>field pattern</code></td>
+<td>Pattern match: <code>field MATCHES "regex"</code></td>
+</tr>
+<tr>
+<td><code>call-expr</code></td>
+<td><code>func args</code></td>
+<td>Function call: <code>func(args...)</code></td>
+</tr>
+<tr>
+<td><code>null-check-expr</code></td>
+<td><code>field negated?</code></td>
+<td><code>IS NULL</code> / <code>IS NOT NULL</code></td>
+</tr>
+<tr>
+<td><code>in-expr</code></td>
+<td><code>field values</code></td>
+<td><code>field IN (val1, val2, ...)</code></td>
+</tr>
+<tr>
+<td><code>between-expr</code></td>
+<td><code>field low high</code></td>
+<td><code>field BETWEEN low AND high</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Collection predicate nodes</strong>
+(<code>ddd-types.rkt:854-886</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Struct</th>
+<th>Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>not-in-expr</code></td>
+<td><code>field values</code></td>
+<td><code>field NOT IN (val1, val2, ...)</code></td>
+</tr>
+<tr>
+<td><code>empty-check-expr</code></td>
+<td><code>field negated?</code></td>
+<td><code>field IS EMPTY</code> / <code>field IS NOT EMPTY</code></td>
+</tr>
+<tr>
+<td><code>set-op-expr</code></td>
+<td><code>op left right</code></td>
+<td>Set ops: <code>'intersects</code>, <code>'subset-of</code>,
+<code>'contains-all</code></td>
+</tr>
+<tr>
+<td><code>contains-expr</code></td>
+<td><code>list-expr value-expr</code></td>
+<td><code>CONTAINS(list-field, value)</code></td>
+</tr>
+<tr>
+<td><code>list-expr</code></td>
+<td><code>items</code></td>
+<td>List literal: <code>(v1, v2, ...)</code> or
+<code>[v1, v2, ...]</code></td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="ii-naming-conventions">II. Naming Conventions</h2>
 <h3 id="the-contract-dsl--all-layers">The Contract: DSL → All
