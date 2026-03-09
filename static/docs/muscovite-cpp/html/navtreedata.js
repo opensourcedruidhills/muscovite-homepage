@@ -64,7 +64,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_2home_2jolo_2muscovite_planning_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
+"_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
 "classmuscovite_1_1geo_1_1Polygon.html#a08e7e32f688179565fc1b19f76aa1bdc",
 "classmuscovite_1_1qt_1_1AuthManager.html#a26534df73ef405862221eb1bbcc2d020",
 "classmuscovite_1_1qt_1_1validation_1_1MockUniquenessChecker.html#a331ce4d118f19b6190ce6787d019811c",

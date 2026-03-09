@@ -1,0 +1,2097 @@
+{
+  "bibliography": [
+    {
+      "authors": [
+        "Eric Evans"
+      ],
+      "id": "evans-2003",
+      "isbn": "978-0-321-12521-7",
+      "publisher": "Addison-Wesley",
+      "title": "Domain-Driven Design: Tackling Complexity in the Heart of Software",
+      "type": "book",
+      "year": 2003
+    },
+    {
+      "authors": [
+        "Vaughn Vernon"
+      ],
+      "id": "vernon-2013",
+      "isbn": "978-0-321-83457-7",
+      "publisher": "Addison-Wesley",
+      "title": "Implementing Domain-Driven Design",
+      "type": "book",
+      "year": 2013
+    },
+    {
+      "authors": [
+        "Scott Millett",
+        "Nick Tune"
+      ],
+      "id": "millett-2015",
+      "isbn": "978-1-118-71470-6",
+      "publisher": "Wrox",
+      "title": "Patterns, Principles, and Practices of Domain-Driven Design",
+      "type": "book",
+      "year": 2015
+    },
+    {
+      "authors": [
+        "Greg Young"
+      ],
+      "id": "young-2010",
+      "publisher": "Self-published",
+      "title": "CQRS Documents",
+      "type": "paper",
+      "url": "https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf",
+      "year": 2010
+    }
+  ],
+  "bounded_contexts": [
+    {
+      "aggregates": [
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Priority levels for tasks",
+          "event_sourced": false,
+          "name": "Priority",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Priority levels for tasks",
+            "fields": [
+              {
+                "doc": "Machine-readable code",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "code",
+                "nullable": true,
+                "searchable": false,
+                "unique": true,
+                "uuid": "a0000001-0002-4000-8000-000000000001-code"
+              },
+              {
+                "doc": "Human-readable display label",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "display",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0002-4000-8000-000000000001-display"
+              },
+              {
+                "doc": "Extended description",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "definition",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0002-4000-8000-000000000001-definition"
+              },
+              {
+                "doc": "Soft delete flag",
+                "dsl_type": "BOOLEAN",
+                "field_constraints": [],
+                "name": "is_active",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0002-4000-8000-000000000001-is_active"
+              },
+              {
+                "doc": "Display ordering",
+                "dsl_type": "INTEGER",
+                "field_constraints": [],
+                "name": "sort_order",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0002-4000-8000-000000000001-sort_order"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": "Primary key",
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": true,
+              "searchable": false,
+              "unique": false,
+              "uuid": "a0000001-0002-4000-8000-000000000001-id"
+            },
+            "invariants": [],
+            "name": "Priority",
+            "relationships": [],
+            "source": null,
+            "synonyms": [],
+            "uses_value_objects": [],
+            "uuid": "a0000001-0002-4000-8000-000000000001"
+          },
+          "uuid": "a0000001-0002-4000-8000-000000000001-agg"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Lifecycle status codes for tasks",
+          "event_sourced": false,
+          "name": "Status",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Lifecycle status codes for tasks",
+            "fields": [
+              {
+                "doc": "Machine-readable code",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "code",
+                "nullable": true,
+                "searchable": false,
+                "unique": true,
+                "uuid": "a0000001-0003-4000-8000-000000000001-code"
+              },
+              {
+                "doc": "Human-readable display label",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "display",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0003-4000-8000-000000000001-display"
+              },
+              {
+                "doc": "Extended description",
+                "dsl_type": "TEXT",
+                "field_constraints": [],
+                "name": "definition",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0003-4000-8000-000000000001-definition"
+              },
+              {
+                "doc": "Soft delete flag",
+                "dsl_type": "BOOLEAN",
+                "field_constraints": [],
+                "name": "is_active",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0003-4000-8000-000000000001-is_active"
+              },
+              {
+                "doc": "Display ordering",
+                "dsl_type": "INTEGER",
+                "field_constraints": [],
+                "name": "sort_order",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "a0000001-0003-4000-8000-000000000001-sort_order"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": "Primary key",
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": true,
+              "searchable": false,
+              "unique": false,
+              "uuid": "a0000001-0003-4000-8000-000000000001-id"
+            },
+            "invariants": [],
+            "name": "Status",
+            "relationships": [],
+            "source": null,
+            "synonyms": [],
+            "uses_value_objects": [],
+            "uuid": "a0000001-0003-4000-8000-000000000001"
+          },
+          "uuid": "a0000001-0003-4000-8000-000000000001-agg"
+        }
+      ],
+      "doc": null,
+      "entities": [],
+      "events": [],
+      "grounding": null,
+      "lookup_tables": [
+        {
+          "doc": "Priority levels for tasks",
+          "extra_fields": [],
+          "name": "Priority",
+          "seed_path": "seeds/basedata/priority.json",
+          "uuid": "a0000001-0002-4000-8000-000000000001"
+        },
+        {
+          "doc": "Lifecycle status codes for tasks",
+          "extra_fields": [],
+          "name": "Status",
+          "seed_path": "seeds/basedata/status.json",
+          "uuid": "a0000001-0003-4000-8000-000000000001"
+        }
+      ],
+      "name": "Basedata",
+      "projections": [],
+      "relationships": [],
+      "sagas": [],
+      "sourced_events": [],
+      "specifications": [],
+      "state_machines": [],
+      "strong_types": [],
+      "uuid": "a0000001-0001-4000-8000-000000000001",
+      "value_objects": []
+    },
+    {
+      "aggregates": [
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "User account aggregate",
+          "event_sourced": false,
+          "name": "Principal",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "System user account with authentication credentials",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "username",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00002-0002-4002-8002-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "password_hash",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "display_name",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Boolean",
+                "field_constraints": [],
+                "name": "is_active",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Boolean",
+                "field_constraints": [],
+                "name": "is_locked",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000007"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Integer",
+                "field_constraints": [],
+                "name": "failed_attempts",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000008"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "locked_until",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-000000000009"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "password_changed_at",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-00000000000a"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "created_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-00000000000b"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "updated_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00002-0002-4002-8002-00000000000c"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00002-0002-4002-8002-000000000002"
+            },
+            "invariants": [
+              {
+                "description": "LENGTH ( username ) >= 3",
+                "expression": "()",
+                "name": "username_min_length",
+                "sql_check": "LENGTH ( username ) >= 3"
+              },
+              {
+                "description": "LENGTH ( username ) <= 64",
+                "expression": "()",
+                "name": "username_max_length",
+                "sql_check": "LENGTH ( username ) <= 64"
+              },
+              {
+                "description": "failed_attempts >= 0",
+                "expression": "()",
+                "name": "failed_attempts_positive",
+                "sql_check": "failed_attempts >= 0"
+              }
+            ],
+            "name": "Principal",
+            "relationships": [],
+            "source": null,
+            "synonyms": [
+              "user",
+              "account",
+              "login"
+            ],
+            "uses_value_objects": [],
+            "uuid": "5ec00002-0002-4002-8002-000000000001"
+          },
+          "uuid": "5ec10001-1001-4001-8001-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Group aggregate for organizing users",
+          "event_sourced": false,
+          "name": "PrincipalGroup",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Group for organizing principals with shared permissions",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "name",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00003-0003-4003-8003-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "description",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00003-0003-4003-8003-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Boolean",
+                "field_constraints": [],
+                "name": "is_active",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00003-0003-4003-8003-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "created_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00003-0003-4003-8003-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "updated_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00003-0003-4003-8003-000000000007"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00003-0003-4003-8003-000000000002"
+            },
+            "invariants": [],
+            "name": "PrincipalGroup",
+            "relationships": [],
+            "source": null,
+            "synonyms": [
+              "role",
+              "user_group"
+            ],
+            "uses_value_objects": [],
+            "uuid": "5ec00003-0003-4003-8003-000000000001"
+          },
+          "uuid": "5ec10002-1002-4002-8002-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Permission aggregate",
+          "event_sourced": false,
+          "name": "Privilege",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Named permission for a specific resource and action",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "name",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00004-0004-4004-8004-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "description",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00004-0004-4004-8004-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "resource",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00004-0004-4004-8004-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "action",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00004-0004-4004-8004-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "created_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00004-0004-4004-8004-000000000007"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00004-0004-4004-8004-000000000002"
+            },
+            "invariants": [
+              {
+                "description": "ACTION IN ( 'create' , 'read' , 'update' , 'delete' , 'execute' )",
+                "expression": "()",
+                "name": "action_valid",
+                "sql_check": "ACTION IN ( 'create' , 'read' , 'update' , 'delete' , 'execute' )"
+              }
+            ],
+            "name": "Privilege",
+            "relationships": [],
+            "source": null,
+            "synonyms": [
+              "permission",
+              "right",
+              "capability"
+            ],
+            "uses_value_objects": [],
+            "uuid": "5ec00004-0004-4004-8004-000000000001"
+          },
+          "uuid": "5ec10003-1003-4003-8003-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "User-group membership aggregate",
+          "event_sourced": false,
+          "name": "GroupMembership",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Association between a principal and a group",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "principal_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00005-0005-4005-8005-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "group_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00005-0005-4005-8005-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "granted_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00005-0005-4005-8005-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "granted_by",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00005-0005-4005-8005-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "expires_at",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00005-0005-4005-8005-000000000007"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00005-0005-4005-8005-000000000002"
+            },
+            "invariants": [],
+            "name": "GroupMembership",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "principal",
+                "required": true,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00005-0005-4005-8005-000000000008"
+              },
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "group",
+                "required": true,
+                "target_context": false,
+                "target_entity": "PrincipalGroup",
+                "uuid": "5ec00005-0005-4005-8005-000000000009"
+              },
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "grantor",
+                "required": false,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00005-0005-4005-8005-00000000000a"
+              }
+            ],
+            "source": null,
+            "synonyms": [],
+            "uses_value_objects": [],
+            "uuid": "5ec00005-0005-4005-8005-000000000001"
+          },
+          "uuid": "5ec10004-1004-4004-8004-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Group-privilege assignment aggregate",
+          "event_sourced": false,
+          "name": "GroupPrivilege",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Association between a group and a privilege",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "group_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00006-0006-4006-8006-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "privilege_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00006-0006-4006-8006-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "granted_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00006-0006-4006-8006-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "granted_by",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00006-0006-4006-8006-000000000006"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00006-0006-4006-8006-000000000002"
+            },
+            "invariants": [],
+            "name": "GroupPrivilege",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "group",
+                "required": true,
+                "target_context": false,
+                "target_entity": "PrincipalGroup",
+                "uuid": "5ec00006-0006-4006-8006-000000000007"
+              },
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "privilege",
+                "required": true,
+                "target_context": false,
+                "target_entity": "Privilege",
+                "uuid": "5ec00006-0006-4006-8006-000000000008"
+              },
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "grantor",
+                "required": false,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00006-0006-4006-8006-000000000009"
+              }
+            ],
+            "source": null,
+            "synonyms": [],
+            "uses_value_objects": [],
+            "uuid": "5ec00006-0006-4006-8006-000000000001"
+          },
+          "uuid": "5ec10005-1005-4005-8005-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Authentication session aggregate",
+          "event_sourced": false,
+          "name": "AuthSession",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Active authentication session with tokens",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "principal_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "access_token",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00007-0007-4007-8007-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "refresh_token",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00007-0007-4007-8007-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "client_ip",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "user_agent",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-000000000007"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "created_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-000000000008"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "expires_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-000000000009"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "refresh_expires_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-00000000000a"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "revoked_at",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00007-0007-4007-8007-00000000000b"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00007-0007-4007-8007-000000000002"
+            },
+            "invariants": [],
+            "name": "AuthSession",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "principal",
+                "required": true,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00007-0007-4007-8007-00000000000c"
+              }
+            ],
+            "source": null,
+            "synonyms": [
+              "session",
+              "login_session",
+              "auth_token"
+            ],
+            "uses_value_objects": [],
+            "uuid": "5ec00007-0007-4007-8007-000000000001"
+          },
+          "uuid": "5ec10006-1006-4006-8006-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Revoked token tracking aggregate",
+          "event_sourced": false,
+          "name": "TokenBlacklist",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Tokens that have been explicitly revoked before expiry",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "token_hash",
+                "nullable": false,
+                "searchable": false,
+                "unique": true,
+                "uuid": "5ec00008-0008-4008-8008-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "principal_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00008-0008-4008-8008-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "revoked_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00008-0008-4008-8008-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "reason",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00008-0008-4008-8008-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "expires_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00008-0008-4008-8008-000000000007"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00008-0008-4008-8008-000000000002"
+            },
+            "invariants": [],
+            "name": "TokenBlacklist",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "principal",
+                "required": true,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00008-0008-4008-8008-000000000008"
+              }
+            ],
+            "source": null,
+            "synonyms": [],
+            "uses_value_objects": [],
+            "uuid": "5ec00008-0008-4008-8008-000000000001"
+          },
+          "uuid": "5ec10007-1007-4007-8007-000000000001"
+        },
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Security audit log aggregate",
+          "event_sourced": false,
+          "name": "SecurityAuditLog",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [],
+            "doc": "Immutable audit trail of security-related events",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "principal_id",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000003"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "event_type",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000004"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "event_time",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000005"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "client_ip",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000006"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "user_agent",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000007"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "resource",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000008"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "action",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-000000000009"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "result",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-00000000000a"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "details",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "5ec00009-0009-4009-8009-00000000000b"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "5ec00009-0009-4009-8009-000000000002"
+            },
+            "invariants": [
+              {
+                "description": "event_type IN ( 'login' , 'logout' , 'login_failed' , 'password_change' , 'privilege_grant' , 'privilege_revoke' , 'session_refresh' , 'token_revoke' , 'account_lock' , 'account_unlock' )",
+                "expression": "()",
+                "name": "event_type_valid",
+                "sql_check": "event_type IN ( 'login' , 'logout' , 'login_failed' , 'password_change' , 'privilege_grant' , 'privilege_revoke' , 'session_refresh' , 'token_revoke' , 'account_lock' , 'account_unlock' )"
+              },
+              {
+                "description": "result IN ( 'success' , 'failure' , 'denied' )",
+                "expression": "()",
+                "name": "result_valid",
+                "sql_check": "result IN ( 'success' , 'failure' , 'denied' )"
+              }
+            ],
+            "name": "SecurityAuditLog",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "principal",
+                "required": false,
+                "target_context": false,
+                "target_entity": "Principal",
+                "uuid": "5ec00009-0009-4009-8009-00000000000c"
+              }
+            ],
+            "source": null,
+            "synonyms": [
+              "audit_log",
+              "security_log"
+            ],
+            "uses_value_objects": [],
+            "uuid": "5ec00009-0009-4009-8009-000000000001"
+          },
+          "uuid": "5ec10008-1008-4008-8008-000000000001"
+        }
+      ],
+      "doc": null,
+      "entities": [],
+      "events": [],
+      "grounding": null,
+      "lookup_tables": [],
+      "name": "security",
+      "projections": [],
+      "relationships": [
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "principal",
+          "required": true,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00005-0005-4005-8005-000000000008"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "group",
+          "required": true,
+          "target_context": false,
+          "target_entity": "PrincipalGroup",
+          "uuid": "5ec00005-0005-4005-8005-000000000009"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "grantor",
+          "required": false,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00005-0005-4005-8005-00000000000a"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "group",
+          "required": true,
+          "target_context": false,
+          "target_entity": "PrincipalGroup",
+          "uuid": "5ec00006-0006-4006-8006-000000000007"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "privilege",
+          "required": true,
+          "target_context": false,
+          "target_entity": "Privilege",
+          "uuid": "5ec00006-0006-4006-8006-000000000008"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "grantor",
+          "required": false,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00006-0006-4006-8006-000000000009"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "principal",
+          "required": true,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00007-0007-4007-8007-00000000000c"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "principal",
+          "required": true,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00008-0008-4008-8008-000000000008"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "principal",
+          "required": false,
+          "target_context": false,
+          "target_entity": "Principal",
+          "uuid": "5ec00009-0009-4009-8009-00000000000c"
+        }
+      ],
+      "sagas": [],
+      "sourced_events": [],
+      "specifications": [],
+      "state_machines": [],
+      "strong_types": [],
+      "uuid": "5ec00001-0001-4001-8001-000000000001",
+      "value_objects": []
+    },
+    {
+      "aggregates": [
+        {
+          "children": [],
+          "concurrency": null,
+          "doc": "Tag aggregate",
+          "event_sourced": false,
+          "name": "Tag",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [
+              {
+                "fallback": null,
+                "format_type": "short",
+                "pattern": "{name}"
+              },
+              {
+                "fallback": null,
+                "format_type": "full",
+                "pattern": "{name}"
+              }
+            ],
+            "doc": "A categorization label applied to tasks",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "name",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0002-4000-8000-000000000011"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "color",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0002-4000-8000-000000000012"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "b0000001-0002-4000-8000-000000000010"
+            },
+            "invariants": [],
+            "name": "Tag",
+            "relationships": [],
+            "source": null,
+            "synonyms": [
+              "label",
+              "category"
+            ],
+            "uses_value_objects": [],
+            "uuid": "b0000001-0002-4000-8000-000000000001"
+          },
+          "uuid": "b0000001-0002-4000-8000-000000000020"
+        },
+        {
+          "children": [
+            {
+              "bitemporal": null,
+              "concurrency": null,
+              "ddd_concept": "Entity",
+              "display_formats": [],
+              "doc": "A comment on a task, displayed in the detail view",
+              "fields": [
+                {
+                  "doc": null,
+                  "dsl_type": "UUID",
+                  "field_constraints": [],
+                  "name": "todo_id",
+                  "nullable": false,
+                  "searchable": false,
+                  "unique": false,
+                  "uuid": "b0000001-0003-4000-8000-000000000011"
+                },
+                {
+                  "doc": null,
+                  "dsl_type": "String",
+                  "field_constraints": [],
+                  "name": "body",
+                  "nullable": false,
+                  "searchable": false,
+                  "unique": false,
+                  "uuid": "b0000001-0003-4000-8000-000000000012"
+                },
+                {
+                  "doc": null,
+                  "dsl_type": "String",
+                  "field_constraints": [],
+                  "name": "author",
+                  "nullable": true,
+                  "searchable": false,
+                  "unique": false,
+                  "uuid": "b0000001-0003-4000-8000-000000000013"
+                },
+                {
+                  "doc": null,
+                  "dsl_type": "Timestamp",
+                  "field_constraints": [],
+                  "name": "created_at",
+                  "nullable": false,
+                  "searchable": false,
+                  "unique": false,
+                  "uuid": "b0000001-0003-4000-8000-000000000014"
+                }
+              ],
+              "has_value_objects": [],
+              "id_field": {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0003-4000-8000-000000000010"
+              },
+              "invariants": [],
+              "name": "TodoComment",
+              "relationships": [
+                {
+                  "cascade": false,
+                  "direction": "to-one",
+                  "embedded": true,
+                  "multiplicity": "one",
+                  "name": "todo",
+                  "required": true,
+                  "target_context": false,
+                  "target_entity": "TodoItem",
+                  "uuid": "b0000001-0003-4000-8000-000000000020"
+                }
+              ],
+              "source": null,
+              "synonyms": [],
+              "uses_value_objects": [],
+              "uuid": "b0000001-0003-4000-8000-000000000001"
+            }
+          ],
+          "concurrency": null,
+          "doc": "Todo aggregate with comments",
+          "event_sourced": false,
+          "name": "TodoItem",
+          "root": {
+            "bitemporal": null,
+            "concurrency": null,
+            "ddd_concept": "Aggregate Root",
+            "display_formats": [
+              {
+                "fallback": null,
+                "format_type": "short",
+                "pattern": "{title}"
+              },
+              {
+                "fallback": null,
+                "format_type": "full",
+                "pattern": "{title} [{priority_id}] — {status_id}"
+              }
+            ],
+            "doc": "A task or action item to be completed",
+            "fields": [
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "title",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000011"
+              },
+              {
+                "doc": null,
+                "dsl_type": "String",
+                "field_constraints": [],
+                "name": "description",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000012"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "priority_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000013"
+              },
+              {
+                "doc": null,
+                "dsl_type": "UUID",
+                "field_constraints": [],
+                "name": "status_id",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000014"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Date",
+                "field_constraints": [],
+                "name": "due_date",
+                "nullable": true,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000015"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Boolean",
+                "field_constraints": [],
+                "name": "is_done",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000016"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "created_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000017"
+              },
+              {
+                "doc": null,
+                "dsl_type": "Timestamp",
+                "field_constraints": [],
+                "name": "updated_at",
+                "nullable": false,
+                "searchable": false,
+                "unique": false,
+                "uuid": "b0000001-0004-4000-8000-000000000018"
+              }
+            ],
+            "has_value_objects": [],
+            "id_field": {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "b0000001-0004-4000-8000-000000000010"
+            },
+            "invariants": [],
+            "name": "TodoItem",
+            "relationships": [
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "priority",
+                "required": true,
+                "target_context": "Basedata",
+                "target_entity": "Priority",
+                "uuid": "b0000001-0004-4000-8000-000000000020"
+              },
+              {
+                "cascade": false,
+                "direction": "to-one",
+                "embedded": false,
+                "multiplicity": "one",
+                "name": "status",
+                "required": true,
+                "target_context": "Basedata",
+                "target_entity": "Status",
+                "uuid": "b0000001-0004-4000-8000-000000000021"
+              }
+            ],
+            "source": null,
+            "synonyms": [
+              "task",
+              "item",
+              "action item"
+            ],
+            "uses_value_objects": [],
+            "uuid": "b0000001-0004-4000-8000-000000000001"
+          },
+          "uuid": "b0000001-0004-4000-8000-000000000030"
+        }
+      ],
+      "doc": null,
+      "entities": [],
+      "events": [
+        {
+          "doc": "A new todo item was created",
+          "fields": [
+            {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "todo_id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "b0000001-0005-4000-8000-000000000010"
+            },
+            {
+              "doc": null,
+              "dsl_type": "String",
+              "field_constraints": [],
+              "name": "title",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "b0000001-0005-4000-8000-000000000011"
+            }
+          ],
+          "name": "TodoCreated",
+          "timestamp_field": "occurred-at",
+          "uuid": "b0000001-0005-4000-8000-000000000001"
+        },
+        {
+          "doc": "A todo item was marked as done",
+          "fields": [
+            {
+              "doc": null,
+              "dsl_type": "UUID",
+              "field_constraints": [],
+              "name": "todo_id",
+              "nullable": false,
+              "searchable": false,
+              "unique": false,
+              "uuid": "b0000001-0006-4000-8000-000000000010"
+            }
+          ],
+          "name": "TodoMarkedDone",
+          "timestamp_field": "occurred-at",
+          "uuid": "b0000001-0006-4000-8000-000000000001"
+        }
+      ],
+      "grounding": null,
+      "lookup_tables": [],
+      "name": "Todo",
+      "projections": [],
+      "relationships": [
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "priority",
+          "required": true,
+          "target_context": "Basedata",
+          "target_entity": "Priority",
+          "uuid": "b0000001-0004-4000-8000-000000000020"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": false,
+          "multiplicity": "one",
+          "name": "status",
+          "required": true,
+          "target_context": "Basedata",
+          "target_entity": "Status",
+          "uuid": "b0000001-0004-4000-8000-000000000021"
+        },
+        {
+          "cascade": false,
+          "direction": "to-one",
+          "embedded": true,
+          "multiplicity": "one",
+          "name": "todo",
+          "required": true,
+          "target_context": false,
+          "target_entity": "TodoItem",
+          "uuid": "b0000001-0003-4000-8000-000000000020"
+        }
+      ],
+      "sagas": [],
+      "sourced_events": [],
+      "specifications": [],
+      "state_machines": [],
+      "strong_types": [],
+      "uuid": "b0000001-0001-4000-8000-000000000001",
+      "value_objects": []
+    }
+  ],
+  "cross_context_relationships": [],
+  "ddd_glossary": [
+    {
+      "aliases": [
+        "Aggregate Root",
+        "Consistency Boundary"
+      ],
+      "audience_notes": {
+        "auditor": "Defines the transactional boundary — all changes within an aggregate are atomic and auditable as a single unit.",
+        "data_steward": "Each aggregate owns its data lifecycle. Cross-aggregate references use UUIDs, not foreign keys.",
+        "developer": "Maps to CommandService + CommandRepository in generated code. One PostgreSQL transaction per aggregate write.",
+        "domain_expert": "Represents a business concept that must always be consistent as a whole. For example, an Order and its OrderItems form one aggregate.",
+        "new_team_member": "Think of it as a 'consistency bubble' — everything inside must be valid at all times.",
+        "project_manager": "Each aggregate becomes a self-contained module with its own API endpoints, tests, and database tables.",
+        "security_officer": "Access control is enforced at the aggregate boundary — no partial reads or writes bypass the service layer."
+      },
+      "definition": "A cluster of domain objects treated as a single unit for data changes. External references are limited to the root entity. All invariants within the aggregate are enforced transactionally.",
+      "ir_struct": "aggregate",
+      "see_also": [
+        "Bounded Context",
+        "Entity",
+        "Value Object",
+        "Invariant"
+      ],
+      "source": "evans-2003",
+      "term": "Aggregate"
+    },
+    {
+      "aliases": [
+        "Context",
+        "Subdomain Boundary"
+      ],
+      "audience_notes": {
+        "auditor": "Defines the scope of a regulatory domain — audit trails are context-scoped.",
+        "data_steward": "Data ownership boundaries. Each context is the single source of truth for its entities.",
+        "developer": "Maps to a shared library (OSLPC). Each context gets its own namespace, database schema, and gRPC service.",
+        "domain_expert": "Each bounded context speaks its own language. 'Patient' in clinical care is different from 'Patient' in billing.",
+        "new_team_member": "Think of it as a team boundary — each context has its own vocabulary and rules.",
+        "project_manager": "Contexts can be developed, deployed, and scaled independently by different teams.",
+        "security_officer": "Security policies are context-scoped. Cross-context communication goes through explicit interfaces."
+      },
+      "definition": "A linguistic and conceptual boundary within which a domain model is defined and applicable. The same real-world concept may have different representations in different bounded contexts.",
+      "ir_struct": "bounded-context",
+      "see_also": [
+        "Context Map",
+        "Anti-Corruption Layer",
+        "Ubiquitous Language"
+      ],
+      "source": "evans-2003",
+      "term": "Bounded Context"
+    },
+    {
+      "aliases": [
+        "Domain Entity",
+        "Reference Object"
+      ],
+      "audience_notes": {
+        "auditor": "Each entity has a stable UUID that persists across all changes — every modification is traceable.",
+        "data_steward": "Entities define the canonical schema. All field types, constraints, and documentation are model-driven.",
+        "developer": "Generated as a C++ struct with UUID primary key, PostgreSQL table, and gRPC message type.",
+        "domain_expert": "A real-world thing with a unique identity. A Patient entity tracks the same person across all interactions.",
+        "new_team_member": "The basic building blocks — like rows in a database table, but with business rules attached.",
+        "project_manager": "Entities are the core data units. Each entity generates a database table, API endpoint, and UI form.",
+        "security_officer": "Entity-level access control and field-level encryption are supported through generated code."
+      },
+      "definition": "An object defined primarily by its identity (UUID), rather than its attributes. Entities have a lifecycle and can change state over time while remaining the same entity.",
+      "ir_struct": "entity",
+      "see_also": [
+        "Aggregate",
+        "Value Object",
+        "Strong Type"
+      ],
+      "source": "evans-2003",
+      "term": "Entity"
+    },
+    {
+      "aliases": [
+        "Event",
+        "Business Event"
+      ],
+      "audience_notes": {
+        "auditor": "Events form an immutable audit trail. Every state change is recorded as a timestamped fact.",
+        "data_steward": "Events are the source of truth for what happened and when. They carry structured payload data.",
+        "developer": "Generated as PostgreSQL event table, gRPC event message, and C++ event struct with payload fields.",
+        "domain_expert": "Captures business-significant things that happened: 'OrderPlaced', 'PaymentReceived', 'PatientAdmitted'.",
+        "new_team_member": "Think of a notification — 'this thing just happened' — that gets stored permanently.",
+        "project_manager": "Events enable integration between contexts and support future analytics requirements.",
+        "security_officer": "Events are append-only and tamper-evident. They provide a complete history of all system changes."
+      },
+      "definition": "A record of something significant that happened in the domain. Events are immutable facts named in past tense that capture state changes or business-significant occurrences.",
+      "ir_struct": "domain-event",
+      "see_also": [
+        "Sourced Event",
+        "Event Sourcing",
+        "Saga"
+      ],
+      "source": "evans-2003",
+      "term": "Domain Event"
+    },
+    {
+      "aliases": [
+        "Data Access",
+        "Persistence Layer"
+      ],
+      "audience_notes": {
+        "auditor": "All data access goes through a defined interface — no direct database queries bypass the repository.",
+        "data_steward": "Single point of data access per aggregate. All CRUD operations are model-driven and auditable.",
+        "developer": "Split into CommandRepository (writes) and QueryRepository (reads) per CQRS. Generated as C++ classes with pqxx.",
+        "domain_expert": "The system's 'memory' — how it stores and retrieves business objects.",
+        "new_team_member": "The 'go-between' that handles saving and loading your domain objects to/from the database.",
+        "project_manager": "Data access is generated, not hand-written. Schema changes automatically update repository code.",
+        "security_officer": "Repository layer enforces data access policies. All queries are parameterized — no SQL injection."
+      },
+      "definition": "An abstraction that mediates between the domain layer and data mapping layers. Repositories provide a collection-like interface for accessing and persisting aggregates.",
+      "ir_struct": null,
+      "see_also": [
+        "Aggregate",
+        "Domain Service",
+        "CQRS"
+      ],
+      "source": "evans-2003",
+      "term": "Repository"
+    },
+    {
+      "aliases": [
+        "Service",
+        "Application Service"
+      ],
+      "audience_notes": {
+        "auditor": "Services are the transaction boundary. All aggregate modifications are orchestrated through services.",
+        "data_steward": "Data modification policies are enforced by services. All writes are validated and logged.",
+        "developer": "Generated as CommandService (mutations) and QueryService (reads). All aggregate access goes through services.",
+        "domain_expert": "Business operations that involve multiple entities — like 'Transfer Funds' between two accounts.",
+        "new_team_member": "The 'verbs' of the system — operations like 'create patient', 'approve order', 'transfer funds'.",
+        "project_manager": "Services define the system's API surface. Each operation is a documented, testable entry point.",
+        "security_officer": "Authentication and authorization are enforced at the service layer. No aggregate bypass."
+      },
+      "definition": "A stateless operation that doesn't naturally belong to any entity or value object. Domain services coordinate aggregate interactions and enforce cross-aggregate business rules.",
+      "ir_struct": null,
+      "see_also": [
+        "Aggregate",
+        "Repository",
+        "CQRS"
+      ],
+      "source": "evans-2003",
+      "term": "Domain Service"
+    },
+    {
+      "aliases": [
+        "Reference Data",
+        "Code Table"
+      ],
+      "audience_notes": {
+        "auditor": "Reference data is versioned and seeded from tracked CSV files. Changes are auditable through migration history.",
+        "data_steward": "Canonical reference data with seed files as the single source of truth.",
+        "developer": "Generated as PostgreSQL table with UUIDv5 primary keys and constexpr C++ header for compile-time constants.",
+        "domain_expert": "Standard codes and categories used across the system — like country codes, status types, or priority levels.",
+        "new_team_member": "Dropdown values — like a list of countries or order statuses — stored in the database and code.",
+        "project_manager": "Reference data is managed declaratively. Adding a new status code is a CSV edit, not a migration.",
+        "security_officer": "Lookup values are compile-time constants. No runtime SQL needed for framework-level codes."
+      },
+      "definition": "A table of fixed reference values used for classification and validation. Lookup tables replace CHECK constraints and database ENUMs with a normalized, extensible pattern. Values are seeded from CSV files.",
+      "ir_struct": "lookup-table",
+      "see_also": [
+        "Entity",
+        "Strong Type"
+      ],
+      "source": "millett-2015",
+      "term": "Lookup Table"
+    },
+    {
+      "aliases": [
+        "Domain Language",
+        "Shared Vocabulary"
+      ],
+      "audience_notes": {
+        "auditor": "Consistent terminology across code and documentation reduces miscommunication risk.",
+        "data_steward": "Data dictionaries are generated from the model. Terminology is consistent across all system layers.",
+        "developer": "DSL names map directly to class names, table names, and API names. No translation needed.",
+        "domain_expert": "The code speaks your language. If you call it a 'Prescription', the code calls it 'Prescription' too.",
+        "new_team_member": "The team agrees on specific words for specific things — and the code uses those exact words.",
+        "project_manager": "Everyone uses the same terms. The model IS the specification — no separate 'business requirements' document.",
+        "security_officer": "Unambiguous naming reduces security requirement misinterpretation."
+      },
+      "definition": "A shared language between developers and domain experts, used consistently in code, documentation, and conversation. Within a bounded context, each term has exactly one meaning.",
+      "ir_struct": null,
+      "see_also": [
+        "Bounded Context",
+        "Grounding"
+      ],
+      "source": "evans-2003",
+      "term": "Ubiquitous Language"
+    },
+    {
+      "aliases": [
+        "Command Query Responsibility Segregation"
+      ],
+      "audience_notes": {
+        "auditor": "Write operations and read operations have separate audit trails and access controls.",
+        "data_steward": "Query models can be denormalized for performance without affecting the authoritative write model.",
+        "developer": "CommandService/CommandRepository for writes, QueryService/QueryRepository for reads. Generated per aggregate.",
+        "domain_expert": "Reading data and changing data are handled differently — each optimized for its purpose.",
+        "new_team_member": "Two separate doors — one for changing data, one for reading it. Each door is optimized for its job.",
+        "project_manager": "Read and write sides can evolve independently. Reporting views don't affect write performance.",
+        "security_officer": "Separate authorization for commands vs. queries. Read-only users never see write endpoints."
+      },
+      "definition": "An architectural pattern that separates read operations (queries) from write operations (commands). Each side can be independently optimized, scaled, and secured.",
+      "ir_struct": null,
+      "see_also": [
+        "Domain Service",
+        "Repository",
+        "Projection",
+        "Event Sourcing"
+      ],
+      "source": "young-2010",
+      "term": "CQRS"
+    },
+    {
+      "aliases": [
+        "Business Rule",
+        "Constraint",
+        "CHECK Constraint"
+      ],
+      "audience_notes": {
+        "auditor": "Business rules enforced at the database level. Invalid data cannot exist, even from direct database access.",
+        "data_steward": "Data quality rules are model-driven and database-enforced. No invalid data can be persisted.",
+        "developer": "Generated as PostgreSQL CHECK constraints and C++ validation functions.",
+        "domain_expert": "Rules that can never be broken — like 'an order must have at least one item' or 'age must be positive'.",
+        "new_team_member": "Rules that the system enforces automatically — like 'price must be positive'. The database rejects violations.",
+        "project_manager": "Business rules are in the model, not in code. Changes propagate automatically to database and application.",
+        "security_officer": "Database-level enforcement means even compromised application code cannot create invalid data."
+      },
+      "definition": "A condition that must always be true for an aggregate to be in a valid state. Invariants are enforced within the aggregate boundary and translate to database CHECK constraints.",
+      "ir_struct": "invariant",
+      "see_also": [
+        "Aggregate",
+        "Entity",
+        "Specification"
+      ],
+      "source": "evans-2003",
+      "term": "Invariant"
+    },
+    {
+      "aliases": [
+        "Domain Policy",
+        "Reaction",
+        "Event Handler"
+      ],
+      "audience_notes": {
+        "auditor": "Automated business rules with documented triggers and actions. Every policy activation is logged.",
+        "data_steward": "Automated data transformations are model-driven and traceable to specific business events.",
+        "developer": "Generated as event handlers that subscribe to specific domain events and invoke commands.",
+        "domain_expert": "Automatic reactions to business events — like 'when payment is confirmed, ship the order'.",
+        "new_team_member": "An automatic reaction — 'when this event happens, automatically do that action'.",
+        "project_manager": "Business automation rules are explicit in the model. No hidden background processes.",
+        "security_officer": "Policy triggers and actions are documented. No undocumented automated data modifications."
+      },
+      "definition": "An automated reaction to a domain event. Policies listen for specific events and trigger commands or side effects in response, implementing 'when X happens, do Y' business rules.",
+      "ir_struct": "policy",
+      "see_also": [
+        "Domain Event",
+        "Saga",
+        "Domain Service"
+      ],
+      "source": "vernon-2013",
+      "term": "Policy"
+    },
+    {
+      "aliases": [
+        "EntityValidator",
+        "Cross-Field Validator",
+        "Tier 2 Validator"
+      ],
+      "audience_notes": {
+        "auditor": "Enforces business rules between related fields — e.g., end date must be after start date. All violations are returned as structured error maps.",
+        "data_steward": "Ensures data consistency across related fields before persistence. Violations are caught at the service layer.",
+        "developer": "Generated as validate() method on ViewModel (Qt) or CommandService. Returns QVariantMap/std::map of field→error pairs. Override validatePlugin() for Tier 3.",
+        "domain_expert": "Validates that combinations of fields make business sense — things that single-field rules cannot catch.",
+        "new_team_member": "Checks that fields work together correctly — like making sure a start date comes before an end date.",
+        "project_manager": "Cross-field validation is automatically generated from the domain model. No hand-written validation code needed.",
+        "security_officer": "All cross-field validations are model-driven and deterministic. No user-supplied code runs in Tier 2."
+      },
+      "definition": "A generated class that enforces cross-field invariants within an aggregate. Tier 2 of the three-tier validation architecture (ADR 20260307). Checks relationships between fields that cannot be expressed as single-field constraints.",
+      "ir_struct": "entity",
+      "see_also": [
+        "Plugin Validator",
+        "Strong Type",
+        "Invariant",
+        "Domain Service"
+      ],
+      "source": "muscovite-adr-20260307",
+      "term": "Entity Validator"
+    },
+    {
+      "aliases": [
+        "PluginValidator",
+        "Sidecar Validator",
+        "Tier 3 Validator"
+      ],
+      "audience_notes": {
+        "auditor": "User-written business rules with a defined integration point. Changes are tracked in sidecar files under version control.",
+        "data_steward": "Custom validation logic with access to the full entity state. Runs after generated validators.",
+        "developer": "Override validatePlugin() in the sidecar .cpp file. Returns QVariantMap of errors which are merged with Tier 2 results. Sentinel comment controls regeneration.",
+        "domain_expert": "Complex business rules that the domain model language cannot express — like external service lookups or multi-aggregate checks.",
+        "new_team_member": "The place to write custom validation rules that the code generator doesn't handle — override one method and return errors.",
+        "project_manager": "Escape hatch for business rules too complex for the DSL. Contained in sidecar files with clear ownership.",
+        "security_officer": "Plugin code is user-owned and reviewed separately. It runs within the same process boundary as generated code."
+      },
+      "definition": "A user-owned extension point for business rule validation that cannot be expressed in the DSL. Tier 3 of the three-tier validation architecture. Implemented as a virtual method in a sidecar file.",
+      "ir_struct": "entity",
+      "see_also": [
+        "Entity Validator",
+        "Domain Service",
+        "Invariant"
+      ],
+      "source": "muscovite-adr-20260307",
+      "term": "Plugin Validator"
+    },
+    {
+      "aliases": [
+        "ValidationErrors",
+        "Error Map",
+        "Validation Result"
+      ],
+      "audience_notes": {
+        "auditor": "Structured error reporting with field-level granularity. Every validation failure is attributable to a specific field.",
+        "data_steward": "Per-field error attribution enables precise data quality feedback to entry operators.",
+        "developer": "QVariantMap (QML) or std::map<QString,QString> (Widgets). Keys are field names, values are translated error messages.",
+        "domain_expert": "Users see exactly which fields have problems and why — not just a generic 'form is invalid' message.",
+        "new_team_member": "A dictionary mapping field names to error messages — the result of calling validate() on a form.",
+        "project_manager": "Consistent error display across all frontends. Generated automatically from the domain model.",
+        "security_officer": "Error messages are generated from tr() calls — no user-supplied strings in error output."
+      },
+      "definition": "A structured map of field names to error messages returned by the three-tier validation pipeline. Used by both Qt Widgets and QML frontends to display per-field error feedback.",
+      "ir_struct": "entity",
+      "see_also": [
+        "Entity Validator",
+        "Plugin Validator",
+        "Domain Service"
+      ],
+      "source": "muscovite-adr-20260307",
+      "term": "Validation Errors"
+    }
+  ],
+  "metadata": {
+    "context_count": 3,
+    "generated_at": "2026-03-09T15:08:08Z",
+    "generator_version": "1.0.0",
+    "project_name": "HelloWorld",
+    "total_aggregates": 12,
+    "total_entities": 13,
+    "total_events": 2,
+    "total_lookup_tables": 2,
+    "total_projections": 0,
+    "total_sagas": 0,
+    "total_specifications": 0,
+    "total_state_machines": 0,
+    "total_strong_types": 0,
+    "total_value_objects": 0
+  }
+}

@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.59.0 | <strong>Generated</strong>:
-2026-03-09 | <strong>Commit</strong>: 8d63cd74 |
+<p><strong>Version</strong>: 1.59.1 | <strong>Generated</strong>:
+2026-03-09 | <strong>Commit</strong>: 3f4a274a |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -214,7 +214,7 @@ edited.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>190</td>
+<td>191</td>
 </tr>
 </tbody>
 </table>
@@ -335,8 +335,39 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1590----2026-03-09">[1.59.0] -- 2026-03-09</h2>
+<h2 id="1591----2026-03-09">[1.59.1] -- 2026-03-09</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li>(FTR-327/328/329): Documentation publish pipeline — local build +
+deploy to GitHub Pages</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>generate AsciiDoc system manuals during release ceremony</li>
+<li>publish-docs.sh path resolution for fact bases and system
+manuals</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>governance cleanup — archive v1.55.3, remove stale v1.55.1 from
+versions</li>
+<li>governance cleanup — archive v1.55.3, remove stale v1.55.1 from
+versions</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>Merge branch 'feature/ftr-327-publish-docs' into develop</li>
+<li>plan: v1.59.1 — documentation publishing pipeline
+(FTR-327..329)</li>
+<li>adr: GitHub Pages documentation deployment via
+muscovite-homepage</li>
+<li>plan: v1.59.1 — documentation publishing pipeline
+(FTR-327..329)</li>
+<li>adr: GitHub Pages documentation deployment via
+muscovite-homepage</li>
+</ul>
+<h2 id="1590----2026-03-09">[1.59.0] -- 2026-03-09</h2>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>Merge pull request #92 from
 opensourcedruidhills/feature/ftr-282-frontend-test-harness</li>
@@ -359,12 +390,12 @@ tests</li>
 <li>(FTR-306): Add PostgreSQL golden-file regression tests</li>
 <li>(ftr-309): Qt Widgets generator golden-file regression tests</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>sync conanfile.py version to 1.55.3 (match CMakeLists.txt)</li>
 <li>add SPDX headers to QML E2E test files (e2e-qml-test.rkt)</li>
 </ul>
-<h3 id="maintenance">Maintenance</h3>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>fix FTR status for v1.59.0 release gate</li>
 <li>mark FTR-278/279/282 complete, update ITERATION.md</li>
@@ -374,7 +405,7 @@ tests</li>
 <li>merge FTR-309/310/311/312 golden-file tests (crash recovery)</li>
 <li>merge FTR-305/306/307/308 golden-file tests (crash recovery)</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>Merge pull request #92 from
 opensourcedruidhills/feature/ftr-282-frontend-test-harness</li>
@@ -386,7 +417,7 @@ opensourcedruidhills/feature/ftr-278-widgets-constraints</li>
 output</li>
 </ul>
 <h2 id="1553----2026-03-09">[1.55.3] -- 2026-03-09</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>(FTR-321): Retroactive Racket unit tests — Validation layer
 (EntityValidator, PluginValidator struct generation, plugin hook
@@ -418,39 +449,6 @@ service, and Layer 2 integration</li>
 <li>All acceptance criteria ticked, all FTRs marked complete</li>
 <li>Ready for v1.55.3 release tagging</li>
 </ul>
-<h2 id="1552----2026-03-08">[1.55.2] -- 2026-03-08</h2>
-<h3 id="added-2">Added</h3>
-<ul>
-<li>(FTR-313): Retroactive Racket unit tests — PostgreSQL generator
-(UUIDv7, named FKs, indexes, COMMENT ON, audit triggers, events,
-lookups, constraints, Sqitch deploy/verify)</li>
-<li>(FTR-314): Retroactive Racket unit tests — CMake/build system
-generator (sanitizer presets ASAN/TSAN, mold exclusion, build
-acceleration, parallel job limits, Qt discovery)</li>
-<li>(FTR-315): Retroactive Racket unit tests — gRPC/Proto generator
-(service definitions, field mappings, timestamps, UUID marshalling,
-oneofs, enums)</li>
-<li>(FTR-316): Retroactive Racket unit tests — Qt generators (Widgets +
-QML model binding, validation, signal/slot connections, async gRPC via
-TaskTree)</li>
-<li>(FTR-317): Retroactive Racket unit tests — infrastructure generators
-(OpenSearch indexes, plugin interfaces, event sourcing, sagas,
-projectors)</li>
-<li>(FTR-318): Retroactive C++ framework doctest coverage —
-EntityValidator, PluginValidator, DomainService base classes (BDD
-SCENARIO/GIVEN/WHEN/THEN patterns)</li>
-<li>(FTR-319): DB deploy regression baseline — FHIR Health and
-Geosciences fresh database setup and schema validation tests</li>
-</ul>
-<h3 id="quality-gateway-1">Quality Gateway</h3>
-<ul>
-<li>All 83 Racket test suites pass (includes 7 new retroactive test
-suites) ✅</li>
-<li>All 353 C++ unit tests pass ✅</li>
-<li>Retroactive test coverage: 70+ feature assertions across 5 generator
-domains + C++ framework</li>
-<li>Ready for stabilization iteration close</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
@@ -462,11 +460,6 @@ domains + C++ framework</li>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>v1.55.1</td>
-<td>Verify ADR 20260307 gates pass on current codebase and add
-golden-file regression tests for all 7 generator targets.</td>
-</tr>
 <tr>
 <td>v1.60.0</td>
 <td>Extend the expression AST with collection predicate operations (NOT
@@ -732,7 +725,7 @@ profiling).</p>
 <td>93</td>
 <td>0</td>
 <td>100%</td>
-<td>439.8s</td>
+<td>345.6s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -747,9 +740,9 @@ profiling).</p>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (119.5s)</li>
-<li><strong>slow</strong>: 53/53 passed (281.1s)</li>
-<li><strong>integration</strong>: 11/11 passed (38.8s)</li>
+<li><strong>fast</strong>: 29/29 passed (41.6s)</li>
+<li><strong>slow</strong>: 53/53 passed (199.4s)</li>
+<li><strong>integration</strong>: 11/11 passed (104.5s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -766,6 +759,14 @@ profiling).</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.59.1</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>93/93</td>
+<td>27/28</td>
+</tr>
 <tr>
 <td>v1.59.0</td>
 <td>8</td>
@@ -784,7 +785,7 @@ profiling).</p>
 </tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.59.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.59.1).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <h1 id="user-profile-jolo">User Profile: Jolo</h1>
 <blockquote>
@@ -926,7 +927,7 @@ licensing</li>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (190)</td>
+<td>Architecture decision records (191)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -949,11 +950,11 @@ licensing</li>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.59.0</td>
+<td>1.59.1</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1299 (since 2025-11-17)</td>
+<td>1310 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
@@ -969,7 +970,7 @@ licensing</li>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>190</td>
+<td>191</td>
 </tr>
 <tr>
 <td>Racket tests</td>
