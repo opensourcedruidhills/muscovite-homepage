@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gRPC API Architecture with Base Library and Generated
+Services — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>gRPC API Architecture with Base Library and Generated
+Services</span>
+</nav>
+
+<h1>gRPC API Architecture with Base Library and Generated Services</h1>
+
+
+<h1
+id="grpc-api-architecture-with-base-library-and-generated-services">gRPC
+API Architecture with Base Library and Generated Services</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: API architects, Backend developers</li>
+<li>Date: 2025-12-23</li>
+<li>Tags: grpc, api, architecture, codegen</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite needs to expose domain operations via gRPC for client
+applications (Qt/QML, web, mobile). The API layer must:</p>
+<ol type="1">
+<li>Be generated from DDD spec files for consistency</li>
+<li>Share common infrastructure (connection pools, error handling,
+interceptors)</li>
+<li>Support future authorization (OAuth2) without breaking changes</li>
+<li>Bridge PL/pgSQL stored procedures to gRPC services</li>
+</ol>
+<p>How should we structure the gRPC layer to maximize code reuse and
+maintainability?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Consistent API generation across all DDD projects</li>
+<li>Avoid duplicating infrastructure code in every generated
+project</li>
+<li>Clean separation between reusable base and project-specific
+generated code</li>
+<li>Prepare for OAuth2 integration via interceptors (Phase 2)</li>
+<li>Leverage existing muscovite libraries (muscovitedba,
+muscoviteserver)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Single monolithic generator (all code in generated project)</li>
+<li>Base library + generated services (layered architecture)</li>
+<li>gRPC gateway to REST (indirect approach)</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Base library + generated services", because it
+provides maximum code reuse, clean separation of concerns, and a clear
+extension point for authorization interceptors.</p>
+<h3 id="architecture-overview">Architecture Overview</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                     Generated Project                            │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │  Generated gRPC Services (from DDD)                         ││
+│  │  - GeosciencesService.cpp                                   ││
+│  │  - MineralogyService.cpp                                    ││
+│  │  - Uses base library types and utilities                    ││
+│  └─────────────────────────────────────────────────────────────┘│
+│                              │                                   │
+│                              ▼                                   │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │  Generated Proto Files                                      ││
+│  │  - geosciences.proto                                        ││
+│  │  - mineralogy.proto                                         ││
+│  └─────────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              muscovitegrpc (Base Library)                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
+│  │ GrpcServer   │  │ Interceptors │  │ ServiceBase            │ │
+│  │ - lifecycle  │  │ - logging    │  │ - error mapping        │ │
+│  │ - config     │  │ - metrics    │  │ - transaction scope    │ │
+│  │ - shutdown   │  │ - (auth*)    │  │ - connection handling  │ │
+│  └──────────────┘  └──────────────┘  └────────────────────────┘ │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
+│  │ TypeMapping  │  │ ErrorCodes   │  │ ProtoConverters        │ │
+│  │ - UUID       │  │ - DbError→   │  │ - Timestamp            │ │
+│  │ - Decimal    │  │   grpc::Stat │  │ - Optional&lt;T&gt;          │ │
+│  │ - Timestamp  │  │ - PoolError  │  │ - Repeated&lt;T&gt;          │ │
+│  └──────────────┘  └──────────────┘  └────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              muscovitedba (Database Access)                      │
+│  ConnectionPool, Transactor, Repository, TypeConverters          │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="phase-1-no-authorization-current">Phase 1: No Authorization
+(Current)</h3>
+<ul>
+<li>All endpoints are publicly accessible</li>
+<li>Focus on correct service implementation</li>
+<li>Interceptors: logging, metrics, error handling only</li>
+</ul>
+<h3 id="phase-2-oauth2-authorization-future">Phase 2: OAuth2
+Authorization (Future)</h3>
+<ul>
+<li>Add <code>AuthInterceptor</code> to base library</li>
+<li>JWT validation via interceptor</li>
+<li>Scope-based authorization per RPC method</li>
+<li>Generated services annotated with required scopes</li>
+<li><strong>No changes to generated service code</strong> — interceptor
+handles auth</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Single place for infrastructure (interceptors, error mapping)</li>
+<li>Generated code is lean and focused on business logic</li>
+<li>OAuth2 addition requires no regeneration of services</li>
+<li>Consistent error handling across all projects</li>
+<li>Easy to test base library independently</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Additional dependency (muscovitegrpc) for all gRPC projects</li>
+<li>Base library API changes affect all projects</li>
+<li>Slightly more complex build setup</li>
+</ul>
+<h2 id="base-library-components">Base Library Components</h2>
+<h3 id="muscovitegrpc-library">muscovitegrpc Library</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GrpcServer</code></td>
+<td>Server lifecycle, configuration, graceful shutdown</td>
+</tr>
+<tr>
+<td><code>ServiceBase</code></td>
+<td>CRTP base for generated services with common utilities</td>
+</tr>
+<tr>
+<td><code>LoggingInterceptor</code></td>
+<td>Request/response logging with timing</td>
+</tr>
+<tr>
+<td><code>MetricsInterceptor</code></td>
+<td>Prometheus metrics collection</td>
+</tr>
+<tr>
+<td><code>ErrorInterceptor</code></td>
+<td>Map C++ exceptions to gRPC status codes</td>
+</tr>
+<tr>
+<td><code>AuthInterceptor</code></td>
+<td>OAuth2 JWT validation (Phase 2)</td>
+</tr>
+<tr>
+<td><code>TypeMapping</code></td>
+<td>UUID, Decimal, Timestamp ↔︎ Proto conversions</td>
+</tr>
+<tr>
+<td><code>ErrorMapping</code></td>
+<td>DbError, PoolError → grpc::Status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generated-code-structure">Generated Code Structure</h3>
+<pre><code>generated-&lt;project&gt;/
+├── proto/
+│   ├── common.proto           # Shared types (UUID, Decimal, etc.)
+│   ├── &lt;context&gt;.proto        # Per bounded context
+│   └── &lt;context&gt;_service.proto
+├── src/grpc/
+│   ├── &lt;Context&gt;ServiceImpl.hpp
+│   ├── &lt;Context&gt;ServiceImpl.cpp
+│   └── main.cpp               # Server bootstrap
+└── CMakeLists.txt             # Links muscovitegrpc</code></pre>
+<h2 id="racket-generator-design">Racket Generator Design</h2>
+<h3 id="generator-responsibilities">Generator Responsibilities</h3>
+<ol type="1">
+<li><p><strong>Proto Generation</strong>
+(<code>generators/grpc/proto.rkt</code>)</p>
+<ul>
+<li>Generate message types from entities</li>
+<li>Generate service definitions from repositories</li>
+<li>Import common.proto from base library</li>
+</ul></li>
+<li><p><strong>Service Implementation</strong>
+(<code>generators/grpc/service.rkt</code>)</p>
+<ul>
+<li>Generate service class inheriting from <code>ServiceBase</code></li>
+<li>Map RPC methods to PL/pgSQL API calls</li>
+<li>Use base library type converters</li>
+</ul></li>
+<li><p><strong>CMake Integration</strong>
+(<code>generators/grpc/cmake.rkt</code>)</p>
+<ul>
+<li>Find muscovitegrpc package</li>
+<li>Proto compilation targets</li>
+<li>Service library targets</li>
+</ul></li>
+</ol>
+<h3 id="proto-mapping-rules">Proto Mapping Rules</h3>
+<table>
+<thead>
+<tr>
+<th>DDD Concept</th>
+<th>Proto Mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entity</td>
+<td>Message with all fields</td>
+</tr>
+<tr>
+<td>Value Object</td>
+<td>Message (embedded)</td>
+</tr>
+<tr>
+<td>Repository.find_by_id</td>
+<td><code>rpc GetById(IdRequest) returns (Entity)</code></td>
+</tr>
+<tr>
+<td>Repository.find_all</td>
+<td><code>rpc List(ListRequest) returns (stream Entity)</code></td>
+</tr>
+<tr>
+<td>Repository.insert</td>
+<td><code>rpc Create(CreateRequest) returns (Entity)</code></td>
+</tr>
+<tr>
+<td>Repository.update</td>
+<td><code>rpc Update(UpdateRequest) returns (Entity)</code></td>
+</tr>
+<tr>
+<td>Repository.delete</td>
+<td><code>rpc Delete(IdRequest) returns (Empty)</code></td>
+</tr>
+<tr>
+<td>Command</td>
+<td><code>rpc &lt;CommandName&gt;(CommandRequest) returns (CommandResponse)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="links">Links</h2>
+<ul>
+<li>Depends on: <a
+href="20251223-use-racket-for-dsl-code-generation.html">Use Racket for
+DSL</a></li>
+<li>Depends on: <a href="20251223-use-pimpl-for-public-cpp-api.html">PIMPL
+for C++ API</a></li>
+<li>Related: <a
+href="20251223-deploy-database-via-sqitch-only.html">Sqitch
+deployment</a></li>
+<li>Future: OAuth2 Authorization ADR (Phase 2)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>ALL gRPC service generation from DDD specs</li>
+<li>Adding new interceptors or base functionality</li>
+<li>Modifying proto mapping rules</li>
+<li>Extending error handling</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>PostgreSQL schema generation (use Sqitch ADR)</li>
+<li>Qt/QML client generation (separate architecture)</li>
+<li>Non-gRPC API protocols (REST, GraphQL)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Racket generators import and use base library types</li>
+<li>Generated CMakeLists.txt links muscovitegrpc</li>
+<li>Code review verifies no infrastructure duplication</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/muscframework/grpc/</code> - Base library (to be
+created)</li>
+<li><code>src/dslgen/generators/grpc/proto.rkt</code> - Proto
+generator</li>
+<li><code>src/dslgen/generators/grpc/service.rkt</code> - Service
+generator</li>
+<li><code>include/muscovite/grpc/</code> - Public headers</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Field Constraint Annotation
+Syntax — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Cross-Field Constraint Annotation Syntax</span>
+</nav>
+
+<h1>Cross-Field Constraint Annotation Syntax</h1>
+
+
+<h1 id="cross-field-constraint-annotation-syntax">Cross-Field Constraint
+Annotation Syntax</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-07</li>
+<li>Tags: dsl, grammar, constraints, validation, cross-field</li>
+</ul>
+<p>Technical Story: Some invariants depend on relationships between
+fields in the same entity (e.g., end_date must be after start_date).
+These cannot be expressed as per-field strong types and require a
+distinct annotation mechanism.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Per-field constraints (ADR 20260307-field-constraint-annotations)
+handle validation of individual field values in isolation. However, many
+domain invariants are relational — they express a constraint between two
+or more fields within the same entity:</p>
+<ul>
+<li><code>end_date</code> must be after <code>start_date</code></li>
+<li><code>discharge_date</code> must not precede
+<code>admission_date</code></li>
+<li><code>max_value</code> must not equal <code>min_value</code></li>
+<li><code>follow_up_date</code> must be on the same day as
+<code>appointment_date</code></li>
+</ul>
+<p>These constraints cannot be encoded as strong types (Tier 1) because
+they require access to multiple field values simultaneously. They need a
+different generation target: the EntityValidator (Tier 2).</p>
+<p>How should the DSL express cross-field constraints that generate
+EntityValidator rules?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Must reuse the annotation syntax pattern established by per-field
+constraints</li>
+<li>Parser must validate that referenced fields exist in the same entity
+at parse time</li>
+<li>Nullable fields must have well-defined semantics (what happens when
+one side is NULL?)</li>
+<li>Cross-field constraints must be clearly distinguishable from
+per-field constraints in the IR</li>
+<li>Generated code must target EntityValidator (Tier 2), not strong
+types (Tier 1)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Cross-field annotations on the constrained field</strong> —
+<code>@after(start_date)</code> on the <code>end_date</code> field</li>
+<li><strong>Separate INVARIANTS block per entity</strong> —
+<code>INVARIANTS { end_date &gt; start_date; }</code></li>
+<li><strong>Expression-based constraints</strong> —
+<code>@constraint("end_date &gt; start_date")</code> as free-form
+expression</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Cross-field annotations on the
+constrained field</strong>, because it maintains the
+annotation-per-field pattern, is parseable with the existing grammar
+extension mechanism, and keeps constraints co-located with the field
+they primarily affect.</p>
+<h3 id="supported-cross-field-annotations">Supported Cross-Field
+Annotations</h3>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>Applies To</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@after(field_name)</code></td>
+<td>Date, DateTime</td>
+<td>This field's value &gt; referenced field's value</td>
+</tr>
+<tr>
+<td><code>@before(field_name)</code></td>
+<td>Date, DateTime</td>
+<td>This field's value &lt; referenced field's value</td>
+</tr>
+<tr>
+<td><code>@same_day(field_name)</code></td>
+<td>Date, DateTime</td>
+<td>Same calendar day as referenced field</td>
+</tr>
+<tr>
+<td><code>@not_equal(field_name)</code></td>
+<td>Any comparable type</td>
+<td>This field's value ≠ referenced field's value</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ir-representation">IR Representation</h3>
+<p>Cross-field constraints reuse the <code>field-constraint</code>
+struct with <code>relative? = #t</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>field-constraint &#39;after &#39;start_date <span class="dv">#t</span><span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; kind: &#39;after</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; value: symbol — the referenced field name</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; relative?: #t — marks this as a cross-field constraint</span></span></code></pre></div>
+<p>The parser validates at parse time that the referenced field symbol
+exists within the same entity. A parse error is raised if the referenced
+field is not found.</p>
+<h3 id="nullable-semantics">Nullable Semantics</h3>
+<p>If either the annotated field or the referenced field is nullable and
+its value is NULL, the constraint is <strong>vacuously true</strong>.
+This follows SQL NULL semantics: <code>NULL &gt; '2026-01-01'</code>
+evaluates to UNKNOWN, which is not a constraint violation.</p>
+<p>Rationale: requiring both fields to be non-null would make nullable
+fields unusable with cross-field constraints, which contradicts
+real-world domain models (e.g., <code>discharge_date</code> is nullable
+because the patient may still be admitted).</p>
+<h3 id="generation-target">Generation Target</h3>
+<p>Cross-field constraints generate <strong>EntityValidator rules (Tier
+2)</strong>, not strong types (Tier 1). The EntityValidator receives the
+fully constructed entity and checks relational invariants:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated EntityValidator rule for: end_date @after(start_date)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>entity<span class="op">.</span>end_date<span class="op">().</span>has_value<span class="op">()</span> <span class="op">&amp;&amp;</span> entity<span class="op">.</span>start_date<span class="op">().</span>has_value<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(*</span>entity<span class="op">.</span>end_date<span class="op">()</span> <span class="op">&lt;=</span> <span class="op">*</span>entity<span class="op">.</span>start_date<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        errors<span class="op">.</span>add<span class="op">(</span><span class="st">&quot;end_date&quot;</span><span class="op">,</span> <span class="st">&quot;must be after start_date&quot;</span><span class="op">);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Consistent annotation syntax — cross-field constraints look like
+per-field constraints</li>
+<li>Parse-time validation catches typos in referenced field names
+immediately</li>
+<li>Clear IR distinction (<code>relative? = #t</code>) enables
+generators to route to the correct tier</li>
+<li>Nullable semantics are well-defined and follow SQL conventions</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>SQL cannot express these as CHECK constraints (PostgreSQL CHECK
+constraints cannot reference other columns in a meaningful cross-row
+way, and cross-column CHECKs are limited) — enforcement is
+application-side only</li>
+<li>Only binary constraints (between two fields) — ternary or
+higher-arity constraints need a future extension</li>
+<li>The annotation is on one field but references another, which could
+be confusing when reading <code>.ddd</code> files</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a href="20260307-field-constraint-annotations.html">ADR
+20260307 — Field Constraint Annotations</a> (per-field constraints)</li>
+<li>Related: <a
+href="20260307-three-tier-validation-architecture.html">ADR 20260307 —
+Three-Tier Validation Architecture</a> (Tier 2 target)</li>
+<li>Related: <a href="20260307-domain-service-layer.html">ADR 20260307 —
+Domain Service Layer</a> (orchestration of validation tiers)</li>
+<li>Related: <a href="20260211-grammar-first-language-evolution.html">ADR
+20260211 — Grammar-First Language Evolution</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When parsing field annotations that reference other field names (the
+<code>value</code> is a symbol, not a number)</li>
+<li>When generating EntityValidator code — cross-field constraints
+produce Tier 2 validation rules</li>
+<li>When extending the PEG grammar for new cross-field annotation
+types</li>
+<li>When handling nullable fields in cross-field validation — apply
+vacuous truth semantics</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Per-field constraints (<code>@min</code>, <code>@max</code>,
+<code>@not_empty</code>) — those are <code>relative? = #f</code>, see
+ADR 20260307-field-constraint-annotations</li>
+<li>Cross-entity constraints (relationships between different entities)
+— those use <code>RELATIONSHIPS {}</code> blocks</li>
+<li>Business rules requiring external state (database lookups, API
+calls) — those are Tier 3 (PluginValidator)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Parser validates referenced field exists in same entity at parse
+time</li>
+<li>Grammar conformance test verifies cross-field annotation syntax</li>
+<li>Generator tests verify EntityValidator output for cross-field
+constraints</li>
+<li>Nullable semantics enforced by generator template (vacuous truth
+pattern)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — cross-field annotation
+grammar rules</li>
+<li><code>dslgen/parser/parser.rkt</code> — field reference resolution
+and parse-time validation</li>
+<li><code>dslgen/model/ddd-types.rkt</code> —
+<code>field-constraint</code> struct with <code>relative?</code>
+flag</li>
+<li><code>dslgen/generators/dba/unified.rkt</code> — EntityValidator
+generation target</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

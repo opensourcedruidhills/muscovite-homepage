@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite Vision Document — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/guides/">guides</a>
+  <span class="sep">/</span>
+  <span>Muscovite Vision Document</span>
+</nav>
+
+<h1>Muscovite Vision Document</h1>
+
+
+<h1 id="muscovite-vision-document">Muscovite Vision Document</h1>
+<blockquote>
+<p>A fully declarative, DDD-first full-stack code generation
+platform</p>
+</blockquote>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>Muscovite is a <strong>model-driven Domain-Driven Design
+framework</strong> that transforms declarative domain models
+(<code>.ddd</code> files) into a complete, production-ready full-stack
+application. While the system currently prioritizes a
+<strong>high-performance C++ and PostgreSQL</strong> stack, these
+targets are treated as implementation details optimized for a specific
+set of requirements: <strong>battle-proven stability, extreme runtime
+efficiency, and maximum climate/CO2 efficiency.</strong></p>
+<p>By minimizing the computational overhead of the generated system,
+Muscovite ensures that enterprise-scale logic runs with the smallest
+possible carbon footprint.</p>
+<ul>
+<li><strong>PostgreSQL</strong> schemas with Sqitch migrations,
+constraints, and seed data</li>
+<li><strong>gRPC/Protocol Buffer</strong> services providing strongly
+typed, high-efficiency APIs</li>
+<li><strong>Qt Widgets &amp; QML</strong> frontends driven by shared
+domain logic</li>
+<li><strong>C++ Backend</strong> optimized for performance-per-watt and
+long-term maintainability</li>
+<li><strong>Security Infrastructure</strong> with authentication,
+authorization, and audit logging</li>
+<li><strong>AI-Native Workflow</strong> using documentation and ADRs as
+persistent context for autonomous agents</li>
+<li><strong>Schema Evolution</strong> with UUID-based semantic
+migrations</li>
+<li><strong>Legacy Modernization</strong> via a formal grammar-based
+ingestion pipeline</li>
+</ul>
+<p>This document captures the architectural vision and serves as the
+north star for Muscovite development.</p>
+<hr />
+<h2 id="the-domain-driven-design-language">The Domain-Driven Design
+Language</h2>
+<p>Muscovite's DSL captures strategic and tactical DDD patterns in a
+readable, declarative syntax.</p>
+<h3 id="bounded-contexts">Bounded Contexts</h3>
+<p>Organize your domain into cohesive modules with explicit
+boundaries:</p>
+<pre class="ddd"><code>CONTEXT Patient @uuid &quot;a1b2c3d4-...&quot; {
+    -- Everything about patient identity and demographics
+}
+
+CONTEXT Observation @uuid &quot;e5f6a7b8-...&quot; {
+    -- Clinical observations and measurements
+}
+
+CONTEXT Encounter @uuid &quot;c9d0e1f2-...&quot; {
+    -- Healthcare visits and episodes of care
+}</code></pre>
+<p>Each context becomes a modular shared library (<strong>OSLPC — One
+Shared Library Per Context</strong>), allowing for granular build
+targets and link-time isolation:</p>
+<ul>
+<li>A PostgreSQL schema (<code>patient</code>, <code>observation</code>,
+<code>encounter</code>)</li>
+<li>A gRPC service library (<code>PatientService</code>,
+<code>ObservationService</code>, <code>EncounterService</code>)</li>
+<li>A C++ DBA library (<code>patient_dba</code>,
+<code>observation_dba</code>, <code>encounter_dba</code>)</li>
+<li>A Qt widget library (<code>patient-qt-widgets</code>,
+<code>observation-qt-widgets</code>)</li>
+</ul>
+<p>The OSLPC pattern means that changing one bounded context only
+triggers recompilation of that context's library and its direct
+dependents — not the entire project. For large domain models (26+
+contexts), this drastically reduces incremental build times and
+build-cycle energy consumption.</p>
+<h3 id="entities-with-rich-field-types">Entities with Rich Field
+Types</h3>
+<p>Define entities with type-safe fields, constraints, and
+documentation:</p>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id              UUID        NOT_NULL,
+    mrn             TEXT        NOT_NULL @unique,
+    active          BOOLEAN     NOT_NULL DEFAULT true,
+    gender_id       UUID        NOT_NULL,
+    birth_date      DATE,
+    deceased        BOOLEAN     DEFAULT false,
+    created_at      TIMESTAMPTZ NOT_NULL,
+    updated_at      TIMESTAMPTZ NOT_NULL
+)
+CHECK gender_valid: gender IN (&#39;male&#39;, &#39;female&#39;, &#39;other&#39;, &#39;unknown&#39;)
+CHECK birth_date_not_future: birth_date &lt;= CURRENT_DATE
+DOC &quot;A person receiving healthcare services&quot;
+SYNONYMS &quot;client&quot;, &quot;subject&quot;;</code></pre>
+<p><strong>Generated PostgreSQL:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>              UUID        <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    mrn             TEXT        <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    active          <span class="dt">BOOLEAN</span>     <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="kw">true</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    gender_id       UUID        <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    birth_date      <span class="dt">DATE</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    deceased        <span class="dt">BOOLEAN</span>     <span class="kw">DEFAULT</span> <span class="kw">false</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    created_at      TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    updated_at      TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> patient_birth_date_not_future <span class="kw">CHECK</span> (birth_date <span class="op">&lt;=</span> <span class="fu">CURRENT_DATE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.patient <span class="kw">IS</span> <span class="st">&#39;A person receiving healthcare services&#39;</span>;</span></code></pre></div>
+<p><strong>Generated gRPC Protocol Buffer:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> Patient {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    muscovite.common.UUID id <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> mrn <span class="op">=</span> <span class="dv">2</span>;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> active <span class="op">=</span> <span class="dv">3</span>;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    muscovite.common.UUID gender_id <span class="op">=</span> <span class="dv">4</span>;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    google.type.Date birth_date <span class="op">=</span> <span class="dv">5</span>;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> deceased <span class="op">=</span> <span class="dv">6</span>;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    muscovite.common.Timestamp created_at <span class="op">=</span> <span class="dv">7</span>;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    muscovite.common.Timestamp updated_at <span class="op">=</span> <span class="dv">8</span>;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">service</span> PatientService {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> CreatePatient(CreatePatientRequest) <span class="kw">returns</span> (PatientResponse);</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> GetPatient(GetPatientRequest) <span class="kw">returns</span> (PatientResponse);</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> ListPatients(ListPatientsRequest) <span class="kw">returns</span> (stream PatientResponse);</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> UpdatePatient(UpdatePatientRequest) <span class="kw">returns</span> (PatientResponse);</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> DeletePatient(DeletePatientRequest) <span class="kw">returns</span> (DeletePatientResponse);</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Generated Qt Edit Dialog (C++):</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> muscovite<span class="op">::</span>qt<span class="op">::</span>widgets<span class="op">::</span>EntityEditDialogBase <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientEditDialog<span class="op">(</span><span class="ex">QWidget</span><span class="op">*</span> parent <span class="op">=</span> <span class="kw">nullptr</span><span class="op">);</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">protected</span><span class="op">:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setupFields<span class="op">()</span> <span class="kw">override</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> loadEntity<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> id<span class="op">)</span> <span class="kw">override</span><span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> saveEntity<span class="op">()</span> <span class="kw">override</span><span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">mrn_</span><span class="op">{};</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QCheckBox</span><span class="op">*</span> <span class="va">active_</span><span class="op">{};</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QComboBox</span><span class="op">*</span> <span class="va">gender_</span><span class="op">{};</span>  <span class="co">// FK ComboBox auto-populated</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QDateEdit</span><span class="op">*</span> <span class="va">birthDate_</span><span class="op">{};</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QCheckBox</span><span class="op">*</span> <span class="va">deceased_</span><span class="op">{};</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<hr />
+<h2 id="efficiency-as-a-first-class-citizen">Efficiency as a First-Class
+Citizen</h2>
+<h3 id="climate-efficient-computation">Climate-Efficient
+Computation</h3>
+<p>The choice of C++ as the primary backend target is a strategic
+decision for <strong>climate efficiency</strong>. In an era of massive
+cloud computing costs and CO2 emissions, Muscovite generates code that
+requires fewer CPU cycles and less memory than traditional
+managed-runtime stacks. By compiling down to native machine code, the
+generated systems achieve higher "work-per-watt" ratios, directly
+reducing the CO2 footprint of the final product.</p>
+<p>This is not premature optimization — it is a fundamental
+architectural commitment. When a domain model generates 300,000+ lines
+of C++ across 26 bounded contexts, the efficiency gains compound: lower
+memory pressure means fewer servers, faster request processing means
+lower energy per transaction, and native compilation means no JIT warmup
+or GC pause overhead.</p>
+<h3 id="the-war-on-build-times">The War on Build Times</h3>
+<p>The flip side of C++ efficiency at runtime is compilation cost at
+development time. To maintain developer and AI agent velocity, the build
+system (Layer 2) is aggressively optimized:</p>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precompiled Headers (PCH)</strong></td>
+<td>Eliminate redundant parsing of heavy libraries (Qt, gRPC,
+Boost)</td>
+</tr>
+<tr>
+<td><strong>Unity (Jumbo) Builds</strong></td>
+<td>Batch entity compilation within each context, reducing process
+overhead</td>
+</tr>
+<tr>
+<td><strong>Mold Linker</strong></td>
+<td>High-parallelism linking (auto-detected, 6× faster than ld)</td>
+</tr>
+<tr>
+<td><strong>ccache</strong></td>
+<td>Compiler cache for unchanged translation units</td>
+</tr>
+<tr>
+<td><strong>OSLPC Isolation</strong></td>
+<td>Per-context libraries limit recompilation blast radius</td>
+</tr>
+<tr>
+<td><strong>Parallelism Directive (Cores − 2)</strong></td>
+<td>Prevent VM memory thrashing and "swap death spirals" on constrained
+machines</td>
+</tr>
+</tbody>
+</table>
+<p>With these optimizations active, a clean build of the FHIR Health
+project (157K lines generated C++) completes in under 30 seconds.
+Incremental builds after single-context changes take under 10
+seconds.</p>
+<hr />
+<h2 id="ai-persistence--adr-governance">AI Persistence &amp; ADR
+Governance</h2>
+<p>Muscovite is built to be developed <strong>by AI, for
+AI.</strong></p>
+<h3 id="documentation-as-external-context">Documentation as External
+Context</h3>
+<p>Because LLM context windows are volatile, the project maintains over
+<strong>141 Architecture Decision Records (ADRs)</strong>. These serve
+as a persistent "transactional log of architectural intent":</p>
+<ul>
+<li>ADRs are not just history — they are <strong>context
+persistence</strong> for AI agents</li>
+<li>AI agents are required to ingest relevant ADRs before any generation
+or code modification</li>
+<li>This prevents "architectural drift" and ensures the 95% AI-generated
+codebase remains strictly consistent</li>
+<li>The <code>.github/copilot-instructions.md</code> file
+cross-references critical ADRs so every agent session starts with the
+right constraints</li>
+</ul>
+<h3 id="concurrent-agent-coordination">Concurrent Agent
+Coordination</h3>
+<p>As AI-first development matures, sequential single-agent workflows
+become a bottleneck. Muscovite supports <strong>concurrent agent
+sessions</strong> — a planning agent analyzing the codebase, an
+implementation agent executing the current iteration, and a hotfix agent
+resolving release issues, all operating simultaneously. Coordination
+uses file-based claims and git worktrees (ADR 20260306) — primitives
+that LLMs can reliably operate without external infrastructure. This is
+the natural evolution from "AI-developed" to "AI-coordinated."</p>
+<h3 id="grammar-first-evolution">Grammar-First Evolution</h3>
+<p>Every syntax change starts with a <strong>PEG grammar edit</strong>
+(ADR 20260211). This ensures that the DSL remains a formal language,
+providing a deterministic constraint for agents and preventing the
+"vibe-coding" that leads to legacy debt.</p>
+<p>The governance chain:</p>
+<pre><code>PEG Grammar (spec) → Parser (impl) → Grammar Conformance Test (parity check)
+       ↓                    ↓                        ↓
+  Syntax rules      IR struct instances      Keyword drift detection
+       ↓                    ↓                        ↓
+  doc/DSL.md (auto)   Generators (emit)       doc/CONTEXT.md (metrics)</code></pre>
+<p>The grammar conformance test
+(<code>test-grammar-conformance.rkt</code>) enforces 98%+ keyword parity
+between grammar and parser, with zero opaque stub rules permitted.</p>
+<hr />
+<h2 id="relationships-and-foreign-keys">Relationships and Foreign
+Keys</h2>
+<p>Express entity relationships explicitly with full referential
+integrity:</p>
+<pre class="ddd"><code>ENTITY Observation @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id              UUID        NOT_NULL,
+    patient_id      UUID        NOT_NULL,
+    encounter_id    UUID,
+    effective_at    TIMESTAMPTZ NOT_NULL,
+    issued_at       TIMESTAMPTZ,
+    status          TEXT        NOT_NULL
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE;
+    encounter -&gt; Encounter OPTIONAL ONE;
+}
+DOC &quot;A clinical measurement or assessment&quot;;</code></pre>
+<p><strong>Generated Foreign Keys:</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> observation.observation</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_observation_patient</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (patient_id) <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>);</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> observation.observation</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_observation_encounter</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (encounter_id) <span class="kw">REFERENCES</span> encounter.encounter(<span class="kw">id</span>);</span></code></pre></div>
+<p><strong>Generated Qt ComboBox Population:</strong></p>
+<p>The Qt generator automatically creates FK comboboxes that load
+referenced entities:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> ObservationEditDialog<span class="op">::</span>loadComboboxData<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Load patients for FK combobox</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> patients <span class="op">=</span> <span class="va">patientService_</span><span class="op">-&gt;</span>listPatients<span class="op">();</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> patient <span class="op">:</span> patients<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">patientCombo_</span><span class="op">-&gt;</span>addItem<span class="op">(</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            patient<span class="op">.</span>displayShort<span class="op">(),</span>  <span class="co">// From PRESENTATION hint</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            <span class="ex">QVariant::fromValue</span><span class="op">(</span>patient<span class="op">.</span>id<span class="op">())</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">);</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="aggregates-and-embedded-entities">Aggregates and Embedded
+Entities</h2>
+<p>Model aggregate boundaries with embedded value objects and child
+entities:</p>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (
+    -- Patient fields...
+)
+
+ENTITY PatientName @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id          UUID    NOT_NULL,
+    patient_id  UUID    NOT_NULL,
+    use         TEXT,           -- official, nickname, maiden, etc.
+    family      TEXT NOT_NULL,
+    given       TEXT,
+    prefix      TEXT,
+    suffix      TEXT
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE @embedded;
+}
+DOC &quot;A name associated with a patient&quot;;
+
+ENTITY PatientAddress @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id          UUID    NOT_NULL,
+    patient_id  UUID    NOT_NULL,
+    use         TEXT,           -- home, work, temp, billing
+    line1       TEXT,
+    line2       TEXT,
+    city        TEXT,
+    state       TEXT,
+    postal_code TEXT,
+    country     TEXT
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE @embedded;
+}
+DOC &quot;An address for a patient&quot;;
+
+AGGREGATE Patient @uuid &quot;...&quot; ROOT Patient
+DOC &quot;Patient aggregate with names, addresses, and contact information&quot;;</code></pre>
+<p>The <code>@embedded</code> annotation tells Muscovite to generate
+master-detail views:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientDetailView <span class="op">:</span> <span class="kw">public</span> <span class="ex">QWidget</span> <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Main patient form</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    PatientEditForm<span class="op">*</span> <span class="va">patientForm_</span><span class="op">{};</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Embedded entity lists in tabs</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QTabWidget</span><span class="op">*</span> <span class="va">detailTabs_</span><span class="op">{};</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    PatientNameListWidget<span class="op">*</span> <span class="va">nameList_</span><span class="op">{};</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    PatientAddressListWidget<span class="op">*</span> <span class="va">addressList_</span><span class="op">{};</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    ContactPointListWidget<span class="op">*</span> <span class="va">contactPointList_</span><span class="op">{};</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<hr />
+<h2 id="lookup-tables-for-extensibility">Lookup Tables for
+Extensibility</h2>
+<p>Instead of hardcoded CHECK constraints for enumerated values,
+Muscovite generates lookup tables that users can extend:</p>
+<pre class="ddd"><code>CONTEXT Basedata @uuid &quot;...&quot; {
+    ENTITY ConditionClinicalStatus @uuid &quot;...&quot; IDENTIFIED_BY id (
+        id          UUID    NOT_NULL,
+        code        TEXT    NOT_NULL @unique,
+        display     TEXT    NOT_NULL,
+        definition  TEXT,
+        is_active   BOOLEAN NOT_NULL DEFAULT true,
+        sort_order  INTEGER
+    )
+    DOC &quot;Clinical status codes for conditions&quot;;
+    
+    AGGREGATE ConditionClinicalStatus ROOT ConditionClinicalStatus;
+    
+    IMPORT_JSON &quot;seeds/basedata/condition_clinical_status.json&quot; INTO ConditionClinicalStatus;
+}</code></pre>
+<p><strong>Seed Data (CSV):</strong></p>
+<pre class="csv"><code>id,code,display,definition,is_active,sort_order
+550e8400-...,active,Active,&quot;The condition is active&quot;,true,1
+550e8401-...,recurrence,Recurrence,&quot;The condition has recurred&quot;,true,2
+550e8402-...,relapse,Relapse,&quot;The condition has relapsed&quot;,true,3
+550e8403-...,inactive,Inactive,&quot;The condition is inactive&quot;,true,4
+550e8404-...,remission,Remission,&quot;The condition is in remission&quot;,true,5
+550e8405-...,resolved,Resolved,&quot;The condition is resolved&quot;,true,6</code></pre>
+<p><strong>Reference in Domain Entities:</strong></p>
+<pre class="ddd"><code>ENTITY Condition @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id                      UUID    NOT_NULL,
+    patient_id              UUID    NOT_NULL,
+    clinical_status_id      UUID    NOT_NULL,
+    -- ...
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE;
+    clinical_status -&gt; Basedata.ConditionClinicalStatus REQUIRED ONE;
+}</code></pre>
+<p>Users can add custom status codes without modifying application
+code—just insert rows into the lookup table.</p>
+<hr />
+<h2 id="value-objects-with-cross-context-support">Value Objects with
+Cross-Context Support</h2>
+<p>Define immutable, value-based data structures that can be shared
+across bounded contexts:</p>
+<pre class="ddd"><code>CONTEXT Basedata @uuid &quot;...&quot; {
+    VALUE_OBJECT Address @inline @uuid &quot;...&quot; (
+        street      TEXT NOT_NULL @uuid &quot;...&quot;,
+        city        TEXT NOT_NULL @uuid &quot;...&quot;,
+        postal_code TEXT NOT_NULL @uuid &quot;...&quot;,
+        country     TEXT NOT_NULL DEFAULT &#39;USA&#39; @uuid &quot;...&quot;
+    )
+    DOC &quot;Physical mailing address&quot;;
+
+    VALUE_OBJECT ContactInfo @inline @uuid &quot;...&quot; (
+        phone   Phone @uuid &quot;...&quot;,
+        email   Email @uuid &quot;...&quot;,
+        fax     Phone @uuid &quot;...&quot;
+    )
+    DOC &quot;Contact information&quot;;
+}</code></pre>
+<p><strong>Reference value objects from other contexts:</strong></p>
+<pre class="ddd"><code>ENTITY EmergencyContact @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id   UUID NOT_NULL @uuid &quot;...&quot;,
+    name TEXT NOT_NULL @uuid &quot;...&quot;
+)
+USES Basedata.ContactInfo @uuid &quot;...&quot;;   -- Fields inlined into table
+HAS home_address Basedata.Address @uuid &quot;...&quot;;  -- Composite column
+
+DOC &quot;Emergency contact with address and contact info&quot;;</code></pre>
+<p><strong>Generated across all layers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>USES (Inline Mixin)</th>
+<th>HAS (Composite Column)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>Individual columns (<code>phone TEXT</code>,
+<code>email TEXT</code>)</td>
+<td>Composite type column
+(<code>home_address basedata.address</code>)</td>
+</tr>
+<tr>
+<td>gRPC/Proto</td>
+<td>Flattened message fields</td>
+<td>Nested message reference</td>
+</tr>
+<tr>
+<td>Qt Widgets</td>
+<td>Individual form fields</td>
+<td>Grouped widget set</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="strong_types-postgresql-domains">STRONG_TYPEs (PostgreSQL
+DOMAINs)</h2>
+<p>Define validated data types with CHECK constraints enforced at the
+database level:</p>
+<pre class="ddd"><code>CONTEXT Basedata @uuid &quot;...&quot; {
+    STRONG_TYPE Email BASED_ON TEXT
+        CHECK email_format: VALUE ~ &#39;^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$&#39;
+        DOC &quot;Email address with format validation&quot;;
+
+    STRONG_TYPE Phone BASED_ON TEXT
+        CHECK phone_format: VALUE ~ &#39;^\+?[0-9\s\-\(\)]{7,20}$&#39;
+        DOC &quot;Phone number with format validation&quot;;
+
+    STRONG_TYPE PositiveDecimal BASED_ON DECIMAL(18,4)
+        CHECK positive: VALUE &gt; 0
+        DOC &quot;Positive decimal number&quot;;
+
+    STRONG_TYPE Latitude BASED_ON DECIMAL(9,6)
+        CHECK valid_range: VALUE BETWEEN -90 AND 90
+        DOC &quot;Geographic latitude&quot;;
+
+    STRONG_TYPE Longitude BASED_ON DECIMAL(10,6)
+        CHECK valid_range: VALUE BETWEEN -180 AND 180
+        DOC &quot;Geographic longitude&quot;;
+}</code></pre>
+<p><strong>Generated PostgreSQL:</strong></p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> basedata.email <span class="kw">AS</span> TEXT</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> email_format <span class="kw">CHECK</span> (<span class="fu">VALUE</span> ~ <span class="st">&#39;^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$&#39;</span>);</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">DOMAIN</span> basedata.email <span class="kw">IS</span> <span class="st">&#39;Email address with format validation&#39;</span>;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> basedata.phone <span class="kw">AS</span> TEXT</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> phone_format <span class="kw">CHECK</span> (<span class="fu">VALUE</span> ~ <span class="st">&#39;^\+?[0-9\s\-\(\)]{7,20}$&#39;</span>);</span></code></pre></div>
+<p><strong>Usage in Entities:</strong></p>
+<pre class="ddd"><code>ENTITY EmergencyContact @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id      UUID  NOT_NULL,
+    phone   Phone,           -- Uses Basedata.Phone domain
+    email   Email            -- Uses Basedata.Email domain
+)</code></pre>
+<p><strong>Type Mappings Across Layers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>STRONG_TYPE</th>
+<th>PostgreSQL</th>
+<th>gRPC/Proto</th>
+<th>C++</th>
+<th>Qt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email, Phone</td>
+<td><code>basedata.email</code>, <code>basedata.phone</code></td>
+<td><code>string</code></td>
+<td><code>std::string</code></td>
+<td><code>QString</code></td>
+</tr>
+<tr>
+<td>PositiveDecimal</td>
+<td><code>basedata.positivedecimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>QString</code></td>
+</tr>
+<tr>
+<td>Latitude, Longitude</td>
+<td>Domain-qualified</td>
+<td><code>double</code></td>
+<td><code>double</code></td>
+<td><code>double</code></td>
+</tr>
+</tbody>
+</table>
+<p>Validation happens at the PostgreSQL DOMAIN level—invalid data is
+rejected before entering the database.</p>
+<hr />
+<h2 id="field-constraint-annotations">Field Constraint Annotations</h2>
+<p>Declare validation constraints directly on entity fields using
+<code>@</code> annotations:</p>
+<pre class="ddd"><code>ENTITY Observation
+    @uuid(&quot;...&quot;)
+{
+    temperature   Decimal   @min(-273.15) @max(1000.0);
+    recorded_at   DateTime  @not_in_future;
+    label         String    @not_empty @max(200);
+    icd_code      String    @pattern(&quot;[A-Z][0-9]{2}\\.[0-9]{1,2}&quot;);
+    start_date    Date;
+    end_date      Date      @after(start_date);
+};</code></pre>
+<p>Constraints generate enforcement code across all layers:</p>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>PostgreSQL</th>
+<th>C++ Strong Type</th>
+<th>Qt Widgets</th>
+<th>QML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@min(N)</code> / <code>@max(N)</code></td>
+<td><code>CHECK (col &gt;= N)</code></td>
+<td><code>BoundedInteger&lt;N,M&gt;</code></td>
+<td><code>QSpinBox::setMinimum</code></td>
+<td><code>IntValidator{bottom:N}</code></td>
+</tr>
+<tr>
+<td><code>@not_empty</code></td>
+<td><code>CHECK (length(col) &gt; 0)</code></td>
+<td><code>BoundedString&lt;1,unbounded&gt;</code></td>
+<td>Input validator</td>
+<td>Non-empty check</td>
+</tr>
+<tr>
+<td><code>@not_in_future</code></td>
+<td>—</td>
+<td><code>ConstrainedDateTime&lt;PastOrPresent&gt;</code></td>
+<td><code>setMaximumDate(today)</code></td>
+<td>Date validator</td>
+</tr>
+<tr>
+<td><code>@pattern("re")</code></td>
+<td><code>CHECK (col ~ 're')</code></td>
+<td><code>PatternString&lt;"re"&gt;</code></td>
+<td><code>QRegularExpressionValidator</code></td>
+<td><code>RegularExpressionValidator</code></td>
+</tr>
+<tr>
+<td><code>@after(field)</code></td>
+<td>—</td>
+<td>EntityValidator rule</td>
+<td>Cross-field validation</td>
+<td><code>ViewModel::validate()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="three-tier-validation-architecture">Three-Tier Validation
+Architecture</h2>
+<p>Field constraints feed a three-tier validation pipeline orchestrated
+by <code>DomainService</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>What</th>
+<th>Lifecycle</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Strong Types</strong></td>
+<td>Per-field construction validation</td>
+<td>Regenerated every run</td>
+<td><code>BoundedInteger&lt;0,200&gt;::try_from(val)</code></td>
+</tr>
+<tr>
+<td><strong>2. EntityValidator</strong></td>
+<td>Cross-field invariants</td>
+<td>Regenerated every run</td>
+<td><code>end_date &gt; start_date</code></td>
+</tr>
+<tr>
+<td><strong>3. PluginValidator</strong></td>
+<td>User business rules</td>
+<td>Sidecar (user-owned)</td>
+<td>External service calls, authorization</td>
+</tr>
+</tbody>
+</table>
+<p>All three tiers accumulate errors via <code>ValidationErrors</code> —
+clients receive all failures in one response. The
+<code>DomainService</code> sits above
+<code>CommandService</code>/<code>QueryService</code>, orchestrating
+validation before persistence. gRPC handlers become thin controllers:
+deserialize → DomainService → serialize.</p>
+<hr />
+<h2 id="behavioral-sovereignty-v1600v1630">Behavioral Sovereignty
+(v1.60.0–v1.63.0)</h2>
+<p>Muscovite's third sovereignty tier — moving business logic from
+manual C++ stubs into the DSL.</p>
+<p><strong>The problem</strong>: COMMANDs currently declare
+<em>what</em> changes state (parameters, events) but not <em>how</em>
+the decision is made. Actual business logic lives in sidecar stubs or
+DomainService implementations that Muscovite cannot parse, validate,
+test, or document.</p>
+<p><strong>The solution</strong>: Evolve COMMAND with a pure functional
+DECIDE block:</p>
+<pre class="ddd"><code>EFFECT SendDischargeNotification(email: String, reason: String);
+
+COMMAND DischargePatient ON Patient(discharge_date: Date, reason: String)
+    REQUIRES active_admission: patient.status = &#39;admitted&#39;
+    REQUIRES valid_date: discharge_date &lt;= NOW()
+    DECIDE {
+        LET final_date = IF discharge_date IS NULL THEN NOW() ELSE discharge_date;
+        EMIT PatientDischarged(final_date, reason);
+        PLAN SendDischargeNotification(patient.email, reason);
+    }
+    ENSURES patient_discharged: patient.status = &#39;discharged&#39;
+EMITS PatientDischarged;</code></pre>
+<p><strong>Key design decisions</strong> (7 ADRs, 20260307-*):</p>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No CEL</strong> — use Muscovite's own expression AST</td>
+<td>Non-Turing complete, fully walkable by generators</td>
+</tr>
+<tr>
+<td><strong>EMIT vs PLAN</strong> — separate internal from external</td>
+<td>EMIT → <code>uow.add_event()</code> (same txn), PLAN → outbox
+(async)</td>
+</tr>
+<tr>
+<td><strong>EFFECT catalog</strong> — formal side-effect
+declarations</td>
+<td>Parse-time validation of PLAN references</td>
+</tr>
+<tr>
+<td><strong>ENSURES</strong> — postconditions for safety + testing</td>
+<td>Transaction rollback on failure, property-based test generation</td>
+</tr>
+<tr>
+<td><strong>DomainService host</strong> — not a separate "pure
+class"</td>
+<td>DECIDE compiles into <code>decide_*</code> const methods</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Expression language tiers</strong> (each independently
+useful):</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Version</th>
+<th>Capability</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 — Collection Predicates</td>
+<td>v1.60.0</td>
+<td>NOT IN, IS EMPTY, INTERSECTS, SUBSET OF</td>
+<td><code>REQUIRES: items IS NOT EMPTY</code></td>
+</tr>
+<tr>
+<td>2 — Computation</td>
+<td>v1.61.0</td>
+<td>IF/THEN/ELSE, LET/IN, MATCH/CASE</td>
+<td><code>LET discount = IF pax &gt;= 10 THEN 0.15 ELSE 0.00</code></td>
+</tr>
+<tr>
+<td>3 — List Comprehensions</td>
+<td>v1.62.0</td>
+<td>MAP, FILTER, REDUCE, SUM, COUNT</td>
+<td><code>LET total = SUM(MAP(items, i -&gt; i.price * i.qty))</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Generated outputs from DECIDE blocks:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>What's generated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C++ DomainService</td>
+<td><code>decide_*</code> const method (pure function) +
+orchestration</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>Outbox table schema, typed effect payloads</td>
+</tr>
+<tr>
+<td>Docs/Mermaid</td>
+<td>Decision flow diagrams, Business Logic chapter</td>
+</tr>
+<tr>
+<td>Property tests</td>
+<td>Fuzz inputs → verify ENSURES postconditions hold</td>
+</tr>
+</tbody>
+</table>
+<p>This transforms Muscovite from an <strong>anemic domain
+model</strong> generator (structure only) into a <strong>rich domain
+model</strong> generator (structure + behavior).</p>
+<hr />
+<h2 id="specifications-reusable-query-predicates">Specifications
+(Reusable Query Predicates)</h2>
+<p>Define named, parameterized queries reusable across your
+application:</p>
+<pre class="ddd"><code>SPECIFICATION ActivePatient FOR Patient
+    WHERE active = true
+    DOC &quot;Patients currently receiving care&quot;;
+
+SPECIFICATION PatientsByGender FOR Patient (gender_code TEXT)
+    WHERE gender_id = (SELECT id FROM basedata.administrative_gender WHERE code = gender_code)
+    DOC &quot;Filter patients by administrative gender&quot;;
+
+SPECIFICATION OverdueAppointments FOR Appointment (threshold_days INTEGER)
+    WHERE scheduled_at &lt; NOW() - (threshold_days || &#39; days&#39;)::INTERVAL
+      AND status = &#39;scheduled&#39;
+    DOC &quot;Appointments past their scheduled time&quot;;</code></pre>
+<p><strong>Generated C++ QueryService:</strong></p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryService <span class="op">{</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> findActivePatients<span class="op">();</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> findPatientsByGender<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> gender_code<span class="op">);</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<hr />
+<h2 id="arc-constraints-n-of-m-field-validation">Arc Constraints (N-of-M
+Field Validation)</h2>
+<p>Enforce that exactly/at least/at most N of M fields are
+populated—essential for polymorphic types:</p>
+<pre class="ddd"><code>-- FHIR Observation: Exactly 1 of 4 value types must be set
+ENTITY Observation @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id              UUID NOT_NULL,
+    value_quantity  DECIMAL,
+    value_string    TEXT,
+    value_boolean   BOOLEAN,
+    value_date      DATE
+)
+CHECK value_arc @uuid &quot;...&quot;:
+    ((value_quantity IS NOT NULL)::int + 
+     (value_string IS NOT NULL)::int + 
+     (value_boolean IS NOT NULL)::int + 
+     (value_date IS NOT NULL)::int) = 1
+DOC &quot;Clinical observation with polymorphic value&quot;;</code></pre>
+<p><strong>Generated PostgreSQL:</strong></p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CONSTRAINT</span> chk_observation_value_arc <span class="kw">CHECK</span> (</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    ((value_quantity <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span> <span class="op">+</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>     (value_string <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span> <span class="op">+</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     (value_boolean <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span> <span class="op">+</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>     (value_date <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span>) <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="presentation-hints-qt-display-customization">PRESENTATION Hints
+(Qt Display Customization)</h2>
+<p>Control how entities appear in the Qt client:</p>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id          UUID NOT_NULL,
+    mrn         TEXT NOT_NULL,
+    given_name  TEXT NOT_NULL,
+    family_name TEXT NOT_NULL
+)
+PRESENTATION {
+    SHORT: &quot;{family_name}, {given_name}&quot;;
+    FULL: &quot;{family_name}, {given_name} (MRN: {mrn})&quot;;
+    TABLE: [mrn, family_name, given_name];
+}</code></pre>
+<p><strong>Generated Qt:</strong></p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">QString</span> Patient<span class="op">::</span>displayShort<span class="op">()</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">QString</span><span class="op">(</span><span class="st">&quot;%1, %2&quot;</span><span class="op">).</span>arg<span class="op">(</span>familyName<span class="op">(),</span> givenName<span class="op">());</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">QString</span> Patient<span class="op">::</span>displayFull<span class="op">()</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">QString</span><span class="op">(</span><span class="st">&quot;%1, %2 (MRN: %3)&quot;</span><span class="op">).</span>arg<span class="op">(</span>familyName<span class="op">(),</span> givenName<span class="op">(),</span> mrn<span class="op">());</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="qt-state-machine-validation">Qt State Machine Validation</h2>
+<p>Edit dialogs use <code>QStateMachine</code> for workflow management
+with signal/slot validation:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated dialog with state machine and validation</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> muscovite<span class="op">::</span>qt<span class="op">::</span>widgets<span class="op">::</span>EntityEditDialogBase <span class="op">{</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// State machine manages: Pristine → Dirty → Validating → Valid/Invalid → Saving → Saved</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    EntityDialogStateMachine<span class="op">*</span> <span class="va">stateMachine_</span><span class="op">;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validation panel shows errors/warnings</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    ValidationDisplayWidget<span class="op">*</span> <span class="va">validationPanel_</span><span class="op">;</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Validation Features:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Immediate feedback</td>
+<td>Strong types (Email, Phone) validate on keystroke</td>
+</tr>
+<tr>
+<td>Blur validation</td>
+<td>Required fields validate on focus loss</td>
+</tr>
+<tr>
+<td>Async validation</td>
+<td>Uniqueness constraints check via gRPC</td>
+</tr>
+<tr>
+<td>Error codes</td>
+<td>Structured codes (VAL001-VAL999) for i18n</td>
+</tr>
+<tr>
+<td>Warnings</td>
+<td>Soft validation allows save with confirmation</td>
+</tr>
+<tr>
+<td>Custom hooks</td>
+<td><code>addCustomValidations()</code> virtual method for app
+extensions</td>
+</tr>
+<tr>
+<td>Copyable errors</td>
+<td>Text panel for easy bug reporting</td>
+</tr>
+</tbody>
+</table>
+<p><strong>State Machine States:</strong></p>
+<pre><code>Pristine → Dirty → Validating → Valid → Saving → Saved
+                            ↘ Invalid
+                            ↘ HasWarnings → Saving (with confirm)</code></pre>
+<hr />
+<h2 id="schema-evolution-safe-semantic-migrations">Schema Evolution:
+Safe, Semantic Migrations</h2>
+<p>Muscovite tracks every DSL element by UUID, enabling semantic diff
+between versions:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare git versions and generate migration</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--output</span> migrations/</span></code></pre></div>
+<p><strong>The migration system detects:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Change Type</th>
+<th>Example</th>
+<th>Generated SQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add field</td>
+<td>New <code>middle_name</code> on Patient</td>
+<td><code>ALTER TABLE ADD COLUMN</code></td>
+</tr>
+<tr>
+<td>Rename field</td>
+<td><code>surname</code> → <code>family_name</code></td>
+<td><code>ALTER TABLE RENAME COLUMN</code></td>
+</tr>
+<tr>
+<td>Add entity</td>
+<td>New <code>Appointment</code> entity</td>
+<td><code>CREATE TABLE</code> + API functions</td>
+</tr>
+<tr>
+<td>Remove entity</td>
+<td>Delete <code>LegacyCode</code></td>
+<td><code>DROP TABLE</code> (with confirmation)</td>
+</tr>
+<tr>
+<td>Change type</td>
+<td><code>INTEGER</code> → <code>BIGINT</code></td>
+<td><code>ALTER COLUMN TYPE</code></td>
+</tr>
+<tr>
+<td>Add relationship</td>
+<td>New FK to <code>Organization</code></td>
+<td><code>ALTER TABLE ADD CONSTRAINT</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>UUIDs Enable Rename Detection:</strong></p>
+<pre class="ddd"><code>-- v1.0.0
+ENTITY Patient (
+    surname TEXT NOT_NULL @uuid &quot;abc123...&quot;
+)
+
+-- v2.0.0 (same UUID, different name = RENAME)
+ENTITY Patient (
+    family_name TEXT NOT_NULL @uuid &quot;abc123...&quot;
+)</code></pre>
+<p><strong>Generated migration:</strong></p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- deploy/v2.0.0-rename-patient-surname.sql</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient <span class="kw">RENAME</span> <span class="kw">COLUMN</span> surname <span class="kw">TO</span> family_name;</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- revert/v2.0.0-rename-patient-surname.sql  </span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient <span class="kw">RENAME</span> <span class="kw">COLUMN</span> family_name <span class="kw">TO</span> surname;</span></code></pre></div>
+<hr />
+<h2 id="built-in-security-module">Built-in Security Module</h2>
+<p>Enable authentication and authorization with a single line:</p>
+<pre class="ddd"><code>PROJECT &quot;FHIR Health&quot; {
+    CAPABILITIES { security }
+    -- ...
+}</code></pre>
+<p>This generates a complete security infrastructure:</p>
+<ul>
+<li><strong>Principal</strong> (user accounts with password
+hashing)</li>
+<li><strong>PrincipalGroup</strong> (roles for organizing users)</li>
+<li><strong>Privilege</strong> (named permissions: resource +
+action)</li>
+<li><strong>GroupMembership</strong> (user ↔︎ group associations)</li>
+<li><strong>GroupPrivilege</strong> (group ↔︎ permission grants)</li>
+<li><strong>AuthSession</strong> (JWT tokens with refresh)</li>
+<li><strong>TokenBlacklist</strong> (logout/revocation tracking)</li>
+<li><strong>SecurityAuditLog</strong> (immutable audit trail)</li>
+</ul>
+<p><strong>Integrated Qt Login Dialog:</strong></p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LoginDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Username/password fields</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// &quot;Remember me&quot; checkbox</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Secure token storage via AuthManager</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Automatic token refresh</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<hr />
+<h2 id="architecture-summary">Architecture Summary</h2>
+<pre><code>DSL (Muscovite .ddd files)
+    ├── Entities / Aggregates / Relationships
+    ├── Value Objects / Strong Types
+    ├── Field Constraint Annotations (@min, @max, @not_in_future, ...)
+    ├── Cross-Field Constraints (@after, @same_day, ...)
+    ├── Specifications / Presentation Hints
+    └── Plugin Extension Points (sidecar-owned)
+            ↓
+    Code Generators (Racket) — The Layer 0 &quot;Brain&quot;
+            ↓
+    ┌──────────────────────────────────────────────────────────────┐
+    │                                                              │
+    ▼               ▼               ▼               ▼              │
+PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
+  Schema         Thin           DomainService    (Qt/QML)          │
+  Migrations     Controllers    EntityValidator  Constraint-driven │
+  CHECK const.   Serialize      PluginValidator  Widget config     │
+    │            Deserialize    ValidationErrors  ViewModel.validate│
+    │               │               │               │              │
+    │               └──→ Domain ◄──┘               │              │
+    │                    Layer                       │              │
+    │                      │                         │              │
+    │                      ▼                         │              │
+    │               C++ DBA Layer                    │              │
+    │               (CommandSvc / QuerySvc)          │              │
+    │                      │                         │              │
+    └──────────────────────┴─────────────────────────┘              │
+                            ↓                                      │
+                    Full-Stack Application                         │
+                            ↓                                      │
+                    Schema Evolution ◄─────────────────────────────┘
+                    (UUID-based semantic diff)</code></pre>
+<hr />
+<h2 id="implementation-status">Implementation Status</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounded Contexts → Full Stack</td>
+<td>✅ Complete</td>
+<td>26 contexts in geosciences, modular OSLPC generation</td>
+</tr>
+<tr>
+<td>Entity + Constraints + DOC</td>
+<td>✅ Complete</td>
+<td>Full parser + all generators</td>
+</tr>
+<tr>
+<td>Aggregates + @embedded</td>
+<td>✅ Complete</td>
+<td>Master-detail Qt views</td>
+</tr>
+<tr>
+<td>Lookup Tables (Basedata)</td>
+<td>✅ Complete</td>
+<td>JSON seed support, compile-time constants</td>
+</tr>
+<tr>
+<td>Value Objects USES/HAS</td>
+<td>✅ Complete</td>
+<td>Cross-context references</td>
+</tr>
+<tr>
+<td>STRONG_TYPE Domains</td>
+<td>✅ Complete</td>
+<td>11 built-in types</td>
+</tr>
+<tr>
+<td>SPECIFICATION queries</td>
+<td>⚠️ Partial</td>
+<td>Parsing complete, generators in progress</td>
+</tr>
+<tr>
+<td>Arc Constraints</td>
+<td>⚠️ Partial</td>
+<td>PostgreSQL CHECK works, Qt validation in progress</td>
+</tr>
+<tr>
+<td>PRESENTATION Hints</td>
+<td>✅ Complete</td>
+<td>SHORT/FULL/TABLE formats</td>
+</tr>
+<tr>
+<td>PEG Grammar Governance</td>
+<td>✅ Complete</td>
+<td>Grammar-first mandate enforced, 98%+ keyword parity</td>
+</tr>
+<tr>
+<td>AI Persistence (ADRs)</td>
+<td>✅ Complete</td>
+<td>129+ records serving as agent context persistence</td>
+</tr>
+<tr>
+<td>Qt Widgets Frontend</td>
+<td>✅ Complete</td>
+<td>EntityDialogStateMachine, master-detail</td>
+</tr>
+<tr>
+<td>Qt Quick/QML Frontend</td>
+<td>✅ Complete</td>
+<td>ViewModel pattern, input validation, dirty tracking</td>
+</tr>
+<tr>
+<td>Flutter/Dart Frontend</td>
+<td>🔲 Deferred</td>
+<td>Deferred to post-1.x; ADR 20260211 superseded</td>
+</tr>
+<tr>
+<td>Schema Evolution</td>
+<td>✅ Complete</td>
+<td>8 ADRs, CLI tool, 22 operation types</td>
+</tr>
+<tr>
+<td>Security Module</td>
+<td>✅ Complete</td>
+<td>Full auth/authz/audit stack</td>
+</tr>
+<tr>
+<td>Event Sourcing</td>
+<td>✅ Complete</td>
+<td>Typed event store, dual-write, snapshots</td>
+</tr>
+<tr>
+<td>CQRS</td>
+<td>✅ Complete</td>
+<td>Projections, event consumers, read replicas</td>
+</tr>
+<tr>
+<td>Build Acceleration</td>
+<td>✅ Complete</td>
+<td>PCH, mold, ccache — 6× faster rebuilds</td>
+</tr>
+<tr>
+<td>Incremental Generation</td>
+<td>✅ Complete</td>
+<td>Context-level skip, 10-100× speedup</td>
+</tr>
+<tr>
+<td>Legacy Ingestion</td>
+<td>⚠️ In Progress</td>
+<td>AI-assisted DDL/code extraction to DSL</td>
+</tr>
+<tr>
+<td>Concurrency Control</td>
+<td>✅ Complete</td>
+<td>Optimistic locking + advisory locks (ADR 20260215)</td>
+</tr>
+<tr>
+<td>Field Constraint Annotations</td>
+<td>🔲 Planned</td>
+<td>@min, @max, @not_empty, @not_in_future, @pattern — v1.54.0</td>
+</tr>
+<tr>
+<td>Strong Type Template Families</td>
+<td>🔲 Planned</td>
+<td>BoundedInteger, ConstrainedDate, BoundedDecimal, BoundedString —
+v1.54.0</td>
+</tr>
+<tr>
+<td>Domain Service Layer</td>
+<td>🔲 Planned</td>
+<td>DomainService above CommandService/QueryService — v1.55.0</td>
+</tr>
+<tr>
+<td>Three-Tier Validation</td>
+<td>🔲 Planned</td>
+<td>Strong types → EntityValidator → PluginValidator — v1.55.0</td>
+</tr>
+<tr>
+<td>Cross-Field Codegen</td>
+<td>🔲 Planned</td>
+<td>@after/@same_day → EntityValidator C++ — v1.58.0</td>
+</tr>
+<tr>
+<td>Frontend Validation Symmetry</td>
+<td>🔲 Planned</td>
+<td>Qt Widgets + QML mirror backend validation — v1.59.0</td>
+</tr>
+<tr>
+<td>Collection Predicates</td>
+<td>🔲 Planned</td>
+<td>NOT IN, IS EMPTY, INTERSECTS, SUBSET OF — v1.60.0</td>
+</tr>
+<tr>
+<td>EFFECT/DECIDE/ENSURES</td>
+<td>🔲 Planned</td>
+<td>COMMAND behavioral evolution, pure function compilation —
+v1.61.0</td>
+</tr>
+<tr>
+<td>List Comprehensions</td>
+<td>🔲 Planned</td>
+<td>MAP/FILTER/REDUCE, SUM/COUNT/MIN/MAX/AVG — v1.62.0</td>
+</tr>
+<tr>
+<td>Property-Based Test Gen</td>
+<td>🔲 Planned</td>
+<td>Fuzz DECIDE inputs, verify ENSURES postconditions — v1.63.0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="viability-assessment">Viability Assessment</h2>
+<p>This vision is <strong>technically feasible</strong> and largely
+implemented:</p>
+<p><strong>Strengths:</strong></p>
+<ul>
+<li>Single source of truth for all layers</li>
+<li>Strong alignment with DDD tactical patterns</li>
+<li>Type safety propagated across DB, API, and UI</li>
+<li>Semantic migrations preserve domain intent</li>
+</ul>
+<p><strong>Challenges:</strong></p>
+<ul>
+<li>Complex business logic beyond CRUD still requires manual coding</li>
+<li>UI customization may need developer extensions</li>
+<li>Large models require modular generation strategies</li>
+</ul>
+<p><strong>Bottom line:</strong> Muscovite represents the transition
+from "writing code" to <strong>"governing intent."</strong> By treating
+targets as implementation details, the system remains future-proof.
+Whether the target is C++, Rust, or a future WASM-based runtime, the
+<strong>domain asset</strong> remains preserved in the <code>.ddd</code>
+model.</p>
+<p><strong>Muscovite: One model. Consistent stack. Maximum efficiency.
+Zero drift.</strong></p>
+<hr />
+<h2 id="strategic-context">Strategic Context</h2>
+<h3 id="origin-and-purpose">Origin and Purpose</h3>
+<p>Muscovite is the distillation of 25 years of consulting experience in
+enterprise systems architecture, DDD, and multi-language stacks. The
+core thesis: <strong>a declarative domain model should be the single
+source of truth for an entire application stack</strong>, and
+AI-assisted development now makes building such a generator economically
+viable for a single engineer.</p>
+<p>The project currently serves as a <strong>proof of concept</strong>
+validating that thesis. It is not (yet) a product, a framework for
+teams, or a commercial offering. It is a spike exploring breadth—8
+generator targets, 2 complex domain examples, event sourcing, CQRS,
+spatial capabilities—to stress-test whether the abstraction holds under
+real-world complexity.</p>
+<h3 id="target-independence-via-ir">Target Independence via IR</h3>
+<p>The current generator targets (PostgreSQL, C++, gRPC, Qt) are just
+one materialization of the intermediate representation. Because the DSL
+compiles to a well-defined semantic IR (with UUID-tracked elements,
+typed fields, explicit relationships, and aggregate boundaries), the
+outputs are <strong>arbitrarily retargetable</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Current Target</th>
+<th>Equivalent Alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>Oracle, SQL Server, CockroachDB</td>
+</tr>
+<tr>
+<td>C++ / pqxx</td>
+<td>.NET / EF Core, Java / Spring, Rust / SQLx</td>
+</tr>
+<tr>
+<td>gRPC / Protobuf</td>
+<td>REST / OpenAPI, GraphQL</td>
+</tr>
+<tr>
+<td>Qt Widgets / QML</td>
+<td>React, Blazor</td>
+</tr>
+<tr>
+<td>Sqitch migrations</td>
+<td>Flyway, Liquibase, EF Migrations</td>
+</tr>
+</tbody>
+</table>
+<p>Adding a new target is a generator-writing exercise (~1,000–5,000
+lines of Racket per target), not an architecture change. The IR is the
+asset; the generators are replaceable.</p>
+<h3 id="formal-grammar-governance-achieved">Formal Grammar Governance
+(Achieved)</h3>
+<p>The DSL is formally specified by a <strong>208-rule PEG
+grammar</strong> (<code>dslgen/grammar/muscovite.peg</code>) that serves
+three roles simultaneously:</p>
+<ol type="1">
+<li><strong>Constraint for AI generation</strong> — LLMs follow the
+formal grammar to produce syntactically valid <code>.ddd</code> files,
+enabling automated domain extraction from brownfield systems.</li>
+<li><strong>Specification for parser evolution</strong> — Grammar
+changes drive parser changes (not the reverse), ensuring the language
+evolves intentionally. Parser changes without a preceding grammar edit
+are forbidden (ADR 20260211).</li>
+<li><strong>Living documentation</strong> — The grammar generates
+<code>doc/DSL.md</code> and <code>doc/PROJECT-DSL.md</code>
+automatically, eliminating the gap between specification and
+implementation.</li>
+</ol>
+<p>A grammar conformance test enforces 98%+ keyword parity between
+grammar and parser, with zero opaque stub rules. This is the foundation
+that prevents "vibe-coding" — every syntax change is intentional,
+traceable, and deterministic.</p>
+<h3 id="legacy-modernization-pipeline">Legacy Modernization
+Pipeline</h3>
+<p>The long-term vision positions Muscovite as a building block for
+<strong>AI-assisted legacy system modernization</strong> — turning
+"vibe-coded" systems held together by implicit knowledge into formally
+modeled, climate-efficient applications.</p>
+<p>The pipeline has four stages:</p>
+<ol type="1">
+<li><strong>Grasping</strong> — Using AI agents to analyze existing SQL
+DDL, API specs, stored procedures, ORM mappings, and runtime logs to
+extract an intermediate representation</li>
+<li><strong>Transformation</strong> — Mapping the IR into the Muscovite
+<code>.ddd</code> DSL via human-in-the-loop verification, constrained by
+the PEG grammar</li>
+<li><strong>Generation</strong> — Materializing a clean,
+high-performance, climate-efficient C++ backend and modern
+frontends</li>
+<li><strong>Data Migration</strong> — Generating Sqitch-based mapping
+layers to move legacy data into the new, validated UUID-based
+schema</li>
+</ol>
+<pre><code>Brownfield System
+    ├── pg_dump / schema inspection
+    ├── Stored procedure analysis
+    ├── ORM mapping extraction
+    └── API controller analysis
+            ↓
+    AI Extraction (LLM + formal grammar + world knowledge)
+            ↓
+    Candidate .ddd Model (constrained by PEG grammar)
+            ↓
+    Human Review (domain expert + consultant)
+            ↓
+    Muscovite IR → New Stack + Data Migration</code></pre>
+<p><strong>What AI can extract structurally</strong> (high
+confidence):</p>
+<ul>
+<li>Database tables → Entities with fields and types</li>
+<li>Foreign keys → Explicit relationships</li>
+<li>CHECK constraints → Invariants</li>
+<li>Unique indexes → <code>@unique</code> annotations</li>
+<li>Stored procedures → Command/query candidates</li>
+</ul>
+<p><strong>What requires human judgment</strong> (domain expertise):</p>
+<ul>
+<li>Aggregate boundaries (which entities form consistency units)</li>
+<li>Bounded context partitioning (where to draw service boundaries)</li>
+<li>Ubiquitous language alignment (naming that reflects domain
+intent)</li>
+<li>Value object vs. entity distinction (identity semantics)</li>
+<li>Which business rules are essential vs. accidental</li>
+</ul>
+<p>The <code>.ddd</code> file sits at exactly the right abstraction
+level to be the <strong>review artifact</strong> between AI extraction
+and human validation. It is small enough to read (the FHIR example is
+~10K lines for 9 bounded contexts), semantically rich enough to capture
+domain intent, and machine-parseable enough to generate from.</p>
+<h3 id="brownfield-extraction-current-capabilities">Brownfield
+Extraction: Current Capabilities</h3>
+<p>The brownfield extraction pipeline is no longer purely theoretical.
+Muscovite v1.31+ includes concrete DSL and generator support:</p>
+<p><strong>MAPPING blocks</strong> (FTR-080, ADR 20260224-002) — A
+dedicated DSL construct for declaring field-level transformations
+between legacy schema structures and Muscovite target entities:</p>
+<pre class="ddd"><code>MAPPING LegacyCustomer @uuid &quot;...&quot; {
+    FROM &quot;legacy_customers&quot; INTO Customer;
+    FIELD customer_id    -&gt; id           COPY_UUID;
+    FIELD fname          -&gt; given_name   @required COPY;
+    FIELD lname          -&gt; family_name  @required COPY;
+    FIELD customer_email -&gt; email        @unique VALIDATE_EMAIL;
+    FIELD birth_dt       -&gt; birth_date   COERCE_DATE format=&quot;MM/dd/yyyy&quot;;
+    FIELD is_active      -&gt; active       DEFAULT true COPY_BOOL;
+    FIELD created_ts     -&gt; created_at   COERCE_TIMESTAMP;
+    DOC &quot;Maps legacy customer table to Patient entity&quot;;
+}</code></pre>
+<p>Each MAPPING block generates type-safe extractor and transformer
+components, bridging the gap between "AI extracted a candidate model"
+and "we can actually move the data."</p>
+<p><strong>Gitea brownfield test</strong>
+(<code>examples/brownfield-gitea-test/</code>) — A working
+proof-of-concept that extracts a subset of the Gitea (self-hosted Git
+forge) schema into a Muscovite domain model, demonstrating the
+end-to-end flow: legacy DDL analysis → <code>.ddd</code> model →
+generated stack with migration artifacts.</p>
+<p><strong>Near-term brownfield goals</strong>:</p>
+<ol type="1">
+<li><strong>Automated DDL-to-DSL extraction</strong> — AI agents analyze
+<code>pg_dump</code> output, ORM mappings, and API controllers to
+produce candidate <code>.ddd</code> files constrained by the PEG
+grammar</li>
+<li><strong>MAPPING validation</strong> — Generator-side enforcement
+that every source field in a MAPPING block corresponds to a real column
+in the legacy schema (via schema introspection)</li>
+<li><strong>Data migration Sqitch scripts</strong> — Generate Sqitch
+change sets that <code>INSERT INTO ... SELECT</code> from legacy tables
+through the MAPPING transformations</li>
+<li><strong>Regression oracle</strong> — Run the legacy system and the
+generated system side-by-side, comparing query results to validate
+behavioral equivalence</li>
+</ol>
+<h3 id="potential-future-directions">Potential Future Directions</h3>
+<p><strong>Personal force-multiplier</strong>: Continue as a consultant
+toolkit—rapid prototyping of domain models, generation of working
+full-stack spikes, schema evolution management for client
+engagements.</p>
+<p><strong>Small team methodology</strong>: Formalize the brownfield
+extraction pipeline into a repeatable consulting engagement: extract →
+model → validate → generate → iterate. The <code>.ddd</code> files
+become the shared language between technical and domain
+stakeholders.</p>
+<p><strong>Additional generator targets</strong>: A stub generator for a
+second backend stack (e.g., TypeScript/Express, Kotlin/Spring) would
+concretely demonstrate target independence with ~500–1,000 lines of
+Racket.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="adr/">Architecture Decision Records</a> - Design decisions
+and rationale</li>
+<li><a href="DSL.html">DSL Syntax Reference</a> - Complete grammar
+documentation</li>
+<li><a href="../examples/fhir-health/">FHIR Health Example</a> -
+Healthcare sample project</li>
+<li><a href="../examples/geosciences/">Geosciences Example</a> -
+Large-scale 26-context example</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

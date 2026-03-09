@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Proto-JSON Serialization for Domain Event
+Payloads — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Proto-JSON Serialization for Domain Event Payloads</span>
+</nav>
+
+<h1>ADR: Proto-JSON Serialization for Domain Event Payloads</h1>
+
+
+<h1 id="adr-proto-json-serialization-for-domain-event-payloads">ADR:
+Proto-JSON Serialization for Domain Event Payloads</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-06</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: events, serialization, outbox, governance,
+protobuf</li>
+<li><strong>Supersedes</strong>: implicit nlohmann::json usage in event
+pipeline (no prior ADR)</li>
+</ul>
+<p>Technical Story: Governance audit found <code>nlohmann::json</code>
+payloads in generated <code>CommandService</code>,
+<code>EventPublisher</code>, and <code>domain_events</code> SQL —
+contradicting ADR 20260204 spirit ("no JSON") and the type-safety
+mandate.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Every generated <code>CommandService</code> and
+<code>EventPublisher</code> constructs event payloads using
+<code>nlohmann::json</code>, serializes them to a string, stores them in
+<code>{schema}.domain_events.payload</code> (TEXT column), and
+roundtrips through <code>nlohmann::json::parse()</code> when filling
+proto wire messages. Yet the project already generates typed protobuf
+event messages per context (<code>events.proto</code>) that are only
+used on the gRPC wire — never for persistence.</p>
+<p>This creates three problems:</p>
+<ol type="1">
+<li><p><strong>Governance contradiction</strong>: ADR 20260204 chose
+"strongly typed per-event payload tables (no JSON)" for
+<code>SOURCED_EVENT</code>. The regular <code>domain_events</code>
+outbox uses the same untyped JSON pattern that ADR 20260204 explicitly
+rejected — just in a different table.</p></li>
+<li><p><strong>Unnecessary dependency</strong>:
+<code>nlohmann_json</code> is linked into every generated DBA and gRPC
+library solely for event payload serialization. Removing it from the
+event hot path simplifies the dependency graph.</p></li>
+<li><p><strong>Type duplication</strong>: Proto event messages are
+already generated with typed fields. Constructing a parallel
+<code>nlohmann::json</code> object with the same fields is redundant
+work that can diverge silently.</p></li>
+</ol>
+<h3 id="current-data-flow">Current Data Flow</h3>
+<pre><code>CommandService → nlohmann::json{...} → .dump() → TEXT column
+TEXT column → nlohmann::json::parse() → fill proto message → gRPC wire</code></pre>
+<h3 id="desired-data-flow">Desired Data Flow</h3>
+<pre><code>CommandService → proto event message → MessageToJsonString() → TEXT column
+TEXT column → JsonStringToMessage() → proto message → gRPC wire (or NATS)</code></pre>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Typed proto event messages (<code>events.proto</code>) already exist
+per context</li>
+<li>ADR 20260305 Phase 2 (outbox relay → NATS) will read
+<code>domain_events</code> and publish to NATS — proto is the natural
+NATS wire format</li>
+<li><code>domain_events.payload</code> is already
+<code>TEXT NOT NULL</code> in <code>sqitch-events.rkt</code> (no DDL
+change needed)</li>
+<li>Proto canonical JSON is deterministic and human-readable in
+<code>psql</code></li>
+<li><code>nlohmann_json</code> remains needed for other uses (VO JSONB
+columns, OpenSearch document mapping, metadata) — this ADR scopes only
+the event payload path</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-a-proto-binary-payload-base64-in-text-column">Option A:
+Proto-binary payload (base64 in TEXT column)</h3>
+<ul>
+<li>Serialize event proto → <code>SerializeToString()</code> →
+base64-encode → TEXT column</li>
+<li><strong>Pro</strong>: Smallest payload, fastest (de)serialization,
+no JSON parse at all</li>
+<li><strong>Con</strong>: Payload is opaque in SQL — no
+<code>SELECT payload FROM domain_events</code> debugging without a proto
+decoder tool. Breaks DBA ergonomics.</li>
+</ul>
+<h3
+id="option-b-proto-json-payload-canonical-json-via-protobuf-api">Option
+B: Proto-JSON payload (canonical JSON via protobuf API)</h3>
+<ul>
+<li>Serialize event proto →
+<code>google::protobuf::util::MessageToJsonString()</code> → TEXT
+column</li>
+<li>Deserialize via
+<code>google::protobuf::util::JsonStringToMessage()</code></li>
+<li><strong>Pro</strong>: Human-readable in SQL, deterministic
+serialization, typed at C++, drop-in for NATS relay (Phase 2 can
+deserialize to proto and publish binary)</li>
+<li><strong>Con</strong>: Still JSON content in TEXT — not a
+schema-level type safety win. Slightly larger than binary. Adds
+<code>protobuf::libprotobuf</code> link to DBA layer.</li>
+</ul>
+<h3
+id="option-c-typed-payload-columns-per-event-extend-adr-20260204-to-outbox">Option
+C: Typed payload columns per event (extend ADR 20260204 to outbox)</h3>
+<ul>
+<li>Each <code>EVENT</code> declaration generates its own outbox table
+with typed columns</li>
+<li><strong>Pro</strong>: Full type safety at DB level. Zero JSON.
+Maximum ADR 20260204 alignment.</li>
+<li><strong>Con</strong>: Major DDL explosion (N tables per context),
+saga orchestration and outbox relay must dispatch per event type,
+multi-iteration migration scope.</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option: Option B — Proto-JSON payload via protobuf
+canonical JSON.</strong></p>
+<p>This is the pragmatic middle ground that:</p>
+<ul>
+<li>Removes <code>nlohmann::json</code> from the event serialization hot
+path</li>
+<li>Uses the typed proto messages that are already generated</li>
+<li>Keeps <code>domain_events.payload</code> human-readable in SQL</li>
+<li>Aligns with NATS Phase 2 (FTR-250): the relay reads TEXT,
+deserializes to proto, publishes proto-binary to NATS JetStream</li>
+<li>Requires no DDL change (payload stays
+<code>TEXT NOT NULL</code>)</li>
+</ul>
+<h3 id="what-changes">What Changes</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CommandService</code> event emit</td>
+<td><code>nlohmann::json payload; payload["id"] = ...</code></td>
+<td><code>PatientCreatedEvent event; event.set_id(...)</code> →
+<code>MessageToJsonString()</code></td>
+</tr>
+<tr>
+<td><code>EventPublisher::Publish()</code></td>
+<td><code>const nlohmann::json&amp; payload</code></td>
+<td><code>const google::protobuf::Message&amp; event</code></td>
+</tr>
+<tr>
+<td><code>domain_events.payload</code> DDL</td>
+<td><code>TEXT NOT NULL</code> (unchanged)</td>
+<td><code>TEXT NOT NULL</code> (unchanged)</td>
+</tr>
+<tr>
+<td>DBA layer dependency</td>
+<td><code>nlohmann_json::nlohmann_json</code></td>
+<td><code>protobuf::libprotobuf</code> (for
+<code>MessageToJsonString</code>)</td>
+</tr>
+<tr>
+<td>Framework <code>DomainEvent</code> struct</td>
+<td><code>std::optional&lt;nlohmann::json&gt; metadata</code></td>
+<td>Metadata stays <code>nlohmann::json</code> (out of scope, see
+below)</td>
+</tr>
+<tr>
+<td><code>events.proto</code> per context</td>
+<td>Already generated (unchanged)</td>
+<td>Already generated (unchanged)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-does-not-change-out-of-scope">What Does NOT Change (Out of
+Scope)</h3>
+<ul>
+<li><strong><code>metadata JSONB</code> column</strong>: Stays JSONB —
+metadata is schemaless by design (correlation IDs, trace context, custom
+headers). Separate ADR if needed.</li>
+<li><strong>Value Object JSONB columns</strong>: <code>@owned</code> VO
+storage as JSONB is a separate concern (sqitch-entity.rkt). Separate ADR
+needed.</li>
+<li><strong>OpenSearch document mapping</strong>: Uses
+<code>nlohmann::json</code> for document construction — this is the
+correct tool for interacting with the OpenSearch REST API.</li>
+<li><strong><code>sqitch-event-changes.rkt</code></strong> (event store
+DDL): Uses <code>payload JSONB</code> for the event store variant. ADR
+20260204 already mandates typed tables for <code>SOURCED_EVENT</code> —
+the event store generator should move to typed columns per ADR 20260204
+(separate work, already covered by existing ADR).</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Event payload serialization uses the same proto types as the gRPC
+wire</li>
+<li>Clean pipeline for NATS Phase 2:
+<code>TEXT → proto → NATS binary</code></li>
+<li><code>nlohmann_json</code> removed from event hot path (fewer
+transitive dependencies)</li>
+<li>Proto canonical JSON is deterministic — byte-equal payloads for
+identical events</li>
+<li><code>psql</code> users can still
+<code>SELECT payload FROM domain_events</code> and read JSON</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><code>protobuf::libprotobuf</code> becomes a DBA layer link
+dependency (currently only gRPC layer)</li>
+<li>Slightly larger payloads than binary proto (canonical JSON includes
+field names)</li>
+<li>Generated <code>CommandService</code> code changes from
+<code>nlohmann::json</code> construction to proto message construction —
+affects ~213 generated files (all generator-driven)</li>
+</ul>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<ol type="1">
+<li><strong>Generator</strong>: Modify
+<code>unified-repository-mutations.rkt</code> and
+<code>command-methods.rkt</code> to emit proto event construction
+instead of <code>nlohmann::json</code> construction</li>
+<li><strong>Generator</strong>: Modify <code>events.rkt</code> (gRPC
+events generator) to use <code>MessageToJsonString</code> /
+<code>JsonStringToMessage</code> instead of
+<code>nlohmann::json</code></li>
+<li><strong>Framework</strong>: Update <code>DomainEvent</code> struct
+in <code>unit_of_work.hpp</code> to accept
+<code>const google::protobuf::Message&amp;</code> for payload</li>
+<li><strong>Generator</strong>: Update CMake/Conan generators to link
+<code>protobuf::libprotobuf</code> on DBA targets and remove
+<code>nlohmann_json</code> from event-only link targets</li>
+<li><strong>Test</strong>: Verify roundtrip: proto → canonical JSON →
+TEXT → canonical JSON → proto</li>
+<li><strong>Regenerate</strong>: All sample projects</li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20260124 — Unconditional Domain Events (outbox pattern)</li>
+<li>ADR 20260204 — Typed Event Store (rejected JSON for sourced
+events)</li>
+<li>ADR 20260305 — Event Hub: NATS JetStream Phased Adoption</li>
+<li><a
+href="https://protobuf.dev/programming-guides/proto3/#json">Protocol
+Buffers — JSON Mapping</a></li>
+<li><a
+href="https://protobuf.dev/reference/cpp/api-docs/google.protobuf.util.json_util/">google::protobuf::util::JsonFormat</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

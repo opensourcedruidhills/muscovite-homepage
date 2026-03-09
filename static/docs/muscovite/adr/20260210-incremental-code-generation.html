@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incremental Code Generation via UUID-Based Change
+Tracking — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Incremental Code Generation via UUID-Based Change
+Tracking</span>
+</nav>
+
+<h1>Incremental Code Generation via UUID-Based Change Tracking</h1>
+
+
+<h1
+id="incremental-code-generation-via-uuid-based-change-tracking">Incremental
+Code Generation via UUID-Based Change Tracking</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-10</li>
+<li>Tags: generator, performance, incremental, uuid, manifest</li>
+</ul>
+<p>Technical Story: Full code generation runs all generators on every
+invocation (~17 files per entity × 6 layers), even when only one entity
+changed. With 26 contexts in geosciences (~8,000 lines of DSL),
+regeneration is wasteful. The existing <code>@uuid</code> identity
+system, <code>diff-model.rkt</code> semantic diff engine, and scaffolded
+manifest/dependency-graph infrastructure provide the foundation for
+selective regeneration.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite regenerates the entire output tree on every
+<code>racket generate.rkt</code> invocation. While
+<code>write-if-changed</code> (content-hash comparison at write time)
+prevents unnecessary disk writes and CMake rebuilds, <strong>all
+generators still execute for all contexts</strong>. This means:</p>
+<ul>
+<li>Parse time is unavoidable (all <code>.ddd</code> files must be
+read)</li>
+<li>Generator execution time grows linearly with model size</li>
+<li>Every entity contributes to 17+ files across PostgreSQL, C++ DBA,
+gRPC, Qt Widgets, and Qt Quick layers</li>
+<li>Cross-context dependencies (e.g., <code>Basedata.Status</code>
+references) make naïve file-timestamp approaches unreliable</li>
+</ul>
+<p>The <code>@uuid</code> annotation on every DSL element provides
+stable identity across versions, enabling semantic change detection
+rather than textual diffing.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Generation time grows linearly with number of contexts and
+entities</li>
+<li><code>write-if-changed</code> prevents downstream rebuilds but
+doesn't skip generator execution</li>
+<li><code>@uuid</code> on every DSL element already provides stable
+identity for semantic diff</li>
+<li><code>diff-model.rkt</code> (685 lines) already computes 22+
+operation types between model versions</li>
+<li><code>dslgen/incremental/</code> and <code>dslgen/manifest/</code>
+have scaffolded but disconnected infrastructure</li>
+<li>Cross-context FK relationships create transitive invalidation
+chains</li>
+<li>Sqitch greenfield generator rewrites <code>sqitch.plan</code>
+completely — must not corrupt deployed plans</li>
+<li>The migration pipeline (<code>migrate.rkt</code>) is already
+inherently incremental (appends to plan)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Context-level incremental generation with model
+serialization</strong></li>
+<li>Entity-level incremental generation (fine-grained per-file
+skip)</li>
+<li>File-timestamp-based incremental generation (like Make)</li>
+<li>Status quo — rely on <code>write-if-changed</code> only</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Context-level incremental
+generation</strong>, because it matches the existing generator
+granularity (most generators operate per-context), leverages existing
+<code>diff-model.rkt</code> infrastructure, and avoids refactoring
+generator internals. Entity-level granularity (Option 2) is a future
+optimization once context-level is proven.</p>
+<h3 id="architecture">Architecture</h3>
+<h4 id="model-serialization">Model Serialization</h4>
+<p>After each generation, the fully parsed <code>ddd-model</code> is
+serialized to <code>.muscovite-model.sexp</code> alongside the artifact
+manifest (<code>.artifact-manifest.json</code>). On the next
+invocation:</p>
+<ol type="1">
+<li>Parse current <code>.ddd</code> files → new model</li>
+<li>Load <code>.muscovite-model.sexp</code> → old model</li>
+<li>Run <code>diff-model</code> → list of semantic operations</li>
+<li>Convert operations → <code>changed-uuids</code> set</li>
+<li>Resolve affected contexts via dependency closure (BFS on reverse
+edges)</li>
+<li>Skip generators for unaffected contexts</li>
+<li>Serialize new model + update manifest</li>
+</ol>
+<p>If <code>.muscovite-model.sexp</code> is missing or corrupt, fall
+back to full generation.</p>
+<h4 id="change-set-translation">Change-Set Translation</h4>
+<p><code>diff-model.rkt</code> returns SQL-oriented migration operations
+(ALTER TABLE, etc.). A new
+<code>dslgen/incremental/change-set.rkt</code> module translates these
+into a simple <code>changed-uuids</code> set:</p>
+<table>
+<thead>
+<tr>
+<th>Migration Operation</th>
+<th>Extracted UUIDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>op-add-entity</code></td>
+<td>entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-remove-entity</code></td>
+<td>entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-rename-entity</code></td>
+<td>entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-add-field</code></td>
+<td>field UUID + entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-remove-field</code></td>
+<td>field UUID + entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-change-field-type</code></td>
+<td>field UUID + entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-add-relationship</code></td>
+<td>relationship UUID + both entity UUIDs + both context UUIDs</td>
+</tr>
+<tr>
+<td><code>op-remove-relationship</code></td>
+<td>relationship UUID + both entity UUIDs + both context UUIDs</td>
+</tr>
+<tr>
+<td><code>op-add-index</code></td>
+<td>entity UUID + context UUID</td>
+</tr>
+<tr>
+<td><code>op-add-invariant</code></td>
+<td>entity UUID + context UUID</td>
+</tr>
+<tr>
+<td>Any aggregate-level op</td>
+<td>aggregate UUID + root entity UUID + context UUID</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dependency-graph-cross-context-invalidation">Dependency Graph
+(Cross-Context Invalidation)</h4>
+<p>The dependency graph in
+<code>dslgen/incremental/dependency-graph.rkt</code> uses BFS transitive
+closure on reverse edges. Edges include:</p>
+<ul>
+<li><strong>Entity → field types</strong>: If a field references a
+strong type from another context, changing that type invalidates the
+entity</li>
+<li><strong>Entity → relationship targets</strong>: If entity A has
+<code>RELATIONSHIPS { x -&gt; B.Entity REQUIRED ONE }</code>, changing
+B.Entity invalidates A's context</li>
+<li><strong>Aggregate → contained entities</strong>: Changing any child
+entity invalidates the aggregate root's context</li>
+<li><strong>Value object → using entities</strong>: Changing a
+shared/inline value object invalidates all entities that
+<code>USES</code> or <code>HAS</code> it</li>
+</ul>
+<p>Cross-context FK references (e.g.,
+<code>Basedata.ConditionClinicalStatus</code> referenced by
+<code>Condition</code> in <code>PatientContext</code>) create
+<strong>hard dependency edges</strong>. A change to any Basedata entity
+propagates to every context that references it.</p>
+<h4 id="sqitch-lifecycle-guard">Sqitch Lifecycle Guard</h4>
+<p>The Sqitch greenfield generator (<code>sqitch-unified.rkt</code>) and
+the migration pipeline (<code>migrate.rkt</code>) are <strong>two
+completely separate code paths</strong> designed for different lifecycle
+stages:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Greenfield (<code>sqitch-unified.rkt</code>)</th>
+<th>Migration (<code>migrate.rkt</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan management</td>
+<td>Full rewrite (preserves timestamps)</td>
+<td>Append only</td>
+</tr>
+<tr>
+<td>SQL style</td>
+<td><code>CREATE TABLE</code></td>
+<td><code>ALTER TABLE</code></td>
+</tr>
+<tr>
+<td>Target</td>
+<td>Test/ephemeral databases</td>
+<td>Production databases</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td><code>write-if-changed</code> prevents unnecessary writes</td>
+<td>Semantic diff + safety classification</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rules</strong>:</p>
+<ul>
+<li>Greenfield generator: <strong>always runs</strong> during generation
+(fast, <code>write-if-changed</code> prevents disk writes, only used for
+<code>--fresh</code>/test databases)</li>
+<li>Migration pipeline: <strong>never invoked by
+<code>generate.rkt</code></strong> — separate CLI tool
+(<code>migrate.rkt</code>) for production schema evolution</li>
+<li>A new <code>--sqitch-mode greenfield|migration</code> flag (default:
+<code>greenfield</code>) guards against accidental plan corruption. When
+<code>migration</code>, the greenfield Sqitch generator is skipped
+entirely.</li>
+<li>The greenfield generator must <strong>never be run against a Sqitch
+project whose plan has been deployed</strong> to a production database.
+The full-rewrite approach would produce a plan that conflicts with
+Sqitch's internal registry of already-deployed changes.</li>
+</ul>
+<h4 id="generator-granularity">Generator Granularity</h4>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>Operates On</th>
+<th>Incremental Skip Unit</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C++ DBA</td>
+<td>Per context</td>
+<td>Context</td>
+<td><code>generate-cpp-dba ctx ...</code> — skip if context
+unchanged</td>
+</tr>
+<tr>
+<td>C++ DBA Tests</td>
+<td>Per context</td>
+<td>Context</td>
+<td><code>generate-cpp-dba-tests ctx ...</code></td>
+</tr>
+<tr>
+<td>gRPC</td>
+<td>Whole model (iterates contexts internally)</td>
+<td>Context</td>
+<td>Skip individual context iterations</td>
+</tr>
+<tr>
+<td>Qt Widgets</td>
+<td>Whole model (iterates contexts internally)</td>
+<td>Context</td>
+<td>Skip individual context iterations</td>
+</tr>
+<tr>
+<td>Qt Quick/QML</td>
+<td>Whole model (iterates contexts internally)</td>
+<td>Context</td>
+<td>Skip individual context iterations</td>
+</tr>
+<tr>
+<td>Sqitch Unified</td>
+<td>Whole model (single <code>sqitch.plan</code>)</td>
+<td>Always regenerate</td>
+<td><code>write-if-changed</code> handles it</td>
+</tr>
+<tr>
+<td>CMake</td>
+<td>Whole model</td>
+<td>Always regenerate</td>
+<td>Must reflect all contexts</td>
+</tr>
+<tr>
+<td>Glossary/Docs</td>
+<td>Whole model</td>
+<td>Always regenerate</td>
+<td>Fast, text-only</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>Whole model</td>
+<td>Always regenerate</td>
+<td>Reports generation stats</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cli-flags">CLI Flags</h4>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Default</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--full</code></td>
+<td>Off</td>
+<td>Force full regeneration (ignore cached model)</td>
+</tr>
+<tr>
+<td><code>--dry-run</code></td>
+<td>Off</td>
+<td>Report what would regenerate without writing</td>
+</tr>
+<tr>
+<td><code>--sqitch-mode greenfield</code></td>
+<td><code>greenfield</code></td>
+<td>Greenfield: rewrite plan. Migration: skip greenfield Sqitch</td>
+</tr>
+<tr>
+<td><code>--verbose</code></td>
+<td>Off</td>
+<td>Log which contexts skipped/regenerated and why</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Generation time scales with change size, not model size</li>
+<li>No behavioral change for users who don't use <code>@uuid</code>
+(falls back to full generation)</li>
+<li><code>write-if-changed</code> remains as safety net even when
+incremental is active</li>
+<li>Sqitch lifecycle explicitly guarded against corruption</li>
+<li>Existing <code>diff-model.rkt</code>, dependency-graph, and manifest
+infrastructure gets wired into production</li>
+<li>Foundation for entity-level granularity in future versions</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Model serialization adds disk I/O (~100KB for large models)</li>
+<li>First run after any infrastructure change requires
+<code>--full</code></li>
+<li>Cross-context dependency edges may cause over-invalidation
+(conservative but safe)</li>
+<li>Two Sqitch code paths remain separate (no shared SQL generation
+logic)</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-context-level-incremental-generation-chosen">Option 1:
+Context-Level Incremental Generation (Chosen)</h3>
+<ul>
+<li>✅ Matches existing generator granularity (per-context
+invocation)</li>
+<li>✅ Leverages existing <code>diff-model.rkt</code> (685 lines) and
+dependency-graph (208 lines)</li>
+<li>✅ No refactoring of generator internals required</li>
+<li>✅ Conservative — over-invalidation is safe (regenerates too much,
+never too little)</li>
+<li>❌ Coarse granularity — changing one entity regenerates all 17+
+files for every entity in that context</li>
+<li>❌ Basedata changes invalidate many/all contexts (common
+cross-cutting dependency)</li>
+</ul>
+<h3 id="option-2-entity-level-incremental-generation">Option 2:
+Entity-Level Incremental Generation</h3>
+<ul>
+<li>✅ Maximum skip efficiency — only affected entity files
+regenerated</li>
+<li>✅ Basedata changes only propagate to specific referencing
+entities</li>
+<li>❌ Requires refactoring generators to accept single-entity
+invocation (major effort)</li>
+<li>❌ Proto files contain all entities per context — can't skip
+individual entities</li>
+<li>❌ <code>sqitch.plan</code> is per-project — entity-level skip
+doesn't help</li>
+<li>❌ Higher risk of missing transitive dependencies</li>
+</ul>
+<h3 id="option-3-file-timestamp-based-make-style">Option 3:
+File-Timestamp-Based (Make-style)</h3>
+<ul>
+<li>✅ Simple implementation — compare <code>.ddd</code> mtime vs output
+mtime</li>
+<li>❌ Doesn't handle cross-context dependencies (Basedata change
+doesn't touch other <code>.ddd</code> files)</li>
+<li>❌ Doesn't handle semantic renames (same UUID, different name =
+change, but file content differs)</li>
+<li>❌ Git operations (checkout, rebase) change mtimes
+unpredictably</li>
+<li>❌ Ignores the <code>@uuid</code> infrastructure entirely</li>
+</ul>
+<h3 id="option-4-status-quo-write-if-changed-only">Option 4: Status Quo
+(write-if-changed only)</h3>
+<ul>
+<li>✅ Zero implementation effort</li>
+<li>✅ Already prevents unnecessary CMake rebuilds</li>
+<li>❌ Generator execution time still grows with model size</li>
+<li>❌ All generators run for all contexts on every invocation</li>
+</ul>
+<h2 id="implementation-phases">Implementation Phases</h2>
+<h3 id="phase-1-sqitch-guard--model-serialization-foundation">Phase 1:
+Sqitch Guard + Model Serialization (Foundation)</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sqitch-mode</code> flag</td>
+<td>Add CLI flag to <code>generate.rkt</code>, skip greenfield Sqitch
+when <code>migration</code></td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td>Model serializer</td>
+<td><code>write-model</code> / <code>read-model</code> for
+<code>ddd-model</code> → <code>.muscovite-model.sexp</code></td>
+<td>New: <code>dslgen/incremental/model-serializer.rkt</code></td>
+</tr>
+<tr>
+<td>Serialize on generation</td>
+<td>After successful generation, write model to disk</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td>Load on startup</td>
+<td>At generation start, load previous model if exists</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-2-change-set--dependency-wiring">Phase 2: Change-Set +
+Dependency Wiring</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Change-set translator</td>
+<td>Convert <code>diff-model</code> operations →
+<code>changed-uuids</code> set</td>
+<td>New: <code>dslgen/incremental/change-set.rkt</code></td>
+</tr>
+<tr>
+<td>Wire dependency graph</td>
+<td>Replace stub accessors with real IR struct accessors</td>
+<td><code>dslgen/incremental/dependency-graph.rkt</code></td>
+</tr>
+<tr>
+<td>Cross-context edges</td>
+<td>Add FK target-context relationships as dependency edges</td>
+<td><code>dslgen/incremental/dependency-graph.rkt</code></td>
+</tr>
+<tr>
+<td>Affected context resolver</td>
+<td>Given <code>changed-uuids</code>, compute
+<code>affected-context-uuids</code> via BFS closure</td>
+<td><code>dslgen/incremental/dependency-graph.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-3-element-mapping--orchestrator-wiring">Phase 3:
+Element-Mapping + Orchestrator Wiring</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix artifact path mappings</td>
+<td>Update all <code>entity-&gt;artifact-paths</code> etc. to match
+actual output</td>
+<td><code>dslgen/manifest/element-mapping.rkt</code></td>
+</tr>
+<tr>
+<td>Wire orchestrator stubs</td>
+<td>Implement <code>all-paths-for-layer</code>,
+<code>uuid-&gt;artifact-paths</code>,
+<code>path-&gt;element-uuids</code></td>
+<td><code>dslgen/incremental/incremental-gen.rkt</code></td>
+</tr>
+<tr>
+<td>Manifest integration</td>
+<td>Track generated artifacts in <code>.artifact-manifest.json</code>
+during generation</td>
+<td><code>dslgen/manifest/artifact-manifest.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-4-pipeline-integration">Phase 4: Pipeline Integration</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Context skip logic</td>
+<td>Skip <code>generate-cpp-dba</code>, <code>generate-grpc</code>, Qt
+for unchanged contexts</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td><code>--full</code> flag</td>
+<td>Force full regeneration</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td><code>--dry-run</code> flag</td>
+<td>Report what would regenerate</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td><code>--verbose</code> logging</td>
+<td>Log skip/regenerate decisions per context</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td>Deletion handling</td>
+<td>Remove artifacts for deleted contexts/entities</td>
+<td><code>dslgen/incremental/incremental-gen.rkt</code></td>
+</tr>
+<tr>
+<td>Fallback safety</td>
+<td>If model load fails or hash mismatch, fall back to
+<code>--full</code></td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Any work on generation performance or skipping unchanged
+artifacts</li>
+<li>Adding new generators (must register output paths in
+element-mapping)</li>
+<li>Modifying <code>generate.rkt</code> pipeline flow</li>
+<li>Working with <code>dslgen/incremental/</code> or
+<code>dslgen/manifest/</code> modules</li>
+<li>Discussions about Sqitch plan management and production
+deployment</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Parser changes (parsing always runs on all files)</li>
+<li>Migration pipeline (<code>migrate.rkt</code>) — already incremental
+by design</li>
+<li>Runtime C++ framework changes (Layer 1)</li>
+<li>Manual testing with <code>--fresh</code> flag (always full
+regeneration)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><code>--sqitch-mode</code> flag guards against greenfield Sqitch on
+deployed databases</li>
+<li><code>write-if-changed</code> remains as safety net regardless of
+incremental mode</li>
+<li>Missing <code>.muscovite-model.sexp</code> triggers automatic
+<code>--full</code> fallback</li>
+<li>Cross-context dependency edges ensure conservative invalidation</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generate.rkt</code> — Main pipeline, integration
+point</li>
+<li><code>dslgen/incremental/dependency-graph.rkt</code> — BFS
+transitive closure on reverse edges</li>
+<li><code>dslgen/incremental/incremental-gen.rkt</code> — Orchestrator
+with stubs to wire</li>
+<li><code>dslgen/manifest/artifact-manifest.rkt</code> — Artifact
+tracking with content hashes</li>
+<li><code>dslgen/manifest/element-mapping.rkt</code> — UUID → file path
+mappings (STALE — must update)</li>
+<li><code>dslgen/migration/diff-model.rkt</code> — Semantic diff engine
+(22+ operation types)</li>
+<li><code>dslgen/migration/operations.rkt</code> — Operation struct
+definitions</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20260109-stable-uuid-identity.html">ADR 20260109: Stable UUID
+Identity</a></li>
+<li><a href="20260109-semantic-model-delta.html">ADR 20260109: Semantic
+Model Delta</a></li>
+<li><a href="20260109-canonical-semantic-ir-representation.html">ADR
+20260109: Canonical Semantic IR Representation</a></li>
+<li><a
+href="../../workflow/ideas/IDEA-002-incremental-code-generation.html">Idea:
+Incremental Code Generation</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

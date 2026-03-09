@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite System Brief — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/guides/">guides</a>
+  <span class="sep">/</span>
+  <span>Muscovite System Brief</span>
+</nav>
+
+<h1>Muscovite System Brief</h1>
+
+
+<h1 id="muscovite-system-brief">Muscovite System Brief</h1>
+<blockquote>
+<p><strong>Version</strong>: 1.59.0 | <strong>Generated</strong>:
+2026-03-09 | <strong>Commit</strong>: 8d63cd74 |
+<strong>Branch</strong>: main All content derived from live project
+sources. No hardcoded lists. Regenerate:
+<code>workflow/scripts/generate-system-brief.sh</code></p>
+</blockquote>
+<hr />
+<h2 id="1-system-purpose">1. System Purpose</h2>
+<p>Muscovite is a <strong>Racket-based DDD code generation
+framework</strong> that transforms declarative domain models
+(<code>.ddd</code> files) into a complete full-stack application.</p>
+<p><strong>Generator targets</strong> (from
+<code>dslgen/generators/</code>):</p>
+<ul>
+<li><strong>cmake</strong> (5 modules, 2005 lines)</li>
+<li><strong>compiled</strong> (0 modules, 0 lines)</li>
+<li><strong>cpp</strong> (77 modules, 21440 lines)</li>
+<li><strong>docs</strong> (11 modules, 3811 lines)</li>
+<li><strong>grpc</strong> (31 modules, 8071 lines)</li>
+<li><strong>messaging</strong> (2 modules, 599 lines)</li>
+<li><strong>postgres</strong> (29 modules, 7697 lines)</li>
+<li><strong>qt</strong> (60 modules, 16805 lines)</li>
+<li><strong>search</strong> (4 modules, 993 lines)</li>
+<li><strong>shared</strong> (11 modules, 2187 lines)</li>
+</ul>
+<p><strong>Dual-licensed</strong>: AGPL-3.0 + Commercial. Copyright ©
+2025-2026 Johannes Lochmann.</p>
+<h2 id="2-architecture--dsl-governance">2. Architecture &amp; DSL
+Governance</h2>
+<h3 id="three-layer-hierarchy">Three-Layer Hierarchy</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer 0 — Brain</strong></td>
+<td><code>dslgen/</code> (Racket)</td>
+<td>DSL parser, IR model, all generators</td>
+</tr>
+<tr>
+<td><strong>Layer 1 — Framework</strong></td>
+<td><code>framework/</code> (C++)</td>
+<td>Reusable base classes (Repository, UnitOfWork, errors)</td>
+</tr>
+<tr>
+<td><strong>Layer 2 — Generated</strong></td>
+<td><code>examples/{project}/</code></td>
+<td>100% generated from <code>.ddd</code> models. Never manually
+edited.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dsl-governance-chain">DSL Governance Chain</h3>
+<pre><code>PEG Grammar (spec) → Parser (impl) → Grammar Conformance Test (parity check)
+       ↓                    ↓                        ↓
+  Syntax rules      IR struct instances      Keyword drift detection
+       ↓                    ↓                        ↓
+  doc/DSL.md (auto)   Generators (emit)       doc/CONTEXT.md (metrics)</code></pre>
+<p><strong>Rule</strong>: Grammar changes precede parser changes (ADR
+20260211). Zero opaque stubs.</p>
+<h2 id="3-dsl-specification-metrics">3. DSL Specification Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PEG grammar rules</td>
+<td>277</td>
+</tr>
+<tr>
+<td>Known types (type-registry.rkt)</td>
+<td>53</td>
+</tr>
+<tr>
+<td>DSL model files (.ddd)</td>
+<td>40 (11621 lines)</td>
+</tr>
+<tr>
+<td>Generated output</td>
+<td>1048272 lines</td>
+</tr>
+<tr>
+<td><strong>DSL amplification</strong></td>
+<td><strong>90× (.ddd → generated)</strong></td>
+</tr>
+<tr>
+<td>Project files (.mus)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>ADRs</td>
+<td>190</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
+<h3 id="layer-0--racket-124961-lines">Layer 0 — Racket (124961
+lines)</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model (IR structs)</td>
+<td>4520</td>
+</tr>
+<tr>
+<td>Parser</td>
+<td>5749</td>
+</tr>
+<tr>
+<td>Generator: postgres</td>
+<td>7697</td>
+</tr>
+<tr>
+<td>Generator: cpp</td>
+<td>21440</td>
+</tr>
+<tr>
+<td>Generator: grpc</td>
+<td>8071</td>
+</tr>
+<tr>
+<td>Generator: qt</td>
+<td>16805</td>
+</tr>
+<tr>
+<td>Generator: cmake</td>
+<td>2005</td>
+</tr>
+<tr>
+<td>Generator: docs</td>
+<td>3811</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>29047</td>
+</tr>
+</tbody>
+</table>
+<h3 id="layer-1--c-framework-41531-lines">Layer 1 — C++ Framework (41531
+lines)</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Headers (.hpp)</td>
+<td>17620</td>
+</tr>
+<tr>
+<td>Sources (.cpp)</td>
+<td>23911</td>
+</tr>
+<tr>
+<td>C++ Tests</td>
+<td>6121</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-per-project-generated-output">5. Per-Project Generated
+Output</h2>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>C++</th>
+<th>SQL</th>
+<th>Proto</th>
+<th>QML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>brownfield-gitea-test</td>
+<td>2395</td>
+<td>795</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>fhir-health</td>
+<td>147278</td>
+<td>15617</td>
+<td>12935</td>
+<td>35502</td>
+</tr>
+<tr>
+<td>geosciences</td>
+<td>74910</td>
+<td>52921</td>
+<td>39247</td>
+<td>0</td>
+</tr>
+<tr>
+<td>hello-world</td>
+<td>49938</td>
+<td>3312</td>
+<td>2808</td>
+<td>5566</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="1590----2026-03-09">[1.59.0] -- 2026-03-09</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Merge pull request #92 from
+opensourcedruidhills/feature/ftr-282-frontend-test-harness</li>
+<li>(FTR-282): Frontend validation test harness for Qt and QML</li>
+<li>Merge pull request #90 from
+opensourcedruidhills/feature/ftr-278-widgets-constraints</li>
+<li>(FTR-283): Fact-base and glossary updates for validation
+concepts</li>
+<li>(FTR-281): QML ViewModel validate() method generation</li>
+<li>(FTR-279): EntityValidator cross-field constraint rules</li>
+<li>(FTR-280): QML field constraint validator generation</li>
+<li>(FTR-278): Constraint-driven widget configuration from DSL</li>
+<li>chore: merge FTR-305/306/307/308 golden-file tests (crash
+recovery)</li>
+<li>(ftr-312): Documentation generator golden-file regression tests</li>
+<li>(ftr-311): CMake/Conan build system golden-file regression
+tests</li>
+<li>(ftr-310): Qt QML generator golden-file regression tests</li>
+<li>(FTR-307, FTR-308): Add C++ DBA and gRPC golden-file tests</li>
+<li>(FTR-306): Add PostgreSQL golden-file regression tests</li>
+<li>(ftr-309): Qt Widgets generator golden-file regression tests</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>sync conanfile.py version to 1.55.3 (match CMakeLists.txt)</li>
+<li>add SPDX headers to QML E2E test files (e2e-qml-test.rkt)</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>fix FTR status for v1.59.0 release gate</li>
+<li>mark FTR-278/279/282 complete, update ITERATION.md</li>
+<li>mark FTR-280, FTR-281, FTR-283 as complete</li>
+<li>register FTR-278/279 tests in test-manifest.rkt</li>
+<li>archive v1.58.0 to workflow/completed/</li>
+<li>merge FTR-309/310/311/312 golden-file tests (crash recovery)</li>
+<li>merge FTR-305/306/307/308 golden-file tests (crash recovery)</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>Merge pull request #92 from
+opensourcedruidhills/feature/ftr-282-frontend-test-harness</li>
+<li>Merge pull request #91 from
+opensourcedruidhills/feature/ftr-280-qml-validators</li>
+<li>Merge pull request #90 from
+opensourcedruidhills/feature/ftr-278-widgets-constraints</li>
+<li>wip: bump FetchContent GIT_TAG v1.54.0 → v1.55.0 in QML test
+output</li>
+</ul>
+<h2 id="1553----2026-03-09">[1.55.3] -- 2026-03-09</h2>
+<h3 id="added-1">Added</h3>
+<ul>
+<li>(FTR-321): Retroactive Racket unit tests — Validation layer
+(EntityValidator, PluginValidator struct generation, plugin hook
+registration, validation error marshalling, constraint checking)</li>
+<li>(FTR-322): Retroactive Racket unit tests — DomainService integration
+(gRPC → validator → plugin → command/query wiring, service method
+generation, dependency injection, error propagation)</li>
+<li>(FTR-323): Retroactive Racket unit tests — Layer 2 generated code
+integration (C++, Proto, SQL, Qt, CMake, Sqitch end-to-end
+verification)</li>
+<li>(FTR-324): Regression tests + fixes — Proto JSON marshalling edge
+cases (UUID RFC 4122, decimal precision, timestamp ISO 8601, NULL
+handling, nested collections)</li>
+<li>(FTR-325): Regression tests + fixes — gRPC service generation with
+complex aggregates (20+ relationships, command dispatch, FK resolution,
+polymorphism, event publication)</li>
+<li>(FTR-326): Regression tests + fixes — Qt async binding race
+conditions (signal ordering, serialization, version tracking, concurrent
+updates, error recovery)</li>
+</ul>
+<h3 id="quality-gateway">Quality Gateway</h3>
+<ul>
+<li>All 89 Racket test suites pass (includes 6 new retroactive + fix
+validation test suites) ✅</li>
+<li>All 365 C++ unit tests pass (98% of 372, DB setup-related failures
+expected) ✅</li>
+<li>Retroactive coverage: 60 test cases across validation, domain
+service, and Layer 2 integration</li>
+<li>All acceptance criteria ticked, all FTRs marked complete</li>
+<li>Ready for v1.55.3 release tagging</li>
+</ul>
+<h2 id="1552----2026-03-08">[1.55.2] -- 2026-03-08</h2>
+<h3 id="added-2">Added</h3>
+<ul>
+<li>(FTR-313): Retroactive Racket unit tests — PostgreSQL generator
+(UUIDv7, named FKs, indexes, COMMENT ON, audit triggers, events,
+lookups, constraints, Sqitch deploy/verify)</li>
+<li>(FTR-314): Retroactive Racket unit tests — CMake/build system
+generator (sanitizer presets ASAN/TSAN, mold exclusion, build
+acceleration, parallel job limits, Qt discovery)</li>
+<li>(FTR-315): Retroactive Racket unit tests — gRPC/Proto generator
+(service definitions, field mappings, timestamps, UUID marshalling,
+oneofs, enums)</li>
+<li>(FTR-316): Retroactive Racket unit tests — Qt generators (Widgets +
+QML model binding, validation, signal/slot connections, async gRPC via
+TaskTree)</li>
+<li>(FTR-317): Retroactive Racket unit tests — infrastructure generators
+(OpenSearch indexes, plugin interfaces, event sourcing, sagas,
+projectors)</li>
+<li>(FTR-318): Retroactive C++ framework doctest coverage —
+EntityValidator, PluginValidator, DomainService base classes (BDD
+SCENARIO/GIVEN/WHEN/THEN patterns)</li>
+<li>(FTR-319): DB deploy regression baseline — FHIR Health and
+Geosciences fresh database setup and schema validation tests</li>
+</ul>
+<h3 id="quality-gateway-1">Quality Gateway</h3>
+<ul>
+<li>All 83 Racket test suites pass (includes 7 new retroactive test
+suites) ✅</li>
+<li>All 353 C++ unit tests pass ✅</li>
+<li>Retroactive test coverage: 70+ feature assertions across 5 generator
+domains + C++ framework</li>
+<li>Ready for stabilization iteration close</li>
+</ul>
+<h2 id="7-current-work">7. Current Work</h2>
+<p>No active iteration.</p>
+<h2 id="8-planned-work">8. Planned Work</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.55.1</td>
+<td>Verify ADR 20260307 gates pass on current codebase and add
+golden-file regression tests for all 7 generator targets.</td>
+</tr>
+<tr>
+<td>v1.60.0</td>
+<td>Extend the expression AST with collection predicate operations (NOT
+IN, IS EMPTY, INTERSECTS, SUBSET OF) and generate them across all
+targets.</td>
+</tr>
+<tr>
+<td>v1.61.0</td>
+<td>Introduce the EFFECT catalog, DECIDE block on COMMAND, EMIT/PLAN
+intent separation, ENSURES postconditions, and Tier 2 computation
+expressions (IF/LET/MATCH) with C++ and PostgreSQL generation.</td>
+</tr>
+<tr>
+<td>v1.62.0</td>
+<td>Complete the functional expression language with MAP/FILTER/REDUCE,
+aggregation built-ins (SUM/COUNT/MIN/MAX/AVG), and prove with a
+real-world booking price calculation example.</td>
+</tr>
+<tr>
+<td>v1.63.0</td>
+<td>Exploit the rich domain model for automated quality assurance
+(property-based test generation from ENSURES) and documentation (Mermaid
+decision diagrams, Business Logic chapter in system manual).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
+<p>41 ideas in backlog.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDEA-001</td>
+<td>Idea: Geosciences Phase 3 spatial: GeologicMapFeature entity + seed
+data</td>
+</tr>
+<tr>
+<td>IDEA-003</td>
+<td>Idea: State Machine DSL Construct — Grammar, IR, and Parser</td>
+</tr>
+<tr>
+<td>IDEA-004</td>
+<td>Idea: State Machine Code Generation — PostgreSQL, C++, gRPC, Qt</td>
+</tr>
+<tr>
+<td>IDEA-005</td>
+<td>Idea: Bitemporal Data DSL Construct — Grammar, IR, and Parser</td>
+</tr>
+<tr>
+<td>IDEA-006</td>
+<td>Idea: Bitemporal Code Generation — PostgreSQL, C++, gRPC, Qt</td>
+</tr>
+<tr>
+<td>IDEA-008</td>
+<td>Idea: Template DSL formal reference documentation</td>
+</tr>
+<tr>
+<td>IDEA-009</td>
+<td>Idea: OpenSearch full-text search capability — ADR and
+architecture</td>
+</tr>
+<tr>
+<td>IDEA-010</td>
+<td>Idea: @searchable annotation — PEG grammar, parser, IR</td>
+</tr>
+<tr>
+<td>IDEA-011</td>
+<td>Idea: SEARCH capability — project DSL grammar and parser</td>
+</tr>
+<tr>
+<td>IDEA-012</td>
+<td>Idea: OpenSearch framework module — libcurl REST client</td>
+</tr>
+<tr>
+<td>IDEA-013</td>
+<td>Idea: Search indexer — NATS event consumer for OpenSearch</td>
+</tr>
+<tr>
+<td>IDEA-014</td>
+<td>Idea: Search query builder and result types — framework</td>
+</tr>
+<tr>
+<td>IDEA-015</td>
+<td>Idea: Search index schema generator — Racket</td>
+</tr>
+<tr>
+<td>IDEA-016</td>
+<td>Idea: Search document mapper generator — C++</td>
+</tr>
+<tr>
+<td>IDEA-017</td>
+<td>Idea: gRPC GlobalSearchService generator</td>
+</tr>
+<tr>
+<td>IDEA-018</td>
+<td>Idea: Qt Widgets GlobalSearchWidget generator</td>
+</tr>
+<tr>
+<td>IDEA-019</td>
+<td>Idea: Qt QML SearchBar component generator</td>
+</tr>
+<tr>
+<td>IDEA-020</td>
+<td>Idea: OpenSearch Docker infrastructure and CMake targets</td>
+</tr>
+<tr>
+<td>IDEA-021</td>
+<td>Idea: Search reindexer — bulk PostgreSQL to OpenSearch</td>
+</tr>
+<tr>
+<td>IDEA-022</td>
+<td>Idea: Replace gen_random_uuid with uuidv7 in all infrastructure
+generators</td>
+</tr>
+<tr>
+<td>IDEA-023</td>
+<td>Idea: Explicit named FK constraints replacing inline REFERENCES</td>
+</tr>
+<tr>
+<td>IDEA-024</td>
+<td>Idea: Automatic btree indexes on all FK columns</td>
+</tr>
+<tr>
+<td>IDEA-025</td>
+<td>Idea: Column-level COMMENT ON propagation from field-doc</td>
+</tr>
+<tr>
+<td>IDEA-026</td>
+<td>Idea: Seed data best practices: multi-row VALUES, standard quotes,
+ON CONFLICT</td>
+</tr>
+<tr>
+<td>IDEA-027</td>
+<td>Idea: Deep verify scripts checking columns, types, constraints,
+indexes, triggers</td>
+</tr>
+<tr>
+<td>IDEA-028</td>
+<td>Idea: Consistent SQL naming conventions: trg_ prefix, idx_ prefix,
+fk_ prefix</td>
+</tr>
+<tr>
+<td>IDEA-029</td>
+<td>Idea: PostgreSQL pattern enforcement test:
+test-postgres-patterns.rkt</td>
+</tr>
+<tr>
+<td>IDEA-030</td>
+<td>Idea: Unify DbErrorCode and DbError enums across Layer 1 and Layer
+2</td>
+</tr>
+<tr>
+<td>IDEA-031</td>
+<td>Idea: Add missing pqxx exception catches in generated map_error</td>
+</tr>
+<tr>
+<td>IDEA-032</td>
+<td>Idea: Fix SerializationFailure gRPC mapping from INTERNAL to
+ABORTED</td>
+</tr>
+<tr>
+<td>IDEA-033</td>
+<td>Idea: Add DeadlineExceeded to DbError enum and gRPC error
+mapping</td>
+</tr>
+<tr>
+<td>IDEA-034</td>
+<td>Idea: Transactor deadline overload with statement_timeout
+propagation</td>
+</tr>
+<tr>
+<td>IDEA-035</td>
+<td>Idea: Add max_statement_timeout to ServerConfig</td>
+</tr>
+<tr>
+<td>IDEA-036</td>
+<td>Idea: Migrate generated services from raw UnitOfWork to framework
+transactor</td>
+</tr>
+<tr>
+<td>IDEA-037</td>
+<td>Idea: Remove maybe_unused from ServerContext in generated gRPC
+handlers</td>
+</tr>
+<tr>
+<td>IDEA-038</td>
+<td>Idea: Generate DEADLINE_EXCEEDED handling in e2e gRPC test client
+stubs</td>
+</tr>
+<tr>
+<td>IDEA-039</td>
+<td>Idea: Doctest tests for transactor deadline-aware behavior</td>
+</tr>
+<tr>
+<td>IDEA-045</td>
+<td>Idea: Idempotency keys for generated write RPCs</td>
+</tr>
+<tr>
+<td>IDEA-046</td>
+<td>Idea: OpenTelemetry integration for generated gRPC services</td>
+</tr>
+<tr>
+<td>IDEA-047</td>
+<td>Idea: Correlation ID propagation across gRPC service layers</td>
+</tr>
+<tr>
+<td>IDEA-048</td>
+<td>Idea: DDD model version exposure in generated gRPC services</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-build-metrics">10. Build Metrics</h2>
+<h3 id="racket-byte-compilation">Racket Byte Compilation</h3>
+<p>The <code>compiled/</code> directories throughout
+<code>dslgen/</code> are Racket's bytecode cache (<code>.zo</code> files
++ <code>.dep</code> dependency trackers), produced by
+<code>raco make generate.rkt</code>. They reduce generator startup from
+~71s to &lt;10s.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bytecode files (<code>.zo</code>)</td>
+<td>254</td>
+</tr>
+<tr>
+<td>Cache size</td>
+<td>7.5M</td>
+</tr>
+</tbody>
+</table>
+<p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
+(or CMake target <code>racket-compile</code>). Gitignored — safe to
+delete.</p>
+<p>Build metrics not available (install <code>jq</code> or run build
+profiling).</p>
+<h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Suites/Tests</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Pass Rate</th>
+<th>Wall Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket (Layer 0)</td>
+<td>93 suites</td>
+<td>93</td>
+<td>0</td>
+<td>100%</td>
+<td>439.8s</td>
+</tr>
+<tr>
+<td>C++ (Layer 1+2)</td>
+<td>28 tests</td>
+<td>27</td>
+<td>1</td>
+<td>96%</td>
+<td>11.1s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Racket tier breakdown</strong> (from
+<code>metrics/racket-test-results.json</code>):</p>
+<ul>
+<li><strong>fast</strong>: 29/29 passed (119.5s)</li>
+<li><strong>slow</strong>: 53/53 passed (281.1s)</li>
+<li><strong>integration</strong>: 11/11 passed (38.8s)</li>
+</ul>
+<p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
+<code>tools/extract-test-metrics.sh</code></p>
+<h3 id="regression-tracking">Regression Tracking</h3>
+<table>
+<thead>
+<tr>
+<th>Release</th>
+<th>Layers Passed</th>
+<th>Layers Failed</th>
+<th>Regressions</th>
+<th>Racket Suites</th>
+<th>C++ Tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.59.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>93/93</td>
+<td>27/28</td>
+</tr>
+<tr>
+<td>v1.55.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>69/69</td>
+<td>20/28</td>
+</tr>
+</tbody>
+</table>
+<p><strong>✅ No regressions in latest release (v1.59.0).</strong></p>
+<h2 id="12-user-profile">12. User Profile</h2>
+<h1 id="user-profile-jolo">User Profile: Jolo</h1>
+<blockquote>
+<p>AI agents: Read this to understand communication style and working
+patterns.</p>
+</blockquote>
+<h2 id="summary">Summary</h2>
+<p><strong>Role</strong>: Staff Engineer / Technical Lead / Former
+Department Head <strong>Experience</strong>: 10+ years systems
+architecture, DDD, multi-language stacks (C++, C#, Python, Racket, SQL,
+QML) <strong>Key Trait</strong>: Pragmatic — values <strong>working code
+over theory</strong>, <strong>documentation over talk</strong>,
+<strong>tests over intuition</strong></p>
+<h2 id="communication-style">Communication Style</h2>
+<p><strong>Preferred format</strong>: <code>## Status: [Feature]</code>
+→ <strong>Completed</strong> ✅ / <strong>Blocking</strong> (file:line)
+/ <strong>Next Action</strong> (test command).</p>
+<p><strong>Do</strong>: Bullet points, tables, code snippets. File:line
+references. Test output as proof. Executable next steps.</p>
+<p><strong>Don't</strong>: ❌ "This might work..." | ❌ "Usually this
+should..." | ❌ Long explanations without actions | ❌ Workarounds
+instead of root-cause fixes.</p>
+<h2 id="what-frustrates">What Frustrates</h2>
+<table>
+<thead>
+<tr>
+<th>Anti-Pattern</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Let's add X because it's cool"</td>
+<td>No domain justification</td>
+</tr>
+<tr>
+<td>"Quick fix now, proper later"</td>
+<td>Technical debt</td>
+</tr>
+<tr>
+<td>"Just edit the generated code"</td>
+<td>Violates DSL-first</td>
+</tr>
+<tr>
+<td>Suggesting manual SQL</td>
+<td>Bypasses migration pipeline</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-builds-trust">What Builds Trust</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Here's a failing test proving the bug"</td>
+<td>Test-driven</td>
+</tr>
+<tr>
+<td>"This affects files X, Y, Z"</td>
+<td>Holistic awareness</td>
+</tr>
+<tr>
+<td>"Per ADR 20260120, use domain services"</td>
+<td>Respects decisions</td>
+</tr>
+<tr>
+<td>Direct line references</td>
+<td>Precise, actionable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="technical-philosophy">Technical Philosophy</h2>
+<ul>
+<li><strong>Generator-first</strong>: Repeating code → Racket
+template</li>
+<li><strong>Fail fast</strong>: Catch errors at generation, not
+runtime</li>
+<li><strong>Single source of truth</strong>: DSL drives everything</li>
+<li><strong>Automation over discipline</strong>: Tools enforce
+conventions</li>
+<li><strong>Integration over unit tests</strong>: Meaningful &gt;
+numerous</li>
+<li><strong>Vertical feature completeness</strong>: Full stack or
+nothing — no partial implementations</li>
+<li><strong>Production-grade or nothing</strong>: Rejects
+toy/lightweight tools for core infrastructure</li>
+</ul>
+<h2 id="how-agents-should-adapt">How Agents Should Adapt</h2>
+<ol type="1">
+<li>Lead with executable actions, not explanations</li>
+<li>Cite specific files/lines</li>
+<li>Show test output to validate</li>
+<li>Use tables/bullets for decisions</li>
+<li>Never suggest editing generated code</li>
+<li>Reference ADRs for architectural changes</li>
+<li>Identify the correct layer (parser? generator? framework?) —
+wrong-layer suggestions erode trust immediately</li>
+<li>Think about downstream impact across all 8 generator targets</li>
+<li>Check license compatibility against AGPL-3.0 + Commercial dual
+licensing</li>
+<li>Suggest production-grade solutions sized to the domain</li>
+</ol>
+<h2 id="13-agent-sessions">13. Agent Sessions</h2>
+<p>No active agent sessions.</p>
+<hr />
+<h2 id="key-references">Key References</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>doc/CONTEXT.md</code></td>
+<td>AI-first project context (generated)</td>
+</tr>
+<tr>
+<td><code>doc/DSL.md</code></td>
+<td>DSL syntax reference (auto-generated from PEG + type registry)</td>
+</tr>
+<tr>
+<td><code>doc/PROJECT-DSL.md</code></td>
+<td>Project DSL reference (auto-generated)</td>
+</tr>
+<tr>
+<td><code>doc/GROUND-TRUTH.md</code></td>
+<td>IR structs, type mappings, naming conventions</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>AI agent guide (build workflow, conventions)</td>
+</tr>
+<tr>
+<td><code>doc/adr/</code></td>
+<td>Architecture decision records (190)</td>
+</tr>
+<tr>
+<td><code>CHANGELOG.md</code></td>
+<td>Release history</td>
+</tr>
+<tr>
+<td><code>workflow/</code></td>
+<td>Feature lifecycle and release management</td>
+</tr>
+</tbody>
+</table>
+<h2 id="project-metrics-summary">Project Metrics Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version</td>
+<td>1.59.0</td>
+</tr>
+<tr>
+<td>Git commits</td>
+<td>1299 (since 2025-11-17)</td>
+</tr>
+<tr>
+<td>Racket source</td>
+<td>124961 lines</td>
+</tr>
+<tr>
+<td>C++ framework</td>
+<td>41531 lines</td>
+</tr>
+<tr>
+<td>Generator targets</td>
+<td>10</td>
+</tr>
+<tr>
+<td>ADRs</td>
+<td>190</td>
+</tr>
+<tr>
+<td>Racket tests</td>
+<td>29047 lines</td>
+</tr>
+<tr>
+<td>C++ tests</td>
+<td>6121 lines</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Generated by
+<code>workflow/scripts/generate-system-brief.sh</code> — all content
+derived from live sources</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

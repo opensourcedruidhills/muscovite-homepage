@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qt/QML Modern Style Guide for
+Muscovite — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Qt/QML Modern Style Guide for Muscovite</span>
+</nav>
+
+<h1>Qt/QML Modern Style Guide for Muscovite</h1>
+
+
+<h1 id="qtqml-modern-style-guide-for-muscovite">Qt/QML Modern Style
+Guide for Muscovite</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-03-03</li>
+<li>Tags: qt, qml, widgets, style-guide, patterns, generator</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: FTR-188 — Codify
+<code>doc/QT-WIDGETS-PATTERNS.md</code> (16 sections) and
+<code>doc/QML-PATTERNS.md</code> (13 sections) as binding Qt/QML style
+guides for all Muscovite Qt code (framework Layer 1 and generated Layer
+2).</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates Qt Widgets and Qt Quick/QML desktop clients from
+the same <code>.ddd</code> domain model. The framework
+(<code>framework/qt/</code>) provides base classes (EntityListModel,
+LoginDialog, GrpcChannelManager, validation). Generated code must follow
+Qt idioms precisely — Qt has strong conventions around:</p>
+<ul>
+<li>Signal/slot naming, <code>Q_PROPERTY</code> patterns, memory
+management (parent-child ownership)</li>
+<li>QML import syntax (Qt 6 versionless), property ordering, type-safe
+<code>required property</code></li>
+<li>Testing: <code>QTest</code> for anything touching
+<code>QObject</code>/<code>QWidget</code>; <code>doctest</code> only for
+pure value types</li>
+</ul>
+<p>Two compliance audits exist:</p>
+<ul>
+<li><code>doc/QT-FRAMEWORK-AUDIT.md</code> — framework code
+patterns</li>
+<li><code>doc/QT-GENERATOR-AUDIT.md</code> — generated code
+patterns</li>
+</ul>
+<p>This ADR elevates the pattern catalogs to binding guides and
+explicitly clarifies the testing boundary.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Generated QML must pass Qt Quick Compiler static analysis
+(<code>qmllint</code>)</li>
+<li>Qt 6 versionless imports avoid build breakage on minor version
+bumps</li>
+<li>AI agents need a single reference for Qt-specific patterns (separate
+from C++23 patterns)</li>
+<li>Testing boundary confusion (QTest vs doctest) caused wrong test
+framework choices in past PRs</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Adopt QT-WIDGETS-PATTERNS.md + QML-PATTERNS.md as binding
+guides</strong></li>
+<li><strong>Use Qt documentation conventions only</strong> — no
+project-specific guide</li>
+<li><strong>Merge into CPP-PATTERNS.md</strong> — single document for
+all C++</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Separate Qt/QML binding
+guides</strong>, because Qt patterns are domain-specific to the GUI
+layer and do not apply to DBA/gRPC code. Merging would bloat the C++
+guide and confuse scope.</p>
+<h3 id="qt-widgets-binding-sections-16-sections">Qt Widgets Binding
+Sections (16 Sections)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Section</th>
+<th>Severity</th>
+<th>Key Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Asynchronous gRPC Calls</td>
+<td>P0</td>
+<td>Never block the event loop with synchronous stubs</td>
+</tr>
+<tr>
+<td>2</td>
+<td>gRPC Stub Ownership</td>
+<td>P0</td>
+<td>Per-instance <code>unique_ptr&lt;StubInterface&gt;</code>, not
+static</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Theming and Colors</td>
+<td>P1</td>
+<td><code>QPalette</code> system colors, no hardcoded RGB</td>
+</tr>
+<tr>
+<td>4</td>
+<td>QML Property Naming</td>
+<td>P1</td>
+<td><code>camelCase</code> for <code>Q_PROPERTY</code>,
+<code>snake_case</code> for C++ members</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Validator Widget Types</td>
+<td>P1</td>
+<td>Use <code>QDoubleValidator</code> for Decimal fields</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Memory Management</td>
+<td>P1</td>
+<td>Qt parent-child ownership; raw <code>new</code> only with
+parent</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Signal/Slot Connections</td>
+<td>P1</td>
+<td><code>connect(sender, &amp;Class::signal, ...)</code> — no
+string-based</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Internationalization</td>
+<td>P1</td>
+<td><code>tr()</code> for Widgets, <code>qsTr()</code> for QML</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Threading and Blocking</td>
+<td>P0</td>
+<td>No <code>QThread::msleep</code>; use
+<code>QTimer::singleShot</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Layout Management</td>
+<td>P2</td>
+<td><code>QFormLayout</code> for forms, <code>QGridLayout</code> for
+tables</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Q_PROPERTY for ViewModels</td>
+<td>P1</td>
+<td>All fields as <code>Q_PROPERTY</code> with <code>NOTIFY</code>
+signal</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Forward Declarations</td>
+<td>P2</td>
+<td>Forward-declare Qt classes in headers</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Header/Source Split</td>
+<td>P1</td>
+<td>Never inline <code>QWidget</code> method bodies</td>
+</tr>
+<tr>
+<td>14</td>
+<td>QRegularExpression</td>
+<td>P2</td>
+<td><code>static const QRegularExpression</code> for reuse</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Member Initialization</td>
+<td>P1</td>
+<td>NSDMI (in-class init) for Qt member pointers</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Qt6-Specific APIs</td>
+<td>P1</td>
+<td><code>qOverload&lt;&gt;</code> over
+<code>QOverload&lt;&gt;::of</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="qml-binding-sections-13-sections">QML Binding Sections (13
+Sections)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Section</th>
+<th>Severity</th>
+<th>Key Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Internationalization (qsTr)</td>
+<td>P0</td>
+<td>All user-facing strings wrapped in <code>qsTr()</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Type-Safe Required Properties</td>
+<td>P1</td>
+<td><code>required property type name</code> for ViewModel
+injection</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Versionless Qt 6 Imports</td>
+<td>P0</td>
+<td><code>import QtQuick</code> — no version numbers</td>
+</tr>
+<tr>
+<td>4</td>
+<td>QAbstractListModel for ListView</td>
+<td>P0</td>
+<td><code>EntityListModel</code> base class, no
+<code>ListModel</code>/<code>modelData</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Loader for Dynamic Dialogs</td>
+<td>P1</td>
+<td><code>Loader { active: false }</code> for dialog creation</td>
+</tr>
+<tr>
+<td>6</td>
+<td>SpinBox Value Handling</td>
+<td>P1</td>
+<td><code>onValueModified</code> (user action) over
+<code>onValueChanged</code> (binding loop)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ListView Clipping</td>
+<td>P2</td>
+<td><code>clip: true</code> on all <code>ListView</code> instances</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Theme Constants</td>
+<td>P2</td>
+<td><code>MuscoviteTheme.qml</code> pragma singleton</td>
+</tr>
+<tr>
+<td>9</td>
+<td>QML Property Ordering</td>
+<td>P2</td>
+<td>id → dimensions → anchors → properties → children → handlers</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Grouped Anchor Notation</td>
+<td>P2</td>
+<td><code>anchors { left: parent.left; ... }</code> grouped block</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Type Dispatch Consolidation</td>
+<td>P1</td>
+<td>Central <code>common.rkt</code> dispatch, no per-file type→widget
+maps</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Module Import (except-in)</td>
+<td>P1</td>
+<td>Racket <code>except-in</code> to resolve binding conflicts</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Template DSL Compliance</td>
+<td>P1</td>
+<td><code>define-template</code> for all new generator functions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing-boundary-explicit--no-exceptions">Testing Boundary
+(EXPLICIT — NO EXCEPTIONS)</h3>
+<table>
+<thead>
+<tr>
+<th>Code Under Test</th>
+<th>Test Framework</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>QObject</code> subclass</td>
+<td><strong>QTest</strong></td>
+<td>Requires <code>QCoreApplication</code>, signal/slot testing</td>
+</tr>
+<tr>
+<td><code>QWidget</code> subclass</td>
+<td><strong>QTest</strong></td>
+<td>Requires <code>QApplication</code>, event loop</td>
+</tr>
+<tr>
+<td><code>QAbstractItemModel</code></td>
+<td><strong>QTest</strong></td>
+<td><code>QSignalSpy</code>, <code>QModelIndex</code></td>
+</tr>
+<tr>
+<td>ViewModel (<code>Q_PROPERTY</code>)</td>
+<td><strong>QTest</strong></td>
+<td>Signal verification, property binding</td>
+</tr>
+<tr>
+<td>Pure value types (no Qt)</td>
+<td><strong>doctest</strong></td>
+<td>No Qt event loop needed</td>
+</tr>
+<tr>
+<td>pqxx repository code</td>
+<td><strong>doctest</strong></td>
+<td>Database, no Qt dependency</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FORBIDDEN</strong>: Using doctest for any class inheriting
+from <code>QObject</code>. Using QTest for pure C++ value types with no
+Qt dependency.</p>
+<h3 id="top-5-forbidden-qtqml-patterns">Top 5 Forbidden Qt/QML
+Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Forbidden</th>
+<th>Required</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Synchronous gRPC stub calls in Qt
+(<code>stub_-&gt;Method(...)</code>)</td>
+<td>TaskTree <code>GrpcTaskAdapter</code> async pattern</td>
+<td>Blocks event loop → frozen UI</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>QOverload&lt;int&gt;::of(&amp;QSpinBox::valueChanged)</code></td>
+<td><code>qOverload&lt;int&gt;(&amp;QSpinBox::valueChanged)</code></td>
+<td>Qt6 free function, shorter and cleaner</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>import QtQuick 2.15</code></td>
+<td><code>import QtQuick</code></td>
+<td>Qt6 versionless imports</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>ListModel { ListElement { ... } }</code> in QML</td>
+<td>C++ <code>QAbstractListModel</code> subclass</td>
+<td>Typed, testable, sortable, filterable</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>QThread::msleep(500)</code></td>
+<td><code>QTimer::singleShot(500, ...)</code></td>
+<td>Non-blocking event-loop-friendly</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Clear testing boundary prevents framework choice errors</li>
+<li>Generated QML passes <code>qmllint</code> static analysis</li>
+<li>AI agents have an explicit Qt-specific forbidden-pattern list</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Two separate documents to maintain (Widgets + QML) — mitigated by
+Generator Cross-Reference sections in each</li>
+<li>Retrofit of existing code is phased per Priority sections</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Qt Widgets catalog: <a
+href="../QT-WIDGETS-PATTERNS.html"><code>doc/QT-WIDGETS-PATTERNS.md</code></a>
+(16 sections)</li>
+<li>QML catalog: <a
+href="../QML-PATTERNS.html"><code>doc/QML-PATTERNS.md</code></a> (13
+sections)</li>
+<li>Framework audit: <a
+href="../QT-FRAMEWORK-AUDIT.html"><code>doc/QT-FRAMEWORK-AUDIT.md</code></a></li>
+<li>Generator audit: <a
+href="../QT-GENERATOR-AUDIT.html"><code>doc/QT-GENERATOR-AUDIT.md</code></a></li>
+<li>Related: ADR C++23 Style Guide (FTR-187), ADR TaskTree Adoption
+(FTR-189)</li>
+<li>Related: ADR 20260212 (doctest adoption), ADR 20260227 (QML
+idiomatic output quality)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

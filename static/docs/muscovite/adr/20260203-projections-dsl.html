@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projections DSL for Read-Optimized
+Views — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Projections DSL for Read-Optimized Views</span>
+</nav>
+
+<h1>Projections DSL for Read-Optimized Views</h1>
+
+
+<h1 id="projections-dsl-for-read-optimized-views">Projections DSL for
+Read-Optimized Views</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-03</li>
+<li>Tags: projections, cqrs, read-models, materialized-views, dsl</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>With the Event Consumers infrastructure complete (v0.9.0 Phase 1), we
+can now build <strong>projections</strong> — read-optimized views that
+aggregate data from domain events. Projections enable:</p>
+<ul>
+<li><strong>Denormalized read models</strong> for dashboard/reporting
+queries</li>
+<li><strong>Cross-aggregate views</strong> joining data from multiple
+bounded contexts</li>
+<li><strong>Pre-computed aggregations</strong> (counts, sums, latest
+values)</li>
+<li><strong>Eventual consistency</strong> between write and read
+models</li>
+</ul>
+<p>The question is: how do we declare projections in the DSL and
+generate the appropriate infrastructure?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>DDD principles</strong>: Projections are derived from domain
+events, not source tables</li>
+<li><strong>Declarative</strong>: Users specify WHAT the projection
+contains, not HOW to refresh</li>
+<li><strong>Multiple refresh strategies</strong>: Event-driven
+(real-time), scheduled, on-demand</li>
+<li><strong>SQL generation</strong>: Target PostgreSQL VIEWs or
+MATERIALIZED VIEWs</li>
+<li><strong>Type safety</strong>: Projections are strongly typed across
+layers</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>SQL-only projections</strong>: Hand-write VIEWs, no DSL
+support</li>
+<li><strong>Event handler DSL</strong>: Define projections as event
+handlers with state</li>
+<li><strong>Declarative projection DSL</strong>: PROJECTION keyword with
+source/select syntax (chosen)</li>
+<li><strong>External tool</strong>: Use dbt or similar for
+projections</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Declarative projection DSL</strong>, because
+it fits naturally with the existing DSL syntax, enables code generation
+for all layers, and keeps the single-source-of-truth principle.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<p><strong>Note</strong>: The <code>FROM</code> clause uses a
+<strong>string literal</strong> to contain the SQL query. This allows
+arbitrary SQL including commas, subqueries, and complex expressions
+without conflicting with the DSL grammar.</p>
+<pre class="ddd"><code>CONTEXT Reporting {
+
+    -- Simple denormalized view joining entities
+    PROJECTION ActivePatientSummary @uuid &quot;...&quot; (
+        patient_id          UUID        NOT NULL,
+        mrn                 TEXT        NOT NULL,
+        full_name           TEXT        NOT NULL,
+        gender_display      TEXT,
+        encounter_count     INTEGER     NOT NULL DEFAULT 0,
+        last_encounter_date DATE,
+        primary_condition   TEXT
+    )
+    FROM &quot;SELECT p.id, p.mrn, pn.family || &#39;, &#39; || pn.given, g.display,
+          COALESCE(e.cnt, 0), e.last_date, c.display
+          FROM Patient.Patient p
+          LEFT JOIN Patient.PatientName pn ON p.id = pn.patient_id AND pn.use = &#39;official&#39;
+          LEFT JOIN Basedata.AdministrativeGender g ON p.gender_id = g.id
+          LEFT JOIN (
+              SELECT patient_id, COUNT(*) as cnt, MAX(period_start) as last_date
+              FROM Encounter.Encounter
+              GROUP BY patient_id
+          ) e ON p.id = e.patient_id
+          WHERE p.active = true&quot;
+    REFRESH ON_DEMAND
+    DOC &quot;Active patients with encounter statistics for dashboard&quot;;
+
+    -- Event-driven projection updated by domain events
+    PROJECTION PatientEncounterTimeline @uuid &quot;...&quot; (
+        id                  UUID        NOT NULL,
+        patient_id          UUID        NOT NULL,
+        event_timestamp     TIMESTAMPTZ NOT NULL,
+        event_type          TEXT        NOT NULL,
+        event_summary       TEXT
+    )
+    REFRESH ON_EVENT Patient.PatientCreated, Encounter.EncounterCreated
+    HANDLER patient_timeline_handler
+    DOC &quot;Timeline of patient events for clinical view&quot;;
+
+    -- Scheduled aggregation
+    PROJECTION DailyEncounterStats @uuid &quot;...&quot; (
+        stat_date           DATE        NOT NULL,
+        encounter_count     INTEGER     NOT NULL,
+        unique_patients     INTEGER     NOT NULL,
+        avg_duration_hours  DECIMAL(5,2)
+    )
+    REFRESH SCHEDULED &quot;0 1 * * *&quot;  -- cron expression: 1 AM daily
+    DOC &quot;Daily encounter statistics for reporting&quot;;
+
+}</code></pre>
+<h3 id="refresh-strategies">Refresh Strategies</h3>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Keyword</th>
+<th>Generated</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>On-demand</strong></td>
+<td><code>REFRESH ON_DEMAND</code></td>
+<td>PostgreSQL MATERIALIZED VIEW</td>
+<td>Reporting dashboards, batch analytics</td>
+</tr>
+<tr>
+<td><strong>Event-driven</strong></td>
+<td><code>REFRESH ON_EVENT &lt;events&gt;</code></td>
+<td>EventConsumer handler + table</td>
+<td>Real-time read models, notifications</td>
+</tr>
+<tr>
+<td><strong>Scheduled</strong></td>
+<td><code>REFRESH SCHEDULED "&lt;cron&gt;"</code></td>
+<td>Cron job + REFRESH MATERIALIZED VIEW</td>
+<td>Periodic aggregations</td>
+</tr>
+<tr>
+<td><strong>Live</strong></td>
+<td><code>REFRESH LIVE</code> (default)</td>
+<td>PostgreSQL VIEW</td>
+<td>Always-current data, small datasets</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generated-artifacts">Generated Artifacts</h3>
+<h4 id="1-postgresql-sqitch-migrations">1. PostgreSQL (Sqitch
+migrations)</h4>
+<p><strong>ON_DEMAND / SCHEDULED</strong> → MATERIALIZED VIEW:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- deploy/reporting-projection-active_patient_summary.sql</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">MATERIALIZED</span> <span class="kw">VIEW</span> reporting.active_patient_summary <span class="kw">AS</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    p.<span class="kw">id</span> <span class="kw">AS</span> patient_id,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    p.mrn,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(pn.given, <span class="st">&#39;&#39;</span>) <span class="op">||</span> <span class="st">&#39; &#39;</span> <span class="op">||</span> <span class="fu">COALESCE</span>(pn.family, <span class="st">&#39;&#39;</span>) <span class="kw">AS</span> full_name,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    g.display <span class="kw">AS</span> gender_display,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(e.cnt, <span class="dv">0</span>) <span class="kw">AS</span> encounter_count,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    e.last_date <span class="kw">AS</span> last_encounter_date,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NULL</span> <span class="kw">AS</span> primary_condition  <span class="co">-- computed separately</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> patient.patient p</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> patient.patient_name pn <span class="kw">ON</span> p.<span class="kw">id</span> <span class="op">=</span> pn.patient_id <span class="kw">AND</span> pn.<span class="kw">use</span> <span class="op">=</span> <span class="st">&#39;official&#39;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> basedata.administrative_gender g <span class="kw">ON</span> p.gender_id <span class="op">=</span> g.<span class="kw">id</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> (</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> patient_id, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">as</span> cnt, <span class="fu">MAX</span>(period_start) <span class="kw">as</span> last_date</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> encounter.encounter</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GROUP</span> <span class="kw">BY</span> patient_id</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>) e <span class="kw">ON</span> p.<span class="kw">id</span> <span class="op">=</span> e.patient_id</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> p.active <span class="op">=</span> <span class="kw">true</span>;</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">UNIQUE</span> <span class="kw">INDEX</span> idx_active_patient_summary_patient_id </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> reporting.active_patient_summary(patient_id);</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">-- Refresh function</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">FUNCTION</span> reporting.refresh_active_patient_summary()</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>RETURNS void <span class="kw">AS</span> $$</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">REFRESH</span> <span class="kw">MATERIALIZED</span> <span class="kw">VIEW</span> CONCURRENTLY reporting.active_patient_summary;</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span></code></pre></div>
+<p><strong>LIVE</strong> → VIEW:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> reporting.active_patients <span class="kw">AS</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">..</span>. <span class="kw">FROM</span> patient.patient <span class="kw">WHERE</span> active <span class="op">=</span> <span class="kw">true</span>;</span></code></pre></div>
+<p><strong>ON_EVENT</strong> → Table + EventConsumer handler:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Table to store projection state</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> reporting.patient_encounter_timeline (</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>                  UUID        <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    patient_id          UUID        <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    event_timestamp     TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    event_type          TEXT        <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    event_summary       TEXT</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_pet_patient_id <span class="kw">ON</span> reporting.patient_encounter_timeline(patient_id);</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_pet_timestamp <span class="kw">ON</span> reporting.patient_encounter_timeline(event_timestamp <span class="kw">DESC</span>);</span></code></pre></div>
+<h4 id="2-c-projection-service">2. C++ Projection Service</h4>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: patient_encounter_timeline_projection.hpp</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> reporting <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEncounterTimelineProjection <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    PatientEncounterTimelineProjection<span class="op">(</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        muscovite<span class="op">::</span>dba<span class="op">::</span>ConnectionPool<span class="op">&amp;</span> pool<span class="op">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        muscovite<span class="op">::</span>dba<span class="op">::</span>EventConsumer<span class="op">&amp;</span> consumer<span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> start<span class="op">();</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> stop<span class="op">();</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Query methods</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>TimelineEntry<span class="op">&gt;</span> get_patient_timeline<span class="op">(</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> patient_id<span class="op">,</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> PageRequest<span class="op">&amp;</span> page <span class="op">=</span> <span class="op">{});</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Event handlers</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> handle_patient_created<span class="op">(</span><span class="at">const</span> patient<span class="op">::</span>PatientCreated<span class="op">&amp;</span> event<span class="op">);</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> handle_encounter_created<span class="op">(</span><span class="at">const</span> encounter<span class="op">::</span>EncounterCreated<span class="op">&amp;</span> event<span class="op">);</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    muscovite<span class="op">::</span>dba<span class="op">::</span>ConnectionPool<span class="op">&amp;</span> <span class="va">pool_</span><span class="op">;</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>unique_ptr<span class="op">&lt;</span>PatientEncounterTimelineRepository<span class="op">&gt;</span> <span class="va">repo_</span><span class="op">;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace reporting</span></span></code></pre></div>
+<h4 id="3-grpc-query-service">3. gRPC Query Service</h4>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// reporting.proto</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">service</span> ReportingQueryService {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> GetActivePatientSummary(GetActivePatientSummaryRequest) </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">returns</span> (ActivePatientSummaryResponse);</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> RefreshActivePatientSummary(RefreshRequest) </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">returns</span> (RefreshResponse);</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> GetPatientTimeline(GetPatientTimelineRequest) </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">returns</span> (stream TimelineEntry);</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> ActivePatientSummary {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> patient_id <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> mrn <span class="op">=</span> <span class="dv">2</span>;</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> full_name <span class="op">=</span> <span class="dv">3</span>;</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> gender_display <span class="op">=</span> <span class="dv">4</span>;</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int32</span> encounter_count <span class="op">=</span> <span class="dv">5</span>;</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    google.type.Date last_encounter_date <span class="op">=</span> <span class="dv">6</span>;</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> primary_condition <span class="op">=</span> <span class="dv">7</span>;</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="projection-lifecycle">Projection Lifecycle</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    Projection Lifecycle                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ON_DEMAND:                                                 │
+│    App startup → Check if exists → Create if not           │
+│    User request → Call refresh_&lt;projection&gt;() function     │
+│                                                             │
+│  SCHEDULED:                                                 │
+│    App startup → Register cron job                         │
+│    Cron fires → Call REFRESH MATERIALIZED VIEW CONCURRENTLY│
+│                                                             │
+│  ON_EVENT:                                                  │
+│    App startup → Register EventConsumer handlers           │
+│    Event received → Handler inserts/updates projection row │
+│    Query → Read from projection table                      │
+│                                                             │
+│  LIVE:                                                      │
+│    Query → View executes underlying SELECT                 │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="parser-changes">Parser Changes</h3>
+<p>Add to <code>parser/parser.rkt</code>:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Projection struct</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> projection</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name          <span class="co">; Symbol</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   uuid          <span class="co">; String (UUID)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>   fields        <span class="co">; List of field</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>   source        <span class="co">; String (FROM ... clause) or #f</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>   refresh-mode  <span class="co">; Symbol: &#39;on-demand, &#39;scheduled, &#39;on-event, &#39;live</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>   refresh-spec  <span class="co">; String (cron) or list of event types</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>   handler       <span class="co">; Symbol (handler function name) or #f</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   doc           <span class="co">; String or #f</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>   synonyms<span class="op">)</span>     <span class="co">; List of string</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">;; Parse PROJECTION keyword</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>parse-projection ps<span class="op">)</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>expect-keyword! ps <span class="st">&quot;PROJECTION&quot;</span><span class="op">)</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  ...<span class="op">)</span></span></code></pre></div>
+<h3 id="generator-updates">Generator Updates</h3>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres/sqitch-unified.rkt</code></td>
+<td>CREATE VIEW / MATERIALIZED VIEW, refresh functions</td>
+</tr>
+<tr>
+<td><code>cpp/dba/projections.rkt</code></td>
+<td>Projection service with event handlers (NEW)</td>
+</tr>
+<tr>
+<td><code>grpc/proto.rkt</code></td>
+<td>Query messages for projection data</td>
+</tr>
+<tr>
+<td><code>grpc/cpp-service-v2.rkt</code></td>
+<td>QueryService methods for projections</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Declarative</strong>: Projections defined alongside domain
+model</li>
+<li><strong>Type-safe</strong>: Generated structs/messages for
+projection data</li>
+<li><strong>Flexible refresh</strong>: Multiple strategies for different
+use cases</li>
+<li><strong>Testable</strong>: Event-driven projections can be unit
+tested</li>
+<li><strong>Migrations</strong>: Projections versioned with Sqitch like
+tables</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><strong>Learning curve</strong>: New DSL syntax to learn</li>
+<li><strong>Complexity</strong>: Event-driven projections require
+careful handler design</li>
+<li><strong>Consistency</strong>: ON_EVENT projections are eventually
+consistent</li>
+<li><strong>Performance</strong>: Complex joins in LIVE views may be
+slow</li>
+</ul>
+<h3 id="example-patient-dashboard">Example: Patient Dashboard</h3>
+<pre class="ddd"><code>CONTEXT Dashboard {
+
+    -- Real-time patient count (event-driven)
+    PROJECTION PatientCountByGender @uuid &quot;...&quot; (
+        gender_code         TEXT        NOT NULL PRIMARY KEY,
+        patient_count       INTEGER     NOT NULL DEFAULT 0,
+        last_updated        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+    REFRESH ON_EVENT Patient.PatientCreated, Patient.PatientUpdated, Patient.PatientDeleted
+    HANDLER gender_count_handler
+    DOC &quot;Patient count by gender, updated in real-time&quot;;
+
+    -- Scheduled daily stats (batch)
+    PROJECTION DailyPatientStats @uuid &quot;...&quot; (
+        stat_date           DATE        NOT NULL PRIMARY KEY,
+        new_patients        INTEGER     NOT NULL,
+        active_patients     INTEGER     NOT NULL,
+        encounters_started  INTEGER     NOT NULL
+    )
+    REFRESH SCHEDULED &quot;0 2 * * *&quot;
+    DOC &quot;Daily statistics computed at 2 AM&quot;;
+
+}</code></pre>
+<h3 id="migration-path">Migration Path</h3>
+<ol type="1">
+<li><strong>Phase 1</strong> (this ADR): Define syntax, implement
+parser</li>
+<li><strong>Phase 2</strong>: SQL generator for VIEW/MATERIALIZED
+VIEW</li>
+<li><strong>Phase 3</strong>: C++ ProjectionService with EventConsumer
+integration</li>
+<li><strong>Phase 4</strong>: gRPC QueryService bindings</li>
+<li><strong>Phase 5</strong>: Scheduled refresh infrastructure
+(cron)</li>
+</ol>
+<h3 id="links">Links</h3>
+<ul>
+<li>Related: <a
+href="20260203-event-consumers.html">20260203-event-consumers.md</a> -
+Event consumption infrastructure</li>
+<li>Related: <a
+href="20260120-cqrs-ready-architecture.html">20260120-cqrs-ready-architecture.md</a>
+- CQRS foundations</li>
+<li>Related: <a
+href="20260202-outbox-pattern-reliable-event-publishing.html">20260202-outbox-pattern-reliable-event-publishing.md</a>
+- Event publishing</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding projection support to the DSL parser</li>
+<li>When generating SQL for read-optimized views</li>
+<li>When implementing event-driven projection handlers</li>
+<li>When adding query methods for projection data</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Simple queries on single entities (use QueryRepository)</li>
+<li>Temporary analysis queries (use SQL directly)</li>
+<li>Ad-hoc reporting (use BI tools)</li>
+</ul>
+<h3 id="key-files-affected">Key Files Affected</h3>
+<ul>
+<li><code>dslgen/parser/parser.rkt</code> - Add PROJECTION parsing</li>
+<li><code>dslgen/model/ddd-types.rkt</code> - Add projection struct</li>
+<li><code>dslgen/generators/postgres/projections.rkt</code> - SQL
+generation (NEW)</li>
+<li><code>dslgen/generators/cpp/dba/projections.rkt</code> - C++ service
+(NEW)</li>
+<li><code>dslgen/generators/grpc/proto.rkt</code> - Query messages</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

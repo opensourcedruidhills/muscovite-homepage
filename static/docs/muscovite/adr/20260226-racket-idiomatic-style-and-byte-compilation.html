@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Racket Idiomatic Style and Byte
+Compilation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Racket Idiomatic Style and Byte Compilation</span>
+</nav>
+
+<h1>Racket Idiomatic Style and Byte Compilation</h1>
+
+
+<h1 id="racket-idiomatic-style-and-byte-compilation">Racket Idiomatic
+Style and Byte Compilation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-26</li>
+<li>Tags: racket, performance, idioms, byte-compilation,
+code-quality</li>
+<li>Relates to: <a
+href="20260218-template-dsl-for-code-generation.html">20260218-template-dsl-for-code-generation.md</a></li>
+<li>Relates to: <a
+href="20260223-racket-generator-unit-testing-strategy.html">20260223-racket-generator-unit-testing-strategy.md</a></li>
+</ul>
+<p>Technical Story: Muscovite's 98K-line Racket codebase operates
+without byte compilation (zero <code>.zo</code> files) and uses
+non-idiomatic patterns — 382 <code>set!</code> mutations, zero
+contract-out enforcement, zero <code>in-list</code> annotations. Module
+load time for <code>generate.rkt</code> is 71 seconds before any
+generation work begins. AI agents working on the codebase are hampered
+by unfamiliar idioms because the code does not match standard Racket
+patterns found in training corpora.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<h3 id="performance-problem">Performance Problem</h3>
+<p>Every <code>racket generate.rkt</code> invocation re-expands and
+re-compiles all 349 <code>.rkt</code> files from source. There are zero
+<code>.zo</code> bytecode files, zero <code>compiled/</code>
+directories, no <code>raco make</code> step, and no package installation
+despite a valid <code>info.rkt</code> existing.</p>
+<p>Measured cold module load times (Racket v9.0 [cs], no bytecache):</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Load Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model/ddd-types.rkt</code></td>
+<td>5.2s</td>
+</tr>
+<tr>
+<td><code>parser/parser.rkt</code></td>
+<td>10.5s</td>
+</tr>
+<tr>
+<td><code>generators/cpp/dba/unified.rkt</code></td>
+<td>22.3s</td>
+</tr>
+<tr>
+<td><code>generate.rkt</code> (all deps)</td>
+<td><strong>71.1s</strong></td>
+</tr>
+</tbody>
+</table>
+<p>This 71-second overhead applies to every generation run, every test
+invocation, and every REPL session. The actual generation work (which is
+fast) is dominated by module expansion.</p>
+<h3 id="idiom-problem">Idiom Problem</h3>
+<p>Quantitative analysis (Feb 2026) of the generator codebase reveals
+patterns that deviate from idiomatic Racket:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Current</th>
+<th>Idiomatic Racket</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set!</code> mutations in generators</td>
+<td>111</td>
+<td>Replaced by <code>for/fold</code>, <code>let-values</code></td>
+</tr>
+<tr>
+<td><code>set!</code> across entire dslgen/</td>
+<td>382</td>
+<td>Near zero in functional Racket</td>
+</tr>
+<tr>
+<td><code>make-hash</code> (mutable) in generators</td>
+<td>102</td>
+<td>Use immutable <code>hash</code> + <code>hash-set</code></td>
+</tr>
+<tr>
+<td><code>match</code> expressions in generators</td>
+<td>23</td>
+<td>Primary dispatch mechanism</td>
+</tr>
+<tr>
+<td><code>for/fold</code> in generators</td>
+<td>14</td>
+<td>Should replace most <code>set!</code> loops</td>
+</tr>
+<tr>
+<td><code>in-list</code> annotations</td>
+<td>0</td>
+<td>On every <code>for</code> over a list</td>
+</tr>
+<tr>
+<td><code>contract-out</code> in provides</td>
+<td>0</td>
+<td>On all public module boundaries</td>
+</tr>
+<tr>
+<td><code>define/contract</code></td>
+<td>0</td>
+<td>On critical internal functions</td>
+</tr>
+<tr>
+<td><code>module+ test</code> submodules</td>
+<td>20 (of 349)</td>
+<td>In every module with testable logic</td>
+</tr>
+<tr>
+<td>Struct <code>#:guard</code> / <code>#:property</code></td>
+<td>1</td>
+<td>For invariant enforcement</td>
+</tr>
+</tbody>
+</table>
+<p>The central IR module (<code>ddd-types.rkt</code>) imports
+<code>racket/contract</code> but uses
+<code>(provide (all-defined-out))</code> — a blanket export with zero
+contract enforcement.</p>
+<h3 id="ai-agent-effectiveness-problem">AI Agent Effectiveness
+Problem</h3>
+<p>AI models (Claude, GPT, Copilot) are trained on vastly more idiomatic
+Racket (from The Racket Guide, Racket documentation, and open-source
+Racket projects) than on the imperative-style patterns used in
+Muscovite. When the codebase uses <code>set!</code> accumulator loops
+instead of <code>for/fold</code>, or bare struct accessors instead of
+<code>match</code>, the models generate code that doesn't stylistically
+match. This is not a Racket-vs-Python problem — it's a
+non-idiomatic-vs-idiomatic problem.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>71-second cold start is the primary developer pain point, blocking
+rapid iteration</li>
+<li>Byte compilation is a zero-risk, zero-cost fix available today</li>
+<li>Contract enforcement catches cross-module type errors at runtime —
+critical for a 70-struct IR</li>
+<li><code>in-list</code> annotations are a mechanical fix with
+measurable performance impact</li>
+<li><code>for/fold</code> replacing <code>set!</code> eliminates an
+entire class of mutation bugs</li>
+<li>Immutable hashes remove shared-state surprises in generators</li>
+<li><code>module+ test</code> enables targeted unit testing (per ADR
+20260223)</li>
+<li>AI agents produce better code when the existing codebase matches
+standard Racket patterns</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Status quo</strong> — continue with no byte compilation and
+current coding style</li>
+<li><strong>Byte compilation only</strong> — add <code>raco make</code>
+but don't change coding style</li>
+<li><strong>Byte compilation + incremental idiomatic migration</strong>
+— enforce new standards for new code, migrate existing code file-by-file
+when touched</li>
+<li><strong>Rewrite in Python</strong> — abandon Racket entirely</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 3 — Byte compilation + incremental
+idiomatic migration</strong>, because byte compilation eliminates 90% of
+the performance pain with zero risk, and idiomatic migration improves
+both code quality and AI agent effectiveness without a disruptive
+rewrite.</p>
+<h3 id="phase-1-byte-compilation-week-1--zero-risk">Phase 1: Byte
+Compilation (Week 1 — Zero Risk)</h3>
+<h4 id="1a-add-raco-make-to-generation-workflow">1a. Add
+<code>raco make</code> to generation workflow</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Before generation</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">raco</span> make generate.rkt</span></code></pre></div>
+<p>Expected: Module load drops from <strong>71s → 3–8s</strong>.
+Incremental recompilation only rebuilds changed files and their
+dependents.</p>
+<h4 id="1b-add-compiled-to-gitignore">1b. Add <code>compiled/</code> to
+<code>.gitignore</code></h4>
+<pre class="gitignore"><code># Racket bytecode (generated by raco make)
+**/compiled/</code></pre>
+<h4 id="1c-add-cmake-integration-target">1c. Add CMake integration
+target</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">add_custom_target</span>(<span class="bn">racket-compile</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">COMMAND</span> raco make generate.rkt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">COMMENT</span> <span class="st">&quot;Compiling Racket modules to bytecode&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>All <code>generate-*</code> CMake targets depend on
+<code>racket-compile</code>.</p>
+<h4 id="1d-add-raco-make-before-test-runs">1d. Add
+<code>raco make</code> before test runs</h4>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">raco</span> make tests/run-all-tests.rkt</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> tests/run-all-tests.rkt  <span class="co"># now fast</span></span></code></pre></div>
+<h3
+id="phase-2-idiomatic-standards-for-new-code-week-2--enforce-on-write">Phase
+2: Idiomatic Standards for New Code (Week 2 — Enforce on Write)</h3>
+<p>All new and modified Racket files MUST follow these rules:</p>
+<h4 id="2a-in-list-on-all-for-comprehensions-over-lists">2a.
+<code>in-list</code> on all <code>for</code> comprehensions over
+lists</h4>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>x xs<span class="op">])</span> ...<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x xs<span class="op">])</span> ...<span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>x <span class="op">(</span>in-list xs<span class="op">)])</span> ...<span class="op">)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x <span class="op">(</span>in-list xs<span class="op">)])</span> ...<span class="op">)</span></span></code></pre></div>
+<p>Why: <code>in-list</code> eliminates generic sequence dispatch.
+Measurable 5–10% speedup on iteration-heavy generators.</p>
+<h4 id="2b-forfold-instead-of-set-accumulator-loops">2b.
+<code>for/fold</code> instead of <code>set!</code> accumulator
+loops</h4>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN (mutable accumulator)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> result </span>&#39;<span class="op">())</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>ctx contexts<span class="op">])</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">set!</span> result <span class="op">(</span><span class="kw">append</span> result <span class="op">(</span>generate-context ctx<span class="op">))))</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED (functional fold)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/fold <span class="op">([</span>acc &#39;<span class="op">()])</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">append</span> acc <span class="op">(</span>generate-context ctx<span class="op">)))</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; Or when building a list:</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/append <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>generate-context ctx<span class="op">))</span></span></code></pre></div>
+<h4 id="2c-immutable-hashes-for-lookup-tables">2c. Immutable hashes for
+lookup tables</h4>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN (mutable hash)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>make-hash<span class="op">))</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>hash-set! h &#39;key val<span class="op">)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED (immutable hash)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>hash &#39;key val<span class="op">))</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h2 </span><span class="op">(</span>hash-set h &#39;key2 val2<span class="op">))</span></span></code></pre></div>
+<p>Exception: Performance-critical paths with &gt;1000 insertions may
+use <code>make-hash</code> with a <code>WHY: performance</code>
+comment.</p>
+<h4 id="2d-contract-out-on-public-module-boundaries">2d.
+<code>contract-out</code> on public module boundaries</h4>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN (blanket export)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>all-defined-out<span class="op">))</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED (explicit contracts)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span>contract-out</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="kw">struct</span> entity <span class="op">([</span>uuid <span class="kw">string?</span><span class="op">]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>name <span class="kw">symbol?</span><span class="op">]</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>fields <span class="op">(</span>listof field?<span class="op">)]</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  ...<span class="op">)]</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>make-entity <span class="op">(</span>-&gt;* <span class="op">(</span><span class="kw">symbol?</span><span class="op">)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                    <span class="op">(</span>#:uuid <span class="kw">string?</span> #:fields <span class="op">(</span>listof field?<span class="op">))</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                    entity?<span class="op">)]))</span></span></code></pre></div>
+<p>Priority targets for contract enforcement:</p>
+<ol type="1">
+<li><code>model/ddd-types.rkt</code> — the IR core (70 structs)</li>
+<li><code>model/type-registry.rkt</code> — type mapping functions</li>
+<li><code>generators/headers.rkt</code> — license header generation</li>
+<li><code>parser/parser.rkt</code> — parser entry points</li>
+</ol>
+<h4 id="2e-module-test-for-unit-testable-logic">2e.
+<code>module+ test</code> for unit-testable logic</h4>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; At bottom of every module with testable functions</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>module+ test</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">require</span> rackunit<span class="op">)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>check-equal? <span class="op">(</span>symbol-&gt;sql-id &#39;PatientContext<span class="op">)</span> <span class="st">&quot;patient_context&quot;</span><span class="op">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>check-equal? <span class="op">(</span>symbol-&gt;cpp-class &#39;order-item<span class="op">)</span> <span class="st">&quot;OrderItem&quot;</span><span class="op">))</span></span></code></pre></div>
+<h3 id="phase-3-incremental-migration-of-existing-code-ongoing">Phase 3:
+Incremental Migration of Existing Code (Ongoing)</h3>
+<p>When a generator file is touched for any reason (feature, bugfix,
+refactor), apply the Phase 2 standards to the entire file. Do not create
+dedicated "style migration" commits — fold style improvements into
+functional changes.</p>
+<p>Track migration progress:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Audit commands (add to tools/)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>  <span class="co"># files missing in-list</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>        <span class="co"># files without contracts</span></span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>71s → 3–8s</strong> module load time (byte compilation
+alone)</li>
+<li>Contract violations caught at module boundaries, not deep in
+generator logic</li>
+<li><code>for/fold</code> eliminates mutation bugs in list
+accumulation</li>
+<li>AI agents produce more consistent code matching idiomatic
+patterns</li>
+<li><code>module+ test</code> enables the per-construct testing strategy
+(ADR 20260223)</li>
+<li><code>in-list</code> provides measurable iteration speedup across
+646 <code>for/list</code> expressions</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><code>compiled/</code> directories appear alongside source (managed
+by <code>.gitignore</code>)</li>
+<li>Contract checking adds ~5–15% runtime overhead (acceptable for
+offline generators)</li>
+<li>Two coding styles coexist during migration period (old files vs
+new/touched files)</li>
+<li>Initial <code>raco make</code> adds ~2–3 minutes to first build
+(subsequent builds are incremental)</li>
+</ul>
+<h2 id="enforcement">Enforcement</h2>
+<h3
+id="ai-agent-instructions-copilot-instructionsmd-claudemd-agentsmd">AI
+Agent Instructions (copilot-instructions.md, CLAUDE.md, AGENTS.md)</h3>
+<p>Add rule: <strong>Racket Idiomatic Style (ADR 20260226)</strong></p>
+<pre><code>### N. Racket Idiomatic Style (MANDATORY for new/modified code)
+
+Per ADR 20260226:
+- `in-list` on ALL `for` comprehensions over lists
+- `for/fold` instead of `set!` accumulator loops
+- Immutable `hash` instead of `make-hash` + `hash-set!`
+- `contract-out` on public module provides (not `all-defined-out`)
+- `module+ test` in every module with testable logic
+- `raco make generate.rkt` before any generation or test run
+
+**FORBIDDEN**: `set!` for accumulation | `(provide (all-defined-out))` in new files |
+bare `for` without `in-list` | mutable hashes without `WHY: performance` comment</code></pre>
+<h3 id="grammar-conformance-parity">Grammar Conformance Parity</h3>
+<p>Extend <code>test-grammar-conformance.rkt</code> (or create
+<code>test-racket-style.rkt</code>) to check:</p>
+<ul>
+<li>Every <code>provide</code> form in model/ files uses
+<code>contract-out</code></li>
+<li>Every <code>for</code> in generators/ uses
+<code>in-list</code>/<code>in-hash</code>/<code>in-range</code>/<code>in-naturals</code></li>
+</ul>
+<h3 id="cmake-gate">CMake Gate</h3>
+<p>The <code>racket-compile</code> target runs before all generation. If
+bytecache is stale, regeneration is safe but slow (falls back to source
+expansion).</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>Extends <a
+href="20260218-template-dsl-for-code-generation.html">Template DSL for
+Code Generation</a> — templates benefit most from idiomatic style</li>
+<li>Extends <a
+href="20260223-racket-generator-unit-testing-strategy.html">Generator Unit
+Testing Strategy</a> — <code>module+ test</code> enables per-module
+testing</li>
+<li>Relates to <a
+href="20260211-grammar-first-language-evolution.html">Grammar-First
+Language Evolution</a> — grammar conformance tests can audit style</li>
+<li>Relates to <a
+href="20260212-doctest-adoption-and-tdd-practice.html">doctest
+Adoption</a> — parallel TDD discipline for Racket layer</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When writing any new <code>.rkt</code> file — follow all Phase 2
+rules from the start</li>
+<li>When modifying an existing <code>.rkt</code> file — apply Phase 2
+rules to the whole file</li>
+<li>When running generation or tests — ensure <code>raco make</code> has
+been run</li>
+<li>When reviewing AI-generated Racket code — verify idiomatic
+patterns</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Quick REPL experiments (no byte compilation needed)</li>
+<li>One-off scripts in <code>tools/</code> (style rules relaxed for
+throwaway code)</li>
+</ul>
+<h3 id="quick-reference">Quick Reference</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ Idiomatic</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x <span class="op">(</span>in-list xs<span class="op">)])</span> <span class="op">(</span>f x<span class="op">))</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/fold <span class="op">([</span>acc &#39;<span class="op">()])</span> <span class="op">([</span>x <span class="op">(</span>in-list xs<span class="op">)])</span> <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>f x<span class="op">)</span> acc<span class="op">))</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>hash &#39;a <span class="dv">1</span> &#39;b <span class="dv">2</span><span class="op">))</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>contract-out <span class="op">[</span>f <span class="op">(</span>-&gt; <span class="kw">symbol?</span> <span class="kw">string?</span><span class="op">)]))</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ Non-idiomatic</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x xs<span class="op">])</span> <span class="op">(</span>f x<span class="op">))</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> result </span>&#39;<span class="op">())</span> <span class="op">(</span>for <span class="op">([</span>x xs<span class="op">])</span> <span class="op">(</span><span class="kw">set!</span> result <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>f x<span class="op">)</span> result<span class="op">)))</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>make-hash<span class="op">))</span> <span class="op">(</span>hash-set! h &#39;a <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>all-defined-out<span class="op">))</span></span></code></pre></div>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammar-First Language
+Evolution — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Grammar-First Language Evolution</span>
+</nav>
+
+<h1>Grammar-First Language Evolution</h1>
+
+
+<h1 id="grammar-first-language-evolution">Grammar-First Language
+Evolution</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: grammar, dsl, evolution, process, testing, onboarding</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's DSL has a <strong>formal PEG grammar</strong>
+(<code>dslgen/grammar/muscovite.peg</code>, 767 lines, 43 rules) and a
+<strong>recursive descent parser</strong>
+(<code>dslgen/parser/parser.rkt</code>, ~2,900 lines). Both were
+developed in parallel: the parser was written first, the grammar was
+extracted and formalized in v1.1.0.</p>
+<p>As the DSL matures, the question is: <strong>which artifact leads
+when the language evolves?</strong></p>
+<p>Historically, new DSL features were added by:</p>
+<ol type="1">
+<li>Editing the parser directly (adding keywords, parse functions)</li>
+<li>Updating the model structs</li>
+<li>Writing generators</li>
+<li>Documenting the syntax retroactively</li>
+</ol>
+<p>This works for a solo developer who holds the full parser in their
+head. It does not scale to:</p>
+<ul>
+<li><strong>AI agents</strong> who need an unambiguous specification to
+generate syntactically valid <code>.ddd</code> files</li>
+<li><strong>Future contributors</strong> who need a reference that isn't
+2,900 lines of Racket</li>
+<li><strong>Cross-version compatibility</strong> where syntax changes
+must be tracked as deliberate, versioned decisions</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>The formal PEG grammar already exists — this inverts the workflow,
+not creates it</li>
+<li>AI agents generate better <code>.ddd</code> files when constrained
+by a formal grammar (per VISION.md)</li>
+<li>Parser bugs are harder to detect without a reference specification
+to test against</li>
+<li>Grammar changes are small, reviewable diffs; parser changes are
+large, procedural diffs</li>
+<li>Onboarding (human or AI) is faster with a declarative spec than with
+imperative parser code</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-grammar-first-spec-leads-parser-follows">Option 1:
+Grammar-First (spec leads, parser follows)</h3>
+<ol type="1">
+<li>Propose syntax change in PEG grammar</li>
+<li>Review grammar diff (small, declarative, reviewable)</li>
+<li>Implement in parser to match grammar</li>
+<li>Validate with grammar conformance test</li>
+<li>Version-stamp the grammar</li>
+</ol>
+<h3 id="option-2-parser-first-current-approach-grammar-follows">Option
+2: Parser-First (current approach, grammar follows)</h3>
+<ol type="1">
+<li>Edit parser directly</li>
+<li>Update grammar afterward (if remembered)</li>
+<li>Risk: grammar and parser drift apart</li>
+</ol>
+<h3
+id="option-3-machine-executable-grammar-parser-generated-from-peg">Option
+3: Machine-Executable Grammar (parser generated from PEG)</h3>
+<ol type="1">
+<li>Write grammar in a Racket PEG library (e.g., parsack)</li>
+<li>Generate parser from grammar automatically</li>
+<li>No drift possible — single source of truth</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Grammar-First</strong>, because it
+provides maximum rigor with minimal tooling change. Option 3 is a future
+possibility but requires replacing the hand-tuned recursive descent
+parser, which is well-tested and handles error recovery gracefully.
+Option 1 gives us 90% of the benefit at 10% of the cost.</p>
+<h3 id="the-process">The Process</h3>
+<pre><code>1. GRAMMAR    →  Edit muscovite.peg (add/modify rule)
+2. VERSION    →  Bump grammar version header
+3. IMPLEMENT  →  Update parser.rkt + lexer.rkt to match
+4. MODEL      →  Update ddd-types.rkt if new structs needed
+5. GENERATORS →  Add/update generators for new construct
+6. TEST       →  Run grammar conformance + generator test suite
+7. EXAMPLES   →  Add usage to example .ddd files</code></pre>
+<p>Step 1 is the <strong>gate</strong>. No parser change without a
+grammar change first.</p>
+<h3 id="what-counts-as-a-grammar-change">What Counts as a Grammar
+Change</h3>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Requires Grammar-First?</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New keyword</td>
+<td>✅ Yes</td>
+<td>Adding <code>PROJECTION</code> construct</td>
+</tr>
+<tr>
+<td>New clause on existing construct</td>
+<td>✅ Yes</td>
+<td>Adding <code>TIMEOUT</code> to <code>COMMAND</code></td>
+</tr>
+<tr>
+<td>New field type</td>
+<td>✅ Yes</td>
+<td>Adding <code>Duration</code> to type system</td>
+</tr>
+<tr>
+<td>Parser bug fix (syntax unchanged)</td>
+<td>❌ No</td>
+<td>Fixing precedence in expression parsing</td>
+</tr>
+<tr>
+<td>Generator change (no syntax impact)</td>
+<td>❌ No</td>
+<td>Changing C++ output format</td>
+</tr>
+<tr>
+<td>Error message improvement</td>
+<td>❌ No</td>
+<td>Better error on missing semicolon</td>
+</tr>
+<tr>
+<td>Refactoring parser internals</td>
+<td>❌ No</td>
+<td>Splitting a parse function</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grammar-versioning">Grammar Versioning</h3>
+<p>The grammar file carries a version header. Grammar versions track
+language versions:</p>
+<pre><code>Version: 1.2.0</code></pre>
+<p>When the grammar changes, the version increments. The grammar
+conformance test (<code>tests/test-grammar-conformance.rkt</code>)
+validates that example <code>.ddd</code> files exercise the grammar
+rules.</p>
+<h2 id="is-the-current-test-harness-sufficient">Is the Current Test
+Harness Sufficient?</h2>
+<p><strong>Assessment of current safety nets:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Safety Net</th>
+<th>Coverage</th>
+<th>Strength</th>
+<th>Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grammar conformance test</td>
+<td>19/24 rules exercised by examples</td>
+<td>✅ Validates parser↔︎grammar alignment</td>
+<td>5 rules uncovered</td>
+</tr>
+<tr>
+<td>Generator test suite
+(<code>test-output-generator-suite.rkt</code>)</td>
+<td>10 generators, 751 lines</td>
+<td>⚠️ Currently failing (exit code 1)</td>
+<td>Must pass before this ADR is actionable</td>
+</tr>
+<tr>
+<td>Parser feature tests (<code>test-parser-features.rkt</code>)</td>
+<td>Core parse paths</td>
+<td>✅ <code>rackunit</code> based</td>
+<td>Doesn't cover new constructs until added</td>
+</tr>
+<tr>
+<td>Cross-layer verification</td>
+<td>6 modules, 1,926 lines</td>
+<td>✅ Infrastructure exists</td>
+<td>ADR still proposed; not wired to CTest</td>
+</tr>
+<tr>
+<td>Example <code>.ddd</code> files</td>
+<td>37 files across 2 projects</td>
+<td>✅ Real-world coverage</td>
+<td>Not all grammar rules exercised</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verdict</strong>: The test harness is <strong>necessary but
+not yet sufficient</strong>. Specifically:</p>
+<ol type="1">
+<li><strong>Generator test suite must pass</strong> — it's the primary
+safety net for "does grammar change X break any generator output?"
+Currently failing.</li>
+<li><strong>Grammar conformance test should reach 24/24 rules</strong> —
+add example <code>.ddd</code> coverage for the 5 uncovered rules.</li>
+<li><strong>CTest integration (ADR 20260210) should be
+completed</strong> — so <code>ctest --preset racket</code> runs all
+Racket tests in one command.</li>
+</ol>
+<p>Once these three are green, the grammar-first workflow has a
+closed-loop safety net:</p>
+<pre><code>Grammar change → Parser change → Conformance test (grammar ↔ parser)
+                                → Generator tests (parser ↔ generators)
+                                → Example parsing (real-world validation)</code></pre>
+<h3
+id="minimum-viable-safety-net-before-enforcing-grammar-first">Minimum
+Viable Safety Net (before enforcing grammar-first)</h3>
+<ul class="task-list">
+<li><label><input
+type="checkbox" /><code>test-output-generator-suite.rkt</code> passes (0
+failures)</label></li>
+<li><label><input type="checkbox" />Grammar conformance reaches ≥22/24
+rules</label></li>
+<li><label><input type="checkbox" /><code>run-all-tests.rkt</code>
+unified runner exists and passes</label></li>
+</ul>
+<p>This is achievable within the v1.2.0 iteration (FTR-004).</p>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li><strong>Onboarding</strong>: New contributors (human or AI) read 768
+lines of PEG, not 2,900 lines of Racket</li>
+<li><strong>AI generation</strong>: LLMs can follow formal grammar to
+produce valid <code>.ddd</code> files</li>
+<li><strong>Reviewability</strong>: Grammar diffs are 5–20 lines; parser
+diffs are 50–200 lines for the same feature</li>
+<li><strong>Drift prevention</strong>: Grammar and parser can't diverge
+if grammar leads</li>
+<li><strong>Versioning</strong>: Language evolution is explicitly
+tracked via grammar version stamps</li>
+<li><strong>Robustness</strong>: Specification-first catches design
+issues before implementation</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li><strong>Process overhead</strong>: Every syntax feature requires a
+grammar edit first (even if trivial)</li>
+<li><strong>Two artifacts to maintain</strong>: Grammar and parser must
+stay synchronized</li>
+<li><strong>Not machine-enforced</strong>: Discipline required — no
+tooling prevents parser-first edits (yet)</li>
+<li><strong>Grammar doesn't cover error recovery</strong>: Parser's
+error handling is richer than what PEG can express</li>
+</ul>
+<h2 id="future-evolution">Future Evolution</h2>
+<p>If grammar-first proves valuable, Option 3 (machine-executable
+grammar) becomes attractive:</p>
+<ol type="1">
+<li>Translate PEG grammar to a Racket parser combinator library</li>
+<li>Generate parser skeleton from grammar</li>
+<li>Hand-tune error recovery in generated code</li>
+<li>Single source of truth, zero drift</li>
+</ol>
+<p>This is a v2.x consideration. Grammar-first process is sufficient for
+v1.x.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related <a href="20260210-racket-generator-test-suite.html">ADR
+20260210 Racket Generator Test Suite</a> — test infrastructure this ADR
+depends on</li>
+<li>Related <a href="20260109-cross-layer-verification.html">ADR 20260109
+Cross-Layer Verification</a> — verification infrastructure</li>
+<li>References <a href="../VISION.html">VISION.md</a> — "Formal Grammar as
+Next Evolution" section</li>
+<li>Grammar file: <code>dslgen/grammar/muscovite.peg</code></li>
+<li>Conformance test:
+<code>dslgen/tests/test-grammar-conformance.rkt</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Adding any new DSL syntax (keywords, clauses, constructs)</li>
+<li>Proposing new field types for the type registry</li>
+<li>Modifying existing syntax (adding optional clauses, changing
+delimiters)</li>
+<li>Planning new DSL features in iteration planning</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Parser bug fixes that don't change accepted syntax</li>
+<li>Generator changes (output format, template strings)</li>
+<li>Error message improvements</li>
+<li>Internal parser refactoring</li>
+<li>Model struct changes that don't affect surface syntax</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><strong>Before implementing any parser change</strong>: Check if it
+changes accepted syntax</li>
+<li><strong>If syntax changes</strong>: Edit
+<code>dslgen/grammar/muscovite.peg</code> first, bump version</li>
+<li><strong>After parser change</strong>: Run
+<code>racket tests/test-grammar-conformance.rkt</code> to validate
+alignment</li>
+<li><strong>After generator change</strong>: Run
+<code>racket tests/test-output-generator-suite.rkt</code> to validate
+output</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — formal PEG grammar (spec
+leads)</li>
+<li><code>dslgen/parser/parser.rkt</code> — recursive descent parser
+(implementation follows)</li>
+<li><code>dslgen/parser/lexer.rkt</code> — tokenizer (keywords must
+match grammar terminals)</li>
+<li><code>dslgen/tests/test-grammar-conformance.rkt</code> — grammar ↔︎
+parser alignment test</li>
+<li><code>dslgen/tests/test-output-generator-suite.rkt</code> —
+generator output validation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

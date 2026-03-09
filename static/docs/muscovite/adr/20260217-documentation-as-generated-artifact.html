@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation as Generated
+Artifact — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Documentation as Generated Artifact</span>
+</nav>
+
+<h1>Documentation as Generated Artifact</h1>
+
+
+<h1 id="documentation-as-generated-artifact">Documentation as Generated
+Artifact</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-17</li>
+<li>Tags: documentation, doxygen, asciidoc, plantuml, sql-comments,
+grounding</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: All DSL metadata (DOC, GROUNDING, @SOURCE, SYNONYMS)
+must propagate to every generated layer in the format canonical to that
+layer. Generated systems must be self-documenting.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's IR is rich in documentation metadata — every struct has a
+<code>doc</code> field, <code>GROUNDING</code> is parsed and stored,
+<code>SYNONYMS</code> exist on entities and value objects. However, most
+generators <strong>ignore</strong> this metadata:</p>
+<ul>
+<li>SQL generators emit <code>COMMENT ON DOMAIN</code> for strong types
+only — no table or column comments for entities/fields</li>
+<li>C++ generators use hardcoded <code>@brief Entity: ClassName</code>
+instead of <code>entity-doc</code></li>
+<li>Proto generators emit hardcoded section banners, ignoring
+<code>entity-doc</code> and <code>field-doc</code> entirely</li>
+<li><code>bounded-context-grounding</code> is parsed but consumed by
+zero generators</li>
+<li>No standalone system manual beyond the existing AsciiDoc
+glossary</li>
+</ul>
+<p>This means generated systems lose the domain knowledge encoded in
+<code>.ddd</code> files. BI tools see undocumented tables, IDEs show
+generic class names instead of domain descriptions, and there's no
+human-readable system manual.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><code>.ddd</code> files contain rich DOC strings and GROUNDING
+blocks already (patient.ddd has DOC on every entity)</li>
+<li>IR already stores all documentation metadata — it's parsed but not
+consumed</li>
+<li>Existing AsciiDoc glossary generator
+(<code>generators/docs/glossary-adoc.rkt</code>, 564 lines) is a proven
+foundation</li>
+<li>Database self-documentation enables BI tool discovery and compliance
+audits</li>
+<li>C++ IDE tooltips should show domain-meaningful descriptions, not
+class name echoes</li>
+<li>System manuals are required for client handoffs and enterprise
+compliance</li>
+<li>Single source of truth (DSL) guarantees consistency across all
+documentation layers</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Enrich existing generators + extend AsciiDoc
+generator</strong> — propagate
+<code>doc</code>/<code>grounding</code>/<code>@SOURCE</code> to existing
+SQL, C++, proto generators; extend glossary-adoc for system manual</li>
+<li><strong>New standalone documentation generators</strong> — separate
+<code>sql-comments.rkt</code>, <code>doxygen.rkt</code>,
+<code>proto-comments.rkt</code>, <code>asciidoc-manual.rkt</code> that
+run independently</li>
+<li><strong>External documentation tooling</strong> — write docs
+manually outside the DSL pipeline</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Enrich existing generators + extend
+AsciiDoc generator</strong>, because inline documentation (SQL comments,
+Doxygen headers, proto comments) cannot be generated as standalone files
+— it must be woven into the same output that the existing generators
+produce. A standalone approach would require either post-processing
+merges or duplicated template logic.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Database is self-documenting for BI tools, pg_admin, and compliance
+audits</li>
+<li>Generated C++ code has IDE-visible domain documentation</li>
+<li>Proto files carry domain semantics for API consumers</li>
+<li>Complete system manual generated from DSL with architecture
+diagrams</li>
+<li>Single source of truth maintained across all layers</li>
+<li>No new generator registration overhead — enrichment happens within
+existing generators</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Increased complexity in existing generator files (~15 files need
+edits)</li>
+<li>Additional test surface for documentation content verification</li>
+<li>PlantUML + asciidoctor become build-time dependencies for manual
+generation</li>
+<li>Grammar extension required for <code>@SOURCE</code> annotation</li>
+</ul>
+<h2 id="detailed-decisions">Detailed Decisions</h2>
+<h3 id="1-sql-postgresql-comment-on-statements--complete-coverage">1.
+SQL: PostgreSQL COMMENT ON Statements — Complete Coverage</h3>
+<p><strong>Every PostgreSQL object that supports <code>COMMENT ON</code>
+MUST have a generated comment if we can derive sensible
+content.</strong> This is not limited to tables and columns.</p>
+<table>
+<thead>
+<tr>
+<th>Object Type</th>
+<th>Comment Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMMENT ON SCHEMA</code></td>
+<td><code>bounded-context-grounding</code> (domain, dialect, key
+concepts) + <code>bounded-context-doc</code></td>
+</tr>
+<tr>
+<td><code>COMMENT ON TABLE</code></td>
+<td><code>entity-doc</code> + event-sourcing note + aggregate
+membership</td>
+</tr>
+<tr>
+<td><code>COMMENT ON COLUMN</code></td>
+<td><code>field-doc</code> + type semantics + <code>@SOURCE</code> +
+constraint summary</td>
+</tr>
+<tr>
+<td><code>COMMENT ON CONSTRAINT</code> (FK)</td>
+<td>Relationship name, direction, cardinality, target entity, CASCADE
+behavior</td>
+</tr>
+<tr>
+<td><code>COMMENT ON CONSTRAINT</code> (CHECK)</td>
+<td><code>invariant-description</code> — the human-readable invariant
+text</td>
+</tr>
+<tr>
+<td><code>COMMENT ON CONSTRAINT</code> (UNIQUE)</td>
+<td>Which field(s), business rationale from <code>field-doc</code> if
+available</td>
+</tr>
+<tr>
+<td><code>COMMENT ON INDEX</code></td>
+<td>Purpose: FK lookup, unique enforcement, spatial query, event store
+access pattern</td>
+</tr>
+<tr>
+<td><code>COMMENT ON DOMAIN</code></td>
+<td>Already implemented — <code>strong-type-doc</code> + check
+constraints</td>
+</tr>
+<tr>
+<td><code>COMMENT ON FUNCTION</code> / <code>TRIGGER</code></td>
+<td>Framework purpose: audit trigger, UUID generation, entity code
+auto-generation</td>
+</tr>
+<tr>
+<td><code>COMMENT ON MATERIALIZED VIEW</code></td>
+<td><code>projection-doc</code> + refresh mode + source entities</td>
+</tr>
+</tbody>
+</table>
+<p>Comments are emitted in Sqitch deploy scripts immediately after the
+<code>CREATE</code> statement for each object. For constraints defined
+inline in <code>CREATE TABLE</code>, comments are emitted after the
+table creation.</p>
+<h3 id="2-c-doxygen-comments-from-ir">2. C++: Doxygen Comments from
+IR</h3>
+<p>Replace hardcoded <code>@brief</code> strings in
+<code>domain.rkt</code>, <code>repository.rkt</code>,
+<code>specifications.rkt</code>, and DBA generators with actual
+<code>entity-doc</code>, <code>field-doc</code>,
+<code>value-object-doc</code> values. Add <code>@see</code> for
+<code>@SOURCE</code> references. Add file-level GROUNDING context.</p>
+<h3 id="3-proto-documentation-comments-from-ir">3. Proto: Documentation
+Comments from IR</h3>
+<p>Add <code>//</code> documentation comments before proto
+<code>message</code> and field declarations using
+<code>entity-doc</code> and <code>field-doc</code>. Proto convention is
+<code>//</code> line comments.</p>
+<h3 id="4-system-manual-asciidoc--plantuml">4. System Manual: AsciiDoc +
+PlantUML</h3>
+<p>Extend existing <code>glossary-adoc.rkt</code> with GROUNDING
+sections, event sourcing flow diagrams, saga workflow diagrams, NATS
+topology diagrams, and API reference sections. All diagrams in PlantUML
+(standardize on one tool).</p>
+<h3 id="5-diagram-format-plantuml-only">5. Diagram Format: PlantUML
+Only</h3>
+<p>Standardize on PlantUML. Convert existing Mermaid generation in
+<code>context-map.rkt</code> to PlantUML. The existing
+<code>glossary-adoc.rkt</code> already generates PlantUML ER diagrams.
+One diagram syntax, one dependency, consistent rendering.</p>
+<h3 id="6-cmake-build-integration">6. CMake Build Integration</h3>
+<p>Add <code>Documentation.cmake</code> module with:</p>
+<ul>
+<li><code>find_package(Doxygen)</code> →
+<code>add_custom_target(doxygen-docs)</code></li>
+<li><code>find_program(asciidoctor)</code> →
+<code>add_custom_target(system-manual-html)</code> and
+<code>add_custom_target(system-manual-pdf)</code></li>
+<li>Umbrella <code>add_custom_target(docs)</code> depending on both</li>
+</ul>
+<h3 id="7-source-annotation">7. @SOURCE Annotation</h3>
+<p>New grammar construct: <code>@SOURCE STRING</code> on fields and
+entities. Multiple <code>@SOURCE</code> annotations per element allowed.
+Stored as <code>(Listof String)</code> in IR. Propagated to SQL
+comments, Doxygen <code>@see</code>, proto comments, and AsciiDoc source
+reference tables.</p>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-enrich-existing-generators-chosen">Option 1: Enrich
+existing generators (chosen)</h3>
+<ul>
+<li>Good, because documentation is emitted in the same pass as code — no
+merge step</li>
+<li>Good, because leverages existing generator infrastructure and
+testing</li>
+<li>Good, because incremental — each generator can be enriched
+independently</li>
+<li>Bad, because touches ~15 existing generator files (higher change
+surface)</li>
+</ul>
+<h3 id="option-2-standalone-documentation-generators">Option 2:
+Standalone documentation generators</h3>
+<ul>
+<li>Good, because isolated from existing generators — lower regression
+risk</li>
+<li>Bad, because C++ Doxygen and proto comments cannot be standalone
+files — they must be embedded in the generated output</li>
+<li>Bad, because SQL COMMENT ON must appear in Sqitch deploy scripts,
+not separate files</li>
+<li>Bad, because duplicates template logic (entity iteration, naming
+conventions)</li>
+</ul>
+<h3 id="option-3-external-documentation-tooling">Option 3: External
+documentation tooling</h3>
+<ul>
+<li>Good, because no generator changes needed</li>
+<li>Bad, because violates single source of truth — documentation drifts
+from DSL</li>
+<li>Bad, because manual maintenance defeats the purpose of code
+generation</li>
+</ul>
+<h2 id="mandatory-documentation-maintenance-no-exceptions">Mandatory
+Documentation Maintenance (NO EXCEPTIONS)</h2>
+<p><strong>All changes to Racket generator code and muscovite-cpp
+framework code MUST update existing documentation in the same
+commit.</strong></p>
+<p>This applies to:</p>
+<ul>
+<li><strong>Racket generators</strong>: If you change a generator's
+output format, update the corresponding
+Doxygen/SQL-comment/proto-comment generation in the same change</li>
+<li><strong>Racket source</strong>: If you change a function's behavior
+or purpose, update its <code>;; WHY:</code> / <code>;; ADR:</code>
+comments</li>
+<li><strong>C++ framework headers</strong>: If you change a public API,
+update the Doxygen <code>@brief</code>, <code>@param</code>,
+<code>@return</code>, <code>@see</code> comments</li>
+<li><strong>C++ framework implementation</strong>: If you change
+behavior, update <code>@note</code> and rationale comments</li>
+</ul>
+<p><strong>FORBIDDEN</strong>:</p>
+<ul>
+<li>Submitting code changes that make existing documentation stale</li>
+<li>Adding new public functions/methods without Doxygen
+documentation</li>
+<li>Changing Racket function signatures without updating the doc
+comment</li>
+<li>"Will document later" — documentation is part of the change, not a
+follow-up</li>
+</ul>
+<p>This rule is enforced in copilot-instructions.md Rule 14 and
+AGENTS.md.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>Depends on <a
+href="20260211-grammar-first-language-evolution.html">Grammar-First
+Language Evolution</a> for @SOURCE annotation</li>
+<li>Depends on <a
+href="20260116-lookup-tables-over-check-constraints.html">Lookup
+Tables</a> for lookup table documentation</li>
+<li>Extends <a href="20260204-event-sourcing-typed-event-store.html">Event
+Sourcing</a> for event flow diagrams</li>
+<li>Related: <a
+href="20260212-compile-time-lookup-constants.html">Compile-Time Lookup
+Constants</a> for documented constant headers</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying any generator that emits C++ headers — include
+Doxygen comments from IR <code>doc</code> fields</li>
+<li>When modifying SQL/Sqitch generators — include
+<code>COMMENT ON</code> for ALL generated objects (tables, columns,
+constraints, indexes, functions, triggers, views)</li>
+<li>When modifying proto generators — include <code>//</code>
+documentation comments</li>
+<li>When extending the AsciiDoc glossary generator — use PlantUML for
+all diagrams</li>
+<li>When adding new DSL constructs — ensure <code>doc</code> field
+exists on IR struct and is consumed by all generators</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Hand-authored muscovite-cpp framework documentation (covered by
+separate ADR 20260218)</li>
+<li>Racket source code comments (governed by comment discipline
+instructions, not generators)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Rackunit tests verify documentation content appears in generated
+output</li>
+<li>Grammar conformance test verifies @SOURCE is accepted</li>
+<li>CMake targets (<code>doxygen-docs</code>,
+<code>system-manual-html</code>, <code>system-manual-pdf</code>)
+verified in CI</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/postgres/sqitch-entity.rkt</code> — SQL
+COMMENT ON generation</li>
+<li><code>dslgen/generators/cpp/domain.rkt</code> — C++ Doxygen
+enrichment</li>
+<li><code>dslgen/generators/cpp/repository.rkt</code> — C++ Doxygen
+enrichment</li>
+<li><code>dslgen/generators/cpp/services.rkt</code> — C++ Doxygen
+enrichment (partially done)</li>
+<li><code>dslgen/generators/grpc/proto.rkt</code> — Proto documentation
+comments</li>
+<li><code>dslgen/generators/docs/glossary-adoc.rkt</code> — AsciiDoc
+system manual</li>
+<li><code>dslgen/generators/docs/context-map.rkt</code> — PlantUML
+context map (convert from Mermaid)</li>
+<li><code>dslgen/grammar/muscovite.peg</code> — @SOURCE annotation
+grammar rule</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — <code>sources</code> field
+on IR structs</li>
+<li><code>cmake/Documentation.cmake</code> — CMake build
+integration</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

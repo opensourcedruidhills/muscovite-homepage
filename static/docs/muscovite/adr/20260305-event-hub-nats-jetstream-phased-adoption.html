@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Event Hub Integration — Phased NATS JetStream
+Adoption — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Event Hub Integration — Phased NATS JetStream
+Adoption</span>
+</nav>
+
+<h1>ADR: Event Hub Integration — Phased NATS JetStream Adoption</h1>
+
+
+<h1 id="adr-event-hub-integration--phased-nats-jetstream-adoption">ADR:
+Event Hub Integration — Phased NATS JetStream Adoption</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-05</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: infrastructure, messaging, events, nats</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Muscovite generates domain events unconditionally (ADR 20260124) and
+persists them in <code>{schema}.domain_events</code> tables within the
+same transaction as the write operation. Sagas declare event-driven
+semantics (<code>TRIGGERED_BY</code>, <code>ON SUCCESS</code>,
+<code>ON FAILURE</code>) but execute via DB-backed state machine
+polling. Context maps (<code>MAP {}</code> blocks) declare cross-context
+relationships with <code>VIA grpc</code> — synchronous point-to-point
+calls.</p>
+<p>This works for single-instance desktop deployments today. However,
+three architectural pressures are building:</p>
+<ol type="1">
+<li><strong>Cross-context integration is synchronous</strong> — DDD
+literature (Vernon, Millett) consistently argues that bounded context
+integration should be event-driven, not synchronous RPC.</li>
+<li><strong>Saga runtime doesn't match DSL semantics</strong> — sagas
+declare event triggers but execute via polling. An event hub would make
+the runtime match the declared model.</li>
+<li><strong>Multi-instance scaling is blocked</strong> — competing
+consumers need coordination that DB polling cannot provide cleanly.</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>The <code>domain_events</code> table is already a
+<strong>Transactional Outbox</strong> (Microservices Patterns,
+Richardson)</li>
+<li>The IR already models events fully: <code>domain-event</code>,
+<code>sourced-event</code>, <code>saga</code> structs carry event names,
+payloads, correlation keys, and step sequences</li>
+<li>NATS JetStream is lightweight (single binary, no ZooKeeper),
+persistent, and Apache 2.0 licensed (compatible with AGPL-3.0 dual
+license)</li>
+<li>Generator architecture means adding a target is ~1K–5K lines of
+Racket</li>
+<li>Premature adoption adds operational burden without current
+consumers</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Kafka</strong> — industry standard, but operationally heavy
+(ZooKeeper/KRaft, JVM, multi-broker)</li>
+<li><strong>RabbitMQ</strong> — mature, but Erlang runtime, less natural
+for event streaming patterns</li>
+<li><strong>NATS JetStream</strong> — lightweight, single binary,
+built-in persistence, natural subject hierarchy ← chosen</li>
+<li><strong>Redis Streams</strong> — capable but conflates cache +
+messaging roles; SSPL licensing concerns</li>
+<li><strong>Defer entirely</strong> — miss the opportunity to align
+generated saga runtime with DSL semantics</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option: NATS JetStream, phased adoption in three
+stages.</strong></p>
+<p>NATS subject hierarchy maps naturally to Muscovite's bounded context
+structure:
+<code>muscovite.{project}.{context}.{aggregate}.{event}</code> —
+generated directly from the IR.</p>
+<h3 id="phase-1--near-term-nats-subject-schema-generation-v1530">Phase 1
+— Near-Term: NATS Subject Schema Generation (v1.53.0)</h3>
+<p>Generate NATS subject/topic definitions from context maps + event
+declarations. No runtime yet — just the messaging schema as a generated
+artifact.</p>
+<p><strong>Deliverables</strong>:</p>
+<ul>
+<li>NATS subject hierarchy generated from IR
+(<code>generators/messaging/nats-subjects.rkt</code>)</li>
+<li>Subject namespace document (AsciiDoc) for each project</li>
+<li>Docker Compose integration for NATS JetStream (alongside existing
+PostgreSQL + OpenSearch)</li>
+<li>Stream/consumer configuration generated as NATS CLI setup
+scripts</li>
+<li>Framework <code>muscovite::messaging</code> namespace with
+<code>Publisher</code> and <code>Subscriber</code> interfaces</li>
+</ul>
+<p><strong>Estimated effort</strong>: ~2K–3K lines of Racket generator +
+~500 lines C++ framework interfaces</p>
+<h3 id="phase-2--mid-term-outbox-relay--event-driven-sagas-v1530">Phase
+2 — Mid-Term: Outbox Relay + Event-Driven Sagas (v1.53.0)</h3>
+<p>Generate an outbox relay service that reads
+<code>domain_events</code> and publishes to NATS JetStream. Saga runtime
+switches from DB polling to NATS subscription.</p>
+<p><strong>Deliverables</strong>:</p>
+<ul>
+<li>Outbox relay: generated C++ service polling
+<code>domain_events</code>, publishing to NATS</li>
+<li>Saga runtime: generated NATS subscribers replacing DB polling for
+step transitions</li>
+<li><code>VIA events</code> transport option in context maps (alongside
+existing <code>VIA grpc</code>)</li>
+<li>Event deduplication via <code>domain_events.id</code> as NATS
+message ID (exactly-once via JetStream)</li>
+<li>Health check + metrics for relay lag (events pending publish)</li>
+</ul>
+<p><strong>Estimated effort</strong>: ~3K–4K lines of Racket generator +
+~1K lines C++ framework</p>
+<h3 id="phase-3--deferred-full-event-driven-context-integration">Phase 3
+— Deferred: Full Event-Driven Context Integration</h3>
+<p>Replace synchronous gRPC cross-context calls with event-driven
+integration. Context map relationships using <code>VIA events</code>
+generate NATS pub/sub instead of gRPC client stubs.</p>
+<p><strong>This phase is explicitly deferred.</strong> Triggers to
+revisit:</p>
+<ul>
+<li>Multi-instance deployment requiring competing consumers</li>
+<li>Performance SLA requiring async cross-context communication</li>
+<li>Context map complexity exceeding what synchronous RPC can maintain
+(&gt; 10 cross-context edges)</li>
+</ul>
+<p><strong>Why deferral is safe</strong>:</p>
+<ul>
+<li>Phase 1 + 2 deliver the infrastructure (NATS running, subjects
+defined, outbox active)</li>
+<li>The <code>VIA events</code> DSL syntax can be added without breaking
+existing <code>VIA grpc</code> consumers</li>
+<li>The IR already has <code>context-map</code> entries — adding a
+transport mode is a field addition, not a redesign</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Generated saga runtime matches DSL event-driven semantics</li>
+<li><code>domain_events</code> table becomes the authoritative event
+source (outbox pattern)</li>
+<li>NATS subject hierarchy provides a machine-readable messaging
+contract</li>
+<li>Path to multi-instance scaling without architectural rework</li>
+<li>Docker Compose already manages PostgreSQL + OpenSearch — adding NATS
+is incremental</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>NATS JetStream becomes a runtime dependency for event-driven
+features</li>
+<li>Outbox relay introduces eventual consistency (events are not
+published synchronously)</li>
+<li>Relay lag monitoring is needed to detect publishing delays</li>
+<li>Phase 3 deferral means cross-context communication remains
+synchronous until revisited</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20260120 — Domain Services as Aggregate Boundary</li>
+<li>ADR 20260124 — Unconditional Domain Events (outbox pattern)</li>
+<li>ADR 20260204 — Typed Event Store (sourced event structure)</li>
+<li>ADR 20260305 — Deferred Infrastructure Capabilities (APIM + Cache —
+companion ADR)</li>
+<li>Richardson, C. — <em>Microservices Patterns</em> — Transactional
+Outbox pattern</li>
+<li>Vernon, V. — <em>Implementing Domain-Driven Design</em> —
+cross-context event integration</li>
+<li><a href="https://docs.nats.io/nats-concepts/jetstream">NATS
+JetStream documentation</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

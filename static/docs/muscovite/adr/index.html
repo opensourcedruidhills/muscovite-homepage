@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture Decision Records
+(191) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Architecture Decision Records (191)</span>
+</nav>
+
+<h1>Architecture Decision Records (191)</h1>
+
+
+<h1 id="architecture-decision-records-191">Architecture Decision Records
+(191)</h1>
+<ul>
+<li><a href="20241224-consistent-schema-and-api-naming.html">Consistent
+Schema and API Naming for All Contexts</a></li>
+<li><a
+href="20241224-muscovite-as-productizable-backend-generator.html">Muscovite
+as Productizable Backend Generator</a></li>
+<li><a href="20251223-api-only-testing-with-ddd-seeding.html">Use
+API-Only Testing with DDD-Driven FK Seeding</a></li>
+<li><a href="20251223-deploy-database-via-sqitch-only.html">Deploy
+Database Changes Exclusively via Sqitch</a></li>
+<li><a href="20251223-disable-cpp20-module-scanning.html">Disable C++20
+Module Scanning</a></li>
+<li><a href="20251223-grpc-api-architecture-base-library.html">gRPC API
+Architecture with Base Library and Generated Services</a></li>
+<li><a href="20251223-name-all-primary-keys-id.html">Name All Primary
+Keys "id"</a></li>
+<li><a href="20251223-no-client-side-caching-in-frontend.html">No
+Client-Side Data Caching in Frontend</a></li>
+<li><a
+href="20251223-oauth2-authentication-for-grpc-frontend.html">OAuth2
+Authentication for gRPC Frontend (External Providers)</a></li>
+<li><a href="20251223-proto-to-qt-type-conversion-strategy.html">Proto
+to Qt Type Conversion Strategy</a></li>
+<li><a href="20251223-qt-frontend-base-library-architecture.html">Use
+grpc++ with Qt Wrapper Layer for Frontend Communication</a></li>
+<li><a href="20251223-security-domain-architecture.html">Security Domain
+Architecture</a></li>
+<li><a href="20251223-use-log4brains-to-manage-the-adrs.html">Use
+Log4brains to manage the ADRs</a></li>
+<li><a
+href="20251223-use-markdown-architectural-decision-records.html">Use
+Markdown Architectural Decision Records</a></li>
+<li><a href="20251223-use-pimpl-for-public-cpp-api.html">Use PIMPL
+Pattern for Public C++ API Classes</a></li>
+<li><a href="20251223-use-racket-for-dsl-code-generation.html">Use
+Racket for DSL Code Generation</a></li>
+<li><a href="20251223-use-text-for-all-postgresql-strings.html">Use TEXT
+for All String Columns in PostgreSQL</a></li>
+<li><a href="20251223-use-timestamptz-for-all-datetime.html">Use
+TIMESTAMPTZ for All Date/Time Values</a></li>
+<li><a
+href="20251226-use-jsonb-for-embedded-value-objects.html">20251226-use-jsonb-for-embedded-value-objects</a></li>
+<li><a href="20251229-migrate-to-modern-libpqxx-api.html">ADR: Migrate
+to Modern libpqxx API (exec + pqxx::params)</a></li>
+<li><a
+href="20251229-optional-auth-grpc-wiring.html">20251229-optional-auth-grpc-wiring</a></li>
+<li><a href="20251229-qt-grpc-client-auth-architecture.html">ADR: Qt
+gRPC Client Auth Architecture</a></li>
+<li><a href="20251229-use-nlohmann-json-for-jwt-serialization.html">ADR:
+Use nlohmann_json for JWT Token Serialization</a></li>
+<li><a href="20251230-grpc-backed-qt-item-models.html">ADR: gRPC-Backed
+Qt Item Models (Widgets + QML)</a></li>
+<li><a href="20251231-qt-widgets-only-no-qml.html">ADR: Qt Widgets Only
+- No QML Client Generation</a></li>
+<li><a href="20260106-explicit-relationships-only.html">Derive All
+Foreign Keys from Explicit DDD Relationships</a></li>
+<li><a href="20260106-fail-fast-relationship-validation.html">Terminate
+Generation on Any Invalid Relationship Reference</a></li>
+<li><a href="20260106-shared-basedata-context.html">Use Shared Basedata
+Context for Cross-Cutting Lookup Entities</a></li>
+<li><a href="20260107-carbonate-rock-classification.html">Carbonate Rock
+Classification Systems (Dunham, Folk)</a></li>
+<li><a href="20260107-entity-code-surrogate-keys.html">Use Entity Code
+as User-Facing Surrogate Key</a></li>
+<li><a href="20260107-fgdc-usgs-mapping-symbol-standard.html">FGDC/USGS
+Geologic Map Symbolization Standard</a></li>
+<li><a href="20260107-grain-size-classification-systems.html">Grain Size
+Classification Systems</a></li>
+<li><a
+href="20260107-metamorphic-vs-sedimentary-facies.html">Metamorphic vs
+Sedimentary Facies - Distinct Concepts</a></li>
+<li><a
+href="20260107-petrology-mineral-composition-classification.html">Petrology
+Mineral Composition and Rock Classification</a></li>
+<li><a href="20260107-project-management-domain.html">Project Management
+Domain with Kanban Workflow</a></li>
+<li><a
+href="20260108-geologic-map-feature-bridge.html">20260108-geologic-map-feature-bridge</a></li>
+<li><a href="20260108-json-seed-data-format.html">Use JSON for Seed Data
+Files</a></li>
+<li><a href="20260108-no-postgresql-enums.html">Forbid PostgreSQL ENUM
+Types - Use Lookup Tables</a></li>
+<li><a href="20260108-postgis-spatial-extension.html">Use PostGIS for
+Spatial Data Storage and Queries</a></li>
+<li><a href="20260108-spatial-query-api.html">Spatial Query API for
+Geologic Map Features</a></li>
+<li><a
+href="20260109-canonical-semantic-ir-representation.html">Canonical
+Semantic IR Representation</a></li>
+<li><a href="20260109-cross-layer-verification.html">Cross-Layer
+Consistency Verification</a></li>
+<li><a href="20260109-declarative-migration-language.html">Declarative
+Migration Language</a></li>
+<li><a href="20260109-fhir-health-sample-domain.html">FHIR Health Sample
+Domain for Schema Evolution Testing</a></li>
+<li><a href="20260109-git-model-version-selection.html">Git-Based Model
+Version Selection</a></li>
+<li><a href="20260109-incremental-artifact-generation.html">Incremental
+Artifact Generation via Semantic Diff</a></li>
+<li><a href="20260109-migration-safety-policies.html">Migration Safety
+and Validation Policies</a></li>
+<li><a href="20260109-migration-sql-generation.html">Migration SQL
+Generation via Sqitch</a></li>
+<li><a href="20260109-semantic-model-delta.html">Semantic Model Delta
+Computation</a></li>
+<li><a href="20260109-stable-uuid-identity.html">Stable UUID Identity
+for Semantic Elements</a></li>
+<li><a href="20260112-cmake-package-export.html">Export Muscovite as
+CMake Package</a></li>
+<li><a href="20260113-shared-libraries-only.html">Build All Libraries as
+Shared Libraries</a></li>
+<li><a href="20260114-entity-display-string-annotation.html">Entity
+Display String Annotation</a></li>
+<li><a
+href="20260115-denormalized-display-name-with-triggers.html">Denormalized
+display_name Field with Database Triggers</a></li>
+<li><a href="20260116-check-constraint-uuid-annotations.html">CHECK
+Constraint UUID Annotations</a></li>
+<li><a
+href="20260116-cross-schema-migration-awareness.html">Cross-Schema
+Migration Awareness</a></li>
+<li><a href="20260116-data-migration-roadmap.html">Data Migration
+Support (Roadmap)</a></li>
+<li><a href="20260116-functional-diff-algorithm.html">Functional Style
+for Diff Algorithm</a></li>
+<li><a
+href="20260116-generated-server-config-via-ini-files.html">Generated
+Server Configuration via INI Files</a></li>
+<li><a href="20260116-incremental-migration-integration-plan.html">ADR:
+Incremental Migration Integration Plan</a></li>
+<li><a href="20260116-lookup-table-dsl-construct.html">LOOKUP_TABLE as
+First-Class DSL Construct</a></li>
+<li><a href="20260116-lookup-tables-over-check-constraints.html">Lookup
+Tables Over CHECK Constraints for Enumerated Values</a></li>
+<li><a href="20260116-migration-operations-traceability.html">Migration
+Operations Traceability</a></li>
+<li><a href="20260116-operation-semantic-versioning.html">Operation
+Semantic Versioning</a></li>
+<li><a href="20260116-operation-topological-sort.html">Operation
+Topological Sort for Migration Execution</a></li>
+<li><a
+href="20260116-qualified-entity-references-in-relationships.html">Qualified
+Entity References in Relationships</a></li>
+<li><a href="20260116-relationship-target-resolution.html">Relationship
+Target Resolution in Migration Operations</a></li>
+<li><a href="20260117-value-objects-and-strong-types.html">ADR: Value
+Objects and Strong Types</a></li>
+<li><a href="20260117-value-object-storage-modes.html">Value Object
+Storage Modes with Composite Types</a></li>
+<li><a href="20260119-strong-types-across-all-layers.html">ADR: Strong
+Types Across All Layers</a></li>
+<li><a href="20260119-test-data-generation-for-strong-types.html">ADR:
+Test Data Generation for Strong Types</a></li>
+<li><a href="20260120-catch2-integration-tests.html">Catch2 Integration
+Tests Replace pgTAP</a></li>
+<li><a href="20260120-cqrs-ready-architecture.html">CQRS-Ready
+Architecture</a></li>
+<li><a href="20260120-domain-services-as-aggregate-boundary.html">Domain
+Services as Aggregate Boundary</a></li>
+<li><a href="20260120-remove-plpgsql-api-layer.html">Remove PL/pgSQL
+Stored Procedure API Layer</a></li>
+<li><a href="20260123-arc-constraints-for-polymorphic-types.html">Arc
+Constraints for Polymorphic Types</a></li>
+<li><a
+href="20260123-presentation-hints-for-entity-display.html">PRESENTATION
+Hints for Entity Display</a></li>
+<li><a href="20260123-qt-state-machine-validation-architecture.html">Qt
+State Machine Validation Architecture</a></li>
+<li><a
+href="20260123-specification-based-queries.html">Specification-Based
+Queries</a></li>
+<li><a href="20260124-explicit-domain-event-declarations.html">Explicit
+Domain Event Declarations in DDD Model</a></li>
+<li><a
+href="20260124-unconditional-domain-events-table-generation.html">Unconditional
+Domain Events Table Generation</a></li>
+<li><a
+href="20260125-authentication-service-struct-alignment.html">Align
+AuthenticationService public structs with implementation</a></li>
+<li><a
+href="20260125-grpc-auth-interceptor-compatibility.html">Implement gRPC
+auth interceptor using supported APIs</a></li>
+<li><a
+href="20260125-version-export-and-component-consolidation.html">Version
+Export and Component Consolidation</a></li>
+<li><a href="20260126-anti-meridian-limitation.html">Anti-Meridian
+Handling Limitation</a></li>
+<li><a href="20260126-geography-over-geometry.html">Geography Over
+Geometry for Spatial Data</a></li>
+<li><a href="20260126-m-coordinate-deferred.html">M-Coordinate Linear
+Referencing Deferred</a></li>
+<li><a href="20260126-metric-units-only.html">Metric Units Only</a></li>
+<li><a href="20260126-qml-maps-in-widgets.html">QML Maps in Qt Widgets
+Application</a></li>
+<li><a href="20260126-remove-pgtap-tests.html">Remove pgTAP Tests in
+Favor of Sqitch Verify and Catch2</a></li>
+<li><a href="20260126-spatial-capability.html">Spatial Capability as
+Framework Feature</a></li>
+<li><a
+href="20260201-documentation-consolidation-for-ai-efficiency.html">ADR:
+Documentation Consolidation for AI Efficiency</a></li>
+<li><a
+href="20260201-extract-cpp-framework-to-separate-repo.html">Extract C++
+Framework to Separate Repository</a></li>
+<li><a
+href="20260202-outbox-pattern-reliable-event-publishing.html">Outbox
+Pattern with NATS JetStream and Protobuf</a></li>
+<li><a href="20260203-defer-redis-caching.html">Defer Redis Caching to
+v1.x</a></li>
+<li><a href="20260203-event-consumers.html">Event Consumers</a></li>
+<li><a href="20260203-projections-dsl.html">Projections DSL for
+Read-Optimized Views</a></li>
+<li><a
+href="20260204-concurrency-control-locking-strategy.html">Concurrency
+Control and Locking Strategy</a></li>
+<li><a href="20260204-event-sourcing-typed-event-store.html">Event
+Sourcing with Typed Event Store (Option B)</a></li>
+<li><a href="20260204-global-event-log-uuidv7.html">Global Event Log
+with UUIDv7 Ordering</a></li>
+<li><a
+href="20260205-muscovite-embedded-prompts.html">20260205-muscovite-embedded-prompts</a></li>
+<li><a
+href="20260206-build-profiling-instrumentation.html">20260206-build-profiling-instrumentation</a></li>
+<li><a href="20260206-multi-frontend-architecture.html">ADR-20260206:
+Multi-Frontend Architecture (Platform Agnostic)</a></li>
+<li><a
+href="20260206-qml-viewmodel-binding-pattern.html">20260206-qml-viewmodel-binding-pattern</a></li>
+<li><a href="20260210-file-based-development-workflow.html">File-Based
+Development Workflow</a></li>
+<li><a href="20260210-incremental-code-generation.html">Incremental Code
+Generation via UUID-Based Change Tracking</a></li>
+<li><a href="20260210-qml-testcase-ui-test-automation.html">Generate QML
+TestCase UI Tests from DSL</a></li>
+<li><a href="20260210-racket-generator-test-suite.html">Racket Generator
+Test Suite with CTest Integration and Coverage</a></li>
+<li><a href="20260211-abstract-layout-vocabulary.html">Abstract Layout
+Vocabulary for Presentation Layer</a></li>
+<li><a href="20260211-autonomous-sample-projects.html">Sample Projects
+Must Be Fully Autonomous</a></li>
+<li><a href="20260211-build-acceleration-toolchain.html">Build
+Acceleration Toolchain (Mold + ccache)</a></li>
+<li><a href="20260211-codegen-over-templates-qt-widgets.html">Code
+Generation Over C++ Templates for Qt Widgets</a></li>
+<li><a href="20260211-flutter-frontend-target.html">Flutter as Generated
+Frontend Target</a></li>
+<li><a href="20260211-git-flow-branching-strategy.html">Git Flow
+Branching Strategy</a></li>
+<li><a
+href="20260211-grammar-first-language-evolution.html">Grammar-First
+Language Evolution</a></li>
+<li><a href="20260211-grpc-transport-for-non-cpp-clients.html">gRPC as
+Primary Transport for Non-C++ Clients</a></li>
+<li><a href="20260211-racket-target-configuration.html">Racket-Based
+Target Configuration for UI Generation</a></li>
+<li><a
+href="20260211-responsive-layout-future-extension.html">Responsive
+Multi-Form-Factor Layouts as Future Extension</a></li>
+<li><a
+href="20260211-s-expression-template-dsl.html">20260211-s-expression-template-dsl</a></li>
+<li><a href="20260211-unified-racket-test-runner.html">Unified Racket
+Test Runner</a></li>
+<li><a href="20260212-capability-gated-subsystems.html">Capability-Gated
+Subsystems</a></li>
+<li><a href="20260212-compile-time-lookup-constants.html">Compile-Time
+Lookup Constants via Deterministic Seed UUIDs</a></li>
+<li><a href="20260212-doctest-adoption-and-tdd-practice.html">Adopt
+doctest and Test-Driven Development Practice</a></li>
+<li><a href="20260212-no-factory-classes.html">No Factory Classes — C++
+Constructors Are Factories</a></li>
+<li><a
+href="20260212-specification-where-clause-hardening.html">Specification
+WHERE Clause Hardening</a></li>
+<li><a
+href="20260213-formalize-project-dsl.html">20260213-formalize-project-dsl</a></li>
+<li><a
+href="20260213-grammar-parser-parity-enforcement.html">Grammar-Parser
+Parity Enforcement and Drift Detection</a></li>
+<li><a href="20260213-per-context-dba-libraries.html">ADR: Per-Context
+Libraries for Change Isolation (All Layers)</a></li>
+<li><a href="20260213-underscore-joined-keywords.html">Underscore-Joined
+Keywords — No Whitespace in DSL Keywords</a></li>
+<li><a href="20260214-remove-display-name-triggers.html">Remove
+display_name PL/pgSQL Triggers — Assemble in C++ Instead</a></li>
+<li><a
+href="20260215-concurrency-control-locking-strategy.html">Concurrency
+Control: Optimistic Locking + Advisory Locks</a></li>
+<li><a
+href="20260217-brownfield-migration-factory-architecture.html">Brownfield
+Migration Factory Architecture</a></li>
+<li><a
+href="20260217-build-acceleration-unity-and-pch.html">20260217-build-acceleration-unity-and-pch</a></li>
+<li><a
+href="20260217-documentation-as-generated-artifact.html">Documentation
+as Generated Artifact</a></li>
+<li><a
+href="20260217-mapping-dsl-block-brownfield-migration.html">MAPPING DSL
+Block for Brownfield Migration</a></li>
+<li><a href="20260217-pg-catalog-schema-introspection.html">pg_catalog
+Schema Introspection for Brownfield Analysis</a></li>
+<li><a
+href="20260217-typed-json-envelope-migration-transport.html">Typed JSON
+Envelope for Migration Transport</a></li>
+<li><a
+href="20260218-generator-modularization-and-dependency-hygiene.html">Generator
+Modularization and Dependency Hygiene</a></li>
+<li><a
+href="20260218-muscovite-cpp-framework-doxygen-retrofit.html">Muscovite-cpp
+Framework Doxygen Retrofit</a></li>
+<li><a
+href="20260218-template-dsl-for-code-generation.html">ADR-20260218:
+Template DSL for Code Generation</a></li>
+<li><a href="20260219-form-factor-layout-selection.html">Form-Factor
+Layout Selection Cascade</a></li>
+<li><a
+href="20260221-audience-specific-asciidoc-generation.html">AI-Supported
+Audience-Specific AsciiDoc Generation</a></li>
+<li><a href="20260221-bitemporal-data-support.html">Bitemporal Data
+Support for Auditable Domain Models</a></li>
+<li><a href="20260221-entity-level-state-machines.html">Entity-Level
+State Machines via DSL Statechart Construct</a></li>
+<li><a
+href="20260222-opensearch-full-text-search-capability.html">OpenSearch
+Full-Text Search Capability</a></li>
+<li><a
+href="20260222-plantuml-salt-wireframes-in-generated-docs.html">PlantUML
+Salt Wireframes in Generated Documentation</a></li>
+<li><a
+href="20260223-circuit-breaker-as-infrastructure-state-machine.html">Circuit
+Breaker as Generated Infrastructure State Machine</a></li>
+<li><a href="20260223-end-to-end-testing-strategy.html">End-to-End
+Testing Strategy</a></li>
+<li><a
+href="20260223-foreign-context-anti-corruption-layer.html">20260223-foreign-context-anti-corruption-layer</a></li>
+<li><a
+href="20260223-migration-extractor-generator-architecture.html">Migration
+Extractor Generator Architecture</a></li>
+<li><a
+href="20260223-migration-transformer-generator-architecture.html">Migration
+Transformer Generator Architecture</a></li>
+<li><a href="20260223-migration-triage-ui-architecture.html">Migration
+Triage UI Architecture (Qt Widgets + QML)</a></li>
+<li><a href="20260223-nats-migration-topology-documentation.html">NATS
+Migration Topology Documentation in System Manual</a></li>
+<li><a
+href="20260223-plugin-system-extension-points-and-layer2-sidecar.html">Plugin
+System — Extension Points and the Layer 2 Sidecar</a></li>
+<li><a
+href="20260223-plugin-transport-selection.html">20260223-plugin-transport-selection</a></li>
+<li><a href="20260223-qt-remote-objects-lgpl-transport-approval.html">Qt
+Remote Objects LGPL Transport Approval for Frontend Plugins</a></li>
+<li><a
+href="20260223-racket-generator-unit-testing-strategy.html">Racket
+Generator Unit Testing Strategy</a></li>
+<li><a
+href="20260223-separate-layout-into-lay-dsl.html">20260223-separate-layout-into-lay-dsl</a></li>
+<li><a href="20260225-github-flow-with-develop-branch.html">GitHub Flow
+with Develop Branch for Multi-Agent Isolation</a></li>
+<li><a href="20260226-mandatory-template-dsl-adoption.html">Mandatory
+Template DSL Adoption for All Generators</a></li>
+<li><a
+href="20260226-racket-idiomatic-style-and-byte-compilation.html">Racket
+Idiomatic Style and Byte Compilation</a></li>
+<li><a
+href="20260227-postgresql-idiomatic-output-quality.html">PostgreSQL
+Idiomatic Output Quality</a></li>
+<li><a href="20260227-qml-idiomatic-output-quality.html">QML Idiomatic
+Output Quality</a></li>
+<li><a
+href="20260227-quality-tooling-in-generated-projects.html">Quality
+Tooling in Generated Projects</a></li>
+<li><a
+href="20260228-deployment-infrastructure-hetzner-over-aws.html">20260228-deployment-infrastructure-hetzner-over-aws</a></li>
+<li><a
+href="20260228-grpc-deadline-to-statement-timeout-propagation.html">gRPC
+Deadline to PostgreSQL Statement Timeout Propagation</a></li>
+<li><a
+href="20260228-grpc-resilience-sandwich-full-architecture.html">gRPC
+Resilience Sandwich — Full Deadline and Retry Architecture</a></li>
+<li><a
+href="20260302-opentelemetry-observability-architecture.html">OpenTelemetry
+Observability Architecture</a></li>
+<li><a href="20260303-cpp23-style-guide.html">C++23 Style Guide for
+Muscovite</a></li>
+<li><a href="20260303-qt-style-guide.html">Qt/QML Modern Style Guide for
+Muscovite</a></li>
+<li><a href="20260303-tasktree-adoption.html">Qt TaskTree Adoption for
+Async Operations</a></li>
+<li><a href="20260305-clang-tidy-enforcement.html">ADR: clang-tidy as
+C++ Pattern Enforcement Mechanism</a></li>
+<li><a
+href="20260305-deferred-infrastructure-capabilities.html">20260305-deferred-infrastructure-capabilities</a></li>
+<li><a
+href="20260305-event-hub-nats-jetstream-phased-adoption.html">ADR: Event
+Hub Integration — Phased NATS JetStream Adoption</a></li>
+<li><a href="20260306-multi-agent-session-protocol.html">Multi-Agent
+Session Protocol</a></li>
+<li><a href="20260306-proto-json-for-domain-event-payloads.html">ADR:
+Proto-JSON Serialization for Domain Event Payloads</a></li>
+<li><a
+href="20260307-behavioral-sovereignty-roadmap.html">20260307-behavioral-sovereignty-roadmap</a></li>
+<li><a href="20260307-command-behavioral-evolution.html">Command
+Behavioral Evolution — DECIDE Block</a></li>
+<li><a href="20260307-cross-field-constraint-syntax.html">Cross-Field
+Constraint Annotation Syntax</a></li>
+<li><a href="20260307-domain-service-layer.html">Domain Service Layer
+Between gRPC and Persistence</a></li>
+<li><a href="20260307-effect-catalog.html">Effect Catalog — Formal
+Declaration of External Side Effects</a></li>
+<li><a
+href="20260307-emit-plan-intent-separation.html">20260307-emit-plan-intent-separation</a></li>
+<li><a href="20260307-ensures-postconditions.html">ENSURES
+Postconditions and Property-Based Test Generation</a></li>
+<li><a href="20260307-field-constraint-annotations.html">Field
+Constraint Annotations in DSL Grammar</a></li>
+<li><a href="20260307-frontend-validation-symmetry.html">Frontend
+Validation Symmetry for Qt Widgets and QML</a></li>
+<li><a href="20260307-functional-expression-language.html">Functional
+Expression Language for Behavioral Sovereignty</a></li>
+<li><a href="20260307-mandatory-multi-layer-test-gates.html">Mandatory
+Multi-Layer Test Gates</a></li>
+<li><a
+href="20260307-pure-function-compilation.html">20260307-pure-function-compilation</a></li>
+<li><a href="20260307-strong-type-template-families.html">Strong Type
+Template Families for Field Constraints</a></li>
+<li><a
+href="20260307-three-tier-validation-architecture.html">Three-Tier
+Validation Architecture</a></li>
+<li><a href="20260309-github-pages-documentation-deployment.html">GitHub
+Pages Documentation Deployment via muscovite-homepage</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

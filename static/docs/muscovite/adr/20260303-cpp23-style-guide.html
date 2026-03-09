@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++23 Style Guide for
+Muscovite — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>C++23 Style Guide for Muscovite</span>
+</nav>
+
+<h1>C++23 Style Guide for Muscovite</h1>
+
+
+<h1 id="c23-style-guide-for-muscovite">C++23 Style Guide for
+Muscovite</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-03-03</li>
+<li>Tags: c++, style-guide, cpp23, patterns, framework, generator</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: FTR-187 — Codify <code>doc/CPP-PATTERNS.md</code> as
+the binding C++23 style guide for all Muscovite C++ code (framework
+Layer 1 and generated Layer 2).</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates ~56K lines of C++ code across DBA repositories,
+gRPC services, and Qt clients. The framework (<code>framework/</code>)
+adds ~35K lines. Both layers must maintain consistent, modern C++23
+style to:</p>
+<ol type="1">
+<li>Ensure generated output is production-quality — not "code-gen
+smell"</li>
+<li>Provide a stable target for AI agents writing/modifying C++
+code</li>
+<li>Prevent regression of patterns already modernized</li>
+</ol>
+<p>The <code>doc/CPP-PATTERNS.md</code> catalog was created as a
+compliance audit (v1.43.0) documenting 20 pattern sections with severity
+ratings. This ADR elevates that catalog to a binding style guide.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Generated code must be indistinguishable from hand-written modern
+C++23</li>
+<li>AI agents (Copilot, Claude) need explicit forbidden/required
+patterns to avoid regressions</li>
+<li>Framework and generated code share the same C++ compiler — style
+must be unified</li>
+<li>The compliance audit (<code>doc/CPP23-COMPLIANCE-AUDIT.md</code>)
+identified specific gaps to close</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Adopt CPP-PATTERNS.md as the binding style guide</strong> —
+reference from copilot-instructions.md</li>
+<li><strong>Use an external style guide (e.g., Google C++ Style
+Guide)</strong> — adapt to project needs</li>
+<li><strong>No formal guide</strong> — rely on code review and
+convention</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — CPP-PATTERNS.md as binding style
+guide</strong>, because it is already tailored to Muscovite's specific
+needs (pqxx, gRPC, Qt, code generation), covers the exact patterns seen
+in the codebase, and has severity ratings that prioritize fixes.</p>
+<h3 id="binding-sections-20-sections">Binding Sections (20
+Sections)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Section</th>
+<th>Severity</th>
+<th>Key Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Error Handling</td>
+<td>P0</td>
+<td>Use <code>std::expected&lt;T,E&gt;</code> for recoverable errors;
+<code>[[nodiscard]]</code> on all</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Attribute Annotations</td>
+<td>P1</td>
+<td><code>[[nodiscard]]</code> on factories/queries;
+<code>[[maybe_unused]]</code> on interface params</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Ranges and Views</td>
+<td>P1</td>
+<td><code>std::ranges::transform</code> over raw
+<code>for</code>+<code>push_back</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Structured Bindings</td>
+<td>P2</td>
+<td>Use for multi-return, tuple/pair decomposition</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Concepts and Constraints</td>
+<td>P2</td>
+<td><code>requires</code> clauses over <code>static_assert</code>
+SFINAE</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Designated Initializers</td>
+<td>P2</td>
+<td>Named initialization for config structs</td>
+</tr>
+<tr>
+<td>7</td>
+<td>String Handling</td>
+<td>P1</td>
+<td><code>std::format</code> over <code>fmt::format</code>;
+<code>constexpr pqxx::zview</code> for SQL</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Const Correctness</td>
+<td>P1</td>
+<td><code>const</code> everywhere possible; <code>constexpr</code> for
+compile-time values</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Forward Declarations</td>
+<td>P2</td>
+<td>Forward-declare in headers; include in sources</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Header/Source Separation</td>
+<td>P1</td>
+<td>No inline method bodies in headers (except templates)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Namespace Structure</td>
+<td>P2</td>
+<td><code>muscovite::{module}::</code> hierarchy</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Memory and Ownership</td>
+<td>P1</td>
+<td><code>unique_ptr</code> default; <code>shared_ptr</code> only when
+shared ownership proven</td>
+</tr>
+<tr>
+<td>13</td>
+<td>C Legacy Elimination</td>
+<td>P1</td>
+<td>No <code>reinterpret_cast</code>, C-style casts,
+<code>#define</code> constants</td>
+</tr>
+<tr>
+<td>14</td>
+<td>SQL Query Management</td>
+<td>P0</td>
+<td><code>constexpr pqxx::zview</code> for all SQL; parameterized
+queries ($1)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Duplicate Code Elimination</td>
+<td>P2</td>
+<td>Template-based deduplication</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Include Guards</td>
+<td>P2</td>
+<td><code>#pragma once</code> (compiler-standard, faster than
+<code>#ifndef</code>)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>NATS/Messaging Patterns</td>
+<td>P1</td>
+<td>Framework-level publish helpers</td>
+</tr>
+<tr>
+<td>18</td>
+<td>constexpr Where Possible</td>
+<td>P1</td>
+<td>Compile-time constants, UUIDv5 lookup values</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Testing Patterns</td>
+<td>P1</td>
+<td>doctest BDD for pure C++; QTest for QObject classes (see ADR Qt
+Style Guide)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>pqxx API Usage</td>
+<td>P0</td>
+<td><code>pqxx::work</code> for writes,
+<code>pqxx::nontransaction</code> for reads,
+<code>pqxx::params</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="top-5-forbidden-patterns-mandatory-cireview-enforcement">Top 5
+Forbidden Patterns (Mandatory CI/Review Enforcement)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Forbidden</th>
+<th>Required</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Raw <code>for</code> + <code>push_back</code> accumulation</td>
+<td><code>std::ranges::transform</code> /
+<code>ranges::to&lt;vector&gt;()</code></td>
+<td>C++23 ranges eliminate off-by-one, improve readability</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>fmt::format(...)</code></td>
+<td><code>std::format(...)</code></td>
+<td>C++23 <code>&lt;format&gt;</code> is standard; eliminates {fmt}
+dependency long-term</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>std::string sql = "SELECT ..."</code></td>
+<td><code>constexpr pqxx::zview sql{"SELECT ..."}</code></td>
+<td>Compile-time string, zero-copy to libpq</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>reinterpret_cast</code> / C-style casts</td>
+<td><code>static_cast</code> / <code>std::bit_cast</code></td>
+<td>Type safety, grep-ability</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>QThread::msleep()</code> in non-test code</td>
+<td><code>QTimer::singleShot()</code></td>
+<td>Non-blocking event loop (see ADR Qt Style Guide)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>AI agents have an explicit forbidden-pattern list → fewer
+regressions</li>
+<li>Generated C++ code quality is auditable against a single
+document</li>
+<li>New contributors have a single style reference</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Existing code that predates this ADR may not fully comply — retrofit
+is phased per <code>CPP-PATTERNS.md</code> Priority and Phasing
+section</li>
+<li>Some patterns (e.g., <code>std::expected</code>) require C++23
+compiler support — already enforced via
+<code>CMAKE_CXX_STANDARD 23</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Living catalog: <a
+href="../CPP-PATTERNS.html"><code>doc/CPP-PATTERNS.md</code></a> (20
+sections, severity-rated)</li>
+<li>Compliance audit: <a
+href="../CPP23-COMPLIANCE-AUDIT.html"><code>doc/CPP23-COMPLIANCE-AUDIT.md</code></a></li>
+<li>Related: ADR Qt/QML Style Guide (FTR-188), ADR TaskTree Adoption
+(FTR-189)</li>
+<li>Supersedes: informal conventions from pre-v1.43.0</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite as Productizable Backend
+Generator — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Muscovite as Productizable Backend Generator</span>
+</nav>
+
+<h1>Muscovite as Productizable Backend Generator</h1>
+
+
+<h1 id="muscovite-as-productizable-backend-generator">Muscovite as
+Productizable Backend Generator</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2024-12-24</li>
+<li>Tags: architecture, product-identity, code-generation</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite has evolved from a DSL experimentation tool into a
+comprehensive code generator. We need to clarify its product identity
+and distinguish between core capabilities (shipped with Muscovite) and
+example projects (proof-of-concept demonstrations).</p>
+<p>Key questions:</p>
+<ol type="1">
+<li>What is Muscovite's primary purpose?</li>
+<li>What capabilities should be built-in vs. external/optional?</li>
+<li>How do example projects (like geosciences) relate to the core
+product?</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Need for a self-contained, productizable code generator</li>
+<li>Desire to ship common infrastructure domains (security, audit) as
+reusable built-ins</li>
+<li>Clear separation between "Muscovite core" and "example
+projects"</li>
+<li>All generated projects need security/auth integration</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>External Module Registry</strong>: Allow importing modules
+from external sources</li>
+<li><strong>Built-in Capabilities</strong>: Ship infrastructure domains
+as part of Muscovite distribution</li>
+<li><strong>Copy-Paste Templates</strong>: Provide templates that users
+copy into their projects</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Built-in Capabilities</strong>, because it
+keeps Muscovite self-contained, ensures consistency across all generated
+projects, and eliminates external dependencies.</p>
+<h3 id="muscovite-product-definition">Muscovite Product Definition</h3>
+<p><strong>Muscovite is a productizable backend code generator with
+focus on:</strong></p>
+<ul>
+<li>PostgreSQL database (schemas, migrations via Sqitch)</li>
+<li>PL/pgSQL stored procedure APIs</li>
+<li>C++ server with gRPC services</li>
+<li>Qt/QML client with QtGRPC integration</li>
+</ul>
+<p><strong>Core Components:</strong></p>
+<ol type="1">
+<li><strong>DSL Parser</strong>: Racket-based parser for
+<code>.ddd</code> domain models</li>
+<li><strong>Generators</strong>: Code generators for all target
+platforms</li>
+<li><strong>Built-in Capabilities</strong>: Infrastructure domains
+(security, audit, storage) that are opt-in via project
+configuration</li>
+</ol>
+<p><strong>Example Projects:</strong></p>
+<ul>
+<li><strong>Geosciences</strong>: Full-fledged experimental
+proof-of-concept (19 bounded contexts, ~8000 lines of DSL)</li>
+<li>Located in <code>src/dslgen/examples/geosciences/</code> (NOT part
+of core distribution)</li>
+<li>Demonstrates all Muscovite features but is NOT shipped as a reusable
+module</li>
+</ul>
+<h3 id="built-in-capabilities-architecture">Built-in Capabilities
+Architecture</h3>
+<p>Built-in capabilities are infrastructure domains that:</p>
+<ol type="1">
+<li>Ship with Muscovite distribution (in
+<code>src/dslgen/builtin/</code>)</li>
+<li>Are enabled via <code>CAPABILITIES { ... }</code> block in
+project.ddd</li>
+<li>Follow the SAME generation patterns as user-defined contexts</li>
+<li>Generate <code>&lt;context&gt;</code> +
+<code>&lt;context&gt;_api</code> schemas like all other contexts</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Self-contained product with no external dependencies</li>
+<li>Consistent API patterns across all generated code</li>
+<li>Security domain available to all projects by default</li>
+<li>Clear separation of concerns between core and examples</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>All capabilities must be maintained as part of Muscovite</li>
+<li>Users cannot add custom built-in capabilities without modifying
+Muscovite</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20241224-consistent-schema-and-api-naming.html">Consistent
+Schema and API Naming</a></li>
+<li><a href="20251223-security-domain-architecture.html">Security Domain
+Architecture</a></li>
+<li><a href="20251223-api-only-testing-with-ddd-seeding.html">API-Only
+Testing with DDD Seeding</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When determining where to place new infrastructure domains
+(security, audit, storage)</li>
+<li>When deciding whether a feature should be built-in or example
+code</li>
+<li>When designing the project.ddd configuration syntax</li>
+<li>When implementing capability loading in generators</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>User-specific domain models (these go in user projects, not
+Muscovite)</li>
+<li>One-off integrations or customizations</li>
+<li>Example code demonstrating DSL features (these go in examples/)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Built-in capabilities MUST live in
+<code>src/dslgen/builtin/&lt;capability&gt;/</code></li>
+<li>Example projects MUST live in
+<code>src/dslgen/examples/&lt;project&gt;/</code></li>
+<li>All built-in capabilities MUST be opt-in via CAPABILITIES block</li>
+<li>No external registry or import mechanism for capabilities</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/builtin/</code> - Built-in capability
+definitions</li>
+<li><code>src/dslgen/builtin/registry.rkt</code> - Capability
+registration and loading</li>
+<li><code>src/dslgen/parser/project-dsl.rkt</code> - CAPABILITIES
+parsing</li>
+<li><code>src/dslgen/generate.rkt</code> - Capability loading during
+generation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

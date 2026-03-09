@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration Operations
+Traceability — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Migration Operations Traceability</span>
+</nav>
+
+<h1>Migration Operations Traceability</h1>
+
+
+<h1 id="migration-operations-traceability">Migration Operations
+Traceability</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-01-16</li>
+<li>Deciders: Architecture Team</li>
+<li>Tags: migration, sqitch, git, traceability, review</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The semantic diff migration pipeline (ADRs 1-5) generates Sqitch SQL
+migrations from DDD model changes. Currently, the generated SQL files go
+to a user-specified <code>--sqitch-dir</code> (often <code>/tmp/</code>
+for testing), making them:</p>
+<ol type="1">
+<li><strong>Not reviewable</strong> - temporary locations aren't
+committed to git</li>
+<li><strong>Not traceable</strong> - no audit trail connecting model
+changes to generated migrations</li>
+<li><strong>Not reproducible</strong> - operations list exists only in
+memory during generation</li>
+</ol>
+<p>Teams need to review migration operations before deploying to
+production databases.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Code review workflow</strong>: Migration SQL must be
+reviewable in pull requests</li>
+<li><strong>Audit trail</strong>: Operations should be traceable to
+specific model versions</li>
+<li><strong>Reproducibility</strong>: Same inputs must produce same
+outputs</li>
+<li><strong>Separation of concerns</strong>: Keep generated artifacts
+distinct from source models</li>
+<li><strong>Git-friendly</strong>: Artifacts must commit cleanly and
+diff well</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-operations-persistence-with-structured-output-directory">Option
+1: Operations Persistence with Structured Output Directory</h3>
+<pre><code>&lt;repo&gt;/migrations/&lt;from-version&gt;-to-&lt;to-version&gt;/
+├── operations.yaml       # Human-readable operation list
+├── sqitch/
+│   ├── sqitch.plan
+│   ├── deploy/
+│   ├── revert/
+│   └── verify/
+└── metadata.yaml         # Generation timestamp, tool version, etc.</code></pre>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>All migration artifacts in one place</li>
+<li>Version-named directories for traceability</li>
+<li>YAML operations file is reviewable and diffable</li>
+<li>Git-friendly structure</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Multiple directories if many migrations</li>
+<li>Need to clean up old migrations manually</li>
+</ul>
+<h3 id="option-2-inline-comments-in-sql-files">Option 2: Inline Comments
+in SQL Files</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Operation: add-entity-op</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- UUID: a1b2c3d4-...</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Safety: safe</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Source: observation.ddd (v1.19.0)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> fhir.observation_component (<span class="op">..</span>.)</span></code></pre></div>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Operations visible in SQL files themselves</li>
+<li>No separate operations file</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Comments can become stale if SQL is edited</li>
+<li>Harder to parse programmatically</li>
+<li>Verbose SQL files</li>
+</ul>
+<h3 id="option-3-json-operations-log">Option 3: JSON Operations Log</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;from_version&quot;</span><span class="fu">:</span> <span class="st">&quot;v1.18.0&quot;</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;to_version&quot;</span><span class="fu">:</span> <span class="st">&quot;v1.19.0&quot;</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;operations&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;add-entity&quot;</span><span class="fu">,</span> <span class="dt">&quot;uuid&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span><span class="fu">,</span> <span class="dt">&quot;entity&quot;</span><span class="fu">:</span> <span class="st">&quot;Observation&quot;</span><span class="fu">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Pros:</strong></p>
+<ul>
+<li>Machine-readable</li>
+<li>Easy to build tooling around</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+<li>Less human-readable than YAML</li>
+<li>Harder to review in PRs</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen option: Option 1 - Operations Persistence with
+Structured Output Directory</strong></p>
+<h3 id="default-output-location">Default Output Location</h3>
+<p>When <code>--sqitch-dir</code> is not specified, migrations output
+to:</p>
+<pre><code>&lt;repo&gt;/migrations/&lt;from-version&gt;-to-&lt;to-version&gt;/</code></pre>
+<p>Example:</p>
+<pre><code>examples/fhir-health/migrations/v1.18.0-to-HEAD/
+├── operations.yaml
+└── sqitch/
+    ├── sqitch.plan
+    ├── deploy/
+    ├── revert/
+    └── verify/</code></pre>
+<h3 id="operations-yaml-format">Operations YAML Format</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Migration Operations: v1.18.0 → v1.19.0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Generated: 2026-01-16T14:30:00Z</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Tool: muscovite-migrate v1.3.0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">from_version</span><span class="kw">:</span><span class="at"> v1.18.0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">to_version</span><span class="kw">:</span><span class="at"> v1.19.0</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">schema</span><span class="kw">:</span><span class="at"> fhir</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">generated_at</span><span class="kw">:</span><span class="at"> 2026-01-16T14:30:00Z</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">operations</span><span class="kw">:</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> add-entity</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">uuid</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">context</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">aggregate</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">entity</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">safety</span><span class="kw">:</span><span class="at"> safe</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> add-field</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">uuid</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;6ba7b810-9dad-11d1-80b4-00c04fd430c8&quot;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">context</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">entity</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">field</span><span class="kw">:</span><span class="at"> status_id</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">sql_type</span><span class="kw">:</span><span class="at"> UUID</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nullable</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">safety</span><span class="kw">:</span><span class="at"> safe</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> add-relationship</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">uuid</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;7c9e6679-7425-40de-944b-e07fc1f90ae7&quot;</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">context</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">entity</span><span class="kw">:</span><span class="at"> Observation</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">relationship</span><span class="kw">:</span><span class="at"> status</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">target_context</span><span class="kw">:</span><span class="at"> Basedata</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">target_entity</span><span class="kw">:</span><span class="at"> ObservationStatus</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">direction</span><span class="kw">:</span><span class="at"> to-one</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">required</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">safety</span><span class="kw">:</span><span class="at"> safe</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="fu">safety_summary</span><span class="kw">:</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">safe</span><span class="kw">:</span><span class="at"> </span><span class="dv">12</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">requires_review</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">destructive</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
+<h3 id="safety-classification">Safety Classification</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Description</th>
+<th>Example Operations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>safe</code></td>
+<td>No data loss, backward compatible</td>
+<td>add-entity, add-field (nullable), add-relationship</td>
+</tr>
+<tr>
+<td><code>requires_review</code></td>
+<td>May affect data, needs review</td>
+<td>rename-entity, change-type (widening), add-field (NOT NULL with
+default)</td>
+</tr>
+<tr>
+<td><code>destructive</code></td>
+<td>Data loss possible</td>
+<td>remove-entity, remove-field, change-type (narrowing)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cli-workflow">CLI Workflow</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate migration with default output location</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--repo</span> ../../examples/fhir-health <span class="dt">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--from</span> v1.18.0 <span class="dt">\</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--to</span> HEAD <span class="dt">\</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--dir</span> contexts <span class="dt">\</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--schema</span> fhir</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Output:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Migration artifacts written to:</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ${PROJECT_ROOT}/examples/fhir-health/migrations/v1.18.0-to-HEAD/</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Files generated:</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   operations.yaml     (12 operations: 10 safe, 2 require review)</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   sqitch/sqitch.plan  (deployment order)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   sqitch/deploy/      (12 SQL files)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   sqitch/revert/      (12 SQL files)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   sqitch/verify/      (12 SQL files)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># NEXT STEPS:</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. Review operations.yaml for safety classifications</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. Review SQL in sqitch/deploy/ for correctness</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   3. git add migrations/v1.18.0-to-HEAD/</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   4. git commit -m &quot;migration: v1.18.0 -&gt; v1.19.0 (Observation context)&quot;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   5. Deploy: cd migrations/v1.18.0-to-HEAD/sqitch &amp;&amp; sqitch deploy &lt;target&gt;</span></span></code></pre></div>
+<h3 id="git-workflow-integration">Git Workflow Integration</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Feature branch workflow</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/add-observation-context</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> contexts/observation.ddd                    <span class="co"># Add new context</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate and commit migration</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--repo</span> . <span class="at">--from</span> main <span class="at">--to</span> HEAD <span class="at">--dir</span> contexts <span class="at">--schema</span> fhir</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add contexts/observation.ddd</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add migrations/main-to-HEAD/</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat(observation): Add FHIR Observation context with semantic migration&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull request includes:</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># - The DDD model changes (contexts/observation.ddd)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># - The operations.yaml (reviewable operation list)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># - The generated SQL (sqitch/deploy/*.sql)</span></span></code></pre></div>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Reviewable migrations</strong>: operations.yaml and SQL
+files in PRs</li>
+<li><strong>Auditable</strong>: Git history shows what operations were
+generated when</li>
+<li><strong>Reproducible</strong>: Re-running same versions produces
+same operations</li>
+<li><strong>Safety awareness</strong>: Operations classified by risk
+level</li>
+<li><strong>Self-documenting</strong>: Version-named directories explain
+themselves</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Disk usage</strong>: Migration directories accumulate over
+time</li>
+<li><strong>Cleanup responsibility</strong>: Teams must decide retention
+policy</li>
+<li><strong>Generated files in git</strong>: Some prefer not to commit
+generated code</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>No automatic deployment</strong>: Teams still run
+<code>sqitch deploy</code> manually</li>
+<li><strong>Override possible</strong>: <code>--sqitch-dir</code> still
+works for custom locations</li>
+</ul>
+<h2 id="implementation-notes">Implementation Notes</h2>
+<h3 id="cli-changes-migraterkt">CLI Changes (migrate.rkt)</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Compute default output directory</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>compute-migrations-dir repo from-ref to-ref<span class="op">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>build-path repo <span class="st">&quot;migrations&quot;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>format <span class="st">&quot;~a-to-~a&quot;</span> from-ref to-ref<span class="op">)))</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Generate operations.yaml</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-operations-yaml ops from-ref to-ref schema output-dir<span class="op">)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> yaml-path </span><span class="op">(</span>build-path output-dir <span class="st">&quot;operations.yaml&quot;</span><span class="op">))</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">with-output-to-file</span> yaml-path</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">()</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;# Migration Operations: ~a → ~a</span><span class="ch">\n</span><span class="st">&quot;</span> from-ref to-ref<span class="op">)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;# Generated: ~a</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">(</span>current-iso-timestamp<span class="op">))</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;# Tool: muscovite-migrate v1.3.0</span><span class="ch">\n\n</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;from_version: ~a</span><span class="ch">\n</span><span class="st">&quot;</span> from-ref<span class="op">)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;to_version: ~a</span><span class="ch">\n</span><span class="st">&quot;</span> to-ref<span class="op">)</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;schema: ~a</span><span class="ch">\n\n</span><span class="st">&quot;</span> schema<span class="op">)</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>printf <span class="st">&quot;operations:</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>for <span class="op">([</span>op ops<span class="op">])</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>emit-operation-yaml op<span class="op">)))</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;replace<span class="op">))</span></span></code></pre></div>
+<h3 id="safety-classification-logic">Safety Classification Logic</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>operation-safety-level op<span class="op">)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match op</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-entity-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span> &#39;safe<span class="op">]</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-field-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> nullable? <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> nullable? &#39;safe &#39;requires-review<span class="op">)]</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-entity-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span> &#39;destructive<span class="op">]</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-field-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span> &#39;destructive<span class="op">]</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-entity-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span> &#39;requires-review<span class="op">]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-field-op <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span> &#39;requires-review<span class="op">]</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">[_</span> &#39;safe<span class="op">]))</span></span></code></pre></div>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Running <code>migrate.rkt</code> without explicit
+<code>--sqitch-dir</code></li>
+<li>Reviewing migration pull requests</li>
+<li>Understanding what operations a migration performs</li>
+<li>Checking safety classification of operations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Full regeneration scenarios (greenfield projects)</li>
+<li>CI/CD ephemeral migrations (use <code>--sqitch-dir /tmp</code>)</li>
+<li>Manual SQL migrations (not using the diff pipeline)</li>
+</ul>
+<h3 id="key-files-affected">Key Files Affected</h3>
+<ul>
+<li><code>src/dslgen/migration/migrate.rkt</code> - output directory
+logic, YAML generation</li>
+<li><code>&lt;repo&gt;/migrations/</code> - output directory (created by
+migrate.rkt)</li>
+</ul>
+<h3 id="workflow-commands">Workflow Commands</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard migration (uses default output)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--repo</span> <span class="op">&lt;</span>path<span class="op">&gt;</span> --from <span class="op">&lt;</span>ref<span class="op">&gt;</span> --to <span class="op">&lt;</span>ref<span class="op">&gt;</span> --dir <span class="op">&lt;</span>dir<span class="op">&gt;</span> --schema <span class="op">&lt;</span>schema<span class="op">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Override output location (testing)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--repo</span> <span class="op">&lt;</span>path<span class="op">&gt;</span> --from <span class="op">&lt;</span>ref<span class="op">&gt;</span> --to <span class="op">&lt;</span>ref<span class="op">&gt;</span> --dir <span class="op">&lt;</span>dir<span class="op">&gt;</span> --schema <span class="op">&lt;</span>schema<span class="op">&gt;</span> --sqitch-dir /tmp/test</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dry run (no files written)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--repo</span> <span class="op">&lt;</span>path<span class="op">&gt;</span> --from <span class="op">&lt;</span>ref<span class="op">&gt;</span> --to <span class="op">&lt;</span>ref<span class="op">&gt;</span> --dir <span class="op">&lt;</span>dir<span class="op">&gt;</span> --schema <span class="op">&lt;</span>schema<span class="op">&gt;</span> --dry-run</span></code></pre></div>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="20260109-stable-uuid-identity.html">Stable UUID Identity</a>
+- UUIDs enable operation tracking</li>
+<li><a href="20260109-semantic-model-delta.html">Semantic Model Delta</a>
+- Operations generated by diff</li>
+<li><a href="20260109-migration-sql-generation.html">Migration SQL
+Generation</a> - SQL from operations</li>
+<li><a href="20251223-deploy-database-via-sqitch-only.html">Deploy
+Database via Sqitch Only</a> - Sqitch as deployment mechanism</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

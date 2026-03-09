@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Value Objects and Strong
+Types — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Value Objects and Strong Types</span>
+</nav>
+
+<h1>ADR: Value Objects and Strong Types</h1>
+
+
+<h1 id="adr-value-objects-and-strong-types">ADR: Value Objects and
+Strong Types</h1>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Date</strong>: 2026-01-17</li>
+<li><strong>Deciders</strong>: Architecture Team</li>
+<li><strong>Technical Story</strong>: Implement DDD Value Objects and
+constrained primitive types without JSONB</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Domain-Driven Design relies heavily on Value Objects for modeling
+immutable, identity-less concepts. The current Muscovite implementation
+has placeholder support for <code>VALUE_OBJECT</code> but lacks:</p>
+<ol type="1">
+<li><strong>Storage strategy</strong> - How to persist multi-field value
+objects relationally</li>
+<li><strong>Constrained primitives</strong> - Single-field types with
+domain-specific validation</li>
+<li><strong>Default handling</strong> - Propagating defaults through all
+layers (PostgreSQL, API, gRPC, Qt)</li>
+<li><strong>Collection support</strong> - Arrays of value objects
+without JSONB</li>
+</ol>
+<p><strong>JSONB is explicitly forbidden</strong> per project
+conventions (breaks type safety, relationships, migrations).</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>No JSONB or JSON types anywhere</li>
+<li>Full type safety through all layers</li>
+<li>PostgreSQL parameter limits (batch insert via composite arrays)</li>
+<li>Support for both single-field (Email, Currency) and multi-field
+(AuditInfo, Measurement) patterns</li>
+<li>Defaults must propagate correctly: column DEFAULT, trigger-computed,
+API parameter DEFAULT</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>JSONB storage</strong> - ❌ Forbidden by project
+conventions</li>
+<li><strong>EAV pattern</strong> - ❌ Loses type safety, poor query
+performance</li>
+<li><strong>Relational patterns with PostgreSQL DOMAIN + composite
+TYPE</strong> - ✅ Selected</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Implement two complementary constructs:</p>
+<h3 id="1-strong_type--postgresql-domain">1. STRONG_TYPE → PostgreSQL
+DOMAIN</h3>
+<p>Single-field constrained primitives using PostgreSQL
+<code>CREATE DOMAIN</code>:</p>
+<pre class="ddd"><code>STRONG_TYPE EmailAddress TEXT
+    CHECK email_format: VALUE ~ &#39;^[^@]+@[^@]+\.[^@]+$&#39;
+    DOC &quot;Valid email address&quot;;
+
+STRONG_TYPE PositiveDecimal DECIMAL
+    CHECK positive: VALUE &gt; 0;
+
+STRONG_TYPE Currency TEXT
+    CHECK valid_currency: VALUE IN (&#39;USD&#39;, &#39;EUR&#39;, &#39;GBP&#39;, &#39;CAD&#39;)
+    DEFAULT &#39;USD&#39;;</code></pre>
+<p><strong>Generates:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> security.email_address <span class="kw">AS</span> TEXT</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> email_format <span class="kw">CHECK</span> (<span class="fu">VALUE</span> ~ <span class="st">&#39;^[^@]+@[^@]+\.[^@]+$&#39;</span>);</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> security.positive_decimal <span class="kw">AS</span> <span class="dt">DECIMAL</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> positive <span class="kw">CHECK</span> (<span class="fu">VALUE</span> <span class="op">&gt;</span> <span class="dv">0</span>);</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> security.currency <span class="kw">AS</span> TEXT</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">DEFAULT</span> <span class="st">&#39;USD&#39;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> valid_currency <span class="kw">CHECK</span> (<span class="fu">VALUE</span> <span class="kw">IN</span> (<span class="st">&#39;USD&#39;</span>, <span class="st">&#39;EUR&#39;</span>, <span class="st">&#39;GBP&#39;</span>, <span class="st">&#39;CAD&#39;</span>));</span></code></pre></div>
+<p><strong>Usage in entities:</strong></p>
+<pre class="ddd"><code>ENTITY Invoice IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    amount PositiveDecimal NOT NULL,
+    currency Currency NOT NULL,
+    contact_email EmailAddress
+);</code></pre>
+<h3 id="2-value_object--three-storage-modes">2. VALUE_OBJECT → Three
+Storage Modes</h3>
+<p>Multi-field value objects with explicit storage strategy:</p>
+<h4 id="21-inline---flatten-fields-into-parent-table">2.1
+<code>@inline</code> - Flatten fields into parent table</h4>
+<p>Best for: Audit trails, addresses, single-instance embedded data</p>
+<pre class="ddd"><code>VALUE_OBJECT AuditInfo @inline (
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_by UUID,
+    modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    modified_by UUID
+)
+COMPUTED modified_at ON UPDATE: NOW()
+IMMUTABLE created_at, created_by
+DOC &quot;Standard audit fields for all entities&quot;;</code></pre>
+<p><strong>Usage:</strong></p>
+<pre class="ddd"><code>ENTITY Patient IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    name TEXT NOT NULL
+)
+USES AuditInfo;  -- Flattens all 4 fields into patient table</code></pre>
+<p><strong>Generates:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> security.patient (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Inlined from AuditInfo</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    created_at TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    created_by UUID,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    modified_at TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    modified_by UUID</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TRIGGER</span> patient_audit_trigger</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">BEFORE</span> <span class="kw">UPDATE</span> <span class="kw">ON</span> security.patient</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">FOR</span> <span class="kw">EACH</span> <span class="kw">ROW</span> <span class="kw">EXECUTE</span> <span class="kw">FUNCTION</span> security.update_modified_at();</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TRIGGER</span> patient_immutable_trigger</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">BEFORE</span> <span class="kw">UPDATE</span> <span class="kw">ON</span> security.patient</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">FOR</span> <span class="kw">EACH</span> <span class="kw">ROW</span> <span class="kw">EXECUTE</span> <span class="kw">FUNCTION</span> security.enforce_immutable(<span class="st">&#39;created_at&#39;</span>, <span class="st">&#39;created_by&#39;</span>);</span></code></pre></div>
+<h4 id="22-owned---child-table-with-lifecycle-tied-to-parent">2.2
+<code>@owned</code> - Child table with lifecycle tied to parent</h4>
+<p>Best for: Collections with ordering, measurements, line items</p>
+<pre class="ddd"><code>VALUE_OBJECT Measurement @owned (
+    value DECIMAL NOT NULL,
+    unit TEXT NOT NULL,
+    effective_at TIMESTAMPTZ DEFAULT NOW()
+)
+COMPUTED ordinal ON INSERT: auto_increment
+DOC &quot;Time-series measurement with automatic ordering&quot;;</code></pre>
+<p><strong>Usage:</strong></p>
+<pre class="ddd"><code>ENTITY Observation IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    subject_id UUID NOT NULL
+)
+HAS measurements Measurement[];  -- Creates child table</code></pre>
+<p><strong>Generates:</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Composite type for batch insert parameter</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TYPE</span> fhir.measurement_t <span class="kw">AS</span> (</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">value</span> <span class="dt">DECIMAL</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    unit TEXT,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    effective_at TIMESTAMPTZ</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- Child table</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> fhir.observation_measurement (</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    observation_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">REFERENCES</span> fhir.observation(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    ordinal <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">value</span> <span class="dt">DECIMAL</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    unit TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    effective_at TIMESTAMPTZ <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNIQUE</span> (observation_id, ordinal)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">-- Ordinal trigger</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TRIGGER</span> observation_measurement_ordinal_trigger</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">BEFORE</span> <span class="kw">INSERT</span> <span class="kw">ON</span> fhir.observation_measurement</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">FOR</span> <span class="kw">EACH</span> <span class="kw">ROW</span> <span class="kw">EXECUTE</span> <span class="kw">FUNCTION</span> fhir.auto_ordinal(<span class="st">&#39;observation_id&#39;</span>);</span></code></pre></div>
+<p><strong>API with composite array parameter:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">FUNCTION</span> fhir_api.observation_insert(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    p_id UUID,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    p_subject_id UUID,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    p_measurements fhir.measurement_t[]  <span class="co">-- Single parameter for N measurements</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>) RETURNS fhir.observation <span class="kw">AS</span> $$</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">DECLARE</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    v_result fhir.observation<span class="dt">%ROWTYPE</span>;</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    v_measurement fhir.measurement_t;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    v_ordinal <span class="dt">INTEGER</span> <span class="op">:=</span> <span class="dv">0</span>;</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INSERT</span> <span class="kw">INTO</span> fhir.observation (<span class="kw">id</span>, subject_id)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">VALUES</span> (<span class="fu">COALESCE</span>(p_id, gen_random_uuid()), p_subject_id)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURNING</span> <span class="op">*</span> <span class="kw">INTO</span> v_result;</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    FOREACH v_measurement <span class="kw">IN</span> <span class="dt">ARRAY</span> p_measurements <span class="cf">LOOP</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        v_ordinal <span class="op">:=</span> v_ordinal <span class="op">+</span> <span class="dv">1</span>;</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">INSERT</span> <span class="kw">INTO</span> fhir.observation_measurement (observation_id, ordinal, <span class="fu">value</span>, unit, effective_at)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">VALUES</span> (v_result.<span class="kw">id</span>, v_ordinal, v_measurement.<span class="fu">value</span>, v_measurement.unit, </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                <span class="fu">COALESCE</span>(v_measurement.effective_at, NOW()));</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">LOOP</span>;</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURN</span> v_result;</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span></code></pre></div>
+<h4 id="23-shared---star-schema-dimension-table">2.3
+<code>@shared</code> - Star schema dimension table</h4>
+<p>Best for: Reference data, CodeableConcept, reusable lookups</p>
+<pre class="ddd"><code>VALUE_OBJECT CodeableConcept @shared (
+    system TEXT NOT NULL,
+    code TEXT NOT NULL,
+    display TEXT,
+    version TEXT DEFAULT &#39;latest&#39;
+)
+NATURAL_KEY (system, code, version)
+DOC &quot;FHIR CodeableConcept as reusable dimension&quot;;</code></pre>
+<p><strong>Usage:</strong></p>
+<pre class="ddd"><code>ENTITY Condition IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    clinical_status CodeableConcept NOT NULL,  -- FK to dimension
+    verification_status CodeableConcept
+);
+
+CONTEXT Fhir {
+    DEFAULT active_status CodeableConcept = (
+        system = &#39;http://hl7.org/fhir/condition-clinical&#39;,
+        code = &#39;active&#39;,
+        display = &#39;Active&#39;
+    );
+}</code></pre>
+<p><strong>Generates:</strong></p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Dimension table</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> fhir.codeable_concept (</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">system</span> TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    code TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    display TEXT,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    version TEXT <span class="kw">DEFAULT</span> <span class="st">&#39;latest&#39;</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNIQUE</span> (<span class="kw">system</span>, code, version)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Get-or-create function</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">FUNCTION</span> fhir_api.codeable_concept_upsert(</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    p_system TEXT,</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    p_code TEXT,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    p_display TEXT <span class="kw">DEFAULT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    p_version TEXT <span class="kw">DEFAULT</span> <span class="st">&#39;latest&#39;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>) RETURNS fhir.codeable_concept <span class="kw">AS</span> $$</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="kw">DECLARE</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    v_result fhir.codeable_concept<span class="dt">%ROWTYPE</span>;</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">INTO</span> v_result</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> fhir.codeable_concept</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> <span class="kw">system</span> <span class="op">=</span> p_system <span class="kw">AND</span> code <span class="op">=</span> p_code <span class="kw">AND</span> version <span class="op">=</span> p_version;</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">IF</span> <span class="kw">NOT</span> FOUND <span class="cf">THEN</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">INSERT</span> <span class="kw">INTO</span> fhir.codeable_concept (<span class="kw">system</span>, code, display, version)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">VALUES</span> (p_system, p_code, p_display, p_version)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">RETURNING</span> <span class="op">*</span> <span class="kw">INTO</span> v_result;</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">IF</span>;</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURN</span> v_result;</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="co">-- Context default (seeded)</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> fhir.codeable_concept (<span class="kw">system</span>, code, display, version)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">&#39;http://hl7.org/fhir/condition-clinical&#39;</span>, <span class="st">&#39;active&#39;</span>, <span class="st">&#39;Active&#39;</span>, <span class="st">&#39;latest&#39;</span>)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> CONFLICT (<span class="kw">system</span>, code, version) DO <span class="kw">NOTHING</span>;</span></code></pre></div>
+<h2 id="default-propagation-matrix">Default Propagation Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Default Type</th>
+<th>PostgreSQL</th>
+<th>API Parameter</th>
+<th>gRPC Proto</th>
+<th>Qt Widget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Column DEFAULT</td>
+<td><code>DEFAULT value</code></td>
+<td><code>DEFAULT value</code></td>
+<td><code>optional</code> field</td>
+<td>Pre-populated</td>
+</tr>
+<tr>
+<td>Trigger-Computed</td>
+<td>BEFORE trigger</td>
+<td>NOT a parameter</td>
+<td>NOT in request</td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Immutable</td>
+<td>BEFORE UPDATE check</td>
+<td>Omit from update</td>
+<td>NOT in update</td>
+<td>Disabled on edit</td>
+</tr>
+<tr>
+<td>Context Default</td>
+<td>Seeded row</td>
+<td>Helper function</td>
+<td>Enum/constant</td>
+<td>ComboBox default</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dsl-syntax-summary">DSL Syntax Summary</h2>
+<pre class="ddd"><code>-- Strong Types (single-field, constrained → PostgreSQL DOMAIN)
+STRONG_TYPE TypeName BaseType
+    [CHECK constraint_name: expression]...
+    [DEFAULT value]
+    [DOC &quot;description&quot;];
+
+-- Value Objects (multi-field → composite type / table patterns)
+VALUE_OBJECT Name @inline|@owned|@shared (
+    field1 Type [NOT NULL] [DEFAULT value],
+    field2 Type [NOT NULL] [DEFAULT value],
+    ...
+)
+[COMPUTED field ON INSERT|UPDATE: expression]...
+[IMMUTABLE field1, field2, ...]
+[NATURAL_KEY (field1, field2, ...)]  -- @shared only
+[DOC &quot;description&quot;];
+
+-- Usage in Entities
+ENTITY Name IDENTIFIED_BY id (
+    field1 StrongType,           -- Uses DOMAIN directly
+    field2 SharedVO,             -- FK to dimension table
+    ...
+)
+[USES InlineVO1, InlineVO2]      -- Flattens @inline fields
+[HAS collection OwnedVO[]]       -- Creates child table
+;
+
+-- Context Defaults (for @shared value objects)
+CONTEXT Name {
+    DEFAULT alias SharedVO = (field1 = value1, field2 = value2);
+}</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>No JSONB</strong> - Full relational integrity
+maintained</li>
+<li><strong>Type safety</strong> - PostgreSQL DOMAINs enforce
+constraints at DB level</li>
+<li><strong>Batch-friendly</strong> - Composite type arrays avoid
+parameter limits</li>
+<li><strong>Star schema</strong> - @shared enables efficient dimension
+queries</li>
+<li><strong>Audit automation</strong> - @inline + COMPUTED/IMMUTABLE
+handles common patterns</li>
+<li><strong>Migration-safe</strong> - All patterns work with Sqitch
+semantic diff</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>More tables</strong> - @owned creates child tables (but
+properly indexed)</li>
+<li><strong>Complexity</strong> - Three storage modes require careful
+selection</li>
+<li><strong>Learning curve</strong> - Developers must understand when to
+use each pattern</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>PostgreSQL-specific (DOMAINs, composite types) - acceptable for this
+project</li>
+</ul>
+<h2 id="implementation-phases">Implementation Phases</h2>
+<ol type="1">
+<li><strong>Phase 1</strong>: Type system (<code>ddd-types.rkt</code>) -
+Add strong-type, extend value-object</li>
+<li><strong>Phase 2</strong>: Parser - STRONG_TYPE,
+@inline/@owned/@shared, COMPUTED, IMMUTABLE</li>
+<li><strong>Phase 3</strong>: PostgreSQL generators - CREATE DOMAIN,
+CREATE TYPE, child tables</li>
+<li><strong>Phase 4</strong>: Triggers - Audit, ordinal, computed,
+immutable enforcement</li>
+<li><strong>Phase 5</strong>: API generators - Parameter defaults,
+composite arrays, upsert helpers</li>
+<li><strong>Phase 6</strong>: gRPC/Qt - Optional fields, pre-populated
+defaults</li>
+</ol>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>User defines <code>STRONG_TYPE</code> → Generate PostgreSQL
+DOMAIN</li>
+<li>User defines <code>VALUE_OBJECT @inline</code> → Flatten fields into
+parent table</li>
+<li>User defines <code>VALUE_OBJECT @owned</code> → Create child table +
+composite type</li>
+<li>User defines <code>VALUE_OBJECT @shared</code> → Create dimension
+table + upsert function</li>
+<li>User uses <code>COMPUTED</code> → Generate BEFORE trigger</li>
+<li>User uses <code>IMMUTABLE</code> → Generate UPDATE check
+trigger</li>
+</ul>
+<h3 id="when-this-does-not-apply">When This Does NOT Apply</h3>
+<ul>
+<li>Regular entities with identity → Use standard ENTITY pattern</li>
+<li>Lookup tables with user extensibility → Use LOOKUP_TABLE
+pattern</li>
+<li>Cross-context references → Use standard FK relationships</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/model/ddd-types.rkt</code> -
+<code>strong-type</code>, <code>value-object</code> structs</li>
+<li><code>src/dslgen/parser/parser.rkt</code> -
+<code>parse-strong-type</code>, <code>parse-value-object</code></li>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+DOMAIN, TYPE, table generation</li>
+<li><code>src/dslgen/generators/postgres/triggers.rkt</code> - Computed,
+immutable triggers</li>
+<li><code>src/dslgen/generators/postgres/plpgsql-api.rkt</code> -
+Composite array parameters</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>PostgreSQL CREATE DOMAIN: <a
+href="https://www.postgresql.org/docs/current/sql-createdomain.html">https://www.postgresql.org/docs/current/sql-createdomain.html</a></li>
+<li>PostgreSQL Composite Types: <a
+href="https://www.postgresql.org/docs/current/rowtypes.html">https://www.postgresql.org/docs/current/rowtypes.html</a></li>
+<li>DDD Value Objects: Evans, "Domain-Driven Design", Chapter 5</li>
+<li>Star Schema: Kimball, "The Data Warehouse Toolkit"</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spatial Capability as Framework
+Feature — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Spatial Capability as Framework Feature</span>
+</nav>
+
+<h1>Spatial Capability as Framework Feature</h1>
+
+
+<h1 id="spatial-capability-as-framework-feature">Spatial Capability as
+Framework Feature</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Deciders</strong>: jolo</li>
+<li><strong>Date</strong>: 2026-01-26</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's spatial/GIS features were initially implemented as
+hardcoded support for the geosciences example project. This couples
+framework capabilities to a specific domain example, violating
+separation of concerns and preventing other projects from using spatial
+features.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Separation of framework from examples</li>
+<li>Reusability across different domains (healthcare facility mapping,
+logistics, etc.)</li>
+<li>Consistency with existing capability pattern (security)</li>
+<li>Clean generator architecture</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Spatial support is implemented as a framework
+capability</strong>, enabled per-project via
+<code>CAPABILITIES { spatial }</code>, with field-level
+<code>@spatial-queryable</code> annotations for query generation.</p>
+<h3 id="project-level-capability">Project-Level Capability</h3>
+<pre class="ddd"><code>PROJECT &quot;FHIR Health&quot; @uuid &quot;...&quot; {
+    DESCRIPTION &quot;Healthcare domain model&quot;;
+    
+    CAPABILITIES {
+        security,    -- Enables Security context
+        spatial      -- Enables PostGIS, geometry types, spatial queries
+    }
+    
+    CONTEXTS &quot;contexts/&quot;;
+}</code></pre>
+<h3 id="field-level-annotation">Field-Level Annotation</h3>
+<p>The <code>@spatial-queryable</code> annotation marks geometry fields
+for spatial query RPC generation:</p>
+<pre class="ddd"><code>ENTITY Facility IDENTIFIED_BY id @uuid &quot;...&quot; (
+    id       UUID      NOT NULL @uuid &quot;...&quot;,
+    name     TEXT      NOT NULL @uuid &quot;...&quot;,
+    location POINT     NOT NULL @uuid &quot;...&quot; @spatial-queryable,
+    boundary POLYGON            @uuid &quot;...&quot; @spatial-queryable
+)
+DOC &quot;Healthcare facility with location&quot;;</code></pre>
+<h3 id="what-spatial-queryable-generates">What
+<code>@spatial-queryable</code> Generates</h3>
+<p>For a field marked <code>@spatial-queryable</code>, the generators
+produce:</p>
+<p><strong>gRPC Service RPCs:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">service</span> FacilityService {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Standard CRUD...</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Spatial queries for @spatial-queryable fields</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> FindFacilitiesWithinExtent(WithinExtentRequest) <span class="kw">returns</span> (stream Facility);</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> FindFacilitiesNearPoint(NearPointRequest) <span class="kw">returns</span> (stream Facility);</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">rpc</span> FindFacilitiesIntersecting(IntersectingRequest) <span class="kw">returns</span> (stream Facility);</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>C++ Repository Methods:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FacilityQueryRepository <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Facility<span class="op">&gt;</span> find_within_extent<span class="op">(</span><span class="at">const</span> Polygon<span class="op">&lt;</span><span class="dv">4326</span><span class="op">&gt;&amp;</span> extent<span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Facility<span class="op">&gt;</span> find_near_point<span class="op">(</span><span class="at">const</span> Point<span class="op">&lt;</span><span class="dv">4326</span><span class="op">&gt;&amp;</span> point<span class="op">,</span> <span class="dt">double</span> radius_meters<span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Facility<span class="op">&gt;</span> find_intersecting<span class="op">(</span><span class="at">const</span> Geometry<span class="op">&lt;</span><span class="dv">4326</span><span class="op">&gt;&amp;</span> geometry<span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="capability-detection-in-generators">Capability Detection in
+Generators</h3>
+<p>Generators check for spatial capability before emitting
+spatial-specific code:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; In generator code</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>has-spatial-capability? project<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">member</span> &#39;spatial <span class="op">(</span>project-capabilities project<span class="op">)))</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>field-is-spatial-queryable? field<span class="op">)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash-ref <span class="op">(</span>field-annotations field<span class="op">)</span> &#39;spatial-queryable <span class="dv">#f</span><span class="op">))</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>is-geometry-type? type-name<span class="op">)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">member</span> type-name &#39;<span class="op">(</span>POINT LINESTRING POLYGON MULTIPOINT MULTILINESTRING </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                      MULTIPOLYGON GEOMETRYCOLLECTION POINTZ LINESTRINGZ POLYGONZ<span class="op">)))</span></span></code></pre></div>
+<h3 id="builtin-spatial-context">Builtin Spatial Context</h3>
+<p>When <code>spatial</code> capability is enabled, the framework
+automatically loads:</p>
+<pre class="ddd"><code>CONTEXT Spatial @builtin @uuid &quot;...&quot; {
+    ENTITY SpatialReferenceSystem IDENTIFIED_BY id @uuid &quot;...&quot; (
+        id          UUID    NOT NULL @uuid &quot;...&quot;,
+        srid        INTEGER NOT NULL @uuid &quot;...&quot; @unique,
+        name        TEXT    NOT NULL @uuid &quot;...&quot;,
+        auth_name   TEXT    NOT NULL @uuid &quot;...&quot;,  -- EPSG, ESRI, etc.
+        auth_srid   INTEGER NOT NULL @uuid &quot;...&quot;,
+        proj4text   TEXT             @uuid &quot;...&quot;,
+        srtext      TEXT             @uuid &quot;...&quot;,  -- WKT definition
+        is_active   BOOLEAN NOT NULL @uuid &quot;...&quot; DEFAULT true
+    )
+    DOC &quot;Spatial reference system metadata (parallels PostGIS spatial_ref_sys)&quot;;
+    
+    AGGREGATE SpatialReferenceSystem ROOT SpatialReferenceSystem;
+    
+    IMPORT CSV &quot;seeds/spatial/common_srs.csv&quot; INTO SpatialReferenceSystem;
+}</code></pre>
+<h3 id="consequences">Consequences</h3>
+<p><strong>Good:</strong></p>
+<ul>
+<li>Clean separation: framework vs examples</li>
+<li>Any project can enable spatial features</li>
+<li>Explicit annotation controls query generation</li>
+<li>Consistent with security capability pattern</li>
+</ul>
+<p><strong>Bad:</strong></p>
+<ul>
+<li>Slight complexity increase in parser</li>
+<li>Two-level configuration (project + field)</li>
+</ul>
+<h3 id="files-affected-by-this-decision">Files Affected by This
+Decision</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parser</td>
+<td><code>src/dslgen/parser/lexer.rkt</code></td>
+<td>Add <code>@spatial-queryable</code> token</td>
+</tr>
+<tr>
+<td>Parser</td>
+<td><code>src/dslgen/parser/parser.rkt</code></td>
+<td>Parse annotation, store in field</td>
+</tr>
+<tr>
+<td>Loader</td>
+<td><code>src/dslgen/generate.rkt</code></td>
+<td>Load spatial context when capability present</td>
+</tr>
+<tr>
+<td>Builtin</td>
+<td><code>src/dslgen/builtin/spatial/spatial.ddd</code></td>
+<td>SpatialReferenceSystem entity</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code></td>
+<td>CREATE EXTENSION postgis</td>
+</tr>
+<tr>
+<td>gRPC</td>
+<td><code>src/dslgen/generators/grpc/proto.rkt</code></td>
+<td>Spatial query RPCs</td>
+</tr>
+<tr>
+<td>C++</td>
+<td><code>src/dslgen/generators/cpp/dba/unified.rkt</code></td>
+<td>Spatial repository methods</td>
+</tr>
+<tr>
+<td>Qt</td>
+<td><code>src/dslgen/generators/qt/widgets-views.rkt</code></td>
+<td>Map widget integration</td>
+</tr>
+</tbody>
+</table>
+<h3 id="migration-from-hardcoded-implementation">Migration from
+Hardcoded Implementation</h3>
+<p>Remove from generators:</p>
+<ul>
+<li><code>(eq? (entity-name e) 'GeologicMapFeature)</code> checks in
+proto.rkt</li>
+<li><code>(string=? ctx-name "GeologicMapping")</code> checks in
+cpp-service-v2.rkt</li>
+</ul>
+<p>Replace with:</p>
+<ul>
+<li><code>(field-is-spatial-queryable? field)</code> for field-level
+decisions</li>
+<li><code>(has-spatial-capability? project)</code> for project-level
+decisions</li>
+<li><code>(is-geometry-type? (field-type field))</code> for type
+detection</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When this applies:</strong></p>
+<ul>
+<li>Adding spatial features to any project</li>
+<li>Modifying generators to support spatial types</li>
+<li>Creating new spatial query operations</li>
+</ul>
+<p><strong>Critical rules:</strong></p>
+<ol type="1">
+<li>Never hardcode entity/context names for spatial features</li>
+<li>Always check <code>@spatial-queryable</code> annotation for query
+generation</li>
+<li>Always check project capability before emitting PostGIS-specific
+code</li>
+<li>Geometry type detection is by DSL type name, not field name</li>
+</ol>
+<p><strong>Generator pattern:</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; CORRECT: Check capability and annotation</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>when <span class="op">(</span><span class="kw">and</span> <span class="op">(</span>has-spatial-capability? project<span class="op">)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>field-is-spatial-queryable? field<span class="op">))</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>emit-spatial-query-rpc entity field<span class="op">))</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; WRONG: Hardcoded entity name</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>when <span class="op">(</span><span class="kw">eq?</span> <span class="op">(</span>entity-name e<span class="op">)</span> &#39;GeologicMapFeature<span class="op">)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>emit-spatial-query-rpc e<span class="op">))</span></span></code></pre></div>
+<h2 id="more-information">More Information</h2>
+<ul>
+<li>Related ADR: <a href="20260126-geography-over-geometry.html">Geography
+Over Geometry</a></li>
+<li>Related ADR: <a href="20260126-qml-maps-in-widgets.html">QML Maps in
+Widgets</a></li>
+<li>Similar pattern: Security capability (see
+<code>AGENTS.md</code>)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

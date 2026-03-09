@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use TIMESTAMPTZ for All Date/Time
+Values — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use TIMESTAMPTZ for All Date/Time Values</span>
+</nav>
+
+<h1>Use TIMESTAMPTZ for All Date/Time Values</h1>
+
+
+<h1 id="use-timestamptz-for-all-datetime-values">Use TIMESTAMPTZ for All
+Date/Time Values</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Database architects</li>
+<li>Date: 2024-06-01</li>
+<li>Tags: postgresql, schema, types, datetime</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When storing date/time values in PostgreSQL, we must choose between
+TIMESTAMP (without time zone) and TIMESTAMPTZ (with time zone).
+Additionally, we must decide whether to ever store dates as TEXT
+strings.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Geosciences data spans global locations with different time
+zones</li>
+<li>Correct time zone handling prevents data corruption</li>
+<li>TEXT storage loses semantic meaning and query capabilities</li>
+<li>PostgreSQL's TIMESTAMPTZ stores UTC internally, displays in session
+TZ</li>
+<li>Avoid ambiguity in temporal data</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>TIMESTAMPTZ for all datetime values</li>
+<li>TIMESTAMP without time zone</li>
+<li>TEXT with ISO 8601 format strings</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "TIMESTAMPTZ for all datetime values", because it
+ensures unambiguous storage in UTC while allowing proper time zone
+conversion on retrieval, which is essential for a global geosciences
+dataset.</p>
+<p><strong>CRITICAL RULE</strong>: Never store dates or timestamps as
+TEXT.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>All timestamps are unambiguous (stored as UTC)</li>
+<li>Time zone conversions handled automatically by PostgreSQL</li>
+<li>Full temporal query support (BETWEEN, date arithmetic)</li>
+<li>Consistent behavior across different client time zones</li>
+<li>Proper indexing and partitioning support</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Requires awareness of session time zone settings</li>
+<li>Slightly more complex display logic in clients</li>
+<li>Historical dates before time zones existed may seem
+anachronistic</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="timestamptz-with-time-zone">TIMESTAMPTZ (with time zone)</h3>
+<ul>
+<li>Good, because stores UTC, converts on display</li>
+<li>Good, because unambiguous across time zones</li>
+<li>Good, because supports all temporal operations</li>
+<li>Good, because proper indexing</li>
+<li>Bad, because requires session TZ awareness</li>
+<li>Bad, because historical dates get modern TZ semantics</li>
+</ul>
+<h3 id="timestamp-without-time-zone">TIMESTAMP (without time zone)</h3>
+<ul>
+<li>Good, because simpler mental model</li>
+<li>Good, because no TZ conversion overhead</li>
+<li>Bad, because ambiguous if data crosses time zones</li>
+<li>Bad, because can cause silent data corruption</li>
+<li>Bad, because clients must manually handle TZ</li>
+</ul>
+<h3 id="text-with-iso-8601">TEXT with ISO 8601</h3>
+<ul>
+<li>Good, because human-readable storage</li>
+<li>Good, because no TZ conversion surprises</li>
+<li>Bad, because loses semantic type information</li>
+<li>Bad, because no temporal query support</li>
+<li>Bad, because requires parsing for any operation</li>
+<li>Bad, because larger storage footprint</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="https://www.postgresql.org/docs/current/datatype-datetime.html">PostgreSQL
+Date/Time Types</a></li>
+<li>Related: Type mapping in generators</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>ALL datetime/timestamp fields in DSL entities</li>
+<li>DSL types: <code>DateTime</code>, <code>Timestamp</code>,
+<code>TIMESTAMPTZ</code> → PostgreSQL <code>TIMESTAMPTZ</code></li>
+<li>Event timestamps, audit fields (created_at, updated_at)</li>
+<li>Field observation dates, sample collection times</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Pure DATE values (use PostgreSQL DATE type)</li>
+<li>Pure TIME values (use PostgreSQL TIME or TIMETZ)</li>
+<li>Durations/intervals (use PostgreSQL INTERVAL)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Racket generators map DateTime to TIMESTAMPTZ</li>
+<li><strong>NEVER</strong> generate TEXT for temporal values</li>
+<li>API functions accept/return proper temporal types</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+Type mapping</li>
+<li><code>src/dslgen/model/ddd-types.rkt</code> - DSL type
+definitions</li>
+<li><code>.github/copilot-instructions.md</code> - Documents this
+rule</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

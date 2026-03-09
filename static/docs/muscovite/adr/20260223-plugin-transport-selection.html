@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plugin Transport Selection — SyncVirtual, LocalGRPC,
+QtRemoteObjects — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Plugin Transport Selection — SyncVirtual, LocalGRPC,
+QtRemoteObjects</span>
+</nav>
+
+<h1>Plugin Transport Selection — SyncVirtual, LocalGRPC,
+QtRemoteObjects</h1>
+
+
+<h1
+id="plugin-transport-selection--syncvirtual-localgrpc-qtremoteobjects">Plugin
+Transport Selection — SyncVirtual, LocalGRPC, QtRemoteObjects</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: plugins, transport, grpc, qt-remote-objects, sync-virtual,
+architecture</li>
+</ul>
+<p>Technical Story: Extension point plugin classes (Validator,
+SideEffect, UIWidget) require different communication transports.
+Transport selection must be a per-plugin <code>.mus</code>
+configuration, not hardcoded in the DSL. This ADR defines the three
+approved transports and their generation rules.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The plugin system (ADR
+20260223-plugin-system-extension-points-and-layer2-sidecar) defines
+three plugin classes. Each class has different performance and
+integration requirements:</p>
+<ul>
+<li><strong>Validator</strong> — synchronous, in-process, zero overhead.
+Network transport is wrong.</li>
+<li><strong>SideEffect</strong> — asynchronous, potentially slow, must
+not block the domain service. Needs process isolation. Network transport
+is correct.</li>
+<li><strong>UIWidget</strong> — frontend UI injection. Must integrate
+with Qt's object model. Qt-native transport is ergonomically
+correct.</li>
+</ul>
+<p>The DSL declares the extension point with a recommended interface.
+The <code>.mus</code> file selects the actual transport for each plugin
+binding. Generator emits different base classes per transport.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Validators must have zero transport overhead — no serialization, no
+network</li>
+<li>SideEffect plugins must be process-isolated — failures must not
+crash the domain service</li>
+<li>UIWidget plugins must integrate with Qt signals/slots naturally</li>
+<li>Transport switching must be a one-line <code>.mus</code> change +
+regeneration (no code changes)</li>
+<li>Localhost-only for all non-SyncVirtual transports — plugins are
+local processes, not external network services</li>
+<li>Qt Remote Objects approved by ADR
+20260223-qt-remote-objects-lgpl-transport-approval</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<p>Transport per class:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Option A</th>
+<th>Option B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validator</td>
+<td>Pure virtual C++ (SyncVirtual)</td>
+<td>CRTP zero-cost abstraction</td>
+</tr>
+<tr>
+<td>SideEffect</td>
+<td>LocalGRPC (loopback)</td>
+<td>Qt Remote Objects (loopback)</td>
+</tr>
+<tr>
+<td>UIWidget</td>
+<td>Qt Remote Objects</td>
+<td>LocalGRPC (loopback)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<h3 id="transport-1-syncvirtual-validator-class">Transport 1:
+SyncVirtual (Validator class)</h3>
+<p>Pure virtual C++ function. No transport protocol. In-process
+call.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: password_validator_interface.hpp (Layer 2)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PasswordValidatorBase <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> <span class="op">~</span>PasswordValidatorBase<span class="op">()</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// </span><span class="an">@brief</span><span class="co"> Validate password value. Called before repository write.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// </span><span class="an">@param</span><span class="co"> </span><span class="cv">value</span><span class="co">  The raw password string to validate</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// </span><span class="an">@return</span><span class="co"> ValidationResult{.ok=true} on pass, {.ok=false, .message=...} on fail</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">virtual</span> ValidationResult validate<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> value<span class="op">)</span> <span class="at">const</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Rationale for pure virtual over CRTP</strong>: Runtime
+pluggability is what the research thesis demonstrates. CRTP gives
+zero-cost abstraction but requires compile-time plugin selection (cannot
+load from shared library). Pure virtual enables runtime loading. CRTP
+documented as a future optimisation option when the compile-time variant
+is desired.</p>
+<p>BE location: abstract base injected into command handler, called
+before repository write. FE location: abstract base injected into Qt
+dialog <code>isValid()</code> chain.</p>
+<h3 id="transport-2-localgrpc-sideeffect-class--backend">Transport 2:
+LocalGRPC (SideEffect class — backend)</h3>
+<p>gRPC over localhost loopback socket. Plugin runs as a separate
+process.</p>
+<p><strong>Localhost enforcement</strong>: Generated
+<code>grpc::SslCredentials</code> are rejected; generated server-side
+bind address is hardcoded to <code>127.0.0.1:PORT</code> (not
+<code>0.0.0.0</code>). This is enforced in generated code, not just
+convention.</p>
+<p><strong>Generator produces</strong> (per LocalGRPC extension
+point):</p>
+<ul>
+<li>Proto service definition (Layer 2, always regenerated):
+<code>{extension_point}_plugin.proto</code> with input/output message
+types derived from <code>TARGET</code></li>
+<li>gRPC client call in generated domain service (Layer 2, always
+regenerated)</li>
+<li>Sidecar server stub (Layer 2 Sidecar, generated once):
+<code>{extension_point}_plugin_server.cpp</code> — developer implements
+the service body</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated sidecar stub: audit_exporter_plugin_server.cpp</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// MUSCOVITE:SIDECAR:UNMODIFIED — remove this line when editing this file</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AuditExporterServiceImpl <span class="kw">final</span> <span class="op">:</span> <span class="kw">public</span> AuditExporter<span class="op">::</span>Service <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    grpc<span class="op">::</span>Status Export<span class="op">(</span>grpc<span class="op">::</span>ServerContext<span class="op">*</span> ctx<span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">const</span> ExportRequest<span class="op">*</span> req<span class="op">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                        ExportResponse<span class="op">*</span> resp<span class="op">)</span> <span class="kw">override</span> <span class="op">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">// </span><span class="al">TODO</span><span class="co">: implement audit export logic here</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> grpc<span class="op">::</span>Status<span class="op">::</span>OK<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="transport-3-qtremoteobjects-uiwidget-class--frontend">Transport
+3: QtRemoteObjects (UIWidget class — frontend)</h3>
+<p>Qt Remote Objects proxy over a local domain socket. Plugin process
+exposes a <code>QRemoteObjectHost</code>; generated dialog connects via
+<code>QRemoteObjectNode</code>.</p>
+<p>Approved by ADR
+20260223-qt-remote-objects-lgpl-transport-approval.</p>
+<p><strong>Generator produces</strong>:</p>
+<ul>
+<li><code>REPC</code> source file (Qt Remote Object class spec) — Layer
+2, regenerated</li>
+<li><code>QRemoteObjectNode</code> connection code in generated dialog —
+Layer 2, regenerated</li>
+<li>Sidecar <code>QRemoteObjectHost</code> implementation stub — Layer 2
+Sidecar, generated once</li>
+</ul>
+<p>Fallback: if <code>TRANSPORT: LocalGRPC</code> is declared on a
+UIWidget-class extension point, the LocalGRPC transport is used instead.
+The generated base class differs but the extension point interface
+contract is identical.</p>
+<h3 id="transport-as-mus-configuration">Transport as <code>.mus</code>
+Configuration</h3>
+<p>Transport is declared in the <code>.mus</code> PLUGIN block:</p>
+<pre class="mus"><code>PLUGIN MyPasswordPolicy
+    IMPLEMENTS: PasswordValidator     # references EXTENSION_POINT in .ddd
+    TRANSPORT: SyncVirtual            # overrides INTERFACE hint from .ddd if compatible
+
+PLUGIN EnterpriseAudit
+    IMPLEMENTS: AuditExporter
+    TRANSPORT: LocalGRPC</code></pre>
+<p>Validation:</p>
+<ul>
+<li><code>TRANSPORT</code> must be compatible with the
+<code>INTERFACE</code> declared on the <code>EXTENSION_POINT</code></li>
+<li>Validator ↔︎ SyncVirtual always; SyncVirtual for SideEffect is
+rejected</li>
+<li>SideEffect ↔︎ LocalGRPC or QtRemoteObjects; UIWidget ↔︎
+QtRemoteObjects or LocalGRPC</li>
+</ul>
+<p>Switching transport: change one <code>.mus</code> line, regenerate.
+No user code changes needed (the sidecar stub regenerates because the
+interface changed and the sentinel is still present).</p>
+<h3 id="transport-compatibility-matrix">Transport Compatibility
+Matrix</h3>
+<table>
+<thead>
+<tr>
+<th>Class \ Transport</th>
+<th>SyncVirtual</th>
+<th>LocalGRPC</th>
+<th>QtRemoteObjects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validator</td>
+<td>✅ only</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>SideEffect</td>
+<td>❌</td>
+<td>✅ BE only</td>
+<td>✅ FE only</td>
+</tr>
+<tr>
+<td>UIWidget</td>
+<td>❌</td>
+<td>✅ fallback</td>
+<td>✅ primary</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>One-line transport switch in <code>.mus</code> without touching
+plugin implementation</li>
+<li>Localhost enforcement prevents accidental network exposure</li>
+<li>Each transport generates appropriate base classes and CMake
+targets</li>
+<li>Plugin contract (abstract interface) is transport-independent</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Three transport implementations to maintain in generators</li>
+<li>Cross-validation between <code>.ddd</code> INTERFACE hint and
+<code>.mus</code> TRANSPORT required</li>
+<li>LocalGRPC plugins require a running process at startup (CMake must
+generate a <code>ExternalProcess</code> launch target or documentation
+for plugin process management)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Required by <a
+href="20260223-plugin-system-extension-points-and-layer2-sidecar.html">ADR
+20260223 Plugin System</a></li>
+<li>Approved transport: <a
+href="20260223-qt-remote-objects-lgpl-transport-approval.html">ADR
+20260223 Qt Remote Objects LGPL</a></li>
+<li>Related: FTR-139 (SyncVirtual generator), FTR-140 (LocalGRPC
+generator), FTR-141 (QtRemoteObjects generator)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

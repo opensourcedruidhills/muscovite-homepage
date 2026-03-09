@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenTelemetry Observability
+Architecture — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>OpenTelemetry Observability Architecture</span>
+</nav>
+
+<h1>OpenTelemetry Observability Architecture</h1>
+
+
+<h1 id="opentelemetry-observability-architecture">OpenTelemetry
+Observability Architecture</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Date: 2026-03-02</li>
+<li>Tags: observability, opentelemetry, tracing, metrics,
+correlation-id, versioning</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: Generated Muscovite gRPC services need
+production-grade observability: distributed tracing, metrics export,
+correlation ID propagation, and DDD model version exposure. IDEA-046,
+IDEA-047, IDEA-048.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Generated gRPC services currently have basic observability
+infrastructure:</p>
+<ul>
+<li><code>MetricsInterceptorFactory</code>: In-memory counters (request
+count, duration histogram, error count) — <strong>not exported
+anywhere</strong></li>
+<li><code>LoggingInterceptorFactory</code>: spdlog per-request logging
+(method, duration, status) — <strong>local only</strong></li>
+<li><code>ErrorInterceptorFactory</code>: Exception → gRPC status
+mapping</li>
+</ul>
+<p>This infrastructure collects useful data but has three critical
+gaps:</p>
+<ol type="1">
+<li><p><strong>No distributed tracing</strong>: In a multi-context
+deployment (FHIR Health: 9 contexts, Geosciences: 26 contexts),
+operators cannot trace a request across service boundaries or correlate
+gRPC calls with database operations.</p></li>
+<li><p><strong>No request correlation</strong>: A single user action
+that triggers operations across multiple bounded contexts produces
+isolated log lines with no shared identifier. Debugging requires manual
+timestamp correlation.</p></li>
+<li><p><strong>No version introspection</strong>: Running services
+cannot report which <code>.ddd</code> model version they were generated
+from, making deployment verification and version-mismatch debugging
+impossible.</p></li>
+</ol>
+<p>How should Muscovite generate production-grade observability into
+every service with zero manual effort from domain modelers?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>License compatibility</strong>: All new dependencies must be
+compatible with AGPL-3.0 + Commercial dual licensing</li>
+<li><strong>Zero-effort for domain modelers</strong>: Observability is
+infrastructure, not domain concern — it should be generated, not
+hand-coded</li>
+<li><strong>Opt-in with zero overhead when disabled</strong>: Projects
+that don't need OTEL should have zero runtime cost</li>
+<li><strong>Industry standard</strong>: OpenTelemetry is the
+CNCF-graduated standard for observability</li>
+<li><strong>Existing infrastructure</strong>: Current interceptor
+pattern in <code>framework/grpc/interceptors.hpp</code> is a natural
+extension point</li>
+<li><strong>Cross-cutting</strong>: Correlation ID must flow through all
+layers (gRPC → service → repository → PostgreSQL → events → NATS)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>OpenTelemetry C++ SDK with capability-gated
+generation</strong></li>
+<li><strong>Prometheus metrics + Jaeger tracing (separate
+libraries)</strong></li>
+<li><strong>Enhance existing in-memory metrics + spdlog
+only</strong></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — OpenTelemetry C++ SDK</strong>,
+because:</p>
+<ul>
+<li>Apache-2.0 licensed (compatible with AGPL-3.0 + Commercial)</li>
+<li>Single SDK covers traces, metrics, and logs (three signals, one
+dependency)</li>
+<li>OTLP exporter works with any OTEL Collector backend (Jaeger,
+Prometheus, Grafana, Datadog, etc.)</li>
+<li>Industry standard — operators expect OTEL in cloud-native
+services</li>
+<li>gRPC transport for OTLP is natural since we already depend on
+gRPC</li>
+</ul>
+<h3
+id="architecture-three-pillars--two-cross-cutting-concerns">Architecture:
+Three Pillars + Two Cross-Cutting Concerns</h3>
+<h4 id="pillar-1-distributed-tracing-opentelemetry-traces">Pillar 1:
+Distributed Tracing (OpenTelemetry Traces)</h4>
+<p>Generated services emit spans at three granularity levels:</p>
+<table>
+<thead>
+<tr>
+<th>Span</th>
+<th>Scope</th>
+<th>Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RPC span</strong></td>
+<td>Full gRPC method execution</td>
+<td><code>rpc.method</code>, <code>rpc.service</code>,
+<code>rpc.grpc.status_code</code>, <code>correlation_id</code></td>
+</tr>
+<tr>
+<td><strong>Service span</strong></td>
+<td>CommandService/QueryService method</td>
+<td><code>muscovite.context</code>, <code>muscovite.aggregate</code>,
+<code>muscovite.operation</code></td>
+</tr>
+<tr>
+<td><strong>Database span</strong></td>
+<td>Individual pqxx operation</td>
+<td><code>db.system=postgresql</code>, <code>db.statement</code>
+(sanitized), <code>db.operation</code></td>
+</tr>
+</tbody>
+</table>
+<p>Span context is propagated via W3C
+<code>traceparent</code>/<code>tracestate</code> gRPC metadata headers
+(standard gRPC OTEL propagation).</p>
+<h4 id="pillar-2-metrics-opentelemetry-metrics">Pillar 2: Metrics
+(OpenTelemetry Metrics)</h4>
+<p>Replace <code>MetricsInterceptorFactory</code> with OTEL-native
+metrics:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>muscovite.grpc.request.duration</code></td>
+<td>Histogram</td>
+<td>method, status, context</td>
+</tr>
+<tr>
+<td><code>muscovite.grpc.request.count</code></td>
+<td>Counter</td>
+<td>method, status, context</td>
+</tr>
+<tr>
+<td><code>muscovite.db.query.duration</code></td>
+<td>Histogram</td>
+<td>operation, context, aggregate</td>
+</tr>
+<tr>
+<td><code>muscovite.db.pool.active</code></td>
+<td>Gauge</td>
+<td>context</td>
+</tr>
+<tr>
+<td><code>muscovite.outbox.publish.count</code></td>
+<td>Counter</td>
+<td>context, event_type</td>
+</tr>
+<tr>
+<td><code>muscovite.outbox.publish.duration</code></td>
+<td>Histogram</td>
+<td>context</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pillar-3-logs-opentelemetry-log-bridge">Pillar 3: Logs
+(OpenTelemetry Log Bridge)</h4>
+<p>Keep spdlog for local development. When OTEL is enabled, add an OTEL
+LogBridge that:</p>
+<ul>
+<li>Enriches spdlog output with <code>trace_id</code> and
+<code>span_id</code> from current span context</li>
+<li>Exports structured logs via OTLP for cloud-native log
+aggregation</li>
+<li>Adds <code>correlation_id</code> to every log record</li>
+</ul>
+<h4 id="cross-cutting-concern-1-correlation-id">Cross-Cutting Concern 1:
+Correlation ID</h4>
+<p><strong>Always generated</strong> (not gated by TELEMETRY capability)
+because correlation is valuable even without full OTEL:</p>
+<ol type="1">
+<li>gRPC interceptor extracts <code>x-correlation-id</code> from
+incoming metadata</li>
+<li>If absent, generates UUIDv7 (time-ordered for natural log
+ordering)</li>
+<li>Stores in <code>CorrelationContext</code> (scoped,
+thread-local)</li>
+<li>Propagated to:
+<ul>
+<li>All spdlog output: <code>[correlation_id={id}]</code></li>
+<li>Domain events: <code>correlation_id</code> column in
+<code>domain_events</code> table</li>
+<li>NATS outbox messages: <code>Nats-Correlation-Id</code> header</li>
+<li>Outgoing gRPC calls: <code>x-correlation-id</code> metadata</li>
+<li>PostgreSQL: <code>SET LOCAL muscovite.correlation_id = '{id}'</code>
+for <code>log_line_prefix</code> correlation</li>
+</ul></li>
+<li>When OTEL is enabled, correlation ID is added as span attribute and
+the OTEL trace ID can serve as the correlation ID</li>
+</ol>
+<h4 id="cross-cutting-concern-2-ddd-model-version">Cross-Cutting Concern
+2: DDD Model Version</h4>
+<p><strong>Always generated</strong> — every service reports its
+lineage:</p>
+<ol type="1">
+<li><p>Generator emits <code>model_version.hpp</code> with compile-time
+constants:</p>
+<ul>
+<li><code>kModelVersion</code>: from
+<code>project.mus VERSION</code></li>
+<li><code>kGeneratedAt</code>: ISO-8601 timestamp of generation</li>
+<li><code>kGeneratorVersion</code>: from
+<code>MUSCOVITE_CPP_VERSION</code></li>
+<li><code>kModelHash</code>: SHA-256 of the serialized IR (stable across
+whitespace changes)</li>
+<li><code>kGitCommit</code>: from <code>libgit2</code> at generation
+time</li>
+</ul></li>
+<li><p>Generated <code>VersionService</code> gRPC service:</p>
+<ul>
+<li><code>GetVersion()</code> → returns all version attributes</li>
+<li>Auto-registered in <code>server_main.cpp</code></li>
+</ul></li>
+<li><p>Every gRPC response includes <code>x-model-version</code> trailer
+metadata</p></li>
+<li><p>When OTEL is enabled, version attributes are OTEL resource
+attributes on all telemetry:</p>
+<ul>
+<li><code>service.version</code> = <code>kModelVersion</code> (OTEL
+semantic convention)</li>
+<li><code>muscovite.generator.version</code> =
+<code>kGeneratorVersion</code></li>
+<li><code>muscovite.model.hash</code> = <code>kModelHash</code></li>
+</ul></li>
+</ol>
+<h3 id="implementation-phases">Implementation Phases</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Features</th>
+<th>Iteration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 1: Foundation</strong></td>
+<td>Correlation ID interceptor, <code>CorrelationContext</code>,
+domain_events column, log enrichment, <code>model_version.hpp</code>,
+<code>VersionService</code></td>
+<td>v1.51.0</td>
+</tr>
+<tr>
+<td><strong>Phase 2: OTEL Core</strong></td>
+<td>TELEMETRY capability, OTEL SDK init, RPC spans, gRPC OTEL
+interceptor, OTLP exporter config in <code>.mus</code></td>
+<td>v1.52.0</td>
+</tr>
+<tr>
+<td><strong>Phase 3: Deep Instrumentation</strong></td>
+<td>Database spans, outbox spans, metrics, OTEL log bridge, resource
+attributes</td>
+<td>v1.53.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dsl-integration">DSL Integration</h3>
+<h4 id="project-dsl-mus--telemetry-block">Project DSL
+(<code>.mus</code>) — TELEMETRY Block</h4>
+<pre class="mus"><code>CAPABILITIES {
+    TELEMETRY;
+}
+
+TELEMETRY {
+    OTLP_ENDPOINT &quot;http://otel-collector:4317&quot;;
+    SERVICE_NAME &quot;fhir-health&quot;;
+    SAMPLING_RATE 1.0;
+    EXPORT_INTERVAL &quot;30s&quot;;
+}</code></pre>
+<p>Parsed by <code>project-parser.rkt</code>, stored in
+<code>project-config</code> IR struct, consumed by
+<code>config.rkt</code> and <code>server-main.rkt</code> generators.</p>
+<h4 id="generated-config-serverini">Generated Config (server.ini)</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[telemetry]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">enabled </span><span class="ot">=</span><span class="st"> </span><span class="kw">true</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">otlp_endpoint </span><span class="ot">=</span><span class="st"> http://otel-collector:4317</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">service_name </span><span class="ot">=</span><span class="st"> fhir-health</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">sampling_rate </span><span class="ot">=</span><span class="st"> </span><span class="fl">1.0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">export_interval_ms </span><span class="ot">=</span><span class="st"> </span><span class="dv">30000</span></span></code></pre></div>
+<p>Overridable at runtime via
+<code>MUSCOVITE_TELEMETRY_OTLP_ENDPOINT</code> env var (following
+existing Config precedence: CLI &gt; env &gt; INI &gt; defaults).</p>
+<h3 id="layer-1-framework-changes">Layer 1 Framework Changes</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TelemetryConfig</code></td>
+<td><code>framework/grpc/include/muscovite/grpc/telemetry.hpp</code></td>
+<td>Config struct for OTEL settings</td>
+</tr>
+<tr>
+<td><code>TelemetryProvider</code></td>
+<td><code>framework/grpc/include/muscovite/grpc/telemetry_provider.hpp</code></td>
+<td>Init/shutdown OTEL SDK (TracerProvider, MeterProvider)</td>
+</tr>
+<tr>
+<td><code>OtelInterceptorFactory</code></td>
+<td><code>framework/grpc/include/muscovite/grpc/otel_interceptor.hpp</code></td>
+<td>OTEL-native gRPC interceptor (replaces MetricsInterceptor)</td>
+</tr>
+<tr>
+<td><code>CorrelationContext</code></td>
+<td><code>framework/grpc/include/muscovite/grpc/correlation.hpp</code></td>
+<td>Thread-scoped correlation ID holder</td>
+</tr>
+<tr>
+<td><code>CorrelationInterceptorFactory</code></td>
+<td><code>framework/grpc/include/muscovite/grpc/correlation_interceptor.hpp</code></td>
+<td>Extract/generate correlation ID from gRPC metadata</td>
+</tr>
+</tbody>
+</table>
+<h3 id="layer-0-generator-changes">Layer 0 Generator Changes</h3>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server-main.rkt</code></td>
+<td>Emit OTEL init/shutdown, correlation interceptor registration,
+VersionService registration</td>
+</tr>
+<tr>
+<td><code>cpp-service-v2.rkt</code></td>
+<td>Emit span creation in RPC handlers, correlation context
+propagation</td>
+</tr>
+<tr>
+<td><code>config.rkt</code></td>
+<td>Emit <code>[telemetry]</code> INI section</td>
+</tr>
+<tr>
+<td><code>proto.rkt</code></td>
+<td>Emit <code>version_service.proto</code> with <code>GetVersion</code>
+RPC</td>
+</tr>
+<tr>
+<td><code>project-parser.rkt</code></td>
+<td>Parse <code>TELEMETRY</code> block</td>
+</tr>
+<tr>
+<td>Main generator</td>
+<td>Emit <code>model_version.hpp</code> with compile-time constants</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dependency">Dependency</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># conanfile.py addition (Phase 2 only)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;opentelemetry-cpp/1.14.2&quot;</span>,  <span class="co"># Apache-2.0 — OTEL traces, metrics, logs, OTLP exporter</span></span></code></pre></div>
+<p>When <code>TELEMETRY</code> capability is not enabled,
+<code>opentelemetry-cpp</code> is not linked (CMake conditional). Zero
+overhead for projects without telemetry.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>DSL amplification extends to operations</strong>:
+<code>.ddd</code> + <code>TELEMETRY</code> → fully instrumented,
+production-observable services</li>
+<li><strong>Zero-effort observability</strong>: Domain modelers declare
+capability, get traces + metrics + correlation</li>
+<li><strong>Backend-agnostic</strong>: OTLP works with any OTEL
+Collector backend</li>
+<li><strong>Incremental adoption</strong>: Correlation ID works
+standalone (Phase 1), OTEL adds depth (Phase 2–3)</li>
+<li><strong>Version provenance</strong>: Every service self-reports its
+model version — deployment verification is trivial</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>opentelemetry-cpp SDK is large (~50 headers) — may increase compile
+time for OTEL-enabled targets</li>
+<li>OTLP gRPC exporter adds another gRPC connection per service
+instance</li>
+<li><code>correlation_id</code> column in <code>domain_events</code>
+requires a migration (additive, nullable initially)</li>
+<li>Phase 2–3 scope is significant (est. 3–5 days per phase)</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-opentelemetry-c-sdk-chosen">Option 1: OpenTelemetry C++
+SDK (chosen)</h3>
+<ul>
+<li>Good, because Apache-2.0 license — dual-license compatible</li>
+<li>Good, because single SDK for traces + metrics + logs</li>
+<li>Good, because CNCF-graduated industry standard</li>
+<li>Good, because OTLP exporter = backend-agnostic</li>
+<li>Good, because gRPC interceptor pattern matches existing
+infrastructure</li>
+<li>Bad, because large dependency (~50 headers)</li>
+<li>Bad, because OTEL C++ SDK maturity is younger than Go/Java
+equivalents</li>
+</ul>
+<h3 id="option-2-prometheus--jaeger-separately">Option 2: Prometheus +
+Jaeger separately</h3>
+<ul>
+<li>Good, because mature, well-understood libraries</li>
+<li>Bad, because two separate dependencies and integration patterns</li>
+<li>Bad, because Prometheus C++ client is GPL-2.0 — <strong>incompatible
+with commercial license</strong></li>
+<li>Bad, because no unified correlation between metrics and traces</li>
+</ul>
+<h3 id="option-3-enhance-existing-spdlog--in-memory-metrics">Option 3:
+Enhance existing spdlog + in-memory metrics</h3>
+<ul>
+<li>Good, because zero new dependencies</li>
+<li>Good, because minimal change surface</li>
+<li>Bad, because no distributed tracing (fundamental gap remains)</li>
+<li>Bad, because no metrics export (data collected but invisible)</li>
+<li>Bad, because no industry-standard integration</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a href="20260120-cqrs-ready-architecture.html">CQRS-Ready
+Architecture</a> — domain events receive correlation_id</li>
+<li>Related: <a
+href="20260202-outbox-pattern-reliable-event-publishing.html">Outbox
+Pattern</a> — NATS messages carry correlation headers</li>
+<li>Related: <a
+href="20260228-grpc-resilience-sandwich-full-architecture.html">gRPC
+Resilience Sandwich</a> — interceptor infrastructure</li>
+<li>Implements: IDEA-046 (OpenTelemetry), IDEA-047 (Correlation ID),
+IDEA-048 (DDD Version)</li>
+<li>External: <a
+href="https://github.com/open-telemetry/opentelemetry-cpp">OpenTelemetry
+C++ SDK</a> (Apache-2.0)</li>
+<li>External: <a href="https://www.w3.org/TR/trace-context/">W3C Trace
+Context</a></li>
+<li>External: <a
+href="https://opentelemetry.io/docs/specs/semconv/rpc/grpc/">OTEL
+Semantic Conventions for gRPC</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating <code>server_main.cpp</code> — include correlation
+interceptor and (optionally) OTEL setup</li>
+<li>When generating <code>ServiceImpl</code> classes — propagate
+correlation context, emit spans (if OTEL)</li>
+<li>When generating domain_events tables — include
+<code>correlation_id UUID</code> column</li>
+<li>When generating NATS outbox publishing — include correlation
+header</li>
+<li>When generating project CMake — conditionally link
+opentelemetry-cpp</li>
+<li>When generating server config — include <code>[telemetry]</code>
+section</li>
+<li>When modifying <code>project-parser.rkt</code> — parse TELEMETRY
+block</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Framework-internal logging (keep spdlog as-is for Layer 1)</li>
+<li>Racket test infrastructure (no OTEL in test runners)</li>
+<li>Build-time tooling (CMake, Conan configuration scripts)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Correlation interceptor generated for ALL gRPC-enabled projects (not
+capability-gated)</li>
+<li>OTEL instrumentation generated only when TELEMETRY capability is
+declared</li>
+<li><code>model_version.hpp</code> generated for ALL projects (always
+useful)</li>
+<li><code>VersionService</code> generated for ALL gRPC-enabled
+projects</li>
+</ul>
+<h3 id="key-files-after-implementation">Key Files (after
+implementation)</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>framework/grpc/include/muscovite/grpc/correlation.hpp</code></td>
+<td>CorrelationContext holder</td>
+</tr>
+<tr>
+<td><code>framework/grpc/include/muscovite/grpc/correlation_interceptor.hpp</code></td>
+<td>gRPC interceptor</td>
+</tr>
+<tr>
+<td><code>framework/grpc/include/muscovite/grpc/telemetry.hpp</code></td>
+<td>TelemetryConfig + provider</td>
+</tr>
+<tr>
+<td><code>framework/grpc/include/muscovite/grpc/otel_interceptor.hpp</code></td>
+<td>OTEL gRPC interceptor</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/grpc/server-main.rkt</code></td>
+<td>Generated main() with OTEL/correlation</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/grpc/version-service.rkt</code></td>
+<td>VersionService proto + impl generator</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/shared/model-version.rkt</code></td>
+<td>model_version.hpp generator</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/project-parser.rkt</code></td>
+<td>TELEMETRY block parsing</td>
+</tr>
+</tbody>
+</table>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

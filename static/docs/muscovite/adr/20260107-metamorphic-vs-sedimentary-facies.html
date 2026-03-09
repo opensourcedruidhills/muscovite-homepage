@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metamorphic vs Sedimentary Facies - Distinct
+Concepts — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Metamorphic vs Sedimentary Facies - Distinct Concepts</span>
+</nav>
+
+<h1>Metamorphic vs Sedimentary Facies - Distinct Concepts</h1>
+
+
+<h1
+id="metamorphic-vs-sedimentary-facies---distinct-concepts">Metamorphic
+vs Sedimentary Facies - Distinct Concepts</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Domain modeling team</li>
+<li>Date: 2026-01-07</li>
+<li>Tags: petrology, stratigraphy, facies, classification</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The term "facies" has two fundamentally different meanings in
+geology:</p>
+<ol type="1">
+<li><strong>Metamorphic facies</strong>: Pressure-Temperature (P-T)
+conditions indicator</li>
+<li><strong>Sedimentary facies</strong>: Depositional environment
+indicator</li>
+</ol>
+<p>These are completely different concepts that must not be conflated in
+the domain model.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Metamorphic facies (Eskola 1915, Turner 1948) are P-T based mineral
+assemblages</li>
+<li>Sedimentary facies are depositional environment interpretations</li>
+<li>Using same entity for both causes semantic confusion</li>
+<li>Geologists expect clear distinction between these concepts</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Maintain <strong>separate entities</strong> in appropriate
+contexts:</p>
+<h3 id="1-metamorphic-facies-petrology-context">1. Metamorphic Facies
+(Petrology Context)</h3>
+<p>Located in <code>petrology.ddd</code> as
+<code>MetamorphicFacies</code>:</p>
+<pre class="ddd"><code>ENTITY MetamorphicFacies IDENTIFIED_BY id (
+    id                    UUID        NOT NULL,
+    name                  VARCHAR(50) NOT NULL,
+    temperature_min_c     DECIMAL     NOT NULL,
+    temperature_max_c     DECIMAL     NOT NULL,
+    pressure_min_kbar     DECIMAL     NOT NULL,
+    pressure_max_kbar     DECIMAL     NOT NULL,
+    geothermal_gradient   VARCHAR(30),
+    diagnostic_assemblages TEXT,
+    typical_minerals      TEXT,
+    tectonic_setting      TEXT,
+    description           TEXT
+)</code></pre>
+<p>Standard metamorphic facies (Eskola/Turner classification):</p>
+<table>
+<thead>
+<tr>
+<th>Facies</th>
+<th>T (°C)</th>
+<th>P (kbar)</th>
+<th>Setting</th>
+<th>Index Minerals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zeolite</td>
+<td>200-300</td>
+<td>0.2-0.5</td>
+<td>Burial</td>
+<td>Zeolites, prehnite</td>
+</tr>
+<tr>
+<td>Prehnite-pumpellyite</td>
+<td>250-350</td>
+<td>0.3-0.7</td>
+<td>Burial</td>
+<td>Prehnite, pumpellyite</td>
+</tr>
+<tr>
+<td>Greenschist</td>
+<td>300-500</td>
+<td>0.3-0.8</td>
+<td>Regional</td>
+<td>Chlorite, epidote, actinolite, albite</td>
+</tr>
+<tr>
+<td>Blueschist</td>
+<td>200-500</td>
+<td>0.5-2.0</td>
+<td>Subduction</td>
+<td>Glaucophane, lawsonite</td>
+</tr>
+<tr>
+<td>Amphibolite</td>
+<td>500-700</td>
+<td>0.4-1.2</td>
+<td>Regional</td>
+<td>Hornblende, plagioclase (&gt;An17)</td>
+</tr>
+<tr>
+<td>Granulite</td>
+<td>700-900</td>
+<td>0.7-1.2</td>
+<td>Deep crust</td>
+<td>Pyroxene, garnet, sillimanite</td>
+</tr>
+<tr>
+<td>Eclogite</td>
+<td>450-700</td>
+<td>1.2-3.0</td>
+<td>Subduction</td>
+<td>Omphacite, pyrope garnet</td>
+</tr>
+<tr>
+<td>Hornfels</td>
+<td>Variable</td>
+<td>Low</td>
+<td>Contact</td>
+<td>Andalusite, cordierite</td>
+</tr>
+<tr>
+<td>Sanidinite</td>
+<td>&gt;900</td>
+<td>Low</td>
+<td>Xenolith</td>
+<td>Sanidine, mullite</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-sedimentary-facies-stratigraphy-context">2. Sedimentary Facies
+(Stratigraphy Context)</h3>
+<p>Located in <code>stratigraphy.ddd</code> as <code>Facies</code> (to
+be renamed <code>SedimentaryFacies</code>):</p>
+<pre class="ddd"><code>ENTITY SedimentaryFacies IDENTIFIED_BY id (
+    id                        UUID        NOT NULL,
+    facies_code               VARCHAR(10) NOT NULL,
+    name                      VARCHAR(100) NOT NULL,
+    facies_type               VARCHAR(30) NOT NULL,
+    lithology                 VARCHAR(50) NOT NULL,
+    grain_size                VARCHAR(20),
+    sedimentary_structures    TEXT,
+    fossils                   TEXT,
+    depositional_process      VARCHAR(100),
+    depositional_environment  VARCHAR(100),
+    facies_associations       TEXT,
+    description               TEXT
+)
+CHECK type_valid: facies_type IN (&#39;lithofacies&#39;, &#39;biofacies&#39;, &#39;ichnofacies&#39;, &#39;seismic_facies&#39;)</code></pre>
+<p>Types of sedimentary facies:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Basis</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lithofacies</td>
+<td>Rock characteristics</td>
+<td>Trough cross-bedded sandstone (St)</td>
+</tr>
+<tr>
+<td>Biofacies</td>
+<td>Fossil assemblage</td>
+<td>Coral-algal biofacies</td>
+</tr>
+<tr>
+<td>Ichnofacies</td>
+<td>Trace fossils</td>
+<td>Skolithos ichnofacies</td>
+</tr>
+<tr>
+<td>Seismic facies</td>
+<td>Seismic reflection patterns</td>
+<td>Parallel continuous reflectors</td>
+</tr>
+</tbody>
+</table>
+<h3 id="walthers-law">Walther's Law</h3>
+<p>For sedimentary facies, Walther's Law (1894) states:</p>
+<blockquote>
+<p>"The vertical succession of facies reflects the lateral juxtaposition
+of depositional environments."</p>
+</blockquote>
+<p>This applies ONLY to sedimentary facies, NOT metamorphic facies.</p>
+<h3 id="key-differences-summary">Key Differences Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Metamorphic Facies</th>
+<th>Sedimentary Facies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basis</td>
+<td>P-T conditions</td>
+<td>Depositional environment</td>
+</tr>
+<tr>
+<td>Defined by</td>
+<td>Mineral assemblage</td>
+<td>Lithology, fossils, structures</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>Petrology</td>
+<td>Stratigraphy</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>Greenschist facies</td>
+<td>Fluvial channel facies</td>
+</tr>
+<tr>
+<td>Spatial</td>
+<td>P-T diagram</td>
+<td>Geographic distribution</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Clear semantic separation prevents confusion</li>
+<li>Each facies type in appropriate bounded context</li>
+<li>Enables correct FK relationships</li>
+<li>Matches geologist mental model</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Two entities with similar names may initially confuse
+developers</li>
+<li>Documentation must be clear about the distinction</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="https://en.wikipedia.org/wiki/Metamorphic_facies">Metamorphic
+Facies - Wikipedia</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/Facies#Sedimentary_facies">Sedimentary
+Facies - Wikipedia</a></li>
+<li>Eskola, P. (1915). "On the relations between the chemical and
+mineralogical composition in the metamorphic rocks of the Orijärvi
+region"</li>
+<li>Walther, J. (1894). "Einleitung in die Geologie als historische
+Wissenschaft"</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

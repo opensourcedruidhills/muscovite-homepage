@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use API-Only Testing with DDD-Driven FK
+Seeding — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use API-Only Testing with DDD-Driven FK Seeding</span>
+</nav>
+
+<h1>Use API-Only Testing with DDD-Driven FK Seeding</h1>
+
+
+<h1 id="use-api-only-testing-with-ddd-driven-fk-seeding">Use API-Only
+Testing with DDD-Driven FK Seeding</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Test architects, Database architects</li>
+<li>Date: 2024-09-01</li>
+<li>Tags: testing, pgtap, api, ddd</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>pgTAP tests need to insert test data to verify CRUD operations. How
+should tests create data and handle foreign key dependencies between
+entities?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Tests should exercise the same code path as production</li>
+<li>FK dependencies must be satisfied in correct order</li>
+<li>Test data setup should be maintainable</li>
+<li>DDD model is the single source of truth for relationships</li>
+<li>Avoid brittle SQL that breaks when schema changes</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>API-only testing with DDD-driven seeding</li>
+<li>Direct SQL INSERT with manual FK ordering</li>
+<li>Test fixtures loaded before test runs</li>
+<li>Mock/stub database layer</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "API-only testing with DDD-driven seeding", because it
+ensures tests exercise the actual API layer and automatically derives FK
+dependencies from the DDD model.</p>
+<p><strong>ABSOLUTE REQUIREMENT</strong>: All pgTAP tests MUST use ONLY
+stored procedures for data manipulation. NO direct SQL
+INSERT/UPDATE/DELETE/SELECT statements allowed.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Tests verify actual production code paths</li>
+<li>FK seeding order derived from DDD relationships</li>
+<li>Tests auto-update when relationships change</li>
+<li>Single source of truth (DDD model)</li>
+<li>Deterministic test execution order</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Tests are slightly slower (API overhead)</li>
+<li>Requires complete API implementation before testing</li>
+<li>More complex test generation logic</li>
+</ul>
+<h2 id="api-contract">API Contract</h2>
+<p>All <code>{schema}_api.{entity}_insert()</code> functions MUST return
+the complete table row via <code>RETURNING * INTO v_result</code>. This
+ensures:</p>
+<ul>
+<li>Returned PKs can be used for subsequent FK references</li>
+<li>All columns (including defaults) are available</li>
+<li>Tests never need to query the table directly</li>
+</ul>
+<h2 id="prohibited-patterns">Prohibited Patterns</h2>
+<ul>
+<li>❌ Direct <code>INSERT INTO table VALUES (...)</code></li>
+<li>❌ Direct <code>UPDATE table SET ...</code></li>
+<li>❌ Direct <code>DELETE FROM table WHERE ...</code></li>
+<li>❌ Direct <code>SELECT * FROM table</code> to extract IDs</li>
+<li>❌ Manual <code>gen_random_uuid()</code> calls</li>
+<li>❌ Inferring FKs from SQL migration files</li>
+<li>❌ Test-specific SQL fixtures</li>
+</ul>
+<h2 id="seeding-algorithm">Seeding Algorithm</h2>
+<ol type="1">
+<li><strong>Extract relationships from DDD metadata</strong> (not SQL
+parsing)</li>
+<li><strong>Compute transitive closure</strong> (all ancestors via DFS +
+memoization)</li>
+<li><strong>Topologically sort entities</strong> (parents always before
+children)</li>
+<li><strong>Generate deterministic API insert calls</strong> (in
+dependency order)</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Detailed algorithm:
+<code>src/dslgen/RELATIONSHIP_SEEDING_ALGORITHM.md</code></li>
+<li>Implementation:
+<code>src/dslgen/generators/postgres/pgtap.rkt</code></li>
+<li>Related: <a
+href="20251223-deploy-database-via-sqitch-only.html">Sqitch
+deployment</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>ALL pgTAP test generation</li>
+<li>ALL test data setup in generated tests</li>
+<li>Manual pgTAP tests for custom scenarios</li>
+<li>Integration tests that touch the database</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>C++ unit tests (use mocks)</li>
+<li>Performance benchmarks (may use direct SQL)</li>
+<li>Data migration scripts (separate from tests)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Generated tests only call
+<code>*_api.*_insert/select/update/delete()</code></li>
+<li>pgTAP test generator uses topological sort</li>
+<li>CI runs full pgTAP suite to verify</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/pgtap.rkt</code> - Test
+generator</li>
+<li><code>src/dslgen/RELATIONSHIP_SEEDING_ALGORITHM.md</code> -
+Algorithm docs</li>
+<li><code>examples/geosciences/generated/geosciences/test/pgtap/</code>
+- Generated tests</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

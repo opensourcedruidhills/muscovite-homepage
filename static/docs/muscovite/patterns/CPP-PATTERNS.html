@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Pattern Catalog for
+Muscovite — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>C++ Pattern Catalog for Muscovite</span>
+</nav>
+
+<h1>C++ Pattern Catalog for Muscovite</h1>
+
+
+<h1 id="c-pattern-catalog-for-muscovite">C++ Pattern Catalog for
+Muscovite</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Constraint document for AI agents and human
+developers. Every C++ pattern in Muscovite framework code (Layer 1) and
+generated output (Layer 2) must use the canonical form. This document is
+the single source of truth for "how to write C++ in this project."</p>
+<p><strong>Scope</strong>: All <code>.hpp</code>/<code>.cpp</code> files
+in <code>framework/</code> (Layer 1) and all C++ generator output in
+<code>dslgen/generators/cpp/</code> and
+<code>dslgen/generators/grpc/</code> (Layer 0 → Layer 2). Qt-specific
+patterns are in <a
+href="QT-WIDGETS-PATTERNS.html">QT-WIDGETS-PATTERNS.md</a> and <a
+href="QML-PATTERNS.html">QML-PATTERNS.md</a>.</p>
+<p><strong>Sibling to</strong>: <a
+href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> (Racket coding
+constraints), <a href="POSTGRES-PATTERNS.html">POSTGRES-PATTERNS.md</a>
+(PostgreSQL patterns), <a href="QML-PATTERNS.html">QML-PATTERNS.md</a>
+(QML output patterns), <a
+href="QT-WIDGETS-PATTERNS.html">QT-WIDGETS-PATTERNS.md</a> (Qt Widgets
+output patterns)</p>
+<p><strong>Companion ADR</strong>: TBD — Modern C++23 Style Guide
+(planned Phase 1 of C++ modernization)</p>
+<p><strong>Standard</strong>: C++23 (<code>-std=c++23</code>). Compiler:
+GCC 14+ / Clang 18+.</p>
+</blockquote>
+<hr />
+<h2 id="rating-system">Rating System</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CANONICAL</strong></td>
+<td>The only acceptable pattern for new and modified code</td>
+</tr>
+<tr>
+<td><strong>ACCEPTABLE</strong></td>
+<td>Tolerated in specific circumstances (documented)</td>
+</tr>
+<tr>
+<td><strong>ANTI-PATTERN</strong></td>
+<td>Forbidden in new code; convert when touching the file</td>
+</tr>
+</tbody>
+</table>
+<p>When an AI agent generates or modifies C++ code for Muscovite, it
+MUST use only CANONICAL or ACCEPTABLE patterns. When an AI agent
+modifies an existing file, it MUST convert any anti-patterns in the
+modified function to canonical form.</p>
+<hr />
+<h2 id="1-error-handling-stdexpected">1. Error Handling
+(std::expected)</h2>
+<p><strong>CANONICAL</strong>: Use
+<code>std::expected&lt;T, E&gt;</code> for fallible operations.
+Muscovite already grades A on this — maintain it.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — std::expected for fallible operations</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> muscovite<span class="op">::</span>dba<span class="op">::</span>Error<span class="op">&gt;;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — monadic chaining (C++23)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> find_by_id<span class="op">(</span>id<span class="op">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>and_then<span class="op">([](</span><span class="kw">auto</span><span class="op">&amp;&amp;</span> p<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> validate<span class="op">(</span>p<span class="op">);</span> <span class="op">})</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>transform<span class="op">([](</span><span class="kw">auto</span><span class="op">&amp;&amp;</span> p<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> to_response<span class="op">(</span>p<span class="op">);</span> <span class="op">});</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — exceptions for truly exceptional conditions (connection loss, OOM)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">throw</span> muscovite<span class="op">::</span>dba<span class="op">::</span>ConnectionError<span class="op">(</span><span class="st">&quot;PostgreSQL unreachable&quot;</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — error codes or output parameters</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> find_by_id<span class="op">(</span><span class="at">const</span> uuid<span class="op">&amp;</span> id<span class="op">,</span> Patient<span class="op">*</span> out<span class="op">);</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — exceptions for expected failures (not-found, validation)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">throw</span> EntityNotFoundException<span class="op">(</span>id<span class="op">);</span>  <span class="co">// Use std::expected&lt;T, NotFound&gt; instead</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — std::optional for errors (loses error information)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span><span class="at">const</span> uuid<span class="op">&amp;</span> id<span class="op">);</span>  <span class="co">// Why did it fail?</span></span></code></pre></div>
+<p><strong>Generator files</strong>: <code>dba/unified.rkt</code>,
+<code>grpc/cpp-service-v2.rkt</code></p>
+<hr />
+<h2 id="2-attribute-annotations">2. Attribute Annotations</h2>
+<h3 id="2a-nodiscard">2a. <code>[[nodiscard]]</code></h3>
+<p><strong>CANONICAL</strong>: ALL functions returning values MUST be
+<code>[[nodiscard]]</code>. Muscovite grades A — maintain it.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_all<span class="op">()</span> <span class="op">-&gt;</span> <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> to_string<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="bu">std::</span>string<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">constexpr</span> <span class="kw">auto</span> is_valid<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing [[nodiscard]] on value-returning functions</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> find_all<span class="op">()</span> <span class="op">-&gt;</span> <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>string to_string<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span></code></pre></div>
+<h3 id="2b-noexcept">2b. <code>noexcept</code></h3>
+<p><strong>CANONICAL</strong>: Mark <code>noexcept</code> on: move
+constructors, move assignment, destructors, trivial getters, converters,
+swap, <code>_opt</code> variants that return std::optional.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — noexcept on moves</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Patient<span class="op">(</span>Patient<span class="op">&amp;&amp;)</span> <span class="kw">noexcept</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Patient<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">=(</span>Patient<span class="op">&amp;&amp;)</span> <span class="kw">noexcept</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — noexcept on trivial getting/conversion</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">constexpr</span> <span class="kw">auto</span> id<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> to_uuid_string<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="bu">std::</span>string<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — noexcept on _opt variants</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id_opt<span class="op">(</span><span class="at">const</span> uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="kw">noexcept</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing noexcept on move operations</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Patient<span class="op">(</span>Patient<span class="op">&amp;&amp;)</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span>  <span class="co">// Add noexcept</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing noexcept on trivial converters</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> to_string<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="bu">std::</span>string<span class="op">;</span>  <span class="co">// If it can&#39;t throw, mark noexcept</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade D — ~30 move operations and ~50
+converters missing <code>noexcept</code>. <strong>Generator
+files</strong>: <code>dba/unified.rkt</code> (entity structs),
+<code>grpc/cpp-service-v2.rkt</code></p>
+<hr />
+<h2 id="3-ranges-and-views-stdranges">3. Ranges and Views
+(std::ranges)</h2>
+<p><strong>CANONICAL</strong>: Use <code>std::ranges</code> algorithms
+and <code>std::views</code> pipelines instead of raw loops. This is the
+single highest-impact modernization item (~30 occurrences).</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — ranges::to for container construction (C++23)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> names <span class="op">=</span> patients</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::transform<span class="op">([](</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> p<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> p<span class="op">.</span>family_name<span class="op">();</span> <span class="op">})</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>ranges::to<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&gt;();</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — ranges algorithm for simple transforms</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>ranges::sort<span class="op">(</span>patients<span class="op">,</span> <span class="op">{},</span> <span class="op">&amp;</span>Patient<span class="op">::</span>family_name<span class="op">);</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>ranges::for_each<span class="op">(</span>events<span class="op">,</span> <span class="op">[&amp;](</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span> <span class="ex">emit</span><span class="op">(</span>e<span class="op">);</span> <span class="op">});</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — views pipeline for filtering + transforming</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> active_names <span class="op">=</span> patients</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::filter<span class="op">(&amp;</span>Patient<span class="op">::</span>is_active<span class="op">)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::transform<span class="op">(&amp;</span>Patient<span class="op">::</span>display_name<span class="op">)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>ranges::to<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&gt;();</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — views::join for flattening</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> all_fields <span class="op">=</span> contexts</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::transform<span class="op">(&amp;</span>Context<span class="op">::</span>entities<span class="op">)</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::join</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::transform<span class="op">(&amp;</span>Entity<span class="op">::</span>fields<span class="op">)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>views::join</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="bu">std::</span>ranges::to<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&gt;();</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — reserve + push_back loop (P0 item, ~30 occurrences)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> names<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>names<span class="op">.</span>reserve<span class="op">(</span>patients<span class="op">.</span>size<span class="op">());</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> p <span class="op">:</span> patients<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    names<span class="op">.</span>push_back<span class="op">(</span>p<span class="op">.</span>family_name<span class="op">());</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — std::transform with back_inserter</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> names<span class="op">;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>transform<span class="op">(</span>patients<span class="op">.</span>begin<span class="op">(),</span> patients<span class="op">.</span>end<span class="op">(),</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>back_inserter<span class="op">(</span>names<span class="op">),</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[](</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> p<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> p<span class="op">.</span>family_name<span class="op">();</span> <span class="op">});</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — manual filter loop</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> active<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> p <span class="op">:</span> patients<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>p<span class="op">.</span>is_active<span class="op">())</span> active<span class="op">.</span>push_back<span class="op">(</span>p<span class="op">);</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade F — zero std::ranges usage in
+entire codebase. ~30 reserve+push_back loops. <strong>Generator
+files</strong>: <code>dba/unified.rkt</code> (query result mapping),
+<code>grpc/cpp-service-v2.rkt</code> (response building)</p>
+<hr />
+<h2 id="4-structured-bindings">4. Structured Bindings</h2>
+<p><strong>CANONICAL</strong>: Use structured bindings for multi-value
+returns, pair/tuple, and map iteration.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — structured bindings for row fields</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> <span class="op">[</span>id<span class="op">,</span> name<span class="op">,</span> active<span class="op">]</span> <span class="op">:</span> rows<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span>emplace_back<span class="op">(</span>Patient<span class="op">{</span>id<span class="op">,</span> name<span class="op">,</span> active<span class="op">});</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — map iteration</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> <span class="op">[</span>key<span class="op">,</span> value<span class="op">]</span> <span class="op">:</span> metadata<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    process<span class="op">(</span>key<span class="op">,</span> value<span class="op">);</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — std::tie replacement</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> <span class="op">[</span>iter<span class="op">,</span> inserted<span class="op">]</span> <span class="op">=</span> cache<span class="op">.</span>emplace<span class="op">(</span>key<span class="op">,</span> value<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — indexed tuple access</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> row <span class="op">:</span> rows<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span>emplace_back<span class="op">(</span>Patient<span class="op">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>get<span class="op">&lt;</span><span class="dv">0</span><span class="op">&gt;(</span>row<span class="op">),</span> <span class="bu">std::</span>get<span class="op">&lt;</span><span class="dv">1</span><span class="op">&gt;(</span>row<span class="op">),</span> <span class="bu">std::</span>get<span class="op">&lt;</span><span class="dv">2</span><span class="op">&gt;(</span>row<span class="op">)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — .first / .second</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> entry <span class="op">:</span> metadata<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    process<span class="op">(</span>entry<span class="op">.</span>first<span class="op">,</span> entry<span class="op">.</span>second<span class="op">);</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade F — zero structured bindings in
+generated or framework code. <strong>Generator files</strong>:
+<code>dba/unified.rkt</code> (row mapping in repositories)</p>
+<hr />
+<h2 id="5-concepts-and-constraints">5. Concepts and Constraints</h2>
+<p><strong>CANONICAL</strong>: Use C++20 concepts to constrain template
+parameters. Define project-specific concepts for domain patterns.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — DbEntity concept for repository templates</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">concept</span> DbEntity <span class="op">=</span> <span class="kw">requires</span><span class="op">(</span>T t<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span> t<span class="op">.</span>id<span class="op">()</span> <span class="op">}</span> <span class="op">-&gt;</span> <span class="bu">std::</span>convertible_to<span class="op">&lt;</span><span class="ex">boost::</span>uuids::uuid<span class="op">&gt;;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span> t<span class="op">.</span>table_name<span class="op">()</span> <span class="op">}</span> <span class="op">-&gt;</span> <span class="bu">std::</span>convertible_to<span class="op">&lt;</span><span class="bu">std::</span>string_view<span class="op">&gt;;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — constrained template</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span>DbEntity T<span class="op">&gt;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>T<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — constrain to_param&lt;T&gt;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">requires</span> <span class="bu">std::</span>convertible_to<span class="op">&lt;</span>T<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;</span> <span class="op">||</span> <span class="bu">std::</span>integral<span class="op">&lt;</span>T<span class="op">&gt;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> to_param<span class="op">(</span><span class="at">const</span> T<span class="op">&amp;</span> value<span class="op">)</span> <span class="op">-&gt;</span> pqxx<span class="op">::</span>params<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — unconstrained template</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>T<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — SFINAE instead of concepts</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">,</span> <span class="kw">typename</span> <span class="op">=</span> <span class="bu">std::</span>enable_if_t<span class="op">&lt;...&gt;&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> process<span class="op">(</span><span class="at">const</span> T<span class="op">&amp;</span> value<span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade F — zero concepts defined.
+<code>to_param&lt;T&gt;</code> is unconstrained. <strong>Generator
+files</strong>: <code>dba/unified.rkt</code>, framework
+<code>dba/repository.hpp</code></p>
+<hr />
+<h2 id="6-designated-initializers">6. Designated Initializers</h2>
+<p><strong>CANONICAL</strong>: Use designated initializers for struct
+construction. Already graded A — maintain it.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — designated initializers for entity construction</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> patient <span class="op">=</span> Patient<span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>id <span class="op">=</span> uuid<span class="op">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>mrn <span class="op">=</span> row<span class="op">[</span><span class="st">&quot;mrn&quot;</span><span class="op">].</span>as<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;(),</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>family_name <span class="op">=</span> row<span class="op">[</span><span class="st">&quot;family_name&quot;</span><span class="op">].</span>as<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;(),</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>active <span class="op">=</span> row<span class="op">[</span><span class="st">&quot;active&quot;</span><span class="op">].</span>as<span class="op">&lt;</span><span class="dt">bool</span><span class="op">&gt;()</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — designated initializers for request structs</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> req <span class="op">=</span> CreatePatientRequest<span class="op">{</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>mrn <span class="op">=</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>family_name <span class="op">=</span> <span class="st">&quot;Smith&quot;</span><span class="op">,</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>given_name <span class="op">=</span> <span class="st">&quot;John&quot;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — positional construction (fragile, order-dependent)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> patient <span class="op">=</span> Patient<span class="op">{</span>uuid<span class="op">,</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">,</span> <span class="st">&quot;Smith&quot;</span><span class="op">,</span> <span class="kw">true</span><span class="op">};</span></span></code></pre></div>
+<p><strong>Generator files</strong>: <code>dba/unified.rkt</code>
+(entity struct construction from DB rows)</p>
+<hr />
+<h2 id="7-string-handling">7. String Handling</h2>
+<h3 id="7a-stdstring_view-for-non-owning-references">7a.
+<code>std::string_view</code> for Non-Owning References</h3>
+<p><strong>CANONICAL</strong>: Use <code>std::string_view</code> for
+function parameters that don't need ownership.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — string_view for non-owning read access</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_code<span class="op">(</span><span class="bu">std::</span>string_view code<span class="op">)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>LookupEntry<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> log_event<span class="op">(</span><span class="bu">std::</span>string_view <span class="dt">event_type</span><span class="op">,</span> <span class="bu">std::</span>string_view payload<span class="op">);</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — static constexpr for SQL query strings</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="kw">constexpr</span> <span class="kw">auto</span> kInsertSql <span class="op">=</span> pqxx<span class="op">::</span>zview<span class="op">{</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSERT INTO patient.patient (id, mrn, family_name) VALUES ($1, $2, $3)&quot;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — const std::string&amp; for non-owning read access</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> find_by_code<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> code<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>LookupEntry<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — duplicated or inline SQL strings</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSERT INTO patient.patient (id, mrn) VALUES ($1, $2)&quot;</span><span class="op">,</span> id<span class="op">,</span> mrn<span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade D for string_view, B- for SQL
+extraction. <strong>Generator files</strong>:
+<code>dba/unified.rkt</code> (repository methods),
+<code>grpc/cpp-service-v2.rkt</code></p>
+<h3 id="7b-stdformat-over-fmtformat">7b. <code>std::format</code> over
+<code>fmt::format</code></h3>
+<p><strong>CANONICAL</strong>: Use <code>std::format</code> (C++20) for
+string formatting. Already graded A- — maintain.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> msg <span class="op">=</span> <span class="bu">std::</span>format<span class="op">(</span><span class="st">&quot;Patient </span><span class="sc">{}</span><span class="st"> not found&quot;</span><span class="op">,</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">));</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — fmt::format (unnecessary dependency when std::format available)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> msg <span class="op">=</span> fmt<span class="op">::</span>format<span class="op">(</span><span class="st">&quot;Patient </span><span class="sc">{}</span><span class="st"> not found&quot;</span><span class="op">,</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">));</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — string concatenation</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> msg <span class="op">=</span> <span class="st">&quot;Patient &quot;</span> <span class="op">+</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">)</span> <span class="op">+</span> <span class="st">&quot; not found&quot;</span><span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="8-const-correctness">8. Const Correctness</h2>
+<p><strong>CANONICAL</strong>: All query methods, getters, and
+non-mutating functions MUST be <code>const</code>.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — const on query service methods</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryService <span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="at">const</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_all<span class="op">(</span><span class="at">const</span> PageRequest<span class="op">&amp;</span> page<span class="op">)</span> <span class="at">const</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — const on entity getters</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Patient <span class="op">{</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> id<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> display_name<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="bu">std::</span>string<span class="op">;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing const on query methods</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;;</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade B — query service generators
+sometimes omit const. <strong>Generator files</strong>:
+<code>dba/unified.rkt</code>, <code>grpc/cpp-service-v2.rkt</code></p>
+<hr />
+<h2 id="9-forward-declarations">9. Forward Declarations</h2>
+<p><strong>CANONICAL</strong>: Use forward declarations in headers to
+minimize includes. Include the full header only in <code>.cpp</code>
+files.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — forward declare in header</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>dba <span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ConnectionPool<span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>  <span class="co">// namespace muscovite::dba</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandService <span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientCommandService<span class="op">(</span>muscovite<span class="op">::</span>dba<span class="op">::</span>ConnectionPool<span class="op">&amp;</span> pool<span class="op">);</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    muscovite<span class="op">::</span>dba<span class="op">::</span>ConnectionPool<span class="op">&amp;</span> <span class="va">pool_</span><span class="op">;</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">// In .cpp: #include &lt;muscovite/dba/connection_pool.hpp&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — full include in header when forward declaration suffices</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;muscovite/dba/connection_pool.hpp&gt;</span><span class="pp">  </span><span class="co">// Only need reference/pointer</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade D+ in Qt framework (barely
+used), B in DBA framework. <strong>Generator files</strong>:
+<code>dba/unified.rkt</code> (header generation),
+<code>grpc/cpp-service-v2.rkt</code></p>
+<hr />
+<h2 id="10-headersource-separation">10. Header/Source Separation</h2>
+<p><strong>CANONICAL</strong>: Headers contain declarations only.
+Implementation goes in <code>.cpp</code> files. Exception: templates,
+constexpr, and trivial one-line getters.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — header: declaration only</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">// patient_command_repository.hpp</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandRepository <span class="op">{</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> insert<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">// patient_command_repository.cpp</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> PatientCommandRepository<span class="op">::</span>insert<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">)</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Full implementation here</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — inline in header for trivial getters and constexpr</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">constexpr</span> <span class="kw">auto</span> id<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="at">const</span> uuid<span class="op">&amp;</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">id_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — inline in header for templates</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span>DbEntity T<span class="op">&gt;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>T<span class="op">,</span> Error<span class="op">&gt;</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — substantial implementation in header</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">// entity_validator.hpp — 526 lines of implementation inline (actual framework file)</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EntityValidator <span class="op">{</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> validate<span class="op">(</span><span class="at">const</span> <span class="ex">QVariantMap</span><span class="op">&amp;</span> data<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ... 200 lines of validation logic ...</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Audit</strong>: Framework grades D+ — ~3,200 lines of
+implementation in headers. Worst offenders:
+<code>entity_validator.hpp</code> (526 lines),
+<code>entity_dialog_state_machine.hpp</code> (469 lines),
+<code>validation_result.hpp</code> (337 lines),
+<code>field_metadata.hpp</code> (378 lines). <strong>Generator
+files</strong>: <code>dba/unified.rkt</code> (generates proper split),
+framework <code>qt/</code> needs manual retrofit.</p>
+<hr />
+<h2 id="11-namespace-structure">11. Namespace Structure</h2>
+<p><strong>CANONICAL</strong>: Use nested namespaces (C++17). Follow
+project conventions strictly.</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — nested namespace declaration</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>dba<span class="op">::</span>patient <span class="op">{</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Patient <span class="kw">final</span> <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">};</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>  <span class="co">// namespace muscovite::dba::patient</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — anonymous namespace for file-local helpers in .cpp</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="op">{</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span> kMaxRetries <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>  <span class="co">// namespace</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — separate namespace blocks</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite <span class="op">{</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> dba <span class="op">{</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> patient <span class="op">{</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ...</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="op">}}}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade A — maintain.</p>
+<hr />
+<h2 id="12-memory-and-ownership">12. Memory and Ownership</h2>
+<p><strong>CANONICAL</strong>: Use value semantics by default. Smart
+pointers only when ownership transfer is needed. No raw
+<code>new</code>/<code>delete</code>.</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — value semantics (default)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> patient <span class="op">=</span> Patient<span class="op">{.</span>id <span class="op">=</span> uuid<span class="op">,</span> <span class="op">.</span>mrn <span class="op">=</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">};</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — std::unique_ptr for exclusive ownership</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> service <span class="op">=</span> <span class="bu">std::</span>make_unique<span class="op">&lt;</span>PatientCommandService<span class="op">&gt;(</span>pool<span class="op">);</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — std::shared_ptr only when genuinely shared</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> pool <span class="op">=</span> <span class="bu">std::</span>make_shared<span class="op">&lt;</span>ConnectionPool<span class="op">&gt;(</span>config<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — raw new/delete</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> patient <span class="op">=</span> <span class="kw">new</span> Patient<span class="op">();</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ... use ...</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">delete</span> patient<span class="op">;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — C-style memory management</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> buf <span class="op">=</span> <span class="op">(</span><span class="dt">char</span><span class="op">*)</span>malloc<span class="op">(</span>size<span class="op">);</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>free<span class="op">(</span>buf<span class="op">);</span></span></code></pre></div>
+<p><strong>Generator files</strong>: All DBA generators use value
+semantics — maintain.</p>
+<hr />
+<h2 id="13-c-legacy-elimination">13. C Legacy Elimination</h2>
+<p><strong>CANONICAL</strong>: Replace all C standard library functions
+with C++ equivalents.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — C++ equivalents</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cmath&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span> pi <span class="op">=</span> <span class="bu">std::</span>numbers::pi<span class="op">;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> distance <span class="op">=</span> <span class="bu">std::</span>sqrt<span class="op">(</span>dx <span class="op">*</span> dx <span class="op">+</span> dy <span class="op">*</span> dy<span class="op">);</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> n <span class="op">=</span> <span class="bu">std::</span>stoi<span class="op">(</span>str<span class="op">);</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> d <span class="op">=</span> <span class="bu">std::</span>stod<span class="op">(</span>str<span class="op">);</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — from_chars for performance-critical parsing (C++17)</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> value<span class="op">{};</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> <span class="op">[</span>ptr<span class="op">,</span> ec<span class="op">]</span> <span class="op">=</span> <span class="bu">std::</span>from_chars<span class="op">(</span>str<span class="op">.</span>data<span class="op">(),</span> str<span class="op">.</span>data<span class="op">()</span> <span class="op">+</span> str<span class="op">.</span>size<span class="op">(),</span> value<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — C math constants</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define _USE_MATH_DEFINES</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cmath&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> circumference <span class="op">=</span> <span class="fl">2.0</span> <span class="op">*</span> M_PI <span class="op">*</span> radius<span class="op">;</span>  <span class="co">// Use std::numbers::pi</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — C string functions</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> len <span class="op">=</span> strlen<span class="op">(</span>str<span class="op">);</span>      <span class="co">// Use str.size()</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> cmp <span class="op">=</span> strcmp<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span>     <span class="co">// Use a == b or a &lt;=&gt; b</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>sprintf<span class="op">(</span>buf<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> value<span class="op">);</span>   <span class="co">// Use std::format</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — atoi/atof (no error reporting)</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> n <span class="op">=</span> atoi<span class="op">(</span>str<span class="op">);</span>  <span class="co">// Use std::stoi or std::from_chars</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade A for most code, but
+<code>proto_type_converters.hpp</code> (416 lines) uses C89-style
+function signatures and manual buffer construction — needs full rewrite.
+<strong>Generator files</strong>: <code>grpc/cpp-service-v2.rkt</code>
+(proto converter generation)</p>
+<hr />
+<h2 id="14-sql-query-management">14. SQL Query Management</h2>
+<p><strong>CANONICAL</strong>: Extract SQL queries to
+<code>static constexpr pqxx::zview</code> constants at class scope or
+file scope. Never inline SQL in method bodies.</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — extracted SQL constant</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandRepository <span class="op">{</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">constexpr</span> <span class="kw">auto</span> kInsertSql <span class="op">=</span> pqxx<span class="op">::</span>zview<span class="op">{</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;INSERT INTO patient.patient (id, mrn, family_name, active) &quot;</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;VALUES ($1, $2, $3, $4) &quot;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;RETURNING id&quot;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> insert<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">)</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span>kInsertSql<span class="op">,</span> req<span class="op">.</span>id<span class="op">,</span> req<span class="op">.</span>mrn<span class="op">,</span> req<span class="op">.</span>family_name<span class="op">,</span> req<span class="op">.</span>active<span class="op">);</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ...</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — inline SQL strings in method bodies</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSERT INTO patient.patient (id, mrn, family_name, active) &quot;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;VALUES ($1, $2, $3, $4) RETURNING id&quot;</span><span class="op">,</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    req<span class="op">.</span>id<span class="op">,</span> req<span class="op">.</span>mrn<span class="op">,</span> req<span class="op">.</span>family_name<span class="op">,</span> req<span class="op">.</span>active<span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade B- — many queries still inline.
+<strong>Generator files</strong>: <code>dba/unified.rkt</code>
+(repository SQL generation)</p>
+<hr />
+<h2 id="15-duplicate-code-elimination">15. Duplicate Code
+Elimination</h2>
+<p><strong>CANONICAL</strong>: Factor out utility functions to shared
+locations. No copy-paste across generators.</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — single uuid_to_string utility</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">// In muscovite/dba/conversions.hpp</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">inline</span> <span class="kw">auto</span> uuid_to_string<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="kw">noexcept</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>string</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">);</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — shared proto conversion utilities</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">// In muscovite/grpc/type_mapping.hpp</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> from_proto_uuid<span class="op">(</span><span class="at">const</span> muscovite<span class="op">::</span>common<span class="op">::</span>UUID<span class="op">&amp;</span> proto<span class="op">)</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="ex">boost::</span>uuids::uuid<span class="op">;</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> to_proto_uuid<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> muscovite<span class="op">::</span>common<span class="op">::</span>UUID<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — duplicated uuid_to_string across files</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">// patient_service.cpp</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> str <span class="op">=</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">);</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">// encounter_service.cpp — same code repeated</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> str <span class="op">=</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: <code>uuid_to_string</code> duplicated in
+multiple generated service files. Proto type converters duplicated
+across contexts instead of shared. <strong>Generator files</strong>:
+<code>grpc/cpp-service-v2.rkt</code>, <code>dba/unified.rkt</code></p>
+<hr />
+<h2 id="16-include-guards">16. Include Guards</h2>
+<p><strong>CANONICAL</strong>: Use <code>#pragma once</code> for all
+headers. Muscovite already uses this consistently — maintain.</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma once</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ...</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — traditional include guards</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef MUSCOVITE_DBA_PATIENT_HPP</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MUSCOVITE_DBA_PATIENT_HPP</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">// ...</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade B- — consistent
+<code>#pragma once</code> but <code>#include</code> ordering is
+inconsistent.</p>
+<p><strong>CANONICAL include order</strong> (enforced by
+clang-format):</p>
+<ol type="1">
+<li>Corresponding header (for <code>.cpp</code> files)</li>
+<li>Project headers (<code>muscovite/...</code>)</li>
+<li>Third-party headers (<code>boost/...</code>, <code>pqxx/...</code>,
+<code>grpc++/...</code>)</li>
+<li>Standard library headers (<code>&lt;string&gt;</code>,
+<code>&lt;vector&gt;</code>, ...)</li>
+</ol>
+<hr />
+<h2 id="17-natsmessaging-patterns-framework">17. NATS/Messaging Patterns
+(Framework)</h2>
+<p><strong>CANONICAL</strong>: RAII wrappers for NATS resources.
+<code>std::expected</code> for messaging errors.</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — RAII wrapper for NATS connection</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NatsConnection <span class="op">{</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> NatsConnection<span class="op">(</span><span class="at">const</span> NatsConfig<span class="op">&amp;</span> config<span class="op">);</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">~</span>NatsConnection<span class="op">();</span>  <span class="co">// Calls natsConnection_Destroy</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    NatsConnection<span class="op">(</span><span class="at">const</span> NatsConnection<span class="op">&amp;)</span> <span class="op">=</span> <span class="kw">delete</span><span class="op">;</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    NatsConnection<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">=(</span><span class="at">const</span> NatsConnection<span class="op">&amp;)</span> <span class="op">=</span> <span class="kw">delete</span><span class="op">;</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    NatsConnection<span class="op">(</span>NatsConnection<span class="op">&amp;&amp;)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    NatsConnection<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">=(</span>NatsConnection<span class="op">&amp;&amp;)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> publish<span class="op">(</span><span class="bu">std::</span>string_view subject<span class="op">,</span> <span class="bu">std::</span>string_view data<span class="op">)</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span><span class="dt">void</span><span class="op">,</span> NatsError<span class="op">&gt;;</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — raw NATS handles without RAII</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>natsConnection<span class="op">*</span> conn <span class="op">=</span> <span class="kw">nullptr</span><span class="op">;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>natsConnection_ConnectTo<span class="op">(&amp;</span>conn<span class="op">,</span> url<span class="op">);</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ... use ...</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>natsConnection_Destroy<span class="op">(</span>conn<span class="op">);</span>  <span class="co">// Leaked if exception thrown before this line</span></span></code></pre></div>
+<p><strong>Audit</strong>: Framework NATS code uses raw handles — needs
+RAII retrofit. <strong>Framework files</strong>:
+<code>framework/dba/include/muscovite/dba/nats_*.hpp</code></p>
+<hr />
+<h2 id="18-constexpr-where-possible">18. constexpr Where Possible</h2>
+<p><strong>CANONICAL</strong>: Use <code>constexpr</code> for
+compile-time evaluable functions, lookup table UUIDs, and configuration
+constants.</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — constexpr lookup constants (ADR 20260212)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> lookup<span class="op">::</span>saga_status <span class="op">{</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inline</span> <span class="kw">constexpr</span> <span class="kw">auto</span> pending <span class="op">=</span> <span class="ex">boost::</span>uuids::uuid<span class="op">{</span><span class="co">/* UUIDv5 bytes */</span><span class="op">};</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inline</span> <span class="kw">constexpr</span> <span class="kw">auto</span> completed <span class="op">=</span> <span class="ex">boost::</span>uuids::uuid<span class="op">{</span><span class="co">/* UUIDv5 bytes */</span><span class="op">};</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inline</span> <span class="kw">constexpr</span> <span class="kw">auto</span> failed <span class="op">=</span> <span class="ex">boost::</span>uuids::uuid<span class="op">{</span><span class="co">/* UUIDv5 bytes */</span><span class="op">};</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — constexpr for simple utilities</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">constexpr</span> <span class="kw">auto</span> is_nullable<span class="op">(</span>FieldSpec spec<span class="op">)</span> <span class="kw">noexcept</span> <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> spec<span class="op">.</span>nullable<span class="op">;</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — runtime constants that could be constexpr</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="kw">auto</span> max_page_size <span class="op">=</span> <span class="dv">100</span><span class="op">;</span>      <span class="co">// Should be constexpr</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="bu">std::</span>string table_name <span class="op">=</span> <span class="st">&quot;patient&quot;</span><span class="op">;</span>  <span class="co">// Should be constexpr string_view</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — runtime lookup for framework constants (ADR 20260212)</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> status_id <span class="op">=</span> query<span class="op">(</span><span class="st">&quot;SELECT id FROM saga_status WHERE code = &#39;completed&#39;&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade B- — constexpr header
+generation works, but not applied everywhere. <strong>Generator
+files</strong>: <code>cpp/lookup-constants.rkt</code></p>
+<hr />
+<h2 id="19-testing-patterns-doctest">19. Testing Patterns (doctest)</h2>
+<p><strong>CANONICAL</strong>: All new C++ tests MUST use doctest BDD
+macros (ADR 20260212). Catch2 for existing tests only.</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — doctest BDD for new tests</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;doctest/doctest.h&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>TEST_SUITE<span class="op">(</span><span class="st">&quot;dba::PatientRepository&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>SCENARIO<span class="op">(</span><span class="st">&quot;creating a patient&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    GIVEN<span class="op">(</span><span class="st">&quot;a valid create request&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> req <span class="op">=</span> CreatePatientRequest<span class="op">{</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>mrn <span class="op">=</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">,</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>family_name <span class="op">=</span> <span class="st">&quot;Smith&quot;</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>        WHEN<span class="op">(</span><span class="st">&quot;insert is called&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>            <span class="kw">auto</span> result <span class="op">=</span> repo<span class="op">.</span>insert<span class="op">(</span>txn<span class="op">,</span> req<span class="op">);</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>            THEN<span class="op">(</span><span class="st">&quot;a patient with a UUID is returned&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>                REQUIRE<span class="op">(</span>result<span class="op">.</span>has_value<span class="op">());</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>                CHECK<span class="op">(</span>result<span class="op">-&gt;</span>id<span class="op">()</span> <span class="op">!=</span> <span class="ex">boost::</span>uuids::nil_uuid<span class="op">());</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>                CHECK<span class="op">(</span>result<span class="op">-&gt;</span>mrn<span class="op">()</span> <span class="op">==</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">);</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>  <span class="co">// TEST_SUITE</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — Catch2 for new tests (existing tests may keep Catch2)</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;catch2/catch_all.hpp&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>TEST_CASE<span class="op">(</span><span class="st">&quot;PatientRepository&quot;</span><span class="op">,</span> <span class="st">&quot;[patient][dba]&quot;</span><span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — Google Test</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>TEST<span class="op">(</span>PatientRepository<span class="op">,</span> CreatePatient<span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="20-pqxx-api-usage">20. pqxx API Usage</h2>
+<p><strong>CANONICAL</strong>: Use modern pqxx 7.x API with
+<code>pqxx::params</code>.</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — pqxx::params (ADR 20251229)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> params <span class="op">=</span> pqxx<span class="op">::</span>params<span class="op">{</span>id<span class="op">,</span> mrn<span class="op">,</span> family_name<span class="op">};</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec<span class="op">(</span>kInsertSql<span class="op">,</span> params<span class="op">);</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — transaction types</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>pqxx<span class="op">::</span>work txn<span class="op">{</span>conn<span class="op">};</span>              <span class="co">// Read-write transaction (commands)</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>pqxx<span class="op">::</span>nontransaction ntxn<span class="op">{</span>conn<span class="op">};</span>   <span class="co">// Read-only (queries)</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — deprecated exec_params (ADR 20251229)</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span>sql<span class="op">,</span> id<span class="op">,</span> mrn<span class="op">,</span> family_name<span class="op">);</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — string interpolation in SQL</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;SELECT * FROM patient WHERE id = &#39;&quot;</span> <span class="op">+</span> id_str <span class="op">+</span> <span class="st">&quot;&#39;&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: <code>exec_params</code> fully eliminated
+(FTR-047 resolved). Maintain compliance. <strong>Generator
+files</strong>: <code>dba/unified.rkt</code></p>
+<hr />
+<h2 id="quick-reference-card">Quick Reference Card</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>✅ Use</th>
+<th>❌ Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error handling</td>
+<td><code>std::expected&lt;T, E&gt;</code></td>
+<td>Exceptions for expected failures</td>
+</tr>
+<tr>
+<td>Annotations</td>
+<td><code>[[nodiscard]]</code> on all return values</td>
+<td>Missing annotations</td>
+</tr>
+<tr>
+<td>noexcept</td>
+<td>On moves, getters, converters, <code>_opt</code></td>
+<td>Missing noexcept on moves</td>
+</tr>
+<tr>
+<td>Transforms</td>
+<td><code>views::transform | ranges::to&lt;&gt;()</code></td>
+<td><code>reserve</code> + <code>push_back</code> loops</td>
+</tr>
+<tr>
+<td>Bindings</td>
+<td><code>auto [a, b] = pair;</code></td>
+<td><code>.first</code> / <code>.second</code></td>
+</tr>
+<tr>
+<td>Constraints</td>
+<td><code>template&lt;DbEntity T&gt;</code> (concepts)</td>
+<td>Unconstrained templates, SFINAE</td>
+</tr>
+<tr>
+<td>Struct init</td>
+<td><code>Patient{.id = x, .mrn = y}</code></td>
+<td>Positional construction</td>
+</tr>
+<tr>
+<td>String params</td>
+<td><code>std::string_view</code></td>
+<td><code>const std::string&amp;</code> for non-owning</td>
+</tr>
+<tr>
+<td>Formatting</td>
+<td><code>std::format(...)</code></td>
+<td><code>fmt::format</code>, string concat</td>
+</tr>
+<tr>
+<td>SQL strings</td>
+<td><code>static constexpr pqxx::zview{...}</code></td>
+<td>Inline SQL in method bodies</td>
+</tr>
+<tr>
+<td>Math</td>
+<td><code>std::numbers::pi</code></td>
+<td><code>M_PI</code></td>
+</tr>
+<tr>
+<td>Parsing</td>
+<td><code>std::from_chars</code></td>
+<td><code>atoi</code>, <code>atof</code></td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Value semantics, <code>unique_ptr</code></td>
+<td>Raw <code>new</code>/<code>delete</code></td>
+</tr>
+<tr>
+<td>Headers</td>
+<td><code>#pragma once</code>, declarations only</td>
+<td>Implementation in headers</td>
+</tr>
+<tr>
+<td>Includes</td>
+<td>Forward-declare in headers</td>
+<td>Full include when fwd-decl suffices</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>doctest
+<code>SCENARIO</code>/<code>GIVEN</code>/<code>WHEN</code>/<code>THEN</code></td>
+<td>Catch2 for new tests</td>
+</tr>
+<tr>
+<td>pqxx</td>
+<td><code>exec()</code> + <code>pqxx::params{}</code></td>
+<td><code>exec_params()</code></td>
+</tr>
+<tr>
+<td>Constants</td>
+<td><code>constexpr</code> + <code>lookup::</code> namespace</td>
+<td>Runtime SELECT for known values</td>
+</tr>
+<tr>
+<td>NATS</td>
+<td>RAII wrappers</td>
+<td>Raw C handles</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="audit-commands">Audit Commands</h2>
+<p>Track modernization progress:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count reserve+push_back loops (should trend toward zero)</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;reserve(&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Count range usage (should trend upward)</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;std::ranges\|std::views&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count structured bindings (should trend upward)</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;auto \[&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing noexcept on moves</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;&amp;&amp;)&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> noexcept <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Concepts defined</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;concept &quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Deprecated exec_params (should be zero)</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;exec_params&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="co"># C legacy functions (should trend toward zero)</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;atoi\|atof\|sprintf\|strlen\|strcmp\|M_PI&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="co"># string_view adoption (should trend upward)</span></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;string_view&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Implementation in headers (non-inline, non-template, non-constexpr — manual review)</span></span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Focus on files &gt;200 lines:</span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> framework/ <span class="at">-name</span> <span class="st">&quot;*.hpp&quot;</span> <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">&#39;lines=$(wc -l &lt; &quot;$1&quot;); [ &quot;$lines&quot; -gt 200 ] &amp;&amp; echo &quot;$lines $1&quot;&#39;</span> _ {} <span class="dt">\;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div>
+<hr />
+<h2 id="generator-cross-reference">Generator Cross-Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Primary Generator</th>
+<th>Framework File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>std::expected</td>
+<td><code>dba/unified.rkt</code></td>
+<td><code>dba/repository.hpp</code></td>
+</tr>
+<tr>
+<td>[[nodiscard]]</td>
+<td><code>dba/unified.rkt</code></td>
+<td>— (generated only)</td>
+</tr>
+<tr>
+<td>noexcept</td>
+<td><code>dba/unified.rkt</code></td>
+<td><code>dba/*.hpp</code></td>
+</tr>
+<tr>
+<td>ranges/views</td>
+<td><code>dba/unified.rkt</code>,
+<code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>dba/*.cpp</code></td>
+</tr>
+<tr>
+<td>structured bindings</td>
+<td><code>dba/unified.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>concepts</td>
+<td>— (not yet)</td>
+<td><code>dba/repository.hpp</code> (planned)</td>
+</tr>
+<tr>
+<td>designated init</td>
+<td><code>dba/unified.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>string_view</td>
+<td><code>dba/unified.rkt</code>,
+<code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>dba/*.hpp</code></td>
+</tr>
+<tr>
+<td>constexpr SQL</td>
+<td><code>dba/unified.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>proto converters</td>
+<td><code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>grpc/type_mapping.hpp</code></td>
+</tr>
+<tr>
+<td>lookup constants</td>
+<td><code>cpp/lookup-constants.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>pqxx API</td>
+<td><code>dba/unified.rkt</code></td>
+<td><code>dba/repository.hpp</code></td>
+</tr>
+<tr>
+<td>NATS RAII</td>
+<td>— (framework only)</td>
+<td><code>dba/nats_*.hpp</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="priority-and-phasing">Priority and Phasing</h2>
+<p>Based on <a
+href="CPP-MODERNIZATION-PLAN.html">CPP-MODERNIZATION-PLAN.md</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Patterns</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0</strong></td>
+<td>§3 (ranges), §20 (pqxx)</td>
+<td>~30 loop sites, thread safety</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>§2b (noexcept), §9 (forward decl), §10 (header/source), §13 (C
+legacy)</td>
+<td>Build times, correctness</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>§7a (string_view), §5 (concepts), §14 (SQL extraction), §15
+(dedup)</td>
+<td>API quality</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td>§4 (structured bindings), §18 (constexpr)</td>
+<td>Modernization</td>
+</tr>
+<tr>
+<td><strong>P4</strong></td>
+<td>§16 (include order), §17 (NATS RAII)</td>
+<td>Polish</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents</h2>
+<ul>
+<li><a href="CPP23-COMPLIANCE-AUDIT.html">CPP23-COMPLIANCE-AUDIT.md</a> —
+Full audit of generated C++ output</li>
+<li><a href="CPP-MODERNIZATION-PLAN.html">CPP-MODERNIZATION-PLAN.md</a> —
+Master prioritized remediation plan</li>
+<li><a href="QT-WIDGETS-PATTERNS.html">QT-WIDGETS-PATTERNS.md</a> — Qt
+Widgets C++ patterns (companion)</li>
+<li><a href="QML-PATTERNS.html">QML-PATTERNS.md</a> — QML output
+patterns</li>
+<li><a href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> — Racket coding
+constraints</li>
+<li><a href="POSTGRES-PATTERNS.html">POSTGRES-PATTERNS.md</a> — PostgreSQL
+patterns</li>
+<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Canonical IR
+structs, type mappings</li>
+</ul>
+<hr />
+<p><em>This document is a constraint document, not a tutorial. For C++
+language reference, see <a
+href="https://en.cppreference.com/">cppreference.com</a>.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

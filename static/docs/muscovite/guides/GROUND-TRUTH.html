@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite Ground Truth
+Reference — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/guides/">guides</a>
+  <span class="sep">/</span>
+  <span>Muscovite Ground Truth Reference</span>
+</nav>
+
+<h1>Muscovite Ground Truth Reference</h1>
+
+
+<h1 id="muscovite-ground-truth-reference">Muscovite Ground Truth
+Reference</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Canonical reference for AI agents to
+prevent hallucinations. Documents the three-layer architecture, exact
+Racket structures, naming conventions, and type mappings.</p>
+</blockquote>
+<hr />
+<h2 id="0-three-layer-architecture-non-negotiable">0. Three-Layer
+Architecture (Non-Negotiable)</h2>
+<p>Muscovite enforces a strict three-layer hierarchy. <strong>Every
+change must respect this separation.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Name</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer 0</strong></td>
+<td>The Brain (Generator/IR)</td>
+<td><code>dslgen/</code> (Racket)</td>
+<td>Defines the DSL IR, owns all templates and code generation</td>
+</tr>
+<tr>
+<td><strong>Layer 1</strong></td>
+<td>The Framework</td>
+<td><code>framework/</code> (C++ base libraries)</td>
+<td>Reusable base infrastructure (Repository, UnitOfWork, errors,
+connections, messaging). <strong>No domain logic.</strong></td>
+</tr>
+<tr>
+<td><strong>Layer 2</strong></td>
+<td>Generated Applications</td>
+<td><code>examples/*/generated/</code></td>
+<td>100% generated from <code>.ddd</code> models. <strong>Never manually
+edited.</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="lockstep-development-mandatory">Lockstep Development
+(Mandatory)</h3>
+<p>When adding a DSL feature (Layer 0), you <strong>must</strong>:</p>
+<ol type="1">
+<li>Update <strong>Layer 1 framework</strong> if new base behavior is
+needed</li>
+<li>Update <strong>Layer 0 templates</strong> to generate Layer 2 code
+that uses it</li>
+<li>Regenerate samples (Layer 2)</li>
+</ol>
+<h3 id="layer-mapping-ir--framework--generated-code">Layer Mapping: IR →
+Framework → Generated Code</h3>
+<table>
+<thead>
+<tr>
+<th>IR Struct</th>
+<th>Layer 1 Base</th>
+<th>Layer 2 Generated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entity</code></td>
+<td><code>Repository</code> base (<a
+href="../framework/dba/include/muscovite/dba/repository.hpp">framework/dba/.../repository.hpp</a>)</td>
+<td>Entity struct (e.g., <code>patient.hpp</code>)</td>
+</tr>
+<tr>
+<td><code>aggregate</code></td>
+<td><code>UnitOfWork</code> (<a
+href="../framework/dba/include/muscovite/dba/unit_of_work.hpp">framework/dba/.../unit_of_work.hpp</a>),
+<code>ValidationErrors</code> (<a
+href="../framework/validation/include/muscovite/validation/validation_errors.hpp">framework/validation/.../validation_errors.hpp</a>)</td>
+<td><code>*CommandService</code> / <code>*QueryService</code> /
+<code>*DomainService</code> classes</td>
+</tr>
+<tr>
+<td><code>repository</code></td>
+<td><code>RepositoryBase</code></td>
+<td><code>*CommandRepository</code> / <code>*QueryRepository</code></td>
+</tr>
+<tr>
+<td><code>domain-event</code></td>
+<td><code>DomainEvent</code> struct in UnitOfWork,
+<code>Publisher</code> (<a
+href="../framework/messaging/include/muscovite/messaging/publisher.hpp">framework/messaging/.../publisher.hpp</a>)</td>
+<td><code>domain_events</code> table + emission in services</td>
+</tr>
+<tr>
+<td><code>sourced-event</code></td>
+<td><em>(no framework base)</em></td>
+<td>Generated EventStore per aggregate</td>
+</tr>
+<tr>
+<td><code>state-machine</code></td>
+<td><em>(no framework base)</em></td>
+<td><code>*StateMachine</code> C++ class, state lookup tables,
+transition log, gRPC RPCs, Qt state-aware UI</td>
+</tr>
+<tr>
+<td><code>entity</code> + <code>display-format</code></td>
+<td><em>(no framework base)</em></td>
+<td>QML ViewModels with <code>Q_PROPERTY</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="i-core-racket-structures-dslgenmodelddd-typesrkt">I. Core Racket
+Structures (dslgen/model/ddd-types.rkt)</h2>
+<h3 id="1-bounded-context">1. Bounded Context</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> bounded-context</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid          <span class="co">; String: stable UUID for semantic diff</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>   name           <span class="co">; Symbol: context name</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   sqitch-project <span class="co">; String or #f: override sqitch project name</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   builtin?       <span class="co">; Boolean: #t if framework-provided (Security, Spatial)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   aggregates     <span class="co">; List of aggregate</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   entities       <span class="co">; List of entity: standalone entities NOT in aggregates</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   repositories   <span class="co">; List of repository</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   services       <span class="co">; List of domain-service</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   events         <span class="co">; List of domain-event (messaging/side effects)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>   sourced-events <span class="co">; List of sourced-event (event sourcing)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   specifications <span class="co">; List of specification</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   policies       <span class="co">; List of policy</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   sagas          <span class="co">; List of saga</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>   state-machines <span class="co">; List of state-machine: entity lifecycle graphs (ADR 20260221)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>   lookup-tables  <span class="co">; List of lookup-table</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   value-objects  <span class="co">; List of value-object</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>   strong-types   <span class="co">; List of strong-type (PostgreSQL DOMAIN)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>   projections    <span class="co">; List of projection (CQRS read models)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   context-defaults <span class="co">; List of context-default</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>   grounding      <span class="co">; grounding or #f: AI context anchoring</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>           <span class="co">; String or #f: documentation</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>make-bounded-context name</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  #:uuid <span class="op">[</span>uuid <span class="op">(</span>generate-uuid<span class="op">)]</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  #:aggregates <span class="op">[</span>aggregates &#39;<span class="op">()]</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  #:entities <span class="op">[</span>entities &#39;<span class="op">()]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ...<span class="op">)</span></span></code></pre></div>
+<h3 id="2-entity">2. Entity</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> entity</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid         <span class="co">; String: stable UUID for semantic diff</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   name         <span class="co">; Symbol: entity name</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   id-field     <span class="co">; field: the identity field (always named &#39;id)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>   fields       <span class="co">; List of field: non-id fields (own fields only)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>   invariants   <span class="co">; List of invariant: CHECK constraints</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>   commands     <span class="co">; List of command</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>   doc          <span class="co">; String or #f: documentation</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>   synonyms     <span class="co">; List of String: alternative names</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>   parent-name  <span class="co">; Symbol or #f: parent entity for TPT inheritance</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>   metadata     <span class="co">; ent-metadata: relationships, indexes, hooks</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   seed         <span class="co">; seed-data or #f: optional test data</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>   seed-import  <span class="co">; seed-import or #f: CSV/JSON import</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>   display-formats <span class="co">; List of display-format: UI display patterns</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>   uses-value-objects  <span class="co">; List of uses-value-object: @inline mixins</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>   has-value-objects   <span class="co">; List of has-value-object: @owned/@shared refs</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>   instructions        <span class="co">; List of instruct-spec: embedded AI prompts</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>   concurrency         <span class="co">; concurrency-config or #f: locking strategy (ADR 20260215)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>   bitemporal          <span class="co">; bitemporal-config or #f: temporal tracking strategy (FTR-107)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>   source<span class="op">)</span>             <span class="co">; String or #f: external reference traceability (@SOURCE, FTR-087)</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Key invariants</strong>:</p>
+<ul>
+<li><code>id-field</code> is always first, always named <code>id</code>,
+always UUID</li>
+<li><code>fields</code> contains only own fields (no inherited
+fields)</li>
+<li>TPT: Use <code>parent-name</code> to link child → parent</li>
+</ul>
+<h3 id="3-field-constraint-ftr-261">3. Field Constraint (FTR-261)</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> field-constraint</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>kind       <span class="co">; Symbol: &#39;min, &#39;max, &#39;not-empty, &#39;not-in-future, &#39;not-in-past, &#39;pattern</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   value      <span class="co">; Number, String, or #f: constraint argument</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>   relative?<span class="op">)</span> <span class="co">; Boolean: #f = per-field, #t = cross-field (FTR-262)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Kind values</strong>: <code>'min</code> (numeric lower
+bound), <code>'max</code> (numeric upper bound), <code>'not-empty</code>
+(string/collection guard), <code>'not-in-future</code> (temporal upper
+bound), <code>'not-in-past</code> (temporal lower bound),
+<code>'pattern</code> (regex validation).</p>
+<h3 id="4-field">4. Field</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> field</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid        <span class="co">; String: stable UUID for rename tracking</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   name        <span class="co">; Symbol: field name (snake_case)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   type        <span class="co">; type-spec: the type</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   constraints <span class="co">; List of field-constraint structs (FTR-261)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   doc         <span class="co">; String or #f: field documentation</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   required?   <span class="co">; Boolean: from @required (NOT NULL)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   unique?     <span class="co">; Boolean: from @unique (UNIQUE constraint)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>   spatial-queryable? <span class="co">; Boolean: generates spatial query RPCs</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   searchable? <span class="co">; Boolean: from @searchable (OpenSearch index, FTR-112)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>   source<span class="op">)</span>     <span class="co">; String or #f: external reference traceability (@SOURCE, FTR-087)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>make-field name type-name </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  #:uuid <span class="op">[</span>uuid <span class="op">(</span>generate-uuid<span class="op">)]</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  #:required? <span class="op">[</span>required? <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  #:unique? <span class="op">[</span>unique? <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  #:spatial-queryable? <span class="op">[</span>spatial-queryable? <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  #:searchable? <span class="op">[</span>searchable? <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ...<span class="op">)</span></span></code></pre></div>
+<h3 id="5-type-spec">5. Type Spec</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> type-spec</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name          <span class="co">; Symbol: type name (UUID, String, Email, etc.)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>   nullable?     <span class="co">; Boolean: can be null (from `?` marker)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   collection?   <span class="co">; Boolean: is array (from `[]` marker)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>   precision     <span class="co">; Integer or #f: for DECIMAL(p,s)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>   scale         <span class="co">; Integer or #f: for DECIMAL(p,s)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>   srid<span class="op">)</span>         <span class="co">; Integer or #f: for geospatial (default 4326)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<h3 id="6-relationship">6. Relationship</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> relationship</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid         <span class="co">; String: stable UUID</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>   name         <span class="co">; Symbol: relationship name (role)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   direction    <span class="co">; Symbol: &#39;to-one | &#39;to-many | &#39;many-to-many</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>   target-entity<span class="co">; Symbol: target entity name</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>   target-context <span class="co">; Symbol or #f: qualified refs like Basedata.Status</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>   required?    <span class="co">; Boolean: NOT NULL FK (REQUIRED vs OPTIONAL)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>   multiplicity <span class="co">; Symbol: &#39;one or &#39;many</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>   min-count    <span class="co">; Integer or #f: minimum count</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   max-count    <span class="co">; Integer or #f: maximum count</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>   inverse-name <span class="co">; Symbol or #f: inverse relationship name</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>   via-field    <span class="co">; Symbol or #f: FK field name</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>   cascade?     <span class="co">; Boolean: cascade delete</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>   embedded?<span class="op">)</span>   <span class="co">; Boolean: child shown embedded in parent UI</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Critical rule</strong>: Relationships are
+<strong>explicit-only</strong> (ADR 20260106). No inference from
+<code>_id</code> naming.</p>
+<h3 id="7-aggregate">7. Aggregate</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> aggregate</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid           <span class="co">; String: stable UUID</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>   name           <span class="co">; Symbol: aggregate name</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>   root           <span class="co">; entity: the aggregate root</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>   entities       <span class="co">; List of entity: child entities</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>   value-objects  <span class="co">; List of value-object: embedded VOs</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>   event-sourced? <span class="co">; Boolean: uses event sourcing (ADR 20260204)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    layouts        <span class="co">; List of layout-spec: UI layout directives by form-factor (FTR-070)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>   concurrency    <span class="co">; concurrency-config or #f: locking strategy (ADR 20260215)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>   grpc-deadline  <span class="co">; String or #f: per-aggregate gRPC deadline (FTR-231, ADR 20260228)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>   doc            <span class="co">; String or #f: documentation</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>   source<span class="op">)</span>        <span class="co">; String or #f: external reference traceability (@SOURCE, FTR-087)</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<h3 id="8-value-object">8. Value Object</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> value-object</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid           <span class="co">; String: stable UUID</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>   name           <span class="co">; Symbol: value object name</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>   fields         <span class="co">; List of field</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>   invariants     <span class="co">; List of invariant</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>   doc            <span class="co">; String or #f</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>   synonyms       <span class="co">; List of String</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>   storage-mode   <span class="co">; Symbol: &#39;inline | &#39;owned | &#39;shared</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>   computed-fields<span class="co">; List of computed-field</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>   immutable-fields<span class="co">; List of Symbol: preserved on UPDATE</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>   natural-key    <span class="co">; List of Symbol or #f: for @shared</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>   source<span class="op">)</span>        <span class="co">; String or #f: external reference traceability (@SOURCE, FTR-087)</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Storage modes</strong> (ADR 20260117):</p>
+<ul>
+<li><code>'inline</code>: Fields flattened into parent table
+(mixin)</li>
+<li><code>'owned</code>: Child table with CASCADE delete</li>
+<li><code>'shared</code>: Dimension/lookup table (star schema)</li>
+</ul>
+<h3 id="9-strong-type-postgresql-domain">9. Strong Type (PostgreSQL
+DOMAIN)</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> strong-type</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid        <span class="co">; String: stable UUID</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>   name        <span class="co">; Symbol: type name (e.g., &#39;Email)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>   base-type   <span class="co">; Symbol: underlying type (TEXT, DECIMAL, INTEGER)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>   checks      <span class="co">; List of strong-type-check: CHECK constraints</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   default     <span class="co">; String or #f: default value expression</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>        <span class="co">; String or #f: documentation</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Examples</strong>: Email, Phone, PostalCode, PositiveDecimal,
+Latitude, Longitude</p>
+<h3 id="10-lookup-table-first-class">10. Lookup Table (First-Class)</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> lookup-table</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid          <span class="co">; String: stable UUID</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>   name          <span class="co">; Symbol: table name</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>   extra-fields  <span class="co">; List of field: beyond standard columns</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>   seed-path     <span class="co">; String: path to JSON/CSV</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>   seed-format   <span class="co">; Symbol: &#39;json or &#39;csv</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>   doc           <span class="co">; String or #f</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>   base-path     <span class="co">; String or #f: for path resolution</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>   source<span class="op">)</span>       <span class="co">; String or #f: external reference traceability (@SOURCE, FTR-087)</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Standard columns</strong> (auto-generated):</p>
+<ul>
+<li><code>id</code> (UUID PRIMARY KEY)</li>
+<li><code>code</code> (TEXT NOT NULL UNIQUE)</li>
+<li><code>display</code> (TEXT NOT NULL)</li>
+<li><code>definition</code> (TEXT)</li>
+<li><code>is_active</code> (BOOLEAN NOT NULL DEFAULT true)</li>
+<li><code>sort_order</code> (INTEGER)</li>
+</ul>
+<h3 id="11-sourced-event-event-sourcing">11. Sourced Event (Event
+Sourcing)</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> sourced-event</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid        <span class="co">; String: stable UUID</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   name        <span class="co">; Symbol: event name (PatientRegistered)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>   fields      <span class="co">; List of field: payload fields</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>   applies-to  <span class="co">; Symbol: aggregate name</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>        <span class="co">; String or #f</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Per ADR 20260204</strong>: Typed event tables (no
+JSON/JSONB), dual-write (events + snapshot + entity table).</p>
+<h3 id="12-layout-spec-ui-layout-directives">12. Layout Spec (UI Layout
+Directives)</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> layout-spec</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>form-factor    <span class="co">; Symbol or #f: &#39;desktop | &#39;tablet | &#39;mobile | &#39;watch | &#39;embedded | #f</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>     master         <span class="co">; master-spec or #f: table column selection</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     detail<span class="op">)</span>        <span class="co">; detail-spec or #f: form style/grouping</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-layout-spec #:form-factor [form-factor #f] #:master [master #f] #:detail [detail #f])</code></p>
+<p><strong>Resolution</strong>:
+<code>resolve-layout-for-form-factor</code>,
+<code>resolve-desktop-layout</code>, <code>resolve-mobile-layout</code>,
+<code>resolve-tablet-layout</code></p>
+<p><strong>Backward compatibility</strong>:
+<code>aggregate-layout</code> remains as a compatibility accessor and
+resolves desktop → unqualified fallback.</p>
+<h3 id="13-master-spec">13. Master Spec</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> master-spec</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>columns<span class="op">)</span>       <span class="co">; List of Symbol: visible columns for table view</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-master-spec columns)</code></p>
+<h3 id="14-detail-spec">14. Detail Spec</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> detail-spec</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>style          <span class="co">; Symbol: &#39;form | &#39;sidebar | &#39;card | &#39;wizard</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>   grouping       <span class="co">; Symbol: &#39;tabs | &#39;sections | &#39;accordion | &#39;flat</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>   actions        <span class="co">; List of Symbol: action button names</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>   children<span class="op">)</span>      <span class="co">; List of child-tab-spec: child entity tab configuration (FTR-103)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-detail-spec #:style [style 'form] #:grouping [grouping 'tabs] #:actions [actions '()] #:children [children '()])</code></p>
+<h3 id="14a-child-tab-spec-ftr-103">14a. Child Tab Spec (FTR-103)</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> child-tab-spec</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity-name   <span class="co">; Symbol: child entity name (e.g., &#39;TodoComment)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>   label<span class="op">)</span>        <span class="co">; String or #f: custom tab label (e.g., &quot;Comments&quot;), #f = use entity name</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>DSL syntax</strong>:
+<code>CHILDREN: [TodoComment as "Comments"];</code>
+<strong>Purpose</strong>: Provides custom UI tab/section labels for
+embedded child entities in master-detail views.</p>
+<h3 id="15-target-config-dslgentargetstarget-configrkt">15. Target
+Config (dslgen/targets/target-config.rkt)</h3>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> target-config</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name               <span class="co">; Symbol: e.g., &#39;qt-widgets-desktop</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>   form-factor        <span class="co">; Symbol: &#39;desktop | &#39;mobile | &#39;tablet</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>   language           <span class="co">; Symbol: &#39;cpp | &#39;qml</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>   detail-styles      <span class="co">; Hash: style-symbol → String (widget class)</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>   detail-groupings   <span class="co">; Hash: grouping-symbol → String (container widget)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>   action-placements  <span class="co">; Hash: placement-symbol → String (action widget)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>   constraints<span class="op">)</span>       <span class="co">; Hash: constraint-key → value</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Resolution functions</strong>:
+<code>resolve-detail-style</code>, <code>resolve-detail-grouping</code>,
+<code>resolve-master-columns</code>,
+<code>resolve-action-placement</code>,
+<code>default-layout-for-target</code>,
+<code>merge-target-configs</code></p>
+<p><strong>Available targets</strong>: <code>qt-widgets-desktop</code>
+(QFormLayout/QTabWidget), <code>qt-qml-desktop</code>
+(ColumnLayout/TabBar)</p>
+<h3 id="16-state-machine-adr-20260221">16. State Machine (ADR
+20260221)</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> state-machine</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid            <span class="co">; String: stable UUID for semantic diff</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>   name            <span class="co">; Symbol: state machine name (e.g., &#39;OrderLifecycle)</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>   for-entity      <span class="co">; Symbol: target entity name (e.g., &#39;Order)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>   states          <span class="co">; List of sm-state: all declared states</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>   transitions     <span class="co">; List of sm-transition: all directed edges</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>   initial-state   <span class="co">; Symbol: the initial state name</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>   terminal-states <span class="co">; List of Symbol: terminal state names</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>   enforce-at-db?  <span class="co">; Boolean: #t if ENFORCE_AT DB_LEVEL (generates guard trigger, FTR-126)</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>            <span class="co">; String or #f: documentation</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-state-machine name for-entity #:uuid [...] #:states ['()] #:transitions ['()] #:initial-state [#f] #:terminal-states ['()] #:enforce-at-db? [#f] #:doc [#f])</code></p>
+<p><strong>Key invariants</strong>:</p>
+<ul>
+<li>Context-level construct (like Saga), not entity-inline</li>
+<li><code>for-entity</code> must reference an entity in the same
+context</li>
+<li><code>initial-state</code> must name exactly one state</li>
+<li><code>terminal-states</code> must name at least one state</li>
+<li>Validation enforces: reachability, no orphan transitions,
+determinism (no duplicate from+event pairs)</li>
+<li>When <code>enforce-at-db?</code> is <code>#t</code>, generates:
+<code>{entity}_allowed_transition</code> table, PL/pgSQL validation
+function, <code>BEFORE UPDATE</code> trigger, and pgTAP test file</li>
+</ul>
+<h3 id="16a-sm-state">16a. SM State</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> sm-state</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name          <span class="co">; Symbol: state name (e.g., &#39;Draft, &#39;Submitted)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>   entry-action  <span class="co">; Symbol or #f: action invoked on state entry</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>   exit-action   <span class="co">; Symbol or #f: action invoked on state exit</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>          <span class="co">; String or #f: documentation</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-sm-state name #:entry-action [#f] #:exit-action [#f] #:doc [#f])</code></p>
+<h3 id="16b-sm-transition">16b. SM Transition</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> sm-transition</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>from-state    <span class="co">; Symbol: source state name</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>   to-state      <span class="co">; Symbol: target state name</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>   event         <span class="co">; Symbol: triggering event name</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">guard</span>         <span class="co">; String or #f: guard expression (SQL-compatible)</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>   action        <span class="co">; Symbol or #f: action invoked on transition</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>          <span class="co">; String or #f: documentation</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-sm-transition from-state to-state event #:guard [#f] #:action [#f] #:doc [#f])</code></p>
+<p><strong>Generated artifacts per state machine</strong>: | Layer |
+Artifact | |-------|----------| | PostgreSQL |
+<code>{entity}_state</code> lookup table + <code>current_state_id</code>
+FK on entity + <code>{entity}_state_transition_log</code> table | |
+PostgreSQL (ENFORCE_AT DB_LEVEL) |
+<code>{entity}_allowed_transition</code> table +
+<code>{entity}_validate_transition()</code> PL/pgSQL function +
+<code>BEFORE UPDATE</code> trigger (FTR-126) | | C++ Lookup |
+<code>lookup::{entity}_state::*</code> compile-time UUIDv5 constants | |
+C++ DBA | <code>{Entity}StateMachine</code> class with
+<code>can_transition()</code>, <code>transition()</code>,
+<code>allowed_transitions()</code> | | gRPC |
+<code>{Entity}StateMachineService</code> with
+<code>TransitionState</code>, <code>GetAllowedTransitions</code>,
+<code>GetStateTransitionLog</code> RPCs | | Qt Widgets |
+<code>{Entity}StateWidget</code> with state display + event buttons | |
+QML | <code>{Entity}StateViewModel</code> +
+<code>{Entity}StatePanel.qml</code> | | Docs | Mermaid
+<code>stateDiagram-v2</code> (standalone <code>.mmd</code> + inline
+AsciiDoc) | | pgTAP (ENFORCE_AT DB_LEVEL) |
+<code>{entity}_state_machine_guard_test.sql</code> — runtime trigger
+validation (FTR-126) |</p>
+<hr />
+<h3 id="17-bitemporal-config-ftr-107-adr-20260221">17. Bitemporal Config
+(FTR-107, ADR 20260221)</h3>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> bitemporal-config</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>valid-from-field  <span class="co">; Symbol: name of valid-time start column (e.g., &#39;valid_from)</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>   valid-to-field    <span class="co">; Symbol: name of valid-time end column (e.g., &#39;valid_to)</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>   system-versioned? <span class="co">; Boolean: #t if SYSTEM_TIME AUTO is specified</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>   granularity<span class="op">)</span>      <span class="co">; Symbol: &#39;second | &#39;millisecond | &#39;microsecond (default &#39;microsecond)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p><strong>Constructor</strong>:
+<code>(make-bitemporal-config valid-from valid-to #:system-versioned? [#f] #:granularity ['microsecond])</code></p>
+<p><strong>Entity field</strong>: <code>entity</code> struct has
+<code>bitemporal</code> field — <code>bitemporal-config</code> or
+<code>#f</code>.</p>
+<p><strong>Key invariants</strong>:</p>
+<ul>
+<li>Entity-level inline clause (like CONCURRENCY), not
+context-level</li>
+<li><code>valid-from-field</code> and <code>valid-to-field</code> must
+not conflict with other entity field names</li>
+<li>System-versioning (<code>SYSTEM_TIME AUTO</code>) adds
+<code>system_from</code> + <code>system_to</code> TIMESTAMPTZ
+columns</li>
+<li>Without system-versioning, only valid-time columns are
+generated</li>
+</ul>
+<p><strong>Generated artifacts per bitemporal entity</strong>: | Layer |
+Artifact | |-------|----------| | PostgreSQL |
+<code>{valid_from}</code>, <code>{valid_to}</code> TIMESTAMPTZ columns
+(+ <code>system_from</code>, <code>system_to</code> if system-versioned)
+| | PostgreSQL | <code>btree_gist</code> extension,
+<code>EXCLUDE USING GIST (id WITH =, tstzrange({valid_from}, {valid_to}) WITH &amp;&amp;)</code>
+constraint | | PostgreSQL | System-time trigger:
+<code>system_from = NOW()</code> on INSERT, close+reopen on UPDATE | |
+C++ DBA | <code>find_as_of(id, valid_at)</code> temporal point query
+(valid-time lookup) | | C++ DBA |
+<code>find_as_of(id, valid_at, system_at)</code> bitemporal point query
+(system-versioned only) | | C++ DBA | <code>find_history(id)</code> full
+valid-time history | | C++ DBA | <code>find_corrections(id)</code> audit
+trail via system time (system-versioned only) | | gRPC |
+<code>valid_at</code> + <code>system_at</code> optional Timestamp fields
+on <code>GetXxxRequest</code> | | gRPC |
+<code>GetHistory{Xxx}Request/Response</code> messages +
+<code>GetHistoryXxx</code> RPC | | Qt QML ViewModel |
+<code>Q_PROPERTY(QDateTime validAt)</code> +
+<code>Q_PROPERTY(QDateTime systemAt)</code> (system-versioned only)
+|</p>
+<hr />
+<h2 id="ii-naming-conventions">II. Naming Conventions</h2>
+<h3 id="the-contract-dsl--all-layers">The Contract: DSL → All
+Layers</h3>
+<p>Given DSL entity <code>Patient</code> in context
+<code>PatientContext</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Artifact</th>
+<th>Naming Rule</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>Schema</td>
+<td><code>symbol-&gt;sql-id</code> (snake_case)</td>
+<td><code>patient</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Table</td>
+<td><code>symbol-&gt;sql-id</code> (snake_case)</td>
+<td><code>patient</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Column</td>
+<td><code>symbol-&gt;sql-id</code> (snake_case)</td>
+<td><code>family_name</code></td>
+</tr>
+<tr>
+<td></td>
+<td>API Schema</td>
+<td><code>{schema}_api</code></td>
+<td><code>patient_api</code></td>
+</tr>
+<tr>
+<td><strong>C++ DBA</strong></td>
+<td>Namespace</td>
+<td><code>symbol-&gt;cpp-namespace</code> (snake_case)</td>
+<td><code>patient::dba</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Class</td>
+<td><code>symbol-&gt;cpp-class</code> (PascalCase)</td>
+<td><code>Patient</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Member</td>
+<td><code>symbol-&gt;cpp-member</code> (snake_case_)</td>
+<td><code>family_name_</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Filename</td>
+<td><code>symbol-&gt;cpp-filename</code> (snake_case)</td>
+<td><code>patient.hpp</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Repository</td>
+<td><code>{Class}Repository</code></td>
+<td><code>PatientRepository</code></td>
+</tr>
+<tr>
+<td></td>
+<td>CommandService</td>
+<td><code>{Class}CommandService</code></td>
+<td><code>PatientCommandService</code></td>
+</tr>
+<tr>
+<td></td>
+<td>QueryService</td>
+<td><code>{Class}QueryService</code></td>
+<td><code>PatientQueryService</code></td>
+</tr>
+<tr>
+<td></td>
+<td>DomainService</td>
+<td><code>{Class}DomainService</code></td>
+<td><code>PatientDomainService</code></td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td>Service</td>
+<td><code>{Class}Service</code></td>
+<td><code>PatientService</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Message</td>
+<td><code>symbol-&gt;proto-message</code> (PascalCase)</td>
+<td><code>Patient</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Field</td>
+<td><code>symbol-&gt;proto-field</code> (snake_case)</td>
+<td><code>family_name</code></td>
+</tr>
+<tr>
+<td></td>
+<td>RPC</td>
+<td><code>symbol-&gt;proto-rpc</code> (PascalCase)</td>
+<td><code>CreatePatient</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Filename</td>
+<td><code>symbol-&gt;proto-filename</code> (snake_case.proto)</td>
+<td><code>patient.proto</code></td>
+</tr>
+<tr>
+<td><strong>Qt Widgets</strong></td>
+<td>Class</td>
+<td><code>{Class}EditDialog</code></td>
+<td><code>PatientEditDialog</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Member</td>
+<td><code>symbol-&gt;cpp-member</code> (snake_case_)</td>
+<td><code>familyName_</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Signal</td>
+<td><code>{property}Changed</code></td>
+<td><code>familyNameChanged()</code></td>
+</tr>
+<tr>
+<td><strong>Qt Quick</strong></td>
+<td>ViewModel</td>
+<td><code>{Class}ViewModel</code></td>
+<td><code>PatientViewModel</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Property</td>
+<td><code>symbol-&gt;qml-property</code> (camelCase)</td>
+<td><code>familyName</code></td>
+</tr>
+<tr>
+<td></td>
+<td>Signal</td>
+<td><code>{property}Changed</code></td>
+<td><code>familyNameChanged()</code></td>
+</tr>
+<tr>
+<td></td>
+<td>QML File</td>
+<td><code>{Class}Form.qml</code></td>
+<td><code>PatientForm.qml</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="racket-name-converters-dslgenmodelddd-typesrkt">Racket Name
+Converters (dslgen/model/ddd-types.rkt)</h3>
+<p>Key functions: <code>symbol-&gt;sql-id</code> (snake_case),
+<code>symbol-&gt;cpp-type</code>/<code>symbol-&gt;cpp-class</code>
+(PascalCase), <code>symbol-&gt;cpp-field</code> (camelCase).</p>
+<h3 id="repository-and-service-patterns">Repository and Service
+Patterns</h3>
+<p><strong>File structure for <code>Patient</code> entity</strong>:</p>
+<pre><code>examples/{project}/generated/
+├── dba/
+│   ├── include/{project}/dba/{context}/
+│   │   ├── entities/patient.hpp              # Patient struct
+│   │   ├── repositories/
+│   │   │   ├── patient_command_repository.hpp # Write operations
+│   │   │   └── patient_query_repository.hpp   # Read operations
+│   │   └── services/
+│   │       ├── patient_command_service.hpp     # Aggregate boundary
+│   │       └── patient_query_service.hpp       # Query service
+│   └── src/{context}/
+│       ├── entities/patient.cpp
+│       ├── repositories/
+│       │   ├── patient_command_repository.cpp
+│       │   └── patient_query_repository.cpp
+│       └── services/
+│           ├── patient_command_service.cpp
+│           └── patient_query_service.cpp
+├── grpc/
+│   ├── proto/{context}/patient.proto         # Proto message + service
+│   └── src/{context}/patient_service.cpp     # gRPC stub
+└── qt-widgets/
+    └── src/{context}/patient_edit_dialog.cpp  # Qt edit dialog</code></pre>
+<p><strong>Aggregate Root vs Child Entity</strong>: | Role | Repository
+| Service | gRPC | |------|------------|---------|------| | Root
+(Patient) | <code>PatientCommandRepository</code> |
+<code>PatientCommandService</code>, <code>PatientDomainService</code> |
+<code>PatientService</code> | | Child (Encounter) |
+<code>EncounterCommandRepository</code> | <em>(none - accessed via
+parent)</em> | <em>(via Patient RPCs)</em> |</p>
+<p><strong>Per ADR 20260120</strong>: All aggregate access through
+<code>{Root}DomainService</code> (which delegates to
+<code>{Root}CommandService</code> / <code>{Root}QueryService</code>).
+Children accessed via parent DomainService. DomainService orchestrates
+the three-tier validation pipeline (FTR-270, ADR 20260307).</p>
+<hr />
+<h2 id="iii-type-mappings-type-registryrkt">III. Type Mappings
+(type-registry.rkt)</h2>
+<h3 id="strict-policy">STRICT POLICY</h3>
+<p><strong>Unknown types cause generation to FAIL</strong>. No silent
+fallbacks.</p>
+<h3 id="known-types-registry">Known Types Registry</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> KNOWN-TYPES</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>set</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Primitives</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>   &#39;UUID &#39;uuid &#39;String &#39;string &#39;TEXT &#39;Text &#39;text &#39;VARCHAR &#39;varchar</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>   &#39;Integer &#39;integer &#39;INT &#39;int &#39;BIGINT &#39;bigint &#39;Boolean &#39;boolean</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>   &#39;Decimal &#39;decimal &#39;NUMERIC &#39;numeric &#39;Money &#39;money</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Temporal</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>   &#39;Date &#39;date &#39;DateTime &#39;datetime &#39;Timestamp &#39;timestamp &#39;TIMESTAMPTZ</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>   &#39;Interval &#39;interval</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Strong Types (String-based domains)</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>   &#39;Email &#39;email &#39;Phone &#39;phone &#39;PostalCode &#39;postalcode &#39;URL &#39;url</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>   &#39;Code &#39;code &#39;NonEmptyString &#39;CountryCode &#39;LanguageCode</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Strong Types (Numeric domains)</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>   &#39;PositiveInteger &#39;positiveinteger &#39;PositiveDecimal &#39;positivedecimal</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>   &#39;Latitude &#39;latitude &#39;Longitude &#39;longitude</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Spatial (PostGIS)</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>   &#39;Point &#39;point &#39;LineString &#39;linestring &#39;Polygon &#39;polygon</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>   &#39;Geometry &#39;geometry &#39;Geography &#39;geography</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Special</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>   &#39;JSON &#39;json &#39;JSONB &#39;jsonb<span class="op">))</span></span></code></pre></div>
+<h3 id="type-mapping-table">Type Mapping Table</h3>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL</th>
+<th>C++ DBA</th>
+<th>gRPC Proto</th>
+<th>Qt Widget</th>
+<th>Qt QML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primitives</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>UUID</td>
+<td><code>UUID</code></td>
+<td><code>boost::uuids::uuid</code></td>
+<td><code>muscovite.common.UUID</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>String, TEXT</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>string</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Integer, INT</td>
+<td><code>INTEGER</code></td>
+<td><code>std::int32_t</code></td>
+<td><code>int32</code></td>
+<td><code>QSpinBox</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>BigInteger, BIGINT</td>
+<td><code>BIGINT</code></td>
+<td><code>std::int64_t</code></td>
+<td><code>int64</code></td>
+<td><code>QSpinBox</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>Decimal, NUMERIC</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Boolean, BOOL</td>
+<td><code>BOOLEAN</code></td>
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+<td><code>QCheckBox</code></td>
+<td><code>bool</code></td>
+</tr>
+<tr>
+<td><strong>Temporal</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Date, DATE</td>
+<td><code>DATE</code></td>
+<td><code>muscovite::dba::Date</code></td>
+<td><code>muscovite.common.Date</code></td>
+<td><code>QDateEdit</code></td>
+<td><code>date</code></td>
+</tr>
+<tr>
+<td>Time, TIMETZ</td>
+<td><code>TIME</code></td>
+<td><code>muscovite::dba::TimeOfDay</code></td>
+<td><code>muscovite.common.TimeOfDay</code></td>
+<td><code>QTimeEdit</code></td>
+<td><code>var</code></td>
+</tr>
+<tr>
+<td>DateTime, TIMESTAMPTZ</td>
+<td><code>TIMESTAMPTZ</code></td>
+<td><code>muscovite::dba::Timestamp</code></td>
+<td><code>muscovite.common.Timestamp</code></td>
+<td><code>QDateTimeEdit</code></td>
+<td><code>date</code></td>
+</tr>
+<tr>
+<td>Interval</td>
+<td><code>INTERVAL</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Interval</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><strong>Strong Types (validation at DB layer)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Email</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Email</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Phone</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Phone</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>PostalCode</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.PostalCode</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Url</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>PositiveInteger</td>
+<td><code>INTEGER</code> (DOMAIN)</td>
+<td><code>std::int32_t</code></td>
+<td><code>int32</code></td>
+<td><code>QSpinBox</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>PositiveDecimal</td>
+<td><code>NUMERIC</code> (DOMAIN)</td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.PositiveDecimal</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Latitude</td>
+<td><code>NUMERIC(9,6)</code> (DOMAIN)</td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>double</code></td>
+</tr>
+<tr>
+<td>Longitude</td>
+<td><code>NUMERIC(10,6)</code> (DOMAIN)</td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>double</code></td>
+</tr>
+<tr>
+<td><strong>Spatial (PostGIS)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Point</td>
+<td><code>GEOGRAPHY(POINT, 4326)</code></td>
+<td><code>std::string</code> (WKT)</td>
+<td><code>muscovite.common.Point</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>LineString</td>
+<td><code>GEOGRAPHY(LINESTRING, 4326)</code></td>
+<td><code>std::string</code> (WKT)</td>
+<td><code>muscovite.common.LineString</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Polygon</td>
+<td><code>GEOGRAPHY(POLYGON, 4326)</code></td>
+<td><code>std::string</code> (WKT)</td>
+<td><code>muscovite.common.Polygon</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td>Geography</td>
+<td><code>GEOGRAPHY</code></td>
+<td><code>std::string</code> (WKT)</td>
+<td><code>string</code></td>
+<td><code>QLineEdit</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><strong>Special</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>JSON, JSONB</td>
+<td><code>JSONB</code></td>
+<td><code>nlohmann::json</code></td>
+<td><code>google.protobuf.Struct</code></td>
+<td><code>QTextEdit</code></td>
+<td><code>var</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="accessormutator-patterns-grpc">Accessor/Mutator Patterns
+(gRPC)</h3>
+<p><strong>Reading from proto</strong>:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>type-&gt;proto-accessor-pattern type-sym<span class="op">)</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> type-sym</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>String Integer Boolean<span class="op">)</span> &#39;direct<span class="op">]</span>          <span class="co">; req.field_name()</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>UUID Decimal Email Phone<span class="op">)</span> &#39;value<span class="op">]</span>         <span class="co">; req.field_name().value()</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>DateTime Timestamp<span class="op">)</span> &#39;seconds<span class="op">]</span>             <span class="co">; req.field_name().seconds()</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Date<span class="op">)</span> &#39;date-fields<span class="op">]</span>                       <span class="co">; req.field_name().year(), .month(), .day()</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Point LineString Polygon<span class="op">)</span> &#39;wkt<span class="op">]))</span>         <span class="co">; wkt_to_spatial(req.field_name())</span></span></code></pre></div>
+<p><strong>Writing to proto</strong>:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>type-&gt;proto-mutator-pattern type-sym<span class="op">)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> type-sym</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>String Integer Boolean<span class="op">)</span> &#39;set<span class="op">]</span>             <span class="co">; req.set_field_name(val)</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>UUID Decimal Email Phone<span class="op">)</span> &#39;mutable-value<span class="op">]</span> <span class="co">; req.mutable_field_name()-&gt;set_value(val)</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>DateTime Timestamp<span class="op">)</span> &#39;mutable-seconds<span class="op">]</span>     <span class="co">; req.mutable_field_name()-&gt;set_seconds(val)</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Date<span class="op">)</span> &#39;mutable-date<span class="op">]))</span>                    <span class="co">; set year/month/day</span></span></code></pre></div>
+<hr />
+<h2 id="iv-database-schema-conventions-mandatory">IV. Database Schema
+Conventions (MANDATORY)</h2>
+<h3 id="per-adrs-20251223--non-negotiable">Per ADRs 20251223-*
+(NON-NEGOTIABLE)</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>ADR</th>
+<th>Enforcement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All PKs named <code>id</code></td>
+<td>20251223-name-all-primary-keys-id.md</td>
+<td>Parser enforces</td>
+</tr>
+<tr>
+<td>All strings as <code>TEXT</code></td>
+<td>20251223-use-text-for-all-postgresql-strings.md</td>
+<td>No VARCHAR constraints</td>
+</tr>
+<tr>
+<td>All datetime as <code>TIMESTAMPTZ</code></td>
+<td>20251223-use-timestamptz-for-all-datetime.md</td>
+<td>Type registry</td>
+</tr>
+<tr>
+<td>No JSONB/JSON columns</td>
+<td>Schema generation</td>
+<td>Enforced by generator</td>
+</tr>
+<tr>
+<td>Lookup tables (no CHECK enums)</td>
+<td>20260116-lookup-tables-over-check-constraints.md</td>
+<td><code>LOOKUP_TABLE</code> DSL</td>
+</tr>
+<tr>
+<td>Deploy via Sqitch only</td>
+<td>20251223-deploy-database-via-sqitch-only.md</td>
+<td>Migration pipeline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FORBIDDEN</strong>:</p>
+<ul>
+<li>❌ <code>DROP DATABASE</code> in migrations</li>
+<li>❌ Hand-written <code>ALTER TABLE</code> (use semantic diff
+pipeline)</li>
+<li>❌ Direct <code>psql</code> schema changes</li>
+<li>❌ Editing generated Sqitch files</li>
+<li>❌ Manual edits to generated code</li>
+</ul>
+<p><strong>ALLOWED (greenfield/test only)</strong>:</p>
+<ul>
+<li>✅ <code>--fresh</code> flag for ephemeral databases</li>
+</ul>
+<h3 id="schema-naming">Schema Naming</h3>
+<p>Given context <code>PatientContext</code>:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">SCHEMA</span> patient;              <span class="co">-- Domain schema</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">SCHEMA</span> patient_api;          <span class="co">-- API functions schema</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (<span class="op">..</span>.); <span class="co">-- Entity table</span></span></code></pre></div>
+<h3 id="id-fields-uuidv7">ID Fields (UUIDv7)</h3>
+<p><strong>Always</strong>:</p>
+<ul>
+<li>Named <code>id</code></li>
+<li>Type <code>UUID</code></li>
+<li>Primary key</li>
+<li>Default <code>gen_random_uuid()</code> or <code>uuidv7()</code> (if
+available)</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">..</span>.</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="foreign-keys">Foreign Keys</h3>
+<p><strong>NO inference from <code>_id</code> naming</strong> (ADR
+20260106). Explicit <code>RELATIONSHIPS</code> block required.</p>
+<pre class="ddd"><code>ENTITY Encounter (...
+    patient_id UUID NOT_NULL  -- Just a UUID field, NOT auto-FK
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE;  -- Explicit FK declaration
+}</code></pre>
+<p><strong>Generated</strong>:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> encounter.encounter</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_encounter_patient</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (patient_id) <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>);</span></code></pre></div>
+<h3 id="arc-constraints-n-of-m">Arc Constraints (N-of-M)</h3>
+<p><strong>For polymorphic types</strong> (e.g., FHIR Observation
+value[x]):</p>
+<pre class="ddd"><code>ENTITY Observation (...
+    value_quantity DECIMAL,
+    value_string TEXT,
+    value_boolean BOOLEAN
+)
+CHECK value_arc: 
+    ((value_quantity IS NOT_NULL)::int + 
+     (value_string IS NOT_NULL)::int + 
+     (value_boolean IS NOT_NULL)::int) = 1;</code></pre>
+<p><strong>Generated</strong>:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CONSTRAINT</span> chk_observation_value_arc <span class="kw">CHECK</span> (</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    ((value_quantity <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span> <span class="op">+</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>     (value_string <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span> <span class="op">+</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>     (value_boolean <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>):<span class="ch">:INT</span>) <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<hr />
+<h2 id="v-domain-services-as-aggregate-boundary-adr-20260120">V. Domain
+Services as Aggregate Boundary (ADR 20260120)</h2>
+<h3 id="mandatory-architecture">MANDATORY Architecture</h3>
+<p><strong>All aggregate access through domain services</strong>. No
+stored procedures.</p>
+<pre><code>gRPC → DomainService → [Tier1: try_from] → [Tier2: EntityValidator] → [Tier3: PluginValidator] → CommandService → CommandRepository (pqxx) → PostgreSQL
+                                                                                                       └── emit event to domain_events table
+gRPC → DomainService → QueryService → QueryRepository (pqxx) → PostgreSQL  (queries bypass validation)</code></pre>
+<h3 id="generated-services">Generated Services</h3>
+<p><strong>DomainService</strong> (orchestration — FTR-270, ADR
+20260307):</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientDomainService <span class="kw">final</span> <span class="op">{</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientDomainService<span class="op">(</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        PatientCommandService<span class="op">&amp;</span> command_service<span class="op">,</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        PatientQueryService<span class="op">&amp;</span> query_service</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Command operations (three-tier validation pipeline)</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> create<span class="op">(</span>Patient<span class="op">&amp;&amp;</span> entity<span class="op">)</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> muscovite<span class="op">::</span>validation<span class="op">::</span>ValidationErrors<span class="op">&gt;;</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> update<span class="op">(</span>Patient<span class="op">&amp;&amp;</span> entity<span class="op">)</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> muscovite<span class="op">::</span>validation<span class="op">::</span>ValidationErrors<span class="op">&gt;;</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> remove<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span><span class="dt">bool</span><span class="op">,</span> muscovite<span class="op">::</span>validation<span class="op">::</span>ValidationErrors<span class="op">&gt;;</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Query operations (passthrough, no validation)</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> DbResult<span class="op">&lt;</span><span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;&gt;;</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> find_all<span class="op">()</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> DbResult<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;&gt;;</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>    PatientCommandService<span class="op">&amp;</span> <span class="va">command_service_</span><span class="op">;</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>    PatientQueryService<span class="op">&amp;</span> <span class="va">query_service_</span><span class="op">;</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>CommandService</strong> (writes):</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandService <span class="op">{</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    PatientCommandService<span class="op">(</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        PatientCommandRepository<span class="op">&amp;</span> patient_repo<span class="op">,</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        EncounterCommandRepository<span class="op">&amp;</span> encounter_repo<span class="op">,</span>  <span class="co">// children</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>        ConnectionPool<span class="op">&amp;</span> pool</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Root operations</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    Patient create<span class="op">(</span><span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    Patient update<span class="op">(</span><span class="at">const</span> UpdatePatientRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> remove<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Child operations (through root)</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    Encounter add_encounter<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> patient_id<span class="op">,</span> </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">const</span> AddEncounterRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Single transaction per command</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">&gt;</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> execute<span class="op">(</span>F<span class="op">&amp;&amp;</span> func<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span><span class="va">pool_</span><span class="op">,</span> <span class="bu">std::</span>forward<span class="op">&lt;</span>F<span class="op">&gt;(</span>func<span class="op">));</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>QueryService</strong> (reads):</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryService <span class="op">{</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    PatientQueryService<span class="op">(</span>PatientQueryRepository<span class="op">&amp;</span> repo<span class="op">);</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_all<span class="op">(</span><span class="at">const</span> PageRequest<span class="op">&amp;</span> page<span class="op">);</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_active<span class="op">();</span>  <span class="co">// From SPECIFICATION</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Repository separation</strong> (ADR 20260120): | Type |
+Transaction | Methods | |------|-------------|---------| |
+CommandRepository | <code>pqxx::work</code> | <code>insert()</code>,
+<code>update()</code>, <code>remove()</code> | | QueryRepository |
+<code>pqxx::nontransaction</code> | <code>find_by_id()</code>,
+<code>find_all()</code> |</p>
+<hr />
+<h2 id="vi-cqrs-event-emission-adr-20260120">VI. CQRS Event Emission
+(ADR 20260120)</h2>
+<p>Every aggregate gets a <code>{schema}.domain_events</code> table (id,
+aggregate_type, aggregate_id, event_type, payload TEXT, occurred_at,
+version). Events emitted inline in CommandService within the same
+transaction. The payload column stores pre-serialized JSON from protobuf
+<code>MessageToJsonString()</code> (ADR 20260306).</p>
+<hr />
+<h2 id="vii-event-sourcing-adr-20260204">VII. Event Sourcing (ADR
+20260204)</h2>
+<p>Opt-in per aggregate with <code>EVENT_SOURCED</code>. Typed event
+tables (no JSON), per-event payload tables, snapshot tables. Dual-write
+strategy: single transaction appends typed event + updates snapshot +
+updates entity table. No replay needed (snapshot = current state).</p>
+<p>DSL:
+<code>SOURCED_EVENT Name @uuid "..." (fields) APPLIES_TO AggregateRoot</code></p>
+<hr />
+<h2 id="viii-qt-multi-frontend-generation-adr-20260206">VIII. Qt
+Multi-Frontend Generation (ADR 20260206)</h2>
+<p>Two frontends from one DSL model via
+<code>--qt-frontend widgets|qml|both</code>:</p>
+<ul>
+<li><strong>Qt Widgets</strong>: C++ QWidget subclasses
+(EntityEditDialogBase, QFormLayout, type-specific widgets)</li>
+<li><strong>Qt Quick/QML</strong>: ViewModel pattern (all fields as
+<code>Q_PROPERTY</code>, QML forms with data binding)</li>
+</ul>
+<hr />
+<h2 id="ix-semantic-diff-migrations-adrs-20260109-">IX. Semantic Diff
+Migrations (ADRs 20260109-*)</h2>
+<h3 id="uuid-based-change-detection">UUID-Based Change Detection</h3>
+<p><strong>Every DSL element has a UUID</strong>:</p>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;a1b2c3d4-...&quot; IDENTIFIED_BY id (
+    family_name TEXT NOT_NULL @uuid &quot;11111111-0001-...&quot;
+)</code></pre>
+<h3 id="migration-generation">Migration Generation</h3>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen/migration</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--repo</span> ../../examples/fhir-health</span></code></pre></div>
+<p><strong>Detects</strong>: | Change | Detection | Generated SQL |
+|--------|-----------|---------------| | Add field | New UUID |
+<code>ALTER TABLE ADD COLUMN</code> | | Rename field | Same UUID,
+different name | <code>ALTER TABLE RENAME COLUMN</code> | | Change type
+| Same UUID, different type | <code>ALTER COLUMN TYPE</code> | | Add
+entity | New UUID | <code>CREATE TABLE</code> | | Remove entity |
+Missing UUID | <code>DROP TABLE</code> (with confirmation) | | Add FK |
+New relationship UUID | <code>ALTER TABLE ADD CONSTRAINT</code> |</p>
+<p><strong>FORBIDDEN in manual edits</strong>:</p>
+<ul>
+<li>❌ Direct <code>psql</code> schema changes</li>
+<li>❌ Editing generated Sqitch files</li>
+<li>❌ Manual <code>ALTER TABLE</code> commands</li>
+</ul>
+<hr />
+<h2 id="x-instruct-blocks-mep---muscovite-embedded-prompts">X. INSTRUCT
+Blocks (MEP - Muscovite Embedded Prompts)</h2>
+<h3 id="platform-agnostic-ai-guidance">Platform-Agnostic AI
+Guidance</h3>
+<p><strong>Per ADR 20260205</strong>: INSTRUCT blocks embed
+domain-specific AI prompts in the DSL.</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> instruct-spec</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid      <span class="co">; String: stable UUID</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>   name      <span class="co">; Symbol: instruction name</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>   intent    <span class="co">; String: natural language intent</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>   inputs    <span class="co">; List of string: inputs</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>   output    <span class="co">; Symbol or #f: output type/code</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>   strategy  <span class="co">; Symbol: &#39;deterministic, etc.</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>      <span class="co">; String or #f</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<h3 id="dsl-syntax-proposed">DSL Syntax (Proposed)</h3>
+<pre class="ddd"><code>ENTITY Patient (...) {
+    INSTRUCT calculate_bmi @uuid &quot;...&quot; (
+        &quot;Calculate Body Mass Index from height and weight&quot;
+        INPUTS: height_cm, weight_kg
+        OUTPUT: Decimal
+        STRATEGY: deterministic
+    )
+    DOC &quot;Derived metric for clinical assessment&quot;;
+}</code></pre>
+<h3 id="multi-target-generation">Multi-Target Generation</h3>
+<p><strong>INSTRUCT blocks generate</strong>:</p>
+<ol type="1">
+<li><strong>C++ method stubs</strong> with intent comment</li>
+<li><strong>SQL CHECK constraints</strong> (if deterministic)</li>
+<li><strong>QML validators</strong> for client-side logic</li>
+</ol>
+<p><strong>Key constraint</strong>: Must be platform-agnostic (no
+C++-specific or SQL-specific logic in DSL).</p>
+<hr />
+<h2 id="xi-testing-infrastructure">XI. Testing Infrastructure</h2>
+<h3 id="test-driven-development-adr-20260212">Test-Driven Development
+(ADR 20260212)</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Test First</th>
+<th>Then Implement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Racket (Layer 0)</strong></td>
+<td><code>rackunit</code> test with expected output</td>
+<td>Generator/parser code</td>
+</tr>
+<tr>
+<td><strong>C++ Framework (Layer 1)</strong></td>
+<td>doctest BDD
+(<code>SCENARIO</code>/<code>GIVEN</code>/<code>WHEN</code>/<code>THEN</code>)</td>
+<td>Framework code</td>
+</tr>
+<tr>
+<td><strong>Generated (Layer 2)</strong></td>
+<td>Generated test IS the specification</td>
+<td>Generator produces code + test together</td>
+</tr>
+</tbody>
+</table>
+<p><strong>New tests</strong>: doctest only (not Catch2). BDD macros +
+<code>TEST_SUITE("module::component")</code>. Use
+<code>doctest_discover_tests()</code> in CMake.</p>
+<hr />
+<h2 id="xiii-quick-reference-file--purpose">XIII. Quick Reference: File
+→ Purpose</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>doc/CONTEXT.md</code></td>
+<td>AI-first project context (generated by
+<code>tools/generate-context.sh</code>)</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>AI agent rules + workflow reference</td>
+</tr>
+<tr>
+<td><code>.github/copilot-instructions.md</code></td>
+<td>Copilot rules, points to CONTEXT.md</td>
+</tr>
+<tr>
+<td><code>dslgen/model/ddd-types.rkt</code></td>
+<td>Core struct definitions (entity, aggregate, field, etc.)</td>
+</tr>
+<tr>
+<td><code>dslgen/model/ir-serialization.rkt</code></td>
+<td>JSON IR serialization (all constructs: entity, aggregate,
+relationship, value-object, strong-type, lookup-table, repository,
+service, specification, policy, saga, command, layout-spec)</td>
+</tr>
+<tr>
+<td><code>dslgen/model/type-registry.rkt</code></td>
+<td>Type mappings (DSL → PostgreSQL, C++, Proto, Qt)</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/parser.rkt</code></td>
+<td>DSL parser (recursive descent)</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/lexer.rkt</code></td>
+<td>Tokenizer</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/postgres/</code></td>
+<td>PostgreSQL/Sqitch migration generators</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/cpp/dba/</code></td>
+<td>C++ DBA layer (entities, repositories, services)</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/grpc/</code></td>
+<td>gRPC proto + service stubs</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/cmake/cmake-ir.rkt</code></td>
+<td>CMake IR structs (22 struct types for typed CMake generation)</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/cmake/cmake-emitter.rkt</code></td>
+<td>CMake IR → CMakeLists.txt serializer</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/qt/widgets-views.rkt</code></td>
+<td>Qt Widgets client</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/qt/quick-views.rkt</code></td>
+<td>Qt Quick/QML client</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/messaging/nats-subjects.rkt</code></td>
+<td>NATS subject schema, stream scripts, AsciiDoc (FTR-247)</td>
+</tr>
+<tr>
+<td><code>dslgen/migration/migrate.rkt</code></td>
+<td>Semantic diff migration CLI</td>
+</tr>
+<tr>
+<td><code>dslgen/migration/diff-model.rkt</code></td>
+<td>Model diff algorithm</td>
+</tr>
+<tr>
+<td><code>dslgen/targets/target-config.rkt</code></td>
+<td>Target config struct + resolution functions</td>
+</tr>
+<tr>
+<td><code>dslgen/targets/qt-widgets-desktop.rkt</code></td>
+<td>Qt Widgets Desktop target configuration</td>
+</tr>
+<tr>
+<td><code>dslgen/targets/qt-qml-desktop.rkt</code></td>
+<td>Qt QML Desktop target configuration</td>
+</tr>
+<tr>
+<td><code>tools/generate-context.sh</code></td>
+<td>Shell script generating doc/CONTEXT.md</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-cmake-emitter.rkt</code></td>
+<td>CMake emitter unit tests (33 tests, FTR-024)</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-coverage.rkt</code></td>
+<td>Generator content pattern tests (55 tests, FTR-026)</td>
+</tr>
+<tr>
+<td><code>cmake/Layer2Verification.cmake</code></td>
+<td>CTest targets for Layer 2 build verification (FTR-025)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="xiv-verification-checklist">XIV. Verification Checklist</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />No manual edits to
+<code>examples/*/generated/</code></label></li>
+<li><label><input type="checkbox" />Type mappings via
+<code>type-registry.rkt</code>, naming via
+<code>symbol-&gt;cpp-class</code>/<code>symbol-&gt;sql-id</code></label></li>
+<li><label><input type="checkbox" />FKs have explicit
+<code>RELATIONSHIPS</code> block; strings <code>TEXT</code>; datetimes
+<code>TIMESTAMPTZ</code>; PKs <code>id</code></label></li>
+<li><label><input type="checkbox" />No stored procedures — use domain
+services</label></li>
+<li><label><input type="checkbox" />Migrations via semantic diff
+pipeline; tests via API (no direct SQL)</label></li>
+</ul>
+<hr />
+<p><strong>Version</strong>: 1.26.0 (Feb 22, 2026)
+<strong>Status</strong>: Canonical reference for Muscovite v1.26.0+
+<strong>Next Review</strong>: Each release — update struct definitions
+and type mappings when IR changes</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

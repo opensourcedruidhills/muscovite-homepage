@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use JSON for Seed Data Files — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use JSON for Seed Data Files</span>
+</nav>
+
+<h1>Use JSON for Seed Data Files</h1>
+
+
+<h1 id="use-json-for-seed-data-files">Use JSON for Seed Data Files</h1>
+<p><strong>Status:</strong> Accepted<br />
+<strong>Date:</strong> 2026-01-08<br />
+<strong>Deciders:</strong> System Architect, Database Team<br />
+<strong>Related:</strong> <a
+href="20260107-entity-code-surrogate-keys.html">20260107-entity-code-surrogate-keys.md</a></p>
+<h2 id="context">Context</h2>
+<p>Seed data files populate lookup tables and reference data during
+database deployment. Initially, CSV format was chosen for its simplicity
+and human-readability. However, CSV parsing has proven fragile due
+to:</p>
+<ol type="1">
+<li><strong>Ambiguous field delimiting</strong>: Commas inside quoted
+fields require complex parsing</li>
+<li><strong>Embedded newlines</strong>: Multi-line field values break
+naive line-splitting</li>
+<li><strong>Quote escaping</strong>: CSV's <code>""</code> →
+<code>"</code> convention is inconsistent across implementations</li>
+<li><strong>Empty field handling</strong>: Different parsers treat
+consecutive commas differently</li>
+<li><strong>No type information</strong>: All values are strings; type
+coercion errors are common</li>
+<li><strong>Mixed quoting</strong>: Some CSVs quote all fields, others
+only fields with special chars</li>
+</ol>
+<p>Real-world failures:</p>
+<ul>
+<li><code>map_symbol.csv</code>: Field
+<code>"Internal contact—Identity questionable, location accurate"</code>
+split incorrectly</li>
+<li><code>lithology_pattern.csv</code>: Embedded newlines in
+descriptions caused SQL syntax errors</li>
+<li><code>dunham_class.csv</code>: Empty fields after trimming caused
+column misalignment</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p><strong>Adopt JSON as the standard format for all seed data
+files.</strong></p>
+<p>Seed files will use <code>.json</code> extension and contain an array
+of objects:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;536568a9-71d8-4467-ac34-7d7f5b92d433&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;LITHPAT-601&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;fgdc_code&quot;</span><span class="fu">:</span> <span class="st">&quot;601&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Gravel or conglomerate (1st option)&quot;</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;rock_category&quot;</span><span class="fu">:</span> <span class="st">&quot;sedimentary&quot;</span><span class="fu">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Coarse-grained clastic sedimentary rock</span><span class="ch">\n</span><span class="st">with particles &gt;2mm&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Key properties:</strong></p>
+<ul>
+<li>Each object represents one table row</li>
+<li>Keys correspond to table column names</li>
+<li>Omitted keys result in NULL or DEFAULT values</li>
+<li>JSON native types (string, number, boolean, null) map naturally to
+SQL types</li>
+<li>Arrays and objects serialize to JSONB columns</li>
+</ul>
+<p><strong>Generator behavior:</strong></p>
+<ul>
+<li>DSL:
+<code>IMPORT_JSON "path/to/file.json" INTO EntityName</code></li>
+<li>Generated SQL escapes values appropriately for PostgreSQL</li>
+<li>Code field omitted from JSON → trigger auto-generates</li>
+<li>Explicit code field → preserves user value</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="why-json-over-alternatives">Why JSON over alternatives?</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Pros</th>
+<th>Cons</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CSV</strong></td>
+<td>Simple, compact, Excel-friendly</td>
+<td>Fragile parsing, no structure</td>
+<td>❌ Current pain point</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td>Unambiguous, structured, Racket built-in</td>
+<td>More verbose</td>
+<td>✅ <strong>Selected</strong></td>
+</tr>
+<tr>
+<td><strong>SQL INSERT</strong></td>
+<td>No parsing, direct execution</td>
+<td>Not data, harder to maintain</td>
+<td>❌ Too imperative</td>
+</tr>
+<tr>
+<td><strong>S-expressions</strong></td>
+<td>Racket-native, simple</td>
+<td>Non-standard, learning curve</td>
+<td>❌ Too niche</td>
+</tr>
+<tr>
+<td><strong>YAML</strong></td>
+<td>Human-friendly, less verbose</td>
+<td>Complex spec, security issues</td>
+<td>❌ Overkill</td>
+</tr>
+<tr>
+<td><strong>TOML</strong></td>
+<td>Simple, readable</td>
+<td>Poor Racket support</td>
+<td>❌ Limited tooling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="json-advantages">JSON advantages:</h3>
+<ol type="1">
+<li><strong>Robust parsing</strong>: Racket's built-in <code>json</code>
+module handles all edge cases correctly</li>
+<li><strong>Unambiguous syntax</strong>: No confusion about quoting,
+escaping, or delimiters</li>
+<li><strong>Type preservation</strong>: Numbers, booleans, nulls are
+distinct from strings</li>
+<li><strong>Validation</strong>: JSON Schema can enforce structure
+before generation</li>
+<li><strong>Tooling</strong>: Every editor has JSON support (syntax
+highlighting, formatting, validation)</li>
+<li><strong>PostgreSQL affinity</strong>: Native JSONB type,
+<code>json_populate_recordset()</code>,
+<code>jsonb_to_record()</code></li>
+<li><strong>Version control friendly</strong>: Structured diffs are
+meaningful</li>
+</ol>
+<h3 id="migration-path">Migration path:</h3>
+<p>Existing CSV files remain valid during transition:</p>
+<ul>
+<li>Generator detects file extension (<code>.csv</code> vs
+<code>.json</code>)</li>
+<li>CSV parsing uses fallback legacy mode (best-effort)</li>
+<li>New seed files MUST use JSON</li>
+<li>Existing CSVs can be converted incrementally</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="generator-changes">Generator changes:</h3>
+<p><strong>sqitch-unified.rkt:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> json<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>parse-seed-file path<span class="op">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>string-suffix? path <span class="st">&quot;.json&quot;</span><span class="op">)</span> <span class="op">(</span>parse-json-seed path<span class="op">)]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>string-suffix? path <span class="st">&quot;.csv&quot;</span><span class="op">)</span>  <span class="op">(</span>parse-csv-seed path<span class="op">)]</span>  <span class="co">; legacy</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">error</span> <span class="st">&quot;Unsupported seed format&quot;</span><span class="op">)]))</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>parse-json-seed path<span class="op">)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-input-file</span> path</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">lambda</span> <span class="op">(</span>in<span class="op">)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="ex">define</span><span class="fu"> data </span><span class="op">(</span>read-json in<span class="op">))</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>unless <span class="op">(</span><span class="kw">list?</span> data<span class="op">)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="kw">error</span> <span class="st">&quot;JSON seed must be array of objects&quot;</span><span class="op">))</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      data<span class="op">)))</span></span></code></pre></div>
+<p><strong>INSERT generation:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; JSON objects directly map to column-value pairs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>row json-data<span class="op">])</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> cols </span><span class="op">(</span>hash-keys row<span class="op">))</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> vals </span><span class="op">(</span><span class="kw">map</span> <span class="op">(</span><span class="kw">lambda</span> <span class="op">(</span>k<span class="op">)</span> <span class="op">(</span>hash-ref row k<span class="op">))</span> cols<span class="op">))</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;INSERT INTO ~a (~a) VALUES (~a);&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>          table</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>string-join cols <span class="st">&quot;, &quot;</span><span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>string-join <span class="op">(</span><span class="kw">map</span> sql-escape vals<span class="op">)</span> <span class="st">&quot;, &quot;</span><span class="op">)))</span></span></code></pre></div>
+<h3 id="sql-value-escaping">SQL value escaping:</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>sql-escape val<span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">null?</span> val<span class="op">)</span> <span class="st">&quot;NULL&quot;</span><span class="op">]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">boolean?</span> val<span class="op">)</span> <span class="op">(</span><span class="kw">if</span> val <span class="st">&quot;true&quot;</span> <span class="st">&quot;false&quot;</span><span class="op">)]</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">number?</span> val<span class="op">)</span> <span class="op">(</span><span class="kw">number-&gt;string</span> val<span class="op">)]</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">string?</span> val<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;E&#39;~a&#39;&quot;</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                          <span class="op">(</span>string-replace </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                           <span class="op">(</span>string-replace val <span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ch">\\\\</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;&#39;&quot;</span> <span class="st">&quot;&#39;&#39;&quot;</span><span class="op">))]</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>hash? val<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;E&#39;~a&#39;&quot;</span> <span class="op">(</span>jsexpr-&gt;string val<span class="op">))]</span>  <span class="co">; JSONB columns</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">list?</span> val<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;E&#39;~a&#39;&quot;</span> <span class="op">(</span>jsexpr-&gt;string val<span class="op">))]</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">error</span> <span class="st">&quot;Unsupported JSON type&quot;</span><span class="op">)]))</span></span></code></pre></div>
+<h3 id="dsl-syntax-unchanged">DSL syntax (unchanged):</h3>
+<pre class="ddd"><code>ENTITY LithologyPattern IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    code TEXT NOT NULL @unique,
+    ...
+)
+IMPORT_JSON &quot;../../seeds/geologic-mapping/lithology_pattern.json&quot; INTO LithologyPattern;</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive:</h3>
+<ul>
+<li>✅ <strong>Eliminates CSV parsing fragility</strong> - no more split
+errors, quote issues, or newline problems</li>
+<li>✅ <strong>Correct by construction</strong> - JSON syntax errors
+caught by parser, not at SQL execution</li>
+<li>✅ <strong>Better type safety</strong> - numbers as numbers,
+booleans as booleans</li>
+<li>✅ <strong>Easier debugging</strong> - JSON structure is
+self-documenting</li>
+<li>✅ <strong>No external dependencies</strong> - Racket's
+<code>json</code> module is built-in</li>
+<li>✅ <strong>Migration-friendly</strong> - CSV files still work during
+transition</li>
+</ul>
+<h3 id="negative">Negative:</h3>
+<ul>
+<li>❌ <strong>More verbose</strong> - JSON overhead (braces, quotes)
+increases file size ~20%</li>
+<li>❌ <strong>Less Excel-friendly</strong> - can't directly edit in
+spreadsheet (but tools exist)</li>
+<li>❌ <strong>Migration effort</strong> - need to convert ~38 existing
+CSV files</li>
+</ul>
+<h3 id="neutral">Neutral:</h3>
+<ul>
+<li>🔄 <strong>Learning curve</strong> - team must learn JSON syntax
+(minimal for most developers)</li>
+<li>🔄 <strong>Tooling required</strong> - need CSV-to-JSON conversion
+script (one-time)</li>
+</ul>
+<h2 id="migration-strategy">Migration Strategy</h2>
+<h3 id="phase-1-generator-support-immediate">Phase 1: Generator support
+(immediate)</h3>
+<ol type="1">
+<li>Add JSON parsing to <code>sqitch-unified.rkt</code></li>
+<li>Keep CSV parsing as fallback</li>
+<li>Test with one converted seed file</li>
+</ol>
+<h3 id="phase-2-conversion-incremental">Phase 2: Conversion
+(incremental)</h3>
+<ol type="1">
+<li>Create <code>convert-seeds-to-json.py</code> script</li>
+<li>Convert basedata seeds first (simple, no FK lookups)</li>
+<li>Validate each conversion with <code>jq</code> and
+<code>jsonlint</code></li>
+<li>Deploy and test incrementally</li>
+</ol>
+<h3 id="phase-3-deprecation-after-all-converted">Phase 3: Deprecation
+(after all converted)</h3>
+<ol type="1">
+<li>Remove CSV parsing code</li>
+<li>Update documentation</li>
+<li>Add <code>.csv</code> extension check that emits error with
+migration instructions</li>
+</ol>
+<h3 id="conversion-script">Conversion script:</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv, json, sys</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(sys.argv[<span class="dv">1</span>]) <span class="im">as</span> f:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    reader <span class="op">=</span> csv.DictReader(f)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> [row <span class="cf">for</span> row <span class="kw">in</span> reader]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(json.dumps(data, indent<span class="op">=</span><span class="dv">2</span>))</span></code></pre></div>
+<p>Usage:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> convert-seeds-to-json.py seeds/geologic-mapping/lithology_pattern.csv <span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       seeds/geologic-mapping/lithology_pattern.json</span></code></pre></div>
+<h2 id="validation">Validation</h2>
+<h3 id="before-deployment">Before deployment:</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Validate JSON syntax</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span> empty lithology_pattern.json <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&quot;Invalid JSON&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Validate structure (all rows have same keys)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span> <span class="at">-e</span> <span class="st">&#39;map(keys) | unique | length == 1&#39;</span> lithology_pattern.json</span></code></pre></div>
+<h3 id="after-deployment">After deployment:</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify row count matches</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">psql</span> <span class="at">-c</span> <span class="st">&quot;SELECT COUNT(*) FROM geologicmapping.lithologypattern;&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> 100</span></code></pre></div>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When this applies:</h3>
+<ul>
+<li>Creating new seed data files</li>
+<li>Converting existing CSV seed files to JSON</li>
+<li>Debugging seed import errors</li>
+<li>Adding new lookup tables with reference data</li>
+</ul>
+<h3 id="when-this-does-not-apply">When this does NOT apply:</h3>
+<ul>
+<li>User data import (use COPY or bulk insert APIs)</li>
+<li>Large datasets (&gt;1000 rows) - consider direct SQL</li>
+<li>Legacy CSV files during transition period</li>
+</ul>
+<h3 id="key-enforcement">Key enforcement:</h3>
+<ol type="1">
+<li><strong>New seed files MUST use JSON format</strong> - generator
+emits warning for CSV</li>
+<li><strong>JSON arrays MUST contain objects</strong> - generator
+validates structure</li>
+<li><strong>Object keys MUST match table columns</strong> - generator
+checks schema</li>
+<li><strong>Code field SHOULD be omitted</strong> - let trigger
+auto-generate (unless explicit user codes)</li>
+</ol>
+<h3 id="code-reference">Code reference:</h3>
+<ul>
+<li><strong>Parser</strong>:
+<code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> lines
+393-440</li>
+<li><strong>Escaping</strong>: <code>sql-escape</code> function for
+PostgreSQL E-string syntax</li>
+<li><strong>DSL</strong>: <code>IMPORT_JSON "path"</code> parsed by
+entity-seed-import</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>RFC 4180 (CSV) specification: <a
+href="https://tools.ietf.org/html/rfc4180">https://tools.ietf.org/html/rfc4180</a></li>
+<li>RFC 8259 (JSON) specification: <a
+href="https://tools.ietf.org/html/rfc8259">https://tools.ietf.org/html/rfc8259</a></li>
+<li>PostgreSQL JSON functions: <a
+href="https://www.postgresql.org/docs/current/functions-json.html">https://www.postgresql.org/docs/current/functions-json.html</a></li>
+<li>Racket JSON library: <a
+href="https://docs.racket-lang.org/json/">https://docs.racket-lang.org/json/</a></li>
+</ul>
+<h2 id="related-issues">Related Issues</h2>
+<ul>
+<li>CSV parsing failures: commits 3944513b, 1ff4cc9c</li>
+<li>Code-key auto-generation: ADR 20260107</li>
+<li>Windows CRLF line endings in CSV files</li>
+<li>Quote escaping inconsistencies across CSV parsers</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

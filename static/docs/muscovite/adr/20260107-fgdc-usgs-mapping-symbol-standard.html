@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FGDC/USGS Geologic Map Symbolization
+Standard — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>FGDC/USGS Geologic Map Symbolization Standard</span>
+</nav>
+
+<h1>FGDC/USGS Geologic Map Symbolization Standard</h1>
+
+
+<h1 id="fgdcusgs-geologic-map-symbolization-standard">FGDC/USGS Geologic
+Map Symbolization Standard</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Domain modeling team</li>
+<li>Date: 2026-01-07</li>
+<li>Tags: mapping, cartography, FGDC, USGS, symbols</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Geologic maps require standardized symbols for features like faults,
+folds, contacts, attitudes, and various point/line/area features. The
+USGS/FGDC standard provides authoritative symbology that should be
+modeled in our mapping context.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>FGDC Digital Cartographic Standard for Geologic Map Symbolization is
+the US national standard</li>
+<li>Standard applies to all Federal Government geologic map
+publications</li>
+<li>ArcGIS Pro and QGIS styles available for implementation</li>
+<li>Need comprehensive symbol library for map generation</li>
+<li>Symbols must be scale-independent</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Minimal symbol set for basic needs</li>
+<li>Full FGDC standard implementation with all categories</li>
+<li>Extensible symbol library with FGDC as base</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Extensible symbol library with FGDC as base",
+because:</p>
+<ol type="1">
+<li>FGDC standard is authoritative and well-documented</li>
+<li>Extensible design allows custom symbols while maintaining standards
+compliance</li>
+<li>SVG-based symbols enable web and print output</li>
+<li>Symbol categories match geologic feature types</li>
+</ol>
+<h3 id="fgdc-symbol-categories">FGDC Symbol Categories</h3>
+<p>The standard organizes symbols into major sections:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Description</th>
+<th>Example Symbols</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Contacts, key beds, dikes</td>
+<td>Contacts (solid, dashed, inferred, concealed)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Faults</td>
+<td>Normal, reverse, thrust, strike-slip, detachment</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Folds</td>
+<td>Anticline, syncline, monocline, overturned</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bedding</td>
+<td>Horizontal, inclined, vertical, overturned</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Lineation</td>
+<td>Mineral, intersection, crenulation</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Foliation</td>
+<td>Cleavage, schistosity, gneissic banding</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Joints</td>
+<td>Systematic, non-systematic, sheeting</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Veins</td>
+<td>Quartz, carbonate, mineralized</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Unconformities</td>
+<td>Angular, disconformity, nonconformity</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Glacial features</td>
+<td>Moraines, drumlins, eskers, striations</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Fluvial features</td>
+<td>Terraces, channels, alluvial fans</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Coastal features</td>
+<td>Beaches, dunes, cliffs, shorelines</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Mass movement</td>
+<td>Landslides, debris flows, rock falls</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Volcanic features</td>
+<td>Craters, vents, lava flows, pyroclastics</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Karst features</td>
+<td>Sinkholes, caves, springs</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Mining/resources</td>
+<td>Mines, prospects, quarries, wells</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Paleontology</td>
+<td>Fossil localities by type</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Sample localities</td>
+<td>Rock samples, soil samples, water samples</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Area patterns</td>
+<td>Lithology patterns, surficial deposit patterns</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Map elements</td>
+<td>Scale bars, north arrows, legends</td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-model-coverage">Current Model Coverage</h3>
+<p>Already implemented in <code>geologic-mapping.ddd</code>:</p>
+<ul>
+<li>✅ PatternCategory, LithologyPattern (Section 19)</li>
+<li>✅ MapSymbol, ContactSymbol (Section 1)</li>
+<li>✅ FaultSymbol (Section 2)</li>
+<li>✅ FoldSymbol (Section 3)</li>
+<li>✅ AttitudeSymbol (Section 4-6)</li>
+<li>✅ PointSymbol (generic)</li>
+<li>✅ AgeColor (ICS time colors)</li>
+<li>✅ HydrologySymbolType (water features)</li>
+</ul>
+<h3 id="symbols-to-add">Symbols to Add</h3>
+<pre class="ddd"><code>-- Section 9: Unconformity symbols
+ENTITY UnconformitySymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    unconformity_type     VARCHAR(50)  NOT NULL,
+    svg_ornament          TEXT,
+    spacing_mm            DECIMAL,
+    description           TEXT
+)
+CHECK type_valid: unconformity_type IN (
+    &#39;angular_unconformity&#39;, &#39;disconformity&#39;, &#39;nonconformity&#39;, 
+    &#39;paraconformity&#39;, &#39;buttress_unconformity&#39;
+)
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}
+
+-- Section 10: Glacial feature symbols
+ENTITY GlacialSymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    feature_type          VARCHAR(50)  NOT NULL,
+    svg_path              TEXT         NOT NULL,
+    decoration_style      VARCHAR(30),
+    description           TEXT
+)
+CHECK type_valid: feature_type IN (
+    &#39;moraine_crest&#39;, &#39;drumlin&#39;, &#39;esker&#39;, &#39;kame&#39;, &#39;kettle&#39;,
+    &#39;glacial_striation&#39;, &#39;roche_moutonnee&#39;, &#39;cirque&#39;, &#39;arete&#39;,
+    &#39;horn&#39;, &#39;hanging_valley&#39;, &#39;u_shaped_valley&#39;, &#39;ice_margin&#39;
+)
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}
+
+-- Section 13: Mass movement symbols
+ENTITY MassMovementSymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    movement_type         VARCHAR(50)  NOT NULL,
+    svg_path              TEXT,
+    crown_symbol          TEXT,
+    toe_symbol            TEXT,
+    direction_indicator   BOOLEAN      NOT NULL DEFAULT true,
+    description           TEXT
+)
+CHECK type_valid: movement_type IN (
+    &#39;landslide&#39;, &#39;rockslide&#39;, &#39;debris_flow&#39;, &#39;earth_flow&#39;,
+    &#39;rock_fall&#39;, &#39;slump&#39;, &#39;creep&#39;, &#39;solifluction&#39;
+)
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}
+
+-- Section 14: Volcanic feature symbols
+ENTITY VolcanicSymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    feature_type          VARCHAR(50)  NOT NULL,
+    svg_path              TEXT         NOT NULL,
+    default_size_mm       DECIMAL,
+    description           TEXT
+)
+CHECK type_valid: feature_type IN (
+    &#39;crater&#39;, &#39;caldera&#39;, &#39;vent&#39;, &#39;fumarole&#39;, &#39;hot_spring&#39;,
+    &#39;lava_flow_front&#39;, &#39;lava_tube&#39;, &#39;spatter_cone&#39;, &#39;cinder_cone&#39;,
+    &#39;maar&#39;, &#39;tuff_ring&#39;, &#39;volcanic_dome&#39;
+)
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}
+
+-- Section 16: Resource symbols
+ENTITY ResourceSymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    resource_type         VARCHAR(50)  NOT NULL,
+    commodity             VARCHAR(50),
+    svg_path              TEXT         NOT NULL,
+    status                VARCHAR(30),
+    description           TEXT
+)
+CHECK type_valid: resource_type IN (
+    &#39;mine&#39;, &#39;prospect&#39;, &#39;quarry&#39;, &#39;pit&#39;, &#39;adit&#39;, &#39;shaft&#39;,
+    &#39;oil_well&#39;, &#39;gas_well&#39;, &#39;water_well&#39;, &#39;geothermal_well&#39;,
+    &#39;mineral_occurrence&#39;, &#39;placer&#39;
+)
+CHECK status_valid: status IN (&#39;active&#39;, &#39;inactive&#39;, &#39;abandoned&#39;, &#39;reclaimed&#39;) OR status IS NULL
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}
+
+-- Section 17: Paleontology symbols
+ENTITY PaleontologySymbol IDENTIFIED_BY id (
+    id                    UUID         NOT NULL,
+    fossil_type           VARCHAR(50)  NOT NULL,
+    svg_path              TEXT         NOT NULL,
+    default_size_mm       DECIMAL,
+    description           TEXT
+)
+CHECK type_valid: fossil_type IN (
+    &#39;vertebrate&#39;, &#39;invertebrate&#39;, &#39;plant&#39;, &#39;trace_fossil&#39;,
+    &#39;microfossil&#39;, &#39;palynomorph&#39;, &#39;conodont&#39;, &#39;fish&#39;,
+    &#39;mammal&#39;, &#39;dinosaur&#39;, &#39;marine_reptile&#39;
+)
+RELATIONSHIPS {
+    symbol -&gt; MapSymbol REQUIRED ONE;
+}</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Comprehensive symbol library matching FGDC standard</li>
+<li>Extensible for custom symbols</li>
+<li>SVG-based for modern web/print output</li>
+<li>Enables standards-compliant map production</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Large number of symbol entities</li>
+<li>SVG definitions require graphic design expertise</li>
+<li>Maintaining synchronization with FGDC updates</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://ngmdb.usgs.gov/fgdc_gds/geolsymstd.php">FGDC
+Digital Cartographic Standard for Geologic Map Symbolization</a></li>
+<li><a
+href="https://ngmdb.usgs.gov/fgdc_gds/geolsymstd/download.php">FGDC
+Standard PDF Download</a></li>
+<li><a
+href="https://ngmdb.usgs.gov/Info/standards/NCGMP09/docs/FGDC_STYLX.zip">ArcGIS
+Pro FGDC Style Implementation</a></li>
+<li><a href="https://ngmdb.usgs.gov/">USGS National Geologic Map
+Database</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

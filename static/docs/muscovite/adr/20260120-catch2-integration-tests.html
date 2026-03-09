@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catch2 Integration Tests Replace
+pgTAP — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Catch2 Integration Tests Replace pgTAP</span>
+</nav>
+
+<h1>Catch2 Integration Tests Replace pgTAP</h1>
+
+
+<h1 id="catch2-integration-tests-replace-pgtap">Catch2 Integration Tests
+Replace pgTAP</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-01-20</li>
+<li>Tags: testing, catch2, pgtap, integration-tests</li>
+<li>Supersedes: <a
+href="20251223-api-only-testing-with-ddd-seeding.html">20251223-api-only-testing-with-ddd-seeding.md</a></li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite currently generates pgTAP tests that validate PL/pgSQL
+stored procedures. With the removal of stored procedures (see ADR:
+Remove PL/pgSQL API Layer), these tests become obsolete. We need a new
+testing strategy that validates business logic at the correct layer: C++
+domain services.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Test the right layer</strong>: Business logic lives in C++
+domain services, not stored procedures</li>
+<li><strong>End-to-end validation</strong>: Tests should exercise full
+path from service to database</li>
+<li><strong>Familiar tooling</strong>: Catch2 is the existing C++ test
+framework in Muscovite</li>
+<li><strong>Real database</strong>: Tests must use actual PostgreSQL to
+validate constraints/FKs</li>
+<li><strong>CI/CD integration</strong>: Tests must run in automated
+pipelines</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Keep pgTAP, mock stored procedures</strong>: Doesn't test
+actual business logic</li>
+<li><strong>Unit tests with mocked repositories</strong>: Fast but
+misses integration issues</li>
+<li><strong>Catch2 integration tests against real PostgreSQL</strong>:
+Full validation (chosen)</li>
+<li><strong>Hybrid: unit + integration tests</strong>: More
+comprehensive but more maintenance</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Catch2 integration tests against real
+PostgreSQL"</strong>, because:</p>
+<ul>
+<li>Tests validate actual business logic in domain services</li>
+<li>Real database catches constraint violations, FK errors, type
+mismatches</li>
+<li>Catch2 is already used in Muscovite (consistent tooling)</li>
+<li>Docker/testcontainers make test database setup reliable</li>
+</ul>
+<h3 id="test-architecture">Test Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    Catch2 Test Suite                             │
+├─────────────────────────────────────────────────────────────────┤
+│  TEST_CASE(&quot;PatientCommandService creates patient&quot;) {           │
+│      // Arrange                                                  │
+│      auto pool = test_connection_pool();                        │
+│      PatientCommandService cmd_svc(pool);                       │
+│      PatientQueryService query_svc(pool);                       │
+│                                                                  │
+│      // Act                                                      │
+│      auto patient = cmd_svc.create({.name = &quot;John Doe&quot;});       │
+│                                                                  │
+│      // Assert                                                   │
+│      auto found = query_svc.find_by_id(patient.id);             │
+│      REQUIRE(found.has_value());                                │
+│      REQUIRE(found-&gt;name == &quot;John Doe&quot;);                        │
+│  }                                                               │
+└───────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Domain Services                               │
+│  CommandService + QueryService                                   │
+└───────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Repositories                                  │
+│  Direct SQL via pqxx                                             │
+└───────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    PostgreSQL (Docker)                           │
+│  Real database with schema, constraints, FKs                     │
+└───────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="test-categories">Test Categories</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Command Tests</strong></td>
+<td>Validate write operations</td>
+<td>Create, update, delete, child operations</td>
+</tr>
+<tr>
+<td><strong>Query Tests</strong></td>
+<td>Validate read operations</td>
+<td>find_by_id, find_all, specifications</td>
+</tr>
+<tr>
+<td><strong>Constraint Tests</strong></td>
+<td>Validate DB constraints</td>
+<td>FK violations, unique constraints</td>
+</tr>
+<tr>
+<td><strong>Transaction Tests</strong></td>
+<td>Validate rollback behavior</td>
+<td>Partial failure scenarios</td>
+</tr>
+<tr>
+<td><strong>Event Tests</strong></td>
+<td>Validate event emission</td>
+<td>Check domain_events table after commands</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generated-test-structure">Generated Test Structure</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: test/domain/patient_service_test.cpp</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;catch2/catch_all.hpp&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fhir/domain/patient_command_service.hpp&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;fhir/domain/patient_query_service.hpp&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;test_fixtures.hpp&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> fhir<span class="op">::</span>test <span class="op">{</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>TEST_CASE<span class="op">(</span><span class="st">&quot;PatientCommandService&quot;</span><span class="op">,</span> <span class="st">&quot;[domain][patient][command]&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> pool <span class="op">=</span> TestFixtures<span class="op">::</span>connection_pool<span class="op">();</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    PatientCommandRepository cmd_repo<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    PatientQueryRepository query_repo<span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    PatientCommandService cmd_svc<span class="op">(</span>cmd_repo<span class="op">,</span> pool<span class="op">);</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    PatientQueryService query_svc<span class="op">(</span>query_repo<span class="op">,</span> pool<span class="op">);</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    SECTION<span class="op">(</span><span class="st">&quot;create inserts patient and emits event&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        CreatePatientRequest req<span class="op">{.</span>name <span class="op">=</span> <span class="st">&quot;John Doe&quot;</span><span class="op">,</span> <span class="op">.</span>birth_date <span class="op">=</span> <span class="st">&quot;1990-01-15&quot;</span><span class="op">};</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> patient <span class="op">=</span> cmd_svc<span class="op">.</span>create<span class="op">(</span>req<span class="op">);</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        REQUIRE<span class="op">(</span>patient<span class="op">.</span>id <span class="op">!=</span> <span class="ex">boost::</span>uuids::nil_uuid<span class="op">());</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        REQUIRE<span class="op">(</span>patient<span class="op">.</span>name <span class="op">==</span> <span class="st">&quot;John Doe&quot;</span><span class="op">);</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Verify event emitted</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> events <span class="op">=</span> TestFixtures<span class="op">::</span>get_events<span class="op">(</span>pool<span class="op">,</span> <span class="st">&quot;Patient&quot;</span><span class="op">,</span> patient<span class="op">.</span>id<span class="op">);</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        REQUIRE<span class="op">(</span>events<span class="op">.</span>size<span class="op">()</span> <span class="op">==</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        REQUIRE<span class="op">(</span>events<span class="op">[</span><span class="dv">0</span><span class="op">].</span><span class="dt">event_type</span> <span class="op">==</span> <span class="st">&quot;PatientCreated&quot;</span><span class="op">);</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    SECTION<span class="op">(</span><span class="st">&quot;create with invalid FK fails&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        CreatePatientRequest req<span class="op">{</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;John Doe&quot;</span><span class="op">,</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>primary_provider_id <span class="op">=</span> <span class="ex">boost::</span>uuids::random_generator<span class="op">()()</span>  <span class="co">// Non-existent</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        REQUIRE_THROWS_AS<span class="op">(</span>cmd_svc<span class="op">.</span>create<span class="op">(</span>req<span class="op">),</span> pqxx<span class="op">::</span>foreign_key_violation<span class="op">);</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    SECTION<span class="op">(</span><span class="st">&quot;delete removes patient&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> patient <span class="op">=</span> cmd_svc<span class="op">.</span>create<span class="op">({.</span>name <span class="op">=</span> <span class="st">&quot;To Delete&quot;</span><span class="op">});</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        cmd_svc<span class="op">.</span>remove<span class="op">(</span>patient<span class="op">.</span>id<span class="op">);</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> found <span class="op">=</span> query_svc<span class="op">.</span>find_by_id<span class="op">(</span>patient<span class="op">.</span>id<span class="op">);</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        REQUIRE_FALSE<span class="op">(</span>found<span class="op">.</span>has_value<span class="op">());</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>TEST_CASE<span class="op">(</span><span class="st">&quot;PatientQueryService&quot;</span><span class="op">,</span> <span class="st">&quot;[domain][patient][query]&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> pool <span class="op">=</span> TestFixtures<span class="op">::</span>connection_pool<span class="op">();</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... query tests</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace fhir::test</span></span></code></pre></div>
+<h3 id="test-fixtures">Test Fixtures</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: test/test_fixtures.hpp</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> fhir<span class="op">::</span>test <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestFixtures <span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Singleton connection pool for tests</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> ConnectionPool<span class="op">&amp;</span> connection_pool<span class="op">();</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clean database between tests</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="dt">void</span> reset_database<span class="op">();</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Seed lookup data</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="dt">void</span> seed_lookups<span class="op">();</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Query domain events for verification</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="bu">std::</span>vector<span class="op">&lt;</span>DomainEvent<span class="op">&gt;</span> get_events<span class="op">(</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        ConnectionPool<span class="op">&amp;</span> pool<span class="op">,</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> <span class="dt">aggregate_type</span><span class="op">,</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> aggregate_id</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">// RAII cleanup</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DatabaseTransaction <span class="op">{</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    DatabaseTransaction<span class="op">()</span> <span class="op">{</span> TestFixtures<span class="op">::</span>reset_database<span class="op">();</span> <span class="op">}</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">~</span>DatabaseTransaction<span class="op">()</span> <span class="op">{</span> <span class="co">/* rollback or clean */</span> <span class="op">}</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace fhir::test</span></span></code></pre></div>
+<h3 id="cmake-integration">CMake Integration</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generated: test/CMakeLists.txt</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">find_package</span>(Catch2 3 <span class="ot">REQUIRED</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">add_executable</span>(<span class="bn">fhir_domain_tests</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    test_fixtures.cpp</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    domain/patient_service_test.cpp</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    domain/encounter_service_test.cpp</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ... more test files</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">target_link_libraries</span>(<span class="bn">fhir_domain_tests</span> <span class="ot">PRIVATE</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="bn">Catch2::Catch2WithMain</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    fhir_domain_services</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    fhir_repositories</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    muscovitedba</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Register with CTest</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(Catch)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">catch_discover_tests</span>(fhir_domain_tests)</span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Tests validate actual business logic location (C++ services)</li>
+<li>Real database catches constraint violations early</li>
+<li>Familiar Catch2 patterns for C++ developers</li>
+<li>CTest integration for CI/CD pipelines</li>
+<li>Tests serve as documentation for service behavior</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Slower than unit tests (database I/O)
+<ul>
+<li>Mitigation: Use transaction rollback instead of truncate</li>
+<li>Mitigation: Parallel test execution</li>
+</ul></li>
+<li>Requires PostgreSQL running for tests
+<ul>
+<li>Mitigation: Docker/testcontainers in CI</li>
+</ul></li>
+<li>More test setup code than pgTAP
+<ul>
+<li>Mitigation: Generate fixtures from DSL model</li>
+</ul></li>
+</ul>
+<h2 id="migration-from-pgtap">Migration from pgTAP</h2>
+<ol type="1">
+<li>Remove pgTAP test generation from <code>pgtap.rkt</code></li>
+<li>Add Catch2 test generation to new
+<code>test-generator.rkt</code></li>
+<li>Update CMake to build and run Catch2 tests</li>
+<li>Update CI/CD to use Catch2 instead of pg_prove</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Requires <a
+href="20260120-remove-plpgsql-api-layer.html">20260120-remove-plpgsql-api-layer.md</a></li>
+<li>Requires <a
+href="20260120-domain-services-as-aggregate-boundary.html">20260120-domain-services-as-aggregate-boundary.md</a></li>
+<li>Supersedes <a
+href="20251223-api-only-testing-with-ddd-seeding.html">20251223-api-only-testing-with-ddd-seeding.md</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating test code for domain services</li>
+<li>When setting up test infrastructure for new projects</li>
+<li>When validating aggregate behavior</li>
+<li>When testing constraint violations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Schema validation (use Sqitch verify scripts)</li>
+<li>Performance testing (use dedicated benchmarks)</li>
+<li>UI testing (separate concern)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>pgTAP generation is removed from generators</li>
+<li>Catch2 tests generated for each aggregate</li>
+<li>CI/CD pipeline runs Catch2 tests, not pg_prove</li>
+<li>Test coverage required for all command operations</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/cpp/test-generator.rkt</code> - NEW:
+Catch2 test generation</li>
+<li><code>src/dslgen/generators/postgres/pgtap.rkt</code> - TO BE
+REMOVED</li>
+<li><code>cmake/Testing.cmake</code> - Catch2 integration</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

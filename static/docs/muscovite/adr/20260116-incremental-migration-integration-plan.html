@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Incremental Migration Integration
+Plan — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Incremental Migration Integration Plan</span>
+</nav>
+
+<h1>ADR: Incremental Migration Integration Plan</h1>
+
+
+<h1 id="adr-incremental-migration-integration-plan">ADR: Incremental
+Migration Integration Plan</h1>
+<p><strong>Status</strong>: Accepted<br />
+<strong>Date</strong>: 2026-01-16<br />
+<strong>Context</strong>: Schema Evolution Pipeline</p>
+<h2 id="summary">Summary</h2>
+<p>This document describes the plan to achieve <strong>incremental
+database migrations from DDD model changes</strong>, ensuring:</p>
+<ul>
+<li>The database is <strong>never dropped and recreated</strong></li>
+<li>All schema changes go through <strong>Sqitch
+migrations</strong></li>
+<li>C++ code can be regenerated from scratch at any time
+(stateless)</li>
+<li>The <strong>DDD model is the single source of truth</strong></li>
+</ul>
+<hr />
+<h2 id="current-state-analysis">Current State Analysis</h2>
+<h3 id="white_check_mark-components-that-exist">✅ Components That
+Exist</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Git DDD extractor</td>
+<td><code>tools/muscovite-version/</code></td>
+<td>Built, works</td>
+</tr>
+<tr>
+<td>Git→Racket bridge</td>
+<td><code>migration/git-version-loader.rkt</code></td>
+<td>Works</td>
+</tr>
+<tr>
+<td>Semantic diff by UUID</td>
+<td><code>migration/diff-model.rkt</code></td>
+<td>Works</td>
+</tr>
+<tr>
+<td>Operation structs</td>
+<td><code>migration/operations.rkt</code></td>
+<td>Complete</td>
+</tr>
+<tr>
+<td>Operation versioning</td>
+<td><code>migration/operation-versioning.rkt</code></td>
+<td><strong>NEW</strong></td>
+</tr>
+<tr>
+<td>Sqitch SQL generator</td>
+<td><code>migration/sqitch-generator.rkt</code></td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>End-to-end CLI</td>
+<td><code>migration/migrate.rkt</code></td>
+<td>Scaffold</td>
+</tr>
+<tr>
+<td>Change classification</td>
+<td><code>migration/change-classifier.rkt</code></td>
+<td>Works</td>
+</tr>
+</tbody>
+</table>
+<h3 id="x-missing-or-incomplete">❌ Missing or Incomplete</h3>
+<table>
+<thead>
+<tr>
+<th>Gap</th>
+<th>Description</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LOOKUP_TABLE ops</strong></td>
+<td>No operation types for lookup tables</td>
+<td>Can't migrate lookup tables</td>
+</tr>
+<tr>
+<td><strong>Seed data ops</strong></td>
+<td>No IMPORT CSV → INSERT/UPDATE</td>
+<td>Can't migrate seed data</td>
+</tr>
+<tr>
+<td><strong>API function ops</strong></td>
+<td>No ops for PL/pgSQL function changes</td>
+<td>Functions regenerated, not migrated</td>
+</tr>
+<tr>
+<td><strong>Index ops incomplete</strong></td>
+<td>add-index-op exists but SQL generation stub</td>
+<td>Can't add indexes incrementally</td>
+</tr>
+<tr>
+<td><strong>Relationship SQL</strong></td>
+<td>add-relationship-op → comment only</td>
+<td>FK migrations incomplete</td>
+</tr>
+<tr>
+<td><strong>sqitch.plan mgmt</strong></td>
+<td>Basic append, no dependency tracking</td>
+<td>May break deploy order</td>
+</tr>
+<tr>
+<td><strong>Full pipeline test</strong></td>
+<td>No integration test with real git history</td>
+<td>Untested end-to-end</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="architecture-target">Architecture Target</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                           INCREMENTAL MIGRATION FLOW                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ Git Ref A (v1.0.0)           Git Ref B (v1.1.0)
+       │                            │
+       ▼                            ▼
+ ┌───────────────┐           ┌───────────────┐
+ │muscovite-     │           │muscovite-     │
+ │version        │           │version        │
+ │(C++ tool)     │           │(C++ tool)     │
+ └───────┬───────┘           └───────┬───────┘
+         │                           │
+         ▼                           ▼
+ ┌───────────────┐           ┌───────────────┐
+ │ .ddd files    │           │ .ddd files    │
+ │ (extracted)   │           │ (extracted)   │
+ └───────┬───────┘           └───────┬───────┘
+         │                           │
+         ▼                           ▼
+ ┌───────────────┐           ┌───────────────┐
+ │ Racket Parser │           │ Racket Parser │
+ │ (parser.rkt)  │           │ (parser.rkt)  │
+ └───────┬───────┘           └───────┬───────┘
+         │                           │
+         ▼                           ▼
+ ┌───────────────┐           ┌───────────────┐
+ │ Semantic IR   │           │ Semantic IR   │
+ │ (with UUIDs)  │           │ (with UUIDs)  │
+ └───────┬───────┘           └───────┬───────┘
+         │                           │
+         └───────────┬───────────────┘
+                     ▼
+            ┌───────────────────┐
+            │   diff-model.rkt  │
+            │   (UUID-based)    │
+            └─────────┬─────────┘
+                      │
+                      ▼
+            ┌───────────────────┐
+            │ Migration Ops     │
+            │ (operations.rkt)  │
+            │ + LOOKUP_TABLE    │
+            │ + SEED DATA       │
+            └─────────┬─────────┘
+                      │
+                      ▼
+            ┌───────────────────┐
+            │ Version Envelope  │
+            │ (operation-       │
+            │  versioning.rkt)  │
+            └─────────┬─────────┘
+                      │
+                      ▼
+            ┌───────────────────┐
+            │ Safety Check      │
+            │ (destructive?)    │
+            └─────────┬─────────┘
+                      │
+                      ▼
+            ┌───────────────────┐
+            │ sqitch-generator  │
+            │ (incremental)     │
+            └─────────┬─────────┘
+                      │
+         ┌────────────┼────────────┐
+         ▼            ▼            ▼
+    ┌─────────┐ ┌─────────┐ ┌─────────┐
+    │ deploy/ │ │ revert/ │ │ verify/ │
+    │ *.sql   │ │ *.sql   │ │ *.sql   │
+    └────┬────┘ └────┬────┘ └────┬────┘
+         │            │            │
+         └────────────┼────────────┘
+                      ▼
+            ┌───────────────────┐
+            │  sqitch.plan      │
+            │  (with deps)      │
+            └─────────┬─────────┘
+                      │
+                      ▼
+            ┌───────────────────┐
+            │  sqitch deploy    │
+            │  db:pg://...      │
+            └───────────────────┘</code></pre>
+<hr />
+<h2 id="implementation-plan">Implementation Plan</h2>
+<h3 id="phase-1-lookup_table-migration-support-day-1">Phase 1:
+LOOKUP_TABLE Migration Support (Day 1)</h3>
+<p><strong>Goal</strong>: LOOKUP_TABLE operations integrated into diff
+and SQL generation</p>
+<h4 id="11-add-lookup_table-operations-to-diff-modelrkt">1.1 Add
+LOOKUP_TABLE operations to diff-model.rkt</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; In diff-entities, detect lookup tables by presence of standard fields</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>entity-is-lookup-table? ent<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> fields </span><span class="op">(</span>entity-fields ent<span class="op">))</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> field-names </span><span class="op">(</span><span class="kw">map</span> field-name fields<span class="op">))</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">and</span> <span class="op">(</span><span class="kw">member</span> &#39;code field-names<span class="op">)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span><span class="kw">member</span> &#39;display field-names<span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span><span class="kw">member</span> &#39;is_active field-names<span class="op">)))</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; Generate add-lookup-table-op instead of add-entity-op for lookup tables</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-entities old-contexts new-contexts<span class="op">)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/list <span class="op">([</span>ent <span class="op">(</span>find-added-entities old-contexts new-contexts<span class="op">)])</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>entity-is-lookup-table? ent<span class="op">)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>add-lookup-table-op ...<span class="op">)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>add-entity-op ...<span class="op">))))</span></span></code></pre></div>
+<h4 id="12-add-sql-generation-for-lookup-tables">1.2 Add SQL generation
+for lookup tables</h4>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; In sqitch-generator.rkt</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">[(</span>add-lookup-table-op uuid ctx-uuid name ent schema-name safety<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;-- Create lookup table: ~a.~a</span><span class="ch">\n</span><span class="st">&quot;</span> schema-name name<span class="op">)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity-&gt;create-table-sql ent schema-name<span class="op">)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;-- Create index on code</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;CREATE UNIQUE INDEX ~a_code_idx ON ~a.~a(code);</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          name schema-name name<span class="op">))]</span></span></code></pre></div>
+<h4 id="13-files-to-modify">1.3 Files to modify</h4>
+<ul>
+<li><code>migration/operations.rkt</code> - Re-export from
+operation-versioning.rkt</li>
+<li><code>migration/diff-model.rkt</code> - Detect lookup tables, emit
+correct ops</li>
+<li><code>migration/sqitch-generator.rkt</code> - Handle LOOKUP_TABLE
+ops</li>
+</ul>
+<hr />
+<h3 id="phase-2-seed-data-migration-day-2">Phase 2: Seed Data Migration
+(Day 2)</h3>
+<p><strong>Goal</strong>: IMPORT CSV changes → INSERT/UPDATE/DELETE
+statements</p>
+<h4 id="21-track-seed-data-in-ir">2.1 Track seed data in IR</h4>
+<p>The parser already captures <code>csv-import</code> structs. Need
+to:</p>
+<ol type="1">
+<li>Include seed file paths in semantic IR</li>
+<li>Diff seed data between versions</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; New operation types</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> add-seed-row-op</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity-uuid table-name schema-name row-data safety<span class="op">)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> update-seed-row-op  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity-uuid table-name schema-name pk-value changes safety<span class="op">)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> remove-seed-row-op</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity-uuid table-name schema-name pk-value safety<span class="op">)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<h4 id="22-seed-diff-algorithm">2.2 Seed diff algorithm</h4>
+<ol type="1">
+<li>Extract CSV content from both git refs (via muscovite-version)</li>
+<li>Parse CSV → list of row hashes</li>
+<li>Compare by PK (code column for lookup tables)</li>
+<li>Generate add/update/remove seed ops</li>
+</ol>
+<h4 id="23-sql-generation">2.3 SQL generation</h4>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- add-seed-row-op</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> basedata.clinical_status (<span class="kw">id</span>, code, display, definition, is_active, sort_order)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">&#39;uuid-here&#39;</span>, <span class="st">&#39;active&#39;</span>, <span class="st">&#39;Active&#39;</span>, <span class="st">&#39;The condition is active&#39;</span>, <span class="kw">true</span>, <span class="dv">1</span>);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- update-seed-row-op  </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> basedata.clinical_status <span class="kw">SET</span> display <span class="op">=</span> <span class="st">&#39;Active Status&#39;</span>, sort_order <span class="op">=</span> <span class="dv">2</span> <span class="kw">WHERE</span> code <span class="op">=</span> <span class="st">&#39;active&#39;</span>;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- remove-seed-row-op</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> basedata.clinical_status <span class="kw">WHERE</span> code <span class="op">=</span> <span class="st">&#39;deprecated&#39;</span>;</span></code></pre></div>
+<hr />
+<h3 id="phase-3-complete-relationship-fk-migrations-day-2-3">Phase 3:
+Complete Relationship FK Migrations (Day 2-3)</h3>
+<p><strong>Goal</strong>: add-relationship-op → actual ALTER TABLE ADD
+CONSTRAINT</p>
+<h4 id="31-current-state">3.1 Current state</h4>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Currently generates:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;-- Add relationship: patient.condition.encounter_id -&gt; encounter.encounter (cardinality: one, required: true)&quot;</span></span></code></pre></div>
+<h4 id="32-target-state">3.2 Target state</h4>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add FK column if not exists</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.condition </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ADD</span> <span class="kw">COLUMN</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> encounter_id UUID;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add foreign key constraint  </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.condition </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_condition_encounter </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (encounter_id) </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">REFERENCES</span> encounter.encounter(<span class="kw">id</span>);</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add NOT NULL if required</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.condition</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ALTER</span> <span class="kw">COLUMN</span> encounter_id <span class="kw">SET</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span></code></pre></div>
+<h4 id="33-implementation">3.3 Implementation</h4>
+<p>Enhance <code>operation-&gt;deploy-sql</code> in sqitch-generator.rkt
+to emit full FK DDL.</p>
+<hr />
+<h3 id="phase-4-sqitchplan-dependency-management-day-3">Phase 4:
+sqitch.plan Dependency Management (Day 3)</h3>
+<p><strong>Goal</strong>: Correct topological order in sqitch.plan</p>
+<h4 id="41-problem">4.1 Problem</h4>
+<p>Current <code>update-sqitch-plan</code> just appends. But migrations
+may have dependencies:</p>
+<ul>
+<li>FK migrations depend on both tables existing</li>
+<li>Seed data depends on table existing</li>
+<li>API functions depend on table existing</li>
+</ul>
+<h4 id="42-solution">4.2 Solution</h4>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Extract dependencies from operations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>operation-dependencies op<span class="op">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match op</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-relationship-op ... src-ent-name src-schema-name tgt-ent-name tgt-schema-name ...<span class="op">)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">list</span> <span class="op">(</span>format <span class="st">&quot;~a-table-~a&quot;</span> src-schema-name src-ent-name<span class="op">)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>format <span class="st">&quot;~a-table-~a&quot;</span> tgt-schema-name tgt-ent-name<span class="op">))]</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>seed-lookup-table-op ... entity-name schema-name ...<span class="op">)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">list</span> <span class="op">(</span>format <span class="st">&quot;~a-table-~a&quot;</span> schema-name entity-name<span class="op">))]</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">[_</span> &#39;<span class="op">()]))</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">;; Write sqitch.plan entry with dependencies</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>write-plan-entry change-name dependencies<span class="op">)</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;~a [~a] ~a Migration &lt;...&gt;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>          change-name</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>string-join dependencies <span class="st">&quot; &quot;</span><span class="op">)</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>current-date-time<span class="op">)))</span></span></code></pre></div>
+<hr />
+<h3 id="phase-5-end-to-end-integration-test-day-4">Phase 5: End-to-End
+Integration Test (Day 4)</h3>
+<p><strong>Goal</strong>: Prove the pipeline works with real FHIR
+project git history</p>
+<h4 id="51-test-scenario">5.1 Test scenario</h4>
+<ol type="1">
+<li>Create git tag <code>v1.0.0</code> on current FHIR model</li>
+<li>Add a new lookup table <code>AppointmentStatus</code> in Basedata
+context</li>
+<li>Commit as <code>v1.1.0</code></li>
+<li>Run:
+<code>racket migrate.rkt --repo examples/fhir-health --from v1.0.0 --to v1.1.0</code></li>
+<li>Verify:
+<ul>
+<li>deploy/migrate-v1_0_0-to-v1_1_0.sql contains CREATE TABLE</li>
+<li>revert/migrate-v1_0_0-to-v1_1_0.sql contains DROP TABLE</li>
+<li>sqitch deploy succeeds</li>
+<li>sqitch verify passes</li>
+</ul></li>
+</ol>
+<h4 id="52-test-file">5.2 Test file</h4>
+<p>Create <code>migration/test-e2e-migration.rkt</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> rackunit</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;migrate.rkt&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;git-version-loader.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>test-case <span class="st">&quot;FHIR incremental migration v1.0.0 → v1.1.0&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; ... full integration test</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">)</span></span></code></pre></div>
+<hr />
+<h2 id="file-changes-summary">File Changes Summary</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operations.rkt</code></td>
+<td>Add LOOKUP_TABLE op re-exports</td>
+</tr>
+<tr>
+<td><code>diff-model.rkt</code></td>
+<td>Detect lookup tables, diff seed data</td>
+</tr>
+<tr>
+<td><code>sqitch-generator.rkt</code></td>
+<td>Full SQL for all operation types</td>
+</tr>
+<tr>
+<td><code>migrate.rkt</code></td>
+<td>Improve sqitch.plan dependency handling</td>
+</tr>
+<tr>
+<td><code>operation-versioning.rkt</code></td>
+<td>Already done ✅</td>
+</tr>
+<tr>
+<td><strong>NEW</strong> <code>seed-diff.rkt</code></td>
+<td>CSV diff algorithm</td>
+</tr>
+<tr>
+<td><strong>NEW</strong> <code>test-e2e-migration.rkt</code></td>
+<td>Integration test</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cli-usage-final">CLI Usage (Final)</h2>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare two git versions, generate migration</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--repo</span> ./examples/fhir-health <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--from</span> v1.0.0 <span class="dt">\</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--to</span> v1.1.0 <span class="dt">\</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sqitch-dir</span> ./examples/fhir-health/generated/sqitch <span class="dt">\</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--dry-run</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Review generated SQL, then deploy</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="dt">\</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">--repo</span> ./examples/fhir-health <span class="dt">\</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">--from</span> v1.0.0 <span class="dt">\</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">--to</span> v1.1.0 <span class="dt">\</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sqitch-dir</span> ./examples/fhir-health/generated/sqitch <span class="dt">\</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">--db</span> db:pg://postgres:postgres@localhost:5555/fhir</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Rollback if needed</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="ex">sqitch</span> revert <span class="at">--to</span> migrate-v1_0_0-to-v1_1_0</span></code></pre></div>
+<hr />
+<h2 id="success-criteria">Success Criteria</h2>
+<ol type="1">
+<li>✅ <strong>Never DROP DATABASE</strong> - All changes via ALTER
+TABLE</li>
+<li>✅ <strong>UUID identity</strong> - Renamed entities detected, not
+dropped/recreated</li>
+<li>✅ <strong>Lookup tables</strong> - CREATE TABLE + seeds in single
+migration</li>
+<li>✅ <strong>Seed data delta</strong> - INSERT/UPDATE/DELETE for
+changed rows only</li>
+<li>✅ <strong>FK constraints</strong> - Full ALTER TABLE ADD
+CONSTRAINT</li>
+<li>✅ <strong>Revertible</strong> - Every deploy has matching
+revert</li>
+<li>✅ <strong>Verifiable</strong> - Every migration has verify
+script</li>
+<li>✅ <strong>Dependency order</strong> - sqitch.plan respects FK
+dependencies</li>
+</ol>
+<hr />
+<h2 id="non-goals-phase-1">Non-Goals (Phase 1)</h2>
+<ul>
+<li>API function migrations (regenerate full API is acceptable)</li>
+<li>pgTAP test migrations (regenerate is acceptable)</li>
+<li>C++ code migrations (regenerate is acceptable)</li>
+<li>gRPC proto migrations (regenerate is acceptable)</li>
+</ul>
+<p>These stateless artifacts can be regenerated from the model at any
+point without data loss.</p>
+<hr />
+<h2 id="risk-mitigation">Risk Mitigation</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destructive ops slip through</td>
+<td>Safety classification + <code>--force</code> required</td>
+</tr>
+<tr>
+<td>Wrong FK order</td>
+<td>Topological sort in sqitch-generator</td>
+</tr>
+<tr>
+<td>Missing revert</td>
+<td>Always generate deploy/revert/verify together</td>
+</tr>
+<tr>
+<td>Seed data conflicts</td>
+<td>Use UPSERT (ON CONFLICT DO UPDATE)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<ol type="1">
+<li><strong>Immediate</strong>: Implement Phase 1 (LOOKUP_TABLE
+ops)</li>
+<li><strong>Then</strong>: Implement Phase 2 (seed data diff)</li>
+<li><strong>Then</strong>: Implement Phase 3 (FK SQL)</li>
+<li><strong>Then</strong>: Implement Phase 4 (sqitch.plan deps)</li>
+<li><strong>Finally</strong>: Implement Phase 5 (e2e test)</li>
+</ol>
+<p>Estimated time: 4 days of focused work.</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

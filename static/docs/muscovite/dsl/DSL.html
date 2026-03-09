@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite DSL Reference — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/dsl/">dsl</a>
+  <span class="sep">/</span>
+  <span>Muscovite DSL Reference</span>
+</nav>
+
+<h1>Muscovite DSL Reference</h1>
+
+
+<h1 id="muscovite-dsl-reference">Muscovite DSL Reference</h1>
+<blockquote>
+<p><strong>Version</strong>: v1.5.0 | <strong>Formal Grammar</strong>:
+<a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
+| <strong>Rules</strong>: 277</p>
+</blockquote>
+<p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
+for specifying domain models. The <a
+href="../dslgen/grammar/muscovite.peg">formal PEG grammar</a> is the
+authoritative syntax specification. This document is
+<strong>auto-generated</strong> from the grammar, the type registry, and
+example <code>.ddd</code> files.</p>
+<blockquote>
+<p>🔄 <strong>Generated file</strong> — do not edit manually.
+Regenerate:
+<code>cd dslgen &amp;&amp; racket tools/generate-dsl-reference.rkt</code></p>
+</blockquote>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Keyword</th>
+<th>Grammar Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounded Context</td>
+<td><code>CONTEXT</code></td>
+<td><code>Context</code></td>
+</tr>
+<tr>
+<td>Entity</td>
+<td><code>ENTITY</code></td>
+<td><code>Entity</code></td>
+</tr>
+<tr>
+<td>Field List and Fields</td>
+<td><code>(field)</code></td>
+<td><code>Field</code></td>
+</tr>
+<tr>
+<td>Value Object</td>
+<td><code>VALUE_OBJECT</code></td>
+<td><code>ValueObject</code></td>
+</tr>
+<tr>
+<td>Strong Type</td>
+<td><code>STRONG_TYPE</code></td>
+<td><code>StrongType</code></td>
+</tr>
+<tr>
+<td>Aggregate</td>
+<td><code>AGGREGATE</code></td>
+<td><code>Aggregate</code></td>
+</tr>
+<tr>
+<td>Domain Event</td>
+<td><code>EVENT</code></td>
+<td><code>DomainEvent</code></td>
+</tr>
+<tr>
+<td>Sourced Event</td>
+<td><code>SOURCED_EVENT</code></td>
+<td><code>SourcedEvent</code></td>
+</tr>
+<tr>
+<td>Command</td>
+<td><code>COMMAND</code></td>
+<td><code>Command</code></td>
+</tr>
+<tr>
+<td>Repository</td>
+<td><code>REPOSITORY</code></td>
+<td><code>Repository</code></td>
+</tr>
+<tr>
+<td>Specification</td>
+<td><code>SPECIFICATION</code></td>
+<td><code>Specification</code></td>
+</tr>
+<tr>
+<td>Projection</td>
+<td><code>PROJECTION</code></td>
+<td><code>Projection</code></td>
+</tr>
+<tr>
+<td>Domain Service</td>
+<td><code>SERVICE</code></td>
+<td><code>DomainService</code></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td><code>POLICY</code></td>
+<td><code>Policy</code></td>
+</tr>
+<tr>
+<td>Saga</td>
+<td><code>SAGA</code></td>
+<td><code>Saga</code></td>
+</tr>
+<tr>
+<td>Relationships Block</td>
+<td><code>RELATIONSHIPS</code></td>
+<td><code>RelationshipsBlock</code></td>
+</tr>
+<tr>
+<td>Arc Constraint</td>
+<td><code>(arc)</code></td>
+<td><code>ArcConstraint</code></td>
+</tr>
+<tr>
+<td>CHECK Constraint</td>
+<td><code>CHECK</code></td>
+<td><code>CheckConstraint</code></td>
+</tr>
+<tr>
+<td>Lookup Table</td>
+<td><code>LOOKUP_TABLE</code></td>
+<td><code>LookupTable</code></td>
+</tr>
+<tr>
+<td>IMPORT</td>
+<td><code>IMPORT_JSON</code></td>
+<td><code>Import</code></td>
+</tr>
+<tr>
+<td>PRESENTATION Block</td>
+<td><code>PRESENTATION</code></td>
+<td><code>PresentationBlock</code></td>
+</tr>
+<tr>
+<td>INSTRUCT Block</td>
+<td><code>INSTRUCT</code></td>
+<td><code>InstructBlock</code></td>
+</tr>
+<tr>
+<td>GROUNDING Block</td>
+<td><code>GROUNDING</code></td>
+<td><code>Grounding</code></td>
+</tr>
+<tr>
+<td>Context Map</td>
+<td><code>MAP</code></td>
+<td><code>MapBlock</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="annotations">Annotations</h2>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@uuid "..."</code></td>
+<td>All constructs, fields</td>
+<td>Stable identity for semantic diff</td>
+</tr>
+<tr>
+<td><code>@required</code></td>
+<td>Fields</td>
+<td>NOT NULL constraint</td>
+</tr>
+<tr>
+<td><code>@unique</code></td>
+<td>Fields</td>
+<td>UNIQUE constraint</td>
+</tr>
+<tr>
+<td><code>@spatial-queryable</code></td>
+<td>Fields</td>
+<td>Generate spatial query RPCs</td>
+</tr>
+<tr>
+<td><code>@searchable</code></td>
+<td>Fields</td>
+<td>OpenSearch full-text index</td>
+</tr>
+<tr>
+<td><code>@inline</code></td>
+<td>Value objects</td>
+<td>Mixin — fields flattened into parent</td>
+</tr>
+<tr>
+<td><code>@owned</code></td>
+<td>Value objects</td>
+<td>Child table with CASCADE delete</td>
+</tr>
+<tr>
+<td><code>@shared</code></td>
+<td>Value objects</td>
+<td>Dimension/lookup table</td>
+</tr>
+<tr>
+<td><code>@cascade</code></td>
+<td>Relationships</td>
+<td>CASCADE delete</td>
+</tr>
+<tr>
+<td><code>@embedded</code></td>
+<td>Relationships</td>
+<td>Show child embedded in parent UI</td>
+</tr>
+<tr>
+<td><code>@builtin</code></td>
+<td>Contexts</td>
+<td>Framework-provided context</td>
+</tr>
+<tr>
+<td><code>@constants</code></td>
+<td>Lookup tables</td>
+<td>Generate compile-time C++ constants</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-types-cross-layer-mappings">Data Types (Cross-Layer
+Mappings)</h2>
+<p>Generated live from <a
+href="../dslgen/model/type-registry.rkt"><code>dslgen/model/type-registry.rkt</code></a>.
+Unknown types cause generation to <strong>fail</strong> (strict
+policy).</p>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL</th>
+<th>C++ DBA</th>
+<th>gRPC Proto</th>
+<th>Qt Widget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primitives</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>UUID</td>
+<td><code>UUID</code></td>
+<td><code>boost::uuids::uuid</code></td>
+<td><code>muscovite.common.UUID</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>String</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>string</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Integer</td>
+<td><code>INTEGER</code></td>
+<td><code>std::int32_t</code></td>
+<td><code>int32</code></td>
+<td><code>QSpinBox</code></td>
+</tr>
+<tr>
+<td>BigInteger</td>
+<td><code>BIGINT</code></td>
+<td><code>std::int64_t</code></td>
+<td><code>int64</code></td>
+<td><code>QSpinBox</code></td>
+</tr>
+<tr>
+<td>Decimal</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><code>BOOLEAN</code></td>
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+<td><code>QCheckBox</code></td>
+</tr>
+<tr>
+<td><strong>Temporal</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Date</td>
+<td><code>DATE</code></td>
+<td><code>muscovite::dba::Date</code></td>
+<td><code>muscovite.common.Date</code></td>
+<td><code>QDateEdit</code></td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>TIME</code></td>
+<td><code>muscovite::dba::TimeOfDay</code></td>
+<td><code>muscovite.common.TimeOfDay</code></td>
+<td><code>QTimeEdit</code></td>
+</tr>
+<tr>
+<td>DateTime</td>
+<td><code>TIMESTAMPTZ</code></td>
+<td><code>muscovite::dba::Timestamp</code></td>
+<td><code>muscovite.common.Timestamp</code></td>
+<td><code>QDateTimeEdit</code></td>
+</tr>
+<tr>
+<td>Interval</td>
+<td><code>INTERVAL</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Interval</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td><strong>Strong Types</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Email</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Email</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Phone</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Phone</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>PostalCode</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.PostalCode</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Url</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>PositiveInteger</td>
+<td><code>INTEGER</code></td>
+<td><code>std::int32_t</code></td>
+<td><code>int32</code></td>
+<td><code>QSpinBox</code></td>
+</tr>
+<tr>
+<td>PositiveDecimal</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.PositiveDecimal</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Latitude</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Longitude</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td><strong>Spatial (PostGIS)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Point</td>
+<td><code>GEOGRAPHY(POINT, 4326)</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Point</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>LineString</td>
+<td><code>GEOGRAPHY(LINESTRING, 4326)</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.LineString</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Polygon</td>
+<td><code>GEOGRAPHY(POLYGON, 4326)</code></td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Polygon</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Geography</td>
+<td><code>GEOGRAPHY</code></td>
+<td><code>std::string</code></td>
+<td><code>string</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> Section III for
+accessor/mutator patterns.</p>
+<hr />
+<h2 id="grammar-reference">Grammar Reference</h2>
+<p>Each section below corresponds to a numbered section in the <a
+href="../dslgen/grammar/muscovite.peg">PEG grammar</a>. Sections 35+ are
+internal/lexical and omitted.</p>
+<h3 id="1-top-level-program">1. Top-Level Program</h3>
+<pre class="peg"><code>Program              &lt;- Spacing ( ProjectBlock / Context / MapBlock )* EOF
+ProjectBlock         &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody &#39;}&#39;</code></pre>
+<h3 id="2-bounded-context">2. Bounded Context</h3>
+<pre class="peg"><code>Context              &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
+BuiltinAnnotation    &lt;- &#39;@&#39; &#39;BUILTIN&#39;
+ContextBody          &lt;- ContextItem*
+ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / Entity / Import / MappingBlock / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
+<h3 id="3-entity">3. Entity</h3>
+<pre class="peg"><code>Entity               &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation
+ExtendsClause        &lt;- &#39;EXTENDS&#39; IDENTIFIER
+EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / SourceAnnotation / DocClause / SynonymsClause</code></pre>
+<h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
+<pre class="peg"><code>FieldList            &lt;- &#39;(&#39; ( Field ( &#39;,&#39; Field )* )? &#39;)&#39;
+Field                &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation*
+FieldName            &lt;- IDENTIFIER / ContextualKeyword
+DefaultClause        &lt;- &#39;DEFAULT&#39; DefaultValue
+DefaultValue         &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39; / &#39;NOW&#39; &#39;(&#39; &#39;)&#39; / IDENTIFIER &#39;(&#39; &#39;)&#39;  # function call default
+FieldAnnotation      &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / &#39;@&#39; &#39;SPATIAL-QUERYABLE&#39; / &#39;@&#39; &#39;SEARCHABLE&#39; / FieldConstraint / SourceAnnotation / UuidAnnotation
+FieldConstraint      &lt;- &#39;@&#39; &#39;MIN&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;MAX&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;NOT_EMPTY&#39; / &#39;@&#39; &#39;NOT_IN_FUTURE&#39; / &#39;@&#39; &#39;NOT_IN_PAST&#39; / &#39;@&#39; &#39;PATTERN&#39; &#39;(&#39; STRING &#39;)&#39; / CrossFieldConstraint
+CrossFieldConstraint &lt;- &#39;@&#39; &#39;AFTER&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;BEFORE&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;SAME_DAY&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;NOT_EQUAL&#39; &#39;(&#39; IDENTIFIER &#39;)&#39;
+SourceAnnotation     &lt;- &#39;@&#39; &#39;SOURCE&#39; STRING</code></pre>
+<h3 id="5-type-specification">5. Type Specification</h3>
+<pre class="peg"><code>TypeSpec             &lt;- ForbiddenType / BaseType ArraySuffix? OptionalMarker? NullClause?
+ForbiddenType        &lt;- &#39;JSONB&#39; / &#39;JSON&#39;
+BaseType             &lt;- &#39;UUID&#39; / &#39;STRING&#39; / &#39;VARCHAR&#39; ( &#39;(&#39; NUMBER &#39;)&#39; )? / &#39;TEXT&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / ( &#39;DECIMAL&#39; / &#39;NUMERIC&#39; ) DecimalPrecision? / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;INTERVAL&#39; / &#39;POSITIVE_INTEGER&#39; / &#39;POSITIVE_INT&#39; / GeospatialType / QualifiedIdentifier  # length ignored, maps to TEXT
+DecimalPrecision     &lt;- &#39;(&#39; NUMBER ( &#39;,&#39; NUMBER )? &#39;)&#39;
+GeospatialType       &lt;- GeospatialTypeName SridClause?
+GeospatialTypeName   &lt;- &#39;POINT&#39; / &#39;POINTZ&#39; / &#39;LINESTRING&#39; / &#39;LINESTRINGZ&#39; / &#39;POLYGON&#39; / &#39;POLYGONZ&#39; / &#39;MULTIPOINT&#39; / &#39;MULTILINESTRING&#39; / &#39;MULTIPOLYGON&#39; / &#39;GEOMETRYCOLLECTION&#39; / &#39;GEOMETRY&#39; / &#39;GEOGRAPHY&#39;
+SridClause           &lt;- &#39;(&#39; NUMBER &#39;)&#39; / &#39;SRID&#39; NUMBER  # e.g., POINT(4326)
+ArraySuffix          &lt;- &#39;[&#39; &#39;]&#39;
+OptionalMarker       &lt;- &#39;?&#39;
+NullClause           &lt;- &#39;NOT_NULL&#39;</code></pre>
+<h3 id="6-uuid-annotation">6. UUID Annotation</h3>
+<pre class="peg"><code>UuidAnnotation       &lt;- &#39;@&#39; &#39;UUID&#39; STRING / !( &#39;@&#39; &#39;UUID&#39; )  # UUID string validated:</code></pre>
+<h3 id="7-value-object">7. Value Object</h3>
+<pre class="peg"><code>ValueObject          &lt;- &#39;VALUE_OBJECT&#39; IDENTIFIER UuidAnnotation StorageAnnotation?
+StorageAnnotation    &lt;- &#39;@&#39; &#39;INLINE&#39; / &#39;@&#39; &#39;OWNED&#39; / &#39;@&#39; &#39;SHARED&#39;  # fields flattened into parent (mixin)
+ValueObjectClause    &lt;- ComputedClause / ImmutableClause / NaturalKeyClause / CheckConstraint / SourceAnnotation / DocClause / SynonymsClause
+ComputedClause       &lt;- &#39;COMPUTED&#39; IDENTIFIER &#39;ON&#39; ComputeTiming &#39;:&#39; SqlExpression &#39;;&#39;?
+ComputeTiming        &lt;- &#39;INSERT&#39; / &#39;UPDATE&#39; / &#39;INSERT_OR_UPDATE&#39;
+ImmutableClause      &lt;- &#39;IMMUTABLE&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
+NaturalKeyClause     &lt;- &#39;NATURAL_KEY&#39; &#39;(&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39; &#39;;&#39;?</code></pre>
+<h3 id="8-strong-type-postgresql-domain">8. Strong Type (PostgreSQL
+DOMAIN)</h3>
+<pre class="peg"><code>StrongType           &lt;- &#39;STRONG_TYPE&#39; IDENTIFIER StrongTypeBase UuidAnnotation
+StrongTypeBase       &lt;- &#39;TEXT&#39; / &#39;VARCHAR&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / &#39;DECIMAL&#39; / &#39;NUMERIC&#39; / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;UUID&#39;
+StrongTypeCheck      &lt;- &#39;CHECK&#39; IDENTIFIER &#39;:&#39; CheckExpression
+CheckExpression      &lt;- ( !( &#39;CHECK&#39; / &#39;DEFAULT&#39; / &#39;DOC&#39; / &#39;;&#39; / EOF ) . )+</code></pre>
+<h3 id="9-aggregate">9. Aggregate</h3>
+<p>Layout directives now live exclusively in .lay profile files. See
+dslgen/grammar/muscovite-lay.peg for the layout grammar. The parser
+rejects LAYOUT in .ddd with a helpful error message. ADR:
+20260223-separate-layout-into-lay-dsl.md Former rules (preserved as
+comments for reference): LayoutBlock &lt;- 'LAYOUT' FormFactorQualifier?
+'{' LayoutDirective+ '}' FormFactorQualifier &lt;- 'desktop' / 'tablet'
+/ 'mobile' / 'watch' / 'embedded' LayoutDirective &lt;- MasterDirective
+/ DetailDirective MasterDirective &lt;- 'MASTER' '{' MasterClause+ '}'
+MasterClause &lt;- 'TABLE' ':' FieldRefList ';' DetailDirective &lt;-
+'DETAIL' '{' DetailClause+ '}' DetailClause &lt;- StyleClause /
+GroupingClause / ActionsClause / ChildrenClause ChildrenClause &lt;-
+'CHILDREN' ':' '[' ChildTabSpec (',' ChildTabSpec)* ']' ';' ChildTabSpec
+&lt;- IDENTIFIER ('as' QuotedString)? QuotedString &lt;- '"' (!'"' .)*
+'"' StyleClause &lt;- 'STYLE' ':' LayoutStyle ';' LayoutStyle &lt;-
+'FORM' / 'SIDEBAR' / 'CARD' / 'WIZARD' GroupingClause &lt;- 'GROUPING'
+':' GroupingMode ';' GroupingMode &lt;- 'TABS' / 'SECTIONS' /
+'ACCORDION' / 'FLAT' ActionsClause &lt;- 'ACTIONS' ':' FieldRefList ';'
+FieldRefList &lt;- '[' IDENTIFIER ( ',' IDENTIFIER )* ']'</p>
+<pre class="peg"><code>Aggregate            &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
+ContainsClause       &lt;- &#39;(&#39; &#39;CONTAINS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39;
+EmbedsClause         &lt;- &#39;EMBEDS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
+EventSourcedClause   &lt;- &#39;EVENT_SOURCED&#39;
+GrpcDeadlineClause   &lt;- &#39;GRPC_DEADLINE&#39; STRING</code></pre>
+<h3 id="10-domain-event">10. Domain Event</h3>
+<pre class="peg"><code>DomainEvent          &lt;- &#39;EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
+<h3 id="11-sourced-event-event-sourcing--adr-20260204">11. Sourced Event
+(Event Sourcing — ADR 20260204)</h3>
+<pre class="peg"><code>SourcedEvent         &lt;- &#39;SOURCED_EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
+<h3 id="12-command">12. Command</h3>
+<pre class="peg"><code>Command              &lt;- &#39;COMMAND&#39; IDENTIFIER &#39;ON&#39; IDENTIFIER FieldList
+RequiresClause       &lt;- &#39;REQUIRES&#39; IDENTIFIER &#39;:&#39; SqlExpression
+EmitsClause          &lt;- &#39;EMITS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*</code></pre>
+<h3 id="13-repository">13. Repository</h3>
+<pre class="peg"><code>Repository           &lt;- &#39;REPOSITORY&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER
+RepositoryMethod     &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
+<h3 id="14-specification">14. Specification</h3>
+<pre class="peg"><code>Specification        &lt;- &#39;SPECIFICATION&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER</code></pre>
+<h3 id="15-projection-cqrs-read-model--adr-20260203">15. Projection
+(CQRS Read Model — ADR 20260203)</h3>
+<pre class="peg"><code>Projection           &lt;- &#39;PROJECTION&#39; IDENTIFIER UuidAnnotation FieldList
+FromClause           &lt;- &#39;FROM&#39; STRING
+RefreshMode          &lt;- &#39;LIVE&#39; / &#39;ON_DEMAND&#39; / &#39;SCHEDULED&#39; STRING / &#39;ON_EVENT&#39; EventTypeList  # cron expression
+EventTypeList        &lt;- QualifiedIdentifier ( &#39;,&#39; QualifiedIdentifier )*
+HandlerClause        &lt;- &#39;HANDLER&#39; IDENTIFIER</code></pre>
+<h3 id="16-domain-service">16. Domain Service</h3>
+<pre class="peg"><code>DomainService        &lt;- &#39;SERVICE&#39; IDENTIFIER
+ServiceMethod        &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
+<h3 id="17-policy">17. Policy</h3>
+<pre class="peg"><code>Policy               &lt;- &#39;POLICY&#39; IDENTIFIER &#39;WHEN&#39; IDENTIFIER
+WhereClause          &lt;- &#39;WHERE&#39; SqlExpression
+OtherwiseClause      &lt;- &#39;OTHERWISE&#39; PolicyAction
+RetryClause          &lt;- &#39;RETRY&#39; NUMBER
+TimeoutClause        &lt;- &#39;TIMEOUT&#39; TimeoutDuration
+TimeoutDuration      &lt;- STRING / NUMBER IDENTIFIER?  # e.g., &quot;30s&quot;, &quot;5m&quot;
+PolicyAction         &lt;- &#39;EMIT&#39; IDENTIFIER ActionParams? / &#39;INVOKE&#39; IDENTIFIER ActionParams? / &#39;NOTIFY&#39; IDENTIFIER ActionParams? / IDENTIFIER ( &#39;.&#39; IDENTIFIER )? ActionParams?
+ActionParams         &lt;- &#39;(&#39; ( ActionParam ( &#39;,&#39; ActionParam )* )? &#39;)&#39;
+ActionParam          &lt;- IDENTIFIER &#39;=&#39; ParamValue
+ParamValue           &lt;- STRING / NUMBER / &#39;$&#39; IDENTIFIER / IDENTIFIER ( &#39;.&#39; IDENTIFIER )?  # event field reference</code></pre>
+<h3 id="18-saga">18. Saga</h3>
+<p>18b. State Machine (Entity Lifecycle — ADR 20260221) Context-level
+construct for formal intra-entity lifecycle modeling. Generates state
+lookup tables, transition log, C++ state machine class, gRPC transition
+RPCs, and Qt state-aware UI. Example: STATE_MACHINE OrderLifecycle @uuid
+"..." FOR Order { STATE Draft DOC "Order being composed"; STATE
+Submitted DOC "Order submitted for processing"; STATE Fulfilled DOC
+"Order shipped and delivered"; STATE Cancelled DOC "Order cancelled";
+INITIAL Draft; TERMINAL Fulfilled, Cancelled; TRANSITION Draft -&gt;
+Submitted ON OrderSubmitted; TRANSITION Submitted -&gt; Fulfilled ON
+ShipmentDelivered GUARD "NOT has_shipped"; TRANSITION Draft -&gt;
+Cancelled ON OrderCancelled; } 18c. Extension Point (Plugin System — ADR
+20260223) Context-level construct declaring a typed extension contract.
+Code generation is driven by PLUGIN wiring in .mus (FTR-137). No
+generated code from EXTENSION_POINT alone — grammar + IR + validation
+only. Example: EXTENSION_POINT PasswordValidator @uuid "..." { CLASS:
+Validator; TARGET: User; LAYER: Backend; INTERFACE: SyncVirtual; DOC
+"Validates password strength before user creation"; }</p>
+<pre class="peg"><code>Saga                 &lt;- &#39;SAGA&#39; IDENTIFIER UuidAnnotation?
+CorrelateClause      &lt;- &#39;CORRELATE_BY&#39; IDENTIFIER
+SagaOutcome          &lt;- &#39;ON&#39; ( &#39;COMPLETED&#39; / &#39;FAILED&#39; / &#39;CANCELLED&#39; ) PolicyAction
+SagaStep             &lt;- &#39;STEP&#39; IDENTIFIER
+SagaTransition       &lt;- &#39;ON&#39; ( &#39;SUCCESS&#39; / &#39;FAILURE&#39; / &#39;TIMEOUT&#39; ) IDENTIFIER
+SagaTarget           &lt;- &#39;COMPLETED&#39; / &#39;FAILED&#39; / &#39;CANCELLED&#39; / &#39;COMPENSATE&#39; ( &#39;-&gt;&#39; ( &#39;FAILED&#39; / &#39;CANCELLED&#39; / IDENTIFIER ) )? / IDENTIFIER  # next step name
+CompensatesClause    &lt;- &#39;COMPENSATES_WITH&#39; CompensationItem ( &#39;,&#39; CompensationItem )*
+CompensationItem     &lt;- IDENTIFIER ActionParams?
+StateMachine         &lt;- &#39;STATE_MACHINE&#39; IDENTIFIER UuidAnnotation?
+SmEnforceAt          &lt;- &#39;ENFORCE_AT&#39; &#39;DB_LEVEL&#39;
+SmBody               &lt;- SmItem*
+SmItem               &lt;- SmState / SmInitial / SmTerminal / SmTransition
+SmState              &lt;- &#39;STATE&#39; IDENTIFIER SmEntryExit? SmEntryExit?
+SmEntryExit          &lt;- ( &#39;ENTRY&#39; / &#39;EXIT&#39; ) IDENTIFIER
+SmInitial            &lt;- &#39;INITIAL&#39; IDENTIFIER &#39;;&#39;?
+SmTerminal           &lt;- &#39;TERMINAL&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
+SmTransition         &lt;- &#39;TRANSITION&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
+SmGuard              &lt;- &#39;GUARD&#39; STRING
+SmAction             &lt;- &#39;ACTION&#39; IDENTIFIER
+ExtensionPoint       &lt;- &#39;EXTENSION_POINT&#39; IDENTIFIER UuidAnnotation
+ExtensionPointBody   &lt;- ExtensionPointItem+
+ExtensionPointItem   &lt;- EpClassClause / EpTargetClause / EpTriggerClause / EpLayerClause / EpInterfaceClause / DocClause
+EpClassClause        &lt;- &#39;CLASS&#39; &#39;:&#39; EpClassName &#39;;&#39;?
+EpClassName          &lt;- &#39;VALIDATOR&#39; / &#39;SIDEEFFECT&#39; / &#39;UIWIDGET&#39;
+EpTargetClause       &lt;- &#39;TARGET&#39; &#39;:&#39; QualifiedIdentifier &#39;;&#39;?
+EpTriggerClause      &lt;- &#39;TRIGGER&#39; &#39;:&#39; EpTriggerName &#39;;&#39;?
+EpTriggerName        &lt;- &#39;ONCOMMIT&#39; / &#39;ONVALIDATE&#39; / &#39;ONSAVE&#39;
+EpLayerClause        &lt;- &#39;LAYER&#39; &#39;:&#39; EpLayerName &#39;;&#39;?
+EpLayerName          &lt;- &#39;BACKEND&#39; / &#39;FRONTEND&#39; / &#39;BOTH&#39;
+EpInterfaceClause    &lt;- &#39;INTERFACE&#39; &#39;:&#39; EpInterfaceName &#39;;&#39;?
+EpInterfaceName      &lt;- &#39;SYNCVIRTUAL&#39; / &#39;LOCALGRPC&#39; / &#39;QTWIDGET&#39; / &#39;QTREMOTEOBJECTS&#39;</code></pre>
+<h3 id="19-relationships-block">19. Relationships Block</h3>
+<pre class="peg"><code>RelationshipsBlock   &lt;- &#39;RELATIONSHIPS&#39; &#39;{&#39; ( Relationship / ArcConstraint )* &#39;}&#39;
+Relationship         &lt;- RelName DirectionArrow RelTarget ArraySuffix?
+RelName              &lt;- IDENTIFIER / ContextualKeyword  # role name
+DirectionArrow       &lt;- &#39;-&gt;&#39; / &#39;&lt;-&#39; / &#39;&lt;-&gt;&#39;
+RelTarget            &lt;- QualifiedIdentifier  # Context.Entity or Entity
+CardinalityClause    &lt;- &#39;REQUIRED&#39; / &#39;OPTIONAL&#39;
+MultiplicityClause   &lt;- &#39;ONE&#39; / &#39;MANY&#39;
+MinMaxClause         &lt;- ( &#39;MIN&#39; NUMBER )? ( &#39;MAX&#39; NUMBER )?
+ViaFieldClause       &lt;- &#39;VIA&#39; IDENTIFIER  # explicit FK field name
+RelAnnotation        &lt;- &#39;@&#39; &#39;CASCADE&#39; / &#39;@&#39; &#39;EMBEDDED&#39; / UuidAnnotation</code></pre>
+<h3 id="20-arc-constraint-n-of-m-relationship">20. Arc Constraint
+(N-of-M Relationship)</h3>
+<pre class="peg"><code>ArcConstraint        &lt;- IDENTIFIER UuidAnnotation? &#39;ARC&#39;</code></pre>
+<h3 id="21-check-constraint">21. CHECK Constraint</h3>
+<pre class="peg"><code>CheckConstraint      &lt;- &#39;CHECK&#39; IDENTIFIER UuidAnnotation? &#39;:&#39; SqlExpression</code></pre>
+<h3 id="22-uses--has-clauses-value-object-references">22. USES / HAS
+Clauses (Value Object References)</h3>
+<pre class="peg"><code>UsesClause           &lt;- &#39;USES&#39; QualifiedIdentifier UuidAnnotation? &#39;;&#39;?
+HasClause            &lt;- &#39;HAS&#39; IDENTIFIER QualifiedIdentifier ArraySuffix?</code></pre>
+<h3 id="23-lookup-table">23. Lookup Table</h3>
+<pre class="peg"><code>LookupTable          &lt;- &#39;LOOKUP_TABLE&#39; IDENTIFIER UuidAnnotation
+ExtraFieldList       &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
+ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation*
+ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39;</code></pre>
+<h3 id="24-import-seed-data-file">24. IMPORT (Seed Data File)</h3>
+<pre class="peg"><code>Import               &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>
+<h3 id="25-seed-block-inline-test-data">25. SEED Block (Inline Test
+Data)</h3>
+<pre class="peg"><code>SeedBlock            &lt;- &#39;SEED&#39; STRING &#39;{&#39; SeedRow* &#39;}&#39;
+SeedRow              &lt;- &#39;(&#39; SeedValue ( &#39;,&#39; SeedValue )* &#39;)&#39; &#39;,&#39;?
+SeedValue            &lt;- NUMBER / STRING / &#39;NULL&#39; / &#39;TRUE&#39; / &#39;FALSE&#39; / IDENTIFIER</code></pre>
+<h3 id="26-display_format-block-ui-display-hints">26. DISPLAY_FORMAT
+Block (UI Display Hints)</h3>
+<p>DISPLAY_FORMAT is the only accepted keyword (FTR-134). PRESENTATION
+is rejected with a helpful error message. TABLE: is rejected inside
+DISPLAY_FORMAT (column selection belongs in .lay files).</p>
+<pre class="peg"><code>PresentationBlock    &lt;- &#39;DISPLAY_FORMAT&#39; &#39;(&#39; DisplayFormat ( &#39;,&#39; DisplayFormat )* &#39;)&#39;
+DisplayFormat        &lt;- ( &#39;SHORT&#39; / &#39;FULL&#39; ) &#39;:&#39; STRING ( &#39;OR&#39; STRING )?</code></pre>
+<h3 id="27-instruct-block-muscovite-embedded-prompts--adr-20260205">27.
+INSTRUCT Block (Muscovite Embedded Prompts — ADR 20260205)</h3>
+<pre class="peg"><code>InstructBlock        &lt;- &#39;INSTRUCT&#39; InstructQualifier? IDENTIFIER &#39;{&#39;
+InstructQualifier    &lt;- &#39;VALIDATION&#39; / &#39;SAGA&#39;
+InstructField        &lt;- &#39;INTENT&#39; &#39;:&#39; STRING / &#39;INPUTS&#39; &#39;:&#39; &#39;{&#39; QualifiedIdentifier ( &#39;,&#39; QualifiedIdentifier )* &#39;}&#39; / &#39;OUTPUT&#39; &#39;:&#39; IDENTIFIER / &#39;STRATEGY&#39; &#39;:&#39; IDENTIFIER</code></pre>
+<h3 id="28-grounding-block-context-ai-anchoring">28. GROUNDING Block
+(Context AI Anchoring)</h3>
+<pre class="peg"><code>Grounding            &lt;- &#39;GROUNDING&#39; &#39;{&#39; GroundingField* &#39;}&#39;
+GroundingField       &lt;- &#39;DOMAIN&#39; STRING &#39;;&#39;? / &#39;KEY_CONCEPTS&#39; StringList &#39;;&#39;? / &#39;DIALECT&#39; IDENTIFIER &#39;;&#39;? / &#39;PRECISION_LEVEL&#39; IDENTIFIER &#39;;&#39;? / &#39;CONSTRAINTS&#39; StringList &#39;;&#39;? / &#39;EXAMPLES&#39; StringList &#39;;&#39;? / DocClause &#39;;&#39;?
+StringList           &lt;- &#39;[&#39; STRING ( &#39;,&#39; STRING )* &#39;]&#39; / STRING ( &#39;,&#39; STRING )*</code></pre>
+<h3 id="29-context-default-value-object-defaults">29. Context Default
+(Value Object Defaults)</h3>
+<pre class="peg"><code>ContextDefault       &lt;- &#39;DEFAULT&#39; IDENTIFIER IDENTIFIER &#39;=&#39;
+DefaultFieldValue    &lt;- IDENTIFIER &#39;=&#39; DefaultLiteral
+DefaultLiteral       &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;</code></pre>
+<h3 id="30-context-map">30. Context Map</h3>
+<pre class="peg"><code>MapBlock             &lt;- &#39;MAP&#39; &#39;{&#39; MapEntry* &#39;}&#39;
+MapEntry             &lt;- LanguageDecl / AclDecl / OhsDecl / ContextRelationship</code></pre>
+<h3 id="31-context-relationship">31. Context Relationship</h3>
+<pre class="peg"><code>ContextRelationship  &lt;- IDENTIFIER ( &#39;-&gt;&#39; / &#39;&lt;-&#39; ) IDENTIFIER &#39;:&#39;
+RelationshipType     &lt;- &#39;CUSTOMER_SUPPLIER&#39; / &#39;PARTNERSHIP&#39; / &#39;SHARED_KERNEL&#39; / &#39;CONFORMIST&#39; / &#39;ANTICORRUPTION_LAYER&#39; / &#39;OPEN_HOST_SERVICE&#39; / &#39;PUBLISHED_LANGUAGE&#39; / &#39;SEPARATE_WAYS&#39;
+ViaProtocolClause    &lt;- &#39;VIA&#39; Protocol
+Protocol             &lt;- &#39;GRPC&#39; / &#39;REST&#39; / &#39;EVENTS&#39; / &#39;MESSAGING&#39; / &#39;SHARED_DB&#39;</code></pre>
+<h3 id="32-open-host-service-declaration">32. Open Host Service
+Declaration</h3>
+<pre class="peg"><code>OhsDecl              &lt;- IDENTIFIER &#39;PROVIDES&#39; IDENTIFIER &#39;:&#39; &#39;OPEN_HOST_SERVICE&#39;</code></pre>
+<h3 id="33-published-language-declaration">33. Published Language
+Declaration</h3>
+<pre class="peg"><code>LanguageDecl         &lt;- &#39;LANGUAGE&#39; IDENTIFIER &#39;FORMAT&#39; Format
+Format               &lt;- &#39;PROTOBUF&#39; / &#39;JSON_SCHEMA&#39; / &#39;AVRO&#39; / &#39;XML_SCHEMA&#39;</code></pre>
+<h3 id="34-anti-corruption-layer">34. Anti-Corruption Layer</h3>
+<p>35a. MAPPING Block (Brownfield Migration Factory — FTR-080, ADR
+20260224-002) MAPPING blocks define field-level transformations between
+legacy schema structures and Muscovite target entities. Used by the
+migration factory generators to produce type-safe extractor and
+transformer components. Example: MAPPING LegacyCustomer @uuid "..." {
+FROM "legacy_customers" INTO Customer; FIELD customer_id -&gt; id
+COPY_UUID; FIELD fname -&gt; given_name @required COPY; FIELD lname
+-&gt; family_name @required COPY; FIELD customer_email -&gt; email
+@unique VALIDATE_EMAIL; FIELD birth_dt -&gt; birth_date COERCE_DATE
+format="MM/dd/yyyy"; FIELD is_active -&gt; active DEFAULT true
+COPY_BOOL; FIELD created_ts -&gt; created_at COERCE_TIMESTAMP; DOC "Maps
+legacy customer table to Patient entity"; } 35b. FOREIGN CONTEXT
+(Anti-Corruption Layer — FTR-144, ADR 20260223) Typed ACL constructs for
+interfacing with external systems. FOREIGN_TYPE declares the shape of
+external data structures. TRANSLATE rules define declarative field-level
+mappings. The TRANSLATE sub-grammar is intentionally restricted: no
+IF/CASE/WHEN, no lambdas, no function calls (except type casts via
+::TYPE). Complex logic belongs in Layer 2 Sidecar files. Example:
+FOREIGN CONTEXT PaymentGateway @uuid "..." { FOREIGN_TYPE
+PaymentResponse @uuid "..." ( transaction_id TEXT NOT_NULL @uuid "...",
+amount_cents INTEGER NOT_NULL @uuid "...", currency_code TEXT NOT_NULL
+@uuid "...", status_text TEXT NOT_NULL @uuid "..." ) DOC "External
+payment gateway response"; TRANSLATE Payment FROM PaymentResponse @uuid
+"..." { id &lt;- transaction_id::UUID, amount &lt;- amount_cents / 100,
+currency &lt;- currency_code, is_approved &lt;- status_text ==
+"APPROVED" }; }</p>
+<pre class="peg"><code>AclDecl              &lt;- &#39;ACL&#39; IDENTIFIER &#39;FROM&#39; IDENTIFIER &#39;TO&#39; IDENTIFIER
+Translator           &lt;- IDENTIFIER &#39;-&gt;&#39; IDENTIFIER &#39;{&#39; TranslatorMapping* &#39;}&#39;
+TranslatorMapping    &lt;- IDENTIFIER &#39;=&#39; MappingExpr &#39;,&#39;?
+MappingExpr          &lt;- &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;TRANSLATE&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / IDENTIFIER  # direct field mapping
+MappingBlock         &lt;- &#39;MAPPING&#39; IDENTIFIER UuidAnnotation
+MappingBody          &lt;- MappingFromInto MappingField* MappingClause*
+MappingFromInto      &lt;- &#39;FROM&#39; STRING &#39;INTO&#39; QualifiedIdentifier &#39;;&#39;
+MappingField         &lt;- &#39;FIELD&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
+MappingAnnotation    &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / UuidAnnotation
+FieldTransform       &lt;- &#39;COPY&#39; / &#39;COPY_UUID&#39; / &#39;COPY_BOOL&#39; / &#39;VALIDATE_EMAIL&#39; / &#39;VALIDATE_PHONE&#39; / &#39;VALIDATE_POSTAL_CODE&#39; / &#39;COERCE_DATE&#39; CoerceOptions? / &#39;COERCE_TIMESTAMP&#39; CoerceOptions? / &#39;COERCE_DECIMAL&#39; CoerceOptions? / &#39;DEFAULT&#39; DefaultValue CoerceOptions? / &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; CoerceOptions?
+CoerceOptions        &lt;- IDENTIFIER &#39;=&#39; STRING
+MappingClause        &lt;- DocClause / SynonymsClause
+ForeignContext       &lt;- &#39;FOREIGN&#39; &#39;CONTEXT&#39; IDENTIFIER UuidAnnotation
+ForeignContextItem   &lt;- ForeignType / TranslateRule / DocClause
+ForeignType          &lt;- &#39;FOREIGN_TYPE&#39; IDENTIFIER UuidAnnotation
+TranslateRule        &lt;- &#39;TRANSLATE&#39; QualifiedIdentifier &#39;FROM&#39; QualifiedIdentifier
+FieldMappingList     &lt;- FieldMapping ( &#39;,&#39; FieldMapping )* &#39;,&#39;?
+FieldMapping         &lt;- IDENTIFIER &#39;&lt;-&#39; TranslateExpr
+TranslateExpr        &lt;- TranslateArith / TranslateComparison / TranslateConcat / TranslateCast / TranslateNull / QualifiedIdentifier  # simple field reference
+TranslateCast        &lt;- QualifiedIdentifier &#39;::&#39; IDENTIFIER
+TranslateArith       &lt;- QualifiedIdentifier ( &#39;+&#39; / &#39;-&#39; / &#39;*&#39; / &#39;/&#39; ) ( NUMBER / QualifiedIdentifier )
+TranslateComparison  &lt;- QualifiedIdentifier &#39;==&#39; STRING
+TranslateConcat      &lt;- QualifiedIdentifier &#39;||&#39; ( STRING / QualifiedIdentifier )
+TranslateNull        &lt;- QualifiedIdentifier &#39;??&#39; ( STRING / NUMBER )</code></pre>
+<hr />
+<h2 id="examples-from-exampleshello-world">Examples (from
+<code>examples/hello-world/</code>)</h2>
+<p>These examples are extracted from the <a
+href="../examples/hello-world/">hello-world</a> project — a minimal
+working Muscovite project.</p>
+<h3 id="entity-with-relationships">Entity with Relationships</h3>
+<pre class="ddd"><code>ENTITY TodoItem @uuid &quot;b0000001-0004-4000-8000-000000000001&quot; IDENTIFIED_BY id (
+        id          UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000010&quot;,
+        title       TEXT        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000011&quot;,
+        description TEXT                 @uuid &quot;b0000001-0004-4000-8000-000000000012&quot;,
+        priority_id UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000013&quot;,
+        status_id   UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000014&quot;,
+        due_date    DATE                 @uuid &quot;b0000001-0004-4000-8000-000000000015&quot;,
+        is_done     BOOLEAN     NOT_NULL DEFAULT false
+                                         @uuid &quot;b0000001-0004-4000-8000-000000000016&quot;,
+        created_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000017&quot;,
+        updated_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000018&quot;
+    )
+    RELATIONSHIPS {
+        priority -&gt; Basedata.Priority REQUIRED ONE
+            @uuid &quot;b0000001-0004-4000-8000-000000000020&quot;;
+        status -&gt; Basedata.Status REQUIRED ONE
+            @uuid &quot;b0000001-0004-4000-8000-000000000021&quot;;
+    }</code></pre>
+<h3 id="aggregate-with-embedded-children">Aggregate with Embedded
+Children</h3>
+<pre class="ddd"><code>AGGREGATE TodoItem @uuid &quot;b0000001-0004-4000-8000-000000000030&quot; ROOT TodoItem (
+        CONTAINS TodoComment
+    )
+    DOC &quot;Todo aggregate with comments&quot;;</code></pre>
+<h3 id="lookup-table">Lookup Table</h3>
+<pre class="ddd"><code>LOOKUP_TABLE Priority @uuid &quot;a0000001-0002-4000-8000-000000000001&quot;
+        SEED_JSON &quot;seeds/basedata/priority.json&quot;
+        DOC &quot;Priority levels for tasks&quot;;</code></pre>
+<h3 id="domain-event">Domain Event</h3>
+<pre class="ddd"><code>EVENT TodoCreated @uuid &quot;b0000001-0005-4000-8000-000000000001&quot; (
+        todo_id     UUID    NOT_NULL @uuid &quot;b0000001-0005-4000-8000-000000000010&quot;,
+        title       TEXT    NOT_NULL @uuid &quot;b0000001-0005-4000-8000-000000000011&quot;
+    )
+    DOC &quot;A new todo item was created&quot;;</code></pre>
+<h3 id="embedded-child-entity">Embedded Child Entity</h3>
+<pre class="ddd"><code>ENTITY TodoComment @uuid &quot;b0000001-0003-4000-8000-000000000001&quot; IDENTIFIED_BY id (
+        id          UUID        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000010&quot;,
+        todo_id     UUID        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000011&quot;,
+        body        TEXT        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000012&quot;,
+        author      TEXT                 @uuid &quot;b0000001-0003-4000-8000-000000000013&quot;,
+        created_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000014&quot;
+    )
+    RELATIONSHIPS {
+        todo -&gt; TodoItem REQUIRED ONE @embedded
+            @uuid &quot;b0000001-0003-4000-8000-000000000020&quot;;
+    }</code></pre>
+<hr />
+<h2 id="forbidden-patterns">Forbidden Patterns</h2>
+<table>
+<thead>
+<tr>
+<th>❌ Pattern</th>
+<th>✅ Alternative</th>
+<th>ADR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VARCHAR(n)</td>
+<td>TEXT</td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>TIMESTAMP (no TZ)</td>
+<td>TIMESTAMPTZ</td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>JSON/JSONB columns</td>
+<td>Typed fields</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CHECK-based enums</td>
+<td>LOOKUP_TABLE</td>
+<td>20260116</td>
+</tr>
+<tr>
+<td>Implicit FK from _id</td>
+<td>Explicit RELATIONSHIPS {}</td>
+<td>20260106</td>
+</tr>
+<tr>
+<td>Stored procedures</td>
+<td>Domain services (C++)</td>
+<td>20260120</td>
+</tr>
+<tr>
+<td>Manual edits to generated code</td>
+<td>Fix the generator</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Runtime lookup for framework constants</td>
+<td>Compile-time lookup:: constants</td>
+<td>20260212</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents</h2>
+<ul>
+<li><a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
+— Formal PEG grammar (authoritative)</li>
+<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Racket IR structs,
+type mappings, naming conventions</li>
+<li><a href="CONTEXT.html">CONTEXT.md</a> — AI-first project context</li>
+<li><a href="VISION.html">VISION.md</a> — Architectural vision with
+extended examples</li>
+<li><a href="adr/">Architecture Decision Records</a> — Design
+rationale</li>
+</ul>
+<hr />
+<p><em>Auto-generated by
+<code>dslgen/tools/generate-dsl-reference.rkt</code> from PEG grammar +
+type registry + example files.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

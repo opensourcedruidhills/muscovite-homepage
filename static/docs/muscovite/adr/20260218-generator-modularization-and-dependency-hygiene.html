@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Modularization and Dependency
+Hygiene — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Generator Modularization and Dependency Hygiene</span>
+</nav>
+
+<h1>Generator Modularization and Dependency Hygiene</h1>
+
+
+<h1 id="generator-modularization-and-dependency-hygiene">Generator
+Modularization and Dependency Hygiene</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-18</li>
+<li>Tags: generators, modularization, ai-context, dependency-hygiene,
+architecture</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: The Racket generator codebase (93 files, ~80K lines)
+has grown cross-target coupling and oversized files that degrade AI
+agent effectiveness. A "Muscovite 2.0" analysis proposed rewriting
+generators in Python/Jinja2 to solve this. This ADR rejects the rewrite
+and prescribes targeted modularization within the existing Racket
+architecture instead.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's generators in <code>dslgen/generators/</code> produce
+output for 6 targets (postgres, cpp, grpc, qt, cmake, docs). As the
+generator count grew, cross-cutting concerns leaked across target
+boundaries:</p>
+<ul>
+<li><code>generators/grpc/main.rkt</code> imports
+<code>generators/cpp/common.rkt</code> and
+<code>generators/cpp/dba/cached-repository.rkt</code> directly</li>
+<li>Naming conventions (<code>symbol-&gt;cpp-class</code>,
+<code>camel-to-snake</code>) are duplicated or imported ad-hoc</li>
+<li><code>generators/grpc/main.rkt</code> is 1203 lines — exceeds any AI
+agent's effective context window for targeted edits</li>
+<li>No automated test prevents cross-target coupling from returning
+after cleanup</li>
+</ul>
+<p>A "Muscovite 2.0 Manifesto" proposed solving this by pivoting to a
+JSON IR + Python/Jinja2 generator architecture. Analysis showed this
+would:</p>
+<ul>
+<li>Destroy 4 months of proven, shipping generators</li>
+<li>Downgrade codegen primitives (Jinja2 &lt; Racket's pattern matching
++ quasiquoting)</li>
+<li>Add serialization/deserialization tax for zero user value</li>
+<li>Require 3–6 months to return to current parity</li>
+</ul>
+<p>The actual problem is organizational, not architectural. The Racket
+struct-based IR (in-memory <code>ddd-model</code> tree) already serves
+as a clean interface between parser and generators. The fix is
+dependency hygiene and file decomposition, not a technology pivot.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>AI agents work best with files under 400 lines and clear module
+boundaries</li>
+<li>Cross-target <code>require</code> statements create hidden coupling
+(changing cpp internals silently breaks grpc)</li>
+<li>The existing Racket struct IR is superior to JSON for this use case:
+zero serialization cost, pattern matching, type-safe accessors</li>
+<li>Template DSL work (FTR-069, planned for v1.21.0) changes
+<em>how</em> code is emitted; modularization changes <em>how generators
+are organized</em> — orthogonal concerns</li>
+<li>Debug IR inspection is valuable, but as an audit tool alongside
+normal generation, not as the generation pipeline</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Targeted modularization</strong> — extract shared module,
+decompose large files, enforce dependency rules, add debug IR
+export</li>
+<li><strong>Full rewrite to Python/Jinja2</strong> — JSON IR as primary
+pipeline, Jinja2 templates for all targets</li>
+<li><strong>No action</strong> — accept growing coupling, rely on
+documentation</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Targeted modularization</strong>,
+because it addresses the root cause (dependency hygiene and file size)
+without abandoning the working generator architecture or its superior
+Racket codegen primitives.</p>
+<h3 id="implementation-plan">Implementation Plan</h3>
+<p>Five concrete work items (each tracked as a separate feature):</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Work Item</th>
+<th>Priority</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Extract <code>generators/shared/</code> module from cross-cutting
+dependencies</td>
+<td>must</td>
+<td>1–2 days</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Decompose all generator files exceeding 400 lines</td>
+<td>must</td>
+<td>2–3 days</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Automated dependency graph test (regression guard)</td>
+<td>must</td>
+<td>0.5 days</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Debug IR export via <code>--emit-ir</code> flag (S-expression
+format)</td>
+<td>should</td>
+<td>1–2 days</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Auto-generated per-target AI context files</td>
+<td>could</td>
+<td>1 day</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dependency-order">Dependency Order</h3>
+<pre><code>Item 1 (shared/) → Item 2 (decompose) → Item 3 (dep graph test)
+Item 4 (debug IR) — independent
+Item 5 (context files) — independent, benefits from Items 1+2</code></pre>
+<h3 id="key-design-decisions">Key Design Decisions</h3>
+<p><strong>S-expressions for debug IR, not JSON</strong>: The
+<code>--emit-ir</code> flag emits the parsed <code>ddd-model</code> as
+readable S-expressions (<code>.sexp</code>). S-expressions are native to
+Racket, round-trip via <code>(read)</code>, and avoid inventing a JSON
+schema for internal debugging. JSON remains an option for external
+tooling in the future.</p>
+<p><strong>400-line file size threshold</strong>: Aggressive but
+justified — AI agents perform best with focused, single-responsibility
+files. Files exceeding 400 lines must be split into sub-modules with
+documented responsibilities.</p>
+<p><strong>Automated dependency enforcement</strong>: A test
+(<code>test-generator-dependency-graph.rkt</code>) scans
+<code>require</code> statements and enforces the rule: all cross-cutting
+utilities flow through <code>generators/shared/</code>, no direct
+imports between target generators.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>AI agents can work on individual generators without loading the
+entire codebase</li>
+<li>Cross-target changes are safe — <code>shared/</code> is the only
+coupling point</li>
+<li>Debug IR enables model inspection without REPL access</li>
+<li>Regression test prevents coupling from returning</li>
+<li>Complements FTR-069 (template DSL) — modularization is
+organizational, template DSL is mechanical</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>One-time refactoring cost (~6–8 days total)</li>
+<li>Byte-identical output verification required for each decomposition
+step</li>
+<li>More files to navigate (mitigated by clear naming and doc
+headers)</li>
+</ul>
+<h2 id="rejected-alternative-pythonjinja2-rewrite">Rejected Alternative:
+Python/Jinja2 Rewrite</h2>
+<p>The "Muscovite 2.0 Manifesto" proposed:</p>
+<ul>
+<li>Racket emits JSON IR → Python dispatcher → Jinja2 templates</li>
+<li>Rationale: "AI comfort zone", multi-language generators, brownfield
+ingestors</li>
+</ul>
+<p>Rejected because:</p>
+<ul>
+<li><strong>Technology downgrade</strong>: Jinja2 is a string template
+engine. Racket has pattern matching, quasiquoting, hygienic macros.
+Complex generation logic (saga orchestration, semantic diffing, event
+sourcing) would be harder in Jinja2 + Python helpers.</li>
+<li><strong>Serialization tax</strong>: JSON IR adds encode/decode
+boundary for zero user value. The in-memory struct tree is faster and
+type-safe.</li>
+<li><strong>Parity cost</strong>: 3–6 months to reproduce current
+output, with zero new features during the transition.</li>
+<li><strong>Moving target</strong>: "AI context limits" are a 2024-era
+concern being solved by longer context windows and better tooling
+(CONTEXT.md, GROUND-TRUTH.md — which Muscovite already has).</li>
+<li><strong>Scope creep</strong>: The manifesto bundled brownfield
+ingestors (a separate product) into the pivot, guaranteeing it would
+never ship.</li>
+</ul>
+<p>The good idea from the manifesto — debug IR for inspection — is
+preserved as Item 4 above.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><code>dslgen/generators/grpc/main.rkt</code> — 1203-line file
+demonstrating the decomposition need</li>
+<li><code>dslgen/generators/grpc/main.rkt:25-27</code> — cross-target
+imports demonstrating coupling</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — the struct-based IR that
+serves as the generator interface</li>
+<li><code>doc/muscovite-2.0-manifesto.md</code> — rejected rewrite
+proposal (preserved as research artifact)</li>
+<li><code>doc/muscovite-2.0-roadmap.md</code> — rejected rewrite roadmap
+(preserved as research artifact)</li>
+<li>FTR-069 (v1.21.0) — S-expression template DSL (orthogonal,
+complementary work)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+var grpc_2include_2muscovite_2grpc_2type__mapping_8hpp =
+[
+    [ "muscovite::grpc::decimal_from_proto", "namespacemuscovite_1_1grpc.html#a7f6fbdd0925ae86d75b02f0b2d743a9d", null ],
+    [ "muscovite::grpc::decimal_to_proto", "namespacemuscovite_1_1grpc.html#a1184c651b500c40782b1eb917d6b0d7d", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#ab74afb4c030b6473c9ff5ca42452686f", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#a3820e7c4e9445fd69b6ebaba52629a52", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#aa42071c4809f8bc7eb65939a1f0b4441", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#a789f176f861c3ddc5d0f1726af56fdec", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#a6803fa1ab88b80c811ceceaee5b6c9d7", null ],
+    [ "muscovite::grpc::from_proto", "namespacemuscovite_1_1grpc.html#a95654395e8ef3430981d664cb39d83e4", null ],
+    [ "muscovite::grpc::from_proto_optional", "namespacemuscovite_1_1grpc.html#ab5f6d570bcf408ba74c4ce760a72411d", null ],
+    [ "muscovite::grpc::spatial_to_wkt", "namespacemuscovite_1_1grpc.html#a926a30eb1cbb4b78e200f441f9560c07", null ],
+    [ "muscovite::grpc::spatial_to_wkt", "namespacemuscovite_1_1grpc.html#a1ef58970644434afb4bd4af5764e6c46", null ],
+    [ "muscovite::grpc::spatial_to_wkt", "namespacemuscovite_1_1grpc.html#a1e614245c654387c1e3f26b0ab4687e0", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#af666b726db018151c0f7129814e204af", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#ad3880bb08d19ba83b120a09c5d01e147", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#a6cdfb820c3aa9da90610a333a19cf0b2", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#a4a07a3102235e14a8ed0c3a5bb9490e3", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#a7b375eb22ce862d8557dc3308260c8c9", null ],
+    [ "muscovite::grpc::to_proto", "namespacemuscovite_1_1grpc.html#a00fa276a45b910a5880d366e27695d21", null ],
+    [ "muscovite::grpc::to_proto_optional", "namespacemuscovite_1_1grpc.html#ad1ef2946db58fb1b20e0bc6743e960ac", null ],
+    [ "muscovite::grpc::uuid_from_string", "namespacemuscovite_1_1grpc.html#a356867699320180aeed2fda2eab174ec", null ],
+    [ "muscovite::grpc::uuid_to_string", "namespacemuscovite_1_1grpc.html#a9df30eaf9a975ff30ded5eeb26c20474", null ],
+    [ "muscovite::grpc::wkt_to_spatial", "namespacemuscovite_1_1grpc.html#a24a704f396ef073e411462afa3367d88", null ],
+    [ "muscovite::grpc::wkt_to_spatial", "namespacemuscovite_1_1grpc.html#a17d5551203e0526cc90b1e2e4a18f009", null ],
+    [ "muscovite::grpc::wkt_to_spatial", "namespacemuscovite_1_1grpc.html#ac2c97c8388c3c35b6f819e2f2be4d61b", null ]
+];

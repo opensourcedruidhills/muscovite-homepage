@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compile-Time Lookup Constants via Deterministic Seed
+UUIDs — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Compile-Time Lookup Constants via Deterministic Seed
+UUIDs</span>
+</nav>
+
+<h1>Compile-Time Lookup Constants via Deterministic Seed UUIDs</h1>
+
+
+<h1
+id="compile-time-lookup-constants-via-deterministic-seed-uuids">Compile-Time
+Lookup Constants via Deterministic Seed UUIDs</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-12</li>
+<li>Tags: lookup-tables, c++, code-generation, type-safety, seeds</li>
+<li>Relates: 20260116-lookup-tables-over-check-constraints.md,
+20260119-strong-types-across-all-layers.md</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates lookup tables (ADR 20260116) for all enumerated
+domain values. Current seed JSON files omit the <code>id</code> field,
+relying on <code>DEFAULT uuidv7()</code> at the database layer. This
+means UUIDs are non-deterministic — they differ across deployments.</p>
+<p>When C++ code needs to reference a lookup value (e.g., "set saga
+status to completed"), it must perform a runtime query to resolve the
+UUID:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Runtime lookup — wasteful, fragile, untestable without DB</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> status_id <span class="op">=</span> query_repo<span class="op">.</span>find_by_code<span class="op">(</span><span class="st">&quot;completed&quot;</span><span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;UPDATE ... SET status_id = $1&quot;</span><span class="op">,</span> status_id<span class="op">);</span></span></code></pre></div>
+<p>This is especially problematic for framework infrastructure tables
+(saga status, step results) where the set of values is known at
+generation time and will never change at runtime.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Lookup table UUIDs must be stable across regenerations
+(deterministic)</li>
+<li>C++ code must reference lookup values without runtime queries</li>
+<li>Mismatches between C++ constants and database rows must be caught at
+compile time, not runtime</li>
+<li>Pattern must work for both generator-created seeds (saga
+infrastructure) and user-authored seeds (domain basedata)</li>
+<li>Must not break existing seed JSON files that omit
+<code>id</code></li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Generate deterministic UUIDs (UUIDv5) in seed JSON files +
+matching C++ headers with compile-time constants.</strong></p>
+<h3 id="two-part-generation">Two-Part Generation</h3>
+<p>For every lookup table whose values are referenced in generated C++
+code:</p>
+<p><strong>Part 1 — Seed JSON with deterministic UUIDs</strong>:</p>
+<p>The Racket generator produces UUIDv5 from a fixed namespace UUID +
+<code>"{context}.{table}.{code}"</code> as the name. The resulting UUID
+is stable across regenerations because the inputs are deterministic.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d4-...&quot;</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;completed&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Completed&quot;</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Saga completed successfully&quot;</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;is_active&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;sort_order&quot;</span><span class="fu">:</span> <span class="dv">4</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Part 2 — C++ header with compile-time constants</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated — DO NOT EDIT</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Lookup constants for workflows.saga_status</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma once</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/uuid/uuid.hpp&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> workflows<span class="op">::</span>lookup<span class="op">::</span>saga_status <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid not_started<span class="op">{</span><span class="bn">0xa1</span><span class="op">,</span> <span class="bn">0xb2</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid in_progress<span class="op">{</span><span class="bn">0xc3</span><span class="op">,</span> <span class="bn">0xd4</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid compensating<span class="op">{</span><span class="bn">0xe5</span><span class="op">,</span> <span class="bn">0xf6</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid completed<span class="op">{</span><span class="bn">0x17</span><span class="op">,</span> <span class="bn">0x28</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid failed<span class="op">{</span><span class="bn">0x39</span><span class="op">,</span> <span class="bn">0x4a</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">inline</span> <span class="kw">constexpr</span> <span class="ex">boost::</span>uuids::uuid cancelled<span class="op">{</span><span class="bn">0x5b</span><span class="op">,</span> <span class="bn">0x6c</span><span class="op">,</span> <span class="op">...};</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace workflows::lookup::saga_status</span></span></code></pre></div>
+<p><strong>Usage in generated repositories</strong>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;workflows/lookup/saga_status.hpp&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> MetamorphicPathwaySagaCommandRepository<span class="op">::</span>complete<span class="op">(</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> saga_id<span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    txn<span class="op">.</span>exec_params<span class="op">(</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;UPDATE workflows.metamorphic_pathway_instances &quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SET status_id = $1, completed_at = NOW(), updated_at = NOW() &quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;WHERE id = $2&quot;</span><span class="op">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        lookup<span class="op">::</span>saga_status<span class="op">::</span>completed<span class="op">,</span>  <span class="co">// compile-time constant</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        saga_id<span class="op">);</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="uuidv5-namespace">UUIDv5 Namespace</h3>
+<p>A single fixed namespace UUID for all Muscovite lookup seeds:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Muscovite lookup seed namespace (UUIDv5)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> MUSCOVITE_LOOKUP_NS </span><span class="st">&quot;6ba7b810-9dad-11d1-80b4-00c04fd430c8&quot;</span><span class="op">)</span></span></code></pre></div>
+<p>Name string format: <code>"{context_name}.{table_name}.{code}"</code>
+— e.g., <code>"workflows.saga_status.completed"</code>.</p>
+<h3 id="applicability">Applicability</h3>
+<table>
+<thead>
+<tr>
+<th>Seed Source</th>
+<th style="text-align: right;">Deterministic UUIDs</th>
+<th style="text-align: center;">C++ Header</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Generator-created</strong> (saga_status, saga_step,
+etc.)</td>
+<td style="text-align: right;">Mandatory</td>
+<td style="text-align: center;">Mandatory</td>
+<td>Always — framework infrastructure</td>
+</tr>
+<tr>
+<td><strong>User-authored with <code>@constants</code></strong></td>
+<td style="text-align: right;">Mandatory</td>
+<td style="text-align: center;">Mandatory</td>
+<td>When DSL declares <code>LOOKUP_TABLE ... @constants</code></td>
+</tr>
+<tr>
+<td><strong>User-authored without <code>@constants</code></strong></td>
+<td style="text-align: right;">Optional</td>
+<td style="text-align: center;">Not generated</td>
+<td>Default — no compile-time references needed</td>
+</tr>
+</tbody>
+</table>
+<p>For user-authored seeds: if the JSON already contains <code>id</code>
+fields, those are used verbatim. If <code>id</code> is absent, the
+generator injects UUIDv5. This preserves backward compatibility.</p>
+<h3 id="seed-insert-generation-change">Seed INSERT Generation
+Change</h3>
+<p>The <code>make-seed-change</code> function in <code>sqitch.rkt</code>
+must be updated to include the <code>id</code> column in INSERT
+statements when the seed JSON contains <code>id</code> fields. Currently
+it passes through all JSON keys verbatim, so this works automatically —
+no INSERT logic change needed, only the JSON content changes.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="good">Good</h3>
+<ul>
+<li>Zero runtime lookups for framework constants</li>
+<li>Compile-time detection of code/UUID mismatches (typo in constant
+name = build error)</li>
+<li>Deterministic UUIDs enable reproducible database state across
+environments</li>
+<li>Same UUIDs in seed JSON and C++ header — single source of truth
+(Racket generator)</li>
+<li>Pattern extends naturally to any lookup table, not just saga
+infrastructure</li>
+</ul>
+<h3 id="bad">Bad</h3>
+<ul>
+<li>UUIDv5 dependency in Racket generator (minor — <code>uuid</code>
+package)</li>
+<li>Slightly more generated code (one <code>.hpp</code> per lookup table
+with constants)</li>
+<li>Existing deployments with non-deterministic UUIDs need migration if
+adopting this pattern retroactively</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Does not affect lookup tables where C++ never references specific
+rows</li>
+<li>gRPC/Qt layers can use code strings (resolved server-side) —
+constants are a C++ DBA optimization</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>Generating lookup tables for saga infrastructure (status, step,
+step_result)</li>
+<li>Any lookup table where generated C++ code references specific rows
+by identity</li>
+<li>When a <code>LOOKUP_TABLE</code> has <code>@constants</code>
+annotation in the DSL</li>
+</ul>
+<h3 id="when-this-does-not-apply">When This Does NOT Apply</h3>
+<ul>
+<li>User-facing lookup tables where C++ never references specific
+values</li>
+<li>Lookup tables populated at runtime (not seeded from DSL)</li>
+<li>Non-C++ targets (use code strings via gRPC)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/generators/cpp/dba/lookup-constants.rkt</code></td>
+<td>C++ header generator (NEW)</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/postgres/sqitch.rkt</code></td>
+<td>Seed JSON generation with UUIDv5</td>
+</tr>
+<tr>
+<td><code>dslgen/model/ddd-types.rkt</code></td>
+<td>UUIDv5 generation utility</td>
+</tr>
+</tbody>
+</table>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Generator-created lookup tables (saga infrastructure) MUST produce
+both seed JSON with UUIDs and C++ constants header</li>
+<li>Generated C++ repositories MUST use constants, never hardcoded UUID
+strings or runtime lookups</li>
+<li>Verify: grep for <code>find_by_code</code> in generated saga
+repositories — should return zero matches</li>
+</ul>
+<h3 id="common-mistakes">Common Mistakes</h3>
+<ul>
+<li>❌ Hardcoding UUID strings in generated C++
+(<code>"a1b2c3d4-..."</code>)</li>
+<li>❌ Runtime <code>SELECT id FROM ... WHERE code = 'completed'</code>
+in hot paths</li>
+<li>❌ Using <code>gen_random_uuid()</code> for lookup tables that need
+compile-time constants</li>
+<li>✅ <code>lookup::saga_status::completed</code> — named constant,
+compile-time checked</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

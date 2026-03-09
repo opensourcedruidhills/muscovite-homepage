@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Racket Pattern Catalog for Muscovite
+Generators — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>Racket Pattern Catalog for Muscovite Generators</span>
+</nav>
+
+<h1>Racket Pattern Catalog for Muscovite Generators</h1>
+
+
+<h1 id="racket-pattern-catalog-for-muscovite-generators">Racket Pattern
+Catalog for Muscovite Generators</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Constraint document for AI agents and human
+developers. Every Racket pattern in Muscovite generators must use the
+canonical form. This document is the single source of truth for "how to
+write Racket in this project."</p>
+<p><strong>Enforcement</strong>: ADR
+20260226-racket-idiomatic-style-and-byte-compilation.md, ADR
+20260226-mandatory-template-dsl-adoption.md</p>
+<p><strong>Scope</strong>: All <code>.rkt</code> files in
+<code>dslgen/</code>. Parser, model, generators, migration, validation,
+tests.</p>
+</blockquote>
+<hr />
+<h2 id="how-to-use-this-document">How to Use This Document</h2>
+<p>Each section has three tiers:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>CANONICAL</strong></td>
+<td>The required pattern. Use this in all new and modified code.</td>
+</tr>
+<tr>
+<td>✅ <strong>ACCEPTABLE</strong></td>
+<td>Permitted in specific circumstances (documented).</td>
+</tr>
+<tr>
+<td>❌ <strong>ANTI-PATTERN</strong></td>
+<td>Forbidden in new code. Convert when touching existing files.</td>
+</tr>
+</tbody>
+</table>
+<p>When an AI agent generates Racket code for Muscovite, it MUST use
+only CANONICAL or ACCEPTABLE patterns. When an AI agent modifies an
+existing file, it MUST convert any anti-patterns in the modified
+function to canonical form.</p>
+<hr />
+<h2 id="1-iterator-patterns">1. Iterator Patterns</h2>
+<h3 id="white_check_mark-canonical-in-list-on-all-for-over-lists">✅
+CANONICAL: <code>in-list</code> on all <code>for</code> over lists</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Always annotate the sequence type</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>generate-context ctx<span class="op">))</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>field <span class="op">(</span>in-list <span class="op">(</span>entity-fields entity<span class="op">))])</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>validate-field field<span class="op">))</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/fold <span class="op">([</span>acc &#39;<span class="op">()])</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">append</span> acc <span class="op">(</span>generate-context ctx<span class="op">)))</span></span></code></pre></div>
+<p><strong>Why</strong>: <code>in-list</code> eliminates generic
+sequence dispatch at runtime. Without it, Racket checks at every
+iteration whether the value is a list, vector, hash, string, etc. 5–10%
+speedup on iteration-heavy generators. More importantly, it communicates
+intent and catches type errors earlier.</p>
+<h3
+id="white_check_mark-canonical-map--filter--filter-map-for-simple-transforms">✅
+CANONICAL: <code>map</code> / <code>filter</code> /
+<code>filter-map</code> for simple transforms</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Pure transform: prefer map</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">map</span> entity-name <span class="op">(</span>bounded-context-entities ctx<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; Filter: prefer filter/filter-map</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">filter</span> entity-event-sourced? entities<span class="op">)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>filter-map entity-doc entities<span class="op">)</span>  <span class="co">;; drops #f values</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; Parallel map over multiple lists</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">map</span> <span class="op">(</span>λ <span class="op">(</span>name type<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;~a ~a;&quot;</span> type name<span class="op">))</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>     field-names field-types<span class="op">)</span></span></code></pre></div>
+<p><strong>Why</strong>: <code>map</code>/<code>filter</code> are
+declarative — the reader knows instantly that the output is a
+same-length (or shorter) list with no side effects.
+<code>for/list</code> is for when the body needs <code>define</code>,
+multiple expressions, or complex control flow.</p>
+<h3
+id="white_check_mark-acceptable-forlist-when-body-needs-bindings-or-control-flow">✅
+ACCEPTABLE: <code>for/list</code> when body needs bindings or control
+flow</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Body needs define — for/list is appropriate</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>fld <span class="op">(</span>in-list fields<span class="op">)])</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> cpp-type </span><span class="op">(</span>field-&gt;cpp-type fld<span class="op">))</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> cpp-name </span><span class="op">(</span>field-&gt;cpp-member fld<span class="op">))</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;    ~a ~a;&quot;</span> cpp-type cpp-name<span class="op">))</span></span></code></pre></div>
+<h3 id="x-anti-pattern-bare-for-without-sequence-annotation">❌
+ANTI-PATTERN: Bare <code>for</code> without sequence annotation</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — generic sequence dispatch, no type safety</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x xs<span class="op">])</span> <span class="op">(</span>f x<span class="op">))</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>x xs<span class="op">])</span> <span class="op">(</span>do-something x<span class="op">))</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — struct accessor returns list, needs in-list</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>m <span class="op">(</span>ddd:repository-methods repo<span class="op">)])</span> ...<span class="op">)</span></span></code></pre></div>
+<p><strong>Found in codebase</strong>:
+<code>dslgen/generators/qt/saga-widgets.rkt</code>,
+<code>dslgen/viewer.rkt</code>,
+<code>dslgen/generators/qt/state-machine-widgets.rkt</code>,
+<code>dslgen/generators/search/document-mapper.rkt</code></p>
+<h3 id="x-anti-pattern-forlist-where-map-suffices">❌ ANTI-PATTERN:
+<code>for/list</code> where <code>map</code> suffices</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — map is simpler and clearer</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>x <span class="op">(</span>in-list xs<span class="op">)])</span> <span class="op">(</span>f x<span class="op">))</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">map</span> f xs<span class="op">)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — nested for/list for a pure transform</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>string-join</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span>for/list <span class="op">([</span>ev <span class="op">(</span>in-list events<span class="op">)])</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>format <span class="st">&quot;case ~a:&quot;</span> ev<span class="op">))</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>string-join <span class="op">(</span><span class="kw">map</span> <span class="op">(</span>λ <span class="op">(</span>ev<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;case ~a:&quot;</span> ev<span class="op">))</span> events<span class="op">)</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">)</span></span></code></pre></div>
+<hr />
+<h2 id="2-accumulation-patterns-forfold-vs-set">2. Accumulation Patterns
+(<code>for/fold</code> vs <code>set!</code>)</h2>
+<h3 id="white_check_mark-canonical-forfold-for-building-results">✅
+CANONICAL: <code>for/fold</code> for building results</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Build a list by folding</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> results</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/fold <span class="op">([</span>acc &#39;<span class="op">()])</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>context-has-entities? ctx<span class="op">)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>generate-context ctx<span class="op">)</span> acc<span class="op">)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        acc<span class="op">)))</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; Build a hash by folding</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> entity-map</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/fold <span class="op">([</span>h <span class="op">(</span>hash<span class="op">)])</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">([</span>ent <span class="op">(</span>in-list entities<span class="op">)])</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>hash-set h <span class="op">(</span>entity-uuid ent<span class="op">)</span> ent<span class="op">)))</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">;; Accumulate multiple values</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-values <span class="op">(</span>tables views<span class="op">)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/fold <span class="op">([</span>tables &#39;<span class="op">()]</span> <span class="op">[</span>views &#39;<span class="op">()])</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            <span class="op">([</span>proj <span class="op">(</span>in-list projections<span class="op">)])</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>projection-materialized? proj<span class="op">)</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="kw">values</span> tables <span class="op">(</span><span class="kw">cons</span> proj views<span class="op">))</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="kw">values</span> <span class="op">(</span><span class="kw">cons</span> proj tables<span class="op">)</span> views<span class="op">))))</span></span></code></pre></div>
+<h3
+id="white_check_mark-canonical-forlist-with-when-for-filtered-collection">✅
+CANONICAL: <code>for/list</code> with <code>#:when</code> for filtered
+collection</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Collect only matching items</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>fld <span class="op">(</span>in-list fields<span class="op">)]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           #:when <span class="op">(</span>field-required? fld<span class="op">))</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>field-name fld<span class="op">))</span></span></code></pre></div>
+<h3 id="white_check_mark-canonical-forappend-for-flat-mapping">✅
+CANONICAL: <code>for/append</code> for flat-mapping</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Flatten nested lists</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> all-fields</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/append <span class="op">([</span>ent <span class="op">(</span>in-list entities<span class="op">)])</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>entity-fields ent<span class="op">)))</span></span></code></pre></div>
+<h3 id="white_check_mark-acceptable-let-loop-for-stateful-iteration">✅
+ACCEPTABLE: <code>let</code> loop for stateful iteration</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Parser token consumption (inherently stateful)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">let</span> loop <span class="op">([</span>tokens remaining<span class="op">])</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">null?</span> tokens<span class="op">)</span> &#39;<span class="op">()]</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>token-keyword? <span class="op">(</span><span class="kw">car</span> tokens<span class="op">)</span> <span class="st">&quot;END&quot;</span><span class="op">)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">cdr</span> tokens<span class="op">)]</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>parse-item <span class="op">(</span><span class="kw">car</span> tokens<span class="op">))</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>loop <span class="op">(</span><span class="kw">cdr</span> tokens<span class="op">)))]))</span></span></code></pre></div>
+<h3 id="x-anti-pattern-set-accumulator-loop">❌ ANTI-PATTERN:
+<code>set!</code> accumulator loop</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> issues </span>&#39;<span class="op">())</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>repo <span class="op">(</span>in-list <span class="op">(</span>bounded-context-repositories ctx<span class="op">))])</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> for-agg </span><span class="op">(</span>repository-for-aggregate repo<span class="op">))</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span>set-member? agg-names for-agg<span class="op">)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> issues</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>validation-issue &#39;error &#39;reference ...<span class="op">)</span> issues<span class="op">))))</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>issues</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE for/fold:</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/fold <span class="op">([</span>issues &#39;<span class="op">()])</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>          <span class="op">([</span>repo <span class="op">(</span>in-list <span class="op">(</span>bounded-context-repositories ctx<span class="op">))])</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> for-agg </span><span class="op">(</span>repository-for-aggregate repo<span class="op">))</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>set-member? agg-names for-agg<span class="op">)</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      issues</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>validation-issue &#39;error &#39;reference ...<span class="op">)</span> issues<span class="op">)))</span></span></code></pre></div>
+<p><strong>Found in codebase</strong>: <code>dslgen/validator.rkt</code>
+(12 instances), <code>dslgen/verification/verify-types.rkt</code> (4
+instances), <code>dslgen/verification/verify-schema.rkt</code> (3
+instances)</p>
+<h3 id="x-anti-pattern-set-counter">❌ ANTI-PATTERN: <code>set!</code>
+counter</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> count </span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>pair <span class="op">(</span>in-list searchable-pairs<span class="op">)])</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>generate-file pair<span class="op">)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">set!</span> count <span class="op">(</span>add1 count<span class="op">)))</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>printf <span class="st">&quot;Total: ~a files</span><span class="ch">\n</span><span class="st">&quot;</span> count<span class="op">)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> count </span><span class="op">(</span><span class="kw">length</span> searchable-pairs<span class="op">))</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>pair <span class="op">(</span>in-list searchable-pairs<span class="op">)])</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>generate-file pair<span class="op">))</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>printf <span class="st">&quot;Total: ~a files</span><span class="ch">\n</span><span class="st">&quot;</span> count<span class="op">)</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">;; OR if count depends on a condition:</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> count</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/sum <span class="op">([</span>pair <span class="op">(</span>in-list searchable-pairs<span class="op">)]</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>            #:when <span class="op">(</span>generate-file pair<span class="op">))</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="op">))</span></span></code></pre></div>
+<hr />
+<h2 id="3-hash--map-patterns">3. Hash / Map Patterns</h2>
+<h3 id="white_check_mark-canonical-immutable-hash-construction">✅
+CANONICAL: Immutable hash construction</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Literal hash</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> type-map</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash &#39;UUID <span class="st">&quot;boost::uuids::uuid&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        &#39;String <span class="st">&quot;std::string&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        &#39;Integer <span class="st">&quot;std::int32_t&quot;</span><span class="op">))</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; Hash from iteration</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> entity-map</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for/hash <span class="op">([</span>ent <span class="op">(</span>in-list entities<span class="op">)])</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">values</span> <span class="op">(</span>entity-uuid ent<span class="op">)</span> ent<span class="op">)))</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; Hash from fold (when multiple sources feed in)</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> uuid-map</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for*/fold <span class="op">([</span>h <span class="op">(</span>hash<span class="op">)])</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>             <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)]</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>              <span class="op">[</span>ent <span class="op">(</span>in-list <span class="op">(</span>all-entities-in-context ctx<span class="op">))])</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>hash-set h <span class="op">(</span>entity-uuid ent<span class="op">)</span> <span class="op">(</span><span class="kw">list</span> ent ctx<span class="op">))))</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">;; Updating an immutable hash</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h2 </span><span class="op">(</span>hash-set h &#39;new-key new-value<span class="op">))</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h3 </span><span class="op">(</span>hash-update h &#39;count add1 <span class="dv">0</span><span class="op">))</span></span></code></pre></div>
+<h3
+id="white_check_mark-acceptable-make-hash-for-module-level-registries">✅
+ACCEPTABLE: <code>make-hash</code> for module-level registries</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; WHY: Module-level registry populated at load time, read-only thereafter</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> generators </span><span class="op">(</span>make-hash<span class="op">))</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>register-generator name proc<span class="op">)</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash-set! generators name proc<span class="op">))</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>get-generator name<span class="op">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash-ref generators name</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span><span class="kw">error</span> &#39;get-generator <span class="st">&quot;Unknown generator: ~a&quot;</span> name<span class="op">))))</span></span></code></pre></div>
+<p><strong>When acceptable</strong>: Only for module-scoped registries
+that are write-once-read-many. Must include a <code>WHY:</code>
+comment.</p>
+<h3
+id="white_check_mark-acceptable-make-hash-for-performance-critical-paths">✅
+ACCEPTABLE: <code>make-hash</code> for performance-critical paths</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; WHY: Performance — &gt;1000 insertions in tight loop; immutable hash would</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; create O(n) intermediate copies</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>make-hash<span class="op">))</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>row <span class="op">(</span>in-list large-dataset<span class="op">)])</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash-set! h <span class="op">(</span>row-key row<span class="op">)</span> <span class="op">(</span>row-value row<span class="op">)))</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Freeze: use only hash-ref after this point</span></span></code></pre></div>
+<p><strong>When acceptable</strong>: Only when profiling shows immutable
+hash is a bottleneck (&gt;1000 insertions). Must include a
+<code>WHY: performance</code> comment.</p>
+<h3 id="x-anti-pattern-mutable-hash-for-build-then-read">❌
+ANTI-PATTERN: Mutable hash for build-then-read</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — accumulation into mutable hash</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> h </span><span class="op">(</span>make-hash<span class="op">))</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)])</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([</span>agg <span class="op">(</span>in-list <span class="op">(</span>bounded-context-aggregates ctx<span class="op">))])</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>hash-set! h <span class="op">(</span>entity-uuid <span class="op">(</span>aggregate-root agg<span class="op">))</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span><span class="kw">list</span> <span class="op">(</span>aggregate-root agg<span class="op">)</span> ctx <span class="op">(</span>aggregate-uuid agg<span class="op">)))))</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>h</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE for*/fold:</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for*/fold <span class="op">([</span>h <span class="op">(</span>hash<span class="op">)])</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>           <span class="op">([</span>ctx <span class="op">(</span>in-list contexts<span class="op">)]</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">[</span>agg <span class="op">(</span>in-list <span class="op">(</span>bounded-context-aggregates ctx<span class="op">))])</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>hash-set h <span class="op">(</span>entity-uuid <span class="op">(</span>aggregate-root agg<span class="op">))</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">list</span> <span class="op">(</span>aggregate-root agg<span class="op">)</span> ctx <span class="op">(</span>aggregate-uuid agg<span class="op">))))</span></span></code></pre></div>
+<p><strong>Found in codebase</strong>:
+<code>dslgen/migration/diff-model.rkt</code>
+(<code>entities-&gt;uuid-map</code>,
+<code>relationships-&gt;uuid-map</code>),
+<code>dslgen/incremental/incremental-gen.rkt</code> (11
+<code>hash-set!</code> calls building <code>uuid-&gt;ctx-name</code>
+map)</p>
+<hr />
+<h2 id="4-match--dispatch-patterns">4. Match / Dispatch Patterns</h2>
+<h3 id="white_check_mark-canonical-match-on-structs">✅ CANONICAL:
+<code>match</code> on structs</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Dispatch on struct type</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>match node</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>template-node &#39;text str<span class="op">)</span> str<span class="op">]</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>template-node &#39;line str<span class="op">)</span> <span class="op">(</span><span class="kw">string-append</span> str <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">)]</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>template-node &#39;block <span class="op">(</span><span class="kw">cons</span> level items<span class="op">))</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span><span class="kw">apply</span> <span class="kw">string-append</span> <span class="op">(</span><span class="kw">map</span> <span class="op">(</span>curry emit-node level<span class="op">)</span> items<span class="op">))]</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">[_</span> <span class="op">(</span><span class="kw">error</span> &#39;emit <span class="st">&quot;Unknown template node: ~a&quot;</span> node<span class="op">)])</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; Destructure struct fields</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>match field</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="kw">struct</span> field <span class="op">(</span>uuid name type constraints doc req? uniq? <span class="op">_</span> <span class="op">_</span> <span class="op">_))</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>format <span class="st">&quot;~a ~a~a&quot;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>type-&gt;sql type<span class="op">)</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>symbol-&gt;sql-id name<span class="op">)</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span><span class="kw">if</span> req? <span class="st">&quot; NOT NULL&quot;</span> <span class="st">&quot;&quot;</span><span class="op">))])</span></span></code></pre></div>
+<h3 id="white_check_mark-canonical-match-on-token-types-parser">✅
+CANONICAL: <code>match</code> on token types (parser)</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Token dispatch — already used correctly in parser.rkt</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>match <span class="op">(</span>current-token ps<span class="op">)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>token &#39;keyword <span class="st">&quot;ENTITY&quot;</span> <span class="op">_</span> <span class="op">_)</span>  <span class="op">(</span>parse-entity ps<span class="op">)]</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>token &#39;keyword <span class="st">&quot;AGGREGATE&quot;</span> <span class="op">_</span> <span class="op">_)</span> <span class="op">(</span>parse-aggregate ps<span class="op">)]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>token &#39;keyword <span class="st">&quot;SAGA&quot;</span> <span class="op">_</span> <span class="op">_)</span>    <span class="op">(</span>parse-saga ps<span class="op">)]</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>tok <span class="op">(</span>parse-error ps <span class="op">(</span>format <span class="st">&quot;Unexpected token: ~a&quot;</span> tok<span class="op">))])</span></span></code></pre></div>
+<h3 id="white_check_mark-acceptable-case-for-symbolstring-dispatch">✅
+ACCEPTABLE: <code>case</code> for symbol/string dispatch</h3>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; case for fixed symbol dispatch</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">case</span> <span class="op">(</span>type-spec-name type<span class="op">)</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>UUID uuid<span class="op">)</span> <span class="st">&quot;UUID&quot;</span><span class="op">]</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>String TEXT Text text<span class="op">)</span> <span class="st">&quot;TEXT&quot;</span><span class="op">]</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>Integer INT int<span class="op">)</span> <span class="st">&quot;INTEGER&quot;</span><span class="op">]</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span>Boolean BOOL bool<span class="op">)</span> <span class="st">&quot;BOOLEAN&quot;</span><span class="op">]</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">error</span> &#39;type-&gt;sql <span class="st">&quot;Unknown type: ~a&quot;</span> <span class="op">(</span>type-spec-name type<span class="op">))])</span></span></code></pre></div>
+<h3 id="x-anti-pattern-cond--equal-chains">❌ ANTI-PATTERN:
+<code>cond</code> + <code>equal?</code> chains</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — use case or match instead</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="kw">equal?</span> key <span class="st">&quot;ENTITY&quot;</span><span class="op">)</span> <span class="op">(</span>parse-entity ps<span class="op">)]</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="kw">equal?</span> key <span class="st">&quot;AGGREGATE&quot;</span><span class="op">)</span> <span class="op">(</span>parse-aggregate ps<span class="op">)]</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="kw">equal?</span> key <span class="st">&quot;SAGA&quot;</span><span class="op">)</span> <span class="op">(</span>parse-saga ps<span class="op">)]</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">error</span> <span class="st">&quot;Unknown keyword&quot;</span><span class="op">)])</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE case:</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">case</span> key</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="st">&quot;ENTITY&quot;</span><span class="op">)</span> <span class="op">(</span>parse-entity ps<span class="op">)]</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="st">&quot;AGGREGATE&quot;</span><span class="op">)</span> <span class="op">(</span>parse-aggregate ps<span class="op">)]</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">[(</span><span class="st">&quot;SAGA&quot;</span><span class="op">)</span> <span class="op">(</span>parse-saga ps<span class="op">)]</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="kw">else</span> <span class="op">(</span><span class="kw">error</span> <span class="st">&quot;Unknown keyword&quot;</span><span class="op">)])</span></span></code></pre></div>
+<hr />
+<h2 id="5-string-output-patterns-generators">5. String Output Patterns
+(Generators)</h2>
+<h3
+id="white_check_mark-canonical-template-dsl-for-output-construction">✅
+CANONICAL: Template DSL for output construction</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../template-dsl.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template generate-entity-header</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity ctx<span class="op">)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>text <span class="op">(</span>copyright-header<span class="op">))</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;#pragma once&quot;</span><span class="op">)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;#include &lt;~a&gt;&quot;</span> <span class="op">(</span>context-&gt;include-path ctx<span class="op">)))</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;namespace ~a::dba {&quot;</span> <span class="op">(</span>symbol-&gt;snake-case <span class="op">(</span>bounded-context-name ctx<span class="op">))))</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;/// @brief ~a&quot;</span> <span class="op">(</span><span class="kw">or</span> <span class="op">(</span>entity-doc entity<span class="op">)</span> <span class="op">(</span><span class="kw">symbol-&gt;string</span> <span class="op">(</span>entity-name entity<span class="op">)))))</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;struct ~a final {&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>map-items</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>λ <span class="op">(</span>fld<span class="op">)</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>indent <span class="dv">1</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a ~a{};&quot;</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>                       <span class="op">(</span>field-&gt;cpp-type fld<span class="op">)</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>                       <span class="op">(</span>field-&gt;cpp-member fld<span class="op">)))))</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>entity-fields entity<span class="op">))</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;} // namespace ~a::dba&quot;</span> <span class="op">(</span>symbol-&gt;snake-case <span class="op">(</span>bounded-context-name ctx<span class="op">))))))</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">;; Usage</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> output </span><span class="op">(</span>emit <span class="op">(</span>generate-entity-header my-entity my-ctx<span class="op">)))</span></span></code></pre></div>
+<p><strong>Why</strong>: Template DSL provides structured composition,
+automatic indentation, conditional sections via <code>when-true</code>,
+list mapping via <code>map-items</code>, and source-location tracking in
+errors. See ADR 20260226-mandatory-template-dsl-adoption.</p>
+<h3
+id="white_check_mark-acceptable-format--string-append-in-utility-functions">✅
+ACCEPTABLE: <code>format</code> + <code>string-append</code> in utility
+functions</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Utility functions computing names/paths (not output construction) — format is fine</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>entity-&gt;include-path entity ctx<span class="op">)</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;~a/dba/~a/entities/~a.hpp&quot;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>symbol-&gt;snake-case <span class="op">(</span>bounded-context-name ctx<span class="op">))</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>symbol-&gt;snake-case <span class="op">(</span>bounded-context-name ctx<span class="op">))</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>symbol-&gt;cpp-filename <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; Short single-line formatting — format is fine</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>field-&gt;sql-column fld<span class="op">)</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;~a ~a~a&quot;</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>symbol-&gt;sql-id <span class="op">(</span>field-name fld<span class="op">))</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>type-&gt;sql <span class="op">(</span>field-type fld<span class="op">))</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>field-required? fld<span class="op">)</span> <span class="st">&quot; NOT NULL&quot;</span> <span class="st">&quot;&quot;</span><span class="op">)))</span></span></code></pre></div>
+<p><strong>When acceptable</strong>: Functions that compute intermediate
+string values (names, paths, single-line SQL column definitions) that
+are consumed by template nodes. The distinction is: <strong>template DSL
+for output structure</strong>, <strong>format for value
+computation</strong>.</p>
+<h3 id="x-anti-pattern-large-string-append-blocks-for-output">❌
+ANTI-PATTERN: Large <code>string-append</code> blocks for output</h3>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — 40+ line string-append chains</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-service-proto agg ctx<span class="op">)</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>proto-header package-name<span class="op">)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;import </span><span class="ch">\&quot;</span><span class="st">&quot;</span> proto-path-prefix <span class="op">(</span>symbol-&gt;proto-filename agg-name<span class="op">)</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;import </span><span class="ch">\&quot;</span><span class="st">&quot;</span> proto-path-prefix <span class="st">&quot;types.proto</span><span class="ch">\&quot;</span><span class="st">;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;import </span><span class="ch">\&quot;</span><span class="st">google/protobuf/empty.proto</span><span class="ch">\&quot;</span><span class="st">;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span><span class="kw">if</span> spatial-enabled?</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;import </span><span class="ch">\&quot;</span><span class="st">muscovite/spatial.proto</span><span class="ch">\&quot;</span><span class="st">;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;service &quot;</span> service-name <span class="st">&quot; {</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; ... 25 more lines</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;}</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">))</span></span></code></pre></div>
+<p><strong>Found in codebase</strong>:
+<code>dslgen/generators/grpc/service.rkt</code> (55+ line
+string-append),
+<code>dslgen/generators/qt/state-machine-widgets.rkt</code> (75-line
+string-append)</p>
+<h3 id="x-anti-pattern-if-cond-format---for-conditionals">❌
+ANTI-PATTERN: <code>(if cond (format ...) "")</code> for
+conditionals</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — empty string hack for conditional output</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span><span class="kw">if</span> has-events? <span class="op">(</span>format <span class="st">&quot;// Events: ~a</span><span class="ch">\n</span><span class="st">&quot;</span> event-count<span class="op">)</span> <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span><span class="kw">if</span> has-sagas? <span class="op">(</span>format <span class="st">&quot;// Sagas: ~a</span><span class="ch">\n</span><span class="st">&quot;</span> saga-count<span class="op">)</span> <span class="st">&quot;&quot;</span><span class="op">))</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; USE when-true:</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>when-true has-events?</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;// Events: ~a&quot;</span> event-count<span class="op">)))</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>when-true has-sagas?</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;// Sagas: ~a&quot;</span> saga-count<span class="op">))))</span></span></code></pre></div>
+<hr />
+<h2 id="6-contract--module-boundary-patterns">6. Contract / Module
+Boundary Patterns</h2>
+<h3 id="white_check_mark-canonical-contract-out-on-public-apis">✅
+CANONICAL: <code>contract-out</code> on public APIs</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span>contract-out</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Struct with typed fields</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="kw">struct</span> entity <span class="op">([</span>uuid <span class="kw">string?</span><span class="op">]</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>name <span class="kw">symbol?</span><span class="op">]</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>id-field field?<span class="op">]</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>fields <span class="op">(</span>listof field?<span class="op">)]</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>invariants <span class="op">(</span>listof invariant?<span class="op">)]</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>commands <span class="op">(</span>listof command?<span class="op">)]</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                  <span class="op">[</span>doc <span class="op">(</span>or/c <span class="kw">string?</span> <span class="dv">#f</span><span class="op">)])]</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Functions with contracts</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>parse-file <span class="op">(</span>-&gt; path-string? <span class="op">(</span>listof bounded-context?<span class="op">))]</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>symbol-&gt;sql-id <span class="op">(</span>-&gt; <span class="kw">symbol?</span> <span class="kw">string?</span><span class="op">)]</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>symbol-&gt;cpp-class <span class="op">(</span>-&gt; <span class="kw">symbol?</span> <span class="kw">string?</span><span class="op">)]))</span></span></code></pre></div>
+<p><strong>Priority targets for enforcement</strong> (in order):</p>
+<ol type="1">
+<li><code>model/ddd-types.rkt</code> — 70 structs, the IR core</li>
+<li><code>model/type-registry.rkt</code> — type mapping functions</li>
+<li><code>generators/headers.rkt</code> — license header generation</li>
+<li><code>parser/parser.rkt</code> — parser entry points</li>
+</ol>
+<h3
+id="white_check_mark-acceptable-explicit-provide-list-without-contracts-migration-period">✅
+ACCEPTABLE: Explicit <code>provide</code> list without contracts
+(migration period)</h3>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Acceptable during migration — explicit list without contract-out</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> parse</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>         parse-file</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>         parse-file-with-map</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>         parse-string<span class="op">)</span></span></code></pre></div>
+<p><strong>When acceptable</strong>: During the incremental migration
+period. Files without contracts should be converted when touched. This
+is strictly better than <code>all-defined-out</code> because it
+documents the public API.</p>
+<h3 id="x-anti-pattern-provide-all-defined-out">❌ ANTI-PATTERN:
+<code>(provide (all-defined-out))</code></h3>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN in new files — exports everything, no API boundary</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>all-defined-out<span class="op">))</span></span></code></pre></div>
+<p><strong>Found in codebase</strong>:
+<code>dslgen/model/ddd-types.rkt</code>, most generator files. Convert
+when touching these files.</p>
+<hr />
+<h2 id="7-error-handling-patterns">7. Error Handling Patterns</h2>
+<h3
+id="white_check_mark-canonical-error-with-component-name-and-context">✅
+CANONICAL: <code>error</code> with component name and context</h3>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Always include the component/function name and actionable context</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> &#39;parse-entity</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;Entity ~a references undefined parent ~a at ~a:~a&quot;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>entity-name entity<span class="op">)</span> parent-name</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>token-line tok<span class="op">)</span> <span class="op">(</span>token-col tok<span class="op">))</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> &#39;type-&gt;sql</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;Unknown DSL type: ~a (known types: ~a)&quot;</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>type-spec-name type<span class="op">)</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>string-join <span class="op">(</span><span class="kw">map</span> <span class="kw">symbol-&gt;string</span> <span class="op">(</span>hash-keys KNOWN-TYPES<span class="op">))</span> <span class="st">&quot;, &quot;</span><span class="op">))</span></span></code></pre></div>
+<h3
+id="white_check_mark-canonical-raise-with-structured-exception-for-recoverable-errors">✅
+CANONICAL: <code>raise</code> with structured exception (for recoverable
+errors)</h3>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define custom exceptions where callers need to catch specific failures</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> exn:fail:parse exn:fail</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>line col token-type token-value<span class="op">)</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>parse-error ps message<span class="op">)</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> tok </span><span class="op">(</span>current-token ps<span class="op">))</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">raise</span> <span class="op">(</span>exn:fail:parse</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>format <span class="st">&quot;Parse error: ~a at ~a:~a&quot;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                  message <span class="op">(</span>token-line tok<span class="op">)</span> <span class="op">(</span>token-col tok<span class="op">))</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>current-continuation-marks<span class="op">)</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>token-line tok<span class="op">)</span> <span class="op">(</span>token-col tok<span class="op">)</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>token-type tok<span class="op">)</span> <span class="op">(</span>token-value tok<span class="op">))))</span></span></code></pre></div>
+<p><strong>When to use structured exceptions</strong>: When callers need
+to catch and handle specific error types (e.g., parse errors that should
+produce user-friendly messages vs internal generator errors that
+indicate bugs).</p>
+<h3
+id="white_check_mark-acceptable-plain-error-for-internal-generator-failures">✅
+ACCEPTABLE: Plain <code>error</code> for internal generator
+failures</h3>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Internal assertion — should never happen if IR is valid</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> &#39;generate-entity <span class="st">&quot;Entity has no id-field — IR invariant violated&quot;</span><span class="op">)</span></span></code></pre></div>
+<p><strong>When acceptable</strong>: For internal consistency checks
+that indicate bugs in the generator or parser, not user input errors.
+These should crash with a clear message.</p>
+<h3 id="x-anti-pattern-error-without-component-name">❌ ANTI-PATTERN:
+<code>error</code> without component name</h3>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — no component name, unclear origin</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> <span class="st">&quot;Something went wrong&quot;</span><span class="op">)</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> <span class="op">(</span>format <span class="st">&quot;Unknown type: ~a&quot;</span> type<span class="op">))</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — string &quot;error&quot; prefix (error already prints &quot;error&quot;)</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">error</span> &#39;foo <span class="st">&quot;Error: unknown type ~a&quot;</span> type<span class="op">)</span></span></code></pre></div>
+<hr />
+<h2 id="8-module-structure-patterns">8. Module Structure Patterns</h2>
+<h3 id="white_check_mark-canonical-module-structure">✅ CANONICAL:
+Module structure</h3>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; </span><span class="an">SPDX-License-Identifier:</span><span class="co"> AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; Copyright (c) 2025-2026 Johannes Lochmann</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">;;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; This software is dual-licensed:</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">;;  - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">;;  - Commercial license, contact muscovite-licensing@johanneslochmann.net</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; WHY: [Design intent — why this module exists]</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co">;; ADR: [Relevant ADR reference]</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; FTR-NNN: [Feature reference if applicable]</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> racket/contract</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>         racket/list</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>         racket/match</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>         racket/string</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>         <span class="co">;; Project imports — relative paths</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;../model/ddd-types.rkt&quot;</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;../model/type-registry.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a> <span class="op">(</span>contract-out</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>generate-entity-hpp <span class="op">(</span>-&gt; entity? bounded-context? <span class="kw">string?</span><span class="op">)]</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>generate-entity-cpp <span class="op">(</span>-&gt; entity? bounded-context? <span class="kw">string?</span><span class="op">)]))</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="co">;; Public API</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-entity-hpp entity ctx<span class="op">)</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; WHY: template DSL per ADR 20260226</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>emit <span class="op">(</span>entity-hpp-template entity ctx<span class="op">)))</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a><span class="co">;; Internal Helpers</span></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>field-&gt;cpp-decl fld<span class="op">)</span> ...<span class="op">)</span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a><span class="co">;; Tests</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a><span class="co">;; ============================================================================</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>module+ test</span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">require</span> rackunit</span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;../model/ddd-types.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>test-case <span class="st">&quot;field-&gt;cpp-decl generates correct declaration&quot;</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="ex">define</span><span class="fu"> fld </span><span class="op">(</span>make-field &#39;name <span class="op">(</span>type-spec &#39;String <span class="dv">#f</span> <span class="dv">#f</span> <span class="dv">#f</span> <span class="dv">#f</span> <span class="dv">#f</span><span class="op">)))</span></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>check-equal? <span class="op">(</span>field-&gt;cpp-decl fld<span class="op">)</span> <span class="st">&quot;std::string name{};&quot;</span><span class="op">)))</span></span></code></pre></div>
+<p><strong>Key elements</strong>:</p>
+<ol type="1">
+<li><code>#lang racket/base</code> (not <code>#lang racket</code> —
+smaller surface area, faster load)</li>
+<li>SPDX license header</li>
+<li><code>WHY:</code> / <code>ADR:</code> / <code>FTR:</code>
+comments</li>
+<li>Imports: <code>racket/*</code> first, then project imports</li>
+<li><code>provide</code> with <code>contract-out</code></li>
+<li>Public API section with clear separator</li>
+<li>Internal helpers section</li>
+<li><code>module+ test</code> at bottom</li>
+</ol>
+<h3 id="white_check_mark-canonical-lang-racketbase-not-lang-racket">✅
+CANONICAL: <code>#lang racket/base</code> (not
+<code>#lang racket</code>)</h3>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED for all new files</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; Import only what you need</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> racket/list    <span class="co">;; for filter-map, append-map, etc.</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>         racket/match   <span class="co">;; for match</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>         racket/string  <span class="co">;; for string-join, string-split, etc.</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>         racket/format<span class="op">)</span> <span class="co">;; for ~a formatting</span></span></code></pre></div>
+<p><strong>Why</strong>: <code>#lang racket</code> re-exports ~600
+bindings. <code>#lang racket/base</code> re-exports ~200. Smaller
+namespace = faster module expansion = better byte compilation. Most
+generator files need only <code>racket/list</code>,
+<code>racket/match</code>, <code>racket/string</code>.</p>
+<h3 id="white_check_mark-canonical-module-test-for-inline-tests">✅
+CANONICAL: <code>module+ test</code> for inline tests</h3>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>module+ test</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">require</span> rackunit<span class="op">)</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>test-case <span class="st">&quot;symbol-&gt;sql-id converts PascalCase to snake_case&quot;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>check-equal? <span class="op">(</span>symbol-&gt;sql-id &#39;PatientContext<span class="op">)</span> <span class="st">&quot;patient_context&quot;</span><span class="op">)</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>check-equal? <span class="op">(</span>symbol-&gt;sql-id &#39;order-item<span class="op">)</span> <span class="st">&quot;order_item&quot;</span><span class="op">))</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>test-case <span class="st">&quot;entity with no fields raises error&quot;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>check-exn exn:fail?</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>validate-entity <span class="op">(</span>make-entity &#39;Empty<span class="op">))))))</span></span></code></pre></div>
+<p><strong>Why</strong>: <code>module+ test</code> submodules are only
+executed when explicitly invoked (<code>raco test file.rkt</code> or
+<code>racket -l rackunit/text-ui file.rkt</code>). They don't slow down
+normal compilation. They enable per-module testing (ADR 20260223).</p>
+<h3 id="x-anti-pattern-lang-racket-for-generators">❌ ANTI-PATTERN:
+<code>#lang racket</code> for generators</h3>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — imports 400+ unnecessary bindings, slower compilation</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket</span></span></code></pre></div>
+<hr />
+<h2 id="9-template-dsl-authoring-patterns">9. Template DSL Authoring
+Patterns</h2>
+<h3 id="white_check_mark-canonical-template-structure">✅ CANONICAL:
+Template structure</h3>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;template-dsl.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; Template for a C++ header file</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template entity-header</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity ctx<span class="op">)</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>text <span class="op">(</span>copyright-header<span class="op">))</span>              <span class="co">;; Raw text: no trailing newline</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;#pragma once&quot;</span><span class="op">)</span>                   <span class="co">;; Line: text + newline</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span>                               <span class="co">;; Blank line</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Conditional section</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>when-true <span class="op">(</span>entity-has-relationships? entity<span class="op">)</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>line <span class="st">&quot;// Forward declarations&quot;</span><span class="op">)</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>map-items</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>λ <span class="op">(</span>rel<span class="op">)</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;class ~a;&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>relationship-target-entity rel<span class="op">)))))</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>entity-relationships entity<span class="op">))</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)))</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Main content</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;struct ~a final {&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Map over fields with indentation</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>map-items</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>λ <span class="op">(</span>fld<span class="op">)</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>indent <span class="dv">1</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a ~a{};&quot;</span> <span class="op">(</span>field-&gt;cpp-type fld<span class="op">)</span> <span class="op">(</span>field-&gt;cpp-member fld<span class="op">)))))</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>entity-id-field entity<span class="op">)</span> <span class="op">(</span>entity-fields entity<span class="op">)))</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)))</span></span></code></pre></div>
+<h3 id="white_check_mark-canonical-template-composition">✅ CANONICAL:
+Template composition</h3>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Shared templates in generators/shared/templates/cpp-templates.rkt</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template cpp-doc-comment</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>text<span class="op">)</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;/**&quot;</span><span class="op">)</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot; * @brief ~a&quot;</span> text<span class="op">))</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot; */&quot;</span><span class="op">)))</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; Compose in a larger template</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template entity-header</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity ctx<span class="op">)</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>text <span class="op">(</span>emit <span class="op">(</span>cpp-doc-comment <span class="op">(</span><span class="kw">or</span> <span class="op">(</span>entity-doc entity<span class="op">)</span> <span class="st">&quot;Entity&quot;</span><span class="op">))))</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;struct ~a final {&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; ...</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)))</span></span></code></pre></div>
+<h3 id="white_check_mark-canonical-emit-to-string">✅ CANONICAL: Emit to
+string</h3>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; emit returns a string — write it to file</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> content </span><span class="op">(</span>emit <span class="op">(</span>entity-header entity ctx<span class="op">)))</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>display-to-file content output-path #:exists &#39;replace<span class="op">)</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; Or in a generator function that returns string</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-entity-hpp entity ctx<span class="op">)</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>emit <span class="op">(</span>entity-header entity ctx<span class="op">)))</span></span></code></pre></div>
+<h3 id="key-template-node-reference">Key template node reference</h3>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(text str)</code></td>
+<td>Raw text, no newline</td>
+<td><code>(text (copyright-header))</code></td>
+</tr>
+<tr>
+<td><code>(line str)</code></td>
+<td>Text + newline</td>
+<td><code>(line "#pragma once")</code></td>
+</tr>
+<tr>
+<td><code>(line "")</code></td>
+<td>Blank line</td>
+<td>Separator between sections</td>
+</tr>
+<tr>
+<td><code>(block n items ...)</code></td>
+<td>Indented block</td>
+<td><code>(block 0 (line "class {") ...)</code></td>
+</tr>
+<tr>
+<td><code>(indent n str)</code></td>
+<td>Indent string by n×4 spaces</td>
+<td><code>(indent 1 (line "int x;"))</code></td>
+</tr>
+<tr>
+<td><code>(join sep items)</code></td>
+<td>Join with separator</td>
+<td><code>(join ", " field-strings)</code></td>
+</tr>
+<tr>
+<td><code>(when-true cond tmpl)</code></td>
+<td>Conditional</td>
+<td><code>(when-true has-doc? (line doc))</code></td>
+</tr>
+<tr>
+<td><code>(map-items fn lst)</code></td>
+<td>Map to templates</td>
+<td><code>(map-items field-&gt;line fields)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-command-line-configuration-pattern">10. Command-Line
+Configuration Pattern</h2>
+<h3 id="white_check_mark-canonical-config-struct-from-command-line">✅
+CANONICAL: Config struct from <code>command-line</code></h3>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define an immutable config struct</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> gen-config</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>project-path cpp-dba? grpc? qt-frontend fresh? dry-run?<span class="op">)</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Build config from command-line, then resolve dependencies purely</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> raw-config</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>command-line</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>   #:program <span class="st">&quot;generate&quot;</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>   #:once-each</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--project&quot;</span><span class="op">)</span> path <span class="st">&quot;Project file&quot;</span> <span class="op">(</span><span class="kw">set!</span> project-path path<span class="op">)]</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--cpp-dba&quot;</span><span class="op">)</span> <span class="st">&quot;Generate C++ DBA&quot;</span> <span class="op">(</span><span class="kw">set!</span> cpp-dba? <span class="dv">#t</span><span class="op">)]</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--grpc&quot;</span><span class="op">)</span> <span class="st">&quot;Generate gRPC&quot;</span> <span class="op">(</span><span class="kw">set!</span> grpc? <span class="dv">#t</span><span class="op">)]</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; ...</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>   <span class="op">))</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>resolve-dependencies config<span class="op">)</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; WHY: Pure function — dependencies resolved without mutation</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let*</span> <span class="op">([</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-qt-frontend config<span class="op">)</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>grpc? <span class="dv">#t</span><span class="op">])</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)]</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>         <span class="op">[</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-grpc? config<span class="op">)</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>cpp-dba? <span class="dv">#t</span><span class="op">])</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)])</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>    config<span class="op">))</span></span></code></pre></div>
+<p><strong>Note</strong>: <code>set!</code> inside
+<code>command-line</code> flag handlers is acceptable — Racket's
+<code>command-line</code> macro specifically uses this pattern. The key
+is to capture the result into an immutable struct immediately and
+resolve dependencies via a pure function.</p>
+<hr />
+<h2 id="quick-reference-card">Quick Reference Card</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>✅ Use</th>
+<th>❌ Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Iteration</td>
+<td><code>(for/list ([x (in-list xs)]) ...)</code></td>
+<td><code>(for/list ([x xs]) ...)</code></td>
+</tr>
+<tr>
+<td>Simple transform</td>
+<td><code>(map f xs)</code></td>
+<td><code>(for/list ([x (in-list xs)]) (f x))</code></td>
+</tr>
+<tr>
+<td>Accumulation</td>
+<td><code>(for/fold ([acc '()]) ...)</code></td>
+<td><code>(define acc '()) (set! acc ...)</code></td>
+</tr>
+<tr>
+<td>Flat-map</td>
+<td><code>(for/append ([x ...]) ...)</code></td>
+<td><code>(apply append (map ...))</code></td>
+</tr>
+<tr>
+<td>Hash build</td>
+<td><code>(for/hash ([x ...]) (values k v))</code></td>
+<td><code>(make-hash) + hash-set!</code></td>
+</tr>
+<tr>
+<td>Hash literal</td>
+<td><code>(hash 'a 1 'b 2)</code></td>
+<td><code>(define h (make-hash)) (hash-set! h ...)</code></td>
+</tr>
+<tr>
+<td>Dispatch</td>
+<td><code>(match x [(pat) ...])</code> or <code>(case x ...)</code></td>
+<td><code>(cond [(equal? x ...) ...] ...)</code></td>
+</tr>
+<tr>
+<td>Output</td>
+<td><code>(define-template name ...)</code> +
+<code>(emit ...)</code></td>
+<td><code>(string-append (format ...) ...)</code></td>
+</tr>
+<tr>
+<td>Conditional out</td>
+<td><code>(when-true cond template)</code></td>
+<td><code>(if cond (format ...) "")</code></td>
+</tr>
+<tr>
+<td>Provide</td>
+<td><code>(provide (contract-out [...]))</code></td>
+<td><code>(provide (all-defined-out))</code></td>
+</tr>
+<tr>
+<td>Module lang</td>
+<td><code>#lang racket/base</code></td>
+<td><code>#lang racket</code></td>
+</tr>
+<tr>
+<td>Errors</td>
+<td><code>(error 'component "msg ~a" val)</code></td>
+<td><code>(error "msg")</code></td>
+</tr>
+<tr>
+<td>Tests</td>
+<td><code>(module+ test (require rackunit))</code></td>
+<td>Separate test files only</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="audit-commands">Audit Commands</h2>
+<p>Track migration progress with these commands:</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count remaining set! in generators</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Files missing in-list</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Files without contracts</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files still using all-defined-out</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;all-defined-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Template DSL adoption (files using define-template)</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw format/string-append in generators (should trend toward zero)</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Files using #lang racket instead of racket/base</span></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;^#lang racket$&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
+<hr />
+<h2 id="related-documents">Related Documents</h2>
+<ul>
+<li><a
+href="adr/20260226-racket-idiomatic-style-and-byte-compilation.html">ADR
+20260226: Racket Idiomatic Style and Byte Compilation</a></li>
+<li><a href="adr/20260226-mandatory-template-dsl-adoption.html">ADR
+20260226: Mandatory Template DSL Adoption</a></li>
+<li><a href="adr/20260223-racket-generator-unit-testing-strategy.html">ADR
+20260223: Generator Unit Testing Strategy</a></li>
+<li><a
+href="adr/20260218-generator-modularization-and-dependency-hygiene.html">ADR
+20260218: Generator Modularization</a></li>
+<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Canonical IR
+structs, type mappings, naming conventions</li>
+<li><a href="CONTEXT.html">CONTEXT.md</a> — Project architecture and DSL
+reference</li>
+</ul>
+<hr />
+<p><em>This document is a constraint document, not a tutorial. For
+Racket language reference, see <a
+href="https://docs.racket-lang.org/guide/">The Racket
+Guide</a>.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

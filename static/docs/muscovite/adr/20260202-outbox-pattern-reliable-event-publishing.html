@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outbox Pattern with NATS JetStream and
+Protobuf — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Outbox Pattern with NATS JetStream and Protobuf</span>
+</nav>
+
+<h1>Outbox Pattern with NATS JetStream and Protobuf</h1>
+
+
+<h1 id="outbox-pattern-with-nats-jetstream-and-protobuf">Outbox Pattern
+with NATS JetStream and Protobuf</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-02</li>
+<li>Tags: outbox, event-publishing, nats, jetstream, protobuf,
+reliability</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The Muscovite architecture stores domain events transactionally
+within the <code>domain_events</code> table of each bounded context.
+Currently, these events are serialized as <code>JSONB</code>. However,
+<code>JSONB</code> lacks strict schema enforcement and type safety for
+external consumers. Furthermore, events currently remain trapped in the
+database without a mechanism to reach external systems reliably.</p>
+<p><strong>Current State (v0.7.0)</strong>:</p>
+<ul>
+<li>Events stored as <code>JSONB</code> in PostgreSQL.</li>
+<li>No external publishing pipeline.</li>
+<li>Clients poll via gRPC for updates (inefficient).</li>
+</ul>
+<p><strong>Goal for v0.8.0</strong>: Establish a strict, crash-only
+event publishing pipeline that bridges PostgreSQL to NATS JetStream
+using binary Protobuf payloads for maximum type safety and
+reliability.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Type Safety</strong>: External consumers need strong
+guarantees about event schemas (Protobuf).</li>
+<li><strong>Database Purity</strong>: The database should act only as a
+persistence buffer; it should not know about downstream consumers
+(Open/Closed Principle).</li>
+<li><strong>Reliability</strong>: Events must be persisted atomically
+with state changes (Outbox Pattern).</li>
+<li><strong>Traceability</strong>: The database tracks "published" state
+to prevent data loss.</li>
+<li><strong>Performance</strong>: NATS JetStream handles fan-out; the
+database is not queried by consumers.</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><p><strong>Option A: JSONB Payloads + Logical Replication
+(CDC)</strong></p>
+<ul>
+<li><em>Pros</em>: Decoupled.</li>
+<li><em>Cons</em>: <code>JSONB</code> is loosely typed; CDC setup
+(Debezium) adds significant infrastructure complexity.</li>
+</ul></li>
+<li><p><strong>Option B: JSONB Payloads + Background
+Polling</strong></p>
+<ul>
+<li><em>Pros</em>: Simple.</li>
+<li><em>Cons</em>: <code>JSONB</code> payloads require runtime
+validation by consumers; write amplification if database tracks
+per-consumer state.</li>
+</ul></li>
+<li><p><strong>Option C: Protobuf Payloads + NATS JetStream Outbox
+(Chosen)</strong></p>
+<ul>
+<li><em>Pros</em>: Strong typing via Protobuf; database only tracks
+"handoff to NATS"; NATS handles fan-out; NATS JetStream provides
+durability.</li>
+<li><em>Cons</em>: Requires <code>nats.c</code> integration; binary
+payloads are harder to query ad-hoc (mitigated by
+<code>event_type</code> column).</li>
+</ul></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Option C - Protobuf Payloads + NATS JetStream
+Outbox"</strong> with <strong>JSON-in-DB / Protobuf-on-wire</strong>
+adaptation.</p>
+<h3 id="1-event-serialization-layered-architecture">1. Event
+Serialization (Layered Architecture)</h3>
+<p>To maintain strict layer separation (DBA layer must not depend on
+gRPC/Protobuf), the implementation uses a hybrid approach:</p>
+<ul>
+<li><strong>Database Storage</strong>: Events are serialized as
+<strong>JSON TEXT</strong> in the <code>payload</code> column. This
+keeps the DBA layer independent of Protobuf (no proto includes).</li>
+<li><strong>Wire Format</strong>: The <code>EventService</code> (gRPC
+layer) parses the JSON payload and constructs typed <strong>Protobuf
+messages</strong> for streaming to clients.</li>
+<li><strong>Schema</strong>: Events are defined in <code>.ddd</code> and
+generate both JSON field mappings (DBA) and Protobuf message definitions
+(gRPC).</li>
+<li><strong>Wrapper</strong>: A <code>ContextEvent</code>
+<code>oneof</code> message wraps all possible events for a context in
+the gRPC layer.</li>
+</ul>
+<p><strong>Why JSON-in-DB?</strong></p>
+<ul>
+<li>DBA layer uses <code>nlohmann::json</code> (already a dependency) -
+no Protobuf dependency needed.</li>
+<li>Maintains layer independence: DBA → Database only, gRPC →
+Protobuf/Wire.</li>
+<li>JSON is human-readable in database (debugging, auditing).</li>
+<li>EventService handles JSON→Protobuf conversion at streaming
+time.</li>
+</ul>
+<h3 id="2-transactional-outbox">2. Transactional Outbox</h3>
+<ul>
+<li><strong>Persistence</strong>: Events are inserted into
+<code>domain_events</code> in the same transaction as the aggregate
+state change.</li>
+<li><strong>State Tracking</strong>: <code>processed_at</code>
+(timestamp) indicates if the event has been successfully handed off to
+NATS.</li>
+<li><strong>Crash Recovery</strong>: On startup/restart, the publisher
+polls for all events where <code>processed_at IS NULL</code>.</li>
+</ul>
+<h3 id="3-nats-jetstream-publishing">3. NATS JetStream Publishing</h3>
+<ul>
+<li><strong>Infrastructure</strong>: A per-context background
+<code>OutboxPublisher</code> polls the database.</li>
+<li><strong>Broker</strong>: <code>NatsMessageBroker</code> (wrapping
+<code>nats.c</code>) publishes binary payloads to NATS.</li>
+<li><strong>Subject</strong>:
+<code>muscovite.{context_name}.{event_type}</code> (e.g.,
+<code>muscovite.patient.PatientCreated</code>).</li>
+<li><strong>Persistence</strong>: JetStream enabled for durability.</li>
+</ul>
+<h3 id="4-client-updates">4. Client Updates</h3>
+<ul>
+<li><strong>Bridge</strong>: The <code>EventService</code> (gRPC) will
+subscribe to NATS subjects and forward events to connected clients
+(e.g., Qt).</li>
+<li><strong>Qt Models</strong>: Models will react to these gRPC streams
+to update UI state in real-time.</li>
+</ul>
+<h2 id="architecture-overview">Architecture Overview</h2>
+<pre class="mermaid"><code>graph TD
+    subgraph &quot;Transaction Boundary&quot;
+        CS[CommandService] --&gt;|1. Mutate State| Repo[Repository]
+        CS --&gt;|2. Serialize JSON| JSON[nlohmann::json]
+        CS --&gt;|3. Insert Event| Outbox[(Outbox Table&lt;br/&gt;TEXT Payload)]
+    end
+    
+    subgraph &quot;Background Process&quot;
+        Pub[OutboxPublisher] --&gt;|4. Poll un-processed| Outbox
+        Pub --&gt;|5. Parse JSON → Proto| Proto[Protobuf Bytes]
+        Pub --&gt;|6. Publish| NATS[NATS JetStream]
+        Pub --&gt;|7. Mark Processed| Outbox
+    end
+    
+    subgraph &quot;Consumer Layer&quot;
+        NATS --&gt;|8. Fan-out| Sub1[External Service]
+        NATS --&gt;|8. Fan-out| Sub2[gRPC EventService]
+        Sub2 --&gt;|9. Stream Proto| Qt[Qt Client]
+    end</code></pre>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><strong>Breaking Change</strong>: Existing
+<code>domain_events</code> tables must be migrated (drop/recreate or
+convert column) to support <code>TEXT</code> JSON.</li>
+<li><strong>New Dependency</strong>: <code>nats.c</code> C library
+required for the C++ backend.</li>
+<li><strong>Infrastructure</strong>: NATS server required in
+<code>docker-compose.yml</code>.</li>
+<li><strong>Observability</strong>: JSON payloads are human-readable in
+the database (easier debugging than binary).</li>
+<li><strong>Layer Independence</strong>: DBA layer has no dependency on
+gRPC/Protobuf generated code.</li>
+</ul>
+<h2 id="implementation-plan-v080">Implementation Plan (v0.8.0)</h2>
+<ol type="1">
+<li><strong>Generators</strong>: Update Protobuf generators for event
+messages; DBA emits JSON; gRPC parses JSON and constructs typed
+Protobuf.</li>
+<li><strong>Database</strong>: Migrate <code>payload</code> column to
+<code>TEXT</code> (JSON storage).</li>
+<li><strong>Messaging</strong>: Implement <code>NatsMessageBroker</code>
+and <code>OutboxPublisher</code> (JSON→Protobuf conversion).</li>
+<li><strong>Integration</strong>: Wire up NATS service in Docker and
+CMake.</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

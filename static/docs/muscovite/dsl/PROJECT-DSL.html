@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite Project DSL
+Reference — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/dsl/">dsl</a>
+  <span class="sep">/</span>
+  <span>Muscovite Project DSL Reference</span>
+</nav>
+
+<h1>Muscovite Project DSL Reference</h1>
+
+
+<h1 id="muscovite-project-dsl-reference">Muscovite Project DSL
+Reference</h1>
+<blockquote>
+<p><strong>Grammar Version</strong>: 1.5.0 | <strong>Formal
+Grammar</strong>: <a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
+| <strong>Sections</strong>: 44–55 | <strong>Rules</strong>: 68</p>
+</blockquote>
+<p>The Muscovite Project DSL (<code>.mus</code> files) is a declarative
+language for configuring project build targets, output directories,
+databases, capabilities, and context file includes. The <a
+href="../dslgen/grammar/muscovite.peg">formal PEG grammar</a> sections
+44–55 are the authoritative syntax specification. This document is
+<strong>auto-generated</strong> from the grammar and example files.</p>
+<blockquote>
+<p>🔄 <strong>Generated file</strong> — do not edit manually.
+Regenerate:
+<code>cd dslgen &amp;&amp; racket tools/generate-project-dsl-reference.rkt</code></p>
+</blockquote>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Purpose</th>
+<th>Grammar Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROJECT name { }</code></td>
+<td>Top-level project declaration</td>
+<td><code>ProjectBlock</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT { }</code></td>
+<td>Output directory, Sqitch project</td>
+<td><code>OutputBlock</code></td>
+</tr>
+<tr>
+<td><code>DATABASE name { }</code></td>
+<td>Named database connection target</td>
+<td><code>DatabaseBlock</code></td>
+</tr>
+<tr>
+<td><code>GENERATE { }</code></td>
+<td>Boolean flags for generator targets</td>
+<td><code>GenerateBlock</code></td>
+</tr>
+<tr>
+<td><code>CONTEXTS { }</code></td>
+<td>Ordered list of <code>.ddd</code> context files</td>
+<td><code>ContextsBlock</code></td>
+</tr>
+<tr>
+<td><code>CAPABILITIES { }</code></td>
+<td>Built-in infrastructure modules</td>
+<td><code>CapabilitiesBlock</code></td>
+</tr>
+<tr>
+<td><code>OAUTH2 { }</code></td>
+<td>OAuth2 authentication config</td>
+<td><code>OAuth2Block</code></td>
+</tr>
+<tr>
+<td><code>FRONTENDS { }</code></td>
+<td>Frontend target configuration</td>
+<td><code>FrontendsBlock</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="two-dsls">Two DSLs</h2>
+<p>Muscovite has <strong>two distinct DSLs</strong>, both formally
+specified in the PEG grammar:</p>
+<table>
+<thead>
+<tr>
+<th>DSL</th>
+<th>Extension</th>
+<th>Grammar Sections</th>
+<th>Parser</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Project DSL</strong></td>
+<td><code>.mus</code></td>
+<td>44–55</td>
+<td><code>parser/project-parser.rkt</code></td>
+<td>Build config: output dirs, databases, capabilities, contexts,
+frontends</td>
+</tr>
+<tr>
+<td><strong>Modeling DSL</strong></td>
+<td><code>.ddd</code></td>
+<td>1–43</td>
+<td><code>parser/parser.rkt</code></td>
+<td>Domain model: entities, aggregates, events, sagas,
+relationships</td>
+</tr>
+</tbody>
+</table>
+<p><code>.mus</code> files configure <em>what to generate and
+where</em>. <code>.ddd</code> files declare <em>the domain
+model</em>.</p>
+<hr />
+<h2 id="grammar-reference">Grammar Reference</h2>
+<p>Each section below corresponds to a numbered section in the <a
+href="../dslgen/grammar/muscovite.peg">PEG grammar</a>.</p>
+<h3 id="44-lifecycle-hooks-reserved">44. Lifecycle Hooks (Reserved)</h3>
+<p>PROJECT DSL — Sections 45–53 The Project DSL (<code>.mus</code>
+files) configures build targets, output directories, databases,
+capabilities, and context file includes. It is a separate language from
+the Modeling DSL (<code>.ddd</code> files, sections 1–43).
+Grammar-first: ADR 20260211 + ADR 20260213</p>
+<pre class="peg"><code>LifecycleHook        &lt;- ( &#39;ON_INSERT&#39; / &#39;ON_UPDATE&#39; / &#39;ON_DELETE&#39; )</code></pre>
+<h3 id="45-project-body">45. Project Body</h3>
+<p>A PROJECT block contains metadata (description, version) followed by
+zero or more configuration sections in any order.</p>
+<pre class="peg"><code>ProjectBody          &lt;- ProjectItem*
+ProjectItem          &lt;- ProjectDescription / ProjectVersion / OutputBlock / DatabaseBlock / GenerateBlock / ContextsBlock / CapabilitiesBlock / OAuth2Block / FrontendsBlock / PluginBlock / ServerBlock / TelemetryBlock
+ProjectDescription   &lt;- &#39;DESCRIPTION&#39; STRING
+ProjectVersion       &lt;- &#39;VERSION&#39; STRING</code></pre>
+<h3 id="46-output-configuration">46. Output Configuration</h3>
+<p>Specifies where generated artifacts are written and the Sqitch
+project name. Example: OUTPUT { directory "generated" sqitch_project
+"database" }</p>
+<pre class="peg"><code>OutputBlock          &lt;- &#39;OUTPUT&#39; &#39;{&#39; OutputDirective* &#39;}&#39;
+OutputDirective      &lt;- OutputDirectory / OutputSqitchProject
+OutputDirectory      &lt;- &#39;DIRECTORY&#39; STRING
+OutputSqitchProject  &lt;- &#39;SQITCH_PROJECT&#39; STRING</code></pre>
+<h3 id="47-database-targets">47. Database Targets</h3>
+<p>Named database connection targets (development, test, production,
+etc.). Each target has a Sqitch-format URI and optional description.
+Example: DATABASE development { uri
+"db:pg://postgres:postgres@localhost:5555/mydb" description "Local
+Docker PostgreSQL" }</p>
+<pre class="peg"><code>DatabaseBlock        &lt;- &#39;DATABASE&#39; IDENTIFIER &#39;{&#39; DatabaseDirective* &#39;}&#39;
+DatabaseDirective    &lt;- DatabaseUri / DatabaseDescription
+DatabaseUri          &lt;- &#39;URI&#39; STRING
+DatabaseDescription  &lt;- &#39;DESCRIPTION&#39; STRING</code></pre>
+<h3 id="48-generation-options">48. Generation Options</h3>
+<p>Boolean flags controlling which generator targets to run. Keys are
+generator target identifiers; values are true/false. Example: GENERATE {
+sqitch true cpp_dba true grpc true qt_widgets false }</p>
+<pre class="peg"><code>GenerateBlock        &lt;- &#39;GENERATE&#39; &#39;{&#39; GenerateDirective* &#39;}&#39;
+GenerateDirective    &lt;- GenerateTarget BooleanLiteral
+GenerateTarget       &lt;- &#39;SQITCH&#39; / &#39;CPP_DBA&#39; / &#39;CPP_DBA_TEST&#39; / &#39;GRPC&#39; / &#39;QT_WIDGETS&#39; / &#39;QT&#39;
+BooleanLiteral       &lt;- &#39;TRUE&#39; / &#39;FALSE&#39;</code></pre>
+<h3 id="49-context-file-includes">49. Context File Includes</h3>
+<p>Ordered list of <code>.ddd</code> context files to load and generate
+from. Order matters: dependency contexts must be listed before
+dependents. Example: CONTEXTS { include "contexts/basedata.ddd" include
+"contexts/patient.ddd" }</p>
+<pre class="peg"><code>ContextsBlock        &lt;- &#39;CONTEXTS&#39; &#39;{&#39; ContextInclude* &#39;}&#39;
+ContextInclude       &lt;- &#39;INCLUDE&#39; STRING</code></pre>
+<h3 id="50-capabilities">50. Capabilities</h3>
+<p>Declares built-in infrastructure modules to enable. Each capability
+loads framework-provided bounded contexts and configures generator
+behavior. Example: CAPABILITIES { security spatial }</p>
+<pre class="peg"><code>CapabilitiesBlock    &lt;- &#39;CAPABILITIES&#39; &#39;{&#39; CapabilityName+ &#39;}&#39;
+CapabilityName       &lt;- &#39;SECURITY&#39; / &#39;SPATIAL&#39; / &#39;SAGA&#39; / &#39;EVENT_SOURCING&#39; / &#39;STATE_MACHINE&#39; / &#39;SEARCH&#39; / &#39;TELEMETRY&#39;</code></pre>
+<h3 id="51-oauth2-configuration">51. OAuth2 Configuration</h3>
+<p>Configures OAuth2 authentication for the gRPC server. Mode "builtin"
+uses the muscovite security module; mode "external" delegates to an
+external provider. Example: OAUTH2 { enabled true mode "builtin"
+provider "keycloak" realm "<a
+href="https://keycloak.example.com/realms/myapp">https://keycloak.example.com/realms/myapp</a>"
+client_id "muscovite-server" }</p>
+<pre class="peg"><code>OAuth2Block          &lt;- &#39;OAUTH2&#39; &#39;{&#39; OAuth2Directive* &#39;}&#39;
+OAuth2Directive      &lt;- OAuth2Enabled / OAuth2Mode / OAuth2Provider / OAuth2Realm / OAuth2ClientId
+OAuth2Enabled        &lt;- &#39;ENABLED&#39; BooleanLiteral
+OAuth2Mode           &lt;- &#39;MODE&#39; STRING
+OAuth2Provider       &lt;- &#39;PROVIDER&#39; STRING
+OAuth2Realm          &lt;- &#39;REALM&#39; STRING
+OAuth2ClientId       &lt;- &#39;CLIENT_ID&#39; STRING</code></pre>
+<h3 id="52-frontend-configuration">52. Frontend Configuration</h3>
+<p>Configures UI frontend generation targets with target-specific
+settings. Each frontend block contains key-value directives. Example:
+FRONTENDS { qt_widgets { enabled true app_name "My Desktop App" style
+"Fusion" theme "Light" mdi true startup_context "Dashboard" } }</p>
+<pre class="peg"><code>FrontendsBlock       &lt;- &#39;FRONTENDS&#39; &#39;{&#39; FrontendTarget* &#39;}&#39;
+FrontendTarget       &lt;- FrontendTargetName &#39;{&#39; FrontendDirective* &#39;}&#39;
+FrontendTargetName   &lt;- &#39;QT_WIDGETS&#39; / &#39;QML&#39;
+FrontendDirective    &lt;- FrontendEnabled / FrontendAppName / FrontendStyle / FrontendTheme / FrontendMdi / FrontendStartupContext
+FrontendEnabled      &lt;- &#39;ENABLED&#39; BooleanLiteral
+FrontendAppName      &lt;- &#39;APP_NAME&#39; STRING
+FrontendStyle        &lt;- &#39;STYLE&#39; STRING
+FrontendTheme        &lt;- &#39;THEME&#39; STRING
+FrontendMdi          &lt;- &#39;MDI&#39; BooleanLiteral
+FrontendStartupContext&lt;- &#39;STARTUP_CONTEXT&#39; STRING</code></pre>
+<h3 id="53-plugin-system--project-level-wiring-ftr-137-adr-20260223">53.
+Plugin System — Project-Level Wiring (FTR-137, ADR 20260223)</h3>
+<p>PLUGIN blocks in .mus connect implementation code to EXTENSION_POINT
+contracts declared in .ddd files. Each plugin names an extension point
+via IMPLEMENTS, declares its transport mechanism, and optionally
+configures a circuit breaker for resilience. Cross-reference validation
+ensures IMPLEMENTS targets resolve to declared EXTENSION_POINTs.
+TRANSPORT compatibility is checked against the extension point's
+CLASS/LAYER/INTERFACE matrix. Example: PLUGIN AuditTrailPlugin {
+IMPLEMENTS Security.AuditLogger TRANSPORT SyncVirtual CIRCUIT_BREAKER {
+FAILURE_THRESHOLD 5 TIMEOUT "30s" BACKOFF Exponential BASE "100ms" MAX
+"10s" JITTER 15 ON_OPEN Warn ON_HALF_OPEN Probe ON_TRIP Emit } }</p>
+<pre class="peg"><code>PluginBlock          &lt;- &#39;PLUGIN&#39; IDENTIFIER &#39;{&#39; PluginDirective+ &#39;}&#39;
+PluginDirective      &lt;- PluginImplements / PluginTransport / PluginCircuitBreaker
+PluginImplements     &lt;- &#39;IMPLEMENTS&#39; QualifiedOrSimpleId
+PluginTransport      &lt;- &#39;TRANSPORT&#39; TransportType
+TransportType        &lt;- &#39;SYNCVIRTUAL&#39; / &#39;LOCALGRPC&#39; / &#39;QTREMOTEOBJECTS&#39;
+PluginCircuitBreaker &lt;- &#39;CIRCUIT_BREAKER&#39; &#39;{&#39; CbDirective+ &#39;}&#39;
+CbDirective          &lt;- CbFailureThreshold / CbTimeout / CbBackoff / CbOnOpen / CbOnHalfOpen / CbOnTrip
+CbFailureThreshold   &lt;- &#39;FAILURE_THRESHOLD&#39; NUMBER
+CbTimeout            &lt;- &#39;TIMEOUT&#39; STRING
+CbBackoff            &lt;- &#39;BACKOFF&#39; BackoffAlgorithm BackoffParams*
+BackoffAlgorithm     &lt;- &#39;Exponential&#39; / &#39;Linear&#39; / &#39;Fixed&#39;
+BackoffParams        &lt;- &#39;BASE&#39; STRING / &#39;MAX&#39; STRING / &#39;INTERVAL&#39; STRING / &#39;JITTER&#39; NUMBER
+CbOnOpen             &lt;- &#39;ON_OPEN&#39; FailureModeAction
+CbOnHalfOpen         &lt;- &#39;ON_HALF_OPEN&#39; FailureModeAction
+CbOnTrip             &lt;- &#39;ON_TRIP&#39; FailureModeAction
+FailureModeAction    &lt;- &#39;Warn&#39; / &#39;Block&#39; / &#39;Ignore&#39; / &#39;Probe&#39; / &#39;Emit&#39;
+QualifiedOrSimpleId  &lt;- IDENTIFIER ( &#39;.&#39; IDENTIFIER )?</code></pre>
+<h3 id="54-server-configuration-ftr-232-adr-20260228">54. Server
+Configuration (FTR-232, ADR 20260228)</h3>
+<p>PROJECT-level gRPC/database timeout defaults. Per-aggregate overrides
+via GRPC_DEADLINE on AGGREGATE (FTR-231). Duration format: "Ns"
+(seconds) or "Nms" (milliseconds). Example: SERVER {
+GRPC_DEFAULT_DEADLINE "5s" GRPC_MAX_DEADLINE "30s" DEADLINE_BUFFER
+"100ms" }</p>
+<pre class="peg"><code>ServerBlock          &lt;- &#39;SERVER&#39; &#39;{&#39; ServerDirective* &#39;}&#39;
+ServerDirective      &lt;- ServerGrpcDefaultDeadline / ServerGrpcMaxDeadline / ServerDeadlineBuffer
+ServerGrpcDefaultDeadline&lt;- &#39;GRPC_DEFAULT_DEADLINE&#39; STRING
+ServerGrpcMaxDeadline&lt;- &#39;GRPC_MAX_DEADLINE&#39; STRING
+ServerDeadlineBuffer &lt;- &#39;DEADLINE_BUFFER&#39; STRING</code></pre>
+<h3 id="55-telemetry-configuration-ftr-239">55. Telemetry Configuration
+(FTR-239)</h3>
+<p>OTLP (OpenTelemetry Protocol) observability configuration. Requires
+TELEMETRY capability in CAPABILITIES block. Example: TELEMETRY {
+OTLP_ENDPOINT "http://collector:4317" SERVICE_NAME "fhir-health-server"
+SAMPLING_RATE 1.0 EXPORT_INTERVAL "30s" HEADERS { Authorization "Bearer
+token123" X-Custom "value" } }</p>
+<pre class="peg"><code>TelemetryBlock       &lt;- &#39;TELEMETRY&#39; &#39;{&#39; TelemetryItem* &#39;}&#39;
+TelemetryItem        &lt;- TelemetryEndpoint / TelemetryServiceName / TelemetrySampling / TelemetryInterval / TelemetryHeaders
+TelemetryEndpoint    &lt;- &#39;OTLP_ENDPOINT&#39; STRING &#39;;&#39;?
+TelemetryServiceName &lt;- &#39;SERVICE_NAME&#39; STRING &#39;;&#39;?
+TelemetrySampling    &lt;- &#39;SAMPLING_RATE&#39; NUMBER &#39;;&#39;?
+TelemetryInterval    &lt;- &#39;EXPORT_INTERVAL&#39; STRING &#39;;&#39;?
+TelemetryHeaders     &lt;- &#39;HEADERS&#39; &#39;{&#39; HeaderItem* &#39;}&#39;
+HeaderItem           &lt;- IDENTIFIER STRING &#39;;&#39;?</code></pre>
+<hr />
+<h2 id="complete-example">Complete Example</h2>
+<p>From <a
+href="../examples/hello-world/project.mus"><code>examples/hello-world/project.mus</code></a>
+— a minimal working Muscovite project:</p>
+<h2 id="project-file-structure">Project File Structure</h2>
+<p>A typical Muscovite project:</p>
+<pre><code>my-project/
+├── project.mus              # Project configuration (this DSL)
+├── contexts/
+│   ├── basedata.ddd         # Shared lookup tables
+│   ├── patient.ddd          # Domain bounded context
+│   └── encounter.ddd        # Another bounded context
+├── seeds/
+│   └── basedata/            # JSON seed data for lookup tables
+└── generated/               # 100% generated output (never edit)
+    ├── dba/                  # C++ DBA layer
+    ├── grpc/                 # gRPC services
+    └── fhirhealth/           # Sqitch migrations</code></pre>
+<h2 id="available-capabilities">Available Capabilities</h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Description</th>
+<th>Context Generated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>security</code></td>
+<td>Authentication, authorization, audit logging, JWT sessions</td>
+<td>Security context</td>
+</tr>
+<tr>
+<td><code>spatial</code></td>
+<td>PostGIS geography types, spatial queries</td>
+<td>Spatial extensions</td>
+</tr>
+<tr>
+<td><code>saga</code></td>
+<td>Long-running process orchestration with compensation</td>
+<td>Saga infrastructure</td>
+</tr>
+<tr>
+<td><code>event_sourcing</code></td>
+<td>Typed event store, snapshots, dual-write</td>
+<td>Event store schema</td>
+</tr>
+</tbody>
+</table>
+<h2 id="generator-targets">Generator Targets</h2>
+<p>Available targets for the <code>GENERATE</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Description</th>
+<th>CLI Flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sqitch</code></td>
+<td>PostgreSQL schema migrations (Sqitch)</td>
+<td><em>(always on)</em></td>
+</tr>
+<tr>
+<td><code>cpp_dba</code></td>
+<td>C++ database access layer (entities, repositories, services)</td>
+<td><code>--cpp-dba</code></td>
+</tr>
+<tr>
+<td><code>cpp_dba_test</code></td>
+<td>C++ DBA test scaffolding</td>
+<td><code>--cpp-dba-test</code></td>
+</tr>
+<tr>
+<td><code>grpc</code></td>
+<td>gRPC/Protobuf service definitions and stubs</td>
+<td><code>--grpc</code></td>
+</tr>
+<tr>
+<td><code>qt_widgets</code></td>
+<td>Qt Widgets desktop client</td>
+<td><code>--qt-frontend widgets</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="related-documents">Related Documents</h2>
+<ul>
+<li><a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
+— Formal PEG grammar (authoritative)</li>
+<li><a href="DSL.html">DSL.md</a> — Modeling DSL reference
+(<code>.ddd</code> files, sections 1–43)</li>
+<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Racket IR structs,
+type mappings, naming conventions</li>
+<li><a href="CONTEXT.html">CONTEXT.md</a> — AI-first project context</li>
+</ul>
+<hr />
+<p><em>Auto-generated by
+<code>dslgen/tools/generate-project-dsl-reference.rkt</code> from PEG
+grammar sections 44–55 + example files.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

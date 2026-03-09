@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abstract Layout Vocabulary for Presentation
+Layer — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Abstract Layout Vocabulary for Presentation Layer</span>
+</nav>
+
+<h1>Abstract Layout Vocabulary for Presentation Layer</h1>
+
+
+<h1 id="abstract-layout-vocabulary-for-presentation-layer">Abstract
+Layout Vocabulary for Presentation Layer</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: presentation, layout, grammar, dsl, qt, qml, ui</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates functional full-stack UIs from <code>.ddd</code>
+files, but all layout decisions are hardcoded in generators:</p>
+<ul>
+<li>Qt Widgets always uses
+<code>QVBoxLayout → QFormLayout → QTabWidget</code> for aggregates
+(<code>generators/qt/widgets-views.rkt</code>)</li>
+<li>Qt QML always uses <code>ColumnLayout → collapsible GroupBox</code>
+for aggregates (<code>generators/qt/qml-main.rkt</code>)</li>
+<li>Field ordering matches declaration order with no DSL-level
+override</li>
+<li>No control over detail view display (table vs. cards vs. tree)</li>
+<li>No control over action button placement or style</li>
+</ul>
+<p>When adding new UI targets, each generator re-invents layout logic.
+There is no shared vocabulary for expressing presentation intent.</p>
+<p><strong>Question</strong>: How should the DSL express layout and
+presentation structure without prescribing target-specific widgets?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Grammar-first evolution (ADR
+20260211-grammar-first-language-evolution)</li>
+<li>Target independence — one DSL model, multiple UI outputs</li>
+<li>Backward compatibility — existing <code>.ddd</code> files must
+generate unchanged output</li>
+<li>Aggregates are the UI boundary (ADR
+20260120-domain-services-as-aggregate-boundary)</li>
+<li>Code generation philosophy — generate specialized classes, not
+runtime abstractions</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-abstract-layout-vocabulary-in-dsl-grammar">Option 1:
+Abstract Layout Vocabulary in DSL Grammar</h3>
+<p>Add a <code>LAYOUT</code> block to the <code>Aggregate</code> grammar
+rule with target-agnostic primitives: <code>STYLE</code>,
+<code>ORIENTATION</code>, <code>GROUPING</code>, <code>DISPLAY</code>,
+<code>ACTIONS</code>, etc. Parser produces IR structs
+(<code>layout-spec</code>, <code>master-spec</code>,
+<code>detail-spec</code>, <code>action-spec</code>). Generators map
+abstract concepts to concrete widgets via target configuration
+modules.</p>
+<h3 id="option-2-external-configuration-files-yamljson">Option 2:
+External Configuration Files (YAML/JSON)</h3>
+<p>Keep layout out of the DSL entirely. Use per-project YAML/JSON files
+to configure UI layout per target.</p>
+<h3 id="option-3-annotation-based-hints">Option 3: Annotation-Based
+Hints</h3>
+<p>Use <code>@layout</code> annotations on entities and fields instead
+of a dedicated block.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Abstract Layout Vocabulary in DSL
+Grammar</strong>, because:</p>
+<ul>
+<li>Grammar-first: layout is part of the formal PEG spec, not external
+config</li>
+<li>Co-located with domain model: layout intent lives next to the
+aggregate it describes</li>
+<li>Testable in Racket: grammar conformance + IR validation in the
+Racket test suite</li>
+<li>Target-independent: generators map abstract concepts to concrete
+widgets</li>
+<li>Backward compatible: when no <code>LAYOUT</code> block is present,
+generators use sensible defaults matching current hardcoded
+behavior</li>
+</ul>
+<h3 id="grammar-extension">Grammar Extension</h3>
+<p>Add to <code>muscovite.peg</code> Section 9 (Aggregate):</p>
+<pre class="peg"><code>Aggregate           &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
+                       ContainsClause?
+                       EmbedsClause?
+                       EventSourcedClause?
+                       LayoutBlock?
+                       DocClause?
+                       &#39;;&#39;?
+
+LayoutBlock         &lt;- &#39;LAYOUT&#39; &#39;{&#39; LayoutDirective+ &#39;}&#39;
+LayoutDirective     &lt;- StyleHint / MasterLayout / DetailLayout / ActionLayout
+
+StyleHint           &lt;- &#39;STYLE&#39; StyleValue
+StyleValue          &lt;- &#39;single_page&#39; / &#39;multi_section&#39; / &#39;wizard&#39; / &#39;split_view&#39;
+
+MasterLayout        &lt;- &#39;MASTER&#39; IDENTIFIER &#39;{&#39; MasterProperty+ &#39;}&#39;
+MasterProperty      &lt;- &#39;ORIENTATION&#39; OrientationValue
+                     / &#39;GROUPING&#39; GroupingValue
+                     / &#39;FIELDS&#39; FieldSelector
+                     / &#39;READONLY&#39; IdentifierList
+                     / &#39;VALIDATION&#39; ValidationValue
+
+DetailLayout        &lt;- &#39;DETAIL&#39; IDENTIFIER &#39;{&#39; DetailProperty+ &#39;}&#39;
+DetailProperty      &lt;- &#39;DISPLAY&#39; DisplayValue
+                     / &#39;COLUMNS&#39; IdentifierList
+                     / &#39;SORTABLE&#39; BoolValue
+                     / &#39;FILTERABLE&#39; BoolValue
+                     / &#39;SEARCHABLE&#39; BoolValue
+                     / &#39;ACTIONS&#39; IdentifierList
+                     / &#39;ACTION_STYLE&#39; ActionStyleValue
+                     / &#39;INLINE_EDIT&#39; BoolValue
+                     / &#39;INITIAL_STATE&#39; InitialStateValue
+                     / &#39;PAGE_SIZE&#39; NUMBER
+
+ActionLayout        &lt;- &#39;ACTIONS&#39; &#39;{&#39; ActionProperty+ &#39;}&#39;
+ActionProperty      &lt;- &#39;PRIMARY&#39; IdentifierList
+                     / &#39;SECONDARY&#39; IdentifierList
+                     / &#39;PLACEMENT&#39; PlacementValue
+
+OrientationValue    &lt;- &#39;vertical&#39; / &#39;horizontal&#39; / &#39;grid&#39;
+GroupingValue       &lt;- &#39;flat&#39; / &#39;sections&#39; / &#39;tabs&#39;
+DisplayValue        &lt;- &#39;table&#39; / &#39;cards&#39; / &#39;list&#39; / &#39;tree&#39;
+ActionStyleValue    &lt;- &#39;toolbar&#39; / &#39;context_menu&#39; / &#39;inline&#39; / &#39;fab&#39;
+InitialStateValue   &lt;- &#39;expanded&#39; / &#39;collapsed&#39;
+PlacementValue      &lt;- &#39;top&#39; / &#39;bottom&#39; / &#39;sidebar&#39; / &#39;floating&#39;
+ValidationValue     &lt;- &#39;inline&#39; / &#39;on_submit&#39;
+FieldSelector       &lt;- &#39;ALL&#39; / IdentifierList
+BoolValue           &lt;- &#39;true&#39; / &#39;false&#39;
+IdentifierList      &lt;- IDENTIFIER ( &#39;,&#39; IDENTIFIER )*</code></pre>
+<h3 id="ir-structs">IR Structs</h3>
+<p>Add to <code>dslgen/model/ddd-types.rkt</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> layout-spec</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>style master-specs detail-specs action-spec<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> master-spec</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name orientation grouping fields readonly-fields validation<span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> detail-spec</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>collection <span class="kw">display</span> columns sortable filterable searchable</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   actions action-style inline-edit initial-state page-size<span class="op">)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> action-spec</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>primary secondary placement<span class="op">)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<p>Add <code>layout</code> field to <code>aggregate</code> struct
+(appended at end, after <code>doc</code>):</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> aggregate</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid name root entities value-objects event-sourced? doc layout<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>make-aggregate name root</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                        #:uuid <span class="op">[</span>uuid <span class="op">(</span>generate-uuid<span class="op">)]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                        #:entities <span class="op">[</span>entities &#39;<span class="op">()]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                        #:value-objects <span class="op">[</span>value-objects &#39;<span class="op">()]</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                        #:event-sourced? <span class="op">[</span>event-sourced? <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                        #:doc <span class="op">[</span>doc <span class="dv">#f</span><span class="op">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                        #:layout <span class="op">[</span>layout <span class="dv">#f</span><span class="op">])</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>aggregate uuid name root entities value-objects event-sourced? doc layout<span class="op">))</span></span></code></pre></div>
+<h3 id="layout-attaches-to-aggregate-only">LAYOUT Attaches to AGGREGATE
+Only</h3>
+<p>The <code>LAYOUT</code> block is only valid inside
+<code>Aggregate</code>, not on standalone entities. Rationale:</p>
+<ul>
+<li>Aggregates define the consistency boundary and the UI interaction
+boundary</li>
+<li>All UI access goes through aggregate services (ADR 20260120)</li>
+<li>Child entities appear as DETAIL sections within the aggregate's
+LAYOUT</li>
+<li>DETAIL sections reference child entity names from the
+<code>CONTAINS</code> clause</li>
+</ul>
+<h3 id="detail-references-child-entities-by-name">DETAIL References
+Child Entities by Name</h3>
+<p><code>DETAIL</code> sections use the child entity name from the
+<code>CONTAINS</code> clause:</p>
+<pre class="ddd"><code>AGGREGATE Patient @uuid &quot;...&quot; ROOT Patient
+    (CONTAINS Appointment, MedicalRecord)
+    LAYOUT {
+        DETAIL Appointment { DISPLAY table }
+        DETAIL MedicalRecord { DISPLAY cards }
+    }
+    DOC &quot;Patient aggregate&quot;;</code></pre>
+<p>The parser validates that <code>DETAIL</code> names match
+<code>CONTAINS</code> names.</p>
+<h3 id="relationship-to-presentation-block">Relationship to PRESENTATION
+Block</h3>
+<ul>
+<li><code>PRESENTATION (SHORT/FULL/TABLE)</code> — controls <strong>data
+formatting</strong> (how an entity displays as text)</li>
+<li><code>LAYOUT { DETAIL { COLUMNS ... } }</code> — controls
+<strong>which columns are visible</strong> in a detail view</li>
+</ul>
+<p>These are complementary, not overlapping.
+<code>PRESENTATION SHORT</code> provides display text for FK comboboxes;
+<code>LAYOUT DETAIL COLUMNS</code> configures which columns appear in a
+table/list.</p>
+<h3 id="default-behavior-no-layout-block">Default Behavior (No LAYOUT
+Block)</h3>
+<p>When no <code>LAYOUT</code> block is present, generators produce the
+same output as today:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>default-layout-for-aggregate aggregate<span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>layout-spec</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   &#39;multi-section</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span><span class="kw">list</span> <span class="op">(</span>master-spec <span class="op">(</span>aggregate-name aggregate<span class="op">)</span> &#39;vertical &#39;flat &#39;all &#39;<span class="op">()</span> &#39;inline<span class="op">))</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>for/list <span class="op">([</span>child <span class="op">(</span>aggregate-entities aggregate<span class="op">)])</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>detail-spec <span class="op">(</span>entity-name child<span class="op">)</span> &#39;table <span class="dv">#f</span> <span class="dv">#t</span> <span class="dv">#f</span> <span class="dv">#f</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                  &#39;<span class="op">(</span>add edit delete<span class="op">)</span> &#39;toolbar <span class="dv">#f</span> &#39;expanded <span class="dv">#f</span><span class="op">))</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>action-spec &#39;<span class="op">(</span>save cancel<span class="op">)</span> &#39;<span class="op">()</span> &#39;bottom<span class="op">)))</span></span></code></pre></div>
+<h3 id="context-sensitive-keywords">Context-Sensitive Keywords</h3>
+<p><code>DISPLAY</code>, <code>ACTIONS</code>, <code>STYLE</code>,
+<code>PRIMARY</code>, <code>SECONDARY</code>, etc. are
+<strong>context-sensitive</strong> — only treated as keywords inside
+<code>LAYOUT { }</code> blocks. This prevents breaking existing
+<code>.ddd</code> files that may use these as field names or
+identifiers.</p>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li>One vocabulary for all UI targets — adding new frontends requires
+only a target config, not DSL changes</li>
+<li>Gradual adoption — existing <code>.ddd</code> files work
+unchanged</li>
+<li>Testable — grammar conformance + IR struct tests in Racket</li>
+<li>Self-documenting — LAYOUT block makes UI intent explicit in the
+domain model</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li>More grammar complexity — 30+ new terminals in the PEG spec</li>
+<li>Parser implementation effort — new parse functions,
+context-sensitive keyword handling</li>
+<li>Default behavior must exactly match current hardcoded output to
+avoid regressions</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Depends on <a
+href="20260211-grammar-first-language-evolution.html">ADR 20260211
+Grammar-First Language Evolution</a></li>
+<li>Related <a
+href="20260120-domain-services-as-aggregate-boundary.html">ADR 20260120
+Domain Services as Aggregate Boundary</a></li>
+<li>Related <a href="20260211-racket-target-configuration.html">ADR
+20260211 Racket-Based Target Configuration</a></li>
+<li>Grammar file: <code>dslgen/grammar/muscovite.peg</code> Section
+9</li>
+<li>Current Qt Widgets generator:
+<code>dslgen/generators/qt/widgets-views.rkt</code></li>
+<li>Current QML generator:
+<code>dslgen/generators/qt/qml-main.rkt</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Adding <code>LAYOUT</code> blocks to <code>.ddd</code> files</li>
+<li>Modifying UI layout behavior in Qt Widgets or QML generators</li>
+<li>Adding new UI targets (future mobile frontends, etc.)</li>
+<li>Creating target configuration modules under
+<code>dslgen/targets/</code></li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Changing <code>PRESENTATION (SHORT/FULL/TABLE)</code> display
+formatting</li>
+<li>Modifying non-UI generators (PostgreSQL, gRPC, C++ DBA)</li>
+<li>Parser bug fixes that don't change accepted syntax</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><code>LAYOUT</code> block only valid inside <code>Aggregate</code>
+(parser rejects elsewhere)</li>
+<li><code>DETAIL</code> names must match <code>CONTAINS</code> clause
+names (parser validates)</li>
+<li>Grammar conformance test must cover <code>LayoutBlock</code>
+rule</li>
+<li>Default <code>layout-spec</code> must produce output identical to
+current hardcoded behavior (golden-file test)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — grammar extension point
+(Section 9)</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — IR struct definitions
+(<code>layout-spec</code>, <code>master-spec</code>, etc.)</li>
+<li><code>dslgen/parser/parser.rkt</code> — <code>parse-aggregate</code>
+function (add <code>LAYOUT</code> parsing)</li>
+<li><code>dslgen/generators/qt/widgets-views.rkt</code> — Qt Widgets
+generator (consult <code>layout-spec</code>)</li>
+<li><code>dslgen/generators/qt/qml-main.rkt</code> — QML generator
+(consult <code>layout-spec</code>)</li>
+<li><code>dslgen/targets/</code> — target configuration modules (maps
+abstract → concrete)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

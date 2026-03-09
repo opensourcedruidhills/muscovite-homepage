@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entity Display String
+Annotation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Entity Display String Annotation</span>
+</nav>
+
+<h1>Entity Display String Annotation</h1>
+
+
+<h1 id="entity-display-string-annotation">Entity Display String
+Annotation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-01-14</li>
+<li>Tags: dsl, qt, localization, ui</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When entities are displayed in FK comboboxes, table cells, navigation
+breadcrumbs, or detail labels, we need human-readable display strings.
+Currently the generator uses heuristics to pick a display field
+(<code>name</code>, <code>code</code>, or fallback to <code>id</code>),
+but this approach:</p>
+<ol type="1">
+<li>Cannot compose multiple fields (e.g., "Dr. John Smith
+(Cardiology)")</li>
+<li>Has no localization support - format patterns need translation for
+different locales</li>
+<li>Provides no control over different display contexts (short vs. full
+vs. table row)</li>
+<li>Cannot handle fallback chains when preferred fields are empty</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Flexibility</strong>: Different UI contexts need different
+display formats</li>
+<li><strong>Localization</strong>: Format patterns must work with Qt's
+<code>tr()</code> and <code>qsTr()</code> systems</li>
+<li><strong>Type Safety</strong>: Field references must be validated at
+generation time</li>
+<li><strong>Simplicity</strong>: DSL syntax should be intuitive and
+readable</li>
+<li><strong>Performance</strong>: Display composition should be
+efficient (client-side)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Simple template string</strong>:
+<code>DISPLAY AS "{family_name}, {given_name}"</code></li>
+<li><strong>With fallback chain</strong>:
+<code>DISPLAY AS "{name}" FALLBACK "{code}" FALLBACK "{id}"</code></li>
+<li><strong>Explicit localization key</strong>:
+<code>DISPLAY AS "{family_name}, {given_name}" KEY "patient_display"</code></li>
+<li><strong>Multiple formats for contexts</strong>:
+<code>DISPLAY (SHORT: ..., FULL: ..., TABLE: ...)</code></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 4 - Multiple formats for different
+contexts</strong>, because:</p>
+<ul>
+<li>Different UI elements need different verbosity levels</li>
+<li>ComboBox needs SHORT, detail view needs FULL, table cells need TABLE
+format</li>
+<li>Each format can have its own fallback chain</li>
+<li>Translation files can provide locale-specific patterns per
+format</li>
+</ul>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>ENTITY Patient IDENTIFIED_BY id (
+    id              UUID        NOT NULL,
+    given_name      TEXT        NOT NULL,
+    family_name     TEXT        NOT NULL,
+    mrn             TEXT        NOT NULL @unique,
+    prefix          TEXT,
+    birth_date      DATE
+)
+PRESENTATION (
+    SHORT: &quot;{mrn}&quot;,
+    FULL: &quot;{prefix} {given_name} {family_name} ({mrn})&quot;,
+    TABLE: &quot;{family_name}, {given_name}&quot;
+)
+DOC &quot;A patient in the healthcare system&quot;;</code></pre>
+<p><strong>Note</strong>: The keyword is <code>PRESENTATION</code>
+rather than <code>DISPLAY</code> to avoid conflicts with the common
+field name <code>display</code> used in lookup tables (e.g.,
+<code>AdministrativeGender.display</code>).</p>
+<p><strong>Format Types</strong>: | Format | Usage | Example Output |
+|--------|-------|----------------| | SHORT | ComboBox items,
+breadcrumbs | "MRN12345" | | FULL | Detail headers, tooltips | "Dr. John
+Smith (MRN12345)" | | TABLE | Table cells, list items | "Smith, John"
+|</p>
+<p><strong>Default Behavior</strong>:</p>
+<ul>
+<li>If only one format specified, it becomes the default for all
+contexts</li>
+<li>If no DISPLAY clause, fall back to heuristic: <code>name</code> &gt;
+<code>code</code> &gt; first TEXT field &gt; <code>id</code></li>
+</ul>
+<h3 id="client-side-composition">Client-Side Composition</h3>
+<p>Display strings are composed in the Qt client, NOT in proto messages
+or server-side code. Reasons:</p>
+<ol type="1">
+<li><strong>Localization</strong>: Qt's <code>tr()</code> system handles
+runtime language switching</li>
+<li><strong>Format patterns</strong>: Translators can reorder
+placeholders (<code>%1 %2</code> → <code>%2 %1</code>)</li>
+<li><strong>No proto bloat</strong>: Proto messages stay lean with
+actual field data</li>
+<li><strong>Flexibility</strong>: Client can choose format based on UI
+context</li>
+</ol>
+<h3 id="generated-code">Generated Code</h3>
+<p><strong>Per-entity DisplayHelper class</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated in patient_display.hpp</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> patient<span class="op">::</span>qt <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> DisplayFormat <span class="op">{</span> Short<span class="op">,</span> Full<span class="op">,</span> Table<span class="op">,</span> Default <span class="op">=</span> Full <span class="op">};</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientDisplayHelper <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="ex">QString</span> displayString<span class="op">(</span><span class="at">const</span> patient<span class="op">::</span>Patient<span class="op">&amp;</span> entity<span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                 DisplayFormat format <span class="op">=</span> DisplayFormat<span class="op">::</span>Default<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>format<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> DisplayFormat<span class="op">::</span>Short<span class="op">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Pattern: &quot;{mrn}&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>mrn<span class="op">());</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> DisplayFormat<span class="op">::</span>Table<span class="op">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Pattern: &quot;{family_name}, {given_name}&quot;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="ex">QObject::tr</span><span class="op">(</span><span class="st">&quot;%1, %2&quot;</span><span class="op">,</span> <span class="st">&quot;Patient.TABLE&quot;</span><span class="op">)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>family_name<span class="op">()))</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>given_name<span class="op">()));</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> DisplayFormat<span class="op">::</span>Full<span class="op">:</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Pattern: &quot;{prefix} {given_name} {family_name} ({mrn})&quot;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="ex">QObject::tr</span><span class="op">(</span><span class="st">&quot;%1 %2 %3 (%4)&quot;</span><span class="op">,</span> <span class="st">&quot;Patient.FULL&quot;</span><span class="op">)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>prefix<span class="op">()))</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>given_name<span class="op">()))</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>family_name<span class="op">()))</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>arg<span class="op">(</span><span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>mrn<span class="op">()));</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace patient::qt</span></span></code></pre></div>
+<p><strong>Translation file (patient_de.ts)</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">context</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">name</span>&gt;PatientDisplayHelper&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">message</span>&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">source</span>&gt;%1, %2&lt;/<span class="kw">source</span>&gt;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">comment</span>&gt;Patient.TABLE&lt;/<span class="kw">comment</span>&gt;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">translation</span>&gt;%1, %2&lt;/<span class="kw">translation</span>&gt;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">message</span>&gt;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">message</span>&gt;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">source</span>&gt;%1 %2 %3 (%4)&lt;/<span class="kw">source</span>&gt;</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">comment</span>&gt;Patient.FULL&lt;/<span class="kw">comment</span>&gt;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">translation</span>&gt;%1 %2 %3 (Patientennr. %4)&lt;/<span class="kw">translation</span>&gt;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">message</span>&gt;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">context</span>&gt;</span></code></pre></div>
+<h3 id="integration-points">Integration Points</h3>
+<ol type="1">
+<li><strong>Qt Model <code>data()</code></strong>: Use
+<code>DisplayHelper::displayString(item, DisplayFormat::Table)</code>
+for DisplayRole</li>
+<li><strong>ComboBox population</strong>: Use
+<code>DisplayFormat::Short</code> for dropdown items</li>
+<li><strong>Detail dialogs</strong>: Use
+<code>DisplayFormat::Full</code> for window titles</li>
+<li><strong>QML</strong>: Expose via
+<code>Q_INVOKABLE QString displayString(int row, int format)</code></li>
+</ol>
+<h3 id="validation-rules">Validation Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Severity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E030</td>
+<td>Error</td>
+<td>Field referenced in DISPLAY pattern doesn't exist</td>
+</tr>
+<tr>
+<td>E031</td>
+<td>Error</td>
+<td>DISPLAY format string has unclosed brace</td>
+</tr>
+<tr>
+<td>E032</td>
+<td>Error</td>
+<td>Unknown format type (not SHORT/FULL/TABLE)</td>
+</tr>
+<tr>
+<td>W030</td>
+<td>Warning</td>
+<td>Entity has no DISPLAY and no suitable display field</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fallback-chain-support">Fallback Chain Support</h3>
+<p>For optional fields that might be empty:</p>
+<pre class="ddd"><code>DISPLAY (
+    SHORT: &quot;{code}&quot; OR &quot;{id}&quot;,
+    FULL: &quot;{name}&quot; OR &quot;{code}&quot; OR &quot;{id}&quot;
+)</code></pre>
+<p>Generated code handles fallbacks:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> DisplayFormat<span class="op">::</span>Short<span class="op">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>entity<span class="op">.</span>code<span class="op">().</span>empty<span class="op">())</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>code<span class="op">());</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ex">QString::fromStdString</span><span class="op">(</span>entity<span class="op">.</span>id<span class="op">());</span></span></code></pre></div>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Full control over entity display in all UI contexts</li>
+<li>Proper Qt localization with translator-controllable patterns</li>
+<li>No proto message bloat (display computed client-side)</li>
+<li>Compile-time validation of field references</li>
+<li>Fallback chains handle optional fields gracefully</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Additional DSL syntax complexity</li>
+<li>Generated DisplayHelper classes add to code size</li>
+<li>Translators need to understand placeholder semantics</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Requires Qt linguist workflow for translations</li>
+<li>Display patterns defined at model level, not UI level</li>
+</ul>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Task</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Add <code>display-format</code> struct to model</td>
+<td><code>model/ddd-types.rkt</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Add <code>DISPLAY</code> keyword and parse formats</td>
+<td><code>parser/lexer.rkt</code>, <code>parser/parser.rkt</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Generate DisplayHelper per entity</td>
+<td><code>generators/qt/display-helper.rkt</code> (new)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Integrate into model data()</td>
+<td><code>generators/qt/widgets-models.rkt</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Update ComboBox to use DisplayHelper</td>
+<td><code>generators/qt/widgets-views.rkt</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Add Q_INVOKABLE for QML</td>
+<td><code>generators/qt/widgets-models.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-adr-applies">When This ADR Applies</h3>
+<ul>
+<li>Generating Qt models or widgets for entities</li>
+<li>Populating FK comboboxes with entity references</li>
+<li>Displaying entity identifiers in UI elements</li>
+</ul>
+<h3 id="when-this-adr-does-not-apply">When This ADR Does NOT Apply</h3>
+<ul>
+<li>Server-side code (proto messages, gRPC services)</li>
+<li>Database layer (SQL, stored procedures)</li>
+<li>Non-Qt clients (CLI tools, web frontends)</li>
+</ul>
+<h3 id="key-implementation-details">Key Implementation Details</h3>
+<ul>
+<li>Display patterns use <code>{field_name}</code> syntax in DSL</li>
+<li>Generated code uses Qt <code>tr()</code> with
+<code>%1, %2, ...</code> placeholders</li>
+<li>Format types: SHORT, FULL, TABLE (case-insensitive in DSL)</li>
+<li>Default format is FULL when unspecified</li>
+<li>Heuristic fallback when no DISPLAY clause: name &gt; code &gt; first
+TEXT &gt; id</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

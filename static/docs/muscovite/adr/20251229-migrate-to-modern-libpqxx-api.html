@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Migrate to Modern libpqxx API (exec +
+pqxx::params) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Migrate to Modern libpqxx API (exec + pqxx::params)</span>
+</nav>
+
+<h1>ADR: Migrate to Modern libpqxx API (exec + pqxx::params)</h1>
+
+
+<h1 id="adr-migrate-to-modern-libpqxx-api-exec--pqxxparams">ADR: Migrate
+to Modern libpqxx API (exec + pqxx::params)</h1>
+<p><strong>Date</strong>: 2025-12-29<br />
+<strong>Status</strong>: Accepted<br />
+<strong>Deciders</strong>: Architecture Team<br />
+<strong>Affected Components</strong>: Database Access Layer (all C++
+code using PostgreSQL)</p>
+<h2 id="context">Context</h2>
+<p>The project uses <strong>libpqxx 7.10.3</strong> for PostgreSQL
+connectivity from C++. libpqxx provides two APIs for executing
+parameterized queries:</p>
+<p><strong>Deprecated API (pre-7.x)</strong>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;SELECT * FROM users WHERE id = $1&quot;</span><span class="op">,</span> user_id<span class="op">);</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;INSERT INTO logs (msg) VALUES ($1)&quot;</span><span class="op">,</span> message<span class="op">);</span></span></code></pre></div>
+<p><strong>Modern API (7.x+)</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;SELECT * FROM users WHERE id = $1&quot;</span><span class="op">,</span> pqxx<span class="op">::</span>params<span class="op">{</span>user_id<span class="op">});</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;INSERT INTO logs (msg) VALUES ($1)&quot;</span><span class="op">,</span> pqxx<span class="op">::</span>params<span class="op">{</span>message<span class="op">});</span></span></code></pre></div>
+<p><strong>Key differences</strong>:</p>
+<ul>
+<li><code>exec_params</code>: Variadic; uses C++ type inference;
+overload resolution can be ambiguous</li>
+<li><code>exec</code> + <code>pqxx::params</code>: Explicit parameter
+wrapper; clear intent; better error messages</li>
+<li>Type handling: <code>exec_params</code> accepts raw pointers
+(<code>&amp;value</code>, <code>nullptr</code>); <code>exec</code> +
+<code>params</code> requires actual values or
+<code>std::optional</code></li>
+</ul>
+<p>The project currently has <strong>mixed usage</strong>:</p>
+<ul>
+<li>Some modules use modern <code>exec</code> API</li>
+<li>Security module previously used deprecated <code>exec_params</code>
+(now migrated)</li>
+<li>Legacy code may still use <code>exec_params</code></li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p><strong>Migrate all libpqxx usage to the modern API:
+<code>txn.exec(query, pqxx::params{...})</code></strong></p>
+<p>This applies to:</p>
+<ul>
+<li>All new code <strong>must</strong> use <code>exec</code> +
+<code>pqxx::params</code></li>
+<li>All existing code using <code>exec_params</code>
+<strong>must</strong> be migrated (via refactoring or regeneration)</li>
+<li>Null handling: use <code>std::optional&lt;T&gt;{}</code> (empty) or
+<code>std::optional&lt;T&gt;{value}</code> instead of
+<code>nullptr</code></li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>exec_params (deprecated)</th>
+<th>exec + pqxx::params (modern)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>Deprecated in libpqxx 7.x</td>
+<td>Recommended, maintained</td>
+</tr>
+<tr>
+<td><strong>Type safety</strong></td>
+<td>Variadic; relies on inference</td>
+<td>Explicit param wrapper</td>
+</tr>
+<tr>
+<td><strong>Error messages</strong></td>
+<td>Ambiguous overload errors</td>
+<td>Clear parameter type errors</td>
+</tr>
+<tr>
+<td><strong>Null handling</strong></td>
+<td>Raw pointers (<code>nullptr</code>, <code>&amp;value</code>)</td>
+<td><code>std::optional&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Future-proof</strong></td>
+<td>Will be removed in libpqxx 8.x</td>
+<td>Supported long-term</td>
+</tr>
+<tr>
+<td><strong>Compiler compatibility</strong></td>
+<td>Works with older C++</td>
+<td>Requires C++17+ (we use C++23)</td>
+</tr>
+<tr>
+<td><strong>Code clarity</strong></td>
+<td>Intent unclear from call site</td>
+<td>Intent explicit at call site</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Selected</strong>: <code>exec</code> +
+<code>pqxx::params</code> because:</p>
+<ol type="1">
+<li>Futures-proof: <code>exec_params</code> is deprecated and will be
+removed in libpqxx 8.x</li>
+<li>Type clarity: <code>pqxx::params{}</code> makes parameterization
+explicit</li>
+<li>Error messages: Compiler can distinguish parameter type errors</li>
+<li>Null safety: <code>std::optional</code> is idiomatic C++17+</li>
+<li>Team readability: Consistent across codebase</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>✅ <strong>Future-proof</strong>: Compatible with libpqxx 8.x and
+beyond</li>
+<li>✅ <strong>Clear intent</strong>: <code>pqxx::params{a, b, c}</code>
+is unambiguous</li>
+<li>✅ <strong>Better errors</strong>: Type mismatch errors point
+directly to the parameter</li>
+<li>✅ <strong>Null safety</strong>: <code>std::optional</code>
+encourages explicit nullable handling</li>
+<li>✅ <strong>Consistency</strong>: Uniform API across all database
+access code</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>⚠️ <strong>Refactoring cost</strong>: All <code>exec_params</code>
+calls must be migrated</li>
+<li>⚠️ <strong>Null handling syntax</strong>: Slightly more verbose
+(<code>std::optional&lt;std::string&gt;{}</code> vs.
+<code>nullptr</code>)</li>
+<li>⚠️ <strong>Optional chaining</strong>: Need to handle optional
+values in some contexts</li>
+</ul>
+<h3 id="migration-pattern">Migration Pattern</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Before (deprecated)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;SELECT * FROM users WHERE id = $1&quot;</span><span class="op">,</span> user_id<span class="op">);</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;INSERT INTO audit (msg) VALUES ($1)&quot;</span><span class="op">,</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                msg<span class="op">.</span>empty<span class="op">()</span> <span class="op">?</span> <span class="kw">nullptr</span> <span class="op">:</span> <span class="op">&amp;</span>msg<span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// After (modern)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;SELECT * FROM users WHERE id = $1&quot;</span><span class="op">,</span> pqxx<span class="op">::</span>params<span class="op">{</span>user_id<span class="op">});</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;INSERT INTO audit (msg) VALUES ($1)&quot;</span><span class="op">,</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>         pqxx<span class="op">::</span>params<span class="op">{</span>msg<span class="op">.</span>empty<span class="op">()</span> <span class="op">?</span> <span class="bu">std::</span>optional<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;{}</span> <span class="op">:</span> msg<span class="op">});</span></span></code></pre></div>
+<h2 id="special-cases">Special Cases</h2>
+<h3 id="1-optional-string-parameters">1. Optional String Parameters</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Before:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;CALL proc($1, $2)&quot;</span><span class="op">,</span> value<span class="op">,</span> opt_msg<span class="op">.</span>empty<span class="op">()</span> <span class="op">?</span> <span class="kw">nullptr</span> <span class="op">:</span> <span class="op">&amp;</span>opt_msg<span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// After:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;CALL proc($1, $2)&quot;</span><span class="op">,</span> pqxx<span class="op">::</span>params<span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    value<span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    opt_msg<span class="op">.</span>empty<span class="op">()</span> <span class="op">?</span> <span class="bu">std::</span>optional<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;{}</span> <span class="op">:</span> opt_msg</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span></code></pre></div>
+<h3 id="2-null-literals">2. Null Literals</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Before:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;UPDATE table SET col = NULL WHERE id = $1&quot;</span><span class="op">,</span> id<span class="op">);</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// After (no change, NULL in SQL):</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;UPDATE table SET col = NULL WHERE id = $1&quot;</span><span class="op">,</span> pqxx<span class="op">::</span>params<span class="op">{</span>id<span class="op">});</span></span></code></pre></div>
+<h3 id="3-default-values">3. DEFAULT Values</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Before:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec_params<span class="op">(</span><span class="st">&quot;INSERT INTO table (name) VALUES (DEFAULT)&quot;</span><span class="op">);</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">// After (no parameters):</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;INSERT INTO table (name) VALUES (DEFAULT)&quot;</span><span class="op">);</span></span></code></pre></div>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When this decision applies</strong>:</p>
+<ul>
+<li>Writing new C++ code that accesses PostgreSQL</li>
+<li>Reviewing database access code</li>
+<li>Migrating legacy code to modern libpqxx</li>
+</ul>
+<p><strong>How it's enforced</strong>:</p>
+<ul>
+<li>Code review: No <code>exec_params</code> in pull requests</li>
+<li>Static analysis: Could add clang-tidy rule to flag
+<code>exec_params</code></li>
+<li>CMakeLists.txt: Require libpqxx 7.10.3+ (enforced via Conan)</li>
+<li>Compiler warnings: Deprecation warnings on <code>exec_params</code>
+(if enabled in libpqxx)</li>
+</ul>
+<p><strong>Key files</strong>:</p>
+<ul>
+<li>All files in <code>src/muscframework/server/src/security/</code> -
+Database access</li>
+<li>All files in <code>src/dslgen/generators/cpp/</code> - Emitted C++
+code (must use modern API)</li>
+<li>CMakeLists.txt - Enforce libpqxx &gt;= 7.10.3</li>
+<li>Code style guide / CONTRIBUTING.md - Add migration guidance</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="a-keep-exec_params-for-backward-compatibility-rejected">A. Keep
+exec_params for backward compatibility (rejected)</h3>
+<ul>
+<li><strong>Reason</strong>: libpqxx 8.x will remove
+<code>exec_params</code>; delaying the migration just defers the
+work</li>
+<li><strong>Cost</strong>: Technical debt, harder migration later</li>
+</ul>
+<h3 id="b-create-a-wrapper-layer-rejected">B. Create a wrapper layer
+(rejected)</h3>
+<ul>
+<li><strong>Reason</strong>: Unnecessary indirection; <code>exec</code>
++ <code>pqxx::params</code> is already idiomatic</li>
+<li><strong>Cost</strong>: Maintenance burden, harder to debug</li>
+</ul>
+<h3 id="c-use-an-orm-eg-sqlpp11-rejected">C. Use an ORM (e.g., sqlpp11)
+(rejected)</h3>
+<ul>
+<li><strong>Reason</strong>: Out of scope for this ADR; would require
+separate architecture decision</li>
+<li><strong>Cost</strong>: Large integration effort</li>
+</ul>
+<h2 id="migration-roadmap">Migration Roadmap</h2>
+<ol type="1">
+<li><strong>Phase 1</strong>: New code uses <code>exec</code> +
+<code>pqxx::params</code> immediately</li>
+<li><strong>Phase 2</strong>: Racket generators emit <code>exec</code> +
+<code>pqxx::params</code> (not <code>exec_params</code>)</li>
+<li><strong>Phase 3</strong>: Audit existing code for
+<code>exec_params</code> usage</li>
+<li><strong>Phase 4</strong>: Migrate remaining <code>exec_params</code>
+calls (batch by module)</li>
+<li><strong>Phase 5</strong>: Update CONTRIBUTING.md with migration
+pattern as reference</li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li><strong>libpqxx 7.10.3 documentation</strong>: <a
+href="https://pqxx.org/development/libpqxx/">https://pqxx.org/development/libpqxx/</a></li>
+<li><strong>libpqxx migration guide</strong>: <a
+href="https://pqxx.org/development/libpqxx/latest/reference/group__api__exec/">https://pqxx.org/development/libpqxx/latest/reference/group__api__exec/</a></li>
+<li><strong>C++ std::optional</strong>: <a
+href="https://en.cppreference.com/w/cpp/utility/optional">https://en.cppreference.com/w/cpp/utility/optional</a></li>
+</ul>
+<h2 id="related-adrs">Related ADRs</h2>
+<ul>
+<li><a href="20251223-deploy-database-via-sqitch-only.html">Deploy
+Database via Sqitch Only</a> - SQL functions use pqxx for
+invocation</li>
+<li><a href="20251223-api-only-testing-with-ddd-seeding.html">API-Only
+Testing with DDD Seeding</a> - pgTAP/Catch2 tests call stored procs via
+pqxx</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

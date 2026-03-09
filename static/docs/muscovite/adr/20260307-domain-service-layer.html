@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain Service Layer Between gRPC and
+Persistence — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Domain Service Layer Between gRPC and Persistence</span>
+</nav>
+
+<h1>Domain Service Layer Between gRPC and Persistence</h1>
+
+
+<h1 id="domain-service-layer-between-grpc-and-persistence">Domain
+Service Layer Between gRPC and Persistence</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-07</li>
+<li>Tags: architecture, domain-services, validation, grpc, ddd</li>
+</ul>
+<p>Technical Story: gRPC handlers currently act as both controller and
+business logic host, calling CommandService/QueryService directly. This
+creates an anemic domain model where DSL-declared constraints are
+discarded at the C++ boundary. There is no orchestration layer for the
+three-tier validation pipeline.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The current architecture has gRPC service handlers performing double
+duty: they act as transport-layer controllers (extracting auth context,
+deserializing protobuf messages, serializing responses) AND as business
+logic hosts (calling CommandService/QueryService directly, performing
+ad-hoc validation). This violates separation of concerns and produces an
+anemic domain model.</p>
+<p>DSL-declared constraints (field validations, cross-field invariants,
+business rules) have no C++ enforcement point. The parser captures them,
+the IR represents them, but the generated C++ code discards them at the
+gRPC boundary. There is no orchestration layer that composes field-level
+validation (Tier 1), entity-level invariants (Tier 2), and
+user-extensible business rules (Tier 3) into a coherent pipeline.</p>
+<p>How should we introduce a domain service layer that orchestrates
+validation across all three tiers while keeping gRPC handlers thin?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>gRPC handlers must remain thin transport controllers — no business
+logic</li>
+<li>All aggregate access must go through CommandService/QueryService
+(ADR 20260120)</li>
+<li>Plugin extensibility via sidecar pattern (ADR 20260223) requires a
+composition point</li>
+<li>Validation errors must accumulate (not fail-fast) for client UX</li>
+<li>The layer must be fully generated from DSL declarations</li>
+<li>All 8 generator targets must remain consistent</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>DomainService per aggregate</strong> — dedicated
+orchestration class between gRPC and CommandService/QueryService</li>
+<li><strong>Validation middleware in gRPC interceptors</strong> —
+gRPC-specific interceptor chain for validation</li>
+<li><strong>Fat CommandService</strong> — extend CommandService to
+include validation orchestration</li>
+<li><strong>No domain layer</strong> — keep validation in gRPC handlers
+with helper functions</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — DomainService per
+aggregate</strong>, because it provides a clean, testable orchestration
+point that is independent of the transport layer and respects the
+existing CommandService/QueryService boundary.</p>
+<p>DomainService orchestrates the three-tier validation pipeline:</p>
+<ol type="1">
+<li><strong>Tier 1 (Strong Types)</strong>:
+<code>Entity::try_from(Command)</code> for per-field construction
+validation</li>
+<li><strong>Tier 2 (EntityValidator)</strong>:
+<code>EntityValidator::validate()</code> for cross-field invariants</li>
+<li><strong>Tier 3 (PluginValidator)</strong>:
+<code>PluginValidator::validate()</code> for user-owned business rules
+via sidecar pattern</li>
+</ol>
+<p>gRPC handlers become thin controllers: extract auth context,
+deserialize protobuf to command, delegate to DomainService, serialize
+result to protobuf response. DomainService returns
+<code>std::expected&lt;Result, ValidationErrors&gt;</code>.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Clean separation of concerns — gRPC handles transport, DomainService
+handles domain logic</li>
+<li>Business logic is testable without gRPC infrastructure (pure C++
+unit tests)</li>
+<li>Plugin extensibility via sidecar pattern composes naturally at the
+DomainService level</li>
+<li>Error accumulation across all three tiers gives clients
+comprehensive validation feedback</li>
+<li>Generated code — DomainService is fully generated from DSL, no
+manual wiring</li>
+<li>Consistent pattern across all aggregates in all bounded
+contexts</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Additional generated class per aggregate increases code volume</li>
+<li>All 8 generator targets need updates (~22 FTRs across 4
+iterations)</li>
+<li>Migration path for existing gRPC handlers requires moving logic out
+incrementally</li>
+<li>One more layer of indirection for developers to understand</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-domainservice-per-aggregate">Option 1: DomainService
+per aggregate</h3>
+<ul>
+<li>Good, because it creates a transport-independent business logic
+layer</li>
+<li>Good, because it provides a natural composition point for the three
+validation tiers</li>
+<li>Good, because it is fully generated from DSL declarations</li>
+<li>Good, because it is independently testable with doctest (no gRPC
+dependency)</li>
+<li>Bad, because it adds one more generated class per aggregate</li>
+<li>Bad, because it requires updating all 8 generator targets</li>
+</ul>
+<h3 id="option-2-validation-middleware-in-grpc-interceptors">Option 2:
+Validation middleware in gRPC interceptors</h3>
+<ul>
+<li>Good, because gRPC interceptors are a standard pattern for
+cross-cutting concerns</li>
+<li>Bad, because it couples validation to the gRPC transport layer</li>
+<li>Bad, because validation logic becomes untestable without gRPC
+infrastructure</li>
+<li>Bad, because Qt frontends cannot reuse the same validation
+pipeline</li>
+</ul>
+<h3 id="option-3-fat-commandservice">Option 3: Fat CommandService</h3>
+<ul>
+<li>Good, because it requires no new class — validation is added to
+existing services</li>
+<li>Bad, because it violates single responsibility (CommandService is
+for persistence orchestration)</li>
+<li>Bad, because it conflates aggregate access (ADR 20260120) with
+domain validation</li>
+<li>Bad, because plugin extensibility would need to be wired into an
+already complex class</li>
+</ul>
+<h3 id="option-4-no-domain-layer">Option 4: No domain layer</h3>
+<ul>
+<li>Good, because zero implementation cost</li>
+<li>Bad, because business logic stays scattered across gRPC
+handlers</li>
+<li>Bad, because validation is duplicated across handlers for the same
+aggregate</li>
+<li>Bad, because DSL-declared constraints remain unenforced at the C++
+boundary</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a
+href="20260120-domain-services-as-aggregate-boundary.html">ADR 20260120 —
+Domain Services as Aggregate Boundary</a></li>
+<li>Related: <a href="20260223-layer-2-sidecar-protocol.html">ADR 20260223
+— Layer 2 Sidecar Protocol</a></li>
+<li>Related: <a
+href="20260307-three-tier-validation-architecture.html">ADR 20260307 —
+Three-Tier Validation Architecture</a></li>
+<li>Related: <a href="20260307-field-constraint-annotations.html">ADR
+20260307 — Field Constraint Annotations in DSL Grammar</a></li>
+<li>Related: <a href="20260307-frontend-validation-symmetry.html">ADR
+20260307 — Frontend Validation Symmetry</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating C++ service code for any aggregate declared in a
+<code>.ddd</code> file</li>
+<li>When generating gRPC handler implementations — handlers MUST
+delegate to DomainService</li>
+<li>When adding validation logic — validation belongs in DomainService,
+not gRPC handlers</li>
+<li>When generating test scaffolding — DomainService tests use doctest,
+not gRPC test fixtures</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Query-only operations that do not mutate state (pure QueryService
+calls may bypass DomainService)</li>
+<li>Infrastructure concerns (auth, rate limiting, logging) which remain
+in gRPC interceptors</li>
+<li>Lookup table access — compile-time constants do not require domain
+service orchestration</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Generator in <code>dslgen/generators/</code> produces DomainService
+class per aggregate</li>
+<li>gRPC handler generator emits thin delegation code only</li>
+<li>Integration tests verify DomainService is callable without gRPC
+infrastructure</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/cpp-service-v2.rkt</code> — gRPC service
+generation (to be refactored)</li>
+<li><code>dslgen/generators/dba/unified.rkt</code> —
+CommandService/QueryService generation</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — aggregate IR struct
+definitions</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

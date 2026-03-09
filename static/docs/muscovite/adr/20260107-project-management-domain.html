@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Management Domain with Kanban
+Workflow — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Project Management Domain with Kanban Workflow</span>
+</nav>
+
+<h1>Project Management Domain with Kanban Workflow</h1>
+
+
+<h1 id="project-management-domain-with-kanban-workflow">Project
+Management Domain with Kanban Workflow</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Date: 2026-01-07</li>
+<li>Deciders: Development Team</li>
+<li>Tags: domain-modeling, workflow, project-management</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The geosciences domain model references "projects" in multiple
+contexts (field mapping, campaigns, drilling, etc.), but lacks a
+comprehensive project management domain to track:</p>
+<ul>
+<li>Project hierarchy (projects, subprojects)</li>
+<li>Goals, milestones, deliverables</li>
+<li>Task management with workflow states</li>
+<li>Team structure (persons, roles, workgroups)</li>
+<li>Resource allocation (instruments, vehicles)</li>
+<li>Time tracking and effort estimation</li>
+<li>Work-in-progress (WIP) limits per person per status</li>
+</ul>
+<p><strong>Current Gap</strong>: No systematic way to:</p>
+<ol type="1">
+<li>Plan and track multi-phase geoscience projects</li>
+<li>Assign work to team members with capacity constraints</li>
+<li>Track progress against goals and milestones</li>
+<li>Manage shared resources (field vehicles, instruments)</li>
+<li>Enforce WIP limits to prevent overload</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Workflow Flexibility</strong>: Support various project
+methodologies (field campaigns, lab work, analysis phases)</li>
+<li><strong>WIP Limits</strong>: Prevent team overload via configurable
+work-in-progress constraints</li>
+<li><strong>Resource Management</strong>: Track expensive field
+equipment and vehicles</li>
+<li><strong>Time Tracking</strong>: Accurate effort estimation and
+actual hours for project accounting</li>
+<li><strong>Hierarchy</strong>: Support complex project structures
+(multi-year projects with phases/subprojects)</li>
+<li><strong>Status Configurability</strong>: Organizations define their
+own workflow states</li>
+<li><strong>Integration</strong>: Link tasks to domain entities
+(samples, analyses, maps, etc.)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-simple-task-list-rejected">Option 1: Simple Task List
+(Rejected)</h3>
+<ul>
+<li>❌ No hierarchy or milestones</li>
+<li>❌ No resource management</li>
+<li>❌ No WIP enforcement</li>
+<li>✅ Easy to implement</li>
+</ul>
+<h3 id="option-2-fixed-workflow-states-rejected">Option 2: Fixed
+Workflow States (Rejected)</h3>
+<ul>
+<li>❌ Not adaptable to different organizations</li>
+<li>❌ Hard-coded states don't fit all workflows</li>
+<li>✅ Predictable behavior</li>
+</ul>
+<h3 id="option-3-kanban-based-with-configurable-states-selected">Option
+3: Kanban-Based with Configurable States (Selected)</h3>
+<ul>
+<li>✅ Flexible workflow states (lookup table)</li>
+<li>✅ WIP limits per person per status</li>
+<li>✅ Visual workflow management</li>
+<li>✅ Time tracking integration</li>
+<li>✅ Resource allocation</li>
+<li>✅ Project hierarchy support</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Implement a <strong>Kanban-inspired project management
+domain</strong> with the following components:</p>
+<h3 id="core-entities">Core Entities</h3>
+<pre class="ddd"><code>CONTEXT ProjectManagement {
+    
+    -- =====================================================================
+    -- Project Hierarchy
+    -- =====================================================================
+    
+    ENTITY Project IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        parent_id       UUID,           -- for subprojects
+        code            TEXT        NOT NULL @unique,
+        name            TEXT        NOT NULL,
+        description     TEXT,
+        status          TEXT        NOT NULL,  -- active, on_hold, completed, cancelled
+        start_date      DATE,
+        target_end_date DATE,
+        actual_end_date DATE,
+        budget_hours    DECIMAL,
+        manager_id      UUID        NOT NULL  -- references Person
+    )
+    CHECK status_valid: status IN (&#39;active&#39;, &#39;on_hold&#39;, &#39;completed&#39;, &#39;cancelled&#39;)
+    DOC &quot;Scientific project or phase (field campaign, lab analysis, report writing)&quot;;
+    
+    ENTITY Goal IDENTIFIED_BY id (
+        id          UUID    NOT NULL,
+        project_id  UUID    NOT NULL,
+        title       TEXT    NOT NULL,
+        description TEXT,
+        priority    INTEGER NOT NULL DEFAULT 3,  -- 1=critical, 5=nice-to-have
+        status      TEXT    NOT NULL             -- not_started, in_progress, achieved, deferred
+    )
+    DOC &quot;High-level project objective (e.g., &#39;Complete stratigraphic correlation&#39;)&quot;;
+    
+    ENTITY Milestone IDENTIFIED_BY id (
+        id           UUID    NOT NULL,
+        project_id   UUID    NOT NULL,
+        goal_id      UUID,               -- optional link to goal
+        title        TEXT    NOT NULL,
+        description  TEXT,
+        target_date  DATE    NOT NULL,
+        actual_date  DATE,
+        status       TEXT    NOT NULL    -- pending, at_risk, achieved, missed
+    )
+    DOC &quot;Measurable checkpoint (e.g., &#39;Field samples collected by June 30&#39;)&quot;;
+    
+    -- =====================================================================
+    -- Task Management (Kanban Core)
+    -- =====================================================================
+    
+    ENTITY TaskStatus IDENTIFIED_BY id (
+        id               UUID    NOT NULL,
+        code             TEXT    NOT NULL @unique,
+        name             TEXT    NOT NULL,
+        description      TEXT,
+        category         TEXT    NOT NULL,  -- backlog, active, done, abandoned
+        display_order    INTEGER NOT NULL,
+        color_hex        TEXT,               -- UI hint: #FF5733
+        wip_limit_global INTEGER             -- organization-wide WIP limit for this status
+    )
+    CHECK category_valid: category IN (&#39;backlog&#39;, &#39;active&#39;, &#39;done&#39;, &#39;abandoned&#39;)
+    DOC &quot;Configurable workflow state (idea, planned, assigned, in_progress, qa, accepted, etc.)&quot;;
+    
+    -- Seed with defaults:
+    IMPORT CSV &quot;../../seeds/project-management/task_status.csv&quot; INTO TaskStatus;
+    
+    ENTITY Task IDENTIFIED_BY id (
+        id                  UUID    NOT NULL,
+        project_id          UUID    NOT NULL,
+        milestone_id        UUID,
+        parent_task_id      UUID,           -- for task breakdown
+        title               TEXT    NOT NULL,
+        description         TEXT,
+        status_id           UUID    NOT NULL,  -- references TaskStatus
+        assigned_to_id      UUID,              -- references Person (nullable if unassigned)
+        estimated_hours     DECIMAL,
+        actual_hours        DECIMAL DEFAULT 0,
+        priority            INTEGER NOT NULL DEFAULT 3,
+        created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        started_at          TIMESTAMPTZ,
+        completed_at        TIMESTAMPTZ,
+        blocked             BOOLEAN NOT NULL DEFAULT FALSE,
+        blocked_reason      TEXT
+    )
+    DOC &quot;Work item with effort estimate and time tracking&quot;;
+    
+    ENTITY TaskStatusTransition IDENTIFIED_BY id (
+        id             UUID        NOT NULL,
+        task_id        UUID        NOT NULL,
+        from_status_id UUID,              -- NULL if initial creation
+        to_status_id   UUID        NOT NULL,
+        transitioned_by UUID       NOT NULL,  -- Person
+        transitioned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        comment        TEXT
+    )
+    DOC &quot;Audit trail for task state changes&quot;;
+    
+    -- =====================================================================
+    -- Team &amp; Resources
+    -- =====================================================================
+    
+    ENTITY Person IDENTIFIED_BY id (
+        id              UUID    NOT NULL,
+        employee_code   TEXT    NOT NULL @unique,
+        first_name      TEXT    NOT NULL,
+        last_name       TEXT    NOT NULL,
+        email           TEXT    NOT NULL @unique,
+        position        TEXT,               -- Geologist, Lab Technician, Project Manager
+        capacity_hours  DECIMAL,            -- weekly capacity (e.g., 40.0)
+        active          BOOLEAN NOT NULL DEFAULT TRUE
+    )
+    DOC &quot;Team member (employee or contractor)&quot;;
+    
+    ENTITY Role IDENTIFIED_BY id (
+        id          UUID    NOT NULL,
+        code        TEXT    NOT NULL @unique,
+        name        TEXT    NOT NULL,
+        description TEXT
+    )
+    DOC &quot;Functional role (Field Geologist, GIS Analyst, Driller, Lab Manager)&quot;;
+    
+    ENTITY PersonRole IDENTIFIED_BY id (
+        id          UUID    NOT NULL,
+        person_id   UUID    NOT NULL,
+        role_id     UUID    NOT NULL,
+        project_id  UUID                -- role assignment scoped to project (optional)
+    )
+    DOC &quot;Person&#39;s role(s) in projects&quot;;
+    
+    ENTITY Workgroup IDENTIFIED_BY id (
+        id          UUID    NOT NULL,
+        code        TEXT    NOT NULL @unique,
+        name        TEXT    NOT NULL,
+        description TEXT,
+        leader_id   UUID                -- references Person
+    )
+    DOC &quot;Team unit (Field Team Alpha, Geochemistry Lab, GIS Group)&quot;;
+    
+    ENTITY WorkgroupMembership IDENTIFIED_BY id (
+        id              UUID    NOT NULL,
+        workgroup_id    UUID    NOT NULL,
+        person_id       UUID    NOT NULL,
+        joined_date     DATE    NOT NULL,
+        left_date       DATE
+    )
+    DOC &quot;Person&#39;s membership in workgroup&quot;;
+    
+    -- =====================================================================
+    -- Resource Management
+    -- =====================================================================
+    
+    ENTITY Instrument IDENTIFIED_BY id (
+        id              UUID    NOT NULL,
+        code            TEXT    NOT NULL @unique,
+        name            TEXT    NOT NULL,
+        description     TEXT,
+        instrument_type TEXT    NOT NULL,  -- XRF, XRD, GPS, Core Drill, etc.
+        serial_number   TEXT,
+        owner_workgroup UUID,              -- references Workgroup
+        status          TEXT    NOT NULL   -- available, in_use, maintenance, retired
+    )
+    CHECK status_valid: status IN (&#39;available&#39;, &#39;in_use&#39;, &#39;maintenance&#39;, &#39;retired&#39;)
+    DOC &quot;Field/lab equipment&quot;;
+    
+    ENTITY Vehicle IDENTIFIED_BY id (
+        id              UUID    NOT NULL,
+        code            TEXT    NOT NULL @unique,
+        name            TEXT    NOT NULL,
+        vehicle_type    TEXT    NOT NULL,  -- truck, helicopter, ship, atv, drone
+        license_plate   TEXT,
+        capacity_persons INTEGER,
+        status          TEXT    NOT NULL   -- available, in_use, maintenance, retired
+    )
+    CHECK status_valid: status IN (&#39;available&#39;, &#39;in_use&#39;, &#39;maintenance&#39;, &#39;retired&#39;)
+    DOC &quot;Field vehicle (4x4, boat, helicopter, ATV)&quot;;
+    
+    ENTITY ResourceAllocation IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        task_id         UUID        NOT NULL,
+        resource_type   TEXT        NOT NULL,  -- instrument, vehicle
+        resource_id     UUID        NOT NULL,  -- polymorphic reference
+        allocated_from  TIMESTAMPTZ NOT NULL,
+        allocated_to    TIMESTAMPTZ NOT NULL,
+        allocated_by    UUID        NOT NULL   -- Person
+    )
+    CHECK resource_type_valid: resource_type IN (&#39;instrument&#39;, &#39;vehicle&#39;)
+    DOC &quot;Time-based resource booking for tasks&quot;;
+    
+    -- =====================================================================
+    -- Time Tracking
+    -- =====================================================================
+    
+    ENTITY TimeEntry IDENTIFIED_BY id (
+        id          UUID        NOT NULL,
+        task_id     UUID        NOT NULL,
+        person_id   UUID        NOT NULL,
+        start_time  TIMESTAMPTZ NOT NULL,
+        end_time    TIMESTAMPTZ,
+        hours       DECIMAL,                -- computed or manual entry
+        notes       TEXT
+    )
+    DOC &quot;Actual time spent on tasks (for effort tracking and billing)&quot;;
+    
+    -- =====================================================================
+    -- WIP Limit Enforcement
+    -- =====================================================================
+    
+    ENTITY PersonWipLimit IDENTIFIED_BY id (
+        id          UUID    NOT NULL,
+        person_id   UUID    NOT NULL,
+        status_id   UUID    NOT NULL,  -- TaskStatus
+        max_hours   DECIMAL NOT NULL,  -- e.g., 20 hours max in &#39;in_progress&#39; at once
+        max_tasks   INTEGER             -- optional: max number of tasks (regardless of hours)
+    )
+    DOC &quot;Per-person WIP limits by status (prevents overload)&quot;;
+    
+    -- =====================================================================
+    -- Aggregates
+    -- =====================================================================
+    
+    AGGREGATE Project ROOT Project (
+        CONTAINS Goal, Milestone, Task
+    );
+    
+    AGGREGATE Team ROOT Person (
+        CONTAINS PersonRole, WorkgroupMembership
+    );
+    
+    AGGREGATE Resources ROOT Instrument (
+        CONTAINS ResourceAllocation
+    );
+    
+    AGGREGATE VehicleFleet ROOT Vehicle (
+        CONTAINS ResourceAllocation
+    );
+    
+    -- =====================================================================
+    -- Domain Events
+    -- =====================================================================
+    
+    EVENT TaskCreated (
+        id          UUID        NOT NULL,
+        task_id     UUID        NOT NULL,
+        project_id  UUID        NOT NULL,
+        created_by  UUID        NOT NULL,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    EVENT TaskAssigned (
+        id              UUID        NOT NULL,
+        task_id         UUID        NOT NULL,
+        assigned_to_id  UUID        NOT NULL,
+        assigned_by     UUID        NOT NULL,
+        assigned_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    EVENT TaskStatusChanged (
+        id             UUID        NOT NULL,
+        task_id        UUID        NOT NULL,
+        from_status_id UUID,
+        to_status_id   UUID        NOT NULL,
+        changed_by     UUID        NOT NULL,
+        changed_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    EVENT TaskCompleted (
+        id              UUID        NOT NULL,
+        task_id         UUID        NOT NULL,
+        completed_by    UUID        NOT NULL,
+        completed_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        actual_hours    DECIMAL
+    );
+    
+    EVENT WipLimitExceeded (
+        id          UUID        NOT NULL,
+        person_id   UUID        NOT NULL,
+        status_id   UUID        NOT NULL,
+        current_wip DECIMAL     NOT NULL,
+        limit_wip   DECIMAL     NOT NULL,
+        detected_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    -- =====================================================================
+    -- Business Rules (Specifications)
+    -- =====================================================================
+    
+    SPECIFICATION TasksInProgress FOR Task
+        WHERE status_id IN (
+            SELECT id FROM TaskStatus WHERE category = &#39;active&#39;
+        )
+        DOC &quot;All tasks currently being worked on&quot;;
+    
+    SPECIFICATION OverdueTask FOR Task
+        WHERE completed_at IS NULL 
+          AND milestone_id IN (
+              SELECT id FROM Milestone 
+              WHERE target_date &lt; CURRENT_DATE 
+                AND status != &#39;achieved&#39;
+          )
+        DOC &quot;Tasks linked to overdue milestones&quot;;
+    
+    SPECIFICATION PersonCurrentWip FOR Task (person_id UUID, status_id UUID)
+        WHERE assigned_to_id = person_id 
+          AND status_id = status_id
+        DOC &quot;Current WIP for a person in a specific status&quot;;
+    
+    -- =====================================================================
+    -- Policies (Workflow Enforcement)
+    -- =====================================================================
+    
+    POLICY EnforceWipLimit
+        WHEN TaskStatusChanged
+        WHERE EXISTS (
+            SELECT 1 FROM PersonWipLimit pwl
+            JOIN Task t ON t.assigned_to_id = pwl.person_id
+            WHERE t.status_id = pwl.status_id
+              AND t.assigned_to_id = $task.assigned_to_id
+            GROUP BY pwl.person_id, pwl.status_id, pwl.max_hours
+            HAVING SUM(t.estimated_hours) &gt; pwl.max_hours
+        )
+        THEN EMIT WipLimitExceeded(
+            person_id = $task.assigned_to_id,
+            status_id = $to_status_id
+        )
+        DOC &quot;Emit event when person exceeds WIP limit for a status&quot;;
+    
+    POLICY NotifyMilestoneRisk
+        WHEN TaskCompleted
+        WHERE $task.milestone_id IS NOT NULL
+          AND EXISTS (
+              SELECT 1 FROM Milestone m
+              WHERE m.id = $task.milestone_id
+                AND m.target_date &lt; CURRENT_DATE + INTERVAL &#39;7 days&#39;
+                AND m.status = &#39;pending&#39;
+          )
+        THEN NOTIFY ProjectManager(
+            milestone_id = $task.milestone_id,
+            days_remaining = (SELECT target_date - CURRENT_DATE FROM Milestone WHERE id = $task.milestone_id)
+        )
+        DOC &quot;Alert manager when milestone is within 7 days and still pending&quot;;
+    
+    -- =====================================================================
+    -- Repository
+    -- =====================================================================
+    
+    REPOSITORY TaskRepository FOR Task (
+        find_by_assignee(person_id UUID) -&gt; Task[],
+        find_by_status(status_id UUID) -&gt; Task[],
+        find_by_project(project_id UUID) -&gt; Task[],
+        find_overdue() -&gt; Task[],
+        find_blocked() -&gt; Task[],
+        calculate_wip_for_person(person_id UUID, status_id UUID) -&gt; DECIMAL
+    );
+    
+    REPOSITORY ProjectRepository FOR Project (
+        find_active() -&gt; Project[],
+        find_by_manager(manager_id UUID) -&gt; Project[],
+        find_with_overdue_milestones() -&gt; Project[]
+    );
+}</code></pre>
+<h3 id="kanban-workflow-model">Kanban Workflow Model</h3>
+<p><strong>Status Lifecycle</strong>:</p>
+<pre><code>Backlog:  idea → to_plan → planned
+Active:   assigned → in_progress → in_qa → in_acceptance
+Done:     accepted
+Abandoned: rework_required → abandoned → aborted → obsolete</code></pre>
+<p><strong>WIP Limit Enforcement</strong>:</p>
+<ul>
+<li>Each person has per-status WIP limits (hours or task count)</li>
+<li>Policy emits <code>WipLimitExceeded</code> event when limit
+breached</li>
+<li>UI displays visual warnings (Kanban board shows red/amber capacity
+indicators)</li>
+<li>Prevents task status change if WIP limit exceeded (optional strict
+mode)</li>
+</ul>
+<p><strong>Time Tracking</strong>:</p>
+<ul>
+<li><code>TimeEntry</code> records actual work sessions (start/stop
+timer or manual entry)</li>
+<li><code>Task.actual_hours</code> aggregated from time entries</li>
+<li>Variance reports: estimated vs. actual (for future estimation
+improvement)</li>
+</ul>
+<p><strong>Resource Allocation</strong>:</p>
+<ul>
+<li>Instruments and vehicles booked for task duration</li>
+<li>Prevents double-booking via constraint checks</li>
+<li>UI shows resource calendar (Gantt-style availability)</li>
+</ul>
+<h3 id="integration-with-geosciences-domain">Integration with
+Geosciences Domain</h3>
+<p><strong>Cross-Context References</strong>:</p>
+<pre class="ddd"><code>-- In FieldObservation context:
+ENTITY FieldCampaign IDENTIFIED_BY id (
+    ...
+    project_id UUID NOT NULL  -- references ProjectManagement.Project
+)
+RELATIONSHIPS {
+    project -&gt; Project REQUIRED ONE;
+}
+
+-- In LaboratoryAnalysis context:
+ENTITY ThinSection IDENTIFIED_BY id (
+    ...
+    analysis_task_id UUID  -- references ProjectManagement.Task
+)
+RELATIONSHIPS {
+    analysis_task -&gt; Task OPTIONAL ONE;
+}
+
+-- In Drilling context:
+ENTITY Borehole IDENTIFIED_BY id (
+    ...
+    drilling_project_id UUID NOT NULL
+)
+RELATIONSHIPS {
+    drilling_project -&gt; Project REQUIRED ONE;
+}</code></pre>
+<h3 id="ui-implementation-qt-widgets">UI Implementation (Qt
+Widgets)</h3>
+<p><strong>Kanban Board View</strong>:</p>
+<ul>
+<li>Column per TaskStatus (configurable, drag-and-drop between
+statuses)</li>
+<li>Task cards show: title, assignee, estimated hours, priority</li>
+<li>Color-coded by priority or person</li>
+<li>WIP indicators: traffic light (green/amber/red) based on
+capacity</li>
+</ul>
+<p><strong>Gantt Chart View</strong>:</p>
+<ul>
+<li>Timeline visualization of milestones and tasks</li>
+<li>Resource allocation view (instruments, vehicles)</li>
+<li>Critical path highlighting</li>
+</ul>
+<p><strong>Person Dashboard</strong>:</p>
+<ul>
+<li>Current WIP by status</li>
+<li>Capacity bar chart (allocated vs. available hours)</li>
+<li>Recent time entries</li>
+</ul>
+<p><strong>Project Tree View</strong>:</p>
+<ul>
+<li>Hierarchical project/subproject structure</li>
+<li>Goal → Milestone → Task drill-down</li>
+<li>Progress indicators (% complete)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<p>✅ <strong>Flexible Workflow</strong>: Organizations configure states
+to match their processes<br />
+✅ <strong>Capacity Management</strong>: WIP limits prevent team
+overload<br />
+✅ <strong>Resource Visibility</strong>: Real-time instrument/vehicle
+availability<br />
+✅ <strong>Accurate Tracking</strong>: Time entry audit trail for
+accounting and estimation<br />
+✅ <strong>Hierarchy Support</strong>: Multi-level projects and task
+breakdown<br />
+✅ <strong>Event-Driven</strong>: Policies enable workflow automation
+and notifications<br />
+✅ <strong>Domain Integration</strong>: Tasks link to samples, analyses,
+maps, etc.</p>
+<h3 id="negative">Negative</h3>
+<p>⚠️ <strong>Complexity</strong>: More entities than simple task list
+(15+ entities)<br />
+⚠️ <strong>Configuration Overhead</strong>: Organizations must define
+TaskStatus lookup data<br />
+⚠️ <strong>Enforcement Burden</strong>: WIP limits require discipline to
+maintain<br />
+⚠️ <strong>UI Complexity</strong>: Kanban board requires sophisticated
+drag-and-drop UI</p>
+<h3 id="risks">Risks</h3>
+<p>🔥 <strong>Over-Engineering</strong>: Risk of unused features (start
+minimal, expand based on feedback)<br />
+🔥 <strong>Performance</strong>: Large projects (1000+ tasks) may need
+pagination/indexing<br />
+🔥 <strong>Polymorphic Resource References</strong>:
+<code>resource_id</code> in <code>ResourceAllocation</code> requires
+careful handling</p>
+<h3 id="mitigation">Mitigation</h3>
+<ul>
+<li><strong>Phased Implementation</strong>: Start with Project → Task →
+Person, add WIP limits later</li>
+<li><strong>Performance</strong>: Index on (project_id, status_id,
+assigned_to_id), use materialized views for dashboards</li>
+<li><strong>Resource Polymorphism</strong>: Consider separate tables
+(InstrumentAllocation, VehicleAllocation) instead of single polymorphic
+table</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20251223-use-racket-for-dsl-code-generation.html">ADR-0001:
+Use Racket for DSL Code Generation</a></li>
+<li><a href="20260106-shared-basedata-context.html">ADR-0009: Shared
+Basedata Context</a> - TaskStatus as cross-cutting lookup</li>
+<li><a href="https://kanbanguides.org/">Kanban Principles</a></li>
+<li><a
+href="https://www.scrum.org/resources/what-is-a-scrum-task-board">Scrum
+Task Board</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-to-apply-this-decision">When to Apply This Decision</h3>
+<ul>
+<li>User requests project, task, or team management features</li>
+<li>User asks about time tracking or WIP limits</li>
+<li>User mentions Kanban boards or workflow management</li>
+<li>User wants to link field/lab work to projects</li>
+</ul>
+<h3 id="when-not-to-apply">When NOT to Apply</h3>
+<ul>
+<li>Simple entity tagging (use metadata fields instead)</li>
+<li>Short-term ad-hoc work (don't over-structure)</li>
+<li>External project management system already in use (integration, not
+replacement)</li>
+</ul>
+<h3 id="how-to-enforce">How to Enforce</h3>
+<ol type="1">
+<li><strong>DDD Model</strong>: Add <code>project-management.ddd</code>
+to <code>src/examples/geosciences/</code></li>
+<li><strong>Seeds</strong>: Create
+<code>seeds/project-management/task_status.csv</code> with default
+states</li>
+<li><strong>Generation</strong>: Run
+<code>racket generate.rkt --project project.ddd</code> (includes new
+context)</li>
+<li><strong>Qt UI</strong>: Generate Kanban board widget (custom, not
+auto-generated)</li>
+</ol>
+<h3 id="related-files">Related Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+Schema generation</li>
+<li><code>src/dslgen/generators/cpp/dba/entity.rkt</code> - C++ entity
+mapping</li>
+<li><code>src/dslgen/generators/qt/widgets.rkt</code> - UI
+generation</li>
+<li><code>src/examples/geosciences/field-observation.ddd</code> -
+Cross-context FK to Project</li>
+</ul>
+<h3 id="implementation-notes">Implementation Notes</h3>
+<p><strong>Polymorphic Resource Handling</strong>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Option A: Discriminated union (type column)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> resource_allocation (</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    resource_type TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,  <span class="co">-- &#39;instrument&#39; | &#39;vehicle&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    resource_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> resource_type_check <span class="kw">CHECK</span> (</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        (resource_type <span class="op">=</span> <span class="st">&#39;instrument&#39;</span> <span class="kw">AND</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> instrument <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> resource_id))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">OR</span> (resource_type <span class="op">=</span> <span class="st">&#39;vehicle&#39;</span> <span class="kw">AND</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> vehicle <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> resource_id))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Option B: Separate tables (cleaner, type-safe)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> instrument_allocation (<span class="op">..</span>.);</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> vehicle_allocation (<span class="op">..</span>.);</span></code></pre></div>
+<p>Recommend <strong>Option B</strong> for generated code (better type
+safety, simpler queries).</p>
+<p><strong>WIP Limit Query</strong> (used by UI):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Current WIP for person in status</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    p.<span class="kw">id</span> <span class="kw">AS</span> person_id,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ts.<span class="kw">id</span> <span class="kw">AS</span> status_id,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    ts.name <span class="kw">AS</span> status_name,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(t.<span class="kw">id</span>) <span class="kw">AS</span> task_count,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(t.estimated_hours), <span class="dv">0</span>) <span class="kw">AS</span> total_hours,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    pwl.max_hours <span class="kw">AS</span> limit_hours,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    pwl.max_tasks <span class="kw">AS</span> limit_tasks,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(t.estimated_hours), <span class="dv">0</span>) <span class="op">&gt;</span> pwl.max_hours <span class="cf">THEN</span> <span class="st">&#39;exceeded&#39;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(t.estimated_hours), <span class="dv">0</span>) <span class="op">&gt;</span> pwl.max_hours <span class="op">*</span> <span class="fl">0.8</span> <span class="cf">THEN</span> <span class="st">&#39;warning&#39;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> <span class="st">&#39;ok&#39;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="kw">AS</span> wip_status</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> person p</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> task t <span class="kw">ON</span> t.assigned_to_id <span class="op">=</span> p.<span class="kw">id</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> task_status ts <span class="kw">ON</span> t.status_id <span class="op">=</span> ts.<span class="kw">id</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> person_wip_limit pwl <span class="kw">ON</span> pwl.person_id <span class="op">=</span> p.<span class="kw">id</span> <span class="kw">AND</span> pwl.status_id <span class="op">=</span> ts.<span class="kw">id</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> ts.<span class="kw">category</span> <span class="op">=</span> <span class="st">&#39;active&#39;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> p.<span class="kw">id</span>, ts.<span class="kw">id</span>, ts.name, pwl.max_hours, pwl.max_tasks;</span></code></pre></div>
+<p>Display as horizontal stacked bar chart in Qt (capacity
+visualization).</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

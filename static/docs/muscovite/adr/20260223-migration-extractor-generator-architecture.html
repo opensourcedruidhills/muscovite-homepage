@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration Extractor Generator
+Architecture — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Migration Extractor Generator Architecture</span>
+</nav>
+
+<h1>Migration Extractor Generator Architecture</h1>
+
+
+<h1 id="migration-extractor-generator-architecture">Migration Extractor
+Generator Architecture</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: brownfield, migration, extractor, generator, pqxx, nats,
+cursor, batching</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: The first execution stage of the brownfield
+migration factory (ADR 20260217) is the Extractor: a generated C++
+binary that reads rows from a legacy PostgreSQL database and emits typed
+JSON envelopes to a NATS JetStream subject. This ADR specifies how the
+extractor generator works and what code it produces.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The migration factory pipeline starts at the legacy database. The
+extractor must:</p>
+<ol type="1">
+<li>Connect to the legacy PostgreSQL instance (separate connection
+string from the target DB)</li>
+<li>Read all rows from <code>MAPPING.SOURCE</code> table in manageable
+batches (cursor-based, not LIMIT/OFFSET which is unstable on live
+tables)</li>
+<li>For each row, construct a typed JSON envelope (ADR
+20260217-typed-json) with field metadata</li>
+<li>Publish the envelope to a NATS JetStream subject</li>
+<li>Be idempotent: re-running the extractor on a row already migrated
+must produce the same target UUID (no duplicate inserts)</li>
+<li>Support resumability: if extraction is interrupted, it must be
+possible to resume from the last committed batch</li>
+</ol>
+<p>Without a generator, every migration project implements this from
+scratch — inconsistently, untested, and often without idempotency.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>All migration code is derived from MAPPING blocks in
+<code>.ddd</code> files (ADR 20260217)</li>
+<li>CommandRepository is the mandated persistence path (ADR 20260120) —
+but the extractor is a read-only source-side component; it writes only
+to NATS, not to the target DB</li>
+<li>Cursor-based batching is mandatory over LIMIT/OFFSET to handle live
+tables without row drift</li>
+<li>Idempotency via UUIDv5 with namespace UUID from MAPPING
+<code>@uuid</code> + legacy PK string (ADR 20260217)</li>
+<li>The generated extractor binary must be standalone — it runs against
+the legacy DB without the full Muscovite stack</li>
+<li>NatsMessageBroker from <code>framework/dba/</code> is the mandated
+NATS client — no new clients created</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Generated standalone C++ binary per context</strong> — one
+<code>{context}-extractor</code> binary that handles all MAPPING blocks
+in that context; configured via INI/env vars</li>
+<li><strong>Generated library + shared bootstrap main</strong> —
+generator emits only the per-entity extraction logic as functions; a
+common main() from the framework wires them together</li>
+<li><strong>Racket CLI tool (no C++ generation)</strong> — an
+interpreted Racket script using the <code>db</code> library reads legacy
+DB and publishes to NATS</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Generated standalone C++ binary per
+context</strong>, because:</p>
+<ul>
+<li>Deployed independently of the main application (extraction runs
+before the target stack is live)</li>
+<li>Compiles against the same Conan toolchain — no runtime interpreter
+dependency on migration host</li>
+<li>Follows generator patterns established by domain service
+generators</li>
+<li>One binary per context maps cleanly to one NATS stream per
+context</li>
+</ul>
+<p>The generator emits a CMake executable target
+<code>{context}-extractor</code> alongside the existing DBA targets.</p>
+<h3 id="generated-file-structure">Generated File Structure</h3>
+<pre><code>generated/
+└── migration/
+    ├── include/{project}/migration/{context}/
+    │   ├── {entity}_extractor.hpp      # Per-entity extraction class
+    │   └── {entity}_envelope.hpp       # Typed JSON envelope struct + serializers
+    ├── src/{context}/
+    │   ├── {entity}_extractor.cpp
+    │   └── {context}_extractor_main.cpp  # main() — connects, iterates MAPPING blocks
+    └── CMakeLists.txt</code></pre>
+<h3 id="cursor-based-batching-strategy">Cursor-Based Batching
+Strategy</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated pattern for LegacyPatientImport</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PatientExtractor<span class="op">::</span>extract<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                NatsMessageBroker<span class="op">&amp;</span> nats<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">const</span> ExtractionConfig<span class="op">&amp;</span> cfg<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    pqxx<span class="op">::</span>nontransaction txn<span class="op">(</span>conn<span class="op">);</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Declare server-side cursor — stable across batches</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    txn<span class="op">.</span>exec<span class="op">(</span>fmt<span class="op">::</span>format<span class="op">(</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;DECLARE migration_cursor_</span><span class="sc">{}</span><span class="st"> CURSOR FOR &quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SELECT patient_id, medical_num, first_name, email_addr, last_visit, balance &quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;FROM legacy_ehr.patients&quot;</span><span class="op">,</span> cfg<span class="op">.</span>run_uuid<span class="op">));</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span><span class="kw">true</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> rows <span class="op">=</span> txn<span class="op">.</span>exec<span class="op">(</span>fmt<span class="op">::</span>format<span class="op">(</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;FETCH </span><span class="sc">{}</span><span class="st"> FROM migration_cursor_</span><span class="sc">{}</span><span class="st">&quot;</span><span class="op">,</span> cfg<span class="op">.</span>batch_size<span class="op">,</span> cfg<span class="op">.</span>run_uuid<span class="op">));</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>rows<span class="op">.</span>empty<span class="op">())</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> row <span class="op">:</span> rows<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">auto</span> envelope <span class="op">=</span> build_envelope<span class="op">(</span>row<span class="op">,</span> cfg<span class="op">);</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            nats<span class="op">.</span>publish<span class="op">(</span><span class="st">&quot;migration.extract.patient_care.patient&quot;</span><span class="op">,</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                         envelope<span class="op">.</span>to_json<span class="op">().</span>dump<span class="op">());</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    txn<span class="op">.</span>exec<span class="op">(</span>fmt<span class="op">::</span>format<span class="op">(</span><span class="st">&quot;CLOSE migration_cursor_</span><span class="sc">{}</span><span class="st">&quot;</span><span class="op">,</span> cfg<span class="op">.</span>run_uuid<span class="op">));</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="idempotency-via-uuidv5">Idempotency via UUIDv5</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Target UUID is deterministic: UUIDv5(mapping_namespace_uuid, legacy_pk_string)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// mapping_namespace_uuid comes from MAPPING @uuid annotation</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">boost::</span>uuids::uuid target_id <span class="op">=</span> muscovite<span class="op">::</span>types<span class="op">::</span>uuid_v5<span class="op">(</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    mapping_namespace<span class="op">,</span>                   <span class="co">// from MAPPING @uuid &quot;a1b2c3d4-...&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    row<span class="op">[</span><span class="st">&quot;patient_id&quot;</span><span class="op">].</span>as<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;()</span>  <span class="co">// legacy PK as string seed</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div>
+<p>Re-running extraction never produces a different target UUID for the
+same source row.</p>
+<h3 id="nats-subject-and-stream-configuration">NATS Subject and Stream
+Configuration</h3>
+<ul>
+<li>Publish subject:
+<code>migration.extract.{sql_id(context)}.{sql_id(entity)}</code></li>
+<li>JetStream stream: <code>MIGRATION_{SQL_ID(context)}</code></li>
+<li>Message retention: <code>LimitsPolicy</code> with
+<code>MaxAge = 7 days</code> (configurable via INI)</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Migration code is 100% generated from MAPPING blocks — no
+hand-written extraction code</li>
+<li>Cursor-based batching is safe on live tables (no row drift between
+batches)</li>
+<li>Idempotency via UUIDv5 makes re-extraction safe — exactly-once
+semantics at the target</li>
+<li>Standalone binary: extraction can run before the target application
+is deployed</li>
+<li>Follows established DBA generator patterns — low cognitive overhead
+for contributors</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>C++ binary requires Conan/CMake build on the migration host</li>
+<li>Cursor lifetime is scoped to one connection — network interruption
+requires full cursor restart (resumability is batch-level, not
+row-level)</li>
+<li>Source is PostgreSQL-only in v1.30.0; MySQL/SQL Server sources need
+new generators</li>
+</ul>
+<h2 id="constraints">Constraints</h2>
+<ul>
+<li>Extractor MUST NOT write to the target database (ADR 20260120
+CommandRepository is transformer's job)</li>
+<li>Extractor MUST NOT use LIMIT/OFFSET pagination on production source
+tables</li>
+<li>Idempotency namespace UUID MUST come from MAPPING <code>@uuid</code>
+annotation — not generated at runtime</li>
+<li>Generated code MUST carry dual-license SPDX header</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20260217-brownfield-migration-factory-architecture.html">ADR
+20260217 — Brownfield Migration Factory Architecture</a></li>
+<li><a href="20260217-typed-json-envelope-migration-transport.html">ADR
+20260217 — Typed JSON Envelope for Migration Transport</a></li>
+<li><a href="20260217-mapping-dsl-block-brownfield-migration.html">ADR
+20260217 — MAPPING DSL Block</a></li>
+<li><a href="20260202-outbox-pattern-reliable-event-publishing.html">ADR
+20260202 — Outbox Pattern Reliable Event Publishing</a></li>
+<li><a href="20260120-domain-services-as-aggregate-boundary.html">ADR
+20260120 — Domain Services as Aggregate Boundary</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p>When implementing the extractor generator:</p>
+<ul>
+<li>New file:
+<code>dslgen/generators/cpp/migration-extractor.rkt</code></li>
+<li>Follow patterns from
+<code>dslgen/generators/cpp/dba/command-repository.rkt</code> for pqxx
+query generation</li>
+<li>MAPPING block IR: <code>(bounded-context-mappings context)</code>
+returns list of <code>mapping</code> structs</li>
+<li>For each mapping: generate <code>{entity}_extractor.hpp/cpp</code>
+using <code>(mapping-source-table m)</code>,
+<code>(mapping-fields m)</code>, <code>(mapping-uuid m)</code> for
+namespace</li>
+<li>Cursor name: <code>"migration_cursor_" + run_uuid_env_var</code> —
+use <code>getenv("MIGRATION_RUN_UUID")</code> or generate at
+startup</li>
+<li>NatsMessageBroker: include
+<code>framework/dba/include/muscovite/dba/nats_message_broker.hpp</code></li>
+<li>CMake target: emit
+<code>add_executable({context}-extractor ...)</code> in
+migration/CMakeLists.txt</li>
+<li>Test: generator test verifying SQL cursor DECLARE statement is
+emitted with correct table name from MAPPING SOURCE</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

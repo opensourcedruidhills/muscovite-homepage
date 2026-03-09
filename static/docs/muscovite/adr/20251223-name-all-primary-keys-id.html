@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name All Primary Keys "id" — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Name All Primary Keys "id"</span>
+</nav>
+
+<h1>Name All Primary Keys "id"</h1>
+
+
+<h1 id="name-all-primary-keys-id">Name All Primary Keys "id"</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Database architects, API designers</li>
+<li>Date: 2024-06-15</li>
+<li>Tags: postgresql, schema, naming, api</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Entity primary keys need consistent naming across the entire stack:
+DSL definitions, PostgreSQL schemas, PL/pgSQL APIs, C++ entities, gRPC
+protos, and Qt models. What naming convention should we use for primary
+keys?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Consistency across all generated code targets</li>
+<li>Simplifies generic repository patterns</li>
+<li>Reduces cognitive load when working across layers</li>
+<li>FK naming becomes predictable (<code>&lt;table&gt;_id</code>)</li>
+<li>Aligns with common ORM conventions</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Always name primary key <code>id</code></li>
+<li>Use <code>&lt;entity&gt;_id</code> pattern (e.g.,
+<code>sample_id</code>, <code>mineral_id</code>)</li>
+<li>Allow custom names per entity</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Always name primary key <code>id</code>", because it
+provides maximum consistency across all targets and simplifies generic
+code patterns.</p>
+<p><strong>Strict Convention</strong>:</p>
+<ul>
+<li>Entity declaration: <code>ENTITY Sample IDENTIFIED_BY id</code></li>
+<li>Field declaration: <code>id UUID NOT NULL</code></li>
+<li>PostgreSQL column:
+<code>id UUID PRIMARY KEY DEFAULT gen_random_uuid()</code></li>
+<li>API parameters: <code>p_id UUID</code> for select/update/delete
+operations</li>
+<li>FK columns: <code>&lt;referenced_table&gt;_id</code> (e.g.,
+<code>sample_id</code> references <code>sample.id</code>)</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Completely predictable naming across all layers</li>
+<li>Generic repository methods work without configuration</li>
+<li>FK naming is unambiguous: <code>locality_id</code> →
+<code>locality.id</code></li>
+<li>Simplified code generation templates</li>
+<li>Easy to teach and remember</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Less descriptive in complex queries (must use table alias)</li>
+<li>Self-referential FKs need special handling
+(<code>parent_id</code>)</li>
+<li>TPT inheritance uses same <code>id</code> for shared PK</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="always-id">Always "id"</h3>
+<ul>
+<li>Good, because maximum consistency</li>
+<li>Good, because simple generic patterns</li>
+<li>Good, because FK naming is predictable</li>
+<li>Good, because matches Rails/Django conventions</li>
+<li>Bad, because ambiguous in JOIN queries</li>
+<li>Bad, because self-referential FKs need exceptions</li>
+</ul>
+<h3 id="entity-prefixed-id-eg-sample_id">Entity-prefixed id (e.g.,
+sample_id)</h3>
+<ul>
+<li>Good, because self-documenting in queries</li>
+<li>Good, because no ambiguity in JOINs</li>
+<li>Bad, because FK naming becomes <code>sample_sample_id</code> or
+inconsistent</li>
+<li>Bad, because harder to write generic code</li>
+<li>Bad, because longer names everywhere</li>
+</ul>
+<h3 id="custom-names-per-entity">Custom names per entity</h3>
+<ul>
+<li>Good, because maximum flexibility</li>
+<li>Good, because can match legacy schemas</li>
+<li>Bad, because no predictability</li>
+<li>Bad, because generators need per-entity configuration</li>
+<li>Bad, because cognitive overhead</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: FK column naming convention</li>
+<li>Related: TPT inheritance pattern</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>ALL entity primary key definitions in DSL</li>
+<li>ALL generated PostgreSQL CREATE TABLE statements</li>
+<li>ALL generated PL/pgSQL API function signatures</li>
+<li>ALL generated C++ entity classes</li>
+<li>ALL generated gRPC proto messages</li>
+<li>ALL generated Qt model classes</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Junction tables for M:N relationships (use composite PK)</li>
+<li>Legacy schema integrations (may need mapping layer)</li>
+<li>Third-party API integrations (map at boundary)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>DSL parser validates <code>IDENTIFIED_BY id</code> pattern</li>
+<li>Generators assume PK is named <code>id</code></li>
+<li>pgTAP tests verify column existence</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/parser/parser.rkt</code> - Validates entity
+definitions</li>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> - DDL
+generation</li>
+<li><code>src/dslgen/generators/postgres/plpgsql-api.rkt</code> - API
+p_id parameters</li>
+<li><code>.github/copilot-instructions.md</code> - Documents this
+rule</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

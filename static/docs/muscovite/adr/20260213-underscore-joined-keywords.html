@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underscore-Joined Keywords — No Whitespace in DSL
+Keywords — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Underscore-Joined Keywords — No Whitespace in DSL
+Keywords</span>
+</nav>
+
+<h1>Underscore-Joined Keywords — No Whitespace in DSL Keywords</h1>
+
+
+<h1
+id="underscore-joined-keywords--no-whitespace-in-dsl-keywords">Underscore-Joined
+Keywords — No Whitespace in DSL Keywords</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-13</li>
+<li>Tags: grammar, dsl, lexer, keywords, breaking-change</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's DSL has <strong>17 multi-word keyword sequences</strong>
+where two or more space-separated tokens form a single syntactic
+construct:</p>
+<table>
+<thead>
+<tr>
+<th>Current Syntax</th>
+<th>Grammar Rule</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VALUE_OBJECT</code></td>
+<td><code>ValueObject</code></td>
+<td>Construct keyword</td>
+</tr>
+<tr>
+<td><code>STRONG_TYPE</code></td>
+<td><code>StrongType</code></td>
+<td>Construct keyword</td>
+</tr>
+<tr>
+<td><code>LOOKUP_TABLE</code></td>
+<td><code>LookupTable</code></td>
+<td>Construct keyword</td>
+</tr>
+<tr>
+<td><code>SOURCED_EVENT</code></td>
+<td><code>SourcedEvent</code></td>
+<td>Construct keyword</td>
+</tr>
+<tr>
+<td><code>EVENT_SOURCED</code></td>
+<td><code>EventSourcedClause</code></td>
+<td>Modifier keyword</td>
+</tr>
+<tr>
+<td><code>NOT NULL</code></td>
+<td><code>NullClause</code></td>
+<td>Constraint clause</td>
+</tr>
+<tr>
+<td><code>IDENTIFIED_BY</code></td>
+<td><code>Entity</code></td>
+<td>Entity clause</td>
+</tr>
+<tr>
+<td><code>BASED_ON</code></td>
+<td><code>StrongType</code></td>
+<td>Strong type clause</td>
+</tr>
+<tr>
+<td><code>APPLIES_TO</code></td>
+<td><code>SourcedEvent</code></td>
+<td>Event clause</td>
+</tr>
+<tr>
+<td><code>TRIGGERED_BY</code></td>
+<td><code>Saga</code></td>
+<td>Saga clause</td>
+</tr>
+<tr>
+<td><code>CORRELATE_BY</code></td>
+<td><code>CorrelateClause</code></td>
+<td>Saga clause</td>
+</tr>
+<tr>
+<td><code>COMPENSATES_WITH</code></td>
+<td><code>CompensatesClause</code></td>
+<td>Saga clause</td>
+</tr>
+<tr>
+<td><code>SEED_JSON</code></td>
+<td><code>LookupTable</code></td>
+<td>Data clause</td>
+</tr>
+<tr>
+<td><code>IMPORT_JSON</code></td>
+<td><code>Import</code></td>
+<td>Data clause</td>
+</tr>
+<tr>
+<td><code>NATURAL_KEY</code></td>
+<td><code>NaturalKeyClause</code></td>
+<td>Value object clause</td>
+</tr>
+<tr>
+<td><code>POSITIVE_INTEGER</code></td>
+<td><code>BaseType</code></td>
+<td>Type keyword</td>
+</tr>
+<tr>
+<td><code>POSITIVE_INT</code></td>
+<td><code>BaseType</code></td>
+<td>Type keyword</td>
+</tr>
+</tbody>
+</table>
+<p>This creates several concrete problems:</p>
+<ol type="1">
+<li><p><strong>Lexer complexity</strong>: The tokenizer must handle
+ambiguous lookahead — <code>VALUE</code> could be a standalone
+identifier or the start of <code>VALUE_OBJECT</code>. Similarly,
+<code>EVENT</code> is both a construct keyword
+(<code>EVENT PatientCreated</code>) and part of
+<code>SOURCED_EVENT</code> and <code>EVENT_SOURCED</code>.</p></li>
+<li><p><strong>Construct-map derivation</strong>: The DSL reference
+generator (<code>dslgen/tools/generate-dsl-reference.rkt</code>)
+maintains a hardcoded 24-entry <code>construct-map</code> because
+construct keywords cannot be derived from grammar rule names —
+<code>ValueObject</code> maps to the two-token sequence
+<code>VALUE_OBJECT</code>, not a single keyword. This mapping must be
+manually synced.</p></li>
+<li><p><strong>Example extraction</strong>: The generator extracts
+examples from <code>.ddd</code> files by matching construct keywords.
+Two-token keywords require special-case handling with fallback logic
+(e.g., <code>LOOKUP_TABLE</code> needs a regex that spans
+whitespace).</p></li>
+<li><p><strong>Parser fragility</strong>: The recursive descent parser
+needs explicit two-token lookahead to distinguish <code>EVENT</code>
+(domain event) from <code>SOURCED_EVENT</code> (sourced event) and
+<code>EVENT_SOURCED</code> (aggregate modifier). This is a known source
+of parse ambiguity.</p></li>
+<li><p><strong>AI generation</strong>: LLMs generating <code>.ddd</code>
+files sometimes split multi-word keywords across lines or insert extra
+whitespace, producing parse failures.</p></li>
+</ol>
+<p>Meanwhile, the grammar already uses underscore-joined tokens for
+relationship types (<code>CUSTOMER_SUPPLIER</code>,
+<code>SHARED_KERNEL</code>, <code>ANTICORRUPTION_LAYER</code>,
+<code>OPEN_HOST_SERVICE</code>, <code>PUBLISHED_LANGUAGE</code>,
+<code>SEPARATE_WAYS</code>), compute timing
+(<code>INSERT_OR_UPDATE</code>), and data formats
+(<code>JSON_SCHEMA</code>, <code>XML_SCHEMA</code>). There is no
+consistent convention.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>C/C++ macro convention</strong>: Underscore-joined
+identifiers are the universal convention for multi-word constants in C,
+C++, and preprocessor macros — the primary target languages of
+Muscovite's generated output</li>
+<li><strong>Lexer simplification</strong>: Single-token keywords
+eliminate lookahead ambiguity — every keyword is one token,
+unambiguously</li>
+<li><strong>Self-describing documentation</strong>: If every construct
+keyword is a single token, the <code>construct-map</code> in the DSL
+reference generator becomes derivable from grammar rule names rather
+than hardcoded</li>
+<li><strong>Grammar-first evolution</strong> (ADR 20260211): Simpler
+grammar rules when keywords are atomic tokens</li>
+<li><strong>Consistency</strong>: Half the multi-word concepts already
+use underscores; the other half use spaces — pick one convention</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-underscore-joined-keywords-strict-policy">Option 1:
+Underscore-Joined Keywords (strict policy)</h3>
+<p>All DSL keywords become single underscore-joined tokens:</p>
+<pre class="ddd"><code>-- Before
+VALUE_OBJECT Address @inline @uuid &quot;...&quot; ( ... )
+STRONG_TYPE Email BASED_ON TEXT @uuid &quot;...&quot;
+LOOKUP_TABLE Status @uuid &quot;...&quot; SEED_JSON &quot;...&quot;
+SOURCED_EVENT PatientRegistered @uuid &quot;...&quot; ( ... ) APPLIES_TO Patient
+ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id ( id UUID NOT NULL )
+SAGA Fulfillment @uuid &quot;...&quot; TRIGGERED_BY OrderPlaced CORRELATE_BY order_id { ... }
+
+-- After (17 replacements)
+VALUE_OBJECT Address @inline @uuid &quot;...&quot; ( ... )
+STRONG_TYPE Email BASED_ON TEXT @uuid &quot;...&quot;
+LOOKUP_TABLE Status @uuid &quot;...&quot; SEED_JSON &quot;...&quot;
+SOURCED_EVENT PatientRegistered @uuid &quot;...&quot; ( ... ) APPLIES_TO Patient
+ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id ( id UUID NOT_NULL )
+SAGA Fulfillment @uuid &quot;...&quot; TRIGGERED_BY OrderPlaced CORRELATE_BY order_id { ... }</code></pre>
+<h3 id="option-2-keep-current-mixed-convention">Option 2: Keep Current
+Mixed Convention</h3>
+<p>Leave multi-word keywords as-is. Accept the lexer complexity and
+hardcoded construct-map as acceptable trade-offs.</p>
+<h3 id="option-3-merge-to-single-words-no-separator">Option 3: Merge to
+Single Words (no separator)</h3>
+<p><code>VALUEOBJECT</code>, <code>STRONGTYPE</code>,
+<code>LOOKUPTABLE</code> — readable for short combinations but degrades
+for longer ones (<code>COMPENSATESWITH</code>,
+<code>IDENTIFIEDBY</code>).</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Underscore-Joined
+Keywords</strong>, because it applies a single consistent convention
+that already exists in the grammar (relationship types, compute timing,
+data formats), follows C/C++ naming tradition, and eliminates an entire
+class of lexer/parser complexity.</p>
+<h3 id="strict-policy">Strict Policy</h3>
+<p><strong>All DSL keywords MUST be single tokens.</strong> The
+underscore <code>_</code> is the word separator for multi-word keywords.
+No exceptions.</p>
+<h3 id="complete-migration-table">Complete Migration Table</h3>
+<table>
+<thead>
+<tr>
+<th>Before</th>
+<th>After</th>
+<th>Grammar Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VALUE_OBJECT</code></td>
+<td><code>VALUE_OBJECT</code></td>
+<td><code>ValueObject</code></td>
+</tr>
+<tr>
+<td><code>STRONG_TYPE</code></td>
+<td><code>STRONG_TYPE</code></td>
+<td><code>StrongType</code></td>
+</tr>
+<tr>
+<td><code>LOOKUP_TABLE</code></td>
+<td><code>LOOKUP_TABLE</code></td>
+<td><code>LookupTable</code></td>
+</tr>
+<tr>
+<td><code>SOURCED_EVENT</code></td>
+<td><code>SOURCED_EVENT</code></td>
+<td><code>SourcedEvent</code></td>
+</tr>
+<tr>
+<td><code>EVENT_SOURCED</code></td>
+<td><code>EVENT_SOURCED</code></td>
+<td><code>EventSourcedClause</code></td>
+</tr>
+<tr>
+<td><code>NOT NULL</code></td>
+<td><code>NOT_NULL</code></td>
+<td><code>NullClause</code></td>
+</tr>
+<tr>
+<td><code>IDENTIFIED_BY</code></td>
+<td><code>IDENTIFIED_BY</code></td>
+<td><code>Entity</code></td>
+</tr>
+<tr>
+<td><code>BASED_ON</code></td>
+<td><code>BASED_ON</code></td>
+<td><code>StrongType</code></td>
+</tr>
+<tr>
+<td><code>APPLIES_TO</code></td>
+<td><code>APPLIES_TO</code></td>
+<td><code>SourcedEvent</code></td>
+</tr>
+<tr>
+<td><code>TRIGGERED_BY</code></td>
+<td><code>TRIGGERED_BY</code></td>
+<td><code>Saga</code></td>
+</tr>
+<tr>
+<td><code>CORRELATE_BY</code></td>
+<td><code>CORRELATE_BY</code></td>
+<td><code>CorrelateClause</code></td>
+</tr>
+<tr>
+<td><code>COMPENSATES_WITH</code></td>
+<td><code>COMPENSATES_WITH</code></td>
+<td><code>CompensatesClause</code></td>
+</tr>
+<tr>
+<td><code>SEED_JSON</code></td>
+<td><code>SEED_JSON</code></td>
+<td><code>LookupTable</code></td>
+</tr>
+<tr>
+<td><code>IMPORT_JSON</code></td>
+<td><code>IMPORT_JSON</code></td>
+<td><code>Import</code></td>
+</tr>
+<tr>
+<td><code>NATURAL_KEY</code></td>
+<td><code>NATURAL_KEY</code></td>
+<td><code>NaturalKeyClause</code></td>
+</tr>
+<tr>
+<td><code>POSITIVE_INTEGER</code></td>
+<td><code>POSITIVE_INTEGER</code></td>
+<td><code>BaseType</code></td>
+</tr>
+<tr>
+<td><code>POSITIVE_INT</code></td>
+<td><code>POSITIVE_INT</code></td>
+<td><code>BaseType</code></td>
+</tr>
+</tbody>
+</table>
+<h3
+id="implementation-order-grammar-first-per-adr-20260211">Implementation
+Order (Grammar-First per ADR 20260211)</h3>
+<pre><code>1. GRAMMAR    →  Replace all multi-word terminals with underscore-joined tokens
+2. VERSION    →  Bump grammar to v1.2.0 (breaking change)
+3. LEXER      →  Update keyword token list in lexer.rkt
+4. PARSER     →  Simplify lookahead — remove two-token matching
+5. MIGRATION  →  Batch-rename all .ddd files (sed/Racket script)
+6. GENERATOR  →  Simplify construct-map derivation, example extraction
+7. TESTS      →  Update grammar conformance, parser tests, generator tests
+8. DOCS       →  Regenerate DSL.md (self-updating — picks up automatically)</code></pre>
+<h3 id="migration-tooling">Migration Tooling</h3>
+<p>A batch migration script MUST be provided to transform existing
+<code>.ddd</code> files:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pseudocode — exact tool </span><span class="al">TBD</span><span class="co"> (sed, Racket, or Python)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="va">$(</span><span class="fu">find</span> examples/ <span class="at">-name</span> <span class="st">&quot;*.ddd&quot;</span><span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="at">-i</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/VALUE_OBJECT/VALUE_OBJECT/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/STRONG_TYPE/STRONG_TYPE/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/LOOKUP_TABLE/LOOKUP_TABLE/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/SOURCED_EVENT/SOURCED_EVENT/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/EVENT_SOURCED/EVENT_SOURCED/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/NOT NULL/NOT_NULL/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/IDENTIFIED_BY/IDENTIFIED_BY/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/BASED_ON/BASED_ON/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/APPLIES_TO/APPLIES_TO/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/TRIGGERED_BY/TRIGGERED_BY/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/CORRELATE_BY/CORRELATE_BY/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/COMPENSATES_WITH/COMPENSATES_WITH/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/SEED_JSON/SEED_JSON/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/IMPORT_JSON/IMPORT_JSON/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/NATURAL_KEY/NATURAL_KEY/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/POSITIVE_INTEGER/POSITIVE_INTEGER/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">-e</span> <span class="st">&#39;s/POSITIVE_INT/POSITIVE_INT/g&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="va">$file</span><span class="st">&quot;</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<p><strong>Note</strong>: Order matters — <code>POSITIVE_INTEGER</code>
+must be replaced before <code>POSITIVE_INT</code> to avoid partial
+matches. Similarly, <code>BASED_ON</code> must not be confused with
+standalone <code>ON</code> in other contexts. The migration script must
+handle these correctly.</p>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li><strong>Lexer simplification</strong>: Every keyword is a single
+token — no lookahead, no ambiguity</li>
+<li><strong>Derivable construct-map</strong>: DSL reference generator
+can derive keyword↔︎rule mapping from grammar rule names (e.g.,
+<code>ValueObject</code> → <code>VALUE_OBJECT</code>) instead of
+hardcoding 24 entries</li>
+<li><strong>Simpler example extraction</strong>: Single-token keyword
+matching replaces multi-token regex with fallback logic</li>
+<li><strong>AI-friendlier</strong>: LLMs can't accidentally split
+keywords across lines</li>
+<li><strong>Consistent convention</strong>: All keywords follow one rule
+— the same one used by C/C++ macros and the existing underscore-joined
+tokens in the grammar</li>
+<li><strong>Parser simplification</strong>: No more <code>EVENT</code>
+vs <code>SOURCED_EVENT</code> vs <code>EVENT_SOURCED</code>
+disambiguation</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li><strong>Breaking change</strong>: All existing <code>.ddd</code>
+files (45 files, ~18K lines) must be migrated</li>
+<li><strong>Visual density</strong>: <code>IDENTIFIED_BY</code> is
+arguably less readable than <code>IDENTIFIED_BY</code> —
+underscore-joined keywords look more "code-like" than "prose-like"</li>
+<li><strong>Migration risk</strong>: <code>sed</code>-based replacement
+could have edge cases in string literals or comments containing these
+keyword sequences</li>
+<li><strong>Readability trade-off</strong>: The DSL moves slightly
+further from natural language toward programming language syntax</li>
+</ul>
+<h2 id="future-evolution">Future Evolution</h2>
+<p>Once all keywords are single tokens:</p>
+<ol type="1">
+<li><strong>Construct-map derivation</strong>: The
+<code>construct-map</code> in the DSL reference generator becomes a
+simple <code>PascalCase-to-UPPER_SNAKE_CASE</code> conversion — no
+hardcoded list needed</li>
+<li><strong>Grammar-to-parser generation</strong> (ADR 20260211, Option
+3): Single-token keywords are a prerequisite for machine-generated
+parsers from PEG grammars</li>
+<li><strong>Language Server Protocol</strong>: Single-token keywords
+simplify completion, highlighting, and hover documentation in editor
+extensions</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related <a href="20260211-grammar-first-language-evolution.html">ADR
+20260211 Grammar-First Language Evolution</a> — grammar-first process
+this change follows</li>
+<li>Related <a href="20260212-compile-time-lookup-constants.html">ADR
+20260212 Compile-Time Lookup Constants</a> — uses C/C++ naming
+convention</li>
+<li>Grammar file: <code>dslgen/grammar/muscovite.peg</code> (v1.1.0 →
+v1.2.0)</li>
+<li>Lexer: <code>dslgen/parser/lexer.rkt</code></li>
+<li>DSL reference generator:
+<code>dslgen/tools/generate-dsl-reference.rkt</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Writing or modifying any <code>.ddd</code> file</li>
+<li>Adding new DSL keywords to the grammar</li>
+<li>Updating the parser or lexer</li>
+<li>Generating <code>.ddd</code> files from brownfield systems</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><strong>New keywords</strong>: MUST be single underscore-joined
+tokens (e.g., <code>BASED_ON</code>, not <code>BASED_ON</code>)</li>
+<li><strong>Grammar validation</strong>:
+<code>racket tests/test-grammar-conformance.rkt</code> validates all
+keywords are single tokens</li>
+<li><strong>Migration</strong>: Use the batch migration script — never
+manually rename keywords in <code>.ddd</code> files</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — PEG grammar (all
+terminals must be single tokens after migration)</li>
+<li><code>dslgen/parser/lexer.rkt</code> — keyword token list (updated
+to match)</li>
+<li><code>dslgen/parser/parser.rkt</code> — simplified lookahead after
+migration</li>
+<li><code>dslgen/tools/generate-dsl-reference.rkt</code> — construct-map
+derivation simplified</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

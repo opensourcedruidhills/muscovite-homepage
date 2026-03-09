@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Behavioral Sovereignty Roadmap — From Anemic to Rich Domain
+Model — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Behavioral Sovereignty Roadmap — From Anemic to Rich Domain
+Model</span>
+</nav>
+
+<h1>Behavioral Sovereignty Roadmap — From Anemic to Rich Domain
+Model</h1>
+
+
+<h1
+id="behavioral-sovereignty-roadmap--from-anemic-to-rich-domain-model">Behavioral
+Sovereignty Roadmap — From Anemic to Rich Domain Model</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-03-07</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Tags: roadmap, behavioral-sovereignty, rich-domain-model</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Muscovite currently delivers <strong>Structural Sovereignty</strong>
+(types, relations, persistence) and <strong>State Sovereignty</strong>
+(bitemporality, sagas, state machines). Business logic remains in
+manually-implemented sidecar stubs or opaque DomainService methods.</p>
+<p>This ADR establishes the roadmap for <strong>Behavioral
+Sovereignty</strong> — moving business logic into the DSL so it can
+be:</p>
+<ul>
+<li>Parsed and validated at compile time</li>
+<li>Generated across all targets (C++, SQL, docs, tests)</li>
+<li>Visualized in system documentation</li>
+<li>Fuzz-tested via property-based test generation</li>
+<li>Reasoned about by AI agents working with the codebase</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p>Behavioral Sovereignty is delivered across four iterations, each
+independently releasable:</p>
+<h3 id="v1600--collection-predicates-tier-1-expression-language">v1.60.0
+— Collection Predicates (Tier 1 Expression Language)</h3>
+<p><strong>Extends the predicate language</strong> with collection
+operations. Every REQUIRES and WHERE clause becomes dramatically more
+expressive.</p>
+<p>New expression nodes:</p>
+<ul>
+<li><code>NOT IN</code>, <code>IS EMPTY</code>,
+<code>IS NOT EMPTY</code></li>
+<li><code>INTERSECTS</code>, <code>SUBSET OF</code>,
+<code>CONTAINS ALL</code></li>
+<li><code>CONTAINS(list, value)</code></li>
+</ul>
+<p>Depends on: v1.55.0 (DomainService exists as generation target)</p>
+<h3
+id="v1610--effect-catalog--emitplan--computation-language-tier-2">v1.61.0
+— EFFECT Catalog + EMIT/PLAN + Computation Language (Tier 2)</h3>
+<p><strong>Introduces behavioral constructs</strong> and the computation
+language needed to express them.</p>
+<p>New DSL constructs:</p>
+<ul>
+<li><code>EFFECT</code> top-level construct (side effect
+declarations)</li>
+<li><code>EMIT</code>/<code>PLAN</code> intent separation in
+COMMAND</li>
+<li><code>DECIDE</code> block on COMMAND (optional, pure logic
+body)</li>
+<li><code>ENSURES</code> postcondition clause</li>
+</ul>
+<p>New expression nodes:</p>
+<ul>
+<li><code>IF cond THEN expr ELSE expr</code></li>
+<li><code>LET name = expr IN body</code></li>
+<li><code>MATCH field { CASE val =&gt; expr }</code></li>
+</ul>
+<p>Depends on: v1.60.0 (collection predicates for REQUIRES/ENSURES)</p>
+<h3
+id="v1620--list-comprehensions--complex-business-logic-tier-3">v1.62.0 —
+List Comprehensions + Complex Business Logic (Tier 3)</h3>
+<p><strong>Completes the functional expression language.</strong>
+Enables complex calculations like booking price computation, dynamic
+packaging, amendment/cancellation logic.</p>
+<p>New expression nodes:</p>
+<ul>
+<li><code>MAP(list, var -&gt; expr)</code></li>
+<li><code>FILTER(list, var -&gt; expr)</code></li>
+<li><code>REDUCE(list, init, acc var -&gt; expr)</code></li>
+<li>Built-in aggregations: <code>SUM</code>, <code>COUNT</code>,
+<code>MIN</code>, <code>MAX</code>, <code>AVG</code></li>
+</ul>
+<p>Depends on: v1.61.0 (LET bindings for intermediate results)</p>
+<h3
+id="v1630--property-based-test-generation--doc-visualization">v1.63.0 —
+Property-Based Test Generation + Doc Visualization</h3>
+<p><strong>Exploits the rich domain model</strong> for automated quality
+assurance and documentation.</p>
+<ul>
+<li>Property-based test generator: fuzz DECIDE inputs, verify
+ENSURES</li>
+<li>Mermaid/PlantUML decision flow diagrams from DECIDE blocks</li>
+<li>System manual "Business Logic" chapter generation</li>
+<li>Test coverage reporting for DECIDE branch paths</li>
+</ul>
+<p>Depends on: v1.62.0 (full expression language)</p>
+<h2 id="versioning-note">Versioning Note</h2>
+<p>These versions follow v1.55.0–v1.59.0 (Domain Layer initiative +
+Stabilization sprints). The Domain Layer provides the DomainService
+generation target and three-tier validation pipeline that Behavioral
+Sovereignty builds upon. Stabilization sprints (v1.55.1–v1.55.2) ensure
+test infrastructure is solid before new feature development.</p>
+<pre><code>v1.54.0  Field constraints, strong type annotations
+v1.55.0  DomainService, EntityValidator, PluginValidator, thin controllers
+v1.55.1  STABILIZATION: Governance gates + golden-file regression tests
+v1.55.2  STABILIZATION: Retroactive test coverage for shipped generators
+v1.58.0  Cross-field invariants → EntityValidator codegen
+v1.59.0  Frontend validation symmetry (Qt Widgets + QML)
+v1.60.0  Collection predicates (Tier 1 expressions)          ← Behavioral Sovereignty starts
+v1.61.0  EFFECT/DECIDE/ENSURES + computation language (Tier 2)
+v1.62.0  List comprehensions + complex business logic (Tier 3)
+v1.63.0  Property-based tests + doc visualization</code></pre>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li><code>.ddd</code> amplification ratio will increase significantly
+(behavioral logic → generated C++ + SQL + tests + docs)</li>
+<li>Commands with DECIDE blocks eliminate the need for sidecar stubs
+(fewer manual files)</li>
+<li>The expression language becomes Muscovite's most complex subsystem —
+needs thorough testing</li>
+<li>AI agents can reason about and modify business logic at the DSL
+level</li>
+<li>Backward compatibility preserved: DECIDE is optional, existing
+commands unchanged</li>
+<li>Each iteration is independently valuable — partial delivery still
+improves the system</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

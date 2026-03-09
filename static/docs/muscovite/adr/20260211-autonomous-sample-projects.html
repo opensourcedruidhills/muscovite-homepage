@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Projects Must Be Fully
+Autonomous — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Sample Projects Must Be Fully Autonomous</span>
+</nav>
+
+<h1>Sample Projects Must Be Fully Autonomous</h1>
+
+
+<h1 id="sample-projects-must-be-fully-autonomous">Sample Projects Must
+Be Fully Autonomous</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: examples, infrastructure, docker, build</li>
+</ul>
+<p>Technical Story: Sample projects (hello-world, fhir-health,
+geosciences) must be self-contained repositories that treat Muscovite as
+an external dependency and manage their own infrastructure.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite sample projects currently live in separate git repositories
+added as submodules under <code>examples/</code>. However, there is no
+formal policy on how autonomous these projects must be. Questions
+arise:</p>
+<ul>
+<li>Can they rely on the root Muscovite <code>docker-compose.yml</code>
+for PostgreSQL?</li>
+<li>Can they assume the Muscovite framework is already built
+locally?</li>
+<li>Can they depend on Muscovite CI to validate them?</li>
+</ul>
+<p>Muscovite has no CI infrastructure and will not have one due to
+budget constraints. This means sample projects cannot rely on a parent
+CI pipeline to catch breakage. Each sample must be independently
+cloneable, buildable, and runnable by a user who has never seen the
+Muscovite monorepo.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>No Muscovite CI</strong>: No budget for CI — samples cannot
+rely on upstream validation</li>
+<li><strong>Onboarding</strong>: A new user should
+<code>git clone</code> a sample and have it working without cloning
+Muscovite itself</li>
+<li><strong>Reproducibility</strong>: Every sample must start from zero
+and produce a deterministic result</li>
+<li><strong>Template quality</strong>: Samples serve as copy-paste
+templates for new projects — they must model best practices for
+standalone Muscovite consumers</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Option 1</strong>: Fully autonomous — own Docker, own build,
+Muscovite as FetchContent/installed dependency</li>
+<li><strong>Option 2</strong>: Semi-autonomous — own build, but share
+Muscovite's Docker infrastructure</li>
+<li><strong>Option 3</strong>: Integrated — build as part of Muscovite's
+CMake tree, share everything</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Fully autonomous</strong>, because
+without CI there is no safety net for integration assumptions, and
+because samples must demonstrate the real-world consumer experience.</p>
+<h3 id="requirements-for-every-sample-project">Requirements for Every
+Sample Project</h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Own git repository</strong></td>
+<td>Hosted at <code>opensourcedruidhills/{name}-sample</code>, added as
+submodule under <code>examples/</code></td>
+</tr>
+<tr>
+<td><strong>Own <code>docker-compose.yml</code></strong></td>
+<td>Starts its own PostgreSQL container. Port configurable via
+<code>DB_PORT</code> env var with per-sample defaults (fhir=5556,
+geosciences=5557, hello-world=5558)</td>
+</tr>
+<tr>
+<td><strong>Own <code>conanfile.py</code> or
+<code>conanfile.txt</code></strong></td>
+<td>Declares all C++ dependencies independently</td>
+</tr>
+<tr>
+<td><strong>Own Conan profiles</strong></td>
+<td><code>conan_profiles/debug</code> and <code>release</code> with
+<code>compiler.cppstd=gnu23</code> + <code>compiler.cstd=17</code>
+(libpq is C, requires C17)</td>
+</tr>
+<tr>
+<td><strong>Own Python venv</strong></td>
+<td><code>python3 -m venv .venv</code> + <code>requirements.txt</code>
+pinning Conan version. No system-level Python dependencies</td>
+</tr>
+<tr>
+<td><strong>Own <code>CMakeLists.txt</code></strong></td>
+<td>Standalone build that uses <code>find_package(muscovite)</code> —
+never <code>add_subdirectory()</code> of Muscovite sources</td>
+</tr>
+<tr>
+<td><strong>Own <code>CMakePresets.json</code></strong></td>
+<td>Standard presets (debug, release) with no references to parent
+paths</td>
+</tr>
+<tr>
+<td><strong>Muscovite version pinned</strong></td>
+<td><code>MUSCOVITE_VERSION</code> file at repo root contains exact tag
+(e.g., <code>v1.18.0</code>). Used by
+<code>FetchContent_Declare(GIT_TAG ...)</code>. Updated during Muscovite
+release ceremony</td>
+</tr>
+<tr>
+<td><strong>Own <code>setup.sh</code></strong></td>
+<td>Full bootstrap: venv → Conan → Docker → Racket generate → CMake
+build → Sqitch deploy. One command from clone to running</td>
+</tr>
+<tr>
+<td><strong>Own Sqitch project</strong></td>
+<td>Self-contained migrations with own <code>sqitch.conf</code> and
+<code>sqitch.plan</code></td>
+</tr>
+<tr>
+<td><strong>Own README.md</strong></td>
+<td>Complete setup instructions: clone → <code>./setup.sh</code> → ctest
+— no "see Muscovite docs" for critical steps</td>
+</tr>
+<tr>
+<td><strong>Own seed data</strong></td>
+<td>All lookup table seeds included in the repository</td>
+</tr>
+</tbody>
+</table>
+<h3 id="release-ceremony-integration">Release Ceremony Integration</h3>
+<p>When Muscovite releases a new version (<code>vX.Y.Z</code>), the
+release script <strong>must</strong> update
+<code>MUSCOVITE_VERSION</code> in all sample submodules, commit, tag,
+and push. This is a mandatory release checklist item.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Any user can <code>git clone</code> + <code>docker compose up</code>
++ <code>cmake --build</code> without Muscovite source</li>
+<li>Samples prove that the framework packaging and install targets
+actually work</li>
+<li>No hidden coupling to monorepo structure</li>
+<li>Samples serve as realistic integration tests for the Muscovite
+install/export chain</li>
+<li>Each sample can evolve and tag releases independently</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Duplication of Docker config across samples (mitigated: it's ~20
+lines of YAML)</li>
+<li>Must keep <code>FetchContent</code> / Conan references in sync when
+Muscovite releases new versions</li>
+<li>Slightly more setup for contributors who work on multiple
+samples</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-fully-autonomous">Option 1: Fully Autonomous</h3>
+<ul>
+<li>Good, because zero assumptions about host environment</li>
+<li>Good, because proves real-world consumer experience works</li>
+<li>Good, because survives without CI</li>
+<li>Bad, because Docker config is duplicated across samples</li>
+</ul>
+<h3 id="option-2-semi-autonomous-shared-docker">Option 2:
+Semi-Autonomous (shared Docker)</h3>
+<ul>
+<li>Good, because less duplication</li>
+<li>Bad, because user must clone Muscovite monorepo to get Docker
+config</li>
+<li>Bad, because port conflicts when running multiple samples</li>
+</ul>
+<h3 id="option-3-integrated">Option 3: Integrated</h3>
+<ul>
+<li>Good, because simplest for monorepo developers</li>
+<li>Bad, because useless as a template — users can't replicate the
+build</li>
+<li>Bad, because hides packaging bugs (everything "just works" inside
+<code>add_subdirectory</code>)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Follows submodule pattern established by
+<code>fhir-health-sample</code> and <code>geosciences-sample</code></li>
+<li>Related: <a
+href="../../workflow/ideas/IDEA-014-hello-world-sample-project.html">IDEA-014
+Hello World Sample Project</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When creating any new sample/example project under
+<code>examples/</code></li>
+<li>When modifying an existing sample project's build or
+infrastructure</li>
+<li>When advising users on how to start a new Muscovite-based
+project</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Muscovite framework itself (<code>framework/</code>,
+<code>dslgen/</code>) — these are the monorepo</li>
+<li>Test fixtures in <code>tests/fixtures/</code> — these are internal
+test data, not standalone projects</li>
+<li><code>.ddd</code> files used only for parser/generator testing</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Code review on sample project PRs</li>
+<li>README.md in each sample must include full standalone setup
+instructions</li>
+<li><code>docker-compose.yml</code> must be present in each sample
+repository root</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>examples/*/docker-compose.yml</code> — per-sample Docker
+config</li>
+<li><code>examples/*/CMakeLists.txt</code> — standalone build with
+<code>find_package(muscovite)</code></li>
+<li><code>examples/*/CMakePresets.json</code> — self-contained
+presets</li>
+<li><code>examples/*/README.md</code> — complete setup walkthrough</li>
+<li><code>.gitmodules</code> — submodule registration</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

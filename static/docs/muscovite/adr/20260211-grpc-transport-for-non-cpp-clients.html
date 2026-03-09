@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gRPC as Primary Transport for Non-C++
+Clients — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>gRPC as Primary Transport for Non-C++ Clients</span>
+</nav>
+
+<h1>gRPC as Primary Transport for Non-C++ Clients</h1>
+
+
+<h1 id="grpc-as-primary-transport-for-non-c-clients">gRPC as Primary
+Transport for Non-C++ Clients</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: grpc, transport, integration, architecture, frontend</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's Qt frontends (Widgets, QML) link directly against the C++
+DBA layer — they share the same process and call repositories
+in-process. This works because Qt is C++.</p>
+<p>Non-C++ frontends (React/TypeScript, Kotlin, Swift, etc.) cannot link
+C++ directly. They need a network transport to the backend. The C++ gRPC
+server already exists and exposes all aggregate operations. The question
+is: <strong>should non-C++ clients use gRPC directly, or should we
+introduce additional transport layers?</strong></p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>gRPC server already exists and is generated from <code>.proto</code>
+contracts</li>
+<li><code>.proto</code> files are the canonical service definition
+(generated from IR)</li>
+<li>Streaming support needed for domain events (server → client
+push)</li>
+<li>Minimize infrastructure (no additional gateways if avoidable)</li>
+<li>Strong typing end-to-end (proto → generated client stubs)</li>
+<li>Multi-platform: mobile, desktop, web all have different transport
+constraints</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-direct-grpc-native-http2">Option 1: Direct gRPC (native
+HTTP/2)</h3>
+<p>Client uses official gRPC library for its language (e.g.,
+<code>grpc-web</code>, <code>grpc-kotlin</code>).</p>
+<pre><code>Non-C++ Client (mobile/desktop)
+        ↓ gRPC (HTTP/2)
+C++ gRPC Server
+        ↓
+PostgreSQL</code></pre>
+<h3 id="option-2-grpc-web-via-proxy">Option 2: gRPC-Web via Proxy</h3>
+<p>Browser-based clients use gRPC-Web protocol through a proxy (Envoy or
+grpcwebproxy) that translates to native gRPC.</p>
+<pre><code>Browser Client
+     ↓ gRPC-Web (HTTP/1.1 or HTTP/2)
+Proxy (Envoy / grpcwebproxy)
+     ↓ gRPC (HTTP/2)
+C++ gRPC Server</code></pre>
+<h3 id="option-3-restjson-gateway">Option 3: REST/JSON Gateway</h3>
+<p>Introduce a REST gateway (e.g., grpc-gateway) that translates
+HTTP/JSON to gRPC.</p>
+<pre><code>Client (HTTP/JSON)
+        ↓ REST
+REST Gateway
+        ↓ gRPC
+C++ gRPC Server</code></pre>
+<h3 id="option-4-native-c-bridge-via-ffi">Option 4: Native C++ Bridge
+via FFI</h3>
+<p>Embed a native C++ gRPC client into the frontend via platform
+channels or FFI.</p>
+<pre><code>Frontend UI
+   ↓ FFI / platform channel
+Native C++ Client Library
+   ↓ gRPC
+C++ gRPC Server</code></pre>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 (direct gRPC) as primary, with Option
+2 (gRPC-Web proxy) as conditional add-on for browser
+targets.</strong></p>
+<p>Options 3 and 4 rejected.</p>
+<h3 id="rationale">Rationale</h3>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Direct gRPC</th>
+<th>gRPC-Web</th>
+<th>REST Gateway</th>
+<th>Native Bridge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reuses existing <code>.proto</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️ needs annotations</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Streaming support</td>
+<td>✅ full</td>
+<td>⚠️ server-stream only</td>
+<td>❌ polling</td>
+<td>✅ full</td>
+</tr>
+<tr>
+<td>Infrastructure overhead</td>
+<td>None</td>
+<td>Proxy process</td>
+<td>Gateway process</td>
+<td>FFI complexity</td>
+</tr>
+<tr>
+<td>Type safety</td>
+<td>✅ generated stubs</td>
+<td>✅ generated stubs</td>
+<td>⚠️ JSON serialization</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Mobile/desktop</td>
+<td>✅ native</td>
+<td>N/A</td>
+<td>✅</td>
+<td>⚠️ per-platform</td>
+</tr>
+<tr>
+<td>Browser</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Generator complexity</td>
+<td>Low</td>
+<td>Low (proxy config)</td>
+<td>Medium (OpenAPI)</td>
+<td>High (FFI bindings)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why not REST?</strong> Introduces a translation layer that
+loses streaming, weakens typing, and requires maintaining OpenAPI
+annotations alongside proto. Contradicts "single contract"
+principle.</p>
+<p><strong>Why not FFI?</strong> Per-platform FFI binding is high
+maintenance. The gRPC server exists precisely to decouple clients from
+the C++ process.</p>
+<h3 id="architecture-rule">Architecture Rule</h3>
+<pre><code>C++ frontends (Qt Widgets, QML)     → Direct C++ (in-process DBA)
+Non-C++ frontends (future targets)  → gRPC (network, HTTP/2)
+Browser frontends (SPA)             → gRPC-Web (via proxy)</code></pre>
+<h3 id="grpc-web-proxy-conditional">gRPC-Web Proxy (Conditional)</h3>
+<p>Only generated when a browser target is enabled:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> ... <span class="at">--web</span></span></code></pre></div>
+<p>Generates:</p>
+<pre><code>deploy/
+  envoy.yaml    ← gRPC-Web proxy configuration</code></pre>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generated envoy.yaml</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">static_resources</span><span class="kw">:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">listeners</span><span class="kw">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">address</span><span class="kw">:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">socket_address</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">address</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.0.0.0</span><span class="kw">,</span><span class="at"> </span><span class="fu">port_value</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">filter_chains</span><span class="kw">:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">filters</span><span class="kw">:</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy.filters.network.http_connection_manager</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="fu">typed_config</span><span class="kw">:</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">&quot;@type&quot;</span><span class="kw">:</span><span class="at"> type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">codec_type</span><span class="kw">:</span><span class="at"> auto</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">stat_prefix</span><span class="kw">:</span><span class="at"> ingress_http</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">route_config</span><span class="kw">:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> local_route</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="fu">virtual_hosts</span><span class="kw">:</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="at">                    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> local_service</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">domains</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;*&quot;</span><span class="kw">]</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">routes</span><span class="kw">:</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="at">                        </span><span class="kw">-</span><span class="at"> </span><span class="fu">match</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;/&quot;</span><span class="at"> </span><span class="kw">}</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="at">                          </span><span class="fu">route</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">cluster</span><span class="kw">:</span><span class="at"> grpc_service </span><span class="kw">}</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">cors</span><span class="kw">:</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="at">                        </span><span class="fu">allow_origin_string_match</span><span class="kw">:</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="at">                          </span><span class="kw">-</span><span class="at"> </span><span class="fu">prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;*&quot;</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="at">                        </span><span class="fu">allow_methods</span><span class="kw">:</span><span class="at"> GET, PUT, DELETE, POST, OPTIONS</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="at">                        </span><span class="fu">allow_headers</span><span class="kw">:</span><span class="at"> keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-custom-header,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="at">                        </span><span class="fu">expose_headers</span><span class="kw">:</span><span class="at"> grpc-status,grpc-message</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="at">                </span><span class="fu">http_filters</span><span class="kw">:</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy.filters.http.grpc_web</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="at">                    </span><span class="fu">typed_config</span><span class="kw">:</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">&quot;@type&quot;</span><span class="kw">:</span><span class="at"> type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy.filters.http.cors</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="at">                    </span><span class="fu">typed_config</span><span class="kw">:</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">&quot;@type&quot;</span><span class="kw">:</span><span class="at"> type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> envoy.filters.http.router</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="at">                    </span><span class="fu">typed_config</span><span class="kw">:</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="at">                      </span><span class="fu">&quot;@type&quot;</span><span class="kw">:</span><span class="at"> type.googleapis.com/envoy.extensions.filters.http.router.v3.Router</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">clusters</span><span class="kw">:</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> grpc_service</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">type</span><span class="kw">:</span><span class="at"> logical_dns</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">lb_policy</span><span class="kw">:</span><span class="at"> round_robin</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">typed_extension_protocol_options</span><span class="kw">:</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">envoy.extensions.upstreams.http.v3.HttpProtocolOptions</span><span class="kw">:</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">&quot;@type&quot;</span><span class="kw">:</span><span class="at"> type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">explicit_http_config</span><span class="kw">:</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">http2_protocol_options</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">load_assignment</span><span class="kw">:</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">cluster_name</span><span class="kw">:</span><span class="at"> grpc_service</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">endpoints</span><span class="kw">:</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">lb_endpoints</span><span class="kw">:</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="at">              </span><span class="kw">-</span><span class="at"> </span><span class="fu">endpoint</span><span class="kw">:</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="at">                  </span><span class="fu">address</span><span class="kw">:</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="at">                    </span><span class="fu">socket_address</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">address</span><span class="kw">:</span><span class="at"> localhost</span><span class="kw">,</span><span class="at"> </span><span class="fu">port_value</span><span class="kw">:</span><span class="at"> </span><span class="dv">50051</span><span class="at"> </span><span class="kw">}</span></span></code></pre></div>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li>Single API contract (<code>.proto</code>) for all clients regardless
+of language</li>
+<li>Streaming domain events work natively over gRPC</li>
+<li>No additional gateway or translation layer for mobile/desktop</li>
+<li>Clean separation: C++ server is a network service, clients are
+independent processes</li>
+<li>Each language ecosystem uses its own idiomatic gRPC library</li>
+<li>Generator only needs to produce proto stubs + thin service
+wrappers</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li>Browser targets require an Envoy proxy (additional deployment
+component)</li>
+<li>gRPC-Web supports only server-streaming (no bidirectional) —
+sufficient for domain events, but limits future use cases</li>
+<li>Network latency vs. in-process calls (acceptable for frontend use
+cases)</li>
+<li>TLS configuration needed for production deployments</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Establishes transport pattern for future non-C++ frontend
+targets</li>
+<li>Related <a
+href="20260120-domain-services-as-aggregate-boundary.html">ADR 20260120
+Domain Services as Aggregate Boundary</a> — services exposed via
+gRPC</li>
+<li>Related <a href="20260120-cqrs-ready-architecture.html">ADR 20260120
+CQRS-Ready Architecture</a> — domain events streamed via gRPC</li>
+<li>Related <a href="20260206-multi-frontend-architecture.html">ADR
+20260206 Multi-Frontend Architecture</a> — multi-frontend strategy</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Integrating any non-C++ frontend with the Muscovite backend</li>
+<li>Choosing transport protocol for new client platforms</li>
+<li>Configuring deployment for browser-based clients</li>
+<li>Generating client stubs for non-C++ languages</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Qt Widgets or QML frontends (these use in-process C++ — no network
+transport)</li>
+<li>C++ test infrastructure (uses DBA directly)</li>
+<li>PostgreSQL schema or migration generation</li>
+<li>Server-to-server communication within the same backend process</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>All non-C++ frontends <strong>MUST</strong> use gRPC as primary
+transport</li>
+<li>REST gateways are <strong>FORBIDDEN</strong> unless explicitly
+justified by a new ADR</li>
+<li>gRPC-Web proxy is <strong>REQUIRED</strong> for browser targets,
+<strong>OPTIONAL</strong> otherwise</li>
+<li>Generated proxy configuration goes to
+<code>deploy/envoy.yaml</code></li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>proto/*.proto</code> — canonical service definitions (source
+of truth)</li>
+<li><code>dslgen/generators/grpc/proto.rkt</code> — proto file
+generation</li>
+<li><code>deploy/envoy.yaml</code> — generated gRPC-Web proxy
+configuration (conditional)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

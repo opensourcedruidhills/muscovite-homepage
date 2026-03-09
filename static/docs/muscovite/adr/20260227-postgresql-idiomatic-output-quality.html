@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostgreSQL Idiomatic Output
+Quality — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>PostgreSQL Idiomatic Output Quality</span>
+</nav>
+
+<h1>PostgreSQL Idiomatic Output Quality</h1>
+
+
+<h1 id="postgresql-idiomatic-output-quality">PostgreSQL Idiomatic Output
+Quality</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-27</li>
+<li>Tags: postgresql, generators, sqitch, idiomacy, quality</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: Systematic audit of PostgreSQL generator output
+revealed 10 categories of non-idiomatic SQL patterns. This ADR records
+the canonical PostgreSQL patterns and mandates their adoption across all
+Sqitch generators.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>A comprehensive audit of 28 Racket generator files in
+<code>dslgen/generators/postgres/</code> (6,527 lines) identified
+patterns that, while functionally correct, deviate from PostgreSQL best
+practices. These deviations affect maintainability, debuggability, and
+production DBA acceptance. The audit found 10 distinct categories
+affecting 13+ files.</p>
+<p>See <code>doc/POSTGRES-PATTERNS.md</code> for the full pattern
+catalog with canonical forms, anti-patterns, and affected files.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Production DBAs expect idiomatic PostgreSQL — non-standard patterns
+erode trust</li>
+<li><code>pg_stat_user_indexes</code> and <code>EXPLAIN</code> output is
+harder to read with auto-generated names</li>
+<li>Missing FK indexes cause sequential scans on JOIN/DELETE
+operations</li>
+<li>Shallow verify scripts give false confidence in migration
+correctness</li>
+<li>Inconsistent naming makes grep-based debugging unreliable</li>
+</ul>
+<h2 id="decisions">Decisions</h2>
+<h3 id="1-uuidv7-everywhere-replace-gen_random_uuid">1. UUIDv7
+Everywhere (Replace gen_random_uuid)</h3>
+<p><strong>All UUID primary key defaults MUST use
+<code>uuidv7()</code></strong>, not <code>gen_random_uuid()</code>.</p>
+<p><code>sqitch-common.rkt</code> already defines
+<code>uuid-default-fn</code> returning <code>"uuidv7()"</code> (L61-63),
+but 6 infrastructure generator files bypass it with hardcoded
+<code>gen_random_uuid()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Occurrences</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sqitch-event-changes.rkt</code></td>
+<td>4</td>
+<td>L38, L159, L180, L200</td>
+</tr>
+<tr>
+<td><code>sqitch-state-machine.rkt</code></td>
+<td>2</td>
+<td>L121, L220</td>
+</tr>
+<tr>
+<td><code>sqitch-saga.rkt</code></td>
+<td>3</td>
+<td>L132, L151, L166</td>
+</tr>
+<tr>
+<td><code>sqitch-events.rkt</code></td>
+<td>2</td>
+<td>L46, L150</td>
+</tr>
+<tr>
+<td><code>migration-sql-deploy.rkt</code></td>
+<td>1</td>
+<td>L174</td>
+</tr>
+<tr>
+<td><code>sqitch-bitemporal.rkt</code></td>
+<td>1</td>
+<td>(system trigger)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fix</strong>: Replace all 13 hardcoded
+<code>gen_random_uuid()</code> with <code>(uuid-default-fn)</code> call
+from <code>sqitch-common.rkt</code>.</p>
+<h3 id="2-named-fk-constraints-via-alter-table-no-inline-references">2.
+Named FK Constraints via ALTER TABLE (No Inline REFERENCES)</h3>
+<p><strong>All foreign keys MUST be created as named constraints using
+<code>ALTER TABLE ... ADD CONSTRAINT</code></strong>, not inline
+<code>REFERENCES</code> in <code>CREATE TABLE</code>.</p>
+<p>Inline REFERENCES produces auto-generated constraint names like
+<code>encounter_patient_id_fkey</code> that are unpredictable and hard
+to reference in migrations. Named constraints follow the pattern
+<code>fk_{table}_{column}</code>.</p>
+<p><strong>Affected files</strong>: <code>sqitch-entity.rkt</code> (L66,
+L111), <code>sqitch-entity-columns.rkt</code> (L93, L112, L146),
+<code>sqitch-state-machine.rkt</code> (L113, L122-126, L221-223),
+<code>sqitch-event-changes.rkt</code> (L181, L201), and others with
+inline <code>REFERENCES</code>.</p>
+<p><strong>Exception</strong>: <code>migration-sql-deploy.rkt</code>
+(L127) already uses named FK constraints — this is the correct pattern
+to follow.</p>
+<h3 id="3-automatic-b-tree-indexes-on-all-fk-columns">3. Automatic
+B-tree Indexes on All FK Columns</h3>
+<p><strong>Every FK column MUST have a corresponding
+<code>CREATE INDEX idx_{table}_{column} ON {schema}.{table} ({column})</code>.</strong></p>
+<p>PostgreSQL does NOT auto-create indexes on FK columns (unlike MySQL).
+Missing FK indexes cause sequential scans on:</p>
+<ul>
+<li>JOIN operations through the FK</li>
+<li>CASCADE DELETE from parent</li>
+<li>Query planner lookups</li>
+</ul>
+<p><code>indexes-triggers.rkt</code> generates metadata-driven indexes
+(L58) but FK indexes are not systematically generated for all FK
+columns.</p>
+<h3 id="4-column-level-comment-on-from-field-doc">4. Column-Level
+COMMENT ON from field-doc</h3>
+<p><strong>Every column with a non-null <code>field-doc</code> MUST
+generate
+<code>COMMENT ON COLUMN {schema}.{table}.{column} IS '...';</code>.</strong></p>
+<p><code>sqitch-entity-columns.rkt</code> already generates
+<code>COMMENT ON TABLE</code> (L313-422) but column-level comments are
+not propagated from <code>field-doc</code> values. Per ADR 20260217, all
+database objects that support <code>COMMENT ON</code> must have
+generated comments.</p>
+<h3 id="5-standard-string-quoting-no-e-prefix">5. Standard String
+Quoting (No E-prefix)</h3>
+<p><strong>Seed data INSERT statements MUST use standard SQL string
+quoting (<code>'...'</code>), not PostgreSQL-specific escape strings
+(<code>E'...'</code>).</strong></p>
+<p><code>sqitch-unified-seeds.rkt</code> <code>sql-escape-value</code>
+(L68-85) uses <code>E'...'</code> prefix for all string values. Standard
+<code>'...'</code> quoting with doubled single quotes (<code>''</code>)
+is sufficient and portable.</p>
+<h3 id="6-idempotent-seeds-with-on-conflict">6. Idempotent Seeds with ON
+CONFLICT</h3>
+<p><strong>All seed INSERT statements MUST include
+<code>ON CONFLICT (id) DO UPDATE SET</code> to enable re-runnable
+deployments.</strong></p>
+<p><code>sqitch-unified-seeds.rkt</code> generates bare
+<code>INSERT INTO</code> (L136-141) without conflict handling.
+Re-running a Sqitch deploy will fail on duplicate keys. Idempotent seeds
+are essential for development workflows.</p>
+<h3 id="7-consistent-sql-naming-prefixes">7. Consistent SQL Naming
+Prefixes</h3>
+<p><strong>All generated SQL objects MUST follow these naming
+conventions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Prefix</th>
+<th>Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foreign key</td>
+<td><code>fk_</code></td>
+<td><code>fk_{table}_{column}</code></td>
+<td><code>fk_encounter_patient_id</code></td>
+</tr>
+<tr>
+<td>Index</td>
+<td><code>idx_</code></td>
+<td><code>idx_{table}_{column}</code></td>
+<td><code>idx_encounter_patient_id</code></td>
+</tr>
+<tr>
+<td>Trigger</td>
+<td><code>trg_</code></td>
+<td><code>trg_{table}_{purpose}</code></td>
+<td><code>trg_patient_audit</code></td>
+</tr>
+<tr>
+<td>Check constraint</td>
+<td><code>chk_</code></td>
+<td><code>chk_{table}_{rule}</code></td>
+<td><code>chk_patient_birth_date_not_future</code></td>
+</tr>
+<tr>
+<td>Unique constraint</td>
+<td><code>uq_</code></td>
+<td><code>uq_{table}_{columns}</code></td>
+<td><code>uq_patient_mrn</code></td>
+</tr>
+<tr>
+<td>Exclusion</td>
+<td><code>excl_</code></td>
+<td><code>excl_{table}_{purpose}</code></td>
+<td><code>excl_patient_valid_time</code></td>
+</tr>
+</tbody>
+</table>
+<p>Existing generators use inconsistent patterns — some use
+<code>fk_</code>, others generate unnamed constraints, triggers lack
+consistent <code>trg_</code> prefix.</p>
+<h3 id="8-deep-verify-scripts">8. Deep Verify Scripts</h3>
+<p><strong>Sqitch verify scripts MUST check actual schema structure, not
+just <code>SELECT 1 FROM {table}</code>.</strong></p>
+<p>Current verify scripts (generated across multiple files) use
+<code>SELECT 1 FROM {schema}.{table} WHERE FALSE;</code> which only
+verifies table existence. Deep verify scripts should check:</p>
+<ul>
+<li>Column existence and types via
+<code>information_schema.columns</code></li>
+<li>Constraint existence via <code>pg_constraint</code></li>
+<li>Index existence via <code>pg_indexes</code></li>
+<li>Trigger existence via <code>information_schema.triggers</code></li>
+</ul>
+<p>Pattern:
+<code>DO $$ BEGIN ... ASSERT (SELECT count(*) FROM information_schema.columns WHERE ...) = N; ... END $$;</code></p>
+<h3 id="9-jsonb-for-event-outbox-payload">9. JSONB for Event Outbox
+Payload</h3>
+<p><strong>Decision</strong>: <code>domain_events.payload</code> columns
+use <code>JSONB</code> type. This is an <strong>explicit
+exception</strong> to the general "no JSONB columns" rule (enforced by
+parser for domain entity fields).</p>
+<p><strong>Rationale</strong>: The <code>domain_events</code> table is
+infrastructure, not a domain entity. Event outbox payloads are:</p>
+<ul>
+<li>Serialized from typed domain event structs (type safety is at the
+C++ layer)</li>
+<li>Consumed by NATS/messaging infrastructure that expects JSON</li>
+<li>Never queried by field (no <code>payload-&gt;&gt;'field'</code> in
+WHERE clauses)</li>
+<li>Transient — consumed and archived, not a long-lived query
+target</li>
+</ul>
+<p>The parser-level JSONB prohibition applies to domain model fields in
+<code>.ddd</code> files. Infrastructure tables generated by the
+framework (domain_events, saga_state, event_store) are exempt because
+their schemas are fixed by the generator, not user-defined.</p>
+<p><strong>No code change required</strong> — current generators already
+emit <code>JSONB</code> for event payloads. This decision documents the
+intentional exception.</p>
+<h3 id="10-postgresql-pattern-enforcement-test">10. PostgreSQL Pattern
+Enforcement Test</h3>
+<p><strong>A dedicated Racket test
+(<code>test-postgres-patterns.rkt</code>) MUST scan generated SQL
+output</strong> and verify compliance with all patterns in this ADR.</p>
+<p>The test should:</p>
+<ul>
+<li>Parse generated <code>.sql</code> files from
+<code>examples/hello-world/generated/</code></li>
+<li>Verify no <code>gen_random_uuid()</code> outside of explicit
+exceptions</li>
+<li>Verify all FK constraints are named (<code>fk_</code> prefix)</li>
+<li>Verify FK indexes exist for all FK columns</li>
+<li>Verify no <code>E'...'</code> string literals in seed files</li>
+<li>Verify <code>ON CONFLICT</code> clause in seed INSERT
+statements</li>
+<li>Verify naming convention compliance</li>
+</ul>
+<p>This is a regression safety net — once patterns are fixed, they must
+not regress.</p>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li>Generated SQL passes DBA review without modification</li>
+<li>FK indexes prevent production performance surprises</li>
+<li>Named constraints enable reliable migration references</li>
+<li>Deep verify scripts catch deployment drift</li>
+<li>Enforceable via automated test</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li>One-time migration of 13+ generator files</li>
+<li>Existing generated output changes (requires regeneration of all
+examples)</li>
+<li>Verify script size increases (more thorough checks)</li>
+</ul>
+<h2 id="implementation-order">Implementation Order</h2>
+<p>Features are ordered by dependency:</p>
+<ol type="1">
+<li><strong>FTR-159</strong> (uuidv7) — standalone, no dependencies</li>
+<li><strong>FTR-165</strong> (naming conventions) — establishes naming
+patterns used by FTR-160, FTR-161</li>
+<li><strong>FTR-160</strong> (named FKs) — depends on FTR-165 for
+<code>fk_</code> prefix convention</li>
+<li><strong>FTR-161</strong> (FK indexes) — depends on FTR-160 (indexes
+reference FK columns)</li>
+<li><strong>FTR-162</strong> (column COMMENT ON) — standalone, extends
+existing COMMENT ON</li>
+<li><strong>FTR-163</strong> (seed best practices) — standalone</li>
+<li><strong>FTR-164</strong> (deep verify) — depends on FTR-160, FTR-161
+(verifies their output)</li>
+<li><strong>FTR-166</strong> (enforcement test) — depends on all above
+(verifies everything)</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a
+href="20251223-use-text-for-all-postgresql-strings.html">ADR 20251223 —
+TEXT for all strings</a></li>
+<li>Related: <a href="20251223-use-timestamptz-for-all-datetime.html">ADR
+20251223 — TIMESTAMPTZ for all datetime</a></li>
+<li>Related: <a href="20251223-name-all-primary-keys-id.html">ADR 20251223
+— All PKs named id</a></li>
+<li>Related: <a
+href="20260116-lookup-tables-over-check-constraints.html">ADR 20260116 —
+Lookup tables over CHECK constraints</a></li>
+<li>Related: <a
+href="20260217-documentation-as-generated-artifact.html">ADR 20260217 —
+Documentation as generated artifact</a></li>
+<li>Companion: <a
+href="../POSTGRES-PATTERNS.html">POSTGRES-PATTERNS.md</a></li>
+<li>Implements: FTR-159, FTR-160, FTR-161, FTR-162, FTR-163, FTR-164,
+FTR-165, FTR-166</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying ANY file in
+<code>dslgen/generators/postgres/</code></li>
+<li>When adding new PostgreSQL generator functions</li>
+<li>When reviewing generated SQL output for correctness</li>
+<li>When writing Sqitch deploy/verify/revert scripts</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Domain entity JSONB prohibition still applies (parser-enforced)</li>
+<li>C++, gRPC, Qt generators (separate concerns)</li>
+<li>Hand-authored SQL in framework migrations (different lifecycle)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/postgres/sqitch-common.rkt</code> —
+<code>uuid-default-fn</code> (L61-63), shared utilities</li>
+<li><code>dslgen/generators/postgres/sqitch-entity.rkt</code> — entity
+table generation</li>
+<li><code>dslgen/generators/postgres/sqitch-entity-columns.rkt</code> —
+column generation, COMMENT ON</li>
+<li><code>dslgen/generators/postgres/sqitch-unified-seeds.rkt</code> —
+seed data INSERT generation</li>
+<li><code>dslgen/generators/postgres/sqitch-state-machine.rkt</code> —
+state machine tables</li>
+<li><code>dslgen/generators/postgres/sqitch-event-changes.rkt</code> —
+event sourcing tables</li>
+<li><code>dslgen/generators/postgres/sqitch-saga.rkt</code> — saga
+tables</li>
+<li><code>dslgen/generators/postgres/sqitch-events.rkt</code> — domain
+events tables</li>
+<li><code>dslgen/generators/postgres/indexes-triggers.rkt</code> — index
+generation</li>
+<li><code>doc/POSTGRES-PATTERNS.md</code> — canonical pattern
+catalog</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

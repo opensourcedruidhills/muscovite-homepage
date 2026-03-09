@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Functional Expression Language for Behavioral
+Sovereignty — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Functional Expression Language for Behavioral Sovereignty</span>
+</nav>
+
+<h1>Functional Expression Language for Behavioral Sovereignty</h1>
+
+
+<h1
+id="functional-expression-language-for-behavioral-sovereignty">Functional
+Expression Language for Behavioral Sovereignty</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-03-07</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Tags: expression-ast, dsl, behavioral-sovereignty</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Muscovite's expression AST (9 node types in
+<code>ddd-types.rkt:804-852</code>) is a <strong>predicate
+language</strong> — it answers yes/no questions via comparisons, boolean
+logic, and null checks. Behavioral Sovereignty requires a
+<strong>functional expression language</strong> that computes values,
+transforms collections, and binds intermediate results.</p>
+<p>Use cases like booking price calculation with dynamic packaging,
+amendments, and cancellations require:</p>
+<ul>
+<li>Collection operations: containment, emptiness, intersection,
+subset</li>
+<li>Conditional expressions: branching without side effects</li>
+<li>Variable binding: intermediate results in multi-step
+calculations</li>
+<li>List comprehensions: map, filter, reduce over typed collections</li>
+<li>Decimal arithmetic with rounding (already partially supported)</li>
+</ul>
+<p>Google CEL was evaluated and rejected: it introduces opaque strings
+that bypass the PEG grammar (violating ADR 20260211), prevents Racket
+generators from walking the AST for documentation and test generation,
+and adds a runtime C++ dependency.</p>
+<h2 id="decision">Decision</h2>
+<p>Extend the existing expression AST in three tiers, each independently
+useful:</p>
+<p><strong>Tier 1 — Collection Predicates</strong> (extends predicate
+language):</p>
+<ul>
+<li><code>NOT IN</code>, <code>IS EMPTY</code>,
+<code>IS NOT EMPTY</code></li>
+<li><code>INTERSECTS</code>, <code>SUBSET OF</code>,
+<code>CONTAINS ALL</code></li>
+<li>New IR nodes: <code>not-in-expr</code>,
+<code>empty-check-expr</code>, <code>set-op-expr</code></li>
+</ul>
+<p><strong>Tier 2 — Computation Language</strong> (adds value-producing
+expressions):</p>
+<ul>
+<li><code>IF cond THEN expr ELSE expr</code> →
+<code>if-expr(cond, then-branch, else-branch)</code></li>
+<li><code>LET name = expr IN body</code> →
+<code>let-expr(bindings, body)</code></li>
+<li><code>MATCH field { CASE val =&gt; expr, ... }</code> →
+<code>match-case-expr(field, cases, default)</code></li>
+<li>These are expressions (produce values), not statements</li>
+</ul>
+<p><strong>Tier 3 — List Comprehensions</strong> (functional collection
+processing):</p>
+<ul>
+<li><code>MAP(list, var -&gt; expr)</code> →
+<code>map-expr(list, var, body)</code></li>
+<li><code>FILTER(list, var -&gt; expr)</code> →
+<code>filter-expr(list, var, body)</code></li>
+<li><code>REDUCE(list, init, acc var -&gt; expr)</code> →
+<code>reduce-expr(list, init, acc, var, body)</code></li>
+<li><code>SUM(list)</code>, <code>COUNT(list)</code>,
+<code>MIN(list)</code>, <code>MAX(list)</code> → built-in aggregations
+via <code>call-expr</code></li>
+<li>Lambda expressions are single-expression, no closures over mutable
+state</li>
+</ul>
+<p><strong>Non-Turing completeness guarantee</strong>: No general
+recursion, no mutable state, no unbounded loops. MAP/FILTER/REDUCE are
+bounded by collection length. This is the same computational model as
+Excel formulas or SQL SELECT expressions.</p>
+<p><strong>Compilation targets per tier</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Tier 1</th>
+<th>Tier 2</th>
+<th>Tier 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td><code>NOT IN</code>, <code>array_length = 0</code></td>
+<td><code>CASE WHEN</code></td>
+<td><code>SELECT ... FROM unnest()</code></td>
+</tr>
+<tr>
+<td>C++</td>
+<td><code>std::ranges::contains</code>, <code>.empty()</code></td>
+<td>Ternary / if-else</td>
+<td><code>std::ranges::transform</code>, <code>fold_left</code></td>
+</tr>
+<tr>
+<td>Docs/Mermaid</td>
+<td>Predicate annotations</td>
+<td>Decision diamond nodes</td>
+<td>Data flow boxes</td>
+</tr>
+<tr>
+<td>Property tests</td>
+<td>Predicate oracle</td>
+<td>Branch coverage</td>
+<td>Collection boundary</td>
+</tr>
+</tbody>
+</table>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Expression grammar (<code>muscovite.peg §37</code>) grows from 30 to
+~80 rules</li>
+<li><code>expression-&gt;sql</code> and <code>expression-&gt;cpp</code>
+emitters must handle all new node types</li>
+<li>IR struct count in expression AST grows from 9 to ~18 nodes</li>
+<li>Every generator that walks expressions must be updated per tier</li>
+<li>Tier 3 introduces variable scoping — parser must track lambda
+parameter scope</li>
+<li>CEL is explicitly rejected; no external expression language
+dependency</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

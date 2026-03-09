@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specification WHERE Clause
+Hardening — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Specification WHERE Clause Hardening</span>
+</nav>
+
+<h1>Specification WHERE Clause Hardening</h1>
+
+
+<h1 id="specification-where-clause-hardening">Specification WHERE Clause
+Hardening</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-12</li>
+<li>Tags: security, specification, sql-injection, grammar,
+defense-in-depth</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The <code>SPECIFICATION ... WHERE</code> clause in the DSL accepts
+arbitrary SQL token sequences and interpolates them <strong>without
+validation or sanitization</strong> into:</p>
+<ol type="1">
+<li><strong>PostgreSQL VIEWs</strong>:
+<code>CREATE VIEW ... AS SELECT * FROM ... WHERE {raw}</code>
+(sqitch.rkt)</li>
+<li><strong>PostgreSQL FUNCTIONs</strong>:
+<code>CREATE FUNCTION ... $$ SELECT ... WHERE {raw} $$</code>
+(sqitch.rkt)</li>
+<li><strong>C++ string literals</strong>:
+<code>ntx.exec("SELECT * FROM ... WHERE {raw}")</code>
+(unified.rkt)</li>
+</ol>
+<p>The current PEG grammar rule <code>SqlExpression</code> accepts any
+token sequence (including DDL/DML keywords, semicolons, and subqueries)
+until hitting a terminating keyword. The parser reconstructs the token
+stream by concatenation with zero semantic validation.</p>
+<h3 id="threat-model">Threat Model</h3>
+<p><code>.ddd</code> files are author-controlled artifacts (like source
+code), not user input. However:</p>
+<ol type="1">
+<li><strong>AI-generated <code>.ddd</code> files</strong> — the
+brownfield extraction pipeline (VISION.md) will use LLMs to generate
+<code>.ddd</code> files from legacy systems. An LLM producing malicious
+SQL in a SPECIFICATION WHERE clause would pass through undetected.</li>
+<li><strong>Malicious contributor</strong> — a <code>DROP TABLE</code>
+or data exfiltration query embedded in a specification WHERE clause
+survives generation and is deployed via <code>sqitch deploy</code> with
+full database privileges.</li>
+<li><strong>No defense-in-depth</strong> — currently zero layers of
+protection between <code>.ddd</code> authoring and SQL execution.</li>
+</ol>
+<h3
+id="additional-bug-parameterized-spec-n-placeholder-mismatch">Additional
+Bug: Parameterized Spec <code>$N</code> Placeholder Mismatch</h3>
+<p>Parameterized specifications have a name-to-positional mismatch in
+C++ generation:</p>
+<ul>
+<li><strong>PostgreSQL function</strong>: Parameters named
+<code>p_threshold_m</code> — WHERE clause references by name ✅</li>
+<li><strong>C++ pqxx</strong>: Parameters passed via
+<code>pqxx::params{threshold_m}</code> — but WHERE clause string
+contains bare name <code>threshold</code> instead of positional
+<code>$1</code> ❌</li>
+</ul>
+<p>This causes runtime query failures.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Defense-in-depth</strong>: Multiple independent layers of
+protection</li>
+<li><strong>Grammar-first evolution</strong>: Per ADR 20260211, grammar
+changes precede parser changes</li>
+<li><strong>Backward compatibility</strong>: 100+ existing SPECIFICATION
+declarations in geosciences must continue parsing</li>
+<li><strong>Fail-fast principle</strong>: Reject malicious input at the
+earliest possible point (parse time)</li>
+<li><strong>Parameterized query safety</strong>: Runtime user values
+must never be string-interpolated into SQL</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Grammar whitelist only</strong> — restrict
+<code>SpecWhereExpression</code> PEG rule to safe SQL subset</li>
+<li><strong>Parser deny-list only</strong> — scan tokens after parsing
+for dangerous keywords</li>
+<li><strong>Grammar whitelist + parser deny-list +
+<code>pqxx::params</code> enforcement</strong> (chosen)</li>
+<li><strong>SQL AST parsing</strong> — full SQL parser for WHERE clauses
+(rejected — excessive complexity)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Grammar whitelist + parser deny-list +
+<code>pqxx::params</code> enforcement"</strong> — three independent
+defense layers at build time and runtime.</p>
+<h3 id="layer-1-peg-grammar-whitelist-build-time--parse">Layer 1: PEG
+Grammar Whitelist (Build Time — Parse)</h3>
+<p>Replace the opaque <code>SqlExpression</code> rule for specification
+WHERE clauses with a restrictive <code>SpecWhereExpression</code>:</p>
+<p><strong>Allowed constructs</strong>:</p>
+<ul>
+<li>Column references (identifiers, qualified
+<code>table.column</code>)</li>
+<li>Comparison operators: <code>=</code>, <code>!=</code>,
+<code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>,
+<code>&lt;=</code>, <code>&gt;=</code></li>
+<li>Logical operators: <code>AND</code>, <code>OR</code>,
+<code>NOT</code></li>
+<li>Predicates: <code>IN (...)</code>, <code>BETWEEN ... AND ...</code>,
+<code>IS NULL</code>, <code>IS NOT NULL</code>, <code>LIKE</code>,
+<code>ILIKE</code></li>
+<li>Literals: string (<code>'...'</code>), number, boolean
+(<code>TRUE</code>/<code>FALSE</code>/<code>NULL</code>)</li>
+<li>Temporal functions: <code>CURRENT_DATE</code>,
+<code>CURRENT_TIMESTAMP</code>, <code>NOW()</code></li>
+<li>Interval expressions: <code>INTERVAL '...'</code></li>
+<li>Type casts: <code>::type</code> (PostgreSQL cast syntax)</li>
+<li>Arithmetic: <code>+</code>, <code>-</code>, <code>*</code>,
+<code>/</code></li>
+<li>Parenthesized subexpressions</li>
+<li>Parameter references (bare names matching specification
+parameters)</li>
+</ul>
+<p><strong>Rejected constructs</strong> (parse error):</p>
+<ul>
+<li>DDL: <code>DROP</code>, <code>CREATE</code>, <code>ALTER</code></li>
+<li>DML: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>,
+<code>TRUNCATE</code></li>
+<li>Access control: <code>GRANT</code>, <code>REVOKE</code>,
+<code>EXECUTE</code></li>
+<li>Data movement: <code>COPY</code></li>
+<li>Statement terminators: <code>;</code></li>
+<li>Subqueries: <code>SELECT</code></li>
+<li>CTEs: <code>WITH</code></li>
+<li>Comments: <code>--</code>, <code>/*</code></li>
+</ul>
+<h3 id="layer-2-parser-deny-list-build-time--validation">Layer 2: Parser
+Deny-List (Build Time — Validation)</h3>
+<p>After <code>parse-sql-expression</code>, scan the token stream for
+deny-listed keywords. This is defense-in-depth — if a construct somehow
+passes the grammar, the parser catches it.</p>
+<p>Fail fast with:</p>
+<pre><code>specification-parse-error: specification &#39;EvilSpec&#39; contains forbidden SQL keyword &#39;DROP&#39; in WHERE clause</code></pre>
+<h3 id="layer-3-pqxxparams-for-runtime-values-runtime--c">Layer 3:
+<code>pqxx::params</code> for Runtime Values (Runtime — C++)</h3>
+<p>Parameterized specifications pass user-supplied values exclusively
+through <code>pqxx::params</code> (parameterized queries). The WHERE
+clause string uses positional <code>$1</code>, <code>$2</code>, ...
+placeholders — <strong>never string interpolation of user
+values</strong>.</p>
+<p>Fix the C++ generator to rewrite parameter references in
+<code>sql-where</code>:</p>
+<ul>
+<li>Scan <code>specification-parameters</code> list</li>
+<li>For each parameter name found in <code>sql-where</code>, replace
+with <code>$N</code> (1-indexed)</li>
+<li>Generate <code>pqxx::params{param1, param2, ...}</code> matching the
+positional order</li>
+</ul>
+<p>Additional runtime defense layers for parameterized specs:</p>
+<ul>
+<li><strong>gRPC</strong>: protobuf type enforcement (typed request
+messages)</li>
+<li><strong>Qt UI</strong>: type-specific widgets with validation
+(QSpinBox for INT, QDateEdit for DATE, etc.)</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Three independent defense layers — grammar, parser, and runtime</li>
+<li>Malicious <code>.ddd</code> content rejected at parse time with
+clear error messages</li>
+<li>AI-generated <code>.ddd</code> files validated before any SQL
+generation</li>
+<li>Parameterized specs use proper prepared-statement semantics</li>
+<li>All 100+ existing specs continue parsing (whitelist covers all
+patterns in use)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Grammar becomes more complex (restrictive rule vs. permissive
+rule)</li>
+<li>Some advanced SQL patterns in WHERE clauses may be rejected (e.g.,
+window functions, CTEs) — acceptable trade-off; these don't belong in
+specification predicates</li>
+<li><code>$N</code> rewriting adds generator complexity</li>
+</ul>
+<h2 id="implementation-notes">Implementation Notes</h2>
+<h3 id="grammar-change-grammar-first-per-adr-20260211">Grammar Change
+(grammar-first per ADR 20260211)</h3>
+<ol type="1">
+<li>Edit <code>dslgen/grammar/muscovite.peg</code> — add
+<code>SpecWhereExpression</code> rule, bump version</li>
+<li>Update <code>parse-sql-expression</code> in
+<code>parser/parser.rkt</code> to use deny-list</li>
+<li>Fix <code>$N</code> rewriting in
+<code>generators/cpp/dba/unified.rkt</code></li>
+<li>Verify: <code>racket tests/test-grammar-conformance.rkt</code>
+(≥22/24)</li>
+<li>Verify: all geosciences specs parse without error</li>
+</ol>
+<h3 id="sql-patterns-in-existing-specs-must-remain-valid">SQL Patterns
+in Existing Specs (must remain valid)</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Example</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple comparison</td>
+<td><code>status = 'active'</code></td>
+<td>~40</td>
+</tr>
+<tr>
+<td><code>IN (...)</code></td>
+<td><code>status IN ('todo', 'in_progress')</code></td>
+<td>~15</td>
+</tr>
+<tr>
+<td><code>IS NOT NULL</code></td>
+<td><code>assignee_id IS NOT NULL</code></td>
+<td>~10</td>
+</tr>
+<tr>
+<td><code>IS NULL</code></td>
+<td><code>deceased_date IS NULL</code></td>
+<td>~5</td>
+</tr>
+<tr>
+<td>Boolean literal</td>
+<td><code>is_extinct = TRUE</code></td>
+<td>~8</td>
+</tr>
+<tr>
+<td>Date arithmetic</td>
+<td><code>NOW() - INTERVAL '30 days'</code></td>
+<td>~5</td>
+</tr>
+<tr>
+<td><code>CURRENT_DATE</code></td>
+<td><code>due_date &lt; CURRENT_DATE</code></td>
+<td>~3</td>
+</tr>
+<tr>
+<td>Type cast</td>
+<td><code>last_eruption_date::DATE</code></td>
+<td>~2</td>
+</tr>
+<tr>
+<td>Arithmetic</td>
+<td><code>(first_appearance_ma - last_appearance_ma) &lt; 10</code></td>
+<td>~5</td>
+</tr>
+<tr>
+<td><code>AND</code>/<code>OR</code></td>
+<td>Multi-predicate</td>
+<td>~30</td>
+</tr>
+<tr>
+<td><code>&gt;=</code> / <code>&lt;=</code></td>
+<td>Threshold comparisons</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>Parameter ref</td>
+<td><code>threshold_m</code> (bare name)</td>
+<td>~6</td>
+</tr>
+</tbody>
+</table>
+<h3 id="documentation-updates-required">Documentation Updates
+Required</h3>
+<p>When implemented, update:</p>
+<ul>
+<li><code>SECURITY.md</code> — grammar whitelist, parser deny-list,
+three-layer defense</li>
+<li><code>CHANGELOG.md</code> — release notes entry</li>
+<li><code>doc/DEVELOPER-GUIDE.md</code> — specification security
+section</li>
+<li><code>doc/AI-DEVELOPER-GUIDE.md</code> — injection prevention for
+AI-generated <code>.ddd</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="20260123-specification-based-queries.html">Specification-Based
+Queries ADR</a> — original generation strategy</li>
+<li><a href="20260211-grammar-first-language-evolution.html">Grammar-First
+Language Evolution</a> — grammar change mandate</li>
+<li><a href="20260120-domain-services-as-aggregate-boundary.html">Domain
+Services as Aggregate Boundary</a> — QueryService architecture</li>
+<li><a href="../VISION.html">VISION.md — Legacy Modernization Pipeline</a>
+— AI-generated <code>.ddd</code> threat vector</li>
+<li>IDEA-021: Specification Full-Stack Completion — implementation
+plan</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Modifying the <code>SPECIFICATION ... WHERE</code> parsing
+pipeline</li>
+<li>Generating SQL from specification WHERE clauses (any generator)</li>
+<li>Adding new SQL constructs to the specification whitelist</li>
+<li>Implementing parameterized specification C++ generation</li>
+<li>Generating gRPC handlers that pass user input to specification
+queries</li>
+<li>Processing AI-generated <code>.ddd</code> files through the
+generation pipeline</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Non-specification SQL generation (e.g., CHECK constraints, migration
+DDL)</li>
+<li>SQL in COMMAND <code>REQUIRES</code> clauses (separate validation
+concern)</li>
+<li>PostgreSQL DOMAIN definitions (type-registry controlled)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><strong>Grammar</strong>: <code>SpecWhereExpression</code> PEG rule
+rejects forbidden tokens at parse time</li>
+<li><strong>Parser</strong>: <code>validate-specification-where!</code>
+function scans for deny-listed keywords</li>
+<li><strong>C++ Generator</strong>: parameterized spec WHERE clauses
+must use <code>$N</code> positional placeholders with
+<code>pqxx::params</code></li>
+<li><strong>Test</strong>:
+<code>test-specification-generators.rkt</code> includes injection
+rejection test cases</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/grammar/muscovite.peg</code></td>
+<td><code>SpecWhereExpression</code> whitelist rule</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/parser.rkt</code></td>
+<td><code>parse-specification</code>,
+<code>validate-specification-where!</code></td>
+</tr>
+<tr>
+<td><code>dslgen/generators/postgres/sqitch.rkt</code></td>
+<td>VIEW/FUNCTION generation with <code>sql-where</code></td>
+</tr>
+<tr>
+<td><code>dslgen/generators/cpp/dba/unified.rkt</code></td>
+<td>C++ QueryRepository with <code>$N</code> rewriting</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-specification-generators.rkt</code></td>
+<td>Injection rejection tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/fixture-specification-task-manager.ddd</code></td>
+<td>7 test specs (4 non-param + 3 parameterized)</td>
+</tr>
+</tbody>
+</table>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

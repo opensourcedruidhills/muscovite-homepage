@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petrology Mineral Composition and Rock
+Classification — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Petrology Mineral Composition and Rock Classification</span>
+</nav>
+
+<h1>Petrology Mineral Composition and Rock Classification</h1>
+
+
+<h1 id="petrology-mineral-composition-and-rock-classification">Petrology
+Mineral Composition and Rock Classification</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Domain modeling team</li>
+<li>Date: 2026-01-07</li>
+<li>Tags: petrology, classification, QAPF, TAS, IUGS</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Igneous rocks are classified based on their mineral composition. The
+percentage of key minerals determines the rock name. We need to model
+the relationship between rocks and their constituent minerals, and
+support standard classification schemes (QAPF, TAS).</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>IUGS recommends QAPF diagram for coarse-grained igneous rocks</li>
+<li>TAS classification used when modal analysis not possible
+(fine-grained/volcanic)</li>
+<li>Mineral percentages determine rock classification</li>
+<li>Support for essential vs accessory mineral designation</li>
+<li>Sedimentary rocks also have mineral compositions (detrital,
+authigenic)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Embed mineral percentages directly in rock entities (current
+approach via MineralMode)</li>
+<li>Junction table linking Rock to Mineral with percentage and role</li>
+<li>Hybrid: Keep MineralMode for summary, add junction for detailed
+composition</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Hybrid approach", because:</p>
+<ol type="1">
+<li>MineralMode value object provides quick access to common
+minerals</li>
+<li>Junction table enables detailed composition with FK to
+Mineralogy.Mineral</li>
+<li>Supports QAPF/TAS classification based on normalized
+percentages</li>
+<li>Enables queries like "find rocks containing &gt;10% olivine"</li>
+</ol>
+<h3 id="rock-mineral-composition-junction-entity">Rock Mineral
+Composition Junction Entity</h3>
+<pre class="ddd"><code>ENTITY RockMineralComposition IDENTIFIED_BY id (
+    id              UUID        NOT NULL,
+    rock_type       VARCHAR(30) NOT NULL,
+    rock_id         UUID        NOT NULL,
+    mineral_id      UUID        NOT NULL,
+    percentage      DECIMAL     NOT NULL,
+    role            VARCHAR(30) NOT NULL,
+    determination   VARCHAR(30),
+    notes           TEXT
+)
+CHECK percentage_valid: percentage &gt;= 0 AND percentage &lt;= 100
+CHECK role_valid: role IN (&#39;essential&#39;, &#39;accessory&#39;, &#39;secondary&#39;, &#39;xenocrystic&#39;)
+CHECK rock_type_valid: rock_type IN (&#39;igneous&#39;, &#39;sedimentary&#39;, &#39;metamorphic&#39;)
+RELATIONSHIPS {
+    mineral -&gt; Mineral REQUIRED ONE;
+}</code></pre>
+<h3 id="qapf-classification-lookup">QAPF Classification Lookup</h3>
+<p>The QAPF diagram uses normalized percentages of:</p>
+<ul>
+<li><strong>Q</strong> = Quartz</li>
+<li><strong>A</strong> = Alkali feldspar (orthoclase, sanidine,
+microcline, perthite, anorthoclase, albite An&lt;5)</li>
+<li><strong>P</strong> = Plagioclase (An≥5)</li>
+<li><strong>F</strong> = Feldspathoid (nepheline, leucite, sodalite,
+etc.)</li>
+</ul>
+<p>Note: Q and F are mutually exclusive (silica oversaturated vs
+undersaturated).</p>
+<pre class="ddd"><code>ENTITY QAPFClassification IDENTIFIED_BY id (
+    id              UUID        NOT NULL,
+    field_number    VARCHAR(10) NOT NULL @unique,
+    rock_name       VARCHAR(80) NOT NULL,
+    q_min           DECIMAL,
+    q_max           DECIMAL,
+    a_min           DECIMAL,
+    a_max           DECIMAL,
+    p_min           DECIMAL,
+    p_max           DECIMAL,
+    f_min           DECIMAL,
+    f_max           DECIMAL,
+    emplacement     VARCHAR(30) NOT NULL,
+    description     TEXT
+)
+CHECK emplacement_valid: emplacement IN (&#39;plutonic&#39;, &#39;volcanic&#39;)</code></pre>
+<p>Key QAPF fields (plutonic rocks): | Field | Rock Name | Q | A | P |
+Notes | |-------|-----------|---|---|---|-------| | 1a | Quartzolite |
+90-100 | - | - | Almost pure quartz | | 2 | Alkali feldspar granite |
+20-60 | 90-100 | 0-10 | | | 3a | Syenogranite | 20-60 | 65-90 | 10-35 |
+| | 3b | Monzogranite | 20-60 | 35-65 | 35-65 | | | 4 | Granodiorite |
+20-60 | 10-35 | 65-90 | | | 5 | Tonalite/Trondhjemite | 20-60 | 0-10 |
+90-100 | | | 6* | Alkali feldspar syenite | 0-5 | 90-100 | 0-10 |
+Q&lt;5%, no F | | 7* | Syenite | 0-5 | 65-90 | 10-35 | | | 8* |
+Monzonite | 0-5 | 35-65 | 35-65 | | | 9* | Monzodiorite | 0-5 | 10-35 |
+65-90 | | | 10* | Diorite/Gabbro | 0-5 | 0-10 | 90-100 | Diorite if Plag
+An&lt;50 |</p>
+<h3 id="tas-classification">TAS Classification</h3>
+<p>Total Alkali-Silica diagram for volcanic rocks:</p>
+<ul>
+<li>X-axis: SiO₂ (wt%)</li>
+<li>Y-axis: Na₂O + K₂O (wt%)</li>
+</ul>
+<pre class="ddd"><code>ENTITY TASClassification IDENTIFIED_BY id (
+    id              UUID        NOT NULL,
+    field_name      VARCHAR(50) NOT NULL @unique,
+    rock_name       VARCHAR(80) NOT NULL,
+    sio2_min        DECIMAL     NOT NULL,
+    sio2_max        DECIMAL     NOT NULL,
+    alkali_min      DECIMAL     NOT NULL,
+    alkali_max      DECIMAL     NOT NULL,
+    silica_category VARCHAR(20),
+    description     TEXT
+)
+CHECK silica_valid: silica_category IN (&#39;ultrabasic&#39;, &#39;basic&#39;, &#39;intermediate&#39;, &#39;acid&#39;) OR silica_category IS NULL</code></pre>
+<p>Key TAS fields: | Field | Rock Name | SiO₂ | Na₂O+K₂O | Category |
+|-------|-----------|------|----------|----------| | Basalt | Basalt |
+45-52 | 0-5 | Basic | | Andesite | Andesite | 52-63 | 2-6 | Intermediate
+| | Dacite | Dacite | 63-69 | 3-7 | Acid | | Rhyolite | Rhyolite | 69-77
+| 5-10 | Acid | | Phonolite | Phonolite | 52-63 | 9-14 |
+Intermediate/alkaline | | Trachyte | Trachyte | 60-69 | 7-12 |
+Intermediate/alkaline |</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Rocks can be classified by mineral composition using standard IUGS
+schemes</li>
+<li>Detailed mineral percentages enable accurate QAPF/TAS placement</li>
+<li>FK to Mineralogy.Mineral ensures data consistency</li>
+<li>Supports queries across rock-mineral relationships</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Additional tables increase complexity</li>
+<li>QAPF field boundaries require careful polygon definition</li>
+<li>Some rock names are ambiguous in classification schemes</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/QAPF_diagram">QAPF Diagram -
+Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/TAS_classification">TAS
+Classification - Wikipedia</a></li>
+<li><a href="https://www.iugs.org/">IUGS Subcommission on the
+Systematics of Igneous Rocks</a></li>
+<li>Related ADR: <a
+href="20260106-explicit-relationships-only.html">Explicit Relationships
+Only</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

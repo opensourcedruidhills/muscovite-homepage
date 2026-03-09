@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strong Type Template Families for Field
+Constraints — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Strong Type Template Families for Field Constraints</span>
+</nav>
+
+<h1>Strong Type Template Families for Field Constraints</h1>
+
+
+<h1 id="strong-type-template-families-for-field-constraints">Strong Type
+Template Families for Field Constraints</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-07</li>
+<li>Tags: cpp, strong-types, templates, validation, constraints</li>
+</ul>
+<p>Technical Story: ADR 20260119 introduced
+<code>strong_type_base&lt;Derived&gt;</code> CRTP with
+<code>from_trusted()</code>. Only <code>PositiveInteger</code> exists as
+a concrete type. The DSL needs a family of parameterized strong types to
+represent arbitrary field constraints from DSL annotations.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The existing strong type infrastructure (ADR 20260119) provides a
+CRTP base class <code>strong_type_base&lt;Derived&gt;</code> with:</p>
+<ul>
+<li><code>static auto from(value_type) -&gt; std::expected&lt;Derived, std::string&gt;</code>
+for validated construction</li>
+<li><code>static auto from_trusted(value_type) -&gt; Derived</code> for
+database loads (bypasses validation)</li>
+<li>Value semantics, comparison operators, hashing</li>
+</ul>
+<p>However, only one concrete type exists: <code>PositiveInteger</code>.
+The DSL constraint annotations (ADR
+20260307-field-constraint-annotations) need to map to a family of
+parameterized strong types that cover the full range of per-field
+constraints: bounded integers, bounded decimals, constrained
+dates/datetimes, bounded strings, and pattern strings.</p>
+<p>How should the strong type family be structured to support arbitrary
+DSL constraint annotations while maintaining compile-time safety where
+possible?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Compile-time validation where possible (integer/string bounds are
+known at compile time)</li>
+<li>Runtime validation where necessary (temporal constraints depend on
+<code>now()</code>)</li>
+<li>Must extend <code>strong_type_base&lt;Derived&gt;</code> to inherit
+<code>from_trusted()</code> for DB loads</li>
+<li>Existing <code>PositiveInteger</code> must remain
+backward-compatible (becomes a type alias)</li>
+<li>C++23 features (NTTP, StringLiteral, constexpr) should be used where
+they improve safety</li>
+<li>Generator must map DSL annotations to specific template
+instantiations</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Four template families</strong> — BoundedInteger,
+ConstrainedDate/DateTime, BoundedDecimal,
+BoundedString/PatternString</li>
+<li><strong>Single generic BoundedType&lt;T, Min, Max&gt;</strong> — one
+template for all types</li>
+<li><strong>Policy-based design</strong> —
+<code>validated_type&lt;T, Policy1, Policy2, ...&gt;</code> with
+composable policies</li>
+<li><strong>Runtime-only validation</strong> — no templates, all
+validation in <code>from()</code> with runtime parameters</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Four template families</strong>,
+because each family has distinct validation semantics that cannot be
+unified into a single template without sacrificing type safety or
+compile-time guarantees.</p>
+<h3 id="family-1-boundedintegermin-max">Family 1: BoundedInteger&lt;Min,
+Max&gt;</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>int64_t Min <span class="op">=</span> <span class="bu">std::</span>numeric_limits<span class="op">&lt;</span><span class="bu">std::</span>int64_t<span class="op">&gt;::</span>min<span class="op">(),</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>         <span class="bu">std::</span>int64_t Max <span class="op">=</span> <span class="bu">std::</span>numeric_limits<span class="op">&lt;</span><span class="bu">std::</span>int64_t<span class="op">&gt;::</span>max<span class="op">()&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BoundedInteger <span class="op">:</span> <span class="kw">public</span> strong_type_base<span class="op">&lt;</span>BoundedInteger<span class="op">&lt;</span>Min<span class="op">,</span> Max<span class="op">&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from<span class="op">(</span><span class="bu">std::</span>int64_t v<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>BoundedInteger<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_trusted<span class="op">(</span><span class="bu">std::</span>int64_t v<span class="op">)</span> <span class="op">-&gt;</span> BoundedInteger<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Backward compatibility</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> PositiveInteger <span class="op">=</span> BoundedInteger<span class="op">&lt;</span><span class="dv">1</span><span class="op">&gt;;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: age Integer @min(0) @max(150) → BoundedInteger&lt;0, 150&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: quantity Integer @min(1) → BoundedInteger&lt;1&gt;</span></span></code></pre></div>
+<p>Sentinel values <code>numeric_limits::min()/max()</code> represent
+"unbounded" on that side, enabling half-open ranges.</p>
+<h3 id="family-2-constraineddate--constraineddatetime">Family 2:
+ConstrainedDate<Policy> / ConstrainedDateTime<Policy></h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> TemporalPolicy <span class="op">{</span> PastOrPresent<span class="op">,</span> Future<span class="op">,</span> PastOnly <span class="op">};</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span>TemporalPolicy P<span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ConstrainedDate <span class="op">:</span> <span class="kw">public</span> strong_type_base<span class="op">&lt;</span>ConstrainedDate<span class="op">&lt;</span>P<span class="op">&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from<span class="op">(</span><span class="bu">std::</span>chrono::year_month_day v<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>ConstrainedDate<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_trusted<span class="op">(</span><span class="bu">std::</span>chrono::year_month_day v<span class="op">)</span> <span class="op">-&gt;</span> ConstrainedDate<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: birth_date Date @not_in_future → ConstrainedDate&lt;TemporalPolicy::PastOrPresent&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: appointment_date DateTime @not_in_past → ConstrainedDateTime&lt;TemporalPolicy::Future&gt;</span></span></code></pre></div>
+<p>Runtime validation because <code>now()</code> is not constexpr. The
+policy tag is a compile-time NTTP that selects the runtime check.</p>
+<h3 id="family-3-boundeddecimalminstr-maxstr">Family 3:
+BoundedDecimal&lt;MinStr, MaxStr&gt;</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span>StringLiteral MinStr <span class="op">=</span> <span class="st">&quot;-inf&quot;</span><span class="op">,</span> StringLiteral MaxStr <span class="op">=</span> <span class="st">&quot;+inf&quot;</span><span class="op">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BoundedDecimal <span class="op">:</span> <span class="kw">public</span> strong_type_base<span class="op">&lt;</span>BoundedDecimal<span class="op">&lt;</span>MinStr<span class="op">,</span> MaxStr<span class="op">&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from<span class="op">(</span>decimal64 v<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>BoundedDecimal<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_trusted<span class="op">(</span>decimal64 v<span class="op">)</span> <span class="op">-&gt;</span> BoundedDecimal<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: temperature Decimal @min(-273.15) @max(1000.0) → BoundedDecimal&lt;&quot;-273.15&quot;, &quot;1000.0&quot;&gt;</span></span></code></pre></div>
+<p>C++23 <code>StringLiteral</code> NTTP allows decimal precision to be
+carried as a compile-time parameter. The string is parsed to
+<code>decimal64</code> at construction time.</p>
+<h3 id="family-4-boundedstringminlen-maxlen-and-patternstring">Family 4:
+BoundedString&lt;MinLen, MaxLen&gt; and PatternString<Pattern></h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>size_t MinLen <span class="op">=</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>         <span class="bu">std::</span>size_t MaxLen <span class="op">=</span> <span class="bu">std::</span>numeric_limits<span class="op">&lt;</span><span class="bu">std::</span>size_t<span class="op">&gt;::</span>max<span class="op">()&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BoundedString <span class="op">:</span> <span class="kw">public</span> strong_type_base<span class="op">&lt;</span>BoundedString<span class="op">&lt;</span>MinLen<span class="op">,</span> MaxLen<span class="op">&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from<span class="op">(</span><span class="bu">std::</span>string_view v<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>BoundedString<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_trusted<span class="op">(</span><span class="bu">std::</span>string v<span class="op">)</span> <span class="op">-&gt;</span> BoundedString<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span>StringLiteral Pattern<span class="op">&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatternString <span class="op">:</span> <span class="kw">public</span> strong_type_base<span class="op">&lt;</span>PatternString<span class="op">&lt;</span>Pattern<span class="op">&gt;&gt;</span> <span class="op">{</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from<span class="op">(</span><span class="bu">std::</span>string_view v<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>PatternString<span class="op">,</span> <span class="bu">std::</span>string<span class="op">&gt;;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_trusted<span class="op">(</span><span class="bu">std::</span>string v<span class="op">)</span> <span class="op">-&gt;</span> PatternString<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: name String @not_empty → BoundedString&lt;1&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">// DSL: email String @pattern(&quot;[^@]+@[^@]+\.[^@]+&quot;) → PatternString&lt;&quot;[^@]+@[^@]+\\.[^@]+&quot;&gt;</span></span></code></pre></div>
+<p><code>@not_empty</code> is syntactic sugar for
+<code>BoundedString&lt;1&gt;</code>. <code>PatternString</code> compiles
+the regex once (static local) and validates on each <code>from()</code>
+call.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Compile-time bounds for integers and strings — invalid template
+parameters caught at compile time</li>
+<li><code>PositiveInteger</code> becomes a backward-compatible alias —
+no migration needed</li>
+<li><code>from_trusted()</code> inherited from
+<code>strong_type_base</code> — DB loads bypass validation
+consistently</li>
+<li>Generator maps DSL annotations directly to template instantiations —
+no runtime configuration</li>
+<li>Each family has focused, understandable validation semantics</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Four families means more framework code to maintain in
+<code>framework/include/muscovite/</code></li>
+<li><code>StringLiteral</code> NTTP (C++23) may not be supported by all
+compilers yet — requires GCC 13+ or Clang 17+</li>
+<li>Temporal validation is runtime-only — cannot be checked at compile
+time</li>
+<li>Complex template instantiations may produce verbose compiler error
+messages</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a href="20260119-strong-types.html">ADR 20260119 — Strong
+Types</a> (foundation:
+<code>strong_type_base&lt;Derived&gt;</code>)</li>
+<li>Related: <a href="20260307-field-constraint-annotations.html">ADR
+20260307 — Field Constraint Annotations</a> (DSL syntax that maps to
+these types)</li>
+<li>Related: <a
+href="20260307-three-tier-validation-architecture.html">ADR 20260307 —
+Three-Tier Validation Architecture</a> (these types are Tier 1)</li>
+<li>Related: <a href="20260303-cpp23-style-guide.html">ADR 20260303 —
+C++23 Style Guide</a> (C++23 feature usage)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating C++ entity field types from DSL constraint
+annotations</li>
+<li>When mapping <code>@min</code>/<code>@max</code> →
+<code>BoundedInteger&lt;Min, Max&gt;</code> or
+<code>BoundedDecimal&lt;MinStr, MaxStr&gt;</code></li>
+<li>When mapping <code>@not_empty</code> →
+<code>BoundedString&lt;1&gt;</code></li>
+<li>When mapping <code>@not_in_future</code>/<code>@not_in_past</code> →
+<code>ConstrainedDate&lt;Policy&gt;</code> or
+<code>ConstrainedDateTime&lt;Policy&gt;</code></li>
+<li>When mapping <code>@pattern(...)</code> →
+<code>PatternString&lt;Pattern&gt;</code></li>
+<li>When generating <code>Entity::try_from(Command)</code> — use strong
+type <code>from()</code> for Tier 1 validation</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Cross-field constraints (<code>@after</code>, <code>@before</code>)
+— those are Tier 2, not strong types</li>
+<li>Unconstrained fields — fields without annotations use raw types
+(<code>std::string</code>, <code>std::int64_t</code>)</li>
+<li>Lookup table foreign keys — these are UUIDs, not constrained value
+types</li>
+<li>Database loads — always use <code>from_trusted()</code>, never
+<code>from()</code></li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Generator maps DSL annotations to template instantiations in
+<code>dslgen/generators/dba/unified.rkt</code></li>
+<li>Framework provides template families in
+<code>framework/include/muscovite/types/</code></li>
+<li>Unit tests verify <code>from()</code> rejects invalid values and
+<code>from_trusted()</code> accepts any value</li>
+<li>Compile-time tests verify <code>BoundedInteger&lt;5, 3&gt;</code>
+(inverted range) produces a <code>static_assert</code> failure</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>framework/include/muscovite/types/strong_type_base.hpp</code>
+— CRTP base class</li>
+<li><code>framework/include/muscovite/types/bounded_integer.hpp</code> —
+BoundedInteger template</li>
+<li><code>framework/include/muscovite/types/constrained_date.hpp</code>
+— ConstrainedDate/DateTime templates</li>
+<li><code>framework/include/muscovite/types/bounded_decimal.hpp</code> —
+BoundedDecimal template</li>
+<li><code>framework/include/muscovite/types/bounded_string.hpp</code> —
+BoundedString and PatternString templates</li>
+<li><code>dslgen/generators/shared/type-mappings.rkt</code> — DSL
+annotation → C++ template mapping</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

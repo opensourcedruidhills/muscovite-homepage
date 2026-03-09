@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FHIR Health Sample Domain for Schema Evolution
+Testing — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>FHIR Health Sample Domain for Schema Evolution Testing</span>
+</nav>
+
+<h1>FHIR Health Sample Domain for Schema Evolution Testing</h1>
+
+
+<h1 id="fhir-health-sample-domain-for-schema-evolution-testing">FHIR
+Health Sample Domain for Schema Evolution Testing</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Tags: sample-project, fhir, health, testing, schema-evolution,
+git-submodule</li>
+<li>Related:
+<ul>
+<li><a href="20260109-canonical-semantic-ir-representation.html">Canonical
+Semantic IR</a> (ADR 1)</li>
+<li><a href="20260109-stable-uuid-identity.html">Stable UUID Identity</a>
+(ADR 2)</li>
+<li><a href="20260109-git-model-version-selection.html">Git Model Version
+Selection</a> (ADR 2.5)</li>
+<li><a href="20260109-semantic-model-delta.html">Semantic Model Delta</a>
+(ADR 3)</li>
+</ul></li>
+<li>Prompt Chain: <strong>Supporting ADR</strong> (implement alongside
+ADR 1, test with ADRs 2.5-7)</li>
+</ul>
+<p>Technical Story: Establish a well-defined, machine-readable sample
+domain in a <strong>separate git repository</strong> to test and
+validate the schema evolution pipeline (ADRs 1-7) with clean version
+history.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The geosciences project is comprehensive (26 bounded contexts, 331
+entities) but too large for iterative development and testing of the
+schema evolution system. We need a smaller, well-defined domain
+that:</p>
+<ol type="1">
+<li><strong>Is machine-readable</strong> - Has formal specifications we
+can validate against</li>
+<li><strong>Is well-documented</strong> - Official documentation for
+every element</li>
+<li><strong>Has realistic complexity</strong> - Multiple aggregates,
+relationships, value objects</li>
+<li><strong>Exercises all ADR features</strong> - UUIDs, diffs,
+migrations, policies, verification</li>
+<li><strong>Has isolated git history</strong> - Version history
+independent from muscovite development</li>
+</ol>
+<p><strong>HL7 FHIR (Fast Healthcare Interoperability
+Resources)</strong> is ideal because:</p>
+<ul>
+<li>Industry-standard healthcare data model</li>
+<li>Machine-readable JSON/XML definitions</li>
+<li>Extensive official documentation</li>
+<li>Small enough for rapid iteration, rich enough to be meaningful</li>
+</ul>
+<p><strong>Git Submodule Approach</strong>: The schema evolution system
+(ADR 2.5) uses git to extract model versions. Testing requires:</p>
+<ul>
+<li>Creating deliberate "v1.0", "v1.1", "v2.0" commits</li>
+<li>Running <code>muscovite-version</code> against these commits</li>
+<li>Diffing versions to generate migrations</li>
+</ul>
+<p>If FHIR sample lives in muscovite repo, its commits are interleaved
+with muscovite development. A <strong>separate repository as git
+submodule</strong> provides clean, testable version history.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Need a test domain for schema evolution pipeline</li>
+<li>Must have machine-readable definitions for validation</li>
+<li>Must be small enough to iterate quickly</li>
+<li>Must exercise: aggregates, entities, value objects, relationships,
+reference data</li>
+<li>Must support semantic diffing and migration scenarios</li>
+<li><strong>Must have isolated git history</strong> for version
+extraction testing</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Subset of geosciences</strong>: Rejected - still too coupled
+to main project, pollutes git history</li>
+<li><strong>Generic e-commerce</strong>: Rejected - no machine-readable
+standard</li>
+<li><strong>FHIR subset in muscovite repo</strong>: Rejected - git
+history interleaved with framework development</li>
+<li><strong>FHIR subset as git submodule</strong>: Accepted - isolated
+history, formal spec, right complexity</li>
+<li><strong>OpenAPI Petstore</strong>: Rejected - too simple, no
+aggregate complexity</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "FHIR subset as git submodule", implementing a focused
+healthcare domain in a separate repository
+(<code>fhir-health-sample</code>) linked to muscovite via git
+submodule.</p>
+<h3 id="repository-structure">Repository Structure</h3>
+<pre><code>github.com/your-org/fhir-health-sample/    # Separate repository
+├── project.ddd
+├── contexts/
+│   ├── security.ddd           # OAuth2 + RBAC (from muscovite&#39;s security module)
+│   ├── basedata.ddd           # Reference data
+│   ├── patient.ddd            # Patient aggregate
+│   ├── practitioner.ddd       # Practitioner aggregate
+│   ├── organization.ddd       # Organization aggregate
+│   ├── encounter.ddd          # Encounter aggregate
+│   └── clinical.ddd           # Condition + Observation
+├── seeds/
+│   └── *.json
+└── README.md
+
+github.com/your-org/muscovite/
+├── examples/
+│   └── fhir-health/           # Git submodule → fhir-health-sample
+└── ...</code></pre>
+<h3 id="git-submodule-setup">Git Submodule Setup</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In muscovite repository</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">${PROJECT_ROOT}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add as submodule (after creating fhir-health-sample repo)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> submodule add https://github.com/your-org/fhir-health-sample.git examples/fhir-health</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone muscovite with submodule</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/your-org/muscovite.git</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Update submodule to specific version</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> examples/fhir-health</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout v1.0.0</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../..</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add examples/fhir-health</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;Update fhir-health to v1.0.0&quot;</span></span></code></pre></div>
+<h3 id="version-history-strategy">Version History Strategy</h3>
+<p>The fhir-health-sample repo will have tagged releases for
+testing:</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Description</th>
+<th>Migration Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v1.0.0</code></td>
+<td>Initial: Security + Basedata + Patient</td>
+<td>Baseline</td>
+</tr>
+<tr>
+<td><code>v1.1.0</code></td>
+<td>Add <code>middle_name</code> to Patient</td>
+<td>Safe: add nullable field</td>
+</tr>
+<tr>
+<td><code>v1.2.0</code></td>
+<td>Add Practitioner context</td>
+<td>Safe: add entity</td>
+</tr>
+<tr>
+<td><code>v1.3.0</code></td>
+<td>Add Organization context</td>
+<td>Safe: add entity</td>
+</tr>
+<tr>
+<td><code>v2.0.0</code></td>
+<td>Add Encounter + Clinical</td>
+<td>Safe: add entities with FKs</td>
+</tr>
+<tr>
+<td><code>v2.1.0</code></td>
+<td>Rename <code>deceased</code> → <code>is_deceased</code></td>
+<td>Safe: rename field</td>
+</tr>
+<tr>
+<td><code>v3.0.0</code></td>
+<td>Remove <code>location_name</code> from Encounter</td>
+<td>Destructive: remove field</td>
+</tr>
+</tbody>
+</table>
+<p>This enables testing <code>muscovite-version</code> against real git
+history:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract v1.0.0 model</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">muscovite-version</span> <span class="at">--repo</span> examples/fhir-health <span class="at">--ref</span> v1.0.0 <span class="at">--format</span> sexpr <span class="op">&gt;</span> v1.sexpr</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract v2.0.0 model  </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">muscovite-version</span> <span class="at">--repo</span> examples/fhir-health <span class="at">--ref</span> v2.0.0 <span class="at">--format</span> sexpr <span class="op">&gt;</span> v2.sexpr</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Diff in Racket</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> <span class="at">-e</span> <span class="st">&#39;(diff-model (read-ir &quot;v1.sexpr&quot;) (read-ir &quot;v2.sexpr&quot;))&#39;</span></span></code></pre></div>
+<h3 id="fhir-subset-specification">FHIR Subset Specification</h3>
+<table>
+<thead>
+<tr>
+<th>Aggregate</th>
+<th>Entities</th>
+<th>Value Objects</th>
+<th>Reference Data</th>
+<th>FHIR Spec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Patient</strong></td>
+<td>Patient</td>
+<td>Identifier, Address, Contact</td>
+<td>AdministrativeGender</td>
+<td><a href="https://www.hl7.org/fhir/patient.html">Patient</a></td>
+</tr>
+<tr>
+<td><strong>Practitioner</strong></td>
+<td>Practitioner</td>
+<td>Identifier, Contact</td>
+<td>PractitionerRole</td>
+<td><a
+href="https://www.hl7.org/fhir/practitioner.html">Practitioner</a></td>
+</tr>
+<tr>
+<td><strong>Organization</strong></td>
+<td>Organization</td>
+<td>Identifier, Contact</td>
+<td>OrganizationType</td>
+<td><a
+href="https://www.hl7.org/fhir/organization.html">Organization</a></td>
+</tr>
+<tr>
+<td><strong>Encounter</strong></td>
+<td>Encounter</td>
+<td>Period, Location</td>
+<td>EncounterType, EncounterStatus</td>
+<td><a href="https://www.hl7.org/fhir/encounter.html">Encounter</a></td>
+</tr>
+<tr>
+<td><strong>Condition</strong></td>
+<td>Condition</td>
+<td>CodeableConcept</td>
+<td>ConditionCode (SNOMED subset)</td>
+<td><a href="https://www.hl7.org/fhir/condition.html">Condition</a></td>
+</tr>
+<tr>
+<td><strong>Observation</strong></td>
+<td>Observation</td>
+<td>CodeableConcept, Quantity</td>
+<td>ObservationCode (LOINC subset)</td>
+<td><a
+href="https://www.hl7.org/fhir/observation.html">Observation</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="relationships">Relationships</h3>
+<pre><code>Patient ──────────┬──────────► Encounter (0..*)
+                  │                │
+                  │                ├──► Observation (0..*)
+                  │                │
+                  │                ├──► Condition (0..*)
+                  │                │
+                  │                └──► Practitioner (1..*)
+                  │
+                  └──────────► Condition (0..*)
+
+Organization ────► Practitioner (0..*)</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Rapid iteration on schema evolution pipeline</li>
+<li>Machine-readable validation against FHIR spec</li>
+<li>Clear documentation for every model element</li>
+<li>Realistic complexity without overwhelming size</li>
+<li>Isolated from geosciences project changes</li>
+<li><strong>Clean git history</strong> for version extraction
+testing</li>
+<li><strong>Controlled version tags</strong> for migration scenario
+testing</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Healthcare domain may be unfamiliar to some contributors</li>
+<li>FHIR spec is extensive; must carefully limit scope</li>
+<li>Not directly related to geosciences use case</li>
+<li>Additional repository to maintain</li>
+<li>Submodule complexity for new contributors</li>
+</ul>
+<h2 id="minimal-deployable-increment-v100">Minimal Deployable Increment
+(v1.0.0)</h2>
+<p><strong>The smallest increment that deploys a working schema with
+OAuth2 authentication:</strong></p>
+<h3 id="v100--security--basedata--patient-3-contexts">v1.0.0 = Security
++ Basedata + Patient (3 contexts)</h3>
+<pre><code>fhir-health-sample/
+├── project.ddd
+├── contexts/
+│   ├── security.ddd      # Copy from muscovite security module
+│   ├── basedata.ddd      # AdministrativeGender only (Patient dependency)
+│   └── patient.ddd       # Patient aggregate
+└── seeds/
+    └── gender.json       # male, female, other, unknown</code></pre>
+<p><strong>Why this is minimal:</strong></p>
+<ul>
+<li><strong>Security</strong>: Required for all muscovite projects
+(OAuth2, RBAC)</li>
+<li><strong>Basedata</strong>: Patient references
+<code>AdministrativeGender</code> - must exist first</li>
+<li><strong>Patient</strong>: Simplest domain aggregate with value
+objects</li>
+</ul>
+<p><strong>Deployment test:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> fhir-health-sample</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> ../src/dslgen/generate.rkt <span class="at">--project</span> project.ddd <span class="at">--sqitch</span> <span class="at">--api</span> <span class="at">--test</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> generated/sqitch</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">sqitch</span> deploy db:pg://postgres:postgres@localhost:5555/fhir_health</span></code></pre></div>
+<h3 id="incremental-growth-path">Incremental Growth Path</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Contexts Added</th>
+<th>Cumulative</th>
+<th>Dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>v1.0.0</strong></td>
+<td>Security, Basedata, Patient</td>
+<td>3</td>
+<td>None</td>
+</tr>
+<tr>
+<td>v1.1.0</td>
+<td>(add field to Patient)</td>
+<td>3</td>
+<td>Migration test</td>
+</tr>
+<tr>
+<td><strong>v1.2.0</strong></td>
+<td>Practitioner</td>
+<td>4</td>
+<td>Basedata.PractitionerRole</td>
+</tr>
+<tr>
+<td><strong>v1.3.0</strong></td>
+<td>Organization</td>
+<td>5</td>
+<td>Basedata.OrganizationType</td>
+</tr>
+<tr>
+<td><strong>v2.0.0</strong></td>
+<td>Encounter</td>
+<td>6</td>
+<td>Patient, Practitioner</td>
+</tr>
+<tr>
+<td><strong>v2.1.0</strong></td>
+<td>Clinical</td>
+<td>7</td>
+<td>Patient, Encounter, Basedata.Codes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-0-repository-setup">Phase 0: Repository Setup</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new repository</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> fhir-health-sample <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> fhir-health-sample</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create structure</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> contexts seeds</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy security module from muscovite</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">${PROJECT_ROOT}</span>/src/dslgen/examples/geosciences/security.ddd contexts/</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create initial files</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> project.ddd contexts/basedata.ddd contexts/patient.ddd seeds/gender.json</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial commit</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;Initial structure&quot;</span></span></code></pre></div>
+<h3
+id="phase-1-v100---minimal-deployable-security--basedata--patient">Phase
+1: v1.0.0 - Minimal Deployable (Security + Basedata + Patient)</h3>
+<p><code>project.ddd</code>:</p>
+<pre class="ddd"><code>PROJECT FhirHealth
+VERSION &quot;1.0.0&quot;
+DATABASE &quot;fhir_health&quot;
+
+CONTEXTS [
+    security,      -- OAuth2 + RBAC (first, always)
+    basedata,      -- Reference data (second, dependencies)
+    patient        -- Domain context
+]</code></pre>
+<p><code>contexts/basedata.ddd</code> (v1.0.0 - minimal):</p>
+<pre class="ddd"><code>CONTEXT Basedata @uuid &quot;fhir-basedata-0000-0000-000000000001&quot; {
+
+    -- Administrative Gender (http://hl7.org/fhir/administrative-gender)
+    -- Only reference data needed for Patient in v1.0.0
+    
+    ENTITY AdministrativeGender @uuid &quot;fhir-basedata-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id          UUID        NOT NULL,
+        code        VARCHAR(20) NOT NULL @unique,
+        display     TEXT        NOT NULL,
+        definition  TEXT
+    )
+    DOC &quot;Administrative gender - not clinical gender&quot;;
+    
+    AGGREGATE AdministrativeGender @uuid &quot;fhir-basedata-0001-0002-000000000001&quot;
+    ROOT AdministrativeGender
+    DOC &quot;Gender value set&quot;;
+    
+    IMPORT_JSON &quot;../../seeds/gender.json&quot; INTO AdministrativeGender;
+}</code></pre>
+<p><code>contexts/patient.ddd</code> (v1.0.0):</p>
+<pre class="ddd"><code>CONTEXT Patient @uuid &quot;fhir-patient-0000-0000-000000000001&quot; {
+
+    ENTITY Patient @uuid &quot;fhir-patient-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        active          BOOLEAN     NOT NULL DEFAULT true,
+        gender_id       UUID,
+        birth_date      DATE,
+        deceased        BOOLEAN     DEFAULT false,
+        deceased_date   TIMESTAMPTZ,
+        
+        -- Embedded value objects (JSONB)
+        name            JSONB,                          -- HumanName[]
+        identifiers     JSONB,                          -- Identifier[]
+        addresses       JSONB,                          -- Address[]
+        telecom         JSONB                           -- ContactPoint[]
+    )
+    RELATIONSHIPS {
+        gender -&gt; AdministrativeGender OPTIONAL ONE;
+    }
+    DOC &quot;Demographics and administrative information about an individual&quot;;
+    
+    AGGREGATE Patient @uuid &quot;fhir-patient-0001-0002-000000000001&quot;
+    ROOT Patient
+    DOC &quot;Patient aggregate - identity and demographics&quot;;
+}</code></pre>
+<p><code>seeds/gender.json</code>:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;male&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Male&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Male&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;female&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Female&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Female&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;other&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Other&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Other&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;unknown&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">}</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Tag v1.0.0:</strong></p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;v1.0.0: Security + Basedata + Patient&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v1.0.0 <span class="at">-m</span> <span class="st">&quot;Minimal deployable: Security, Basedata (Gender), Patient&quot;</span></span></code></pre></div>
+<h3 id="phase-2-v110---first-migration-test-add-field">Phase 2: v1.1.0 -
+First Migration Test (Add Field)</h3>
+<h3 id="phase-2-v110---first-migration-test-add-field-1">Phase 2: v1.1.0
+- First Migration Test (Add Field)</h3>
+<p>Add a nullable field to Patient to test safe migration:</p>
+<pre class="ddd"><code>-- In patient.ddd, add to Patient entity:
+        middle_name     TEXT,                           -- NEW: v1.1.0</code></pre>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;v1.1.0: Add middle_name to Patient&quot;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v1.1.0 <span class="at">-m</span> <span class="st">&quot;Migration test: add nullable field&quot;</span></span></code></pre></div>
+<p><strong>Expected migration (ADR 3-6):</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- deploy/patient-add-middle_name.sql</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient <span class="kw">ADD</span> <span class="kw">COLUMN</span> middle_name TEXT;</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- revert/patient-add-middle_name.sql</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient <span class="kw">DROP</span> <span class="kw">COLUMN</span> middle_name;</span></code></pre></div>
+<h3 id="phase-3-v120---add-practitioner-context">Phase 3: v1.2.0 - Add
+Practitioner Context</h3>
+<p>Expand basedata.ddd with PractitionerRole, add practitioner.ddd:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;v1.2.0: Add Practitioner context&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v1.2.0 <span class="at">-m</span> <span class="st">&quot;Add Practitioner aggregate&quot;</span></span></code></pre></div>
+<h3 id="phase-4-v130---add-organization-context">Phase 4: v1.3.0 - Add
+Organization Context</h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v1.3.0 <span class="at">-m</span> <span class="st">&quot;Add Organization aggregate&quot;</span></span></code></pre></div>
+<h3 id="phase-5-v200---add-encounter--relationships">Phase 5: v2.0.0 -
+Add Encounter + Relationships</h3>
+<p>Major version: adds cross-context relationships.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v2.0.0 <span class="at">-m</span> <span class="st">&quot;Add Encounter with Patient/Practitioner relationships&quot;</span></span></code></pre></div>
+<h3 id="phase-6-v210---add-clinical-context">Phase 6: v2.1.0 - Add
+Clinical Context</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v2.1.0 <span class="at">-m</span> <span class="st">&quot;Add Condition and Observation aggregates&quot;</span></span></code></pre></div>
+<h3 id="phase-7-v300---destructive-migration-test">Phase 7: v3.0.0 -
+Destructive Migration Test</h3>
+<p>Remove a field to test destructive migration handling:</p>
+<pre class="ddd"><code>-- Remove from Encounter:
+--      location_name   TEXT,  -- REMOVED in v3.0.0</code></pre>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> tag <span class="at">-a</span> v3.0.0 <span class="at">-m</span> <span class="st">&quot;BREAKING: Remove location_name from Encounter&quot;</span></span></code></pre></div>
+<h3 id="basedata-context-full---for-later-versions">Basedata Context
+(Full - for later versions)</h3>
+<p>Shared value objects used across aggregates:</p>
+<pre class="ddd"><code>-- In each context that uses them, or in a shared module
+
+VALUE_OBJECT Identifier @uuid &quot;fhir-vo-0001-0000-000000000001&quot; (
+    system      TEXT        NOT NULL,  -- Naming system URI
+    value       TEXT        NOT NULL   -- The identifier value
+)
+DOC &quot;Identifier with system namespace (MRN, SSN, NPI, etc.)&quot;;
+
+VALUE_OBJECT Address @uuid &quot;fhir-vo-0002-0000-000000000001&quot; (
+    use         VARCHAR(10),           -- home | work | temp | billing
+    line        TEXT[],                -- Street lines
+    city        TEXT,
+    state       TEXT,
+    postal_code VARCHAR(20),
+    country     VARCHAR(3)             -- ISO 3166-1 alpha-3
+)
+DOC &quot;Physical or postal address&quot;;
+
+VALUE_OBJECT ContactPoint @uuid &quot;fhir-vo-0003-0000-000000000001&quot; (
+    system      VARCHAR(10) NOT NULL,  -- phone | email | fax | url
+    value       TEXT        NOT NULL,
+    use         VARCHAR(10)            -- home | work | mobile
+)
+DOC &quot;Contact details (phone, email, etc.)&quot;;
+
+VALUE_OBJECT HumanName @uuid &quot;fhir-vo-0004-0000-000000000001&quot; (
+    use         VARCHAR(10),           -- usual | official | nickname
+    family      TEXT        NOT NULL,  -- Family name (surname)
+    given       TEXT[],                -- Given names (first, middle)
+    prefix      TEXT[],                -- Dr., Mr., etc.
+    suffix      TEXT[]                 -- Jr., III, etc.
+)
+DOC &quot;Human name with components&quot;;
+
+VALUE_OBJECT Period @uuid &quot;fhir-vo-0005-0000-000000000001&quot; (
+    start_time  TIMESTAMPTZ,
+    end_time    TIMESTAMPTZ
+)
+DOC &quot;Time period with start and optional end&quot;;
+
+VALUE_OBJECT Quantity @uuid &quot;fhir-vo-0006-0000-000000000001&quot; (
+    value       DECIMAL     NOT NULL,
+    unit        TEXT        NOT NULL,  -- Human-readable unit
+    system      TEXT,                  -- Unit system URI (UCUM)
+    code        VARCHAR(20)            -- Coded unit (e.g., &quot;Cel&quot;, &quot;mm[Hg]&quot;)
+)
+DOC &quot;Measured quantity with unit&quot;;
+
+VALUE_OBJECT CodeableConcept @uuid &quot;fhir-vo-0007-0000-000000000001&quot; (
+    system      TEXT        NOT NULL,  -- Code system URI
+    code        VARCHAR(20) NOT NULL,  -- The code
+    display     TEXT                   -- Human-readable display
+)
+DOC &quot;Coded concept from a terminology&quot;;</code></pre>
+<h3 id="phase-4-patient-aggregate">Phase 4: Patient Aggregate</h3>
+<p><code>contexts/patient.ddd</code>:</p>
+<pre class="ddd"><code>CONTEXT Patient @uuid &quot;fhir-patient-0000-0000-000000000001&quot; {
+
+    ENTITY Patient @uuid &quot;fhir-patient-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        active          BOOLEAN     NOT NULL DEFAULT true,
+        gender_id       UUID,                           -- FK to Basedata.AdministrativeGender
+        birth_date      DATE,
+        deceased        BOOLEAN     DEFAULT false,
+        deceased_date   TIMESTAMPTZ,
+        
+        -- Embedded value objects (JSONB)
+        name            JSONB,                          -- HumanName[]
+        identifiers     JSONB,                          -- Identifier[]
+        addresses       JSONB,                          -- Address[]
+        telecom         JSONB                           -- ContactPoint[]
+    )
+    RELATIONSHIPS {
+        gender -&gt; AdministrativeGender OPTIONAL ONE;
+    }
+    DOC &quot;Demographics and administrative information about an individual receiving care&quot;;
+    
+    AGGREGATE Patient @uuid &quot;fhir-patient-0001-0002-000000000001&quot;
+    ROOT Patient
+    DOC &quot;Patient aggregate - identity and demographics&quot;;
+}</code></pre>
+<h3 id="phase-5-practitioner-aggregate">Phase 5: Practitioner
+Aggregate</h3>
+<p><code>contexts/practitioner.ddd</code>:</p>
+<pre class="ddd"><code>CONTEXT Practitioner @uuid &quot;fhir-practitioner-0000-0000-000000000001&quot; {
+
+    ENTITY Practitioner @uuid &quot;fhir-practitioner-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        active          BOOLEAN     NOT NULL DEFAULT true,
+        role_id         UUID,                           -- FK to Basedata.PractitionerRole
+        organization_id UUID,                           -- FK to Organization
+        
+        -- Embedded value objects (JSONB)
+        name            JSONB       NOT NULL,           -- HumanName
+        identifiers     JSONB,                          -- Identifier[] (NPI, license)
+        telecom         JSONB                           -- ContactPoint[]
+    )
+    RELATIONSHIPS {
+        role -&gt; PractitionerRole OPTIONAL ONE;
+        organization -&gt; Organization OPTIONAL ONE;
+    }
+    DOC &quot;A person with a formal responsibility in providing healthcare&quot;;
+    
+    AGGREGATE Practitioner @uuid &quot;fhir-practitioner-0001-0002-000000000001&quot;
+    ROOT Practitioner
+    DOC &quot;Practitioner aggregate&quot;;
+}</code></pre>
+<h3 id="phase-6-organization-aggregate">Phase 6: Organization
+Aggregate</h3>
+<p><code>contexts/organization.ddd</code>:</p>
+<pre class="ddd"><code>CONTEXT Organization @uuid &quot;fhir-organization-0000-0000-000000000001&quot; {
+
+    ENTITY Organization @uuid &quot;fhir-organization-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        active          BOOLEAN     NOT NULL DEFAULT true,
+        type_id         UUID,                           -- FK to Basedata.OrganizationType
+        name            TEXT        NOT NULL,
+        
+        -- Embedded value objects (JSONB)
+        identifiers     JSONB,                          -- Identifier[]
+        addresses       JSONB,                          -- Address[]
+        telecom         JSONB                           -- ContactPoint[]
+    )
+    RELATIONSHIPS {
+        type -&gt; OrganizationType OPTIONAL ONE;
+    }
+    DOC &quot;A formally or informally recognized grouping of people or organizations&quot;;
+    
+    AGGREGATE Organization @uuid &quot;fhir-organization-0001-0002-000000000001&quot;
+    ROOT Organization
+    DOC &quot;Organization aggregate&quot;;
+}</code></pre>
+<h3 id="phase-7-encounter-aggregate">Phase 7: Encounter Aggregate</h3>
+<p><code>contexts/encounter.ddd</code>:</p>
+<pre class="ddd"><code>CONTEXT Encounter @uuid &quot;fhir-encounter-0000-0000-000000000001&quot; {
+
+    ENTITY Encounter @uuid &quot;fhir-encounter-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        status_id       UUID        NOT NULL,           -- FK to Basedata.EncounterStatus
+        type_id         UUID,                           -- FK to Basedata.EncounterType
+        patient_id      UUID        NOT NULL,           -- FK to Patient
+        
+        -- Time period (embedded)
+        period_start    TIMESTAMPTZ NOT NULL,
+        period_end      TIMESTAMPTZ,
+        
+        -- Location (simple for prototype)
+        location_name   TEXT,
+        
+        -- Reason (JSONB array of CodeableConcept)
+        reason_codes    JSONB
+    )
+    RELATIONSHIPS {
+        status -&gt; EncounterStatus REQUIRED ONE;
+        type -&gt; EncounterType OPTIONAL ONE;
+        patient -&gt; Patient REQUIRED ONE;
+    }
+    DOC &quot;An interaction between a patient and healthcare provider(s)&quot;;
+    
+    -- Participant join table (Encounter &lt;-&gt; Practitioner)
+    ENTITY EncounterParticipant @uuid &quot;fhir-encounter-0002-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        encounter_id    UUID        NOT NULL,
+        practitioner_id UUID        NOT NULL,
+        role_id         UUID                            -- Role in this encounter
+    )
+    RELATIONSHIPS {
+        encounter -&gt; Encounter REQUIRED ONE;
+        practitioner -&gt; Practitioner REQUIRED ONE;
+        role -&gt; PractitionerRole OPTIONAL ONE;
+    }
+    DOC &quot;Practitioner participation in an encounter&quot;;
+    
+    AGGREGATE Encounter @uuid &quot;fhir-encounter-0001-0002-000000000001&quot;
+    ROOT Encounter
+    CONTAINS EncounterParticipant
+    DOC &quot;Encounter aggregate - clinical visit/admission&quot;;
+}</code></pre>
+<h3 id="phase-8-clinical-context-condition--observation">Phase 8:
+Clinical Context (Condition + Observation)</h3>
+<p><code>contexts/clinical.ddd</code>:</p>
+<pre class="ddd"><code>CONTEXT Clinical @uuid &quot;fhir-clinical-0000-0000-000000000001&quot; {
+
+    -- Condition (diagnosis, problem)
+    ENTITY Condition @uuid &quot;fhir-clinical-0001-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        patient_id      UUID        NOT NULL,           -- FK to Patient
+        encounter_id    UUID,                           -- FK to Encounter (when diagnosed)
+        code_id         UUID        NOT NULL,           -- FK to Basedata.ConditionCode
+        
+        clinical_status VARCHAR(20) NOT NULL,           -- active | recurrence | relapse | inactive | remission | resolved
+        verification    VARCHAR(20) NOT NULL,           -- unconfirmed | provisional | differential | confirmed
+        onset_date      DATE,
+        abatement_date  DATE,
+        recorded_date   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        
+        note            TEXT
+    )
+    RELATIONSHIPS {
+        patient -&gt; Patient REQUIRED ONE;
+        encounter -&gt; Encounter OPTIONAL ONE;
+        code -&gt; ConditionCode REQUIRED ONE;
+    }
+    DOC &quot;A clinical condition, problem, or diagnosis&quot;;
+    
+    AGGREGATE Condition @uuid &quot;fhir-clinical-0001-0002-000000000001&quot;
+    ROOT Condition
+    DOC &quot;Condition aggregate&quot;;
+
+    -- Observation (vital signs, lab results)
+    ENTITY Observation @uuid &quot;fhir-clinical-0002-0001-000000000001&quot;
+    IDENTIFIED_BY id (
+        id              UUID        NOT NULL,
+        patient_id      UUID        NOT NULL,           -- FK to Patient
+        encounter_id    UUID,                           -- FK to Encounter
+        code_id         UUID        NOT NULL,           -- FK to Basedata.ObservationCode
+        
+        status          VARCHAR(20) NOT NULL,           -- registered | preliminary | final | amended | cancelled
+        effective_time  TIMESTAMPTZ NOT NULL,
+        issued          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        
+        -- Value (one of these will be populated)
+        value_quantity  JSONB,                          -- Quantity value object
+        value_string    TEXT,
+        value_boolean   BOOLEAN,
+        
+        interpretation  VARCHAR(20),                    -- normal | abnormal | high | low | critical
+        note            TEXT
+    )
+    RELATIONSHIPS {
+        patient -&gt; Patient REQUIRED ONE;
+        encounter -&gt; Encounter OPTIONAL ONE;
+        code -&gt; ObservationCode REQUIRED ONE;
+    }
+    DOC &quot;Measurements and simple assertions about a patient&quot;;
+    
+    AGGREGATE Observation @uuid &quot;fhir-clinical-0002-0002-000000000001&quot;
+    ROOT Observation
+    DOC &quot;Observation aggregate&quot;;
+}</code></pre>
+<h3 id="phase-9-seed-data-files">Phase 9: Seed Data Files</h3>
+<p><code>seeds/gender.json</code>:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;male&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Male&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Male&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;female&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Female&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Female&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;other&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Other&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Other&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;unknown&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Unknown&quot;</span><span class="fu">}</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><code>seeds/encounter_type.json</code>:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;inpatient&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Inpatient&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Hospital admission&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;outpatient&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Outpatient&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Clinic visit&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;emergency&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Emergency&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Emergency department visit&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;virtual&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Virtual&quot;</span><span class="fu">,</span> <span class="dt">&quot;definition&quot;</span><span class="fu">:</span> <span class="st">&quot;Telehealth encounter&quot;</span><span class="fu">}</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><code>seeds/condition_codes.json</code>:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://snomed.info/sct&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;38341003&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Hypertension&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://snomed.info/sct&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;44054006&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Type 2 diabetes mellitus&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://snomed.info/sct&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;195967001&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Asthma&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://snomed.info/sct&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;13645005&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Chronic obstructive pulmonary disease&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://snomed.info/sct&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;49436004&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Atrial fibrillation&quot;</span><span class="fu">}</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><code>seeds/observation_codes.json</code>:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;8310-5&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Body temperature&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;Cel&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;85354-9&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Blood pressure panel&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;mm[Hg]&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;8867-4&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Heart rate&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;/min&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;9279-1&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Respiratory rate&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;/min&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;2708-6&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Oxygen saturation&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;%&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;29463-7&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Body weight&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;kg&quot;</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span><span class="dt">&quot;system&quot;</span><span class="fu">:</span> <span class="st">&quot;http://loinc.org&quot;</span><span class="fu">,</span> <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;8302-2&quot;</span><span class="fu">,</span> <span class="dt">&quot;display&quot;</span><span class="fu">:</span> <span class="st">&quot;Body height&quot;</span><span class="fu">,</span> <span class="dt">&quot;unit&quot;</span><span class="fu">:</span> <span class="st">&quot;cm&quot;</span><span class="fu">}</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<h3 id="phase-10-schema-evolution-test-scenarios">Phase 10: Schema
+Evolution Test Scenarios</h3>
+<p>The FHIR sample enables testing these migration scenarios:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Migration Type</th>
+<th>ADR Tested</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add <code>middle_name</code> to Patient</td>
+<td>Add nullable field</td>
+<td>Safe (ADR 5)</td>
+</tr>
+<tr>
+<td>Rename <code>deceased</code> to <code>is_deceased</code></td>
+<td>Rename field</td>
+<td>Safe (ADR 3, 5)</td>
+</tr>
+<tr>
+<td>Add <code>Allergy</code> entity</td>
+<td>Add entity</td>
+<td>Safe (ADR 3, 4)</td>
+</tr>
+<tr>
+<td>Remove <code>location_name</code> from Encounter</td>
+<td>Remove field</td>
+<td>Destructive (ADR 5)</td>
+</tr>
+<tr>
+<td>Change <code>birth_date</code> from DATE to TIMESTAMPTZ</td>
+<td>Type change</td>
+<td>Review (ADR 5)</td>
+</tr>
+<tr>
+<td>Add NOT NULL <code>recorded_by</code> to Observation</td>
+<td>Add required field</td>
+<td>Unsafe (ADR 5)</td>
+</tr>
+<tr>
+<td>Move <code>ConditionCode</code> to separate context</td>
+<td>Move entity</td>
+<td>Complex (ADR 3, 4)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>examples/fhir-health/project.ddd</code> - Project
+manifest</li>
+<li><code>examples/fhir-health/contexts/*.ddd</code> - Context
+definitions</li>
+<li><code>examples/fhir-health/seeds/*.json</code> - Reference data</li>
+<li><code>examples/fhir-health/migrations/</code> - Test migration
+scenarios</li>
+</ul>
+<h3 id="metrics">Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Geosciences</th>
+<th>FHIR Health</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounded Contexts</td>
+<td>26</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Entities</td>
+<td>331</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Value Objects</td>
+<td>~50</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Relationships</td>
+<td>~200</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Reference Data Tables</td>
+<td>~30</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FHIR is ~5% the size of geosciences</strong> - ideal for
+rapid iteration.</p>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When implementing or testing schema evolution features</li>
+<li>When validating ADRs 1-7 against a concrete domain</li>
+<li>When creating example migrations for documentation</li>
+<li>When using <code>muscovite-version</code> tool to extract model
+versions</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Production healthcare systems (this is a prototype subset)</li>
+<li>Full FHIR compliance (intentionally limited scope)</li>
+<li>Geosciences project work</li>
+<li>Changes to muscovite core generators</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>FHIR sample MUST live in a <strong>separate git
+repository</strong></li>
+<li>FHIR sample MUST be linked to muscovite via <strong>git
+submodule</strong> at <code>examples/fhir-health/</code></li>
+<li>FHIR sample MUST include UUIDs on all elements (for ADR 0002)</li>
+<li>FHIR sample MUST be parseable by current Muscovite parser</li>
+<li>Migration test scenarios MUST be documented with <strong>git
+tags</strong></li>
+<li>Changes to FHIR sample MUST NOT affect geosciences project</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<p><strong>Phase 0: Repository Setup</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create
+<code>fhir-health-sample</code> repository (GitHub/GitLab)</label></li>
+<li><label><input type="checkbox" />Add as submodule to muscovite:
+<code>git submodule add &lt;url&gt; examples/fhir-health</code></label></li>
+<li><label><input type="checkbox" />Update <code>.gitmodules</code> in
+muscovite</label></li>
+</ul>
+<p><strong>Phase 1: v1.0.0 (Minimal Deployable)</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create <code>project.ddd</code>
+manifest</label></li>
+<li><label><input type="checkbox" />Copy <code>security.ddd</code> from
+muscovite security module</label></li>
+<li><label><input type="checkbox" />Create <code>basedata.ddd</code>
+with AdministrativeGender only</label></li>
+<li><label><input type="checkbox" />Create <code>patient.ddd</code>
+aggregate</label></li>
+<li><label><input type="checkbox" />Create
+<code>seeds/gender.json</code></label></li>
+<li><label><input type="checkbox" />Verify parsing with current
+parser</label></li>
+<li><label><input type="checkbox" />Deploy to PostgreSQL
+successfully</label></li>
+<li><label><input type="checkbox" />Tag <code>v1.0.0</code></label></li>
+</ul>
+<p><strong>Phase 2: v1.1.0 (First Migration)</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Add <code>middle_name</code> field
+to Patient</label></li>
+<li><label><input type="checkbox" />Tag <code>v1.1.0</code></label></li>
+<li><label><input type="checkbox" />Test <code>muscovite-version</code>
+extraction</label></li>
+</ul>
+<p><strong>Subsequent Phases</strong> (implement as needed):</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />v1.2.0: Add
+Practitioner</label></li>
+<li><label><input type="checkbox" />v1.3.0: Add
+Organization</label></li>
+<li><label><input type="checkbox" />v2.0.0: Add Encounter with
+relationships</label></li>
+<li><label><input type="checkbox" />v2.1.0: Add Clinical (Condition +
+Observation)</label></li>
+<li><label><input type="checkbox" />v3.0.0: Destructive migration
+test</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>Supporting ADR</strong> - This provides the test domain for
+validating ADRs 1-7.</p>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>This ADR</th>
+<th>Used By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-</td>
+<td>FHIR Sample Domain</td>
+<td>ADRs 2.5, 3, 4, 5, 6, 7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implementation Order</strong>:</p>
+<ol type="1">
+<li>Create repository with v1.0.0 (alongside ADR 1 work)</li>
+<li>Use for testing each subsequent ADR implementation</li>
+</ol>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li>Separate git repository created and linked as submodule</li>
+<li>v1.0.0 (Security + Basedata + Patient) parses without errors</li>
+<li>v1.0.0 schema deploys to PostgreSQL successfully</li>
+<li>All entities have <code>@uuid</code> annotations</li>
+<li>All relationships reference valid targets</li>
+<li><code>muscovite-version --repo examples/fhir-health --ref v1.0.0</code>
+produces valid output</li>
+<li>At least one migration scenario (v1.0.0 → v1.1.0) testable</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

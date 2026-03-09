@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Consumers — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Event Consumers</span>
+</nav>
+
+<h1>Event Consumers</h1>
+
+
+<h1 id="event-consumers">Event Consumers</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-03</li>
+</ul>
+<p>Technical Story: Complete the event-driven architecture by
+implementing consumption of events published via the Outbox pattern
+(v0.8.0).</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>v0.8.0 implemented the Outbox pattern for reliable event publishing
+to NATS JetStream. Applications now need to consume these events to:</p>
+<ol type="1">
+<li><strong>Trigger side effects</strong> (send notifications, update
+external systems)</li>
+<li><strong>Build projections</strong> (read-optimized views,
+materialized aggregations)</li>
+<li><strong>Synchronize bounded contexts</strong> (eventual consistency
+between microservices)</li>
+<li><strong>Enable event sourcing patterns</strong> (replay events to
+rebuild state)</li>
+</ol>
+<p>We need a consistent framework for consuming events with proper error
+handling, replay capability, and monitoring.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Reliability</strong>: At-least-once delivery with idempotent
+handlers</li>
+<li><strong>Scalability</strong>: Horizontal scaling via consumer
+groups</li>
+<li><strong>Observability</strong>: Metrics and tracing for
+debugging</li>
+<li><strong>Simplicity</strong>: Easy handler registration and
+routing</li>
+<li><strong>Consistency</strong>: Match the OutboxPublisher patterns
+from v0.8.0</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Pull-based consumers</strong> (application polls
+JetStream)</li>
+<li><strong>Push-based consumers</strong> (NATS pushes to callback)</li>
+<li><strong>Hybrid approach</strong> (push with acknowledgment
+control)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Push-based consumers with explicit
+acknowledgment</strong>, because:</p>
+<ul>
+<li>JetStream's push subscriptions handle flow control
+automatically</li>
+<li>Explicit ack/nak allows retry control</li>
+<li>Consumer groups provide horizontal scaling via durable
+subscriptions</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Simpler implementation (no polling loop needed)</li>
+<li>Built-in load balancing across consumer instances</li>
+<li>JetStream handles message redelivery</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Requires message handlers to be idempotent (cannot prevent
+redelivery)</li>
+<li>Backpressure managed by NATS, not application</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<h3 id="components">Components</h3>
+<pre><code>NATS JetStream
+      │
+      │ Push subscription
+      ▼
+┌─────────────────────────────────────┐
+│ NatsEventConsumer                   │
+│                                     │
+│  ┌───────────────────────────────┐  │
+│  │ Handler Registry              │  │
+│  │  - PatientCreated → handler1  │  │
+│  │  - PatientUpdated → handler2  │  │
+│  │  - *              → default   │  │
+│  └───────────────────────────────┘  │
+│                                     │
+│  ┌───────────────────────────────┐  │
+│  │ Message Router                │  │
+│  │  - Parse JSON payload         │  │
+│  │  - Look up handler            │  │
+│  │  - Invoke with context        │  │
+│  │  - Ack/Nak based on result    │  │
+│  └───────────────────────────────┘  │
+└─────────────────────────────────────┘</code></pre>
+<h3 id="handler-signature">Handler Signature</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> EventHandler <span class="op">=</span> <span class="bu">std::</span>function<span class="op">&lt;</span>HandlerResult<span class="op">(</span><span class="at">const</span> EventContext<span class="op">&amp;</span> ctx<span class="op">)&gt;;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> EventContext <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string event_id<span class="op">;</span>              <span class="co">// UUID from domain_events.id</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string <span class="dt">event_type</span><span class="op">;</span>            <span class="co">// e.g., &quot;PatientCreated&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string aggregate_id<span class="op">;</span>          <span class="co">// e.g., patient UUID</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string schema<span class="op">;</span>                <span class="co">// Bounded context schema name</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    nlohmann<span class="op">::</span>json payload<span class="op">;</span>            <span class="co">// Parsed JSON payload</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>chrono::system_clock::time_point occurred_at<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>uint64_t sequence<span class="op">;</span>            <span class="co">// JetStream sequence number</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> reply_to<span class="op">;</span> <span class="co">// For request-reply patterns</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> HandlerResult <span class="op">{</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    Ack<span class="op">,</span>        <span class="co">// Successfully processed, acknowledge</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    Nak<span class="op">,</span>        <span class="co">// Temporary failure, retry later (exponential backoff)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    Term<span class="op">,</span>       <span class="co">// Permanent failure, do not retry (move to DLQ)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    InProgress  <span class="co">// Long-running operation, defer ack (for async handlers)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="consumer-configuration">Consumer Configuration</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> EventConsumerConfig <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Consumer group name (durable subscription)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string consumer_name<span class="op">{</span><span class="st">&quot;default&quot;</span><span class="op">};</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Subjects to subscribe to (e.g., &quot;muscovite.patient.&gt;&quot;)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> subjects<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maximum messages to buffer before backpressure</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>size_t max_pending<span class="op">{</span><span class="dv">1000</span><span class="op">};</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Ack wait before redelivery (default 30s)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>chrono::seconds ack_wait<span class="op">{</span><span class="dv">30</span><span class="op">};</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maximum redelivery attempts</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>size_t max_deliver<span class="op">{</span><span class="dv">5</span><span class="op">};</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Enable message deduplication window</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>chrono::seconds dedupe_window<span class="op">{</span><span class="dv">120</span><span class="op">};</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="registration-api">Registration API</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EventConsumer <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Register handler for specific event type</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> on<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> <span class="dt">event_type</span><span class="op">,</span> EventHandler handler<span class="op">);</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Register catch-all handler (for unmatched events)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> on_any<span class="op">(</span>EventHandler handler<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Register error handler (called on handler exceptions)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> on_error<span class="op">(</span>ErrorHandler handler<span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Start consuming events</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> start<span class="op">()</span> <span class="op">-&gt;</span> <span class="dt">bool</span><span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Stop consuming (waits for in-flight handlers)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> stop<span class="op">();</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="usage-example">Usage Example</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NatsConfig nats_config<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nats_config<span class="op">.</span>url <span class="op">=</span> <span class="st">&quot;nats://localhost:4222&quot;</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>EventConsumerConfig consumer_config<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>consumer_config<span class="op">.</span>consumer_name <span class="op">=</span> <span class="st">&quot;patient-notifications&quot;</span><span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>consumer_config<span class="op">.</span>subjects <span class="op">=</span> <span class="op">{</span><span class="st">&quot;muscovite.patient.&gt;&quot;</span><span class="op">};</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>NatsEventConsumer consumer<span class="op">(</span>nats_config<span class="op">,</span> consumer_config<span class="op">);</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Register handlers</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>consumer<span class="op">.</span>on<span class="op">(</span><span class="st">&quot;PatientCreated&quot;</span><span class="op">,</span> <span class="op">[&amp;</span>smtp<span class="op">](</span><span class="at">const</span> EventContext<span class="op">&amp;</span> ctx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> email <span class="op">=</span> ctx<span class="op">.</span>payload<span class="op">[</span><span class="st">&quot;contact_email&quot;</span><span class="op">].</span>get<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;();</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    smtp<span class="op">.</span>send_welcome_email<span class="op">(</span>email<span class="op">);</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HandlerResult<span class="op">::</span>Ack<span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>consumer<span class="op">.</span>on<span class="op">(</span><span class="st">&quot;PatientDeceasedFlagged&quot;</span><span class="op">,</span> <span class="op">[&amp;</span>audit<span class="op">](</span><span class="at">const</span> EventContext<span class="op">&amp;</span> ctx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    audit<span class="op">.</span>log_sensitive_access<span class="op">(</span>ctx<span class="op">.</span>event_id<span class="op">,</span> ctx<span class="op">.</span>aggregate_id<span class="op">);</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HandlerResult<span class="op">::</span>Ack<span class="op">;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">// Catch-all for unknown events</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>consumer<span class="op">.</span>on_any<span class="op">([](</span><span class="at">const</span> EventContext<span class="op">&amp;</span> ctx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    spdlog<span class="op">::</span>debug<span class="op">(</span><span class="st">&quot;Ignoring event: </span><span class="sc">{}</span><span class="st">&quot;</span><span class="op">,</span> ctx<span class="op">.</span><span class="dt">event_type</span><span class="op">);</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HandlerResult<span class="op">::</span>Ack<span class="op">;</span>  <span class="co">// Acknowledge to avoid redelivery</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">// Start consuming</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>consumer<span class="op">.</span>start<span class="op">();</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">// ... application runs ...</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">// Graceful shutdown</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>consumer<span class="op">.</span>stop<span class="op">();</span></span></code></pre></div>
+<h3 id="idempotency">Idempotency</h3>
+<p>Handlers MUST be idempotent because:</p>
+<ol type="1">
+<li>JetStream delivers at-least-once (not exactly-once)</li>
+<li>Consumer restarts may redeliver in-flight messages</li>
+<li>Network issues may cause duplicate deliveries</li>
+</ol>
+<p>Recommended idempotency strategies:</p>
+<ul>
+<li><strong>Database constraints</strong>: UNIQUE on event_id in
+processed_events table</li>
+<li><strong>Conditional updates</strong>: Only apply if current state
+matches expected</li>
+<li><strong>Deduplication cache</strong>: In-memory or Redis cache of
+recent event IDs</li>
+</ul>
+<h3 id="consumer-groups-horizontal-scaling">Consumer Groups (Horizontal
+Scaling)</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Multiple instances share the same consumer_name for load balancing</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>consumer_config<span class="op">.</span>consumer_name <span class="op">=</span> <span class="st">&quot;patient-notifications-group&quot;</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">// JetStream distributes messages across active consumers</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Each message delivered to exactly one consumer in the group</span></span></code></pre></div>
+<h3 id="metrics">Metrics</h3>
+<p>New Prometheus metrics (complement OutboxMetrics):</p>
+<pre><code>muscovite_consumer_events_received_total{consumer, event_type, schema}
+muscovite_consumer_events_acked_total{consumer, event_type, schema}
+muscovite_consumer_events_nacked_total{consumer, event_type, schema}
+muscovite_consumer_events_termed_total{consumer, event_type, schema}
+muscovite_consumer_handler_duration_seconds{consumer, event_type}
+muscovite_consumer_pending_messages{consumer}
+muscovite_consumer_redelivery_count{consumer, event_type}</code></pre>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<ol type="1">
+<li><strong>EventConsumer interface</strong>
+(<code>framework/dba/include/muscovite/dba/event_consumer.hpp</code>)</li>
+<li><strong>NatsEventConsumer</strong>
+(<code>framework/dba/src/nats_event_consumer.cpp</code>)</li>
+<li><strong>ConsumerMetrics</strong> (extend OutboxMetrics)</li>
+<li><strong>Unit tests</strong> (MockNatsConnection)</li>
+<li><strong>Integration tests</strong> (publish → consume
+round-trip)</li>
+<li><strong>Grafana dashboard</strong> (consumer panels)</li>
+<li><strong>Generator updates</strong> (optional consumer registration
+in main.cpp)</li>
+</ol>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Implementing event consumers in <code>framework/dba/</code></li>
+<li>Adding event-driven projections</li>
+<li>Building cross-context synchronization</li>
+<li>Implementing saga coordinators</li>
+</ul>
+<h3 id="when-it-does-not-apply">When It Does NOT Apply</h3>
+<ul>
+<li>Direct database queries (use repositories)</li>
+<li>Synchronous command handling (use gRPC services)</li>
+<li>Real-time streaming (use gRPC streaming)</li>
+</ul>
+<h3 id="key-files-affected">Key Files Affected</h3>
+<ul>
+<li><code>framework/dba/include/muscovite/dba/event_consumer.hpp</code>
+- Interface</li>
+<li><code>framework/dba/src/nats_event_consumer.cpp</code> - NATS
+implementation</li>
+<li><code>framework/dba/src/consumer_metrics.cpp</code> - Metrics</li>
+<li><code>framework/dba/tests/event_consumer_test.cpp</code> - Unit
+tests</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Handlers must return <code>HandlerResult</code> (compile-time)</li>
+<li>Consumer group names must be unique per deployment</li>
+<li>Metrics automatically tracked for all handlers</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="20260202-outbox-pattern-reliable-event-publishing.html">Outbox
+Pattern ADR</a> - Publisher side</li>
+<li><a href="https://docs.nats.io/nats-concepts/jetstream">NATS
+JetStream Documentation</a></li>
+<li><a
+href="https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.html">Enterprise
+Integration Patterns - Competing Consumers</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

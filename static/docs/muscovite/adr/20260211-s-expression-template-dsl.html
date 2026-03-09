@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S-Expression Template DSL for Code Generation (Future
+Direction) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>S-Expression Template DSL for Code Generation (Future
+Direction)</span>
+</nav>
+
+<h1>S-Expression Template DSL for Code Generation (Future
+Direction)</h1>
+
+
+<h1
+id="s-expression-template-dsl-for-code-generation-future-direction">S-Expression
+Template DSL for Code Generation (Future Direction)</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: templates, s-expression, racket, code-generation, future</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's generators produce code using Racket's
+<code>format</code> strings and <code>string-append</code>
+concatenation:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Current approach (widgets-views.rkt, qml-main.rkt)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>format <span class="st">&quot;class ~aEditDialog : public QDialog {</span><span class="ch">\n</span><span class="st">    Q_OBJECT</span><span class="ch">\n</span><span class="st">public:</span><span class="ch">\n</span><span class="st">    explicit ~aEditDialog(QWidget* parent = nullptr);</span><span class="ch">\n</span><span class="st">};</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        class-name class-name<span class="op">)</span></span></code></pre></div>
+<p>This works but has drawbacks:</p>
+<ul>
+<li><code>~a</code> placeholders are positional — counting placeholders
+in long format strings is error-prone</li>
+<li>Template structure is invisible — no distinction between
+"boilerplate" and "interpolated value"</li>
+<li>No composability — templates are flat strings, not structured
+data</li>
+<li>Validation is runtime-only — malformed templates produce bad output
+silently</li>
+</ul>
+<p>An alternative approach uses <strong>s-expression templates</strong>
+— structured Racket data that describes the code to generate:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Proposed future approach</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template entity-reference-widget</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">(</span>entity context<span class="op">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    `<span class="op">(</span>cpp-class</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>name ,<span class="op">(</span>format <span class="st">&quot;~aReferenceWidget&quot;</span> <span class="op">(</span>entity-name entity<span class="op">)))</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>base <span class="st">&quot;QComboBox&quot;</span><span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>qobject <span class="dv">#t</span><span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>signals</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>       ,<span class="op">(</span>format <span class="st">&quot;void ~aSelected(~a::~a::id_type id)&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span>to-camel-case <span class="op">(</span>entity-name entity<span class="op">))</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span>context-name context<span class="op">)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span>entity-name entity<span class="op">))))))</span></span></code></pre></div>
+<p><strong>Question</strong>: Should Muscovite adopt s-expression
+templates now, or continue with <code>format</code>-based
+generation?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Existing generators work — ~5,500 lines of <code>format</code>-based
+generation across <code>widgets-views.rkt</code> and
+<code>qml-main.rkt</code></li>
+<li>Risk of rewrite — converting existing generators to s-expression
+templates is a large refactor</li>
+<li>Benefit scales with target count — more valuable when generating for
+5+ targets, marginal for 2</li>
+<li>Racket's macro system is naturally suited to s-expression
+templates</li>
+<li>No external template engine dependency</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-adopt-s-expression-templates-now">Option 1: Adopt
+S-Expression Templates Now</h3>
+<p>Introduce <code>define-template</code>, <code>template-file</code>,
+and a template evaluation engine. Convert generators incrementally.</p>
+<h3 id="option-2-defer-to-future-continue-format-based">Option 2: Defer
+to Future (Continue format-based)</h3>
+<p>Document the approach as a future direction. Continue using
+<code>format</code>/<code>string-append</code> in current generators.
+Revisit when adding the 3rd or 4th UI target.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — Defer</strong>, because:</p>
+<ul>
+<li>Current <code>format</code>-based generators work and are
+tested</li>
+<li>Only 2 UI targets exist — the composability benefit doesn't justify
+the refactor cost</li>
+<li>Layout-spec integration (ADR
+<code>abstract-layout-vocabulary</code>) can be implemented with
+existing <code>format</code> patterns</li>
+<li>The s-expression approach is well-understood and can be adopted
+later without breaking changes</li>
+<li>Rewriting 5,500 lines of working generator code carries regression
+risk</li>
+</ul>
+<h3 id="when-to-revisit">When to Revisit</h3>
+<p>This ADR should be revisited when:</p>
+<ol type="1">
+<li>A 3rd UI target is added — template duplication becomes painful</li>
+<li>Layout-spec generators reach 1,000+ lines of <code>format</code>
+strings — maintainability threshold</li>
+<li>Cross-target template sharing is needed (e.g., both Qt Widgets and
+QML emit similar validation code)</li>
+</ol>
+<h3 id="s-expression-template-design-for-future-reference">S-Expression
+Template Design (For Future Reference)</h3>
+<p>The template system would consist of:</p>
+<ol type="1">
+<li><strong><code>define-template</code></strong> — macro for declaring
+named templates</li>
+<li><strong>Template evaluation</strong> — walks s-expression tree,
+emits target-language code</li>
+<li><strong>Target-specific emitters</strong> — <code>cpp-class</code> →
+C++ header/source, <code>qml-item</code> → QML component</li>
+<li><strong>Composition</strong> — templates reference other templates
+by name</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Template definition</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template entity-edit-dialog</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>λ <span class="op">(</span>entity layout-spec target-config<span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    `<span class="op">(</span>cpp-class</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>name ,<span class="op">(</span>format <span class="st">&quot;~aEditDialog&quot;</span> <span class="op">(</span>entity-name entity<span class="op">)))</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>base <span class="st">&quot;QDialog&quot;</span><span class="op">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>qobject <span class="dv">#t</span><span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>constructor ...<span class="op">)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>private-fields</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>       ,@<span class="op">(</span>for/list <span class="op">([</span>field <span class="op">(</span>entity-fields entity<span class="op">)])</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>           <span class="op">(</span>generate-field-widget field target-config<span class="op">))))))</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">;; Template evaluation</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>emit-cpp-class template-output<span class="op">)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match template-output</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>`<span class="op">(</span>cpp-class <span class="op">(</span>name ,name<span class="op">)</span> <span class="op">(</span>base ,base<span class="op">)</span> <span class="op">(</span>qobject ,qobj<span class="op">)</span> . ,rest<span class="op">)</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>format <span class="st">&quot;class ~a : public ~a {</span><span class="ch">\n</span><span class="st">&quot;</span> name base<span class="op">)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">if</span> qobj <span class="st">&quot;    Q_OBJECT</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; ... emit rest</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="op">)]))</span></span></code></pre></div>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li>Documents the design direction for future contributors</li>
+<li>Current generators are unaffected — no regression risk</li>
+<li>Decision is reversible — can adopt templates incrementally
+later</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li>Generators continue using <code>format</code> strings (harder to
+maintain at scale)</li>
+<li>Adding new targets requires duplicating format-string patterns</li>
+<li>No structured validation of generated code structure</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related <a href="20260211-abstract-layout-vocabulary.html">ADR
+20260211 Abstract Layout Vocabulary</a></li>
+<li>Related <a href="20260211-codegen-over-templates-qt-widgets.html">ADR
+20260211 Code Generation Over Templates for Qt</a></li>
+<li>Future: IDEA-016 (s-expression-template-dsl)</li>
+<li>Current generators:
+<code>dslgen/generators/qt/widgets-views.rkt</code>,
+<code>dslgen/generators/qt/qml-main.rkt</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When proposing to replace <code>format</code>-based generation with
+structured templates</li>
+<li>When discussing code generation architecture for multiple
+targets</li>
+<li>When evaluating template engines or DSLs for code generation</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Current generator work — use
+<code>format</code>/<code>string-append</code> as today</li>
+<li>Adding <code>LAYOUT</code> support to existing generators</li>
+<li>Non-template-related generator changes</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><strong>Do not</strong> introduce <code>define-template</code> or
+s-expression template infrastructure until this ADR is superseded</li>
+<li>Continue using <code>format</code>/<code>string-append</code> in
+generators</li>
+<li>If proposing template adoption, reference this ADR and provide
+migration plan</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/qt/widgets-views.rkt</code> — current
+format-based Qt Widgets generation</li>
+<li><code>dslgen/generators/qt/qml-main.rkt</code> — current
+format-based QML generation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

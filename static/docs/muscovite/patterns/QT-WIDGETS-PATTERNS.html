@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qt Widgets C++ Pattern Catalog for
+Muscovite — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>Qt Widgets C++ Pattern Catalog for Muscovite</span>
+</nav>
+
+<h1>Qt Widgets C++ Pattern Catalog for Muscovite</h1>
+
+
+<h1 id="qt-widgets-c-pattern-catalog-for-muscovite">Qt Widgets C++
+Pattern Catalog for Muscovite</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Constraint document for AI agents and human
+developers. Every Qt Widgets C++ pattern in Muscovite framework code
+(Layer 1 <code>framework/qt/</code>) and generated Qt output (Layer 2)
+must use the canonical form.</p>
+<p><strong>Scope</strong>: All Qt C++ files — <code>framework/qt/</code>
+(Layer 1), generated Qt Widgets output from
+<code>dslgen/generators/qt/</code>, and the C++ backing classes for Qt
+Quick/QML ViewModels. For pure QML patterns, see <a
+href="QML-PATTERNS.html">QML-PATTERNS.md</a>. For non-Qt C++ patterns, see
+<a href="CPP-PATTERNS.html">CPP-PATTERNS.md</a>.</p>
+<p><strong>Sibling to</strong>: <a
+href="QML-PATTERNS.html">QML-PATTERNS.md</a> (QML output patterns), <a
+href="CPP-PATTERNS.html">CPP-PATTERNS.md</a> (pure C++ patterns), <a
+href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> (Racket coding
+constraints)</p>
+<p><strong>Companion ADR</strong>: TBD — Qt/QML Modern Style Guide
+(planned Phase 1 of C++ modernization)</p>
+<p><strong>Qt Version</strong>: Qt 6.x. <strong>Standard</strong>:
+C++23.</p>
+</blockquote>
+<hr />
+<h2 id="rating-system">Rating System</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CANONICAL</strong></td>
+<td>The only acceptable pattern for new and modified code</td>
+</tr>
+<tr>
+<td><strong>ACCEPTABLE</strong></td>
+<td>Tolerated in specific circumstances (documented)</td>
+</tr>
+<tr>
+<td><strong>ANTI-PATTERN</strong></td>
+<td>Forbidden in new code; convert when touching the file</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-asynchronous-grpc-calls-p0--production-blocker">1.
+Asynchronous gRPC Calls (P0 — Production Blocker)</h2>
+<p><strong>CANONICAL</strong>: ALL gRPC calls from Qt UI code MUST be
+asynchronous. NEVER block the UI thread with synchronous RPC.</p>
+<p>This is the single most critical defect in generated Qt code — every
+generated dialog and ViewModel makes synchronous gRPC calls on the main
+thread, causing UI freezes and potential ANR (Application Not
+Responding) on slow networks.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — async gRPC via QtConcurrent + QFutureWatcher</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> loadPatient<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span><span class="op">*</span> watcher <span class="op">=</span> <span class="kw">new</span> <span class="ex">QFutureWatcher</span><span class="op">&lt;</span>grpc<span class="op">::</span>Status<span class="op">&gt;(</span><span class="kw">this</span><span class="op">);</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">connect</span><span class="op">(</span>watcher<span class="op">,</span> <span class="op">&amp;</span><span class="ex">QFutureWatcher</span><span class="op">&lt;</span>grpc<span class="op">::</span>Status<span class="op">&gt;::</span>finished<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">this</span><span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">,</span> watcher<span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">auto</span> status <span class="op">=</span> watcher<span class="op">-&gt;</span>result<span class="op">();</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>status<span class="op">.</span>ok<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                populateFields<span class="op">(</span><span class="va">response_</span><span class="op">);</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                showError<span class="op">(</span>status<span class="op">.</span>error_message<span class="op">());</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            watcher<span class="op">-&gt;</span>deleteLater<span class="op">();</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        watcher<span class="op">-&gt;</span>setFuture<span class="op">(</span><span class="ex">QtConcurrent::run</span><span class="op">([</span><span class="kw">this</span><span class="op">,</span> id<span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            grpc<span class="op">::</span>ClientContext ctx<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            GetPatientRequest req<span class="op">;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            req<span class="op">.</span>mutable_id<span class="op">()-&gt;</span>set_value<span class="op">(</span>id<span class="op">.</span>toStdString<span class="op">());</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">stub_</span><span class="op">-&gt;</span>GetPatient<span class="op">(&amp;</span>ctx<span class="op">,</span> req<span class="op">,</span> <span class="op">&amp;</span><span class="va">response_</span><span class="op">);</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">}));</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — framework helper using Qt TaskTree (planned for framework/qt/)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// GrpcTaskAdapter wraps gRPC calls as TaskTree tasks with timeout + cancellation</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> loadPatient<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">using</span> <span class="kw">namespace</span> Tasking<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        GetPatientRequest req<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        req<span class="op">.</span>mutable_id<span class="op">()-&gt;</span>set_value<span class="op">(</span>id<span class="op">.</span>toStdString<span class="op">());</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">const</span> <span class="kw">auto</span> onDone <span class="op">=</span> <span class="op">[</span><span class="kw">this</span><span class="op">](</span><span class="at">const</span> GrpcResult<span class="op">&lt;</span>GetPatientResponse<span class="op">&gt;&amp;</span> result<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>result<span class="op">.</span>ok<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                populateFields<span class="op">(</span>result<span class="op">.</span>response<span class="op">());</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                showError<span class="op">(</span>result<span class="op">.</span>errorMessage<span class="op">());</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">// TaskTree handles threading, timeout, cancellation</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> <span class="op">*</span>task <span class="op">=</span> <span class="kw">new</span> GrpcTask<span class="op">&lt;</span>GetPatientRequest<span class="op">,</span> GetPatientResponse<span class="op">&gt;(</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">stub_</span><span class="op">,</span> <span class="op">&amp;</span>PatientService<span class="op">::</span>Stub<span class="op">::</span>GetPatient<span class="op">,</span> req<span class="op">,</span> onDone<span class="op">,</span> <span class="kw">this</span><span class="op">);</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        task<span class="op">-&gt;</span>start<span class="op">();</span>  <span class="co">// non-blocking, result delivered via signal</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — synchronous gRPC on UI thread (P0 BLOCKER)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// EVERY generated dialog currently does this — affects ALL 57 Qt generator files</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PatientEditDialog<span class="op">::</span>loadPatient<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    grpc<span class="op">::</span>ClientContext ctx<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    GetPatientRequest req<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    GetPatientResponse resp<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    req<span class="op">.</span>mutable_id<span class="op">()-&gt;</span>set_value<span class="op">(</span>id<span class="op">.</span>toStdString<span class="op">());</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> status <span class="op">=</span> <span class="va">stub_</span><span class="op">-&gt;</span>GetPatient<span class="op">(&amp;</span>ctx<span class="op">,</span> req<span class="op">,</span> <span class="op">&amp;</span>resp<span class="op">);</span>  <span class="co">// BLOCKS UI THREAD</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>status<span class="op">.</span>ok<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        populateFields<span class="op">(</span>resp<span class="op">);</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — QThread::msleep blocking UI</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> LoginDialog<span class="op">::</span>onLoginClicked<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... send login request ...</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QThread::msleep</span><span class="op">(</span><span class="dv">500</span><span class="op">);</span>  <span class="co">// BLOCKS UI FOR 500ms — login_dialog.cpp:L183</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    checkLoginResult<span class="op">();</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade F — every generated gRPC call is
+synchronous. QThread::msleep(500) in login dialog. <strong>Generator
+files</strong>: ALL <code>dslgen/generators/qt/</code> files (~57 files)
+that emit gRPC calls. <strong>Framework needed</strong>:
+<code>GrpcTaskAdapter</code> class in <code>framework/qt/</code> built
+on Qt TaskTree (vendored from qt-creator solutions/tasking/ until Qt
+6.11 ships <code>Qt::Tasking</code>).</p>
+<hr />
+<h2 id="2-grpc-stub-ownership-p0--thread-safety">2. gRPC Stub Ownership
+(P0 — Thread Safety)</h2>
+<p><strong>CANONICAL</strong>: gRPC stubs MUST be instance members, NOT
+static. Recreate on channel change.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — instance member stub, recreated on channel change</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientViewModel <span class="op">:</span> <span class="kw">public</span> <span class="ex">QObject</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setChannel<span class="op">(</span><span class="bu">std::</span>shared_ptr<span class="op">&lt;</span>grpc<span class="op">::</span>Channel<span class="op">&gt;</span> channel<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">stub_</span> <span class="op">=</span> PatientService<span class="op">::</span>NewStub<span class="op">(</span>channel<span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>unique_ptr<span class="op">&lt;</span>PatientService<span class="op">::</span>Stub<span class="op">&gt;</span> <span class="va">stub_</span><span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — static stub (thread-unsafe, stale channel)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientViewModel <span class="op">:</span> <span class="kw">public</span> <span class="ex">QObject</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="bu">std::</span>shared_ptr<span class="op">&lt;</span>PatientService<span class="op">::</span>Stub<span class="op">&gt;</span> <span class="va">stub_</span><span class="op">;</span>  <span class="co">// DATA RACE</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> ensureStub<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!</span><span class="va">stub_</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="va">stub_</span> <span class="op">=</span> PatientService<span class="op">::</span>NewStub<span class="op">(</span>channel<span class="op">);</span>  <span class="co">// Race condition</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade F — all QML ViewModels use static
+stubs. <strong>Generator files</strong>:
+<code>qt/qml-viewmodel.rkt</code>, <code>qt/widgets-main.rkt</code></p>
+<hr />
+<h2 id="3-theming-and-colors-p1--maintainability">3. Theming and Colors
+(P1 — Maintainability)</h2>
+<p><strong>CANONICAL</strong>: ALL colors and visual styles MUST use the
+theme system. No hardcoded CSS or color values.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — theme-based styling</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;muscovite/qt/theme.hpp&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> label <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLabel</span><span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Status:&quot;</span><span class="op">));</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>label<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span>muscovite<span class="op">::</span>qt<span class="op">::</span>Theme<span class="op">::</span>instance<span class="op">().</span>fieldLabelStyle<span class="op">());</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> errorBox <span class="op">=</span> <span class="kw">new</span> <span class="ex">QGroupBox</span><span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Errors&quot;</span><span class="op">));</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>errorBox<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span>muscovite<span class="op">::</span>qt<span class="op">::</span>Theme<span class="op">::</span>instance<span class="op">().</span>errorGroupStyle<span class="op">());</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QPalette for widget colors</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> palette <span class="op">=</span> widget<span class="op">-&gt;</span>palette<span class="op">();</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>palette<span class="op">.</span>setColor<span class="op">(</span><span class="ex">QPalette::Highlight</span><span class="op">,</span> theme<span class="op">.</span>accentColor<span class="op">());</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>widget<span class="op">-&gt;</span>setPalette<span class="op">(</span>palette<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — hardcoded colors (25+ occurrences in framework)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>label<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span><span class="st">&quot;QLabel { color: #cc0000; font-weight: bold; }&quot;</span><span class="op">);</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>groupBox<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span><span class="st">&quot;QGroupBox { border: 1px solid red; }&quot;</span><span class="op">);</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>button<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span><span class="st">&quot;QPushButton { background-color: #4CAF50; color: white; }&quot;</span><span class="op">);</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — inline CSS strings</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>widget<span class="op">-&gt;</span>setStyleSheet<span class="op">(</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;QWidget {&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;  background-color: #f0f0f0;&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;  border: 1px solid #cccccc;&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;  border-radius: 4px;&quot;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;}&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade D — 25+ setStyleSheet calls with
+hardcoded CSS in framework, more in generated output. MuscoviteTheme.qml
+exists for QML but unused. No Qt Widgets theme singleton.
+<strong>Generator files</strong>: <code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code> <strong>Framework
+files</strong>: <code>framework/qt/include/muscovite/qt/</code> — most
+widget classes</p>
+<hr />
+<h2 id="4-qml-property-naming-p1--convention-violation">4. QML Property
+Naming (P1 — Convention Violation)</h2>
+<p><strong>CANONICAL</strong>: ALL QML-exposed properties MUST use
+camelCase. Never snake_case.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — camelCase Q_PROPERTY</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> familyName READ familyName WRITE setFamilyName NOTIFY familyNameChanged<span class="op">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> priorityId READ priorityId WRITE setPriorityId NOTIFY priorityIdChanged<span class="op">)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QDate</span> birthDate READ birthDate WRITE setBirthDate NOTIFY birthDateChanged<span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — snake_case Q_PROPERTY (current generator output)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> family_name READ family_name WRITE setFamily_name NOTIFY family_nameChanged<span class="op">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> priority_id READ priority_id WRITE setPriority_id NOTIFY priority_idChanged<span class="op">)</span></span></code></pre></div>
+<p><strong>Root cause</strong>: <code>symbol-&gt;qml-property</code> in
+<code>dslgen/generators/qt/common.rkt</code> splits on <code>-</code>
+(kebab-case) but DSL field names use <code>_</code> (snake_case). Fix:
+add <code>(string-replace str "_" "-")</code> before splitting.
+<strong>Breaking change</strong>: Safe — both ViewModel and QML are
+generated, so coordinated regeneration maintains consistency.</p>
+<p><strong>Audit</strong>: Grade F — every generated QML property from a
+snake_case DSL field is wrong. <strong>Generator files</strong>:
+<code>qt/common.rkt</code> (<code>symbol-&gt;qml-property</code>), all
+QML ViewModel generators</p>
+<hr />
+<h2 id="5-validator-widget-types-p1--dead-code">5. Validator Widget
+Types (P1 — Dead Code)</h2>
+<p><strong>CANONICAL</strong>: Validators MUST use the correct widget
+type for each field. Not every field is a QLineEdit.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — type-appropriate widget casting</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PatientValidator<span class="op">::</span>validate<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// String fields → QLineEdit</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> mrnEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;mrn_edit&quot;</span><span class="op">);</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>mrnEdit <span class="op">&amp;&amp;</span> mrnEdit<span class="op">-&gt;</span>text<span class="op">().</span>isEmpty<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        addError<span class="op">(</span><span class="st">&quot;mrn&quot;</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;MRN is required&quot;</span><span class="op">));</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Boolean fields → QCheckBox</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> activeCheck <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QCheckBox</span><span class="op">*&gt;(</span><span class="st">&quot;active_check&quot;</span><span class="op">);</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// No required validation needed for checkboxes — they always have a value</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Date fields → QDateEdit</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> birthDateEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QDateEdit</span><span class="op">*&gt;(</span><span class="st">&quot;birth_date_edit&quot;</span><span class="op">);</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>birthDateEdit <span class="op">&amp;&amp;</span> <span class="op">!</span>birthDateEdit<span class="op">-&gt;</span>date<span class="op">().</span>isValid<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        addError<span class="op">(</span><span class="st">&quot;birth_date&quot;</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Invalid date&quot;</span><span class="op">));</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// FK/Lookup fields → QComboBox</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> genderCombo <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QComboBox</span><span class="op">*&gt;(</span><span class="st">&quot;gender_combo&quot;</span><span class="op">);</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>genderCombo <span class="op">&amp;&amp;</span> genderCombo<span class="op">-&gt;</span>currentData<span class="op">().</span>isNull<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        addError<span class="op">(</span><span class="st">&quot;gender_id&quot;</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Gender is required&quot;</span><span class="op">));</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — all fields cast to QLineEdit (current generator output)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">// validator-generator.rkt:L119 unconditionally emits QLineEdit* for ALL fields</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> PatientValidator<span class="op">::</span>validate<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> mrnEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;mrn_edit&quot;</span><span class="op">);</span>       <span class="co">// OK: text field</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> activeEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;active_edit&quot;</span><span class="op">);</span> <span class="co">// WRONG: checkbox</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> birthEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;birth_date_edit&quot;</span><span class="op">);</span> <span class="co">// WRONG: date edit</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> genderEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;gender_edit&quot;</span><span class="op">);</span> <span class="co">// WRONG: combobox</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// → Validators are effectively dead code for non-text fields</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade D+ — validators are generated but
+non-functional for non-text fields. <strong>Generator files</strong>:
+<code>qt/validator-generator.rkt</code> (L119), needs type-dispatched
+widget accessors. Must use <code>type-registry.rkt</code> Qt widget
+mappings to emit correct widget type per field.</p>
+<hr />
+<h2 id="6-memory-management-qt-patterns">6. Memory Management (Qt
+Patterns)</h2>
+<p><strong>CANONICAL</strong>: Use Qt's parent-child ownership model. No
+raw <code>new</code> without parent. No manual <code>delete</code>.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — parent-child ownership</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> layout <span class="op">=</span> <span class="kw">new</span> <span class="ex">QVBoxLayout</span><span class="op">(</span><span class="kw">this</span><span class="op">);</span>  <span class="co">// this takes ownership</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> label <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLabel</span><span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Name:&quot;</span><span class="op">),</span> <span class="kw">this</span><span class="op">);</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> edit <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLineEdit</span><span class="op">(</span><span class="kw">this</span><span class="op">);</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>layout<span class="op">-&gt;</span>addWidget<span class="op">(</span>label<span class="op">);</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>layout<span class="op">-&gt;</span>addWidget<span class="op">(</span>edit<span class="op">);</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — explicit deleteLater for cross-thread</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>worker<span class="op">,</span> <span class="op">&amp;</span>Worker<span class="op">::</span>finished<span class="op">,</span> worker<span class="op">,</span> <span class="op">&amp;</span><span class="ex">QObject::deleteLater</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — raw new without parent (memory leak risk)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> dialog <span class="op">=</span> <span class="kw">new</span> PatientEditDialog<span class="op">();</span>  <span class="co">// No parent!</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dialog<span class="op">-&gt;</span>show<span class="op">();</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">// If dialog is not explicitly deleted, it leaks</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — manual delete in destructors</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>PatientList<span class="op">::~</span>PatientList<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">delete</span> <span class="va">model_</span><span class="op">;</span>  <span class="co">// Should use parent ownership</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">delete</span> <span class="va">delegate_</span><span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Generally good in framework. Some generated
+dialogs created without parent. <strong>Generator files</strong>:
+<code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code></p>
+<hr />
+<h2 id="7-signalslot-connections">7. Signal/Slot Connections</h2>
+<p><strong>CANONICAL</strong>: Use Qt6 type-safe function pointer
+connections. Use <code>qOverload&lt;&gt;()</code> for overloaded
+signals.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — type-safe connections (Qt5+ style)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>button<span class="op">,</span> <span class="op">&amp;</span><span class="ex">QPushButton::clicked</span><span class="op">,</span> <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>PatientDialog<span class="op">::</span>onSave<span class="op">);</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>model<span class="op">,</span> <span class="op">&amp;</span><span class="ex">QAbstractItemModel::rowsInserted</span><span class="op">,</span> <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>PatientList<span class="op">::</span>onRowsInserted<span class="op">);</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — qOverload for overloaded signals/slots (Qt6)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>spinBox<span class="op">,</span> <span class="fu">qOverload</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;(&amp;</span><span class="ex">QSpinBox::valueChanged</span><span class="op">),</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>Dialog<span class="op">::</span>onValueChanged<span class="op">);</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>comboBox<span class="op">,</span> <span class="fu">qOverload</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;(&amp;</span><span class="ex">QComboBox::currentIndexChanged</span><span class="op">),</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>Dialog<span class="op">::</span>onSelectionChanged<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — QOverload::of (Qt5 compat — use qOverload in Qt6)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>spinBox<span class="op">,</span> <span class="ex">QOverload</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;::</span>of<span class="op">(&amp;</span><span class="ex">QSpinBox::valueChanged</span><span class="op">),</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>Dialog<span class="op">::</span>onValueChanged<span class="op">);</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — string-based connections (no compile-time checking)</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>button<span class="op">,</span> <span class="ex">SIGNAL</span><span class="op">(</span>clicked<span class="op">()),</span> <span class="kw">this</span><span class="op">,</span> <span class="ex">SLOT</span><span class="op">(</span>onSave<span class="op">()));</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — lambda capturing this without safety</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>widget<span class="op">,</span> <span class="op">&amp;</span>Widget<span class="op">::</span>destroyed<span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">]()</span> <span class="op">{</span> doSomething<span class="op">();</span> <span class="op">});</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Safe version: capture weak reference or use QPointer</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade A- for signal/slot style. But
+<code>QOverload::of()</code> used 10+ times instead of
+<code>qOverload&lt;&gt;()</code>. <strong>Framework files</strong>:
+Various <code>framework/qt/</code> sources — migrate
+<code>QOverload::of</code> to <code>qOverload&lt;&gt;</code></p>
+<hr />
+<h2 id="8-internationalization-i18n">8. Internationalization (i18n)</h2>
+<p><strong>CANONICAL</strong>: ALL user-facing strings MUST use
+<code>tr()</code>. Widget text, dialog titles, error messages,
+tooltips.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — tr() for all user-facing strings</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> label <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLabel</span><span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Family Name:&quot;</span><span class="op">));</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>setWindowTitle<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Edit Patient&quot;</span><span class="op">));</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>statusBar<span class="op">()-&gt;</span>showMessage<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Patient saved successfully&quot;</span><span class="op">));</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">QMessageBox::critical</span><span class="op">(</span><span class="kw">this</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Error&quot;</span><span class="op">),</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Failed to load patient: %1&quot;</span><span class="op">).</span>arg<span class="op">(</span>errorMsg<span class="op">));</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — %n for plurals</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>statusBar<span class="op">()-&gt;</span>showMessage<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;</span><span class="sc">%n</span><span class="st"> patient(s) found&quot;</span><span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">,</span> count<span class="op">));</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — hardcoded strings</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> label <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLabel</span><span class="op">(</span><span class="st">&quot;Family Name:&quot;</span><span class="op">);</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>setWindowTitle<span class="op">(</span><span class="st">&quot;Edit Patient&quot;</span><span class="op">);</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">QMessageBox::critical</span><span class="op">(</span><span class="kw">this</span><span class="op">,</span> <span class="st">&quot;Error&quot;</span><span class="op">,</span> <span class="st">&quot;Failed to load patient&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade A- in framework (mostly good).
+Generated output inconsistent — some strings use <code>tr()</code>,
+others don't. <strong>Generator files</strong>:
+<code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code> (i18n coverage varies)</p>
+<hr />
+<h2 id="9-threading-and-blocking">9. Threading and Blocking</h2>
+<p><strong>CANONICAL</strong>: NEVER block the main thread. Use
+signals/slots for cross-thread communication.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QTimer for deferred actions</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">QTimer::singleShot</span><span class="op">(</span><span class="dv">0</span><span class="op">,</span> <span class="kw">this</span><span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Deferred to next event loop iteration</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    refreshData<span class="op">();</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QtConcurrent for background work</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> future <span class="op">=</span> <span class="ex">QtConcurrent::run</span><span class="op">([</span><span class="kw">this</span><span class="op">]()</span> <span class="op">-&gt;</span> Result <span class="op">{</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> performHeavyWork<span class="op">();</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> watcher <span class="op">=</span> <span class="kw">new</span> <span class="ex">QFutureWatcher</span><span class="op">&lt;</span>Result<span class="op">&gt;(</span><span class="kw">this</span><span class="op">);</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>watcher<span class="op">,</span> <span class="op">&amp;</span><span class="ex">QFutureWatcher</span><span class="op">&lt;</span>Result<span class="op">&gt;::</span>finished<span class="op">,</span> <span class="kw">this</span><span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">,</span> watcher<span class="op">]()</span> <span class="op">{</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    handleResult<span class="op">(</span>watcher<span class="op">-&gt;</span>result<span class="op">());</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    watcher<span class="op">-&gt;</span>deleteLater<span class="op">();</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>watcher<span class="op">-&gt;</span>setFuture<span class="op">(</span>future<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — blocking the UI thread</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">QThread::msleep</span><span class="op">(</span><span class="dv">500</span><span class="op">);</span>                    <span class="co">// BLOCKS UI for 500ms</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">QThread::currentThread</span><span class="op">()-&gt;</span>wait<span class="op">(</span><span class="dv">1000</span><span class="op">);</span>    <span class="co">// BLOCKS UI for 1000ms</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(!</span>ready<span class="op">)</span> <span class="op">{</span> <span class="ex">QThread::msleep</span><span class="op">(</span><span class="dv">10</span><span class="op">);</span> <span class="op">}</span> <span class="co">// Spin-wait BLOCKS UI</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — blocking event processing</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">QApplication::processEvents</span><span class="op">();</span>  <span class="co">// Reentrant — causes subtle bugs</span></span></code></pre></div>
+<p><strong>Audit</strong>: <code>QThread::msleep(500)</code> in
+<code>login_dialog.cpp:L178/L183</code> — P1 blocker. <strong>Framework
+files</strong>: <code>framework/qt/src/login_dialog.cpp</code></p>
+<hr />
+<h2 id="10-layout-management">10. Layout Management</h2>
+<p><strong>CANONICAL</strong>: Use layout classes exclusively. Never use
+fixed positioning or manual resizing.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QFormLayout for label-field pairs</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> formLayout <span class="op">=</span> <span class="kw">new</span> <span class="ex">QFormLayout</span><span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>formLayout<span class="op">-&gt;</span>addRow<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;MRN:&quot;</span><span class="op">),</span> <span class="va">mrnEdit_</span><span class="op">);</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>formLayout<span class="op">-&gt;</span>addRow<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Family Name:&quot;</span><span class="op">),</span> <span class="va">familyNameEdit_</span><span class="op">);</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>formLayout<span class="op">-&gt;</span>addRow<span class="op">(</span><span class="fu">tr</span><span class="op">(</span><span class="st">&quot;Birth Date:&quot;</span><span class="op">),</span> <span class="va">birthDateEdit_</span><span class="op">);</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QVBoxLayout / QHBoxLayout for stacking</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> mainLayout <span class="op">=</span> <span class="kw">new</span> <span class="ex">QVBoxLayout</span><span class="op">(</span><span class="kw">this</span><span class="op">);</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>addWidget<span class="op">(</span><span class="va">formGroup_</span><span class="op">);</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>addWidget<span class="op">(</span><span class="va">buttonBox_</span><span class="op">);</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — stretch and spacing from theme</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>setContentsMargins<span class="op">(</span>theme<span class="op">.</span>dialogMargins<span class="op">());</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>setSpacing<span class="op">(</span>theme<span class="op">.</span>formSpacing<span class="op">());</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — fixed geometry</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>widget<span class="op">-&gt;</span>setGeometry<span class="op">(</span><span class="dv">10</span><span class="op">,</span> <span class="dv">20</span><span class="op">,</span> <span class="dv">200</span><span class="op">,</span> <span class="dv">30</span><span class="op">);</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>widget<span class="op">-&gt;</span>setFixedSize<span class="op">(</span><span class="dv">400</span><span class="op">,</span> <span class="dv">300</span><span class="op">);</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — hardcoded margins/spacing</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>setContentsMargins<span class="op">(</span><span class="dv">10</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">10</span><span class="op">);</span>  <span class="co">// Use theme constants</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>mainLayout<span class="op">-&gt;</span>setSpacing<span class="op">(</span><span class="dv">8</span><span class="op">);</span>                         <span class="co">// Use theme constants</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade B+ — layout usage is good structurally,
+but spacing/margins are hardcoded. <strong>Generator files</strong>:
+<code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code></p>
+<hr />
+<h2 id="11-q_property-for-qml-viewmodels">11. Q_PROPERTY for QML
+ViewModels</h2>
+<p><strong>CANONICAL</strong>: Every field exposed to QML MUST have full
+Q_PROPERTY with READ, WRITE, NOTIFY.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — complete Q_PROPERTY declaration</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientViewModel <span class="op">:</span> <span class="kw">public</span> <span class="ex">QObject</span> <span class="op">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> id READ id NOTIFY idChanged<span class="op">)</span>  <span class="co">// Read-only (PK)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> mrn READ mrn WRITE setMrn NOTIFY mrnChanged<span class="op">)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="dt">bool</span> active READ active WRITE setActive NOTIFY activeChanged<span class="op">)</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QDate</span> birthDate READ birthDate WRITE setBirthDate NOTIFY birthDateChanged<span class="op">)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> mrn<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="ex">QString</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">mrn_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setMrn<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span><span class="va">mrn_</span> <span class="op">!=</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>            <span class="va">mrn_</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>            <span class="ex">emit</span> mrnChanged<span class="op">();</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="ex">signals</span><span class="op">:</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> idChanged<span class="op">();</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> mrnChanged<span class="op">();</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> activeChanged<span class="op">();</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> birthDateChanged<span class="op">();</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> <span class="va">id_</span><span class="op">;</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> <span class="va">mrn_</span><span class="op">;</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> <span class="va">active_</span><span class="op">{</span><span class="kw">false</span><span class="op">};</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QDate</span> <span class="va">birthDate_</span><span class="op">;</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing NOTIFY (QML binding won&#39;t update)</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> mrn READ mrn WRITE setMrn<span class="op">)</span>  <span class="co">// No NOTIFY → stale UI</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — missing change guard in setter (infinite loop risk)</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> setMrn<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">mrn_</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">emit</span> mrnChanged<span class="op">();</span>  <span class="co">// Emits even if value didn&#39;t change</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade C — Q_PROPERTY declarations exist but
+some miss NOTIFY. Naming is snake_case (see §4). <strong>Generator
+files</strong>: <code>qt/qml-viewmodel.rkt</code></p>
+<hr />
+<h2 id="12-forward-declarations-in-qt-headers">12. Forward Declarations
+in Qt Headers</h2>
+<p><strong>CANONICAL</strong>: Forward-declare Qt classes in headers.
+Include full headers only in <code>.cpp</code> files.</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — forward declarations in header</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>QT_BEGIN_NAMESPACE</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="ex">QLineEdit</span><span class="op">;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="ex">QComboBox</span><span class="op">;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="ex">QDateEdit</span><span class="op">;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="ex">QPushButton</span><span class="op">;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="ex">QVBoxLayout</span><span class="op">;</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>QT_END_NAMESPACE</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientEditDialog<span class="op">(</span><span class="ex">QWidget</span><span class="op">*</span> parent <span class="op">=</span> <span class="kw">nullptr</span><span class="op">);</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">mrnEdit_</span><span class="op">{};</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QComboBox</span><span class="op">*</span> <span class="va">genderCombo_</span><span class="op">{};</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QDateEdit</span><span class="op">*</span> <span class="va">birthDateEdit_</span><span class="op">{};</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co">// In .cpp:</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QLineEdit&gt;</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QComboBox&gt;</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QDateEdit&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — full includes in header</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QLineEdit&gt;</span><span class="pp">      </span><span class="co">// Only need pointer — forward-declare</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QComboBox&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QDateEdit&gt;</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QPushButton&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QVBoxLayout&gt;</span></span></code></pre></div>
+<p><strong>Audit</strong>: Grade D+ — barely used in framework.
+Generated code includes everything in headers. <strong>Framework
+files</strong>: <code>framework/qt/include/muscovite/qt/*.hpp</code>
+<strong>Generator files</strong>: <code>qt/widgets-main.rkt</code>
+(header generation)</p>
+<hr />
+<h2 id="13-headersource-split-for-qt-classes">13. Header/Source Split
+for Qt Classes</h2>
+<p><strong>CANONICAL</strong>: Qt class declarations in
+<code>.hpp</code>, implementation in <code>.cpp</code>. Exception:
+trivial getters, Q_PROPERTY accessors.</p>
+<p>This is the framework's most significant structural debt — ~3,200
+lines of implementation inline in headers.</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — inline trivial getter in header</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="kw">auto</span> id<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">id_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — substantial implementation in .cpp</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">// entity_validator.hpp — declaration only</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EntityValidator <span class="op">{</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> validate<span class="op">(</span><span class="at">const</span> <span class="ex">QVariantMap</span><span class="op">&amp;</span> data<span class="op">);</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... declarations ...</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co">// entity_validator.cpp — implementation</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> EntityValidator<span class="op">::</span>validate<span class="op">(</span><span class="at">const</span> <span class="ex">QVariantMap</span><span class="op">&amp;</span> data<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 200 lines of validation logic ...</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — substantial implementation in header (current state)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">// entity_validator.hpp — 526 lines inline</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EntityValidator <span class="op">{</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> validate<span class="op">(</span><span class="at">const</span> <span class="ex">QVariantMap</span><span class="op">&amp;</span> data<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 200+ lines of implementation IN THE HEADER</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Worst offenders</strong> (framework, requiring manual
+retrofit): | File | Inline Lines | Should Be |
+|------|-------------|-----------| | <code>entity_validator.hpp</code> |
+526 | &lt; 50 | | <code>entity_dialog_state_machine.hpp</code> | 469 |
+&lt; 50 | | <code>validation_result.hpp</code> | 337 | &lt; 30 | |
+<code>field_metadata.hpp</code> | 378 | &lt; 40 |</p>
+<p><strong>Audit</strong>: Grade D+ — ~3,200 lines of implementation in
+headers. <strong>Framework files</strong>:
+<code>framework/qt/include/muscovite/qt/</code></p>
+<hr />
+<h2 id="14-qregularexpression-efficiency">14. QRegularExpression
+Efficiency</h2>
+<p><strong>CANONICAL</strong>: Pre-compile QRegularExpression objects.
+Never construct in hot paths.</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — static const regex (compiled once)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="at">const</span> <span class="ex">QRegularExpression</span> kEmailRegex<span class="op">(</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QStringLiteral</span><span class="op">(</span><span class="st">&quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+</span><span class="sc">\\</span><span class="st">.[a-zA-Z]{2,}$&quot;</span><span class="op">));</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> isValidEmail<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> email<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> kEmailRegex<span class="op">.</span>match<span class="op">(</span>email<span class="op">).</span>hasMatch<span class="op">();</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — member regex for reuse</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RoleNormalizer <span class="op">{</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="at">const</span> <span class="ex">QRegularExpression</span> kNormalizationRegex<span class="op">;</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Inited in .cpp: QRegularExpression(&quot;[-_\\s]+&quot;)</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — regex constructed per call (3 objects per normalizeRoleName call)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">QString</span> normalizeRoleName<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> name<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QRegularExpression</span> spaces<span class="op">(</span><span class="st">&quot;</span><span class="sc">\\</span><span class="st">s+&quot;</span><span class="op">);</span>   <span class="co">// Compiled every call</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QRegularExpression</span> dashes<span class="op">(</span><span class="st">&quot;-+&quot;</span><span class="op">);</span>      <span class="co">// Compiled every call</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QRegularExpression</span> underscores<span class="op">(</span><span class="st">&quot;_+&quot;</span><span class="op">);</span> <span class="co">// Compiled every call</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> name<span class="op">.</span>replace<span class="op">(</span>spaces<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">).</span>replace<span class="op">(</span>dashes<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">).</span>replace<span class="op">(</span>underscores<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">);</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: <code>normalizeRoleName</code> creates 3
+regex objects per call — hot path in metadata extraction.
+<strong>Framework files</strong>: <code>framework/qt/src/</code> — gRPC
+metadata utilities</p>
+<hr />
+<h2 id="15-member-initialization">15. Member Initialization</h2>
+<p><strong>CANONICAL</strong>: Default-initialize pointer members
+in-class. Use member initializer lists.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — in-class default initialization</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">mrnEdit_</span><span class="op">{};</span>       <span class="co">// nullptr by default</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QComboBox</span><span class="op">*</span> <span class="va">genderCombo_</span><span class="op">{};</span>   <span class="co">// nullptr by default</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> <span class="va">modified_</span><span class="op">{</span><span class="kw">false</span><span class="op">};</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="va">retryCount_</span><span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — member initializer list for constructor</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>PatientEditDialog<span class="op">::</span>PatientEditDialog<span class="op">(</span><span class="ex">QWidget</span><span class="op">*</span> parent<span class="op">)</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> <span class="ex">QDialog</span><span class="op">(</span>parent<span class="op">)</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">,</span> <span class="va">mrnEdit_</span><span class="op">(</span><span class="kw">new</span> <span class="ex">QLineEdit</span><span class="op">(</span><span class="kw">this</span><span class="op">))</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">,</span> <span class="va">genderCombo_</span><span class="op">(</span><span class="kw">new</span> <span class="ex">QComboBox</span><span class="op">(</span><span class="kw">this</span><span class="op">))</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="op">{}</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — uninitialized pointer members</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEditDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> mrnEdit<span class="op">;</span>    <span class="co">// Uninitialized! UB if accessed before setup</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QComboBox</span><span class="op">*</span> genderCombo<span class="op">;</span> <span class="co">// Uninitialized! Crash risk</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — assignment in constructor body instead of initializer list</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>PatientEditDialog<span class="op">::</span>PatientEditDialog<span class="op">(</span><span class="ex">QWidget</span><span class="op">*</span> parent<span class="op">)</span> <span class="op">:</span> <span class="ex">QDialog</span><span class="op">(</span>parent<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">mrnEdit_</span> <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLineEdit</span><span class="op">(</span><span class="kw">this</span><span class="op">);</span>      <span class="co">// Assignment, not initialization</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">genderCombo_</span> <span class="op">=</span> <span class="kw">new</span> <span class="ex">QComboBox</span><span class="op">(</span><span class="kw">this</span><span class="op">);</span>   <span class="co">// Assignment, not initialization</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Audit</strong>: Inconsistent — some framework files use
+<code>{}</code> init, others don't. <strong>Generator files</strong>:
+<code>qt/widgets-main.rkt</code></p>
+<hr />
+<h2 id="16-qt6-specific-api-preferences">16. Qt6-Specific API
+Preferences</h2>
+<p><strong>CANONICAL</strong>: Use Qt6-preferred APIs. Avoid deprecated
+Qt5 patterns.</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — Qt6 APIs</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>spinBox<span class="op">,</span> <span class="fu">qOverload</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;(&amp;</span><span class="ex">QSpinBox::valueChanged</span><span class="op">),</span> <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>Dialog<span class="op">::</span>onValueChanged<span class="op">);</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> text <span class="op">=</span> lineEdit<span class="op">-&gt;</span>text<span class="op">();</span>  <span class="co">// Already a QString — no conversion needed</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="ex">QStringLiteral</span><span class="op">(</span><span class="st">&quot;static string&quot;</span><span class="op">);</span>  <span class="co">// Compile-time QString construction</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — QStringView for read-only string parameters</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> processName<span class="op">(</span><span class="ex">QStringView</span> name<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — Qt5 compatibility patterns</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>spinBox<span class="op">,</span> <span class="ex">QOverload</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;::</span>of<span class="op">(&amp;</span><span class="ex">QSpinBox::valueChanged</span><span class="op">),</span> <span class="kw">this</span><span class="op">,</span> <span class="op">&amp;</span>Dialog<span class="op">::</span>onValueChanged<span class="op">);</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                 <span class="co">// Use qOverload&lt;int&gt;() instead of QOverload&lt;int&gt;::of()</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — deprecated conversions</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>myString<span class="op">.</span>toStdString<span class="op">().</span>c_str<span class="op">();</span>  <span class="co">// Double conversion — use toUtf8().constData() or stay in QString</span></span></code></pre></div>
+<p><strong>Audit</strong>: <code>QOverload::of()</code> used 10+ times
+in framework — should be <code>qOverload&lt;&gt;()</code>.
+<strong>Framework files</strong>: Various <code>framework/qt/</code>
+sources</p>
+<hr />
+<h2 id="quick-reference-card">Quick Reference Card</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>✅ Use</th>
+<th>❌ Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gRPC calls</td>
+<td><code>QtConcurrent::run()</code> + <code>QFutureWatcher</code></td>
+<td>Synchronous stub calls on UI thread</td>
+</tr>
+<tr>
+<td>gRPC stubs</td>
+<td>Instance member <code>std::unique_ptr&lt;Stub&gt;</code></td>
+<td>Static <code>std::shared_ptr&lt;Stub&gt;</code></td>
+</tr>
+<tr>
+<td>Colors</td>
+<td>Theme singleton / QPalette</td>
+<td><code>setStyleSheet("color: #cc0000")</code></td>
+</tr>
+<tr>
+<td>QML properties</td>
+<td>camelCase (<code>familyName</code>)</td>
+<td>snake_case (<code>family_name</code>)</td>
+</tr>
+<tr>
+<td>Validators</td>
+<td>Type-specific widget cast</td>
+<td><code>QLineEdit*</code> for all fields</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Parent-child (<code>new Widget(parent)</code>)</td>
+<td>Raw <code>new</code> without parent</td>
+</tr>
+<tr>
+<td>Signals</td>
+<td><code>qOverload&lt;int&gt;()</code></td>
+<td><code>QOverload&lt;int&gt;::of()</code></td>
+</tr>
+<tr>
+<td>Strings</td>
+<td><code>tr("User text")</code></td>
+<td>Hardcoded <code>"User text"</code></td>
+</tr>
+<tr>
+<td>Threading</td>
+<td><code>QtConcurrent::run</code> /
+<code>QTimer::singleShot</code></td>
+<td><code>QThread::msleep()</code></td>
+</tr>
+<tr>
+<td>Layout</td>
+<td><code>QFormLayout</code> + theme margins</td>
+<td>Fixed geometry / hardcoded px</td>
+</tr>
+<tr>
+<td>Q_PROPERTY</td>
+<td><code>READ ... WRITE ... NOTIFY ...</code></td>
+<td>Missing NOTIFY</td>
+</tr>
+<tr>
+<td>Qt headers</td>
+<td>Forward declarations in <code>.hpp</code></td>
+<td>Full includes in headers</td>
+</tr>
+<tr>
+<td>Impl location</td>
+<td><code>.cpp</code> file</td>
+<td>&gt;50 lines inline in header</td>
+</tr>
+<tr>
+<td>Regex</td>
+<td>Static <code>const QRegularExpression</code></td>
+<td>Constructed per call</td>
+</tr>
+<tr>
+<td>Members</td>
+<td><code>Widget* ptr_{}</code> (in-class init)</td>
+<td>Uninitialized pointer members</td>
+</tr>
+<tr>
+<td>Overloads</td>
+<td><code>qOverload&lt;&gt;()</code></td>
+<td><code>QOverload&lt;&gt;::of()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="audit-commands">Audit Commands</h2>
+<p>Track modernization progress:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Synchronous gRPC calls (should trend toward zero)</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;stub_-&gt;.*(&amp;ctx&quot;</span> examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&quot;QtConcurrent&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Static stubs (should be zero)</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;static.*shared_ptr.*Stub&quot;</span> examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Hardcoded setStyleSheet (should trend toward zero)</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;setStyleSheet&quot;</span> framework/qt/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># snake_case Q_PROPERTY (should be zero — all should be camelCase)</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;Q_PROPERTY.*_.*READ&quot;</span> examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&quot;Q_PROPERTY(Q&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># QOverload::of usage (should migrate to qOverload)</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;QOverload.*::of&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing tr() on string literals in generated Qt code</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&#39;&quot;[A-Z][a-z]&#39;</span> examples/<span class="pp">*</span>/generated/qt<span class="pp">*</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&quot;tr(&quot;</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-20</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Lines of implementation in Qt headers (should decrease)</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> framework/qt/include <span class="at">-name</span> <span class="st">&quot;*.hpp&quot;</span> <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">&#39;lines=$(wc -l &lt; &quot;$1&quot;); [ &quot;$lines&quot; -gt 100 ] &amp;&amp; echo &quot;$lines $1&quot;&#39;</span> _ {} <span class="dt">\;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="co"># QThread::msleep (should be zero)</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;QThread::msleep\|QThread::sleep&quot;</span> framework/ examples/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
+<hr />
+<h2 id="generator-cross-reference">Generator Cross-Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Primary Generator</th>
+<th>Framework File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Async gRPC</td>
+<td>ALL qt/ generators (~57 files)</td>
+<td><code>framework/qt/</code> (planned GrpcTaskAdapter via
+TaskTree)</td>
+</tr>
+<tr>
+<td>Static stub</td>
+<td><code>qt/qml-viewmodel.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Theming</td>
+<td><code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code></td>
+<td><code>framework/qt/include/muscovite/qt/theme.hpp</code>
+(planned)</td>
+</tr>
+<tr>
+<td>QML naming</td>
+<td><code>qt/common.rkt</code>
+(<code>symbol-&gt;qml-property</code>)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Validators</td>
+<td><code>qt/validator-generator.rkt</code></td>
+<td><code>framework/qt/include/muscovite/qt/entity_validator.hpp</code></td>
+</tr>
+<tr>
+<td>Q_PROPERTY</td>
+<td><code>qt/qml-viewmodel.rkt</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Forward decl</td>
+<td><code>qt/widgets-main.rkt</code></td>
+<td><code>framework/qt/include/muscovite/qt/*.hpp</code></td>
+</tr>
+<tr>
+<td>Header/source</td>
+<td>— (framework only)</td>
+<td><code>framework/qt/include/muscovite/qt/*.hpp</code></td>
+</tr>
+<tr>
+<td>QOverload</td>
+<td>— (framework only)</td>
+<td><code>framework/qt/src/*.cpp</code></td>
+</tr>
+<tr>
+<td>QRegularExpression</td>
+<td>— (framework only)</td>
+<td><code>framework/qt/src/*.cpp</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="priority-and-phasing">Priority and Phasing</h2>
+<p>Based on <a
+href="CPP-MODERNIZATION-PLAN.html">CPP-MODERNIZATION-PLAN.md</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Patterns</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0</strong></td>
+<td>§1 (async gRPC), §2 (stub ownership)</td>
+<td><strong>Production blockers</strong> — UI freezes, data races</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>§3 (theming), §4 (QML naming), §5 (validators), §9 (threading)</td>
+<td>Functional defects, convention violations</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>§12 (forward decl), §13 (header/source split), §14 (regex)</td>
+<td>Build time, maintenance</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td>§7 (qOverload), §8 (i18n), §10 (layout margins)</td>
+<td>Polish, consistency</td>
+</tr>
+<tr>
+<td><strong>P4</strong></td>
+<td>§15 (member init), §16 (Qt6 API)</td>
+<td>Incremental modernization</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documents">Related Documents</h2>
+<ul>
+<li><a href="QML-PATTERNS.html">QML-PATTERNS.md</a> — QML output patterns
+(13 CANONICAL patterns)</li>
+<li><a href="CPP-PATTERNS.html">CPP-PATTERNS.md</a> — Pure C++ patterns
+for DBA/gRPC</li>
+<li><a href="QT-FRAMEWORK-AUDIT.html">QT-FRAMEWORK-AUDIT.md</a> — Layer 1
+framework audit (Grade C+)</li>
+<li><a href="QT-GENERATOR-AUDIT.html">QT-GENERATOR-AUDIT.md</a> —
+Generated output audit (Grade C+)</li>
+<li><a href="QT-MODERNIZATION-AUDIT.html">QT-MODERNIZATION-AUDIT.md</a> —
+Updated v1.34.0 audit (Grade C−)</li>
+<li><a href="CPP-MODERNIZATION-PLAN.html">CPP-MODERNIZATION-PLAN.md</a> —
+Master remediation plan</li>
+<li><a href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> — Racket coding
+constraints</li>
+</ul>
+<hr />
+<p><em>This document is a constraint document, not a tutorial. For Qt
+reference, see <a href="https://doc.qt.io/qt-6/">Qt 6
+Documentation</a>.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

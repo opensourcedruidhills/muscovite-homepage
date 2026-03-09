@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Supported Audience-Specific AsciiDoc
+Generation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>AI-Supported Audience-Specific AsciiDoc Generation</span>
+</nav>
+
+<h1>AI-Supported Audience-Specific AsciiDoc Generation</h1>
+
+
+<h1 id="ai-supported-audience-specific-asciidoc-generation">AI-Supported
+Audience-Specific AsciiDoc Generation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-21</li>
+<li>Tags: documentation, asciidoc, glossary, llm, persona, audience,
+ddd-literature</li>
+</ul>
+<p>Technical Story: Different stakeholders interacting with a
+Muscovite-generated project (auditors, domain experts, C-level, IT/ops,
+architects, developers) require vastly different documentation views
+derived from the same <code>.ddd</code> source of truth.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite already generates AsciiDoc glossaries via
+<code>dslgen/generators/docs/glossary.rkt</code> and
+<code>glossary-adoc.rkt</code>, but these produce a single
+undifferentiated view of the IR. Different stakeholders need
+fundamentally different projections of the same domain model:</p>
+<ul>
+<li><strong>Auditors (GDPR, Fintech):</strong> Data lineage, PII
+identification, audit log guarantees.</li>
+<li><strong>Domain Experts:</strong> Ubiquitous Language verification,
+Aggregate boundaries, business processes (Sagas).</li>
+<li><strong>C-Level / Sponsors (CTO, CFO, COO, CIO, CSO):</strong>
+High-level architecture, compliance summaries.</li>
+<li><strong>IT / Ops Staff:</strong> Deployment topologies,
+infrastructure requirements, graceful degradation (e.g., NATS
+unavailability and recovery).</li>
+<li><strong>Architects / Team Leads:</strong> Bounded Contexts, Context
+Maps, service boundaries.</li>
+<li><strong>Developers (Users of Muscovite):</strong> API contracts,
+repository interfaces, frontend bindings.</li>
+<li><strong>Developers (Developing Muscovite):</strong> Internal
+generator architecture documentation.</li>
+<li><strong>Technical Managers:</strong> Team workflow understanding,
+system capability overview.</li>
+</ul>
+<p>Maintaining the Ubiquitous Language across the entire organizational
+chart — not just among developers — is one of the hardest problems in
+DDD. Writing audience-specific documentation manually always drifts from
+implementation. Since Muscovite holds the complete semantic model, it
+can generate this documentation automatically.</p>
+<p>A key architectural insight: writing complex Racket text-formatting
+code for 5+ audiences is brittle and hard to maintain. Treating an LLM
+as a <em>compiler target</em> — generating a structured Fact Base in
+Racket and synthesizing audience-specific prose via persona prompts — is
+simpler and more extensible.</p>
+<p><strong>Question</strong>: How should Muscovite produce
+audience-tailored documentation from the domain model while anchoring it
+in globally accepted DDD literature?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Aligns with ADR 20260217 (Documentation as Generated Artifact) — all
+DSL metadata must propagate to every generated layer</li>
+<li>Existing <code>glossary.rkt</code> / <code>glossary-adoc.rkt</code>
+pipeline provides a working foundation to extend</li>
+<li>CMake documentation targets (FTR-092, completed in v1.20.0) provide
+the build integration point</li>
+<li>Audience-specific views are a force multiplier for enterprise
+adoption</li>
+<li>DDD literature citations add credibility and educational value</li>
+<li>Minimizing Racket code complexity for text synthesis</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-pure-racket-asciidoc-templates-per-audience">Option 1:
+Pure Racket AsciiDoc templates per audience</h3>
+<p>Extend the existing <code>glossary-adoc.rkt</code> pipeline with
+per-audience Racket template modules (e.g.,
+<code>auditor-adoc.rkt</code>, <code>domain-expert-adoc.rkt</code>).
+Each module filters and formats the IR for its target audience using
+Racket <code>format</code> strings.</p>
+<h3 id="option-2-structured-fact-base--llm-persona-synthesis">Option 2:
+Structured Fact Base + LLM persona synthesis</h3>
+<p>Extend the existing glossary pipeline to emit a structured,
+machine-readable Fact Base (JSON or dense Markdown). Create versioned
+persona prompts per audience. Use an LLM to synthesize the final
+AsciiDoc reports from the Fact Base + persona prompt.</p>
+<h3 id="option-3-external-documentation-tool-integration">Option 3:
+External documentation tool integration</h3>
+<p>Export the domain model to a format consumable by external tools
+(Structurizr, Antora, etc.) and delegate audience-specific rendering to
+those tools.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — Structured Fact Base + LLM persona
+synthesis</strong>, because it minimizes Racket code complexity, is the
+most extensible approach for adding new audiences, and produces
+higher-quality prose than template-based formatting.</p>
+<h3 id="architecture">Architecture</h3>
+<ol type="1">
+<li><strong>Racket Fact Base Generator (Layer 0):</strong> Extend the
+existing <code>glossary.rkt</code> pipeline to emit
+<code>domain-fact-base.json</code> — a structured file fusing framework
+concepts (Aggregates, Sagas, Events) with the user's concrete domain
+objects, DDD term definitions, and bibliography citations.</li>
+<li><strong>Persona Prompts:</strong> Versioned system prompts in
+<code>dslgen/resources/prompts/audiences/</code> (e.g.,
+<code>auditor.prompt</code>, <code>domain-expert.prompt</code>). Each
+prompt instructs the LLM what to include, exclude, and emphasize.</li>
+<li><strong>AI Generation Pipeline:</strong> A script
+(<code>tools/generate-audience-reports.sh</code>) that takes the Fact
+Base, iterates persona prompts, calls an LLM (API or local tool like
+<code>ollama</code>), and outputs per-audience AsciiDoc files.</li>
+<li><strong>CMake Integration:</strong> Per-audience build targets
+(e.g., <code>cmake --build --preset debug --target docs-auditor</code>),
+building on the existing documentation target infrastructure from
+FTR-092.</li>
+<li><strong>Glossary Merging:</strong> The Fact Base interleaves user
+domain terms with Muscovite DDD terms. Cross-references link concrete
+instances (e.g., <code>Patient</code>) to their DDD concept (e.g.,
+<code>Aggregate Root</code>).</li>
+<li><strong>Bibliography:</strong> Citations are injected for
+architectural patterns used in the generated code (e.g., Evans 2003,
+Vernon 2013, Fowler). Output AsciiDoc includes a
+<code>[bibliography]</code> section.</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Living Documentation guaranteed to match the implementation</li>
+<li>Out-of-the-box compliance/auditability reports reduce enterprise
+adoption friction</li>
+<li>Shared Ubiquitous Language glossary across technical and
+non-technical stakeholders</li>
+<li>Vastly simpler Racket code — text synthesis delegated to LLM</li>
+<li>Adding a new audience requires only a new prompt file, not new
+Racket code</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Introduces LLM dependency (cost, availability, potential
+non-determinism) in the documentation build phase</li>
+<li>Requires managing and versioning persona prompts alongside the
+codebase</li>
+<li>LLM output quality depends on Fact Base completeness — incomplete IR
+metadata produces weak reports</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Extends <a
+href="20260217-documentation-as-generated-artifact.html">ADR 20260217
+Documentation as Generated Artifact</a></li>
+<li>Builds on FTR-092 CMake Documentation Build Targets (completed
+v1.20.0)</li>
+<li>Related <a
+href="20260218-muscovite-cpp-framework-doxygen-retrofit.html">ADR 20260218
+Muscovite-cpp Framework Doxygen Retrofit</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When extending the <code>glossary.rkt</code> /
+<code>glossary-adoc.rkt</code> pipeline</li>
+<li>When adding new documentation output targets</li>
+<li>When adding audience-specific content filtering to generators</li>
+<li>When working on the Fact Base JSON schema or persona prompts</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Existing per-layer documentation propagation (SQL COMMENT ON, C++
+Doxygen, proto comments) — those remain pure Racket generators per ADR
+20260217</li>
+<li>Internal developer documentation for Muscovite itself (CONTEXT.md,
+GROUND-TRUTH.md) — those have their own generation pipelines</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Fact Base schema validated by Racket tests</li>
+<li>Persona prompts versioned in repository alongside DSL sources</li>
+<li>CMake targets fail loudly if Fact Base generation fails (LLM step is
+optional/degradable)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/docs/glossary.rkt</code></li>
+<li><code>dslgen/generators/docs/glossary-adoc.rkt</code></li>
+<li><code>dslgen/generators/docs/glossary-adoc-entities.rkt</code></li>
+<li><code>dslgen/generators/docs/glossary-adoc-helpers.rkt</code></li>
+<li><code>dslgen/generators/docs/glossary-adoc-sections.rkt</code></li>
+<li><code>dslgen/generators/docs/glossary-references.rkt</code></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

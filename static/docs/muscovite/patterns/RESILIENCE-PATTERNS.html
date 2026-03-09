@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resilience Sandwich Pattern
+Catalog — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>Resilience Sandwich Pattern Catalog</span>
+</nav>
+
+<h1>Resilience Sandwich Pattern Catalog</h1>
+
+
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+
+<h1 id="resilience-sandwich-pattern-catalog">Resilience Sandwich Pattern
+Catalog</h1>
+<blockquote>
+<p>Comprehensive reference for Muscovite's deadline propagation, retry,
+and error classification architecture.</p>
+<p><strong>ADRs</strong>: 20260228-grpc-deadline-to-statement-timeout,
+20260228-grpc-resilience-sandwich-full-architecture</p>
+<p><strong>Features</strong>: FTR-225, FTR-230, FTR-231, FTR-232,
+FTR-233, FTR-235</p>
+</blockquote>
+<hr />
+<h2 id="1-concept-the-resilience-sandwich">1. Concept: The Resilience
+Sandwich</h2>
+<p>The <strong>Resilience Sandwich</strong> is a layered timeout and
+retry architecture that propagates client deadlines through every system
+boundary: gRPC → business logic → PostgreSQL.</p>
+<pre><code>┌─────────────────────────────────────────┐
+│  Client Deadline (gRPC metadata)        │  ← outermost boundary
+├─────────────────────────────────────────┤
+│  Server Deadline (per-aggregate clamp)  │  ← GRPC_DEADLINE &quot;Ns&quot;
+├─────────────────────────────────────────┤
+│  Transactor Retry Budget                │  ← RetryPolicy.deadline
+├─────────────────────────────────────────┤
+│  PostgreSQL statement_timeout           │  ← innermost boundary
+└─────────────────────────────────────────┘</code></pre>
+<p><strong>Invariant</strong> (must always hold):</p>
+<pre><code>statement_timeout &lt; remaining - buffer &lt; server_deadline ≤ client_deadline</code></pre>
+<p>Each layer's timeout is strictly shorter than its parent's,
+ensuring:</p>
+<ol type="1">
+<li>PostgreSQL times out before the server does → server can return a
+meaningful error</li>
+<li>Server times out before the client does → client can retry or fail
+gracefully</li>
+<li>Retry budget prevents wasting attempts near deadline expiry</li>
+</ol>
+<hr />
+<h2 id="2-timeout-hierarchy">2. Timeout Hierarchy</h2>
+<h3 id="21-client-deadline-outer-layer">2.1 Client Deadline (Outer
+Layer)</h3>
+<p>Set by the gRPC client as a metadata deadline. This is the absolute
+upper bound for the entire operation. The server reads it via
+<code>context-&gt;deadline()</code>.</p>
+<h3 id="22-server-deadline--clamp_deadline-middle-layer">2.2 Server
+Deadline — <code>clamp_deadline()</code> (Middle Layer)</h3>
+<p>Per-aggregate SLA enforcement. The DSL <code>GRPC_DEADLINE</code>
+clause sets a maximum duration for an aggregate's operations:</p>
+<pre class="ddd"><code>AGGREGATE PatientRecord @uuid &quot;...&quot; ROOT PatientRecord
+    GRPC_DEADLINE &quot;5s&quot;
+    DOC &quot;Latency-sensitive patient lookup&quot;;</code></pre>
+<p>Generated code calls <code>clamp_deadline()</code> to enforce:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// From framework/server/include/muscovite/server/deadline.hpp</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> deadline <span class="op">=</span> muscovite<span class="op">::</span>server<span class="op">::</span>clamp_deadline<span class="op">(</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    context<span class="op">,</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">5000</span><span class="op">});</span></span></code></pre></div>
+<p><code>clamp_deadline()</code> returns
+<code>min(now + max_duration, client_deadline)</code> — the server never
+waits longer than the client allows.</p>
+<h3 id="23-retry-budget-transactor-layer">2.3 Retry Budget (Transactor
+Layer)</h3>
+<p>The transactor's <code>RetryPolicy</code> struct includes
+deadline-awareness:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_retries</code></td>
+<td>3</td>
+<td>Maximum retry attempts</td>
+</tr>
+<tr>
+<td><code>initial_delay</code></td>
+<td>100ms</td>
+<td>First backoff delay</td>
+</tr>
+<tr>
+<td><code>backoff_multiplier</code></td>
+<td>2.0</td>
+<td>Exponential backoff factor</td>
+</tr>
+<tr>
+<td><code>max_delay</code></td>
+<td>5000ms</td>
+<td>Backoff ceiling</td>
+</tr>
+<tr>
+<td><code>deadline</code></td>
+<td><code>max()</code></td>
+<td>Retry budget boundary (FTR-235)</td>
+</tr>
+<tr>
+<td><code>min_remaining_for_retry</code></td>
+<td>200ms</td>
+<td>Minimum time to allow another attempt</td>
+</tr>
+<tr>
+<td><code>retry_on_serialization_failure</code></td>
+<td>true</td>
+<td>Retry PostgreSQL 40001</td>
+</tr>
+<tr>
+<td><code>retry_on_deadlock</code></td>
+<td>true</td>
+<td>Retry PostgreSQL 40P01</td>
+</tr>
+<tr>
+<td><code>retry_on_connection_error</code></td>
+<td>false</td>
+<td>Retry connection failures</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Budget check</strong> — before each retry:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> has_retry_budget<span class="op">(</span><span class="at">const</span> RetryPolicy<span class="op">&amp;</span> policy<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>policy<span class="op">.</span>deadline <span class="op">==</span> time_point<span class="op">::</span>max<span class="op">())</span> <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span>  <span class="co">// no deadline → unlimited</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> remaining <span class="op">=</span> policy<span class="op">.</span>deadline <span class="op">-</span> now<span class="op">();</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> remaining <span class="op">&gt;</span> policy<span class="op">.</span>min_remaining_for_retry<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Backoff capping</strong> — when a deadline is set, the delay
+is capped at <code>remaining / 2</code> to avoid sleeping past the
+deadline.</p>
+<h3 id="24-postgresql-statement_timeout-inner-layer">2.4 PostgreSQL
+statement_timeout (Inner Layer)</h3>
+<p>The deadline-aware <code>execute()</code> injects
+<code>SET LOCAL statement_timeout</code> into each transaction:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span><span class="va">pool_</span><span class="op">,</span> deadline<span class="op">,</span> <span class="op">[&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> tx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// statement_timeout = min(remaining - buffer, max_statement_timeout)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... business logic ...</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">},</span> max_statement_timeout<span class="op">,</span> deadline_buffer<span class="op">);</span></span></code></pre></div>
+<p>If the query exceeds <code>statement_timeout</code>, PostgreSQL
+cancels it with SQLSTATE <code>57014</code>, which the transactor maps
+to <code>DbError::DeadlineExceeded</code>.</p>
+<hr />
+<h2 id="3-error-classification">3. Error Classification</h2>
+<h3 id="31-grpc-status-code-classification">3.1 gRPC Status Code
+Classification</h3>
+<p>From
+<code>framework/grpc/include/muscovite/grpc/retry_classification.hpp</code>:</p>
+<table>
+<thead>
+<tr>
+<th>gRPC Status</th>
+<th>Classification</th>
+<th>Retry?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OK</code></td>
+<td>—</td>
+<td>No</td>
+<td>Success</td>
+</tr>
+<tr>
+<td><code>CANCELLED</code></td>
+<td>—</td>
+<td>No</td>
+<td>Client-initiated</td>
+</tr>
+<tr>
+<td><code>UNKNOWN</code></td>
+<td>—</td>
+<td>No</td>
+<td>Ambiguous</td>
+</tr>
+<tr>
+<td><code>INVALID_ARGUMENT</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Fix the request</td>
+</tr>
+<tr>
+<td><code>DEADLINE_EXCEEDED</code></td>
+<td><strong>Retryable</strong> ¹</td>
+<td>Conditional</td>
+<td>Only if budget remains</td>
+</tr>
+<tr>
+<td><code>NOT_FOUND</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Resource does not exist</td>
+</tr>
+<tr>
+<td><code>ALREADY_EXISTS</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Duplicate key</td>
+</tr>
+<tr>
+<td><code>PERMISSION_DENIED</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Authorization failure</td>
+</tr>
+<tr>
+<td><code>RESOURCE_EXHAUSTED</code></td>
+<td><strong>Retryable</strong></td>
+<td>Yes</td>
+<td>Backpressure / rate limit</td>
+</tr>
+<tr>
+<td><code>FAILED_PRECONDITION</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Invalid state</td>
+</tr>
+<tr>
+<td><code>ABORTED</code></td>
+<td><strong>Retryable</strong></td>
+<td>Yes</td>
+<td>Serialization conflict</td>
+</tr>
+<tr>
+<td><code>UNIMPLEMENTED</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Wrong server version</td>
+</tr>
+<tr>
+<td><code>INTERNAL</code></td>
+<td><strong>Neither</strong></td>
+<td>No</td>
+<td>Ambiguous — log and alert</td>
+</tr>
+<tr>
+<td><code>UNAVAILABLE</code></td>
+<td><strong>Retryable</strong></td>
+<td>Yes</td>
+<td>Server temporarily down</td>
+</tr>
+<tr>
+<td><code>UNAUTHENTICATED</code></td>
+<td><strong>Permanent</strong></td>
+<td>No</td>
+<td>Bad/expired credentials</td>
+</tr>
+<tr>
+<td><code>DATA_LOSS</code></td>
+<td>—</td>
+<td>No</td>
+<td>Unrecoverable</td>
+</tr>
+</tbody>
+</table>
+<p>¹ <code>DEADLINE_EXCEEDED</code> is retryable only when
+<code>has_retry_budget()</code> returns true and the failure was from a
+downstream timeout, not the client's own deadline.</p>
+<h3 id="32-postgresql-error-classification-transactor">3.2 PostgreSQL
+Error Classification (Transactor)</h3>
+<table>
+<thead>
+<tr>
+<th>SQLSTATE</th>
+<th>Error</th>
+<th>Retryable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>40001</code></td>
+<td>Serialization failure</td>
+<td>Yes (when <code>retry_on_serialization_failure</code>)</td>
+</tr>
+<tr>
+<td><code>40P01</code></td>
+<td>Deadlock</td>
+<td>Yes (when <code>retry_on_deadlock</code>)</td>
+</tr>
+<tr>
+<td><code>57014</code></td>
+<td>Query canceled / statement_timeout</td>
+<td>No (→ <code>DeadlineExceeded</code>)</td>
+</tr>
+<tr>
+<td><code>08*</code></td>
+<td>Connection errors</td>
+<td>Conditional (<code>retry_on_connection_error</code>)</td>
+</tr>
+<tr>
+<td><code>23505</code></td>
+<td>Unique violation</td>
+<td>No (→ <code>UniqueViolation</code>)</td>
+</tr>
+<tr>
+<td><code>23503</code></td>
+<td>FK violation</td>
+<td>No (→ <code>ForeignKeyViolation</code>)</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>Unknown</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-dsl-configuration-reference">4. DSL Configuration
+Reference</h2>
+<h3 id="41-server-block-project-dsl--mus">4.1 SERVER Block (Project DSL
+— <code>.mus</code>)</h3>
+<p>Configures global gRPC deadline defaults:</p>
+<pre class="mus"><code>SERVER {
+    GRPC_DEFAULT_DEADLINE &quot;5s&quot;;
+    GRPC_MAX_DEADLINE &quot;120s&quot;;
+}</code></pre>
+<table>
+<thead>
+<tr>
+<th>Directive</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GRPC_DEFAULT_DEADLINE</code></td>
+<td>5000ms</td>
+<td>Default deadline for aggregates without
+<code>GRPC_DEADLINE</code></td>
+</tr>
+<tr>
+<td><code>GRPC_MAX_DEADLINE</code></td>
+<td>30000ms</td>
+<td>Upper bound on any deadline (safety clamp)</td>
+</tr>
+</tbody>
+</table>
+<p>Generated into the server configuration INI file under
+<code>[deadlines]</code>.</p>
+<h3 id="42-grpc_deadline-on-aggregate-domain-dsl--ddd">4.2 GRPC_DEADLINE
+on AGGREGATE (Domain DSL — <code>.ddd</code>)</h3>
+<p>Overrides the server default for specific aggregates:</p>
+<pre class="ddd"><code>AGGREGATE DataImport @uuid &quot;a1b2c3d4-...&quot;
+    ROOT ImportJob
+    GRPC_DEADLINE &quot;60s&quot;
+    DOC &quot;Long-running batch import — needs more time than default&quot;;</code></pre>
+<p><strong>Duration format</strong>: <code>"Ns"</code> (seconds) or
+<code>"Nms"</code> (milliseconds). Examples: <code>"5s"</code>,
+<code>"100ms"</code>, <code>"60s"</code>.</p>
+<p><strong>Effect</strong>: Generated service methods call
+<code>clamp_deadline(context, milliseconds{N})</code> instead of
+<code>context-&gt;deadline()</code>.</p>
+<h3 id="43-retry-policy-c--compile-time-configuration">4.3 Retry Policy
+(C++ — compile-time configuration)</h3>
+<p>The <code>RetryPolicy</code> struct is configured in C++ application
+code:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>muscovite<span class="op">::</span>dba<span class="op">::</span>RetryPolicy policy<span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>max_retries <span class="op">=</span> <span class="dv">5</span><span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>initial_delay <span class="op">=</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">50</span><span class="op">},</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>backoff_multiplier <span class="op">=</span> <span class="fl">2.0</span><span class="op">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>max_delay <span class="op">=</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">2000</span><span class="op">},</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>retry_on_serialization_failure <span class="op">=</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>retry_on_deadlock <span class="op">=</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>retry_on_connection_error <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// .deadline and .min_remaining_for_retry are set automatically</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// by the deadline-aware execute() overload</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>The <code>deadline</code> field is populated automatically when using
+the deadline-aware <code>execute()</code> overload — it threads the gRPC
+deadline into the retry budget mechanism.</p>
+<hr />
+<h2 id="5-anti-patterns">5. Anti-Patterns</h2>
+<h3 id="x-ignoring-the-client-deadline">❌ Ignoring the Client
+Deadline</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// WRONG: Uses a fixed 30s deadline regardless of what the client set</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> deadline <span class="op">=</span> system_clock<span class="op">::</span>now<span class="op">()</span> <span class="op">+</span> <span class="dv">30</span><span class="bu">s</span><span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span><span class="va">pool_</span><span class="op">,</span> deadline<span class="op">,</span> fn<span class="op">,</span> <span class="op">...);</span></span></code></pre></div>
+<p><strong>Why it's wrong</strong>: The client may have set a 2s
+deadline. Using a fixed 30s deadline wastes server resources on a
+request the client has already abandoned.</p>
+<p><strong>Fix</strong>: Always derive the server deadline from the
+client's:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> deadline <span class="op">=</span> muscovite<span class="op">::</span>server<span class="op">::</span>clamp_deadline<span class="op">(</span>context<span class="op">,</span> <span class="dv">30</span><span class="bu">s</span><span class="op">);</span></span></code></pre></div>
+<h3 id="x-retrying-deadline_exceeded-without-budget-check">❌ Retrying
+DEADLINE_EXCEEDED Without Budget Check</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// WRONG: Retries DEADLINE_EXCEEDED blindly</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>is_retryable<span class="op">(</span>status<span class="op">.</span>error_code<span class="op">()))</span> <span class="op">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    retry<span class="op">();</span>  <span class="co">// Will retry DEADLINE_EXCEEDED even with 0ms remaining</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Why it's wrong</strong>: The retry will immediately fail
+again (or worse, succeed after the client has timed out and
+disconnected).</p>
+<p><strong>Fix</strong>: Check remaining budget before retry:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>is_retryable<span class="op">(</span>status<span class="op">.</span>error_code<span class="op">()))</span> <span class="op">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>is_deadline_exceeded<span class="op">(</span>status<span class="op">.</span>error_code<span class="op">())</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>has_retry_budget<span class="op">(</span>policy<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> status<span class="op">;</span>  <span class="co">// No point retrying</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    retry<span class="op">();</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="x-setting-statement_timeout-equal-to-grpc-deadline">❌ Setting
+statement_timeout Equal to gRPC Deadline</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// WRONG: No buffer for response marshaling</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> timeout <span class="op">=</span> remaining<span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>tx<span class="op">.</span>exec0<span class="op">(</span>format<span class="op">(</span><span class="st">&quot;SET LOCAL statement_timeout = &#39;</span><span class="sc">{}</span><span class="st">&#39;&quot;</span><span class="op">,</span> timeout<span class="op">.</span>count<span class="op">()));</span></span></code></pre></div>
+<p><strong>Why it's wrong</strong>: The query may finish just in time,
+but the server needs time to marshal the response, commit the
+transaction, and send the gRPC reply. Without a buffer, the response
+arrives after the client has timed out.</p>
+<p><strong>Fix</strong>: Subtract a buffer:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> timeout <span class="op">=</span> min<span class="op">(</span>remaining <span class="op">-</span> deadline_buffer<span class="op">,</span> max_statement_timeout<span class="op">);</span></span></code></pre></div>
+<h3 id="x-sleeping-past-the-deadline">❌ Sleeping Past the Deadline</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// WRONG: Exponential backoff may exceed remaining time</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> delay <span class="op">=</span> initial_delay <span class="op">*</span> pow<span class="op">(</span>backoff_multiplier<span class="op">,</span> attempt<span class="op">);</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sleep<span class="op">(</span>delay<span class="op">);</span>  <span class="co">// May sleep for 8s when only 500ms remains</span></span></code></pre></div>
+<p><strong>Why it's wrong</strong>: The retry attempt after the sleep
+will fail immediately because the deadline has expired.</p>
+<p><strong>Fix</strong>: Cap backoff at <code>remaining / 2</code>:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> delay <span class="op">=</span> min<span class="op">(</span>computed_delay<span class="op">,</span> remaining <span class="op">/</span> <span class="dv">2</span><span class="op">);</span></span></code></pre></div>
+<h3 id="x-using-runtime-queries-for-retry-configuration">❌ Using
+Runtime Queries for Retry Configuration</h3>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// WRONG: Runtime query for framework constants</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> max_retries <span class="op">=</span> db<span class="op">.</span>query<span class="op">(</span><span class="st">&quot;SELECT value FROM config WHERE key = &#39;max_retries&#39;&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><strong>Why it's wrong</strong>: Per ADR 20260212, framework
+constants use compile-time values (UUIDv5 + constexpr). Runtime queries
+add latency and failure modes to the retry path itself.</p>
+<p><strong>Fix</strong>: Use <code>RetryPolicy</code> struct with
+compile-time defaults.</p>
+<hr />
+<h2 id="6-troubleshooting">6. Troubleshooting</h2>
+<h3 id="grpc-deadline-already-expired">"gRPC deadline already
+expired"</h3>
+<p>The server received a request whose deadline was already in the past.
+Causes:</p>
+<ul>
+<li>Client set a very short deadline</li>
+<li>Network latency consumed the entire budget in transit</li>
+<li>Clock skew between client and server</li>
+</ul>
+<p><strong>Action</strong>: Check client-side deadline configuration.
+Consider increasing the deadline or using <code>GRPC_DEADLINE</code> on
+the aggregate to enforce a minimum.</p>
+<h3
+id="insufficient-time-remaining-for-database-operation">"Insufficient
+time remaining for database operation"</h3>
+<p>Deadline minus buffer is ≤ 0. The request arrived with less remaining
+time than the deadline buffer requires.</p>
+<p><strong>Action</strong>: Reduce <code>deadline_buffer_ms</code> in
+the server config, or increase the client deadline.</p>
+<h3
+id="postgresql-statement_timeout-exceeded-propagated-from-grpc-deadline">"PostgreSQL
+statement_timeout exceeded (propagated from gRPC deadline)"</h3>
+<p>The database query ran longer than the allocated time slice. This is
+the innermost timeout firing.</p>
+<p><strong>Action</strong>: Optimize the query, add appropriate indexes,
+or increase the aggregate's <code>GRPC_DEADLINE</code>.</p>
+<h3 id="retry-budget-exhausted">"Retry budget exhausted"</h3>
+<p>The transactor detected insufficient remaining time
+(<code>&lt; min_remaining_for_retry</code>) and skipped a retry.</p>
+<p><strong>Action</strong>: This is correct behavior — the system
+prevented a wasteful retry. If the operation legitimately needs more
+retries, increase the client deadline.</p>
+<hr />
+<h2 id="7-generated-code-reference">7. Generated Code Reference</h2>
+<h3 id="service-method-with-grpc_deadline">Service Method (with
+GRPC_DEADLINE)</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status PatientServiceImpl<span class="op">::</span>CreateImpl<span class="op">(</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    grpc<span class="op">::</span>ServerContext<span class="op">*</span> context<span class="op">,</span> <span class="op">...)</span> <span class="op">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> deadline <span class="op">=</span> muscovite<span class="op">::</span>server<span class="op">::</span>clamp_deadline<span class="op">(</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        context<span class="op">,</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">5000</span><span class="op">});</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">pool_</span><span class="op">,</span> deadline<span class="op">,</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">[&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> tx<span class="op">)</span> <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">},</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">max_statement_timeout_</span><span class="op">,</span> <span class="va">deadline_buffer_</span><span class="op">);</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="service-method-default--no-grpc_deadline">Service Method
+(default — no GRPC_DEADLINE)</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status LabResultServiceImpl<span class="op">::</span>CreateImpl<span class="op">(</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    grpc<span class="op">::</span>ServerContext<span class="op">*</span> context<span class="op">,</span> <span class="op">...)</span> <span class="op">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> deadline <span class="op">=</span> context<span class="op">-&gt;</span>deadline<span class="op">();</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">pool_</span><span class="op">,</span> deadline<span class="op">,</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">[&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> tx<span class="op">)</span> <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">},</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">max_statement_timeout_</span><span class="op">,</span> <span class="va">deadline_buffer_</span><span class="op">);</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The only difference is the deadline extraction line. Everything
+downstream is identical.</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

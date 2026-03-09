@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR-20260218: Template DSL for Code
+Generation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR-20260218: Template DSL for Code Generation</span>
+</nav>
+
+<h1>ADR-20260218: Template DSL for Code Generation</h1>
+
+
+<h1 id="adr-20260218-template-dsl-for-code-generation">ADR-20260218:
+Template DSL for Code Generation</h1>
+<p><strong>Status</strong>: Accepted <strong>Date</strong>: 2026-02-18
+<strong>Feature</strong>: FTR-069</p>
+<h2 id="context">Context</h2>
+<p>Muscovite generators currently produce code using Racket
+<code>format</code> strings and <code>string-append</code> calls. This
+approach has served well for the initial implementation but presents
+scaling challenges:</p>
+<ol type="1">
+<li><strong>Positional placeholders</strong>: <code>~a</code>
+placeholders in format strings are error-prone when templates grow large
+(counting errors, off-by-one mistakes)</li>
+<li><strong>No structural validation</strong>: Format strings are
+opaque—there's no compile-time check that generated code structure is
+valid</li>
+<li><strong>Template duplication</strong>: Similar patterns (e.g., Qt
+Widgets and QML validation logic) are copy-pasted across generators with
+minor variations</li>
+<li><strong>Indentation fragility</strong>: Manual indentation via
+string concatenation (<code>(indent 1 ...)</code>) is scattered without
+consistent abstraction</li>
+</ol>
+<p>As Muscovite adds more targets (Qt QML, TypeScript, Rust), the cost
+of duplicating format-string logic escalates.</p>
+<h2 id="decision">Decision</h2>
+<p>Introduce an <strong>s-expression template DSL</strong> for code
+generation that replaces raw
+<code>format</code>/<code>string-append</code> with structured,
+composable templates.</p>
+<h3 id="design-principles">Design Principles</h3>
+<ol type="1">
+<li><p><strong>S-expression based</strong>: Templates are Racket data
+structures, not strings. This enables:</p>
+<ul>
+<li>Syntax checking at template definition time</li>
+<li>Programmatic composition (templates can reference other
+templates)</li>
+<li>Target-agnostic structure (same template can emit C++, SQL, or
+TypeScript with different emitters)</li>
+</ul></li>
+<li><p><strong>Explicit indentation</strong>: No auto-indent magic.
+Templates use explicit <code>indent</code> calls, preventing nested
+block double-indentation bugs.</p></li>
+<li><p><strong>Composable building blocks</strong>: Templates are small,
+reusable functions (e.g., <code>cpp-class</code>,
+<code>cpp-method</code>, <code>cpp-field</code>) that combine to form
+complete files.</p></li>
+<li><p><strong>Performance acceptable</strong>: Template evaluation
+should be within 10× of format-string baseline. Measured at 4× in
+initial implementation (acceptable, can optimize if needed).</p></li>
+</ol>
+<h3 id="api">API</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define a reusable template</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template cpp-class</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name doc sections<span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>cpp-doc-comment doc<span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;class ~a final {&quot;</span> name<span class="op">))</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>map-items</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>λ <span class="op">(</span>section<span class="op">)</span> <span class="op">(</span>emit-section section<span class="op">))</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>     sections<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)))</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; Use it</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>emit <span class="op">(</span>cpp-class <span class="st">&quot;Person&quot;</span> <span class="st">&quot;User entity&quot;</span> sections<span class="op">)</span> #:target &#39;cpp<span class="op">)</span></span></code></pre></div>
+<h3 id="core-template-nodes">Core Template Nodes</h3>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Raw text (no newline)</td>
+<td><code>(text "hello")</code> → <code>"hello"</code></td>
+</tr>
+<tr>
+<td><code>line</code></td>
+<td>Text with newline</td>
+<td><code>(line "int x;")</code> → <code>"int x;\n"</code></td>
+</tr>
+<tr>
+<td><code>block</code></td>
+<td>Container (no auto-indent)</td>
+<td><code>(block 0 ...)</code></td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td>Join with separator</td>
+<td><code>(join ", " items)</code> → <code>"a, b, c"</code></td>
+</tr>
+<tr>
+<td><code>when-true</code></td>
+<td>Conditional inclusion</td>
+<td><code>(when-true cond tmpl)</code></td>
+</tr>
+<tr>
+<td><code>map-items</code></td>
+<td>Map function over list</td>
+<td><code>(map-items fn lst)</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="proof-of-concept-scope">Proof-of-Concept Scope</h3>
+<p><strong>v1.21.0 converts value object generation only</strong>. This
+proves the DSL works end-to-end:</p>
+<ul>
+<li>Template modules: <code>dslgen/generators/template-dsl.rkt</code>,
+<code>dslgen/generators/cpp/emitters.rkt</code></li>
+<li>Tests: <code>dslgen/tests/test-template-dsl.rkt</code> (all passing,
+4× performance ratio)</li>
+<li>Integration: <code>generate-value-object</code> in
+<code>dslgen/generators/cpp/domain.rkt</code> now calls
+<code>generate-value-object-template</code></li>
+<li>Output: <strong>Byte-identical to format-string version</strong>
+(verified via incremental generation SHA matching)</li>
+</ul>
+<p>Remaining generators (entities, domain events, repositories,
+services, Qt, gRPC, SQL) migrate incrementally in future releases.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Reduced duplication</strong>: Cross-target patterns
+(validation, getters, constructors) can be shared via template
+composition</li>
+<li><strong>Easier maintenance</strong>: Changing a template updates all
+uses automatically (vs. hunting down format-string duplicates)</li>
+<li><strong>Better error messages</strong>: Template evaluation errors
+can report source location (vs. cryptic format-string arity
+mismatches)</li>
+<li><strong>Incremental migration</strong>: Proof-of-concept (value
+objects) validates approach without forcing a big-bang rewrite</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Learning curve</strong>: Contributors must learn the
+template DSL API (mitigated by comprehensive tests and examples)</li>
+<li><strong>Performance overhead</strong>: 4× slower than format strings
+(acceptable for generator code; can optimize if needed)</li>
+<li><strong>Two codepaths during transition</strong>: Some generators
+use templates, others use format strings (temporary, resolves as
+migration completes)</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li><strong>Line count</strong>: Template definitions are slightly more
+verbose than equivalent format strings, but improved readability offsets
+this</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="1-stick-with-format-strings">1. Stick with format strings</h3>
+<p><strong>Rejected</strong>: Duplication and fragility already causing
+maintenance burden. Adding more targets (TypeScript, Rust) would
+exacerbate this.</p>
+<h3 id="2-use-external-templating-engine-mustache-jinja2">2. Use
+external templating engine (Mustache, Jinja2)</h3>
+<p><strong>Rejected</strong>: External tools add dependency and force
+context out of Racket. S-expressions keep everything in-language with
+full Racket expressiveness.</p>
+<h3 id="3-macro-based-code-generation">3. Macro-based code
+generation</h3>
+<p><strong>Rejected</strong>: Racket macros operate at Racket syntax
+level. Generating C++/SQL/TypeScript requires string output, making
+macros awkward for this use case.</p>
+<h2 id="implementation-notes">Implementation Notes</h2>
+<ul>
+<li><p><strong>File locations</strong>:</p>
+<ul>
+<li>Core DSL: <code>dslgen/generators/template-dsl.rkt</code></li>
+<li>C++ emitters: <code>dslgen/generators/cpp/emitters.rkt</code></li>
+<li>Tests: <code>dslgen/tests/test-template-dsl.rkt</code></li>
+</ul></li>
+<li><p><strong>Migration strategy</strong>:</p>
+<ol type="1">
+<li>✅ Value objects (v1.21.0)</li>
+<li>Entities (v1.22.0 candidate)</li>
+<li>Domain events, repositories, services (v1.23.0+)</li>
+<li>Cross-target templates (Qt Widgets/QML shared logic) (v1.24.0+)</li>
+</ol></li>
+<li><p><strong>Performance</strong>: Measured at 4× slower than format
+strings (1000 iterations: template 4ms, format 1ms). This is acceptable
+for generator code which runs offline. If performance becomes critical,
+can optimize template-eval with caching or lazy evaluation.</p></li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>FTR-069: S-Expression Template DSL for Code Generation</li>
+<li>Proof-of-concept: <code>generate-value-object-template</code> in
+<code>dslgen/generators/cpp/emitters.rkt</code></li>
+<li>Test suite: <code>racket dslgen/tests/test-template-dsl.rkt</code>
+(all passing)</li>
+<li>Byte-identical output verified: FHIR Health full generation shows "0
+written, 1201 unchanged (skipped)"</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

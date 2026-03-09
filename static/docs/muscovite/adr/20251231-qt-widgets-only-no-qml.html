@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Qt Widgets Only - No QML Client
+Generation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Qt Widgets Only - No QML Client Generation</span>
+</nav>
+
+<h1>ADR: Qt Widgets Only - No QML Client Generation</h1>
+
+
+<h1 id="adr-qt-widgets-only---no-qml-client-generation">ADR: Qt Widgets
+Only - No QML Client Generation</h1>
+<p><strong>Status</strong>: Superseded by <a
+href="20260206-multi-frontend-architecture.html">20260206-multi-frontend-architecture</a><br />
+<strong>Date</strong>: 2025-12-31<br />
+<strong>Context</strong>: Qt gRPC client generation for Muscovite</p>
+<h2 id="decision">Decision</h2>
+<p>We will <strong>NOT</strong> generate QML-based clients. All
+frontends will use <strong>Qt Widgets</strong> exclusively.</p>
+<h2 id="rationale">Rationale</h2>
+<ol type="1">
+<li><strong>Build System Complexity</strong>: QML module integration in
+CMake introduces build system complexity, moc file handling, and Qt
+Autotools conflicts.</li>
+<li><strong>Maintenance</strong>: Qt Widgets is simpler to maintain and
+debug in a generated context.</li>
+<li><strong>Performance</strong>: Widgets is faster for data-heavy
+(CRUD) applications like Geosciences.</li>
+<li><strong>Deployment</strong>: Widgets distributes as a single
+executable without runtime QML dependencies.</li>
+<li><strong>Focus</strong>: Avoids dividing effort between two
+incompatible frontend frameworks.</li>
+</ol>
+<h2 id="implications">Implications</h2>
+<ul>
+<li>All Qt client generators produce Widgets-only code (no QML files, no
+QML modules).</li>
+<li>Qt models and list models are linked into a Widgets executable.</li>
+<li>CMake targets are straightforward: <code>add_executable()</code> +
+<code>target_link_libraries()</code>.</li>
+<li>Moc files are generated by <code>set(CMAKE_AUTOMOC ON)</code> and
+never included directly in source.</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-to-apply">When to Apply</h3>
+<ul>
+<li>Generating Qt clients from Muscovite DDD models.</li>
+<li>Building Muscovite framework Qt components.</li>
+<li>Creating Qt-based tooling or UI applications.</li>
+</ul>
+<h3 id="when-not-to-apply">When NOT to Apply</h3>
+<ul>
+<li>Qt library code (e.g., <code>muscoviteqt</code> library
+itself).</li>
+<li>Pure C++ backends or gRPC servers.</li>
+</ul>
+<h3 id="key-rules">Key Rules</h3>
+<ol type="1">
+<li><strong>No QML generation</strong>: Never emit <code>.qml</code>
+files from generators.</li>
+<li><strong>No moc includes</strong>: Moc files are ALWAYS
+auto-generated by CMake; never include them manually.</li>
+<li><strong>CMake-only build</strong>: Use
+<code>set(CMAKE_AUTOMOC ON)</code> and standard Qt6 CMake helpers
+(<code>qt_add_executable</code>, <code>qt_add_library</code>).</li>
+<li><strong>Widgets only</strong>: All UI code uses
+<code>QWidget</code>, <code>QMainWindow</code>,
+<code>QTableWidget</code>, etc.</li>
+</ol>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Remove all QML file references from
+generator</label></li>
+<li><label><input type="checkbox" />Remove qt_add_qml_module calls from
+generated CMakeLists</label></li>
+<li><label><input type="checkbox" />Use <code>qt_add_executable()</code>
+for Widgets apps</label></li>
+<li><label><input type="checkbox" />Enable <code>CMAKE_AUTOMOC</code> in
+CMakeLists</label></li>
+<li><label><input type="checkbox" />Never hardcode <code>.moc</code> or
+<code>.moc.cpp</code> in sources</label></li>
+<li><label><input type="checkbox" />Link Qt6::Widgets, Qt6::Core,
+Qt6::Gui (no Qt6::Qml)</label></li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="./20251223-use-racket-for-dsl-code-generation.html">ADR: Use
+Racket for DSL Code Generation</a></li>
+<li>Qt 6 CMake documentation: <a
+href="https://doc.qt.io/qt-6/qt-cmake-manual.html">https://doc.qt.io/qt-6/qt-cmake-manual.html</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

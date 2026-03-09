@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Strong Types Across All
+Layers — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Strong Types Across All Layers</span>
+</nav>
+
+<h1>ADR: Strong Types Across All Layers</h1>
+
+
+<h1 id="adr-strong-types-across-all-layers">ADR: Strong Types Across All
+Layers</h1>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Date</strong>: 2026-01-19</li>
+<li><strong>Deciders</strong>: Architecture Team</li>
+<li><strong>Technical Story</strong>: Implement end-to-end strong typing
+from PostgreSQL through gRPC to C++ and Qt</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's <code>STRONG_TYPE</code> DSL construct currently
+generates PostgreSQL DOMAINs with CHECK constraints for database-level
+validation. However, these strong types are <strong>flattened to
+primitives</strong> when crossing layer boundaries:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Current Mapping</th>
+<th>Problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td><code>CREATE DOMAIN email AS TEXT</code></td>
+<td>✅ Validated</td>
+</tr>
+<tr>
+<td>PL/pgSQL API</td>
+<td><code>p_email email</code></td>
+<td>✅ Domain-typed</td>
+</tr>
+<tr>
+<td>gRPC Proto</td>
+<td><code>string email = 1;</code></td>
+<td>❌ Just a string</td>
+</tr>
+<tr>
+<td>C++ Service</td>
+<td><code>std::string email</code></td>
+<td>❌ Just a string</td>
+</tr>
+<tr>
+<td>Qt Client</td>
+<td><code>QString email</code></td>
+<td>❌ Just a string</td>
+</tr>
+</tbody>
+</table>
+<p>This creates several problems:</p>
+<ol type="1">
+<li><strong>Type safety lost</strong> - Any string can be passed where
+an email is expected</li>
+<li><strong>No compile-time checks</strong> - Mismatched types only
+caught at runtime (DB constraint)</li>
+<li><strong>Self-documenting code</strong> - <code>std::string</code>
+says nothing about the domain meaning</li>
+<li><strong>IDE support</strong> - No type-specific autocomplete or
+validation</li>
+<li><strong>Interoperability</strong> - Existing boost/Qt types
+(boost::uuids::uuid, QUuid) not leveraged</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Type safety</strong>: Compile-time errors when mixing
+incompatible types</li>
+<li><strong>Reuse existing types</strong>: boost::uuids::uuid, QUuid,
+std::chrono types</li>
+<li><strong>Validation locality</strong>: Validate in C++/Qt, not just
+at database</li>
+<li><strong>Serialization</strong>: Efficient proto serialization
+without string conversion overhead</li>
+<li><strong>Performance</strong>: Avoid unnecessary string ↔︎ native type
+conversions</li>
+<li><strong>Ergonomics</strong>: Idiomatic C++ and Qt code</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Keep primitives</strong> - ❌ No type safety</li>
+<li><strong>C++20 strong typedefs only</strong> - Partial solution, no
+Qt/proto integration</li>
+<li><strong>Custom wrapper classes per strong type</strong> - Maximum
+safety, but verbose</li>
+<li><strong>Hybrid: Reuse existing + generate wrappers</strong> - ✅
+Selected</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Implement strong types across all layers using a <strong>hybrid
+approach</strong>:</p>
+<h3 id="1-built-in-types--existing-library-types">1. Built-in Types →
+Existing Library Types</h3>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL</th>
+<th>gRPC Proto</th>
+<th>C++</th>
+<th>Qt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UUID</code></td>
+<td><code>UUID</code></td>
+<td><code>string</code> (RFC 4122)</td>
+<td><code>boost::uuids::uuid</code></td>
+<td><code>QUuid</code></td>
+</tr>
+<tr>
+<td><code>Date</code></td>
+<td><code>DATE</code></td>
+<td><code>google.type.Date</code></td>
+<td><code>std::chrono::year_month_day</code></td>
+<td><code>QDate</code></td>
+</tr>
+<tr>
+<td><code>DateTime</code></td>
+<td><code>TIMESTAMPTZ</code></td>
+<td><code>google.protobuf.Timestamp</code></td>
+<td><code>std::chrono::system_clock::time_point</code></td>
+<td><code>QDateTime</code></td>
+</tr>
+<tr>
+<td><code>Time</code></td>
+<td><code>TIME</code></td>
+<td><code>google.type.TimeOfDay</code></td>
+<td><code>std::chrono::hh_mm_ss&lt;&gt;</code></td>
+<td><code>QTime</code></td>
+</tr>
+<tr>
+<td><code>Decimal</code></td>
+<td><code>NUMERIC(p,s)</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>boost::multiprecision::cpp_dec_float&lt;50&gt;</code></td>
+<td><code>QString</code> (display)</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td>
+<td><code>BOOLEAN</code></td>
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+</tr>
+<tr>
+<td><code>Integer</code></td>
+<td><code>INTEGER</code></td>
+<td><code>int64</code></td>
+<td><code>std::int64_t</code></td>
+<td><code>qint64</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-strong_type--generated-wrapper-classes">2. STRONG_TYPE →
+Generated Wrapper Classes</h3>
+<p>For each user-defined <code>STRONG_TYPE</code>:</p>
+<pre class="ddd"><code>STRONG_TYPE Email BASED_ON TEXT
+    CHECK email_format: VALUE ~ &#39;^[^@]+@[^@]+\.[^@]+$&#39;
+    DOC &quot;Valid email address&quot;;</code></pre>
+<p><strong>Generated C++ (muscovite::types::Email)</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>types <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Email <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Explicit construction from string - validates format</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> Email<span class="op">(</span><span class="bu">std::</span>string_view value<span class="op">);</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Factory method for unchecked construction (from trusted source like DB)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> Email from_trusted<span class="op">(</span><span class="bu">std::</span>string value<span class="op">)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Accessors</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> value<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">value_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="bu">std::</span>string_view view<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">value_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Implicit conversion to string_view for ergonomics</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">operator</span> <span class="bu">std::</span>string_view<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">value_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Comparison (defaulted)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> <span class="kw">operator</span><span class="op">&lt;=&gt;(</span><span class="at">const</span> Email<span class="op">&amp;)</span> <span class="at">const</span> <span class="op">=</span> <span class="cf">default</span><span class="op">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validation (static, usable before construction)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="at">static</span> <span class="dt">bool</span> is_valid<span class="op">(</span><span class="bu">std::</span>string_view value<span class="op">)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Proto serialization</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> to_proto<span class="op">(</span><span class="bu">std::</span>string<span class="op">*</span> out<span class="op">)</span> <span class="at">const</span> <span class="op">{</span> <span class="op">*</span>out <span class="op">=</span> <span class="va">value_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> Email from_proto<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> proto<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> from_trusted<span class="op">(</span>proto<span class="op">);</span> <span class="op">}</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string <span class="va">value_</span><span class="op">;</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace muscovite::types</span></span></code></pre></div>
+<p><strong>Generated Qt Wrapper (muscovite::qt::Email)</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>qt <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Email <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> Email<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">);</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> Email fromTrusted<span class="op">(</span><span class="ex">QString</span> value<span class="op">)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">()</span> <span class="at">const</span> <span class="kw">noexcept</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">value_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="at">static</span> <span class="dt">bool</span> isValid<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">)</span> <span class="kw">noexcept</span><span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Conversion to/from C++ type</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> Email<span class="op">(</span><span class="at">const</span> muscovite<span class="op">::</span>types<span class="op">::</span>Email<span class="op">&amp;</span> cpp<span class="op">);</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> muscovite<span class="op">::</span>types<span class="op">::</span>Email toCpp<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// QVariant support for Qt models</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">operator</span> <span class="ex">QVariant</span><span class="op">()</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="ex">QVariant::fromValue</span><span class="op">(</span><span class="va">value_</span><span class="op">);</span> <span class="op">}</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> <span class="va">value_</span><span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace muscovite::qt</span></span></code></pre></div>
+<p><strong>Generated Proto Message</strong>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In muscovite/common/types.proto</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> Email {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> value <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="3-entity-usage---strong-typed-throughout">3. Entity Usage -
+Strong-Typed Throughout</h3>
+<p><strong>DDD Model</strong>:</p>
+<pre class="ddd"><code>ENTITY Patient IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    email Email,
+    birth_date Date NOT NULL,
+    balance Decimal(18,2)
+)</code></pre>
+<p><strong>Generated C++ Entity</strong>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Patient <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="bu">std::</span>optional<span class="op">&lt;</span>muscovite<span class="op">::</span>types<span class="op">::</span>Email<span class="op">&gt;</span> email<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="bu">std::</span>chrono::year_month_day birth_date<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[[</span><span class="at">nodiscard</span><span class="op">]]</span> <span class="ex">boost::</span>multiprecision::cpp_dec_float<span class="op">&lt;</span><span class="dv">50</span><span class="op">&gt;</span> balance<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> set_email<span class="op">(</span><span class="bu">std::</span>optional<span class="op">&lt;</span>muscovite<span class="op">::</span>types<span class="op">::</span>Email<span class="op">&gt;</span> value<span class="op">);</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Generated Proto</strong>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> Patient {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    muscovite.common.UUID id <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">optional</span> muscovite.common.Email email <span class="op">=</span> <span class="dv">2</span>;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    google.type.Date birth_date <span class="op">=</span> <span class="dv">3</span>;</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    muscovite.common.Decimal balance <span class="op">=</span> <span class="dv">4</span>;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Generated Qt Model</strong>:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientModel <span class="op">:</span> <span class="kw">public</span> <span class="ex">QAbstractTableModel</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Returns QVariant wrapping muscovite::qt::Email (or display string)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QVariant</span> data<span class="op">(</span><span class="at">const</span> <span class="ex">QModelIndex</span><span class="op">&amp;</span> index<span class="op">,</span> <span class="dt">int</span> role<span class="op">)</span> <span class="at">const</span> <span class="kw">override</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="4-conversion-functions">4. Conversion Functions</h3>
+<p>Generated converters in
+<code>muscovite/types/conversions.hpp</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>types <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">// UUID conversions</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">boost::</span>uuids::uuid from_proto<span class="op">(</span><span class="at">const</span> muscovite<span class="op">::</span>common<span class="op">::</span>UUID<span class="op">&amp;</span> proto<span class="op">);</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> to_proto<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> uuid<span class="op">,</span> muscovite<span class="op">::</span>common<span class="op">::</span>UUID<span class="op">*</span> proto<span class="op">);</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">QUuid</span> to_qt<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> uuid<span class="op">);</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">boost::</span>uuids::uuid from_qt<span class="op">(</span><span class="at">const</span> <span class="ex">QUuid</span><span class="op">&amp;</span> uuid<span class="op">);</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Date conversions</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>chrono::year_month_day from_proto<span class="op">(</span><span class="at">const</span> google<span class="op">::</span>type<span class="op">::</span>Date<span class="op">&amp;</span> proto<span class="op">);</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> to_proto<span class="op">(</span><span class="bu">std::</span>chrono::year_month_day date<span class="op">,</span> google<span class="op">::</span>type<span class="op">::</span>Date<span class="op">*</span> proto<span class="op">);</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="ex">QDate</span> to_qt<span class="op">(</span><span class="bu">std::</span>chrono::year_month_day date<span class="op">);</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>chrono::year_month_day from_qt<span class="op">(</span><span class="at">const</span> <span class="ex">QDate</span><span class="op">&amp;</span> date<span class="op">);</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">// DateTime (Timestamp) conversions</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>chrono::system_clock::time_point from_proto<span class="op">(</span><span class="at">const</span> google<span class="op">::</span>protobuf<span class="op">::</span>Timestamp<span class="op">&amp;</span> proto<span class="op">);</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> to_proto<span class="op">(</span><span class="bu">std::</span>chrono::system_clock::time_point tp<span class="op">,</span> google<span class="op">::</span>protobuf<span class="op">::</span>Timestamp<span class="op">*</span> proto<span class="op">);</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ex">QDateTime</span> to_qt<span class="op">(</span><span class="bu">std::</span>chrono::system_clock::time_point tp<span class="op">);</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>chrono::system_clock::time_point from_qt<span class="op">(</span><span class="at">const</span> <span class="ex">QDateTime</span><span class="op">&amp;</span> dt<span class="op">);</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">// Decimal conversions</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="ex">boost::</span>multiprecision::cpp_dec_float<span class="op">&lt;</span><span class="dv">50</span><span class="op">&gt;</span> from_proto<span class="op">(</span><span class="at">const</span> muscovite<span class="op">::</span>common<span class="op">::</span>Decimal<span class="op">&amp;</span> proto<span class="op">);</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> to_proto<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>multiprecision::cpp_dec_float<span class="op">&lt;</span><span class="dv">50</span><span class="op">&gt;&amp;</span> dec<span class="op">,</span> muscovite<span class="op">::</span>common<span class="op">::</span>Decimal<span class="op">*</span> proto<span class="op">);</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="ex">QString</span> to_qt_string<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>multiprecision::cpp_dec_float<span class="op">&lt;</span><span class="dv">50</span><span class="op">&gt;&amp;</span> dec<span class="op">,</span> <span class="dt">int</span> precision <span class="op">=</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">// STRONG_TYPE conversions (generated per type)</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">// Email from_proto(const muscovite::common::Email&amp; proto);</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">// void to_proto(const Email&amp; email, muscovite::common::Email* proto);</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace muscovite::types</span></span></code></pre></div>
+<h3 id="5-validation-strategy">5. Validation Strategy</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>When Validated</th>
+<th>Action on Invalid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Qt Input</strong></td>
+<td>User input in QLineEdit</td>
+<td>Show validation error, don't submit</td>
+</tr>
+<tr>
+<td><strong>Qt Model</strong></td>
+<td>Before gRPC call</td>
+<td>Throw validation exception</td>
+</tr>
+<tr>
+<td><strong>gRPC Service</strong></td>
+<td>Request received</td>
+<td>Return INVALID_ARGUMENT status</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>INSERT/UPDATE</td>
+<td>Raise constraint violation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Validation regex is single source of truth</strong> in the
+DDD model:</p>
+<pre class="ddd"><code>STRONG_TYPE Email BASED_ON TEXT
+    CHECK email_format: VALUE ~ &#39;^[^@]+@[^@]+\.[^@]+$&#39;</code></pre>
+<p>This regex is:</p>
+<ol type="1">
+<li>Used in PostgreSQL DOMAIN CHECK</li>
+<li>Compiled into C++ static validator (std::regex or RE2)</li>
+<li>Compiled into Qt QRegularExpressionValidator</li>
+<li>Documented in proto message comment</li>
+</ol>
+<h2 id="type-mapping-matrix-complete">Type Mapping Matrix
+(Complete)</h2>
+<table>
+<thead>
+<tr>
+<th>DSL STRONG_TYPE</th>
+<th>PostgreSQL</th>
+<th>Proto</th>
+<th>C++</th>
+<th>Qt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email</td>
+<td>DOMAIN TEXT</td>
+<td><code>Email { string }</code></td>
+<td><code>muscovite::types::Email</code></td>
+<td><code>muscovite::qt::Email</code></td>
+</tr>
+<tr>
+<td>Phone</td>
+<td>DOMAIN TEXT</td>
+<td><code>Phone { string }</code></td>
+<td><code>muscovite::types::Phone</code></td>
+<td><code>muscovite::qt::Phone</code></td>
+</tr>
+<tr>
+<td>PostalCode</td>
+<td>DOMAIN TEXT</td>
+<td><code>PostalCode { string }</code></td>
+<td><code>muscovite::types::PostalCode</code></td>
+<td><code>muscovite::qt::PostalCode</code></td>
+</tr>
+<tr>
+<td>CountryCode</td>
+<td>DOMAIN TEXT</td>
+<td><code>CountryCode { string }</code></td>
+<td><code>muscovite::types::CountryCode</code></td>
+<td><code>muscovite::qt::CountryCode</code></td>
+</tr>
+<tr>
+<td>LanguageCode</td>
+<td>DOMAIN TEXT</td>
+<td><code>LanguageCode { string }</code></td>
+<td><code>muscovite::types::LanguageCode</code></td>
+<td><code>muscovite::qt::LanguageCode</code></td>
+</tr>
+<tr>
+<td>CodingSystem</td>
+<td>DOMAIN TEXT</td>
+<td><code>CodingSystem { string }</code></td>
+<td><code>muscovite::types::CodingSystem</code></td>
+<td><code>muscovite::qt::CodingSystem</code></td>
+</tr>
+<tr>
+<td>CodingCode</td>
+<td>DOMAIN TEXT</td>
+<td><code>CodingCode { string }</code></td>
+<td><code>muscovite::types::CodingCode</code></td>
+<td><code>muscovite::qt::CodingCode</code></td>
+</tr>
+<tr>
+<td>PositiveInteger</td>
+<td>DOMAIN INT</td>
+<td><code>int64</code> (proto native)</td>
+<td><code>muscovite::types::PositiveInteger</code></td>
+<td><code>qint64</code> (validated)</td>
+</tr>
+<tr>
+<td>PositiveDecimal</td>
+<td>DOMAIN DECIMAL</td>
+<td><code>Decimal { string }</code></td>
+<td><code>muscovite::types::PositiveDecimal</code></td>
+<td><code>QString</code> (validated)</td>
+</tr>
+<tr>
+<td>Latitude</td>
+<td>DOMAIN DECIMAL</td>
+<td><code>double</code></td>
+<td><code>muscovite::types::Latitude</code></td>
+<td><code>double</code> (validated)</td>
+</tr>
+<tr>
+<td>Longitude</td>
+<td>DOMAIN DECIMAL</td>
+<td><code>double</code></td>
+<td><code>muscovite::types::Longitude</code></td>
+<td><code>double</code> (validated)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="implementation-phases">Implementation Phases</h2>
+<h3
+id="phase-1-c-type-library-muscovite-types-white_check_mark-complete">Phase
+1: C++ Type Library (muscovite-types) ✅ COMPLETE</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Create
+<code>include/muscovite/types/</code> header-only library</label></li>
+<li><label><input type="checkbox" checked="" />Implement base types:
+<code>Email</code>, <code>Phone</code>, <code>PostalCode</code>,
+etc.</label></li>
+<li><label><input type="checkbox" checked="" />Add validation with
+std::regex</label></li>
+<li><label><input type="checkbox" checked="" />Unit tests with Catch2
+(87 tests passing)</label></li>
+</ul>
+<h3
+id="phase-2-proto-message-generation-white_check_mark-complete-simplified">Phase
+2: Proto Message Generation ✅ COMPLETE (Simplified)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Strong types use
+<code>string</code> in proto for cross-language
+compatibility</label></li>
+<li><label><input type="checkbox" checked="" />Validation happens at
+PostgreSQL DOMAIN layer (CHECK constraints)</label></li>
+<li><label><input type="checkbox" checked="" />Proto is transport-only;
+type safety enforced at DB and service layer</label></li>
+</ul>
+<h3 id="phase-3-c-dba-layer-primitives-for-pqxx-compatibility">Phase 3:
+C++ DBA Layer (Primitives for pqxx Compatibility)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />DBA entity structs use
+<code>std::string</code> for strong type fields</label></li>
+<li><label><input type="checkbox" checked="" />This is intentional:
+pqxx::params requires string-like types</label></li>
+<li><label><input type="checkbox" checked="" />Validation happens at
+PostgreSQL DOMAIN layer</label></li>
+<li><label><input type="checkbox" /><strong>Optional</strong>: Add
+factory methods that accept strong types and extract
+<code>.value()</code></label></li>
+</ul>
+<h3 id="phase-4-c-service-layer-strong-types-at-api-boundary">Phase 4:
+C++ Service Layer (Strong Types at API Boundary)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Service methods validate input using
+<code>muscovite::types::*</code> classes</label></li>
+<li><label><input type="checkbox" />Convert: proto <code>string</code> →
+<code>Email::is_valid()</code> check → DBA
+<code>std::string</code></label></li>
+<li><label><input type="checkbox" />Return: DBA <code>std::string</code>
+→ <code>Email::from_trusted()</code> → proto
+<code>string</code></label></li>
+<li><label><input type="checkbox" />This is where application-level
+validation should occur</label></li>
+</ul>
+<h3
+id="phase-5-qt-type-library-muscovite-qt-types-white_check_mark-complete">Phase
+5: Qt Type Library (muscovite-qt-types) ✅ COMPLETE</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Create
+<code>include/muscovite/qt/types/</code> headers</label></li>
+<li><label><input type="checkbox" checked="" />Qt wrappers with
+QValidator integration (<code>EmailValidator</code>, etc.)</label></li>
+<li><label><input type="checkbox" checked="" />Factory function
+<code>createValidator(const QString&amp; typeName)</code></label></li>
+</ul>
+<h3 id="phase-6-qt-widget-generation-in-progress">Phase 6: Qt Widget
+Generation (In Progress)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Add
+<code>field-type-&gt;validator</code> function in
+common.rkt</label></li>
+<li><label><input type="checkbox" />Update edit dialog generation to
+attach validators to QLineEdit</label></li>
+<li><label><input type="checkbox" />Generate proper model data() return
+types</label></li>
+</ul>
+<h2 id="layer-boundary-architecture-implementation-decision">Layer
+Boundary Architecture (Implementation Decision)</h2>
+<p>The strong types library (<code>muscovite::types</code>) provides
+<strong>application-layer validation</strong> that sits between the
+transport layer (gRPC) and the database layer (DBA). Here's how types
+flow:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
+│                           Qt Client Layer                                   │
+│   QLineEdit → EmailValidator::validate() → gRPC call with string           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     │
+                                     ▼ proto: string
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         gRPC Transport Layer                                │
+│   Proto uses simple string type for cross-language compatibility            │
+│   No proto wrapper messages - validation happens elsewhere                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     │
+                                     ▼ std::string (from proto)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      C++ gRPC Service Layer                                 │
+│   Option A: Validate here using muscovite::types::Email::is_valid()         │
+│   Option B: Pass through to DBA, let PostgreSQL DOMAIN reject invalid       │
+│                                                                             │
+│   Current: Option B (DB-level validation only)                              │
+│   Future: Add Option A for early rejection with better error messages       │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     │
+                                     ▼ std::string
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          DBA Layer (Repository)                             │
+│   Entity structs use std::string for strong type fields                     │
+│   Required: pqxx::params only accepts string-like types                     │
+│   row[n].as&lt;std::string&gt;() → entity.email                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     │
+                                     ▼ std::string via pqxx
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        PostgreSQL Layer                                     │
+│   Column type: basedata.email (DOMAIN with CHECK constraint)                │
+│   INSERT/UPDATE → CHECK (VALUE ~ &#39;^[^@]+@[^@]+\.[^@]+$&#39;)                    │
+│   Constraint violation → 23514 error → DBA layer throws                     │
+│                                                                             │
+│   This is the AUTHORITATIVE validation layer                                │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="why-primitives-in-dba-layer">Why Primitives in DBA Layer?</h3>
+<ol type="1">
+<li><strong>pqxx Compatibility</strong>: <code>pqxx::params</code>
+constructor requires types convertible to string/numeric</li>
+<li><strong>PostgreSQL DOMAINs</strong>: The database enforces
+constraints authoritatively</li>
+<li><strong>Performance</strong>: No redundant validation; DB checks on
+every write</li>
+<li><strong>Simplicity</strong>: DBA layer is a thin pass-through, not a
+validation layer</li>
+</ol>
+<h3 id="where-strong-types-are-used">Where Strong Types Are Used</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Strong Types?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>muscovite::types::*</code> library</td>
+<td>✅ Yes</td>
+<td>Provide validation utilities</td>
+</tr>
+<tr>
+<td><code>muscovite::qt::*</code> library</td>
+<td>✅ Yes</td>
+<td>QValidator integration for UI</td>
+</tr>
+<tr>
+<td>Generated DBA entities</td>
+<td>❌ No</td>
+<td>pqxx requires primitives</td>
+</tr>
+<tr>
+<td>Generated proto messages</td>
+<td>❌ No</td>
+<td>Cross-language compatibility</td>
+</tr>
+<tr>
+<td>Generated gRPC services</td>
+<td>❌ No</td>
+<td>Transport layer, no validation</td>
+</tr>
+<tr>
+<td>Application service layer</td>
+<td>✅ Optional</td>
+<td>Add validation before DBA calls</td>
+</tr>
+</tbody>
+</table>
+<h3 id="using-strong-types-in-application-code">Using Strong Types in
+Application Code</h3>
+<p>Application code that calls the generated DBA layer can use strong
+types for validation:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Application service (hand-written, not generated)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status PatientService<span class="op">::</span>UpdateEmail<span class="op">(</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    grpc<span class="op">::</span>ServerContext<span class="op">*</span> ctx<span class="op">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> UpdateEmailRequest<span class="op">*</span> req<span class="op">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    UpdateEmailResponse<span class="op">*</span> resp<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validate using strong type</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>muscovite<span class="op">::</span>types<span class="op">::</span>Email<span class="op">::</span>is_valid<span class="op">(</span>req<span class="op">-&gt;</span>email<span class="op">()))</span> <span class="op">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> grpc<span class="op">::</span>Status<span class="op">(</span>grpc<span class="op">::</span>INVALID_ARGUMENT<span class="op">,</span> <span class="st">&quot;Invalid email format&quot;</span><span class="op">);</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Call generated DBA layer with primitive string</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> patient <span class="op">=</span> <span class="va">repo_</span><span class="op">.</span>find_by_id<span class="op">(</span>uuid_from_proto<span class="op">(</span>req<span class="op">-&gt;</span>patient_id<span class="op">()));</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    patient<span class="op">.</span>email <span class="op">=</span> req<span class="op">-&gt;</span>email<span class="op">();</span>  <span class="co">// std::string, not Email</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">repo_</span><span class="op">.</span>update<span class="op">(</span>patient<span class="op">);</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grpc<span class="op">::</span>Status<span class="op">::</span>OK<span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Compile-time safety</strong> - <code>Email</code> and
+<code>Phone</code> are distinct types</li>
+<li><strong>Self-documenting</strong> - Code clearly shows domain
+intent</li>
+<li><strong>Validation at all layers</strong> - Invalid data caught
+early</li>
+<li><strong>IDE support</strong> - Type-specific autocomplete</li>
+<li><strong>Reuse</strong> - Leverage mature boost/Qt types</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>More code</strong> - Wrapper classes for each strong
+type</li>
+<li><strong>Conversion overhead</strong> - Proto ↔︎ C++ ↔︎ Qt
+conversions</li>
+<li><strong>Build time</strong> - More templates to compile</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Regex validation compiled once at startup (negligible overhead)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>Generating C++ code for entities with STRONG_TYPE fields → Use
+wrapper types</li>
+<li>Generating proto messages → Use
+<code>muscovite.common.{TypeName}</code> messages</li>
+<li>Generating Qt models/dialogs → Use Qt wrapper types with
+validators</li>
+<li>Converting between layers → Use generated conversion functions</li>
+</ul>
+<h3 id="when-this-does-not-apply">When This Does NOT Apply</h3>
+<ul>
+<li>Built-in types (UUID, Date, DateTime) → Use existing library types
+directly</li>
+<li>PostgreSQL generation → Already uses DOMAINs correctly</li>
+<li>PL/pgSQL API → Already uses domain-typed parameters</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>include/muscovite/types/*.hpp</code> - C++ strong type
+wrappers</li>
+<li><code>include/muscovite/qt/types/*.hpp</code> - Qt strong type
+wrappers</li>
+<li><code>proto/muscovite/common/types.proto</code> - Proto message
+definitions</li>
+<li><code>src/dslgen/generators/grpc/proto.rkt</code> - Proto field
+generation</li>
+<li><code>src/dslgen/generators/grpc/cpp-service.rkt</code> - C++
+service generation</li>
+<li><code>src/dslgen/generators/qt/widgets-views.rkt</code> - Qt widget
+generation</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>Boost.Uuid: <a
+href="https://www.boost.org/doc/libs/1_84_0/libs/uuid/doc/uuid.html">https://www.boost.org/doc/libs/1_84_0/libs/uuid/doc/uuid.html</a></li>
+<li>Boost.Multiprecision: <a
+href="https://www.boost.org/doc/libs/1_84_0/libs/multiprecision/doc/html/index.html">https://www.boost.org/doc/libs/1_84_0/libs/multiprecision/doc/html/index.html</a></li>
+<li>QUuid: <a
+href="https://doc.qt.io/qt-6/quuid.html">https://doc.qt.io/qt-6/quuid.html</a></li>
+<li>std::chrono: <a
+href="https://en.cppreference.com/w/cpp/chrono">https://en.cppreference.com/w/cpp/chrono</a></li>
+<li>google.type.Date: <a
+href="https://github.com/googleapis/googleapis/blob/master/google/type/date.proto">https://github.com/googleapis/googleapis/blob/master/google/type/date.proto</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

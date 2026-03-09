@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geography Over Geometry for Spatial
+Data — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Geography Over Geometry for Spatial Data</span>
+</nav>
+
+<h1>Geography Over Geometry for Spatial Data</h1>
+
+
+<h1 id="geography-over-geometry-for-spatial-data">Geography Over
+Geometry for Spatial Data</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Deciders</strong>: jolo</li>
+<li><strong>Date</strong>: 2026-01-26</li>
+<li><strong>Supersedes</strong>: <a
+href="20260108-postgis-spatial-extension.html">PostGIS Spatial
+Extension</a></li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>PostGIS provides two spatial type systems: GEOMETRY (planar/Cartesian
+math) and GEOGRAPHY (spherical/geodetic math). The original ADR chose
+GEOMETRY for performance. After further analysis, we need to reconsider
+for scientific and commercial accuracy requirements.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Correctness and precision over speed</li>
+<li>Global applicability (not limited to small geographic areas)</li>
+<li>Scientific rigor for geology, environmental, and mapping
+applications</li>
+<li>Consistent behavior regardless of location on Earth</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>GEOMETRY</strong> - Planar Cartesian calculations</li>
+<li><strong>GEOGRAPHY</strong> - Spherical geodetic calculations</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>GEOGRAPHY</strong>, because correctness and
+precision are more important than speed for scientific and commercial
+work.</p>
+<h3 id="consequences">Consequences</h3>
+<p><strong>Good:</strong></p>
+<ul>
+<li>Accurate distance calculations anywhere on Earth (meters, not
+degrees)</li>
+<li>Correct area calculations for large regions</li>
+<li>No projection distortion artifacts</li>
+<li>Always uses WGS84 (SRID 4326) - universal standard</li>
+</ul>
+<p><strong>Bad:</strong></p>
+<ul>
+<li>Slower than GEOMETRY (typically 2-5x for complex operations)</li>
+<li>Some spatial functions not available (can cast to GEOMETRY when
+needed)</li>
+<li>Always meters for distance (no configurable units - which we
+consider good, see ADR: Metric Units Only)</li>
+</ul>
+<h3 id="technical-details">Technical Details</h3>
+<p><strong>Type Mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POINT</code></td>
+<td><code>GEOGRAPHY(POINT, 4326)</code></td>
+</tr>
+<tr>
+<td><code>POINTZ</code></td>
+<td><code>GEOGRAPHY(POINTZ, 4326)</code></td>
+</tr>
+<tr>
+<td><code>LINESTRING</code></td>
+<td><code>GEOGRAPHY(LINESTRING, 4326)</code></td>
+</tr>
+<tr>
+<td><code>LINESTRINGZ</code></td>
+<td><code>GEOGRAPHY(LINESTRINGZ, 4326)</code></td>
+</tr>
+<tr>
+<td><code>POLYGON</code></td>
+<td><code>GEOGRAPHY(POLYGON, 4326)</code></td>
+</tr>
+<tr>
+<td><code>POLYGONZ</code></td>
+<td><code>GEOGRAPHY(POLYGONZ, 4326)</code></td>
+</tr>
+<tr>
+<td><code>MULTIPOINT</code></td>
+<td><code>GEOGRAPHY(MULTIPOINT, 4326)</code></td>
+</tr>
+<tr>
+<td><code>MULTILINESTRING</code></td>
+<td><code>GEOGRAPHY(MULTILINESTRING, 4326)</code></td>
+</tr>
+<tr>
+<td><code>MULTIPOLYGON</code></td>
+<td><code>GEOGRAPHY(MULTIPOLYGON, 4326)</code></td>
+</tr>
+<tr>
+<td><code>GEOMETRYCOLLECTION</code></td>
+<td><code>GEOGRAPHY(GEOMETRYCOLLECTION, 4326)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>SRID Strategy:</strong></p>
+<ul>
+<li>GEOGRAPHY always uses WGS84 (SRID 4326) internally</li>
+<li>DSL allows specifying SRID for documentation:
+<code>location POINT(4326)</code></li>
+<li>If non-4326 SRID specified, data is transformed on
+insert/select</li>
+<li>Default SRID is 4326; omitting generates a warning</li>
+</ul>
+<p><strong>C++ Template SRID:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Compile-time SRID safety</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>muscovite<span class="op">::</span>dba<span class="op">::</span>Point<span class="op">&lt;</span><span class="dv">4326</span><span class="op">&gt;</span> location<span class="op">;</span>  <span class="co">// WGS84</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>muscovite<span class="op">::</span>dba<span class="op">::</span>Point<span class="op">&lt;</span><span class="dv">3857</span><span class="op">&gt;</span> webMercator<span class="op">;</span>  <span class="co">// Web Mercator</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Compilation error: cannot assign different SRIDs</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>location <span class="op">=</span> webMercator<span class="op">;</span>  <span class="co">// ERROR</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Explicit transform required</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>location <span class="op">=</span> webMercator<span class="op">.</span>transform<span class="op">&lt;</span><span class="dv">4326</span><span class="op">&gt;();</span>  <span class="co">// OK</span></span></code></pre></div>
+<p><strong>Index Generation:</strong></p>
+<ul>
+<li>GIST spatial indexes auto-generated for
+<code>@spatial-queryable</code> fields</li>
+<li>Uses <code>USING GIST (column geography_ops)</code> for
+GEOGRAPHY</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When this applies:</strong></p>
+<ul>
+<li>Any entity with spatial/geographic data</li>
+<li>Location fields, boundaries, routes, areas</li>
+<li>Whenever <code>POINT</code>, <code>LINESTRING</code>,
+<code>POLYGON</code>, etc. types are used</li>
+</ul>
+<p><strong>When this does NOT apply:</strong></p>
+<ul>
+<li>Pure coordinate storage without spatial queries (use two DECIMAL
+fields)</li>
+<li>Image/raster coordinates (pixel space, not geographic)</li>
+</ul>
+<p><strong>Key implementation files:</strong></p>
+<ul>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+GEOGRAPHY type emission</li>
+<li><code>src/dslgen/generators/cpp/common.rkt</code> - C++ type
+mapping</li>
+<li><code>src/muscframework/dba/include/muscovite/dba/geometry/</code> -
+Boost.Geometry wrappers</li>
+</ul>
+<h2 id="more-information">More Information</h2>
+<ul>
+<li><a
+href="https://postgis.net/docs/using_postgis_dbmanagement.html#PostGIS_Geography">PostGIS
+Geography Type</a></li>
+<li><a
+href="https://postgis.net/workshops/postgis-intro/geography.html">When
+to use Geography vs Geometry</a></li>
+<li>Related ADR: <a href="20260126-metric-units-only.html">Metric Units
+Only</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

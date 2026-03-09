@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disable C++20 Module Scanning — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Disable C++20 Module Scanning</span>
+</nav>
+
+<h1>Disable C++20 Module Scanning</h1>
+
+
+<h1 id="disable-c20-module-scanning">Disable C++20 Module Scanning</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Build system architects</li>
+<li>Date: 2025-12-23</li>
+<li>Tags: cpp, cmake, build, clang-tidy</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>CMake 3.28+ automatically enables C++20 module scanning for C++23
+projects. This causes GCC to add <code>-fmodules-ts</code>,
+<code>-fmodule-mapper</code>, and <code>-fdeps-format=p1689r5</code>
+flags. However, clang-tidy uses clang's frontend which doesn't
+understand these GCC-specific flags, causing hard errors.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>clang-tidy is essential for code quality enforcement</li>
+<li>We are not currently using C++20 modules</li>
+<li>GCC module flags are incompatible with clang's frontend</li>
+<li>Cannot suppress these errors via <code>.clang-tidy</code> (they're
+frontend errors)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Disable C++20 module scanning globally</li>
+<li>Disable module scanning only when clang-tidy enabled</li>
+<li>Switch to clang compiler</li>
+<li>Drop clang-tidy</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Disable C++20 module scanning globally", because we
+are not using C++20 modules and this is the simplest solution that
+allows both GCC compilation and clang-tidy analysis.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In root CMakeLists.txt</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(<span class="dv">CMAKE_CXX_SCAN_FOR_MODULES</span> <span class="ot">OFF</span>)  <span class="co"># Not using C++20 modules</span></span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>clang-tidy works correctly with GCC-compiled code</li>
+<li>Build is simpler without module dependency scanning</li>
+<li>No conditional logic needed</li>
+<li>Can enable modules in future if needed</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Cannot use C++20 modules without changing this setting</li>
+<li>Must revisit if modules become desirable</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="disable-globally">Disable globally</h3>
+<ul>
+<li>Good, because simplest solution</li>
+<li>Good, because no conditional logic</li>
+<li>Good, because clearly documents we don't use modules</li>
+<li>Bad, because prevents future module use without change</li>
+</ul>
+<h3 id="disable-conditionally">Disable conditionally</h3>
+<ul>
+<li>Good, because could use modules when not running clang-tidy</li>
+<li>Bad, because split behavior between build modes</li>
+<li>Bad, because more complex CMake logic</li>
+</ul>
+<h3 id="switch-to-clang">Switch to clang</h3>
+<ul>
+<li>Good, because clang-tidy works natively</li>
+<li>Bad, because GCC has better C++23 support currently</li>
+<li>Bad, because disrupts existing build setup</li>
+</ul>
+<h3 id="drop-clang-tidy">Drop clang-tidy</h3>
+<ul>
+<li>Good, because no compatibility issues</li>
+<li>Bad, because lose valuable static analysis</li>
+<li>Bad, because code quality suffers</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="https://cmake.org/cmake/help/latest/prop_tgt/CXX_SCAN_FOR_MODULES.html">CMake
+CXX_SCAN_FOR_MODULES</a></li>
+<li>Related: <a href="20251223-use-pimpl-for-public-cpp-api.html">PIMPL
+pattern</a> (alternative to modules for encapsulation)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>CMake configuration for C++23 targets</li>
+<li>Adding new C++ libraries to the build</li>
+<li>Troubleshooting clang-tidy errors about unknown flags</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>If project decides to adopt C++20 modules (supersede this ADR)</li>
+<li>Non-CMake build systems</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><code>CMAKE_CXX_SCAN_FOR_MODULES OFF</code> in root
+CMakeLists.txt</li>
+<li>No <code>.cppm</code> or module interface files in codebase</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>CMakeLists.txt</code> - Global setting at line 16</li>
+<li><code>cmake/StaticAnalysis.cmake</code> - clang-tidy
+configuration</li>
+<li><code>.clang-tidy</code> - Analysis rules</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

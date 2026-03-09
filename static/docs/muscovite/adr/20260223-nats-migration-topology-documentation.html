@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NATS Migration Topology Documentation in System
+Manual — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>NATS Migration Topology Documentation in System Manual</span>
+</nav>
+
+<h1>NATS Migration Topology Documentation in System Manual</h1>
+
+
+<h1 id="nats-migration-topology-documentation-in-system-manual">NATS
+Migration Topology Documentation in System Manual</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: documentation, nats, migration, plantuml, asciidoc,
+system-manual</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: The brownfield migration factory (ADR 20260217)
+introduces NATS-coupled runtime components (Extractor, Transformer, DLQ,
+Triage UI). The generated AsciiDoc system manual has no diagram showing
+the NATS data-flow topology, leaving operators and new developers
+without a generated artifact that describes the runtime pipeline.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When a Muscovite project enables migration (any bounded context
+contains a MAPPING block), the generated application acquires a new
+runtime topology:</p>
+<pre><code>Legacy DB ──→ Extractor ──→ NATS JetStream ──→ Transformer ──→ CommandRepository ──→ Target DB
+                                                      │
+                                                      └──→ DLQ Subject ──→ Triage UI</code></pre>
+<p>The existing <code>glossary-adoc.rkt</code> generator emits domain
+glossaries, ER diagrams, and (for sagas) workflow diagrams. It does not
+generate any network/component diagram. NATS subjects, JetStream
+streams, consumer group names, and DLQ routing rules are opaque to the
+human reader unless they open C++ source files.</p>
+<p>Other generators in the chain (Context Map → PlantUML) set the
+precedent: topology visible from <code>.ddd</code> sources. The
+migration factory must follow the same convention.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>ADR 20260217 (Documentation as Generated Artifact): all generated
+systems must be self-documenting</li>
+<li>ADR 20260217 (Brownfield Migration Factory Architecture): pipeline
+topology is determined by MAPPING blocks</li>
+<li>PlantUML standardization (ADR 20260217): all diagrams in PlantUML —
+no Mermaid, no hand-drawn</li>
+<li>The system manual is the handoff artifact to operations; missing
+topology = undocumented production dependency</li>
+<li>NATS subject names and stream configurations are derived from
+generator templates — only the generator can accurately document
+them</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Extend <code>glossary-adoc.rkt</code> to emit PlantUML
+component diagram per project</strong> — diagram driven by presence of
+MAPPING blocks; subject names computed by same naming logic used by
+extractor/transformer generators</li>
+<li><strong>Separate <code>nats-topology.rkt</code> generator</strong> —
+standalone generator invoked only for migration-capable projects</li>
+<li><strong>Static template</strong> — a hand-written diagram appended
+to the manual template</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — extend
+<code>glossary-adoc.rkt</code></strong>, because the naming logic for
+NATS subjects (<code>migration.extract.{context}.{entity}</code>,
+<code>migration.dlq.{context}.{entity}</code>) is already available in
+the generator environment and placing the diagram in the same pass as
+the glossary ensures consistency with entity names.</p>
+<h3 id="generated-diagram-structure">Generated Diagram Structure</h3>
+<p>For each MAPPING block <code>M</code> in context <code>C</code>
+targeting entity <code>E</code>, the generator emits:</p>
+<pre class="plantuml"><code>@startuml nats-migration-topology
+!pragma layout smetana
+skinparam componentStyle rectangle
+
+component &quot;Legacy DB\n({M.source})&quot; as legacy_C_E
+component &quot;Extractor\n({C}Extractor)&quot; as ext_C_E
+queue &quot;NATS JetStream\nmigration.extract.{c}.{e}&quot; as nats_C_E
+component &quot;Transformer\n({C}{E}Transformer)&quot; as xfm_C_E
+database &quot;Target DB\n{c}.{e}&quot; as db_C_E
+queue &quot;NATS DLQ\nmigration.dlq.{c}.{e}&quot; as dlq_C_E
+component &quot;Triage UI\n({C}{E}TriageWidget)&quot; as triage_C_E
+
+legacy_C_E --&gt; ext_C_E : cursor batch\n(batch_size)
+ext_C_E --&gt; nats_C_E : typed JSON envelope
+nats_C_E --&gt; xfm_C_E : consume
+xfm_C_E --&gt; db_C_E : CommandRepository::create()
+xfm_C_E --&gt; dlq_C_E : validation failure
+dlq_C_E --&gt; triage_C_E : poll
+
+@enduml</code></pre>
+<p>The diagram is emitted as a standalone <code>.puml</code> file and
+included via AsciiDoc <code>plantuml::</code> block macro in the system
+manual's "Infrastructure &amp; Data Flow" section.</p>
+<h3 id="naming-conventions-for-subjects">Naming Conventions for
+Subjects</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>NATS subject / stream name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Extractor publish</td>
+<td><code>migration.extract.{sql_id(context)}.{sql_id(entity)}</code></td>
+</tr>
+<tr>
+<td>Transformer subscribe</td>
+<td><code>migration.extract.{sql_id(context)}.{sql_id(entity)}</code></td>
+</tr>
+<tr>
+<td>DLQ subject</td>
+<td><code>migration.dlq.{sql_id(context)}.{sql_id(entity)}</code></td>
+</tr>
+<tr>
+<td>JetStream stream</td>
+<td><code>MIGRATION_{SQL_ID(context)}</code></td>
+</tr>
+</tbody>
+</table>
+<p>These are computed by <code>symbol-&gt;sql-id</code> — the same
+function used by extractor/transformer generators — ensuring the diagram
+is always accurate.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Operations receives an accurate, auto-updated topology diagram with
+every DSL regeneration</li>
+<li>Subject names in the diagram are guaranteed correct — derived from
+same naming logic as code</li>
+<li>Adding a MAPPING block automatically updates the diagram</li>
+<li>Consistent with PlantUML-only diagram policy (ADR 20260217)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li><code>glossary-adoc.rkt</code> grows; migration-specific section is
+conditionally emitted only when MAPPING blocks exist</li>
+<li><code>plantuml::</code> macro requires Asciidoctor diagram extension
+— already a dependency for ER diagrams</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20260217-brownfield-migration-factory-architecture.html">ADR
+20260217 — Brownfield Migration Factory Architecture</a></li>
+<li><a href="20260217-documentation-as-generated-artifact.html">ADR
+20260217 — Documentation as Generated Artifact</a></li>
+<li><a href="20260217-mapping-dsl-block-brownfield-migration.html">ADR
+20260217 — MAPPING DSL Block</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p>When implementing NATS topology documentation:</p>
+<ul>
+<li>File to modify:
+<code>dslgen/generators/docs/glossary-adoc.rkt</code></li>
+<li>Add a new section <code>generate-nats-topology-diagram</code> that
+takes the list of all bounded contexts, filters for those with
+<code>mapping</code> structs, and emits the PlantUML block</li>
+<li>Emit the PlantUML as a standalone <code>.puml</code> file under
+<code>generated/doc/diagrams/nats-migration-topology.puml</code></li>
+<li>Inline via
+<code>plantuml::../diagrams/nats-migration-topology.puml[]</code> in the
+main AsciiDoc</li>
+<li>Subject naming: use
+<code>(symbol-&gt;sql-id (bounded-context-name ctx))</code> and
+<code>(symbol-&gt;sql-id (mapping-target-entity m))</code> — these match
+what extractor/transformer generators emit</li>
+<li>Guard the entire section: emit only if
+<code>(any (map (λ (ctx) (not (null? (bounded-context-mappings ctx)))) contexts))</code></li>
+<li>Test: generator test checks that a project with MAPPING blocks
+produces a <code>.puml</code> file referencing correct NATS subject
+names</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

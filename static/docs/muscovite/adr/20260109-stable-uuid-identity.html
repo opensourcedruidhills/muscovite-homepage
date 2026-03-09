@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stable UUID Identity for Semantic
+Elements — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Stable UUID Identity for Semantic Elements</span>
+</nav>
+
+<h1>Stable UUID Identity for Semantic Elements</h1>
+
+
+<h1 id="stable-uuid-identity-for-semantic-elements">Stable UUID Identity
+for Semantic Elements</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Updated: 2026-01-11</li>
+<li>Tags: uuid, identity, semantic-ir, diff, schema-evolution</li>
+<li>Related: <a
+href="20260109-canonical-semantic-ir-representation.html">Canonical
+Semantic IR</a>, <a href="20260109-semantic-model-delta.html">Semantic
+Model Delta</a></li>
+</ul>
+<p>Technical Story: Enable reliable rename/move detection by assigning
+stable UUIDs to all DDD model elements.</p>
+<h2 id="implementation-status">Implementation Status</h2>
+<p><strong>IMPLEMENTED</strong>: As of 2026-01-11, @uuid is
+<strong>mandatory</strong> for all model objects:</p>
+<ul>
+<li>CONTEXT</li>
+<li>ENTITY</li>
+<li>AGGREGATE</li>
+<li>VALUE_OBJECT</li>
+<li>EVENT</li>
+<li>ENUM</li>
+<li>Fields (within entities/value objects)</li>
+<li>Relationships (within RELATIONSHIPS blocks)</li>
+</ul>
+<p>Parser now rejects files without @uuid with clear error messages.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Names alone are insufficient for identifying elements across model
+versions. When an entity is renamed:</p>
+<ul>
+<li>Current behavior: Looks like DELETE old + ADD new</li>
+<li>Desired behavior: Detected as RENAME operation</li>
+</ul>
+<p>Example:</p>
+<pre class="ddd"><code># Version 1
+ENTITY Sample IDENTIFIED_BY id ( ... )
+
+# Version 2  
+ENTITY FieldSample IDENTIFIED_BY id ( ... )  # Same entity, renamed</code></pre>
+<p>Without stable identity, the diff engine cannot determine if
+<code>FieldSample</code> is:</p>
+<ol type="1">
+<li>A renamed <code>Sample</code> (preserve data, ALTER TABLE
+RENAME)</li>
+<li>A new entity (CREATE TABLE, no data migration)</li>
+<li>A replacement (DROP + CREATE, data loss)</li>
+</ol>
+<p>This ambiguity makes automated migrations unsafe.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Ensure stable identity for all semantic elements across
+versions</li>
+<li>Support safe detection of renames, moves, and deletions</li>
+<li>Preserve identity across parses, commits, and deployments</li>
+<li>Machine-readable but optionally human-assignable</li>
+<li>Backward compatible with existing <code>.ddd</code> files</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Use names as identifiers</strong>: Rejected - brittle,
+renames break identity</li>
+<li><strong>Use integer IDs generated per parse</strong>: Rejected -
+unstable across runs</li>
+<li><strong>Use content hashes</strong>: Rejected - any change breaks
+identity</li>
+<li><strong>Assign explicit UUIDs per element</strong>: Accepted -
+stable and portable</li>
+<li><strong>Auto-generate if missing, preserve if present</strong>:
+Accepted as implementation detail</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Assign explicit UUIDs per element", with
+auto-generation for new elements and preservation for existing ones.
+UUIDs are stored in the DSL files using an annotation syntax.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Diff engine can reliably detect renames (same UUID, different
+name)</li>
+<li>Migrations become deterministic and repeatable</li>
+<li>Referential integrity preserved across model evolution</li>
+<li>Supports element moves between aggregates/contexts</li>
+<li>Git-friendly (UUIDs are stable across branches)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Existing <code>.ddd</code> files need one-time migration to add
+UUIDs</li>
+<li>Slightly more verbose DSL syntax</li>
+<li>Merge conflicts possible if two branches add same element with
+different UUIDs</li>
+<li>UUIDs must be globally unique (enforced by parser)</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-1-dsl-syntax-extension">Phase 1: DSL Syntax Extension</h3>
+<p>Add <code>@uuid</code> annotation support in
+<code>src/dslgen/parser/lexer.rkt</code> and
+<code>parser.rkt</code>:</p>
+<pre class="ddd"><code>CONTEXT Chemistry @uuid &quot;550e8400-e29b-41d4-a716-446655440001&quot; {
+    
+    ENTITY ChemicalElement @uuid &quot;550e8400-e29b-41d4-a716-446655440010&quot;
+    IDENTIFIED_BY id (
+        id            UUID        NOT NULL,
+        atomic_number INTEGER     NOT NULL @uuid &quot;550e8400-e29b-41d4-a716-446655440011&quot;,
+        symbol        VARCHAR(3)  NOT NULL @uuid &quot;550e8400-e29b-41d4-a716-446655440012&quot;,
+        name          TEXT        NOT NULL @uuid &quot;550e8400-e29b-41d4-a716-446655440013&quot;
+    )
+    DOC &quot;Chemical element from periodic table&quot;;
+    
+    AGGREGATE ChemicalElement @uuid &quot;550e8400-e29b-41d4-a716-446655440020&quot;
+    ROOT ChemicalElement
+    DOC &quot;Chemical element aggregate&quot;;
+}</code></pre>
+<h3 id="phase-2-parser-modifications">Phase 2: Parser Modifications</h3>
+<p>Modify <code>src/dslgen/parser/parser.rkt</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Parse optional @uuid annotation</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>parse-uuid-annotation ps<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>current-token-is? ps <span class="st">&quot;@uuid&quot;</span><span class="op">)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">begin</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>advance! ps<span class="op">)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="ex">define</span><span class="fu"> uuid-str </span><span class="op">(</span>expect-string! ps<span class="op">))</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>string-&gt;uuid uuid-str<span class="op">))</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>make-uuid<span class="op">)))</span>  <span class="co">;; Auto-generate if not provided</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; In parse-entity:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> entity-uuid </span><span class="op">(</span>parse-uuid-annotation ps<span class="op">))</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>expect-keyword! ps <span class="st">&quot;ENTITY&quot;</span><span class="op">)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> name </span><span class="op">(</span>expect-identifier! ps<span class="op">))</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">;; ... rest of parsing</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>entity entity-uuid name fields pk-field parent-name metadata doc<span class="op">)</span></span></code></pre></div>
+<h3 id="phase-3-uuid-persistence">Phase 3: UUID Persistence</h3>
+<p>Store UUIDs alongside <code>.ddd</code> files in
+<code>src/dslgen/model/uuid-registry.rkt</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Registry maps element paths to UUIDs</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; Path format: &quot;Context.Aggregate.Entity.field&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>load-uuid-registry project-dir<span class="op">)</span> ...<span class="op">)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>save-uuid-registry registry project-dir<span class="op">)</span> ...<span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Auto-assign UUIDs to new elements, preserve existing</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>reconcile-uuids model registry<span class="op">)</span> ...<span class="op">)</span></span></code></pre></div>
+<h3 id="phase-4-migration-tool">Phase 4: Migration Tool</h3>
+<p>Create <code>src/dslgen/tools/add-uuids.rkt</code> for one-time
+migration:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Add @uuid annotations to existing .ddd files</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>add-uuids-to-file ddd-path<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> content </span><span class="op">(</span>file-&gt;string ddd-path<span class="op">))</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> model </span><span class="op">(</span>parse-string content<span class="op">))</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> annotated </span><span class="op">(</span>add-uuid-annotations content model<span class="op">))</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>display-to-file annotated ddd-path #:exists &#39;replace<span class="op">))</span></span></code></pre></div>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/parser/lexer.rkt</code> - Add <code>@uuid</code>
+token</li>
+<li><code>src/dslgen/parser/parser.rkt</code> - Parse UUID
+annotations</li>
+<li><code>src/dslgen/model/ddd-types.rkt</code> - UUID field in all
+structs (from ADR 0001)</li>
+<li><code>src/dslgen/model/uuid-registry.rkt</code> - New file for UUID
+persistence</li>
+<li><code>src/dslgen/tools/add-uuids.rkt</code> - Migration tool</li>
+<li><code>src/dslgen/examples/geosciences/*.ddd</code> - Update with
+UUIDs</li>
+</ul>
+<h3 id="uuid-format">UUID Format</h3>
+<p>Use UUID v4 (random) for new elements:</p>
+<ul>
+<li>Format: <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code></li>
+<li>Generated via <code>(make-uuid)</code> from
+<code>racket/uuid</code></li>
+<li>Stored as lowercase with hyphens</li>
+</ul>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li><strong>Depends on</strong>: ADR 0001 (Canonical Semantic IR) - UUID
+fields in structs</li>
+<li><strong>Required by</strong>: ADR 0003 (Semantic Model Delta) -
+UUID-based comparison</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When parsing any <code>.ddd</code> file</li>
+<li>When creating new semantic elements programmatically</li>
+<li>When comparing two model versions</li>
+<li>When generating migration scripts</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Database row IDs (those are data, not model identity)</li>
+<li>Generated code identifiers (those derive from names)</li>
+<li>Runtime object identity in C++/Qt code</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Parser MUST accept <code>@uuid</code> annotations on all semantic
+elements</li>
+<li>Parser MUST auto-generate UUID if annotation missing</li>
+<li>Parser MUST reject duplicate UUIDs within a project</li>
+<li>Serialization MUST preserve UUIDs exactly</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Add <code>@uuid</code> to lexer
+keywords</label></li>
+<li><label><input type="checkbox" />Implement
+<code>parse-uuid-annotation</code> function</label></li>
+<li><label><input type="checkbox" />Update <code>parse-entity</code> to
+capture UUID</label></li>
+<li><label><input type="checkbox" />Update <code>parse-aggregate</code>
+to capture UUID</label></li>
+<li><label><input type="checkbox" />Update
+<code>parse-bounded-context</code> to capture UUID</label></li>
+<li><label><input type="checkbox" />Update <code>parse-field</code> to
+capture UUID (optional, for field-level tracking)</label></li>
+<li><label><input type="checkbox" />Implement UUID validation (format,
+uniqueness)</label></li>
+<li><label><input type="checkbox" />Create UUID registry
+persistence</label></li>
+<li><label><input type="checkbox" />Create migration tool for existing
+files</label></li>
+<li><label><input type="checkbox" />Add tests for UUID parsing and
+preservation</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>ADR 2 of 7</strong> - Depends on ADR 0001 (Canonical IR).
+Complete this before ADR 0003 (Semantic Diff).</p>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li>Parser accepts <code>@uuid "..."</code> annotations on CONTEXT,
+AGGREGATE, ENTITY</li>
+<li>Parser auto-generates UUIDs for elements without annotations</li>
+<li>UUIDs are preserved across parse → serialize → parse cycle</li>
+<li>Duplicate UUIDs within project cause parse error</li>
+<li>Migration tool successfully adds UUIDs to geosciences example</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

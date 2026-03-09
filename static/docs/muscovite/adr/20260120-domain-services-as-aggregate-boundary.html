@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain Services as Aggregate
+Boundary — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Domain Services as Aggregate Boundary</span>
+</nav>
+
+<h1>Domain Services as Aggregate Boundary</h1>
+
+
+<h1 id="domain-services-as-aggregate-boundary">Domain Services as
+Aggregate Boundary</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-01-20</li>
+<li>Tags: ddd, architecture, aggregate, domain-services, cqrs</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The current Muscovite architecture generates independent CRUD APIs
+for every entity, including child entities within aggregates. This
+creates an <strong>anemic domain model</strong> where:</p>
+<ul>
+<li>Child entities can be modified directly, bypassing the aggregate
+root</li>
+<li>No transactional boundary around aggregate operations</li>
+<li>Business invariants spanning multiple entities cannot be
+enforced</li>
+<li>The aggregate root is not the sole access point as DDD
+prescribes</li>
+</ul>
+<p>Example of the problem:</p>
+<pre><code># Current (anemic): Child entity directly accessible
+gRPC: CreateOrderLine(order_id, product_id, quantity)
+      → OrderLineRepository.insert() → PostgreSQL
+      # Order aggregate invariants NOT checked!
+
+# DDD-correct: Access through aggregate root
+gRPC: AddLineToOrder(order_id, product_id, quantity)
+      → OrderCommandService.add_line() 
+      → Validates order state, checks invariants
+      → OrderRepository.save(order_with_new_line)</code></pre>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>DDD Compliance</strong>: Aggregate root must be sole entry
+point for modifications</li>
+<li><strong>Invariant Enforcement</strong>: Business rules spanning
+entities must be validated</li>
+<li><strong>Transaction Boundaries</strong>: All changes to an aggregate
+in single transaction</li>
+<li><strong>Testability</strong>: Business logic in C++ is testable with
+Catch2</li>
+<li><strong>Consistency</strong>: All aggregates (including lookups)
+follow same pattern</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Keep current per-entity APIs</strong>: Status quo, anemic
+model</li>
+<li><strong>Domain services for multi-entity aggregates only</strong>:
+Partial fix</li>
+<li><strong>Domain services for ALL aggregates</strong>: Full DDD
+compliance (chosen)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Domain services for ALL aggregates"</strong>,
+because:</p>
+<ul>
+<li>Consistent architecture: all access patterns follow same model</li>
+<li>Lookup tables (self-referential aggregates) also get proper
+encapsulation</li>
+<li>Simplifies gRPC service generation (always route through
+services)</li>
+<li>Enables future features: caching, validation, event emission</li>
+</ul>
+<h3 id="architecture">Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                        gRPC Service                              │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+        ┌───────────────────┴───────────────────┐
+        │ Write Operations      │ Read Operations│
+        ▼                       ▼                
+┌───────────────────┐   ┌───────────────────┐   
+│  CommandService   │   │   QueryService    │   
+│  - create()       │   │  - find_by_id()   │   
+│  - update()       │   │  - find_all()     │   
+│  - delete()       │   │  - find_by_spec() │   
+│  - add_child()    │   └─────────┬─────────┘   
+│  - remove_child() │             │             
+└─────────┬─────────┘             │             
+          │                       │             
+          │ pqxx::work            │ pqxx::nontransaction
+          ▼                       ▼             
+┌───────────────────┐   ┌───────────────────┐   
+│ CommandRepository │   │  QueryRepository  │   
+│ (direct SQL)      │   │  (direct SQL)     │   
+└─────────┬─────────┘   └─────────┬─────────┘   
+          │                       │             
+          └───────────┬───────────┘             
+                      ▼                         
+┌─────────────────────────────────────────────────────────────────┐
+│                         PostgreSQL                               │
+│  - FK constraints enforced here                                  │
+│  - CHECK constraints enforced here                               │
+│  - Domain type validation here                                   │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="implementation">Implementation</h3>
+<p><strong>CommandService</strong> (generated for each aggregate):</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandService <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    PatientCommandService<span class="op">(</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        PatientCommandRepository<span class="op">&amp;</span> patient_repo<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        EncounterCommandRepository<span class="op">&amp;</span> encounter_repo<span class="op">,</span>  <span class="co">// child</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        ConnectionPool<span class="op">&amp;</span> pool</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Aggregate root operations</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    Patient create<span class="op">(</span><span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    Patient update<span class="op">(</span><span class="at">const</span> UpdatePatientRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> remove<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Child entity operations (through root)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    Encounter add_encounter<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> patient_id<span class="op">,</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">const</span> AddEncounterRequest<span class="op">&amp;</span> req<span class="op">);</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> remove_encounter<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> patient_id<span class="op">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                         <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> encounter_id<span class="op">);</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// All operations wrapped in single transaction</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">&gt;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> execute<span class="op">(</span>F<span class="op">&amp;&amp;</span> func<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span><span class="va">pool_</span><span class="op">,</span> <span class="bu">std::</span>forward<span class="op">&lt;</span>F<span class="op">&gt;(</span>func<span class="op">));</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>QueryService</strong> (generated for each aggregate):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryService <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    PatientQueryService<span class="op">(</span>PatientQueryRepository<span class="op">&amp;</span> repo<span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_all<span class="op">(</span><span class="at">const</span> PageRequest<span class="op">&amp;</span> page<span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_active<span class="op">();</span>  <span class="co">// From SPECIFICATION</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>Lookup Tables</strong> follow same pattern:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Even simple lookups get services for consistency</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClinicalStatusCommandService <span class="op">{</span> <span class="co">/* create, update, delete */</span> <span class="op">};</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClinicalStatusQueryService <span class="op">{</span> <span class="co">/* find_by_id, find_all, find_by_code */</span> <span class="op">};</span></span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Proper DDD: Aggregate root enforces invariants</li>
+<li>Single transaction: All aggregate changes atomic</li>
+<li>Testable: Business logic in C++, tested with Catch2</li>
+<li>Consistent: All aggregates (including lookups) same pattern</li>
+<li>CQRS-ready: Command/query paths already separated</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>More generated code (service classes for each aggregate)</li>
+<li>Slight indirection for simple lookups
+<ul>
+<li>Mitigation: Services are thin wrappers, minimal overhead</li>
+</ul></li>
+<li>Child entities not directly accessible
+<ul>
+<li>Mitigation: This is intentional—DDD compliance</li>
+</ul></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Requires <a
+href="20260120-remove-plpgsql-api-layer.html">20260120-remove-plpgsql-api-layer.md</a></li>
+<li>Refined by <a
+href="20260120-cqrs-ready-architecture.html">20260120-cqrs-ready-architecture.md</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating gRPC service implementations</li>
+<li>When generating C++ domain services</li>
+<li>When designing aggregate operations</li>
+<li>When adding child entity operations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Database schema generation (unchanged)</li>
+<li>Direct database queries for reporting/analytics (use views)</li>
+<li>Internal repository operations (services call repositories)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>gRPC services MUST route through domain services</li>
+<li>Child entity operations MUST go through aggregate root service</li>
+<li>Repositories accept <code>pqxx::work&amp;</code> for transaction
+injection</li>
+<li>Code review rejects direct child entity access</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/cpp/domain-services.rkt</code> - Service
+generation</li>
+<li><code>src/dslgen/generators/cpp/repository.rkt</code> - Repository
+with txn injection</li>
+<li><code>src/dslgen/generators/grpc/cpp-service.rkt</code> - gRPC
+routing</li>
+<li><code>src/dslgen/model/ddd-types.rkt</code> - Aggregate
+structure</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

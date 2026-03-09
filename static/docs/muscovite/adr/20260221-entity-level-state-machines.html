@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entity-Level State Machines via DSL Statechart
+Construct — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Entity-Level State Machines via DSL Statechart Construct</span>
+</nav>
+
+<h1>Entity-Level State Machines via DSL Statechart Construct</h1>
+
+
+<h1
+id="entity-level-state-machines-via-dsl-statechart-construct">Entity-Level
+State Machines via DSL Statechart Construct</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-21</li>
+<li>Tags: dsl, state-machine, statechart, behavior, fsm, safety,
+lifecycle</li>
+</ul>
+<p>Technical Story: Muscovite currently models data (CRUD entities) and
+cross-aggregate orchestration (Sagas), but lacks formal intra-entity
+lifecycle modeling. Domains like vending machines, railway signaling,
+and financial order processing require explicit state-transition graphs
+with guards, actions, and safety guarantees (no invalid transitions,
+reachability analysis, deadlock detection).</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Many real-world aggregates have lifecycle behavior that goes beyond
+simple status fields: orders flow through
+Draft→Submitted→Approved→Fulfilled, railway signals cycle through
+Clear→Approach→Stop with safety interlocks, vending machines track
+Idle→Selecting→Dispensing→Returning. Today, developers implement this as
+procedural <code>if/else</code> or <code>switch(status)</code> blocks —
+error-prone, untestable, and invisible to the domain model.</p>
+<p>Sagas already implement step-based state machines for cross-aggregate
+orchestration (7 generators, lookup tables, compile-time constants). The
+infrastructure exists — but Sagas are the wrong abstraction for
+intra-entity lifecycle. A <code>STATE_MACHINE</code> construct would
+formalize entity behavior in the <code>.ddd</code> model and generate
+enforcement at every layer.</p>
+<p><strong>Question</strong>: How should Muscovite model formal state
+machines for entity lifecycles?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Grammar-first language evolution (ADR 20260211) — PEG grammar must
+change before parser</li>
+<li>Saga infrastructure provides proven patterns for state/transition
+lookup tables and compile-time constants (ADR 20260212)</li>
+<li>Domain Services as Aggregate Boundary (ADR 20260120) — transitions
+must go through CommandService</li>
+<li>Event Sourcing compatibility (ADR 20260204) — state transitions
+should emit domain events</li>
+<li>CQRS-Ready (ADR 20260120) — transition commands are writes, state
+queries are reads</li>
+<li>Safety domains (railway, medical devices, vending) require formal
+verification of state graphs</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-entity-level-clause-like-concurrency">Option 1:
+Entity-level clause (like CONCURRENCY)</h3>
+<p>Add a <code>STATE_MACHINE { ... }</code> block as a clause inside
+<code>ENTITY</code>, similar to how <code>CONCURRENCY</code> works
+today. States and transitions are defined inline within the entity.</p>
+<h3
+id="option-2-context-level-construct-with-for-clause-like-saga">Option
+2: Context-level construct with FOR clause (like SAGA)</h3>
+<p>Add <code>STATE_MACHINE Name FOR Entity { ... }</code> as a top-level
+context construct, following the Saga precedent. The entity gains a
+<code>current_state_id</code> FK but the state graph lives
+separately.</p>
+<h3 id="option-3-embedded-in-aggregate-with-event_sourced">Option 3:
+Embedded in AGGREGATE with EVENT_SOURCED</h3>
+<p>Extend the existing <code>EVENT_SOURCED</code> mechanism to include
+statechart definitions, coupling state transitions to sourced
+events.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — Context-level construct with FOR
+clause</strong>, because:</p>
+<ol type="1">
+<li><strong>Saga precedent works</strong>: 7 generators already handle
+context-level constructs with lookup tables, compile-time constants, and
+cross-layer generation. The <code>STATE_MACHINE</code> pattern is
+structurally identical.</li>
+<li><strong>Separation of data and behavior</strong>: Entities describe
+<em>structure</em>, state machines describe <em>lifecycle</em>. Mixing
+them increases entity complexity.</li>
+<li><strong>Multiple machines per entity</strong>: Rare but valid (e.g.,
+<code>OrderFulfillmentState</code> + <code>PaymentState</code>).
+Context-level allows this naturally.</li>
+<li><strong>Reachability analysis</strong>: A standalone construct is
+easier to validate (graph analysis) than one embedded in entity
+parsing.</li>
+</ol>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>STATE_MACHINE OrderLifecycle @uuid &quot;...&quot; FOR Order {
+    STATE Draft       DOC &quot;Initial state, order being composed&quot;;
+    STATE Submitted   DOC &quot;Order submitted for processing&quot;;
+    STATE Approved    DOC &quot;Order approved by manager&quot;;
+    STATE Rejected    DOC &quot;Order rejected&quot;;
+    STATE Fulfilled   DOC &quot;Order shipped and delivered&quot;;
+    STATE Cancelled   DOC &quot;Order cancelled&quot;;
+
+    INITIAL Draft;
+    TERMINAL Fulfilled, Rejected, Cancelled;
+
+    TRANSITION Draft -&gt; Submitted ON OrderSubmitted;
+    TRANSITION Submitted -&gt; Approved ON ManagerApproved
+        GUARD &quot;total_amount &lt; approval_threshold&quot;;
+    TRANSITION Submitted -&gt; Rejected ON ManagerRejected;
+    TRANSITION Approved -&gt; Fulfilled ON ShipmentDelivered;
+    TRANSITION Submitted -&gt; Cancelled ON OrderCancelled
+        GUARD &quot;NOT has_shipped&quot;;
+    TRANSITION Draft -&gt; Cancelled ON OrderCancelled;
+}</code></pre>
+<h3 id="ir-structs">IR Structs</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> state-machine <span class="op">(</span>uuid name for-entity states transitions initial-state terminal-states doc<span class="op">))</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> sm-state <span class="op">(</span>name entry-action exit-action doc<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> sm-transition <span class="op">(</span>from-state to-state event <span class="kw">guard</span> action doc<span class="op">))</span></span></code></pre></div>
+<h3 id="generated-artifacts-per-layer">Generated Artifacts Per
+Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td><code>{entity}_state</code> lookup table (UUIDv5 seeds),
+<code>current_state_id</code> FK on entity,
+<code>{entity}_state_transition_log</code> table, <code>EXCLUDE</code>
+constraint preventing invalid transitions</td>
+</tr>
+<tr>
+<td><strong>C++ DBA</strong></td>
+<td><code>{Entity}StateMachine</code> class:
+<code>can_transition(current, event)</code>,
+<code>transition(current, event)</code>, compile-time state constants
+(<code>lookup::{entity}_state::draft</code>)</td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td><code>Transition{Entity}State</code> RPC,
+<code>Get{Entity}AllowedTransitions</code> RPC</td>
+</tr>
+<tr>
+<td><strong>Qt Widgets</strong></td>
+<td>State-aware button enable/disable from
+<code>allowed_transitions()</code></td>
+</tr>
+<tr>
+<td><strong>Qt QML</strong></td>
+<td>ViewModel <code>Q_PROPERTY</code> for <code>currentState</code> +
+<code>allowedTransitions</code></td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>Mermaid statechart diagram from transition graph</td>
+</tr>
+</tbody>
+</table>
+<h3 id="verification-layer-0">Verification (Layer 0)</h3>
+<p>The Racket generator MUST perform static analysis on the state
+graph:</p>
+<ul>
+<li><strong>Reachability</strong>: All states must be reachable from
+INITIAL</li>
+<li><strong>Terminal completeness</strong>: At least one TERMINAL state
+must be declared</li>
+<li><strong>No orphan transitions</strong>: Every FROM/TO state must be
+declared in STATE list</li>
+<li><strong>Determinism</strong>: No two transitions from the same state
+on the same event (unless guards are mutually exclusive)</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Formal lifecycle modeling visible in <code>.ddd</code> — no hidden
+behavior in procedural code</li>
+<li>Reuse of saga lookup-table and compile-time constant infrastructure
+(ADR 20260212)</li>
+<li>Safety-critical domains get verifiable state graphs with generated
+documentation</li>
+<li>Qt UI automatically reflects allowed transitions — no manual button
+logic</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>New grammar section + IR structs + 6 generators — significant
+implementation effort</li>
+<li>Guard expressions need a safe evaluation model (SQL-compatible
+subset)</li>
+<li>State machines with many transitions may produce verbose
+<code>.ddd</code> files</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

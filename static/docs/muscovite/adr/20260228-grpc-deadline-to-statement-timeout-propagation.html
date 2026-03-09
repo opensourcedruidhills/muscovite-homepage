@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gRPC Deadline to PostgreSQL Statement Timeout
+Propagation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>gRPC Deadline to PostgreSQL Statement Timeout Propagation</span>
+</nav>
+
+<h1>gRPC Deadline to PostgreSQL Statement Timeout Propagation</h1>
+
+
+<h1 id="grpc-deadline-to-postgresql-statement-timeout-propagation">gRPC
+Deadline to PostgreSQL Statement Timeout Propagation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-28</li>
+<li>Tags: grpc, postgresql, resilience, timeout, deadline, dba,
+code-generation</li>
+<li>Relates: 20260120-domain-services-as-aggregate-boundary.md,
+20260120-cqrs-ready-architecture.md</li>
+</ul>
+<p>Technical Story: Generated gRPC services have no deadline awareness.
+Server handlers mark <code>ServerContext*</code> as
+<code>[[maybe_unused]]</code>. Client stubs set no deadlines. A slow
+PostgreSQL query can block indefinitely, and the client has no timeout
+protection. This ADR addresses the first concrete step: propagating the
+gRPC deadline as a PostgreSQL <code>statement_timeout</code> on every
+transaction.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Currently, generated gRPC service methods have <strong>zero
+deadline/timeout infrastructure</strong>:</p>
+<ol type="1">
+<li><strong>Server-side</strong>: <code>grpc::ServerContext*</code> is
+received but <code>[[maybe_unused]]</code>. Even if a client sets a
+deadline, the handler runs the full query and commits regardless of
+whether the client has given up.</li>
+<li><strong>Client-side</strong>: Generated e2e test stubs create bare
+<code>grpc::ClientContext</code> with infinite timeout (no
+<code>set_deadline()</code>).</li>
+<li><strong>DBA layer</strong>: libpqxx has no concept of gRPC. A
+PostgreSQL query will execute to completion even if the gRPC deadline
+expired seconds ago.</li>
+</ol>
+<p>The consequence: a single slow query (table scan, lock contention,
+unindexed join) blocks a gRPC thread indefinitely with no backpressure
+to the client. In production under load, this causes thread pool
+starvation and cascading failures.</p>
+<p><strong>Scope of this ADR</strong>: Specifically the mechanism by
+which a gRPC deadline is converted to a PostgreSQL
+<code>statement_timeout</code> (or <code>transaction_timeout</code> on
+PostgreSQL 17+) per unit of work. The broader resilience picture
+(client-side deadlines, retry coordination, idempotency, circuit
+breaking) is deferred to a separate ADR.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>gRPC C++ does <strong>not</strong> automatically propagate deadlines
+to downstream calls (unlike Go's <code>context.Context</code>)</li>
+<li>PostgreSQL supports per-transaction
+<code>SET LOCAL statement_timeout = 'Nms'</code> which aborts queries
+exceeding the limit and auto-rollbacks the transaction</li>
+<li>PostgreSQL 17+ introduces <code>transaction_timeout</code> which is
+a stricter per-transaction wall-clock limit</li>
+<li>The framework already has <code>muscovite::dba::execute()</code> in
+<code>transactor.hpp</code> — a natural choke point for deadline
+injection</li>
+<li>Generated services currently bypass the transactor (see "Negative
+Consequences")</li>
+<li>The statement timeout <strong>must</strong> be shorter than the gRPC
+deadline to allow time for serialization, network transit, and error
+response formatting</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Framework utility <code>apply_deadline()</code> + generator
+injection</strong> — Layer 1 provides a
+<code>apply_deadline(tx, grpc_context, buffer)</code> helper; Layer 0
+generators emit calls to it in every RPC handler</li>
+<li><strong>Transactor-level integration</strong> — Extend
+<code>muscovite::dba::execute()</code> to accept an optional
+<code>grpc::ServerContext*</code> and internally set
+<code>statement_timeout</code> before invoking the user callable</li>
+<li><strong>gRPC server interceptor</strong> — Use gRPC's
+<code>ServerInterceptor</code> to extract deadlines globally and store
+in thread-local, making it transparent to handlers</li>
+<li><strong>No framework support — inline in generated code</strong> —
+Generator emits raw <code>SET LOCAL statement_timeout</code> directly in
+each handler without framework abstraction</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — Transactor-level
+integration</strong>, because:</p>
+<ul>
+<li>The transactor is already the choke point for all transaction
+lifecycle (begin, commit, retry, error mapping)</li>
+<li>It naturally owns the <code>SET LOCAL statement_timeout</code> call
+— this is a transaction-level concern</li>
+<li>Generated services should migrate to use the transactor (they
+currently use raw UnitOfWork) — this gives a forcing function</li>
+<li>Retry logic in the transactor can respect the remaining deadline:
+stop retrying if deadline is about to expire</li>
+<li>The buffer calculation (deadline minus overhead) is centralized in
+one place, not scattered across generated code</li>
+</ul>
+<h3 id="mechanism">Mechanism</h3>
+<p><strong>Layer 1: Framework (<code>transactor.hpp</code>)</strong></p>
+<p>New overload of <code>execute()</code> accepting a deadline:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> muscovite<span class="op">::</span>dba <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">/// Execute with gRPC deadline propagation.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">/// Converts remaining gRPC deadline to PostgreSQL statement_timeout.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns DEADLINE_EXCEEDED if deadline already expired before DB call.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">/// Buffer (default 500ms) is reserved for serialization + network overhead.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> F<span class="op">&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> execute<span class="op">(</span>ConnectionPool<span class="op">&amp;</span> pool<span class="op">,</span> F<span class="op">&amp;&amp;</span> fn<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="bu">std::</span>chrono::system_clock::time_point deadline<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>             RetryPolicy policy <span class="op">=</span> <span class="op">{},</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>             <span class="bu">std::</span>chrono::milliseconds buffer <span class="op">=</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">500</span><span class="op">})</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span><span class="bu">std::</span>invoke_result_t<span class="op">&lt;</span>F<span class="op">,</span> pqxx<span class="op">::</span>work<span class="op">&amp;&gt;,</span> Error<span class="op">&lt;</span>DbError<span class="op">&gt;&gt;;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Inside the implementation:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> remaining <span class="op">=</span> deadline <span class="op">-</span> <span class="bu">std::</span>chrono::system_clock::now<span class="op">();</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>remaining <span class="op">&lt;=</span> <span class="bu">std::</span>chrono::milliseconds::zero<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">std::</span>unexpected<span class="op">(</span>Error<span class="op">&lt;</span>DbError<span class="op">&gt;{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>code <span class="op">=</span> DbError<span class="op">::</span>DeadlineExceeded<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>message <span class="op">=</span> <span class="st">&quot;gRPC deadline already expired before database call&quot;</span><span class="op">});</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> timeout_ms <span class="op">=</span> <span class="bu">std::</span>chrono::duration_cast<span class="op">&lt;</span><span class="bu">std::</span>chrono::milliseconds<span class="op">&gt;(</span>remaining<span class="op">)</span> <span class="op">-</span> buffer<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>timeout_ms <span class="op">&lt;=</span> <span class="bu">std::</span>chrono::milliseconds::zero<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    timeout_ms <span class="op">=</span> <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">1</span><span class="op">};</span> <span class="co">// PostgreSQL minimum</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>pqxx<span class="op">::</span>work tx<span class="op">{</span>conn<span class="op">};</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>tx<span class="op">.</span>exec0<span class="op">(</span><span class="bu">std::</span>format<span class="op">(</span><span class="st">&quot;SET LOCAL statement_timeout = &#39;</span><span class="sc">{}</span><span class="st">&#39;&quot;</span><span class="op">,</span> timeout_ms<span class="op">.</span>count<span class="op">()));</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">// ... invoke user callable, commit ...</span></span></code></pre></div>
+<p>On retry iterations, the remaining time is recalculated. Retries are
+skipped if remaining time is insufficient.</p>
+<p><strong>Layer 0: Generator changes
+(<code>cpp-service-v2-crud.rkt</code>)</strong></p>
+<p>Generated RPC handlers pass <code>context-&gt;deadline()</code> to
+the transactor:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated — before (current):</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dba_ctx<span class="op">::</span>EntityCommandService cmd_service<span class="op">{</span><span class="va">pool_</span><span class="op">};</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> cmd_service<span class="op">.</span>create<span class="op">(</span>entity<span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated — after:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> muscovite<span class="op">::</span>dba<span class="op">::</span>execute<span class="op">(</span><span class="va">pool_</span><span class="op">,</span> <span class="op">[&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> tx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... business logic using tx ...</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">},</span> context<span class="op">-&gt;</span>deadline<span class="op">());</span></span></code></pre></div>
+<p>The <code>[[maybe_unused]]</code> annotation on <code>context</code>
+is removed.</p>
+<p><strong>Layer 0: Error mapping
+(<code>cpp-service-errors.rkt</code>)</strong></p>
+<p>New enum value and gRPC mapping:</p>
+<pre><code>DbErrorCode::DeadlineExceeded → grpc::StatusCode::DEADLINE_EXCEEDED</code></pre>
+<p>Also fix: <code>SerializationFailure</code> →
+<code>grpc::StatusCode::ABORTED</code> (current <code>INTERNAL</code> is
+incorrect per gRPC convention).</p>
+<h3 id="override-hierarchy-for-default-deadline">Override Hierarchy for
+Default Deadline</h3>
+<p>This ADR establishes that the <strong>server side honors whatever
+deadline the client sends</strong>. The server's only job is to convert
+the remaining time to <code>statement_timeout</code>. The DSL-driven
+override hierarchy for setting <em>client-side</em> deadlines (global
+default → per-context → per-aggregate → per-RPC) is deferred to the
+companion ADR on full resilience.</p>
+<p>However, a <strong>server-side maximum</strong> is desirable as a
+safety net (even if the client sends no deadline or an absurd 10-minute
+deadline):</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Configuration</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Server global</strong></td>
+<td><code>muscovite::server::Config::max_statement_timeout</code></td>
+<td>30s</td>
+</tr>
+<tr>
+<td><strong>Per-aggregate</strong> (future)</td>
+<td>DSL <code>GRPC_DEADLINE</code> clause on <code>AGGREGATE</code></td>
+<td>inherits server</td>
+</tr>
+</tbody>
+</table>
+<p>The server picks
+<code>min(grpc_remaining - buffer, max_statement_timeout)</code>.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>A slow query is aborted by PostgreSQL at
+<code>statement_timeout</code>, rolling back the transaction
+automatically — no orphaned long-running queries</li>
+<li>The gRPC thread is freed promptly — prevents thread pool
+starvation</li>
+<li>Client gets <code>DEADLINE_EXCEEDED</code> with a meaningful message
+instead of hanging</li>
+<li>Retry logic becomes deadline-aware — no wasted retries when the
+deadline is about to expire</li>
+<li>Foundation for the full resilience pattern (companion ADR)</li>
+<li>Transactor adoption in generated services is a forcing function for
+consistency with framework patterns</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Generated service pattern changes significantly —
+<code>CommandService.create()</code> must accept a transaction or
+deadline parameter</li>
+<li>All existing generated code is affected (breaking regeneration
+change)</li>
+<li><code>DeadlineExceeded</code> must be added to the generated
+<code>DbErrorCode</code> enum</li>
+<li>Requires PostgreSQL 9.3+ for
+<code>SET LOCAL statement_timeout</code> (universally available)</li>
+<li>Buffer calculation (500ms default) may need tuning per deployment —
+too small risks premature timeout, too large wastes available time</li>
+</ul>
+<h2 id="prerequisite-work">Prerequisite Work</h2>
+<p>Before this ADR can be implemented:</p>
+<ol type="1">
+<li><strong>Unify error enums</strong>: Generated
+<code>DbErrorCode</code> (9 variants) must align with framework
+<code>DbError</code> (16 variants). Add <code>DeadlineExceeded</code> to
+both.</li>
+<li><strong>Add missing pqxx exception catches</strong>: Generated
+<code>map_error()</code> in <code>repository_base.hpp</code> is missing
+<code>broken_connection</code>, <code>check_violation</code>,
+<code>not_null_violation</code>, <code>deadlock_detected</code>.</li>
+<li><strong>Fix SerializationFailure mapping</strong>: Change from
+<code>INTERNAL</code> to <code>ABORTED</code> in
+<code>cpp-service-errors.rkt</code>.</li>
+</ol>
+<h2 id="implementation-phases-single-sprint">Implementation Phases
+(Single Sprint)</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Work Item</th>
+<th>Layer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Unify <code>DbErrorCode</code>/<code>DbError</code> enums, add
+<code>DeadlineExceeded</code></td>
+<td>L1 + L0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Add missing pqxx exception catches in generated
+<code>map_error()</code></td>
+<td>L0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Fix <code>SerializationFailure</code> → <code>ABORTED</code> gRPC
+mapping</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Add <code>execute()</code> deadline overload to
+<code>transactor.hpp</code></td>
+<td>L1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Add <code>max_statement_timeout</code> to
+<code>ServerConfig</code></td>
+<td>L1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Update <code>cpp-service-v2-crud.rkt</code> to emit transactor-based
+handlers with deadline</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Remove <code>[[maybe_unused]]</code> from
+<code>ServerContext*</code> in all generated RPCs</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Update <code>cpp-service-errors.rkt</code> for
+<code>DeadlineExceeded</code> mapping</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Add <code>DeadlineExceeded</code> handling in generated e2e test
+client stubs</td>
+<td>L0</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Doctest tests for transactor deadline behavior</td>
+<td>L1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Golden file updates + full regen + C++ build verification</td>
+<td>L0 + L2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating any gRPC service method that performs database
+operations</li>
+<li>When modifying <code>transactor.hpp</code> or <code>execute()</code>
+function</li>
+<li>When modifying <code>cpp-service-v2-crud.rkt</code>,
+<code>cpp-service-errors.rkt</code>, or
+<code>cpp-service-v2-source.rkt</code></li>
+<li>When adding new RPC types (saga, state machine, event sourcing) —
+they must also propagate deadlines</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Client-side deadline defaults (covered by companion ADR)</li>
+<li>DSL syntax for deadline configuration (covered by companion
+ADR)</li>
+<li>Non-database RPCs (pure computation) — no
+<code>statement_timeout</code> needed, but <code>IsCancelled()</code>
+checks may still be appropriate</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>framework/dba/include/muscovite/dba/transactor.hpp</code> —
+deadline overload target</li>
+<li><code>framework/dba/include/muscovite/dba/error.hpp</code> —
+<code>DeadlineExceeded</code> enum addition</li>
+<li><code>framework/server/include/muscovite/server/config.hpp</code> —
+<code>max_statement_timeout</code> config</li>
+<li><code>dslgen/generators/grpc/cpp-service-v2-crud.rkt</code> —
+generated handler pattern change</li>
+<li><code>dslgen/generators/grpc/cpp-service-errors.rkt</code> — error
+mapping fixes</li>
+<li><code>dslgen/generators/grpc/e2e-grpc-test.rkt</code> — client-side
+deadline handling</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Companion: <a
+href="20260228-grpc-resilience-sandwich-full-architecture.html">gRPC
+Resilience Sandwich — Full Deadline and Retry Architecture</a>
+(proposed)</li>
+<li>Related: <a
+href="20260120-domain-services-as-aggregate-boundary.html">Domain Services
+as Aggregate Boundary</a></li>
+<li>Related: <a href="20260120-cqrs-ready-architecture.html">CQRS-Ready
+Architecture</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

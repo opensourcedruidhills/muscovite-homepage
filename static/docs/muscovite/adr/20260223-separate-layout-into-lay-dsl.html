@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Separate Layout and Presentation Directives into `.lay` DSL
+Files — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Separate Layout and Presentation Directives into `.lay` DSL
+Files</span>
+</nav>
+
+<h1>Separate Layout and Presentation Directives into `.lay` DSL
+Files</h1>
+
+
+<h1
+id="separate-layout-and-presentation-directives-into-lay-dsl-files">Separate
+Layout and Presentation Directives into <code>.lay</code> DSL Files</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: layout, presentation, dsl, lay, domain-modeling,
+separation-of-concerns</li>
+<li>Supersedes: <a
+href="20260211-abstract-layout-vocabulary.html">Abstract Layout
+Vocabulary</a>, <a
+href="20260219-form-factor-layout-selection.html">Form-Factor Layout
+Selection Cascade</a></li>
+</ul>
+<p>Technical Story: Layout and presentation directives
+(<code>LAYOUT { ... }</code>, form-factor overrides, column selection)
+are mixed into <code>.ddd</code> domain model files. This violates
+separation of concerns and prevents multiple presentation profiles from
+targeting the same domain model. The fix is a third DSL file type:
+<code>.lay</code>.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p><code>.ddd</code> files currently carry three categories of
+content:</p>
+<ol type="1">
+<li><strong>Domain modeling</strong> — entities, aggregates,
+relationships, events, sagas: domain expert's concern, belongs in
+<code>.ddd</code></li>
+<li><strong>Identity display strings</strong>
+(<code>DISPLAY_FORMAT { SHORT, FULL }</code>) — how the domain
+identifies an aggregate in human-readable text: a domain claim, belongs
+in <code>.ddd</code></li>
+<li><strong>Layout and rendering directives</strong>
+(<code>LAYOUT { ... }</code>, <code>TABLE: [...]</code> column lists) —
+rendering decisions. A patient aggregate should not need to say "use
+TABS on desktop." That is a UI design concern. It does not belong in
+<code>.ddd</code>.</li>
+</ol>
+<p>ADR 20260211 (Abstract Layout Vocabulary) and ADR 20260219
+(Form-Factor Layout Selection) placed the right concepts in the wrong
+file tier. This ADR remedies that.</p>
+<p>Additionally: multiple presentation profiles (desktop, tablet,
+accessibility) on one domain model cannot be expressed without
+duplicating aggregates or adding indirection inside
+<code>.ddd</code>.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Domain experts authoring <code>.ddd</code> should not be exposed to
+UI rendering concepts</li>
+<li>Multiple presentation profiles on one domain model without
+duplicating aggregates</li>
+<li><code>.ddd</code> files should be parseable and meaningful with no
+UI target present</li>
+<li>Aligns with the existing <code>.ddd</code> / <code>.mus</code>
+separation (domain model vs. project config)</li>
+<li>Grammar-first evolution (ADR
+20260211-grammar-first-language-evolution)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>New <code>.lay</code> DSL file type</strong> — separate
+file, separate grammar, separate parser, explicitly declared in
+<code>.mus</code></li>
+<li><strong>LAYOUT section inside <code>.mus</code></strong> — reuse
+project config file; <code>.ddd</code> stays clean</li>
+<li><strong>Keep in <code>.ddd</code></strong> — reject separation
+(status quo)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — New <code>.lay</code> DSL file
+type</strong>, because:</p>
+<ul>
+<li>Multiple presentation profiles require separate files with separate
+names</li>
+<li><code>.mus</code> already has a defined concern (project config,
+capabilities, plugin wiring); layout is not project config</li>
+<li>Separation is auditable: <code>ls *.lay</code> shows all
+presentation profiles</li>
+<li>Follows prior art: <code>.mus</code> has its own grammar file
+<code>muscovite-mus.peg</code></li>
+</ul>
+<h3 id="grammar-and-parser">Grammar and Parser</h3>
+<ul>
+<li>Formal grammar: <code>dslgen/grammar/muscovite-lay.peg</code>
+(separate file — follows
+<code>.mus</code>/<code>muscovite-mus.peg</code> precedent; one concern,
+one grammar file)</li>
+<li>Parser module: <code>dslgen/parser/lay-parser.rkt</code></li>
+<li>IR produced: <code>lay-profile</code> struct containing
+<code>lay-aggregate-layout</code> entries</li>
+</ul>
+<h3 id="file-discovery-explicit">File Discovery (Explicit)</h3>
+<p><code>.mus</code> project files declare presentation profiles
+explicitly:</p>
+<pre><code>PRESENTATION_PROFILE &quot;path/to/desktop.lay&quot;
+PRESENTATION_PROFILE &quot;path/to/mobile.lay&quot;</code></pre>
+<p>Auto-discovery was rejected: explicit declaration is
+version-controlled intent and enables two profiles for the same domain
+without ambiguity.</p>
+<h3 id="lay-file-syntax"><code>.lay</code> File Syntax</h3>
+<pre class="lay"><code>LAYOUT_PROFILE &quot;hello-world-desktop&quot; FORM_FACTOR desktop {
+
+    LAYOUT Todo.TodoItem {
+        MASTER { TABLE: [title, due_date, is_done]; }
+        DETAIL {
+            STYLE: FORM;
+            GROUPING: TABS;
+            ACTIONS: [create, edit, delete];
+            CHILDREN: [TodoComment as &quot;Comments&quot;];
+        }
+    }
+
+    LAYOUT desktop Todo.TodoItem {
+        MASTER { TABLE: [title, due_date, is_done]; }
+    }
+
+    LAYOUT mobile Todo.TodoItem {
+        MASTER { TABLE: [title, is_done]; }
+        DETAIL { STYLE: CARD; GROUPING: FLAT; }
+    }
+}</code></pre>
+<p>Aggregate references: <code>CONTEXT.AggregateName</code> qualified
+form required. Form-factor qualification follows ADR 20260219 semantics
+(selection cascade preserved).</p>
+<h3
+id="display_format-in-ddd-rename-from-presentation"><code>DISPLAY_FORMAT</code>
+in <code>.ddd</code> (Rename from <code>PRESENTATION</code>)</h3>
+<p>The existing <code>PRESENTATION</code> block is renamed
+<code>DISPLAY_FORMAT</code>. It retains only:</p>
+<ul>
+<li><code>SHORT: "format string"</code> — short text representation
+(combo box, breadcrumb)</li>
+<li><code>FULL: "format string"</code> — full text representation
+(detail header, notification)</li>
+</ul>
+<p><code>TABLE: [...]</code> is removed from <code>.ddd</code> and moves
+to <code>.lay</code>.</p>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (...)
+DISPLAY_FORMAT {
+    SHORT: &quot;{family_name}, {given_name}&quot;;
+    FULL:  &quot;{family_name}, {given_name} (MRN: {mrn})&quot;;
+}
+DOC &quot;A person receiving healthcare services&quot;;</code></pre>
+<p>This amends ADR 20260123 (PRESENTATION Hints for Entity Display): the
+concept is retained, the keyword is renamed, and <code>TABLE</code> is
+removed from its scope.</p>
+<h3 id="migration-steps">Migration Steps</h3>
+<ol type="1">
+<li><strong>FTR-132</strong> — Implement <code>.lay</code> grammar,
+parser, IR, <code>PRESENTATION_PROFILE</code> in <code>.mus</code></li>
+<li><strong>FTR-133</strong> — Mechanical migration of all example
+<code>.ddd</code> files (fhir-health × 9 contexts, geosciences × 26
+contexts, hello-world): extract <code>LAYOUT</code> blocks and
+<code>TABLE</code> column lists to <code>.lay</code> files; rename
+<code>PRESENTATION</code> → <code>DISPLAY_FORMAT</code></li>
+<li><strong>FTR-134</strong> — Enable parser enforcement:
+<code>LAYOUT</code> or <code>TABLE:</code> inside <code>.ddd</code> is a
+hard parse error (depends on FTR-133 completing first)</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><code>.ddd</code> files contain only domain modeling concerns</li>
+<li>Multiple presentation profiles per domain model via multiple
+<code>.lay</code> files</li>
+<li>Domain experts and UI designers can work on separate files without
+merge conflicts</li>
+<li>Generator discovers which layouts exist per profile without
+re-parsing domain models</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>New parser and grammar to maintain</li>
+<li>Breaking change for all <code>.ddd</code> files containing
+<code>LAYOUT</code> blocks</li>
+<li>Three DSL file types: <code>.ddd</code>, <code>.mus</code>,
+<code>.lay</code></li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-new-lay-dsl-file-type-chosen">Option 1: New
+<code>.lay</code> DSL file type (chosen)</h3>
+<ul>
+<li>Good, because enables multiple presentation profiles on same domain
+model</li>
+<li>Good, because <code>.ddd</code> is a clean domain modeling
+language</li>
+<li>Good, because follows the <code>.mus</code> precedent (one concern,
+one file type)</li>
+<li>Bad, because adds a third DSL with its own parser and grammar</li>
+</ul>
+<h3 id="option-2-layout-section-inside-mus">Option 2: LAYOUT section
+inside <code>.mus</code></h3>
+<ul>
+<li>Good, because no new file type</li>
+<li>Bad, because <code>.mus</code> has a defined concern (project
+config); layout is not project config</li>
+<li>Bad, because one <code>.mus</code> cannot cleanly express two
+profiles for the same aggregate</li>
+</ul>
+<h3 id="option-3-keep-in-ddd">Option 3: Keep in <code>.ddd</code></h3>
+<ul>
+<li>Bad, because domain experts are exposed to UI rendering
+concepts</li>
+<li>Bad, because multiple profiles require aggregate duplication</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes <a href="20260211-abstract-layout-vocabulary.html">ADR
+20260211 Abstract Layout Vocabulary</a></li>
+<li>Supersedes <a href="20260219-form-factor-layout-selection.html">ADR
+20260219 Form-Factor Layout Selection</a></li>
+<li>Amends <a
+href="20260123-presentation-hints-for-entity-display.html">ADR 20260123
+PRESENTATION Hints</a> — renames to <code>DISPLAY_FORMAT</code>, removes
+<code>TABLE</code> from scope</li>
+<li>Requires <a href="20260211-grammar-first-language-evolution.html">ADR
+20260211 Grammar-First Language Evolution</a></li>
+<li>Related: FTR-132 (grammar + parser + IR), FTR-133 (migration),
+FTR-134 (enforcement)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

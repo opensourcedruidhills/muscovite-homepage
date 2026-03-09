@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR-20260206: Build Profiling Instrumentation (Per-Phase
+Metrics + HTML Reports) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR-20260206: Build Profiling Instrumentation (Per-Phase Metrics
++ HTML Reports)</span>
+</nav>
+
+<h1>ADR-20260206: Build Profiling Instrumentation (Per-Phase Metrics +
+HTML Reports)</h1>
+
+
+<h1
+id="adr-20260206-build-profiling-instrumentation-per-phase-metrics--html-reports">ADR-20260206:
+Build Profiling Instrumentation (Per-Phase Metrics + HTML Reports)</h1>
+<p><strong>Status</strong>: Accepted<br />
+<strong>Date</strong>: 2026-02-06<br />
+<strong>Deciders</strong>: Jolo (Staff Engineer)</p>
+<h2 id="context">Context</h2>
+<p>With multi-frontend generation (ADR
+20260206-multi-frontend-architecture), build times become critical:</p>
+<ul>
+<li>Widgets generation ~900ms</li>
+<li>QML generation ~X ms (new, unknown)</li>
+<li>C++ compilation + linking still dominates total cycle</li>
+</ul>
+<p>The user's iteration loop depends on fast feedback:</p>
+<ol type="1">
+<li>Generate DSL → Racket phase</li>
+<li>Build C++ → CMake/Ninja phase</li>
+<li>Test → Run application phase</li>
+</ol>
+<p>Currently, phases are not systematically measured. We need
+<strong>visibility into where time is spent</strong> and
+<strong>historical trending</strong> to validate that multi-frontend
+strategy doesn't regress build speed.</p>
+<h2 id="problem-statement">Problem Statement</h2>
+<p><strong>Current State (v0.9.0)</strong>:</p>
+<ul>
+<li>Racket generator has <code>time-phase</code> macro (1ms
+precision)</li>
+<li>Per-generator metrics stored in JSON:
+<code>generated-{project}/metrics/current.json</code> and
+<code>.jsonl</code> history</li>
+<li>HTML dashboard exists:
+<code>generated-{project}/metrics/report.html</code></li>
+<li><strong>But</strong>: C++ build (CMake configure + compilation +
+linking) is <strong>not measured</strong></li>
+<li><strong>And</strong>: No trending analysis (compare build #1 vs.
+build #100)</li>
+<li><strong>And</strong>: No alerting on regressions (build suddenly 2x
+slower)</li>
+</ul>
+<p><strong>Information Gaps</strong>:</p>
+<ul>
+<li>Is QML generation faster or slower than Widgets?</li>
+<li>Which C++ targets are bottlenecks (proto compilation? MOC?
+linking)?</li>
+<li>Did the last code change regress build time?</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<h3 id="comprehensive-build-profiling-strategy">Comprehensive Build
+Profiling Strategy</h3>
+<p><strong>Three layers of instrumentation</strong>:</p>
+<ol type="1">
+<li><p><strong>Racket DSL Generation Phase</strong> (already exists,
+enhance)</p>
+<ul>
+<li>Measure: <code>sqitch-unified</code>, <code>cpp-dba</code>,
+<code>cpp-dba-test</code>, <code>grpc</code>, <code>qt-widgets</code>,
+<code>qt-quick</code></li>
+<li>Capture: phase name, duration (ms), timestamp, optional details</li>
+<li>Output: JSON snapshot + JSONL history</li>
+</ul></li>
+<li><p><strong>CMake Configuration Phase</strong> (new)</p>
+<ul>
+<li>Measure: <code>cmake --preset &lt;name&gt;</code> time (configure
+step)</li>
+<li>Capture: preset name, duration, timestamp</li>
+<li>Hook: CMake <code>message()</code> at start/end of
+configuration</li>
+</ul></li>
+<li><p><strong>C++ Compilation Phase</strong> (new, via Ninja stats)</p>
+<ul>
+<li>Measure: Per-target compilation time (if available), total build
+time</li>
+<li>Capture: Ninja <code>-d stats</code> output → JSON conversion</li>
+<li>Output: JSON with per-object/per-target timings</li>
+</ul></li>
+</ol>
+<h3 id="metrics-collection-points">Metrics Collection Points</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Tool</th>
+<th>Measurement</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Racket Generation</strong></td>
+<td>Racket <code>time-phase</code></td>
+<td>Per-generator (ms)</td>
+<td><code>metrics/current.json</code></td>
+</tr>
+<tr>
+<td><strong>CMake Configure</strong></td>
+<td>CMake <code>message()</code> hooks</td>
+<td>Total configure time</td>
+<td><code>metrics/cmake-configure.json</code></td>
+</tr>
+<tr>
+<td><strong>Proto Compilation</strong></td>
+<td>Ninja <code>-d stats</code></td>
+<td>Per-proto file time</td>
+<td><code>metrics/ninja-stats.json</code></td>
+</tr>
+<tr>
+<td><strong>Qt MOC</strong></td>
+<td>Ninja <code>-d stats</code></td>
+<td>Per-entity MOC time</td>
+<td><code>metrics/ninja-stats.json</code></td>
+</tr>
+<tr>
+<td><strong>Linking</strong></td>
+<td>Ninja <code>-d stats</code></td>
+<td>Per-target link time</td>
+<td><code>metrics/ninja-stats.json</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-storage-format">Data Storage Format</h3>
+<p><strong><code>metrics/current.json</code></strong> (snapshot,
+overwritten per run):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;timestamp&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-02-06T15:30:45Z&quot;</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;build_id&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;git_sha&quot;</span><span class="fu">:</span> <span class="st">&quot;a1b2c3d4e5f6...&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;branch&quot;</span><span class="fu">:</span> <span class="st">&quot;feature/multi-frontend-qml&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;total_duration_ms&quot;</span><span class="fu">:</span> <span class="dv">12500</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;phases&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;racket_generation&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;total_ms&quot;</span><span class="fu">:</span> <span class="dv">3200</span><span class="fu">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;sub_phases&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;sqitch_unified&quot;</span><span class="fu">:</span> <span class="dv">847</span><span class="fu">,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;cpp_dba&quot;</span><span class="fu">:</span> <span class="dv">1523</span><span class="fu">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;cpp_dba_test&quot;</span><span class="fu">:</span> <span class="dv">456</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;grpc&quot;</span><span class="fu">:</span> <span class="dv">1847</span><span class="fu">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;qt_widgets&quot;</span><span class="fu">:</span> <span class="dv">923</span><span class="fu">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;qt_quick&quot;</span><span class="fu">:</span> <span class="dv">504</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;cmake_configure&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;total_ms&quot;</span><span class="fu">:</span> <span class="dv">2100</span><span class="fu">,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;preset&quot;</span><span class="fu">:</span> <span class="st">&quot;debug&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ninja_build&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;total_ms&quot;</span><span class="fu">:</span> <span class="dv">7200</span><span class="fu">,</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ninja_stats&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;build_time_ms&quot;</span><span class="fu">:</span> <span class="dv">7200</span><span class="fu">,</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;command_count&quot;</span><span class="fu">:</span> <span class="dv">247</span><span class="fu">,</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;total_output_bytes&quot;</span><span class="fu">:</span> <span class="dv">45678900</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;hotspots&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">&quot;target&quot;</span><span class="fu">:</span> <span class="st">&quot;libmuscovite_dba.so&quot;</span><span class="fu">,</span> <span class="dt">&quot;time_ms&quot;</span><span class="fu">:</span> <span class="dv">2100</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">&quot;target&quot;</span><span class="fu">:</span> <span class="st">&quot;protoc_gen_grpc&quot;</span><span class="fu">,</span> <span class="dt">&quot;time_ms&quot;</span><span class="fu">:</span> <span class="dv">1500</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">&quot;target&quot;</span><span class="fu">:</span> <span class="st">&quot;geosciences-qt-widgets&quot;</span><span class="fu">,</span> <span class="dt">&quot;time_ms&quot;</span><span class="fu">:</span> <span class="dv">1200</span><span class="fu">}</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;machine_info&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;os&quot;</span><span class="fu">:</span> <span class="st">&quot;Linux&quot;</span><span class="fu">,</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;cpu_cores&quot;</span><span class="fu">:</span> <span class="dv">8</span><span class="fu">,</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;cmake_version&quot;</span><span class="fu">:</span> <span class="st">&quot;3.27.0&quot;</span><span class="fu">,</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ninja_version&quot;</span><span class="fu">:</span> <span class="st">&quot;1.11.1&quot;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong><code>metrics/metrics-history.jsonl</code></strong>
+(append-only):</p>
+<pre><code>{&quot;timestamp&quot;:&quot;2026-02-06T15:30:45Z&quot;,&quot;total_duration_ms&quot;:12500,&quot;phases&quot;:...}
+{&quot;timestamp&quot;:&quot;2026-02-06T15:45:12Z&quot;,&quot;total_duration_ms&quot;:11800,&quot;phases&quot;:...}
+{&quot;timestamp&quot;:&quot;2026-02-06T16:00:33Z&quot;,&quot;total_duration_ms&quot;:13200,&quot;phases&quot;:...}</code></pre>
+<h3 id="html-report-generation">HTML Report Generation</h3>
+<p><strong><code>metrics/report.html</code></strong> (enhanced from
+v0.9.0):</p>
+<p><strong>Section 1: Latest Build Summary</strong></p>
+<ul>
+<li>Total time: 12.5s</li>
+<li>Breakdown pie chart: Racket (25%), CMake (17%), Ninja (58%)</li>
+<li>Timestamp + Git SHA + Machine info</li>
+</ul>
+<p><strong>Section 2: Phase Breakdown (Bar Chart)</strong></p>
+<pre><code>Racket Generation     [━━━━━━━━━━━] 3.2s (25%)
+├─ Sqitch            [━━] 0.8s
+├─ C++ DBA           [━━━━] 1.5s
+├─ gRPC              [━━━━━] 1.8s
+├─ Qt Widgets        [━━] 0.9s
+└─ Qt Quick          [━] 0.5s
+
+CMake Configure      [━━━━━] 2.1s (17%)
+Ninja Build          [━━━━━━━━━━━━━━━━━━━] 7.2s (58%)
+└─ Hotspots          [per-target chart]</code></pre>
+<p><strong>Section 3: Historical Trend (Last 20 Builds)</strong></p>
+<ul>
+<li>Line chart: Y-axis = duration (ms), X-axis = build sequence</li>
+<li>Show regressions: if build #20 &gt; build #19 + 10%, highlight
+red</li>
+<li>Show improvements: if build #20 &lt; build #19 - 10%, highlight
+green</li>
+</ul>
+<p><strong>Section 4: Comparison Matrix</strong> (Optional)</p>
+<ul>
+<li>Compare consecutive builds</li>
+<li>Show per-phase delta (Δ ms, Δ %)</li>
+</ul>
+<h3 id="cli-integration">CLI Integration</h3>
+<p><strong>Racket generator</strong> (existing, enhanced):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">racket</span> generate.rkt <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--project</span> ../examples/geosciences/project.ddd <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cpp-dba</span> <span class="at">--grpc</span> <span class="at">--qt-frontend</span> both <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--metrics-output</span> ../examples/geosciences/generated/metrics</span></code></pre></div>
+<p>Output includes:</p>
+<pre><code>├─ Running unified Sqitch generator ────────────────────────────
+└─ Generation complete (847 ms)
+
+├─ Generating C++ DBA Layer ───────────────────────────────────
+└─ DBA layer generation complete (1523 ms)
+
+├─ Generating gRPC API ────────────────────────────────────────
+└─ gRPC API generation complete (1847 ms)
+
+├─ Generating Qt Widgets ──────────────────────────────────────
+└─ Qt Widgets generation complete (923 ms)
+
+├─ Generating Qt Quick ────────────────────────────────────────
+└─ Qt Quick generation complete (504 ms)
+
+└─ Metrics written to: examples/geosciences/generated/metrics/current.json
+                      examples/geosciences/generated/metrics/metrics-history.jsonl
+                      examples/geosciences/generated/metrics/report.html</code></pre>
+<p><strong>CMake build</strong> (new integration):</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--preset</span> debug <span class="at">-DCMAKE_MESSAGE_LOG_LEVEL</span><span class="op">=</span>VERBOSE</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--verbose</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">tee</span> build.log</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Post-build: extract Ninja stats</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> tools/extract-ninja-metrics.py build/debug/.ninja_log <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output</span> examples/geosciences/generated/metrics/ninja-stats.json</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all metrics into unified report</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> tools/merge-build-metrics.py <span class="dt">\</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">--racket-metrics</span> examples/geosciences/generated/metrics/current.json <span class="dt">\</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ninja-metrics</span> examples/geosciences/generated/metrics/ninja-stats.json <span class="dt">\</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output</span> examples/geosciences/generated/metrics/report.html</span></code></pre></div>
+<h3 id="tools-to-createenhance">Tools to Create/Enhance</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/info.rkt</code></td>
+<td>Record metrics during generation</td>
+<td>✅ Exists (enhance)</td>
+</tr>
+<tr>
+<td><code>tools/extract-ninja-metrics.py</code></td>
+<td>Parse Ninja <code>.ninja_log</code> → JSON</td>
+<td>🔲 New</td>
+</tr>
+<tr>
+<td><code>tools/merge-build-metrics.py</code></td>
+<td>Combine Racket + CMake + Ninja metrics → HTML</td>
+<td>🔲 New</td>
+</tr>
+<tr>
+<td><code>tools/analyze-regressions.py</code></td>
+<td>Compare build history, flag regressions</td>
+<td>🔲 New (Phase 2)</td>
+</tr>
+<tr>
+<td><code>metrics/report.html</code></td>
+<td>Static HTML dashboard</td>
+<td>✅ Exists (enhance)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="build-workflow-integration">Build Workflow Integration</h3>
+<p><strong>Step 1: Generate DSL</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="bu">time</span> racket generate.rkt <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--project</span> ../examples/geosciences/project.ddd <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cpp-dba</span> <span class="at">--grpc</span> <span class="at">--qt-frontend</span> both</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Outputs: examples/geosciences/generated/metrics/current.json</span></span></code></pre></div>
+<p><strong>Step 2: Build C++</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--preset</span> debug <span class="kw">&amp;&amp;</span> <span class="bu">time</span> cmake <span class="at">--build</span> <span class="at">--preset</span> debug <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="fu">tee</span> /tmp/build.log</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ninja stats: build/debug/.ninja_log</span></span></code></pre></div>
+<p><strong>Step 3: Extract + Merge Metrics</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> tools/extract-ninja-metrics.py build/debug/.ninja_log <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output</span> examples/geosciences/generated/metrics/ninja-stats.json</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> tools/merge-build-metrics.py <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--racket-metrics</span> examples/geosciences/generated/metrics/current.json <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--ninja-metrics</span> examples/geosciences/generated/metrics/ninja-stats.json <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output</span> examples/geosciences/generated/metrics/report.html</span></code></pre></div>
+<p><strong>Step 4: View Report</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> examples/geosciences/generated/metrics/report.html</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">xdg-open</span> examples/geosciences/generated/metrics/report.html</span></code></pre></div>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ol type="1">
+<li><strong>Visibility</strong>: Know exactly where build time is spent
+(Racket vs. CMake vs. Ninja)</li>
+<li><strong>Trending</strong>: Detect regressions early (build suddenly
+2x slower)</li>
+<li><strong>AI Agent Validation</strong>: Prove that multi-frontend
+strategy doesn't explode build times</li>
+<li><strong>Baseline Capture</strong>: Establish reference metrics
+before optimizations</li>
+<li><strong>Future Optimization</strong>: Identify bottlenecks (e.g.,
+"proto compilation is 40% of Ninja time")</li>
+</ol>
+<h3 id="negative">Negative</h3>
+<ol type="1">
+<li><strong>Tooling Overhead</strong>: New Python scripts, HTML
+generation, metrics storage</li>
+<li><strong>Disk Space</strong>: JSONL history accumulates; need cleanup
+strategy</li>
+<li><strong>Parse Complexity</strong>: Ninja stats format is
+per-version; fragile parsing</li>
+<li><strong>Latency</strong>: Post-build metric extraction adds ~5-10s
+per build</li>
+</ol>
+<h3 id="neutral">Neutral</h3>
+<ol type="1">
+<li><strong>Reproducibility</strong>: Metrics are non-deterministic
+(machine-dependent), but trends are meaningful</li>
+<li><strong>CI Integration</strong>: Can be extended to GitHub Actions,
+but not required for local iteration</li>
+</ol>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<h3 id="phase-1-v0100-racket--cmake--html-report">Phase 1 (v0.10.0):
+Racket + CMake + HTML Report</h3>
+<p><strong>Tasks</strong>:</p>
+<ol type="1">
+<li>Enhance <code>dslgen/info.rkt</code> to include CMake configure
+time</li>
+<li>Create <code>tools/extract-ninja-metrics.py</code> (parse
+<code>.ninja_log</code> → JSON)</li>
+<li>Create <code>tools/merge-build-metrics.py</code> (combine metrics →
+HTML)</li>
+<li>Update <code>metrics/report.html</code> with multi-phase breakdown +
+historical chart</li>
+<li>Document in DEVELOPER-GUIDE.md</li>
+</ol>
+<p><strong>Acceptance Criteria</strong>:</p>
+<ul>
+<li>Generate DSL on geosciences example</li>
+<li>Build with CMake</li>
+<li>View <code>metrics/report.html</code> with all phases visible</li>
+<li>Historical chart shows &gt;2 builds</li>
+</ul>
+<h3 id="phase-2-v100-regression-detection">Phase 2 (v1.0.0): Regression
+Detection</h3>
+<p><strong>Tasks</strong>:</p>
+<ol type="1">
+<li>Create <code>tools/analyze-regressions.py</code> (compare
+consecutive builds)</li>
+<li>Add CI integration to GitHub Actions (store metrics
+per-workflow-run)</li>
+<li>Add regression alert (email/Slack if build &gt;10% slower)</li>
+<li>Add benchmark comparison (vs. previous release)</li>
+</ol>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When is this decision applicable?</strong></p>
+<ul>
+<li>Any change affecting build performance (Racket generator, CMake, C++
+code)</li>
+<li>Any iteration round where build time matters</li>
+<li>Any optimization work (baseline + measurement required)</li>
+</ul>
+<p><strong>How it's enforced</strong>:</p>
+<ul>
+<li>Metrics are collected automatically on every generate + build</li>
+<li>HTML report is mandatory output (not optional)</li>
+<li>Historical data is preserved in <code>.jsonl</code> for
+trending</li>
+</ul>
+<p><strong>Key files affected</strong>:</p>
+<ul>
+<li><code>dslgen/info.rkt</code> → enhance timing capture</li>
+<li><code>tools/extract-ninja-metrics.py</code> → new</li>
+<li><code>tools/merge-build-metrics.py</code> → new</li>
+<li><code>metrics/report.html</code> → new/enhanced template</li>
+<li><code>doc/DEVELOPER-GUIDE.md</code> → new section on build
+profiling</li>
+</ul>
+<p><strong>Related ADRs</strong>:</p>
+<ul>
+<li><a
+href="20260206-multi-frontend-architecture.html">ADR-20260206-multi-frontend-architecture.md</a>
+— context for build complexity</li>
+<li><a
+href="20260109-incremental-artifact-generation.html">ADR-20260109-incremental-artifact-generation.md</a>
+— generation efficiency</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>Ninja documentation: <a
+href="https://ninja-build.org/manual.html#bibliography">Ninja
+Stats</a></li>
+<li>CMake documentation: <a
+href="https://cmake.org/cmake/help/latest/command/message.html">Message
+Command</a></li>
+<li>Python tools: JSON, matplotlib (for future charting)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

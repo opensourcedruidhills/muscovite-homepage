@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbonate Rock Classification Systems (Dunham,
+Folk) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Carbonate Rock Classification Systems (Dunham, Folk)</span>
+</nav>
+
+<h1>Carbonate Rock Classification Systems (Dunham, Folk)</h1>
+
+
+<h1 id="carbonate-rock-classification-systems-dunham-folk">Carbonate
+Rock Classification Systems (Dunham, Folk)</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Domain modeling team</li>
+<li>Date: 2026-01-07</li>
+<li>Tags: petrology, sedimentology, carbonates, classification</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Carbonate rocks (limestones, dolostones) require specialized
+classification systems different from clastic sedimentary rocks. Two
+main systems exist: Dunham (depositional texture based) and Folk
+(allochems and matrix based).</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Dunham classification is most widely used (89% of workers per Lokier
+&amp; Al Junaibi 2016)</li>
+<li>Folk classification provides more detailed petrographic
+information</li>
+<li>Both systems needed for comprehensive carbonate petrology</li>
+<li>Classifications determine rock name from microscopic
+observation</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Implement <strong>both Dunham and Folk classifications</strong> as
+lookup entities, with Dunham as primary.</p>
+<h3
+id="dunham-classification-1962-modified-by-embry--klovan-1971">Dunham
+Classification (1962, modified by Embry &amp; Klovan 1971)</h3>
+<p>Based on depositional texture:</p>
+<ul>
+<li>Mud-supported vs grain-supported fabric</li>
+<li>Presence/absence of mud matrix</li>
+<li>Evidence of organic binding</li>
+</ul>
+<pre class="ddd"><code>ENTITY DunhamClass IDENTIFIED_BY id (
+    id                    UUID        NOT NULL,
+    class_name            VARCHAR(50) NOT NULL @unique,
+    mud_supported         BOOLEAN,
+    grain_supported       BOOLEAN,
+    organic_bound         BOOLEAN,
+    mud_content           VARCHAR(30),
+    grain_content         VARCHAR(30),
+    grain_size_2mm_plus   VARCHAR(30),
+    binding_type          VARCHAR(30),
+    description           TEXT
+)</code></pre>
+<p>Dunham classes: | Class | Mud | Grains | Support | Bound | Notes |
+|-------|-----|--------|---------|-------|-------| | Mudstone | &gt;90%
+| &lt;10% | Mud | No | Lime mud with few grains | | Wackestone | Present
+| &gt;10% | Mud | No | Mud-supported, &gt;10% grains | | Packstone |
+Present | Abundant | Grain | No | Grain-supported with mud | |
+Grainstone | Absent | Dominant | Grain | No | No mud matrix | |
+Floatstone | Present | &gt;10% &gt;2mm | Matrix | No | Large grains in
+mud matrix | | Rudstone | Variable | &gt;10% &gt;2mm | Grain | No |
+Grain-supported coarse | | Boundstone | Variable | Variable | Organic |
+Yes | Organically bound | | Bafflestone | Variable | Variable | Organic
+| Yes | Organisms baffled sediment | | Bindstone | Variable | Variable |
+Organic | Yes | Encrusting organisms | | Framestone | Variable |
+Variable | Organic | Yes | Rigid organic framework |</p>
+<h3 id="folk-classification-1959-1962">Folk Classification (1959,
+1962)</h3>
+<p>Based on allochem types and matrix:</p>
+<p><strong>Allochems (transported grains):</strong></p>
+<ul>
+<li><strong>Oo</strong> = Ooids</li>
+<li><strong>Bio</strong> = Bioclasts (fossils)</li>
+<li><strong>Pel</strong> = Peloids (pellets)</li>
+<li><strong>Intra</strong> = Intraclasts</li>
+</ul>
+<p><strong>Matrix suffixes:</strong></p>
+<ul>
+<li><strong>-sparite</strong> = Sparry calcite cement (&gt;10μm
+crystals)</li>
+<li><strong>-micrite</strong> = Micritic mud matrix (&lt;4μm
+crystals)</li>
+</ul>
+<pre class="ddd"><code>ENTITY FolkCarbonateClass IDENTIFIED_BY id (
+    id                    UUID        NOT NULL,
+    class_name            VARCHAR(50) NOT NULL @unique,
+    primary_allochem      VARCHAR(30),
+    secondary_allochem    VARCHAR(30),
+    matrix_type           VARCHAR(30) NOT NULL,
+    folk_code             VARCHAR(20) NOT NULL @unique,
+    description           TEXT
+)
+CHECK matrix_valid: matrix_type IN (&#39;sparite&#39;, &#39;micrite&#39;, &#39;dismicrite&#39;)
+CHECK allochem_valid: primary_allochem IN (&#39;oo&#39;, &#39;bio&#39;, &#39;pel&#39;, &#39;intra&#39;) OR primary_allochem IS NULL</code></pre>
+<p>Folk classes: | Code | Name | Primary | Matrix | Description |
+|------|------|---------|--------|-------------| | oosparite | Oosparite
+| Ooids | Sparite | Ooids in sparry cement | | oomicrite | Oomicrite |
+Ooids | Micrite | Ooids in lime mud | | biosparite | Biosparite |
+Bioclasts | Sparite | Fossils in sparry cement | | biomicrite |
+Biomicrite | Bioclasts | Micrite | Fossils in lime mud | | pelsparite |
+Pelsparite | Peloids | Sparite | Pellets in sparry cement | | pelmicrite
+| Pelmicrite | Peloids | Micrite | Pellets in lime mud | | intrasparite
+| Intrasparite | Intraclasts | Sparite | Intraclasts in sparry cement |
+| intramicrite | Intramicrite | Intraclasts | Micrite | Intraclasts in
+lime mud | | biolithite | Biolithite | - | - | In-place organic growth |
+| dismicrite | Dismicrite | - | Micrite | Disturbed micrite |</p>
+<h3 id="folk-sandstone-classification">Folk Sandstone
+Classification</h3>
+<p>Folk also developed a sandstone classification based on QFR
+(Quartz-Feldspar-Rock fragments):</p>
+<pre class="ddd"><code>ENTITY FolkSandstoneClass IDENTIFIED_BY id (
+    id                    UUID        NOT NULL,
+    class_name            VARCHAR(50) NOT NULL @unique,
+    q_percent_min         DECIMAL,
+    q_percent_max         DECIMAL,
+    f_percent_min         DECIMAL,
+    f_percent_max         DECIMAL,
+    r_percent_min         DECIMAL,
+    r_percent_max         DECIMAL,
+    matrix_content        VARCHAR(30),
+    textural_maturity     VARCHAR(30),
+    description           TEXT
+)
+CHECK maturity_valid: textural_maturity IN (&#39;immature&#39;, &#39;submature&#39;, &#39;mature&#39;, &#39;supermature&#39;) OR textural_maturity IS NULL</code></pre>
+<p>Folk sandstone classes: | Class | Q% | F% | R% | Matrix | Notes |
+|-------|----|----|----|----|-------| | Quartzarenite | &gt;95 | &lt;5 |
+&lt;5 | &lt;15% | Pure quartz sand | | Subarkose | 75-95 | 5-25 | &lt;5
+| &lt;15% | Quartz-rich, some feldspar | | Sublitharenite | 75-95 |
+&lt;5 | 5-25 | &lt;15% | Quartz-rich, some rock fragments | | Arkose |
+25-75 | &gt;25 | &lt;F | &lt;15% | Feldspar-rich | | Lithic arkose |
+25-75 | &gt;R | 5-25 | &lt;15% | Feldspar &gt; rock fragments | |
+Feldspathic litharenite | 25-75 | 5-25 | &gt;F | &lt;15% | Rock
+fragments &gt; feldspar | | Litharenite | 25-75 | &lt;5 | &gt;25 |
+&lt;15% | Rock fragment-rich | | Quartzwacke | &gt;95 | &lt;5 | &lt;5 |
+&gt;15% | Quartzarenite with mud matrix | | Feldspathic wacke | &lt;75 |
+- | - | &gt;15% | Wacke with feldspar | | Lithic wacke | &lt;75 | - | -
+| &gt;15% | Wacke with rock fragments |</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Both major carbonate classification systems supported</li>
+<li>Lookup tables enable consistent classification</li>
+<li>Folk sandstone classification adds sedimentary rock detail</li>
+<li>Clear criteria for each class enable automated classification
+suggestions</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Overlap between Dunham and Folk may cause confusion</li>
+<li>Petrographic skill required to apply correctly</li>
+<li>Some intermediate textures difficult to classify</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Dunham_classification">Dunham
+Classification - Wikipedia</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Folk_classification">Folk
+Classification - Wikipedia</a></li>
+<li>Dunham, R.J. (1962) "Classification of carbonate rocks according to
+depositional texture"</li>
+<li>Embry, A.F. &amp; Klovan, J.E. (1971) "A late Devonian reef tract on
+northeastern Banks Island"</li>
+<li>Folk, R.L. (1959) "Practical petrographic classification of
+limestones"</li>
+<li>Folk, R.L. (1980) "Petrology of Sedimentary Rocks"</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

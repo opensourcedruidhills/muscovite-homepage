@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polymorphic GeologicMapFeature Bridge for Cross-Domain Feature
+Documentation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Polymorphic GeologicMapFeature Bridge for Cross-Domain Feature
+Documentation</span>
+</nav>
+
+<h1>Polymorphic GeologicMapFeature Bridge for Cross-Domain Feature
+Documentation</h1>
+
+
+<h1
+id="polymorphic-geologicmapfeature-bridge-for-cross-domain-feature-documentation">Polymorphic
+GeologicMapFeature Bridge for Cross-Domain Feature Documentation</h1>
+<p><strong>Date</strong>: 2026-01-08<br />
+<strong>Status</strong>: Accepted<br />
+<strong>Deciders</strong>: System Architect, DDD Expert, GIS Team<br />
+<strong>Tags</strong>: ddd, bounded-context, polymorphism,
+geologic-mapping, fgdc</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Geologic maps document observations of features from multiple domain
+contexts (faults from StructuralGeology, volcanoes from Volcanology,
+deposits from EconomicGeology). Each feature has domain-specific
+properties (kinematics, eruption date, ore grade), but the map layer
+needs a unified way to:</p>
+<ol type="1">
+<li>Associate features with map symbols (FaultSymbol, VolcanicSymbol,
+etc.)</li>
+<li>Store observed geometries (may differ from canonical feature
+geometry)</li>
+<li>Track confidence level (certain/approximate/inferred)</li>
+<li>Query "all features on this map" without JOIN to every feature
+domain</li>
+</ol>
+<p>How can we bridge feature domains and the GeologicMapping context
+without violating DDD bounded context principles (no cross-context
+foreign keys)?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>DDD Bounded Context Integrity</strong>: Domain contexts own
+features, GeologicMapping context documents observations</li>
+<li><strong>No Cross-Context FKs</strong>: ADR-20260106 forbids foreign
+keys between bounded contexts</li>
+<li><strong>Polymorphic References</strong>: Map features can reference
+Fault, Volcano, Deposit, Fold, etc.</li>
+<li><strong>Spatial Queries</strong>: Need "features within extent"
+without domain-specific JOINs</li>
+<li><strong>FGDC Compliance</strong>: USGS standard requires symbol
+assignment and confidence tracking</li>
+<li><strong>Audit Trail</strong>: Track who observed/deduced/suspected
+each feature placement</li>
+<li><strong>Flexible Geometry</strong>: Map may show
+simplified/approximated geometry vs. canonical feature</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-direct-foreign-keys-to-all-feature-types-rejected">Option
+1: Direct Foreign Keys to All Feature Types (REJECTED)</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> geologic_map_feature (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    fault_id UUID <span class="kw">REFERENCES</span> structural_geology.fault(<span class="kw">id</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    volcano_id UUID <span class="kw">REFERENCES</span> volcanology.volcano(<span class="kw">id</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    deposit_id UUID <span class="kw">REFERENCES</span> economic_geology.mineral_deposit(<span class="kw">id</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ... 50+ feature types</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Referential integrity enforced by database</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li><strong>Violates DDD</strong>: Cross-context FKs couple domains</li>
+<li><strong>Unmaintainable</strong>: 50+ nullable columns for each
+feature type</li>
+<li><strong>Schema explosion</strong>: Adding new feature type requires
+DDL migration</li>
+<li><strong>Complex queries</strong>: Must check 50 columns to find
+which type is set</li>
+</ul>
+<h3
+id="option-2-single-table-inheritance-with-feature-union-rejected">Option
+2: Single Table Inheritance with Feature Union (REJECTED)</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> map_feature (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    feature_type TEXT,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    fault_trace GEOMETRY,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    volcano_outline GEOMETRY,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    deposit_outline GEOMETRY,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ... union of all feature properties</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Single table query</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li><strong>Massive schema</strong>: Hundreds of columns for all feature
+types</li>
+<li><strong>NULL proliferation</strong>: 95% of columns NULL for any
+given row</li>
+<li><strong>Tight coupling</strong>: Map layer knows about all domain
+internals</li>
+<li><strong>No domain encapsulation</strong>: Feature logic
+duplicated</li>
+</ul>
+<h3
+id="option-3-polymorphic-bridge-with-source-context-tracking-accepted">Option
+3: Polymorphic Bridge with Source Context Tracking (ACCEPTED)</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> geologic_mapping.geologic_map_feature (</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    map_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">REFERENCES</span> geologic_mapping.geologic_map(<span class="kw">id</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Polymorphic source reference (NO FK constraint)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    source_context TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,      <span class="co">-- &#39;StructuralGeology&#39;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    source_entity TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,       <span class="co">-- &#39;Fault&#39;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    source_entity_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,    <span class="co">-- ID in source context</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Map-specific data</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    symbol_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">REFERENCES</span> geologic_mapping.map_symbol(<span class="kw">id</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    geometry GEOMETRY <span class="kw">NOT</span> <span class="kw">NULL</span>,        <span class="co">-- PostGIS</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    confidence_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">REFERENCES</span> basedata.confidence_level(<span class="kw">id</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Audit</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    observed_by TEXT,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    observed_at TIMESTAMPTZ <span class="kw">DEFAULT</span> now()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_map_feature_source </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> geologic_mapping.geologic_map_feature(source_context, source_entity, source_entity_id);</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_map_feature_geometry </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> geologic_mapping.geologic_map_feature <span class="kw">USING</span> GIST(geometry);</span></code></pre></div>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li><strong>DDD Compliant</strong>: No cross-context FKs</li>
+<li><strong>Extensible</strong>: Adding new feature types requires no
+schema changes</li>
+<li><strong>Single query</strong>: All map features in one table</li>
+<li><strong>Spatial indexes</strong>: Fast "features within extent"
+queries</li>
+<li><strong>Domain independence</strong>: Feature domains evolve without
+map layer changes</li>
+<li><strong>Flexible geometry</strong>: Map can store observed geometry
+separate from canonical</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li>No database-enforced referential integrity on source_entity_id</li>
+<li>Requires application-layer validation of source references</li>
+<li>JOINs to source tables require dynamic query construction</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen Option</strong>: Polymorphic bridge with source
+context tracking (Option 3)</p>
+<p>The GeologicMapFeature entity acts as a <strong>weak reference
+bridge</strong> between the GeologicMapping context and all
+feature-owning domains, respecting bounded context boundaries while
+enabling unified spatial queries.</p>
+<h3 id="dsl-definition">DSL Definition</h3>
+<p><strong>GeologicMapping Context</strong>
+(<code>src/examples/geosciences/geologic-mapping.ddd</code>):</p>
+<pre class="ddd"><code>ENTITY GeologicMapFeature IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    map_id UUID NOT NULL,
+    
+    -- Polymorphic source (no FK constraint)
+    source_context TEXT NOT NULL,
+    source_entity TEXT NOT NULL,
+    source_entity_id UUID NOT NULL,
+    
+    -- Cartographic properties
+    symbol_id UUID NOT NULL,
+    geometry GEOMETRY NOT NULL,
+    confidence_id UUID NOT NULL,
+    
+    -- Metadata
+    label TEXT,
+    notes TEXT,
+    observed_by TEXT,
+    observed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+)
+RELATIONSHIPS {
+    map -&gt; GeologicMap REQUIRED ONE;
+    symbol -&gt; MapSymbol REQUIRED ONE;
+    confidence -&gt; ConfidenceLevel REQUIRED ONE;
+}
+DOC &quot;Bridge entity linking domain features to map symbols with spatial geometry&quot;;</code></pre>
+<h3 id="polymorphic-reference-pattern">Polymorphic Reference
+Pattern</h3>
+<p><strong>Source Context Values</strong> (controlled vocabulary):</p>
+<ul>
+<li><code>StructuralGeology</code> → Fault, Fold, Lineation,
+Foliation</li>
+<li><code>Volcanology</code> → Volcano, LavaFlow,
+PyroclasticDeposit</li>
+<li><code>EconomicGeology</code> → MineralDeposit, AlterationZone,
+Vein</li>
+<li><code>Geomorphology</code> → Landform, Glacier, Moraine</li>
+<li><code>Stratigraphy</code> → LithostratigraphicUnit, Facies</li>
+<li><code>Petrology</code> → Outcrop, RockUnit</li>
+<li><code>FieldObservation</code> → Station, Outcrop</li>
+</ul>
+<p><strong>Source Entity Values</strong> (entity type names):</p>
+<ul>
+<li>Entity name from DSL: <code>Fault</code>, <code>Volcano</code>,
+<code>MineralDeposit</code>, etc.</li>
+</ul>
+<p><strong>Source Entity ID</strong> (UUID):</p>
+<ul>
+<li>Primary key value from source entity table</li>
+</ul>
+<h3 id="validation-strategy">Validation Strategy</h3>
+<p><strong>Application-Layer Validation</strong> (API function):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">FUNCTION</span> geologic_mapping_api.map_feature_insert(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    p_map_id UUID,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    p_source_context TEXT,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    p_source_entity TEXT,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    p_source_entity_id UUID,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    p_symbol_id UUID,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    p_geometry TEXT,  <span class="co">-- WKT</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    p_confidence_id UUID,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    p_label TEXT <span class="kw">DEFAULT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    p_notes TEXT <span class="kw">DEFAULT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    p_observed_by TEXT <span class="kw">DEFAULT</span> current_user</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>) RETURNS geologic_mapping.geologic_map_feature <span class="kw">AS</span> $$</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">DECLARE</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    v_result geologic_mapping.geologic_map_feature<span class="dt">%ROWTYPE</span>;</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    v_source_exists <span class="dt">BOOLEAN</span>;</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Validate source context + entity combination</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">IF</span> p_source_context <span class="kw">NOT</span> <span class="kw">IN</span> (</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;StructuralGeology&#39;</span>, <span class="st">&#39;Volcanology&#39;</span>, <span class="st">&#39;EconomicGeology&#39;</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;Geomorphology&#39;</span>, <span class="st">&#39;Stratigraphy&#39;</span>, <span class="st">&#39;Petrology&#39;</span>, <span class="st">&#39;FieldObservation&#39;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="cf">THEN</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        RAISE <span class="kw">EXCEPTION</span> <span class="st">&#39;Invalid source_context: %&#39;</span>, p_source_context</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="kw">USING</span> ERRCODE <span class="op">=</span> <span class="st">&#39;P0001&#39;</span>;</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">IF</span>;</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Validate source entity exists (dynamic query)</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">EXECUTE</span> format(</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;SELECT EXISTS(SELECT 1 FROM %I.%I WHERE id = $1)&#39;</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">lower</span>(<span class="fu">regexp_replace</span>(p_source_context, <span class="st">&#39;([A-Z])&#39;</span>, <span class="st">&#39;_\1&#39;</span>, <span class="st">&#39;g&#39;</span>)),  <span class="co">-- CamelCase → snake_case</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">lower</span>(<span class="fu">regexp_replace</span>(p_source_entity, <span class="st">&#39;([A-Z])&#39;</span>, <span class="st">&#39;_\1&#39;</span>, <span class="st">&#39;g&#39;</span>))</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">INTO</span> v_source_exists <span class="kw">USING</span> p_source_entity_id;</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">IF</span> <span class="kw">NOT</span> v_source_exists <span class="cf">THEN</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        RAISE <span class="kw">EXCEPTION</span> <span class="st">&#39;Source entity not found: %.% with id %&#39;</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>            p_source_context, p_source_entity, p_source_entity_id</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">USING</span> ERRCODE <span class="op">=</span> <span class="st">&#39;23503&#39;</span>;  <span class="co">-- FK violation code</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">IF</span>;</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Insert with geometry transform to map&#39;s SRID</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INSERT</span> <span class="kw">INTO</span> geologic_mapping.geologic_map_feature (</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        map_id, source_context, source_entity, source_entity_id,</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        symbol_id, geometry, confidence_id,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        <span class="kw">label</span>, notes, observed_by, observed_at</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">VALUES</span> (</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        p_map_id,</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        p_source_context,</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        p_source_entity,</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>        p_source_entity_id,</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>        p_symbol_id,</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        ST_GeomFromText(p_geometry, <span class="dv">4326</span>),</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        p_confidence_id,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        p_label,</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>        p_notes,</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        p_observed_by,</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>        now()</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURNING</span> <span class="op">*</span> <span class="kw">INTO</span> v_result;</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURN</span> v_result;</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span></code></pre></div>
+<h3 id="query-patterns">Query Patterns</h3>
+<p><strong>1. All Features on Map</strong> (spatial query):</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> geologic_mapping.geologic_map_feature</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> map_id <span class="op">=</span> <span class="st">&#39;...&#39;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> ST_Intersects(geometry, ST_MakeEnvelope(<span class="op">..</span>.));</span></code></pre></div>
+<p><strong>2. Features by Type</strong>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> geologic_mapping.geologic_map_feature</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> map_id <span class="op">=</span> <span class="st">&#39;...&#39;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> source_context <span class="op">=</span> <span class="st">&#39;StructuralGeology&#39;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> source_entity <span class="op">=</span> <span class="st">&#39;Fault&#39;</span>;</span></code></pre></div>
+<p><strong>3. Join to Source Feature</strong> (enriched data):</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Faults on map with kinematics</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    mf.<span class="kw">id</span> <span class="kw">AS</span> map_feature_id,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    mf.geometry <span class="kw">AS</span> observed_geometry,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    mf.<span class="kw">label</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    f.name <span class="kw">AS</span> fault_name,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    f.fault_type,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    f.sense_of_slip</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> geologic_mapping.geologic_map_feature mf</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> structural_geology.fault f <span class="kw">ON</span> mf.source_entity_id <span class="op">=</span> f.<span class="kw">id</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> mf.map_id <span class="op">=</span> <span class="st">&#39;...&#39;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> mf.source_context <span class="op">=</span> <span class="st">&#39;StructuralGeology&#39;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> mf.source_entity <span class="op">=</span> <span class="st">&#39;Fault&#39;</span>;</span></code></pre></div>
+<p><strong>4. GeoJSON Export with Source Details</strong>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> json_build_object(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;type&#39;</span>, <span class="st">&#39;FeatureCollection&#39;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;features&#39;</span>, json_agg(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        json_build_object(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;type&#39;</span>, <span class="st">&#39;Feature&#39;</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;id&#39;</span>, <span class="kw">id</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;geometry&#39;</span>, ST_AsGeoJSON(geometry):<span class="ch">:json</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;properties&#39;</span>, json_build_object(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;source_context&#39;</span>, source_context,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;source_entity&#39;</span>, source_entity,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;source_id&#39;</span>, source_entity_id,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;symbol&#39;</span>, symbol_code,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;confidence&#39;</span>, confidence_code,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                <span class="st">&#39;label&#39;</span>, <span class="kw">label</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> geologic_mapping.geologic_map_feature</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> map_id <span class="op">=</span> <span class="st">&#39;...&#39;</span>;</span></code></pre></div>
+<h3 id="confidence-level-lookup-table">Confidence Level Lookup
+Table</h3>
+<p><strong>Basedata Context</strong>
+(<code>src/examples/geosciences/basedata.ddd</code>):</p>
+<pre class="ddd"><code>ENTITY ConfidenceLevel IDENTIFIED_BY id (
+    id UUID NOT NULL,
+    code TEXT NOT NULL @unique,
+    name TEXT NOT NULL,
+    description TEXT,
+    line_pattern TEXT,
+    display_order INTEGER,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE
+)
+DOC &quot;Observation confidence levels for geologic mapping&quot;;
+
+AGGREGATE ConfidenceLevel ROOT ConfidenceLevel;
+
+IMPORT_JSON &quot;../../seeds/basedata/confidence_level.json&quot; INTO ConfidenceLevel;</code></pre>
+<p><strong>Seed Data</strong>
+(<code>seeds/basedata/confidence_level.json</code>):</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;CERTAIN&quot;</span><span class="fu">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Certain&quot;</span><span class="fu">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Feature location and identification are definite&quot;</span><span class="fu">,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;line_pattern&quot;</span><span class="fu">:</span> <span class="st">&quot;solid&quot;</span><span class="fu">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display_order&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;APPROXIMATE&quot;</span><span class="fu">,</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Approximate&quot;</span><span class="fu">,</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Feature location or identification is approximate&quot;</span><span class="fu">,</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;line_pattern&quot;</span><span class="fu">:</span> <span class="st">&quot;dashed&quot;</span><span class="fu">,</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display_order&quot;</span><span class="fu">:</span> <span class="dv">2</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;INFERRED&quot;</span><span class="fu">,</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Inferred&quot;</span><span class="fu">,</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Feature existence is inferred from indirect evidence&quot;</span><span class="fu">,</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;line_pattern&quot;</span><span class="fu">:</span> <span class="st">&quot;dotted&quot;</span><span class="fu">,</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display_order&quot;</span><span class="fu">:</span> <span class="dv">3</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;CONCEALED&quot;</span><span class="fu">,</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Concealed&quot;</span><span class="fu">,</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Feature is covered by younger deposits&quot;</span><span class="fu">,</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;line_pattern&quot;</span><span class="fu">:</span> <span class="st">&quot;short-dashed&quot;</span><span class="fu">,</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display_order&quot;</span><span class="fu">:</span> <span class="dv">4</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;code&quot;</span><span class="fu">:</span> <span class="st">&quot;QUERIED&quot;</span><span class="fu">,</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Queried&quot;</span><span class="fu">,</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Feature existence or identification is uncertain&quot;</span><span class="fu">,</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;line_pattern&quot;</span><span class="fu">:</span> <span class="st">&quot;dashed-dotted&quot;</span><span class="fu">,</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;display_order&quot;</span><span class="fu">:</span> <span class="dv">5</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<h2 id="implementation-rules">Implementation Rules</h2>
+<h3 id="1-no-cross-context-fks">1. No Cross-Context FKs</h3>
+<p>GeologicMapFeature MUST NOT have foreign key constraints to feature
+tables in other contexts:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- CORRECT</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>source_entity_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- INCORRECT (violates bounded context integrity)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>fault_id UUID <span class="kw">REFERENCES</span> structural_geology.fault(<span class="kw">id</span>)</span></code></pre></div>
+<h3 id="2-application-layer-validation">2. Application-Layer
+Validation</h3>
+<p>API layer MUST validate source references exist before INSERT:</p>
+<ul>
+<li>Use dynamic SQL:
+<code>EXECUTE format('SELECT EXISTS...')</code></li>
+<li>Raise exception with ERRCODE = '23503' (FK violation) if not
+found</li>
+<li>Log validation failures for debugging</li>
+</ul>
+<h3 id="3-contextentity-controlled-vocabulary">3. Context/Entity
+Controlled Vocabulary</h3>
+<p>Maintain canonical list of valid combinations:</p>
+<ul>
+<li>Document in ADR (this file)</li>
+<li>Validate in API function</li>
+<li>Consider lookup table if list grows large (&gt;20 contexts)</li>
+</ul>
+<h3 id="4-audit-trail-required">4. Audit Trail Required</h3>
+<p>All map features MUST track:</p>
+<ul>
+<li><code>observed_by</code> (who documented the feature)</li>
+<li><code>observed_at</code> (when)</li>
+<li>Optional: <code>confidence_id</code> (observation certainty)</li>
+</ul>
+<h3 id="5-geometry-independence">5. Geometry Independence</h3>
+<p>Map feature geometry CAN differ from canonical feature geometry:</p>
+<ul>
+<li>Fault canonical: High-precision GPS trace (10m accuracy)</li>
+<li>Map feature: Simplified for 1:50,000 scale display</li>
+<li>Both are valid for their purpose</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>DDD Compliant</strong>: Respects bounded context
+boundaries</li>
+<li><strong>Extensible</strong>: New feature types require no schema
+changes</li>
+<li><strong>Performance</strong>: Single-table spatial queries with GIST
+index</li>
+<li><strong>Audit Trail</strong>: Tracks observation metadata</li>
+<li><strong>Flexible</strong>: Supports observed vs. canonical
+geometry</li>
+<li><strong>FGDC Compliant</strong>: Symbol assignment and confidence
+tracking</li>
+<li><strong>Domain Independence</strong>: Feature domains evolve
+independently</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>No DB Referential Integrity</strong>: Source references not
+enforced by PostgreSQL</li>
+<li><strong>Dynamic Queries</strong>: JOINs to source tables require
+runtime query construction</li>
+<li><strong>Application Validation</strong>: Must validate source
+references in API layer</li>
+<li><strong>Orphan Risk</strong>: If source feature deleted, map feature
+becomes orphan (mitigated by audit trail)</li>
+<li><strong>Query Complexity</strong>: Enriched queries require dynamic
+SQL or UNION across feature types</li>
+</ul>
+<h3 id="mitigation-strategies">Mitigation Strategies</h3>
+<p><strong>Orphan Detection</strong>:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Find map features with missing source entities</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> source_context, source_entity</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> geologic_mapping.geologic_map_feature mf</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> (</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> information_schema.<span class="kw">tables</span> t</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> t.table_schema <span class="op">=</span> <span class="fu">lower</span>(<span class="fu">regexp_replace</span>(mf.source_context, <span class="st">&#39;([A-Z])&#39;</span>, <span class="st">&#39;_\1&#39;</span>, <span class="st">&#39;g&#39;</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">AND</span> t.table_name <span class="op">=</span> <span class="fu">lower</span>(<span class="fu">regexp_replace</span>(mf.source_entity, <span class="st">&#39;([A-Z])&#39;</span>, <span class="st">&#39;_\1&#39;</span>, <span class="st">&#39;g&#39;</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Cascade Delete Policy</strong>:</p>
+<ul>
+<li>Feature domains SHOULD emit domain events on deletion</li>
+<li>GeologicMapping context SHOULD subscribe to deletion events</li>
+<li>Option 1: Mark map features as "source_deleted"</li>
+<li>Option 2: Soft-delete map features</li>
+<li>Option 3: Retain as historical record (RECOMMENDED for audit
+trail)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li><strong>Always</strong>: Linking features from domain contexts to
+GeologicMapping</li>
+<li><strong>Always</strong>: Cross-context associations without FKs</li>
+<li><strong>Always</strong>: Polymorphic references to multiple entity
+types</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Intra-context relationships (use normal FKs)</li>
+<li>References within same bounded context</li>
+<li>References to Basedata shared kernel (use normal FKs)</li>
+</ul>
+<h3 id="how-its-enforced">How It's Enforced</h3>
+<ol type="1">
+<li><strong>DSL Validation</strong>: Generator checks for cross-context
+FK attempts</li>
+<li><strong>API Template</strong>: API functions include source
+validation logic</li>
+<li><strong>Index Generation</strong>: BTREE index on (source_context,
+source_entity, source_entity_id)</li>
+<li><strong>GIST Index</strong>: Spatial index on geometry column</li>
+</ol>
+<h3 id="key-files-affected">Key Files Affected</h3>
+<ul>
+<li><code>src/examples/geosciences/geologic-mapping.ddd</code> - Add
+GeologicMapFeature entity</li>
+<li><code>src/examples/geosciences/basedata.ddd</code> - Add
+ConfidenceLevel entity</li>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+Generate indexes</li>
+<li><code>src/dslgen/generators/postgres/plpgsql-api.rkt</code> -
+Generate validation logic</li>
+<li><code>seeds/basedata/confidence_level.json</code> - Seed confidence
+levels</li>
+</ul>
+<h3 id="common-patterns">Common Patterns</h3>
+<p><strong>Add Feature to Map</strong> (API call):</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> geologic_mapping_api.map_feature_insert(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    p_map_id <span class="op">:=</span> <span class="st">&#39;...&#39;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    p_source_context <span class="op">:=</span> <span class="st">&#39;StructuralGeology&#39;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    p_source_entity <span class="op">:=</span> <span class="st">&#39;Fault&#39;</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    p_source_entity_id <span class="op">:=</span> <span class="st">&#39;...&#39;</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    p_symbol_id <span class="op">:=</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> geologic_mapping.fault_symbol <span class="kw">WHERE</span> code <span class="op">=</span> <span class="st">&#39;NORMAL&#39;</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    p_geometry <span class="op">:=</span> <span class="st">&#39;LINESTRING(139.7 35.7, 139.8 35.8)&#39;</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    p_confidence_id <span class="op">:=</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> basedata.confidence_level <span class="kw">WHERE</span> code <span class="op">=</span> <span class="st">&#39;CERTAIN&#39;</span>),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    p_label <span class="op">:=</span> <span class="st">&#39;Tanna Fault&#39;</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    p_observed_by <span class="op">:=</span> <span class="st">&#39;field_geologist&#39;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Query Features by Map</strong>:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> geologic_mapping.geologic_map_feature</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> map_id <span class="op">=</span> <span class="st">&#39;...&#39;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> observed_at <span class="kw">DESC</span>;</span></code></pre></div>
+<p><strong>Enrich with Source Data</strong> (dynamic JOIN):</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This requires application-layer query construction</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Qt client assembles query based on source_context + source_entity</span></span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="20260106-explicit-relationships-only.html">ADR-20260106:
+Explicit Relationships Only</a> - No FK inference</li>
+<li><a href="20260106-shared-basedata-context.html">ADR-20260106: Shared
+Basedata Context</a> - Cross-cutting lookups</li>
+<li><a href="20260108-postgis-spatial-extension.html">ADR-20260108:
+PostGIS Spatial Extension</a> - Geometry storage</li>
+<li><a href="20260108-no-postgresql-enums.html">ADR-20260108: No
+PostgreSQL ENUMs</a> - ConfidenceLevel as lookup</li>
+<li><a href="https://www.domainlanguage.com/ddd/">DDD Blue Book</a> -
+Bounded context pattern</li>
+<li>FGDC Standard Section 1.5: Feature Confidence
+(../../examples/geosciences/docs/usgs/FGDCgeostdTM11A2_web_all.pdf)</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>This pattern is sometimes called "Weak Reference" or "Polymorphic
+Association" in DDD literature. It trades database referential integrity
+for bounded context autonomy—a fundamental DDD tradeoff.</p>
+<p>The pattern enables the GeologicMapping context to fulfill its
+responsibility ("document observed features on maps") without becoming
+tightly coupled to every feature-owning domain. Each domain remains
+independently deployable and evolvable.</p>
+<p>For feature-rich applications requiring frequent source data
+enrichment, consider implementing a <strong>View Service</strong> that
+provides pre-joined queries across contexts (read-only materialized
+views or caching layer).</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>End-to-End Testing Strategy — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>End-to-End Testing Strategy</span>
+</nav>
+
+<h1>End-to-End Testing Strategy</h1>
+
+
+<h1 id="end-to-end-testing-strategy">End-to-End Testing Strategy</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: testing, e2e, grpc, qt, qml, ctest, cmake, generators</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: Generated applications must be verifiable against a
+live stack (PostgreSQL + NATS + OpenSearch + gRPC server) through all
+layers up to and including the Qt ViewModel and QML property bindings.
+This ADR establishes the three-tier e2e strategy, the CMake
+orchestration model, the Racket generator responsibilities, and the
+Racket file-size discipline required.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>ADR 20260212 (doctest + TDD) covers unit and integration tests at the
+framework level. It does not address full-stack verification of
+generated applications. Today there are zero tests that:</p>
+<ul>
+<li>Start a generated gRPC server binary against a live database</li>
+<li>Call that server via the generated stub client libraries</li>
+<li>Verify that Qt ViewModel Q_PROPERTY values are populated correctly
+from a live gRPC response</li>
+<li>Verify that QML property bindings observe the correct signals</li>
+</ul>
+<p>The 19× DSL amplification ratio means one generator defect silently
+corrupts every entity in every generated project. A broken Q_PROPERTY
+type mapping or a wrong proto field name is not caught until a human
+runs the application.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>CTest fixture infrastructure already exists
+(<code>Testing.cmake</code> <code>FIXTURES_SETUP</code>)</li>
+<li>Three infrastructure services already in
+<code>docker-compose.yml</code> (postgres, nats, opensearch)</li>
+<li><code>Qt6::Test</code> already linked in
+<code>tests/CMakeLists.txt</code></li>
+<li>ADR 20260223 (generator unit testing) mandates test emitters for all
+generators</li>
+<li>Racket file-size discipline: 400 LOC per file is the hard limit;
+emitter modules must be split by concern, not collapsed into existing
+generator files</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Three-tier generated e2e</strong> — CMake orchestration +
+three generated test tiers driven by Racket emitters, registered in
+Racket test harness</li>
+<li><strong>External test harness (Squish/Robot Framework)</strong> —
+GUI automation tool</li>
+<li><strong>Hand-written e2e tests only</strong> — no generator
+involvement</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Three-tier generated e2e</strong>.
+Options 2 and 3 are incompatible with the generator-first architecture:
+externally maintained test code drifts from generator output by
+definition. Only generated tests can track the 19× amplification
+surface.</p>
+<h3 id="tier-1--grpc-contract-layer-doctest">Tier 1 — gRPC contract
+layer (doctest)</h3>
+<p>Pure C++ doctest
+<code>SCENARIO</code>/<code>GIVEN</code>/<code>WHEN</code>/<code>THEN</code>
+tests. Each generated aggregate gets one test file:
+<code>{context}_e2e_grpc_test.cpp</code>. Calls real gRPC stubs against
+a live server. Verifies: all CRUD RPCs return <code>status.ok()</code>,
+list RPCs paginate, FK fields resolve, <code>FAILED_PRECONDITION</code>
+from a bad state transition.</p>
+<p><strong>Requires</strong> CTest fixture <code>e2e-grpc</code> (see
+CMake section). <strong>Label</strong>: <code>e2e;grpc</code></p>
+<h3 id="tier-2--qt-viewmodel-layer-qtest--qsignalspy">Tier 2 — Qt
+ViewModel layer (QTest + QSignalSpy)</h3>
+<p><code>QTEST_GUILESS_MAIN</code> — headless, no display required. Each
+generated ViewModel gets one test file:
+<code>{entity}_view_model_e2e_test.cpp</code>. Tests:</p>
+<ul>
+<li><code>load()</code> populates all Q_PROPERTY values</li>
+<li><code>QSignalSpy(&amp;vm, &amp;{Entity}ViewModel::{field}Changed)</code>
+fires after load</li>
+<li><code>QAbstractItemModelTester</code> passed against the list model
+(Qt contract)</li>
+<li>Null optional fields remain at Qt default (empty string / 0 /
+false)</li>
+</ul>
+<p><strong>Requires</strong> <code>e2e-grpc</code> fixture.
+<strong>Label</strong>: <code>e2e;qt</code></p>
+<h3 id="tier-3--qml-binding-layer-qt-quick-test-offscreen">Tier 3 — QML
+binding layer (Qt Quick Test, offscreen)</h3>
+<p><code>QT_QPA_PLATFORM=offscreen</code>. Each entity gets
+<code>{Entity}FormTest.qml</code> using <code>TestCase</code> +
+<code>SignalSpy</code>. Tests: QML property round-trip, model delegate
+correctness, form submit signal emitted. Headless via
+<code>cmake -DQTEST_FUNCTION_TIMEOUT=30000</code>.</p>
+<p><strong>Label</strong>: <code>e2e;qml</code></p>
+<h2 id="cmake-orchestration">CMake Orchestration</h2>
+<p><code>Testing.cmake</code> gains
+<code>muscovite_register_e2e_fixture(NAME ... [REQUIRES ...])</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">muscovite_register_e2e_fixture</span>(e2e-infra)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># SETUP:   docker compose -f ${DOCKER_COMPOSE_FILE} up -d --wait</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#          sqitch deploy &lt;all registered projects&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#          seed lookup tables</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># CLEANUP: docker compose down</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">muscovite_register_e2e_fixture</span>(e2e-grpc REQUIRES e2e-infra)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># SETUP:   $&lt;TARGET_FILE:grpc-server&gt; &amp;; write PID to tmp/grpc-server.pid</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#          poll :50051 until open (max 20s)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># CLEANUP: kill $(cat tmp/grpc-server.pid)</span></span></code></pre></div>
+<p>All three test tiers set
+<code>FIXTURES_REQUIRED "e2e-grpc"</code>.</p>
+<p>CTest preset <code>e2e</code> runs only <code>-L e2e</code>. Default
+<code>unit</code>/<code>debug</code> presets exclude it.</p>
+<h2 id="racket-generator-responsibilities">Racket Generator
+Responsibilities</h2>
+<h3 id="file-discipline-hard-limit-400-loc-per-file">File discipline
+(HARD LIMIT: 400 LOC per file)</h3>
+<p>Each e2e test emitter is a <strong>separate Racket module</strong> —
+never merged into the existing generator file it accompanies. Naming
+convention:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Generator file</th>
+<th>E2E emitter file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gRPC</td>
+<td><code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>grpc/e2e-grpc-test.rkt</code></td>
+</tr>
+<tr>
+<td>Qt Widgets ViewModel</td>
+<td><code>qt/widgets-views.rkt</code></td>
+<td><code>qt/e2e-viewmodel-test.rkt</code></td>
+</tr>
+<tr>
+<td>QML ViewModel</td>
+<td><code>qt/quick-views.rkt</code></td>
+<td><code>qt/e2e-qml-test.rkt</code></td>
+</tr>
+</tbody>
+</table>
+<p>If any emitter approaches 400 LOC, split further by aggregate vs
+entity vs lookup.</p>
+<h3 id="racket-test-harness-registration-mandatory">Racket test harness
+registration (MANDATORY)</h3>
+<p>Every new emitter module MUST be exercised in
+<code>dslgen/tests/</code>:</p>
+<ul>
+<li>A companion test file
+<code>dslgen/tests/test-{emitter-slug}-e2e-emitter.rkt</code> verifying
+the emitter output (pattern: generate → inspect string → assert presence
+of <code>SCENARIO</code>, <code>QSignalSpy</code>,
+<code>TestCase</code>, etc.)</li>
+<li>Registered in <code>dslgen/tests/run-all-tests.rkt</code> require
+list</li>
+</ul>
+<p><strong>FORBIDDEN</strong>: Emitter modules that are not represented
+in the Racket test harness.</p>
+<h3 id="entry-points">Entry points</h3>
+<p>Each emitter exposes a single public function following the existing
+convention:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; grpc/e2e-grpc-test.rkt</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; WHY: tier-1 e2e test emitter for a bounded context</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; ADR: 20260223-end-to-end-testing-strategy</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-grpc-e2e-tests context output-dir<span class="op">)</span> ...<span class="op">)</span></span></code></pre></div>
+<p>Called from <code>dslgen/generators/grpc/main.rkt</code> when the
+<code>--test</code> flag is active.</p>
+<h2 id="positive-consequences">Positive Consequences</h2>
+<ul>
+<li>Every generated aggregate ships with a full-stack test suite at no
+manual cost</li>
+<li>Regression protection scales with the DSL model, not with developer
+time</li>
+<li><code>ctest -L e2e</code> gives a pass/fail verdict on a live
+generated application</li>
+<li>Racket test harness covers the emitters themselves (two-level
+verification)</li>
+</ul>
+<h2 id="negative-consequences">Negative Consequences</h2>
+<ul>
+<li>CI run time increases significantly for <code>e2e</code> label
+(infrastructure startup)</li>
+<li>Requires Docker in CI</li>
+<li>Racket emitter maintenance: each generator change may require
+emitter update</li>
+</ul>
+<h2 id="mandatory-racket-file-size-discipline">Mandatory Racket
+File-Size Discipline</h2>
+<p>The 400 LOC limit per Racket file is not a guideline — it is a hard
+constraint for this feature. Rationale: beyond 400 LOC, test emitters
+become untestable as units, require-chains grow circular, and the Racket
+test harness cannot isolate failures. If an emitter naturally grows
+beyond 400 LOC, split by:</p>
+<ol type="1">
+<li>Fixture/helpers module (<code>e2e-grpc-helpers.rkt</code>)</li>
+<li>Per-operation modules (<code>e2e-grpc-crud.rkt</code>,
+<code>e2e-grpc-pagination.rkt</code>)</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Extends: <a href="20260212-doctest-adoption-and-tdd-practice.html">ADR
+20260212 — doctest + TDD</a></li>
+<li>Extends: <a
+href="20260223-racket-generator-unit-testing-strategy.html">ADR 20260223 —
+Racket generator unit testing strategy</a></li>
+<li>Uses: <a href="20260211-grammar-first-language-evolution.html">ADR
+20260211 — Grammar-first language evolution</a></li>
+<li>Related: <a href="20260206-qml-viewmodel-binding.html">ADR 20260206 —
+QML ViewModel binding</a></li>
+<li>Ideas: IDEA-027, IDEA-028, IDEA-029</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use Racket for DSL Code
+Generation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use Racket for DSL Code Generation</span>
+</nav>
+
+<h1>Use Racket for DSL Code Generation</h1>
+
+
+<h1 id="use-racket-for-dsl-code-generation">Use Racket for DSL Code
+Generation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project founders</li>
+<li>Date: 2024-01-15</li>
+<li>Tags: dsl, codegen, language</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite needs a language to implement its Domain-Specific Language
+(DSL) parser and multi-target code generators. The language must handle
+complex text transformations, support recursive descent parsing, and
+generate code for PostgreSQL, C++, gRPC, and Qt/QML targets.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Excellent support for language-oriented programming and DSL
+creation</li>
+<li>Powerful macro system for code generation templates</li>
+<li>Strong pattern matching for parsing</li>
+<li>Interactive REPL for rapid development</li>
+<li>Functional programming paradigm fits transformation pipelines</li>
+<li>No compilation step needed during development</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li>Racket (Lisp dialect designed for language creation)</li>
+<li>Python with PLY/ANTLR</li>
+<li>TypeScript with tree-sitter</li>
+<li>Haskell with Parsec</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Racket", because it was designed specifically for
+creating languages and DSLs, provides the most expressive code
+generation capabilities through its macro system, and offers an
+excellent REPL-driven development workflow.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Very concise parser implementation (~500 lines for full DDD
+grammar)</li>
+<li>Pattern matching makes AST transformations readable</li>
+<li>REPL allows instant testing of parser changes</li>
+<li>Single language for parsing, validation, and all generators</li>
+<li>Educational: demonstrates language-oriented programming</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Smaller talent pool compared to Python/TypeScript</li>
+<li>IDE support less mature than mainstream languages</li>
+<li>Learning curve for Lisp syntax</li>
+<li>Deployment requires Racket runtime</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="racket">Racket</h3>
+<ul>
+<li>Good, because designed for language creation (Language-Oriented
+Programming)</li>
+<li>Good, because powerful macro system for code templates</li>
+<li>Good, because excellent pattern matching with
+<code>match</code></li>
+<li>Good, because interactive REPL development</li>
+<li>Bad, because smaller community and talent pool</li>
+<li>Bad, because unfamiliar syntax for most developers</li>
+</ul>
+<h3 id="python-with-plyantlr">Python with PLY/ANTLR</h3>
+<ul>
+<li>Good, because large community and easy hiring</li>
+<li>Good, because extensive library ecosystem</li>
+<li>Good, because familiar syntax</li>
+<li>Bad, because grammar definitions separate from processing code</li>
+<li>Bad, because less elegant pattern matching</li>
+<li>Bad, because string-heavy code generation is verbose</li>
+</ul>
+<h3 id="typescript-with-tree-sitter">TypeScript with tree-sitter</h3>
+<ul>
+<li>Good, because type safety and IDE support</li>
+<li>Good, because familiar syntax for web developers</li>
+<li>Good, because tree-sitter is fast and incremental</li>
+<li>Bad, because tree-sitter grammar is complex to define</li>
+<li>Bad, because code generation requires template libraries</li>
+<li>Bad, because less suited for multi-stage transformations</li>
+</ul>
+<h3 id="haskell-with-parsec">Haskell with Parsec</h3>
+<ul>
+<li>Good, because excellent parser combinator library</li>
+<li>Good, because strong type system catches errors</li>
+<li>Good, because pure functional fits transformations</li>
+<li>Bad, because steep learning curve</li>
+<li>Bad, because lazy evaluation can be surprising</li>
+<li>Bad, because deployment is more complex</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Relates to all generator ADRs (PostgreSQL, gRPC, Qt)</li>
+<li><a href="https://racket-lang.org/">Racket Language</a></li>
+<li><a href="https://beautifulracket.com/">Beautiful Racket</a> - DSL
+tutorial</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>All DSL parser development in <code>src/dslgen/parser/</code></li>
+<li>All code generators in <code>src/dslgen/generators/</code></li>
+<li>Any new target language generators</li>
+<li>DSL validation logic</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Build system (CMake)</li>
+<li>Generated C++ code (output, not input)</li>
+<li>Runtime server code (C++23)</li>
+<li>Shell scripts for deployment</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>All generator logic must be in Racket</li>
+<li>Entry point is <code>generate-geosciences-unified.rkt</code></li>
+<li>Tests use Racket's test framework</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/parser/parser.rkt</code> - DSL parser</li>
+<li><code>src/dslgen/parser/lexer.rkt</code> - Tokenizer</li>
+<li><code>src/dslgen/model/ddd-types.rkt</code> - AST structures</li>
+<li><code>src/dslgen/generators/</code> - All code generators</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

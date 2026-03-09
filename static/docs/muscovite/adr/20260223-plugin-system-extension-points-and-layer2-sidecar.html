@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plugin System — Extension Points and the Layer 2
+Sidecar — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Plugin System — Extension Points and the Layer 2 Sidecar</span>
+</nav>
+
+<h1>Plugin System — Extension Points and the Layer 2 Sidecar</h1>
+
+
+<h1 id="plugin-system--extension-points-and-the-layer-2-sidecar">Plugin
+System — Extension Points and the Layer 2 Sidecar</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: plugins, extension-points, layer2-sidecar, dsl, generator,
+architecture</li>
+</ul>
+<p>Technical Story: Muscovite's generated applications need
+well-defined, typed extension points that third-party code can implement
+without modifying generated code. This ADR establishes the plugin system
+architecture: the <code>EXTENSION_POINT</code> DSL construct, the
+<code>PLUGIN</code> wiring in <code>.mus</code>, and the Layer 2 Sidecar
+concept for generated-once user-owned code.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The three-layer invariant states that Layer 2 (generated
+applications) is never manually edited. This is correct — but it creates
+a problem: how does user-written domain behavior hook into the generated
+application? Without extension points, users must either:</p>
+<ol type="1">
+<li>Fork the generator (wrong — violates DSL-first)</li>
+<li>Edit generated code (wrong — breaks regeneration guarantee)</li>
+<li>Insert hooks by hand (wrong — no contract, no tooling)</li>
+</ol>
+<p>The plugin system solves this by making extension points first-class
+DSL citizens. The <code>.ddd</code> file declares the slot; the
+generator produces the interface; the plugin provides the
+implementation; the framework wires them at startup.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Extension mechanism must not introduce Turing-complete complexity in
+the DSL</li>
+<li>Three-layer invariant must be preserved: generated code is always
+regeneratable</li>
+<li>Plugin implementations must have a stable, versioned contract</li>
+<li>Generated-once user files need a clear protocol to coexist with
+continuous regeneration</li>
+<li>Grammar-first evolution (ADR
+20260211-grammar-first-language-evolution)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>EXTENSION_POINT in <code>.ddd</code> + PLUGIN in
+<code>.mus</code> + Layer 2 Sidecar stubs</strong> (extension points as
+domain contracts, wiring as project config)</li>
+<li><strong>External plugin registry file</strong> (separate plugin
+manifest, not in DSL)</li>
+<li><strong>Convention-based hooks</strong> (no DSL construct, just
+naming conventions)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — EXTENSION_POINT in
+<code>.ddd</code> + PLUGIN in <code>.mus</code> + Layer 2
+Sidecar</strong>.</p>
+<h3 id="three-plugin-classes">Three Plugin Classes</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Contract</th>
+<th>Interface</th>
+<th>Transport</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Validator</strong></td>
+<td>Synchronous, pure, stateless</td>
+<td>Pure virtual C++ function</td>
+<td>None — in-process</td>
+</tr>
+<tr>
+<td><strong>SideEffect</strong></td>
+<td>Asynchronous, potentially slow</td>
+<td>gRPC over localhost (BE) / Qt Remote Objects (FE)</td>
+<td>Local socket only</td>
+</tr>
+<tr>
+<td><strong>UIWidget</strong></td>
+<td>Frontend UI injection</td>
+<td>Pure virtual C++ / Qt Remote Objects</td>
+<td>Qt-native or local socket</td>
+</tr>
+</tbody>
+</table>
+<h3
+id="extension_point-in-ddd-domain-contract"><code>EXTENSION_POINT</code>
+in <code>.ddd</code> (Domain Contract)</h3>
+<p>Extension points are declared in <code>.ddd</code> because they are
+domain contracts: they define what the aggregate exposes, what payload
+it carries, and when it fires. They are not project configuration.</p>
+<pre class="ddd"><code>EXTENSION_POINT PasswordValidator
+    CLASS: Validator
+    TARGET: User.password
+    LAYER: Backend
+    INTERFACE: SyncVirtual
+    DOC &quot;Validates password strength against configured policy&quot;
+
+EXTENSION_POINT AuditExporter
+    CLASS: SideEffect
+    TARGET: PatientAggregate
+    TRIGGER: OnCommit
+    LAYER: Backend
+    INTERFACE: LocalGRPC
+    DOC &quot;Exports audit records to external audit log&quot;
+
+EXTENSION_POINT CustomPatientFormSection
+    CLASS: UIWidget
+    TARGET: PatientEditDialog
+    LAYER: Frontend
+    INTERFACE: QtWidget
+    DOC &quot;Custom form section injected into patient edit dialog&quot;</code></pre>
+<p><strong>IR struct</strong> (<code>extension-point</code>):</p>
+<ul>
+<li><code>uuid</code> — stable UUID for semantic diff</li>
+<li><code>name</code> — Symbol: extension point name</li>
+<li><code>class</code> — Symbol:
+<code>'Validator | 'SideEffect | 'UIWidget</code></li>
+<li><code>target</code> — Symbol or qualified name:
+entity/aggregate/field/dialog being extended</li>
+<li><code>trigger</code> — Symbol or #f:
+<code>'OnCommit | 'OnValidate | 'OnSave | #f</code> (Validators:
+#f)</li>
+<li><code>layer</code> — Symbol: <code>'Backend | 'Frontend</code></li>
+<li><code>interface</code> — Symbol:
+<code>'SyncVirtual | 'LocalGRPC | 'QtWidget | 'QtRemoteObjects</code></li>
+<li><code>doc</code> — String or #f</li>
+</ul>
+<p><strong>Validation rules</strong> (enforced at parse time):</p>
+<ul>
+<li><code>TARGET</code> must reference an existing entity, aggregate,
+field, or dialog in the same context</li>
+<li><code>INTERFACE</code> must be consistent with <code>CLASS</code>
+and <code>LAYER</code> (e.g., Validator ↔︎ SyncVirtual)</li>
+<li><code>TRIGGER</code> required for <code>SideEffect</code> and
+<code>UIWidget</code>, forbidden for <code>Validator</code></li>
+</ul>
+<h3 id="plugin-in-mus-project-wiring"><code>PLUGIN</code> in
+<code>.mus</code> (Project Wiring)</h3>
+<p>Plugins wire against extension points in the <code>.mus</code>
+project file because plugin wiring is a project/deployment decision, not
+a domain decision.</p>
+<pre class="mus"><code>PLUGIN MyPasswordPolicy
+    IMPLEMENTS: PasswordValidator
+    TRANSPORT: SyncVirtual
+
+PLUGIN EnterpriseAudit
+    IMPLEMENTS: AuditExporter
+    TRANSPORT: LocalGRPC
+    CIRCUIT_BREAKER:
+        FAILURE_THRESHOLD: 3
+        TIMEOUT: 30s
+        BACKOFF: Exponential BASE 500ms MAX 30s JITTER 10%
+        ON_OPEN: Warn
+        ON_HALF_OPEN: Probe
+        ON_TRIP: Ignore</code></pre>
+<p><strong>IR struct</strong> (<code>plugin-config</code>):</p>
+<ul>
+<li><code>name</code> — Symbol: plugin name</li>
+<li><code>implements</code> — Symbol: must reference a declared
+<code>EXTENSION_POINT</code></li>
+<li><code>transport</code> — Symbol: transport (validated against
+EXTENSION_POINT.INTERFACE)</li>
+<li><code>circuit-breaker</code> — <code>circuit-breaker-config</code>
+or #f</li>
+</ul>
+<p><strong>Cross-reference validation</strong>: <code>IMPLEMENTS</code>
+target must name a declared <code>EXTENSION_POINT</code> in the same
+project. Validated by the project parser after all <code>.ddd</code>
+files are loaded.</p>
+<h3 id="layer-2-sidecar">Layer 2 Sidecar</h3>
+<p>The three-layer invariant states Layer 2 is always regeneratable. The
+plugin system introduces a new territory: <strong>generated-once,
+user-owned</strong> stub files.</p>
+<table>
+<thead>
+<tr>
+<th>Territory</th>
+<th>Ownership</th>
+<th>Regenerated?</th>
+<th>Named</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer 2</td>
+<td>Generator</td>
+<td>Yes — every run</td>
+<td>Interface files</td>
+</tr>
+<tr>
+<td>Layer 2 Sidecar</td>
+<td>Developer</td>
+<td>No — once + sentinel-protected</td>
+<td>Stub implementation files</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Naming convention</strong>:</p>
+<ul>
+<li><code>{ExtensionPoint}_interface.hpp</code> — Layer 2, always
+regenerated, contains abstract base</li>
+<li><code>{ExtensionPoint}_impl.cpp</code> — Layer 2 Sidecar, generated
+once, user-owned thereafter</li>
+</ul>
+<p><strong>Sentinel mechanism</strong>:</p>
+<p>The second line of every freshly generated sidecar file contains:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// MUSCOVITE:SIDECAR:UNMODIFIED — remove this line when editing this file</span></span></code></pre></div>
+<p>On every generation run, the generator checks each sidecar file:</p>
+<ul>
+<li><strong>Sentinel present</strong> → file is pristine. If the
+interface has changed, regenerate.</li>
+<li><strong>Sentinel absent</strong> → user has edited. Never touch.
+Emit a notice: <code>→ sidecar {file} user-owned, skipped</code>.</li>
+</ul>
+<p><strong>Why sentinel over checksum</strong>: checksums are fragile
+(whitespace normalization, line endings, BOM). A sentinel comment
+survives any encoding normalization and is human-readable. A developer
+who opens the file and sees the sentinel understands immediately what it
+means.</p>
+<h3 id="--force-regen-stubs-flag"><code>--force-regen-stubs</code>
+Flag</h3>
+<p>Regenerates sidecar files even when user-modified. Output:</p>
+<ul>
+<li>Produces <code>{ExtensionPoint}_impl.cpp.new</code> alongside the
+existing user-owned file</li>
+<li>Does NOT overwrite in place</li>
+<li>Developer reconciles via
+<code>git merge {ExtensionPoint}_impl.cpp.new</code> or three-way
+merge</li>
+</ul>
+<p>This is the correct place for reconciliation — git history is the
+right tool.</p>
+<h3 id="cmake-integration">CMake Integration</h3>
+<p>Both files are added to <code>target_sources()</code> with distinct
+labels:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">target_sources</span>(<span class="bn">patient_context</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">PRIVATE</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Layer 2 — regenerated every run</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        generated/plugins/password_validator_interface.hpp</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">PRIVATE</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Layer 2 Sidecar — user-owned, generated once</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        sidecars/plugins/password_validator_impl.cpp</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The sidecar directory (<code>sidecars/</code>) is separate from
+<code>generated/</code> to make the distinction visible in the file
+tree.</p>
+<h3 id="generated-artifacts-per-extension-point">Generated Artifacts per
+Extension Point</h3>
+<ol type="1">
+<li>Abstract C++ interface class (Layer 2)</li>
+<li>Proto definition (for LocalGRPC transport, Layer 2)</li>
+<li>Sidecar stub implementation (Layer 2 Sidecar, generated once)</li>
+<li>CMake integration: both files in <code>target_sources()</code></li>
+<li>Circuit breaker wrapping (if <code>CIRCUIT_BREAKER</code> configured
+in <code>.mus</code>)</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Extension points are first-class DSL citizens with typed
+contracts</li>
+<li>Domain model is not polluted with implementation concerns</li>
+<li>Layer 2 regeneration guarantee preserved for interface files</li>
+<li>Sidecar pattern gives users a stable place to write plugin
+implementations</li>
+<li>Interface changes are detectable (sentinel → regenerate →
+<code>.new</code> file for merge)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Two-territory filesystem (generated/ + sidecars/) adds navigation
+complexity</li>
+<li>Sentinel protocol requires discipline: removing the sentinel by
+accident marks the file as user-modified permanently (until manually
+re-adding sentinel or deleting)</li>
+<li><code>IMPLEMENTS</code> cross-reference validation requires loading
+all <code>.ddd</code> files before validating <code>.mus</code> plugin
+declarations</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-extension_point--plugin--layer-2-sidecar-chosen">Option
+1: EXTENSION_POINT + PLUGIN + Layer 2 Sidecar (chosen)</h3>
+<ul>
+<li>Good, because typed contracts are enforceable by the generator</li>
+<li>Good, because three-layer invariant preserved for interface
+files</li>
+<li>Good, because sidecar protocol is explicit and tooling-enforced</li>
+<li>Bad, because adds complexity (new DSL construct, new file
+territory)</li>
+</ul>
+<h3 id="option-2-external-plugin-registry-file">Option 2: External
+plugin registry file</h3>
+<ul>
+<li>Good, because no new DSL construct</li>
+<li>Bad, because no cross-reference validation against domain model</li>
+<li>Bad, because interface contracts are implicit (no generator
+enforcement)</li>
+</ul>
+<h3 id="option-3-convention-based-hooks">Option 3: Convention-based
+hooks</h3>
+<ul>
+<li>Good, because no tooling changes</li>
+<li>Bad, because no contract, no versioning, no generator enforcement —
+purely convention</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Required by <a href="20260223-plugin-transport-selection.html">ADR
+20260223 Plugin Transport Selection</a></li>
+<li>Required by <a
+href="20260223-circuit-breaker-as-infrastructure-state-machine.html">ADR
+20260223 Circuit Breaker as Infrastructure State Machine</a></li>
+<li>Requires <a href="20260211-grammar-first-language-evolution.html">ADR
+20260211 Grammar-First Language Evolution</a></li>
+<li>Related: FTR-136 (EXTENSION_POINT DSL), FTR-137 (PLUGIN wiring),
+FTR-138 (sidecar generation)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

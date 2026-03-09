@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Build Acceleration — Unity Builds + Precompiled Headers
+for Generated Code — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Build Acceleration — Unity Builds + Precompiled Headers for
+Generated Code</span>
+</nav>
+
+<h1>ADR: Build Acceleration — Unity Builds + Precompiled Headers for
+Generated Code</h1>
+
+
+<h1
+id="adr-build-acceleration--unity-builds--precompiled-headers-for-generated-code">ADR:
+Build Acceleration — Unity Builds + Precompiled Headers for Generated
+Code</h1>
+<p><strong>Date</strong>: 2026-02-17 <strong>Status</strong>: accepted
+<strong>Features</strong>: FTR-063, FTR-064 <strong>Supersedes</strong>:
+—</p>
+<h2 id="context">Context</h2>
+<p>Each bounded context generates many small C++ translation units
+(entity.cpp, command_repository.cpp, query_repository.cpp,
+command_service.cpp, query_service.cpp per entity). For fhir-health with
+9 contexts, this means hundreds of compiler invocations. Each invocation
+pays the full include parsing cost for Qt, gRPC, Boost, and pqxx
+headers.</p>
+<p>CMake 3.16+ provides built-in support for both unity builds
+(<code>UNITY_BUILD</code> target property) and precompiled headers
+(<code>target_precompile_headers()</code>). These require zero manual
+header batching — CMake handles everything.</p>
+<h2 id="decision">Decision</h2>
+<p><strong>KEEP both features</strong>, gated by CMake options
+defaulting to OFF:</p>
+<ul>
+<li><code>MUSCOVITE_UNITY_BUILD</code> — sets
+<code>UNITY_BUILD ON</code> + <code>UNITY_BUILD_BATCH_SIZE 0</code> on
+all per-context library targets</li>
+<li><code>MUSCOVITE_PCH</code> — adds
+<code>target_precompile_headers()</code> with layer-appropriate
+headers</li>
+</ul>
+<p>Both options are emitted into generated CMakeLists.txt files across
+all four layers (DBA, gRPC, Qt Widgets, QML).</p>
+<h2 id="benchmark-results-2026-02-16-fhir-health--j6">Benchmark Results
+(2026-02-16, fhir-health, -j6)</h2>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Steps</th>
+<th>Wall Time</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline (no unity, no PCH)</td>
+<td>914</td>
+<td>1103s</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Unity build ON</td>
+<td>216</td>
+<td>183s</td>
+<td><strong>83.4%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Gate condition was "&lt; 5% improvement = REVERT". 83.4% far exceeds
+the threshold.</p>
+<p>PCH headers by layer:</p>
+<ul>
+<li><strong>DBA</strong>: <code>&lt;pqxx/pqxx&gt;</code>,
+<code>&lt;boost/uuid/uuid.hpp&gt;</code>,
+<code>&lt;boost/uuid/uuid_io.hpp&gt;</code>,
+<code>&lt;string&gt;</code>, <code>&lt;vector&gt;</code>,
+<code>&lt;optional&gt;</code>, <code>&lt;memory&gt;</code>,
+<code>&lt;stdexcept&gt;</code></li>
+<li><strong>gRPC</strong>: <code>&lt;grpcpp/grpcpp.h&gt;</code>,
+<code>&lt;google/protobuf/util/json_util.h&gt;</code></li>
+<li><strong>Qt Widgets</strong>: <code>&lt;QWidget&gt;</code>,
+<code>&lt;QLineEdit&gt;</code>, <code>&lt;QComboBox&gt;</code>,
+<code>&lt;QFormLayout&gt;</code>, <code>&lt;QVBoxLayout&gt;</code></li>
+<li><strong>QML</strong>: <code>&lt;QObject&gt;</code>,
+<code>&lt;QString&gt;</code>, <code>&lt;QVariant&gt;</code></li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Clean builds of generated projects can be 6× faster with
+<code>-DMUSCOVITE_UNITY_BUILD=ON</code></li>
+<li>Zero impact when options are OFF (default) — no behavioral change
+for existing users</li>
+<li>Unity builds may surface ODR violations if generated code uses
+<code>static</code> helper functions in <code>.cpp</code> files — audit
+periodically</li>
+<li>ccache interaction: PCH may require
+<code>CCACHE_SLOPPINESS=pch_defines,time_macros</code> for optimal cache
+hit rates</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

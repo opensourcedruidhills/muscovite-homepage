@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effort Estimation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/guides/">guides</a>
+  <span class="sep">/</span>
+  <span>Effort Estimation</span>
+</nav>
+
+<h1>Effort Estimation</h1>
+
+
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+
+<!-- AUTO-GENERATED during release ceremony. Do not edit manually. -->
+
+<!-- Regenerate: workflow/scripts/generate-effort-estimation.sh -->
+
+<!-- Source: live codebase metrics + estimation model -->
+
+<h1 id="effort-estimation">Effort Estimation</h1>
+<p><strong>Generated</strong>: 2026-03-09 <strong>Version</strong>:
+v1.59.0 <strong>Project start</strong>: 2025-11-17 (112 days ago)
+<strong>Releases</strong>: 70</p>
+<p>This document estimates the effort required to produce the Muscovite
+platform and the projects built with it, across three scenarios:</p>
+<ul>
+<li><strong>Scenario A</strong> — Manual: all code written by hand, no
+code generation</li>
+<li><strong>Scenario B</strong> — Muscovite: <code>.ddd</code> domain
+models written manually, all generated code produced by the
+platform</li>
+<li><strong>Scenario C</strong> — Actual: the real effort spent building
+Muscovite and all example projects (moonlighting since November 2025,
+occasional weekends)</li>
+</ul>
+<hr />
+<h2 id="1-platform-investment">1. Platform Investment</h2>
+<p>The Muscovite platform itself (generators, framework, tooling) is a
+fixed cost that enables all downstream projects. This cost exists in
+<strong>Scenario B</strong> and <strong>Scenario C</strong> but not in
+<strong>Scenario A</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th style="text-align: right;">Lines</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket generators/parser/model</td>
+<td style="text-align: right;">124961</td>
+<td>DSL parser, IR model, 8 generator targets</td>
+</tr>
+<tr>
+<td>C++ framework (<code>framework/</code> + <code>include/</code>)</td>
+<td style="text-align: right;">23911</td>
+<td>pqxx repositories, gRPC services, Qt/QML infrastructure, strong
+types</td>
+</tr>
+<tr>
+<td>PEG grammar</td>
+<td style="text-align: right;">1491</td>
+<td>Formal language specification</td>
+</tr>
+<tr>
+<td>Build system + documentation + tooling</td>
+<td style="text-align: right;">~6,500</td>
+<td>CMake, Conan, Docker, ADRs, workflow scripts</td>
+</tr>
+<tr>
+<td><strong>Platform total</strong></td>
+<td style="text-align: right;"><strong>~156863</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="platform-effort-estimates">Platform effort estimates</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Approach</th>
+<th>Estimated effort</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B (modeled)</td>
+<td>Senior Racket + C++ developer</td>
+<td>6–9 person-months</td>
+<td>Complex DSL design, 8 generator targets, strong-type mappings, test
+suite</td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td>Solo developer, moonlighting + weekends</td>
+<td>~3 calendar months</td>
+<td>Nov 2025 – Feb 2026. ~10–15 hrs/week average = ~3–4 person-months
+effective</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-per-project-effort-estimation">2. Per-Project Effort
+Estimation</h2>
+<h3 id="fhir-health">fhir-health</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DSL input (<code>.ddd</code>)</td>
+<td style="text-align: right;">1692 lines</td>
+</tr>
+<tr>
+<td>DSL input (<code>.mus</code>)</td>
+<td style="text-align: right;">111 lines</td>
+</tr>
+<tr>
+<td>Generated output</td>
+<td style="text-align: right;">345084 lines</td>
+</tr>
+<tr>
+<td>Amplification</td>
+<td style="text-align: right;">191×</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>DSL effort</th>
+<th>Generated effort</th>
+<th>Total</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (manual)</td>
+<td>—</td>
+<td>345084 lines by hand</td>
+<td><strong>1380–2070 person-days</strong></td>
+<td>3–5 senior developers (C++, SQL, Proto, Qt, CMake)</td>
+</tr>
+<tr>
+<td>B (modeled)</td>
+<td>1–2 weeks (domain analyst)</td>
+<td>0 (generated)</td>
+<td><strong>1–2 weeks</strong></td>
+<td>1 domain analyst / architect</td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td>~2 days</td>
+<td>0 (generated)</td>
+<td><strong>~2 days</strong></td>
+<td>1 developer (copy from FHIR spec, adapt to DSL)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="geosciences">geosciences</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DSL input (<code>.ddd</code>)</td>
+<td style="text-align: right;">9607 lines</td>
+</tr>
+<tr>
+<td>DSL input (<code>.mus</code>)</td>
+<td style="text-align: right;">148 lines</td>
+</tr>
+<tr>
+<td>Generated output</td>
+<td style="text-align: right;">638316 lines</td>
+</tr>
+<tr>
+<td>Amplification</td>
+<td style="text-align: right;">65×</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>DSL effort</th>
+<th>Generated effort</th>
+<th>Total</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (manual)</td>
+<td>—</td>
+<td>638316 lines by hand</td>
+<td><strong>2552–3829 person-days</strong></td>
+<td>6–10 senior developers</td>
+</tr>
+<tr>
+<td>B (modeled)</td>
+<td>4–8 weeks (domain analyst + geoscience SME)</td>
+<td>0 (generated)</td>
+<td><strong>4–8 weeks</strong></td>
+<td>1 domain analyst + 1 subject-matter expert</td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td>~2 weeks</td>
+<td>0 (generated)</td>
+<td><strong>~2 weeks</strong></td>
+<td>1 developer (researched GeoSciML/IGSN standards)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hello-world">hello-world</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DSL input (<code>.ddd</code>)</td>
+<td style="text-align: right;">145 lines</td>
+</tr>
+<tr>
+<td>DSL input (<code>.mus</code>)</td>
+<td style="text-align: right;">78 lines</td>
+</tr>
+<tr>
+<td>Generated output</td>
+<td style="text-align: right;">61515 lines</td>
+</tr>
+<tr>
+<td>Amplification</td>
+<td style="text-align: right;">275×</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>DSL effort</th>
+<th>Generated effort</th>
+<th>Total</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (manual)</td>
+<td>—</td>
+<td>61515 lines by hand</td>
+<td><strong>245–368 person-days</strong></td>
+<td>2–3 developers</td>
+</tr>
+<tr>
+<td>B (modeled)</td>
+<td>1–2 days (any developer)</td>
+<td>0 (generated)</td>
+<td><strong>1–2 days</strong></td>
+<td>1 developer</td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td>~2 hours</td>
+<td>0 (generated)</td>
+<td><strong>~2 hours</strong></td>
+<td>1 developer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="brownfield-gitea-test">brownfield-gitea-test</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DSL input (<code>.ddd</code>)</td>
+<td style="text-align: right;">39 lines</td>
+</tr>
+<tr>
+<td>DSL input (<code>.mus</code>)</td>
+<td style="text-align: right;">22 lines</td>
+</tr>
+<tr>
+<td>Generated output</td>
+<td style="text-align: right;">3357 lines</td>
+</tr>
+<tr>
+<td>Amplification</td>
+<td style="text-align: right;">55×</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>DSL effort</th>
+<th>Generated effort</th>
+<th>Total</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (manual)</td>
+<td>—</td>
+<td>3357 lines by hand</td>
+<td><strong>12–19 person-days</strong></td>
+<td>1–2 developers</td>
+</tr>
+<tr>
+<td>B (modeled)</td>
+<td>1–2 days (migration analyst)</td>
+<td>0 (generated)</td>
+<td><strong>1–2 days</strong></td>
+<td>1 developer + legacy DB access</td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td>~2 hours</td>
+<td>0 (generated)</td>
+<td><strong>~2 hours</strong></td>
+<td>1 developer (pg_catalog introspection + MAPPING DSL)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-aggregate-effort-summary">3. Aggregate Effort Summary</h2>
+<h3 id="all-projects-combined">All projects combined</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total DSL input</td>
+<td style="text-align: right;">11842 lines (<code>.ddd</code> +
+<code>.mus</code>)</td>
+</tr>
+<tr>
+<td>Total generated output</td>
+<td style="text-align: right;">1048272 lines</td>
+</tr>
+<tr>
+<td>Overall amplification</td>
+<td style="text-align: right;"><strong>88×</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="effort-comparison-across-scenarios">Effort comparison across
+scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th style="text-align: right;">Platform cost</th>
+<th style="text-align: right;">Project modeling</th>
+<th style="text-align: right;">Generated code effort</th>
+<th style="text-align: right;"><strong>Total</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A (manual)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">190–285 person-months</td>
+<td style="text-align: right;"><strong>190–285
+person-months</strong></td>
+</tr>
+<tr>
+<td>B (modeled)</td>
+<td style="text-align: right;">6–9 person-months</td>
+<td style="text-align: right;">6–12 weeks</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><strong>7.5–12
+person-months</strong></td>
+</tr>
+<tr>
+<td>C (actual)</td>
+<td style="text-align: right;">~3–4 person-months</td>
+<td style="text-align: right;">~3 weeks</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><strong>~4 person-months</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-per-line-productivity-context">4. Per-Line Productivity
+Context</h2>
+<p>These estimates use <strong>~200 lines/day</strong> for Scenario A
+(manual C++ with tests). This rate assumes:</p>
+<ul>
+<li>Production-quality code with proper error handling</li>
+<li>Unit and integration tests (90%+ coverage)</li>
+<li>Code review, documentation</li>
+<li>Build system integration (CMake, Conan)</li>
+<li>Cross-platform considerations (Qt Widgets + QML)</li>
+</ul>
+<p>For generated code (Scenarios B/C), the rate is irrelevant — the
+generator produces all output in seconds.</p>
+<hr />
+<h2 id="5-key-insight-domain-modeling-is-the-bottleneck">5. Key Insight:
+Domain Modeling is the Bottleneck</h2>
+<p>In Scenario B, the dominant cost is <strong>domain modeling</strong>
+— understanding the business domain well enough to express it as
+<code>.ddd</code> declarations. The generator then amplifies this
+understanding by 88× into production code.</p>
+<p>The largest project (geosciences, 9607 lines of <code>.ddd</code>)
+produces 638316 lines of output. The domain expertise required to write
+those 9607 lines is the real investment — not programming skill.</p>
+<p>This is the value proposition: <strong>domain expertise, not
+programming labor, drives the output</strong>.</p>
+<hr />
+<h2 id="6-methodology">6. Methodology</h2>
+<p>This document is auto-generated during the release ceremony by
+<code>workflow/scripts/generate-effort-estimation.sh</code>. Metrics are
+derived from live codebase counts (<code>find</code> +
+<code>wc -l</code>). Effort estimates use the following model:</p>
+<ul>
+<li><strong>Manual C++ productivity</strong>: 200 lines/day (industry
+standard for reviewed, tested C++)</li>
+<li><strong>Domain modeling productivity</strong>: ~500–1,000 lines/week
+for <code>.ddd</code> (depends on domain familiarity)</li>
+<li><strong>Platform development</strong>: Based on actual git history
+(first commit to current release)</li>
+<li><strong>Calendar months → person-months</strong>: Moonlighting at
+~10–15 hrs/week ≈ 0.3 FTE</li>
+</ul>
+<p>Effort estimates are <strong>conservative lower bounds</strong> for
+Scenario A and <strong>empirical</strong> for Scenario C.</p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QML Generator Patterns — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>QML Generator Patterns</span>
+</nav>
+
+<h1>QML Generator Patterns</h1>
+
+
+<h1 id="qml-generator-patterns">QML Generator Patterns</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Canonical pattern catalog for AI agents
+working on QML/Qt Quick generators. <strong>Companion to</strong>: <a
+href="adr/20260227-qml-idiomatic-output-quality.html">ADR 20260227 — QML
+Idiomatic Output Quality</a> <strong>Sibling to</strong>: <a
+href="POSTGRES-PATTERNS.html">POSTGRES-PATTERNS.md</a> (PostgreSQL
+patterns), <a href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> (Racket
+coding constraints) <strong>Qt 6 References</strong>: <a
+href="https://doc.qt.io/qt-6/qtquick-bestpractices.html">Best
+Practices</a> | <a
+href="https://doc.qt.io/qt-6/qml-codingconventions.html">Coding
+Conventions</a> | <a
+href="https://doc.qt.io/qt-6/qtquick-performance.html">Performance</a></p>
+</blockquote>
+<hr />
+<h2 id="rating-system">Rating System</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CANONICAL</strong></td>
+<td>The only acceptable pattern for new and modified code</td>
+</tr>
+<tr>
+<td><strong>ACCEPTABLE</strong></td>
+<td>Tolerated in existing code; convert when touching the file</td>
+</tr>
+<tr>
+<td><strong>ANTI-PATTERN</strong></td>
+<td>Must never appear in new code; fix immediately when found</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-internationalization-qstr">1. Internationalization (qsTr)</h2>
+<p><strong>CANONICAL</strong>: ALL user-facing strings in generated QML
+MUST be wrapped in <code>qsTr()</code>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Label { <span class="dt">text</span><span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;Family Name *:&quot;</span>) }</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Dialog { <span class="dt">title</span><span class="op">:</span> viewModel<span class="op">.</span><span class="at">id</span><span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="fu">qsTr</span>(<span class="st">&quot;Edit Patient&quot;</span>) <span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;New Patient&quot;</span>) }</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>TextField { <span class="dt">placeholderText</span><span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;Enter email&quot;</span>) }</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ToolTip</span><span class="op">.</span><span class="at">text</span><span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;Enter date as YYYY-MM-DD&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN: unwrapped strings</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Label { <span class="dt">text</span><span class="op">:</span> <span class="st">&quot;Family Name *:&quot;</span> }</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Dialog { <span class="dt">title</span><span class="op">:</span> <span class="st">&quot;Edit Patient&quot;</span> }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>TextField { <span class="dt">placeholderText</span><span class="op">:</span> <span class="st">&quot;Enter email&quot;</span> }</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Make User-Facing Strings
+Translatable" (Best Practices)</p>
+<p><strong>Rationale</strong>: Without <code>qsTr()</code>, the string
+is invisible to Qt Linguist and lupdate. Generated apps cannot be
+localized. This blocks internationalization for all downstream
+users.</p>
+<p><strong>Affected files</strong> (current violations):</p>
+<ul>
+<li><code>qml-dialog.rkt</code> — 6 label occurrences (L81, L85, L90,
+L95, L112, L134), title (L186), placeholderText (L85, L90, L134),
+ToolTip.text (L85, L90)</li>
+<li><code>qml-dialog-children.rkt</code> — section headers</li>
+</ul>
+<p><strong>Exception</strong>: <code>qsTr()</code> is NOT needed
+for:</p>
+<ul>
+<li>Property bindings to ViewModel values (already localized
+upstream)</li>
+<li><code>id</code> strings (internal identifiers, not visible)</li>
+<li>Format patterns like <code>"yyyy-MM-dd"</code>
+(locale-independent)</li>
+</ul>
+<hr />
+<h2 id="2-type-safe-required-properties">2. Type-Safe Required
+Properties</h2>
+<p><strong>CANONICAL</strong>: All <code>required property</code>
+declarations MUST use the ViewModel's actual type.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — typed property (qml-saga.rkt L212 is the reference)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">required</span> <span class="kw">property</span> PatientViewModel viewModel</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — untyped var</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">required</span> <span class="kw">property</span> <span class="dt">var</span> viewModel</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Type Safety — ALWAYS use actual types
+(string, int, MyMenu) instead of var — var hides errors, prevents static
+analysis" (Best Practices)</p>
+<p><strong>Rationale</strong>: <code>property var</code> defeats QML's
+type system. The QML engine cannot validate property access at compile
+time, IDE completion stops working, and AOT compilation cannot optimize
+the binding. Using the actual ViewModel type enables static analysis by
+qmllint and the QML compiler.</p>
+<p><strong>Affected files</strong> (current violations):</p>
+<ul>
+<li><code>qml-dialog.rkt</code> — L184:
+<code>required property var viewModel</code></li>
+<li><code>qml-list.rkt</code> — L80:
+<code>required property var viewModel</code></li>
+<li><code>qml-dialog-children.rkt</code> — child sections</li>
+</ul>
+<p><strong>Reference implementation</strong>: <code>qml-saga.rkt</code>
+L212 correctly emits
+<code>required property {Type}ViewModel viewModel</code>.</p>
+<hr />
+<h2 id="3-versionless-qt-6-imports">3. Versionless Qt 6 Imports</h2>
+<p><strong>CANONICAL</strong>: All QML import statements MUST use
+versionless form.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL (Qt 6)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick.Controls</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick.Layouts</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN (Qt 5 style)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick 2.15</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick.Controls 2.15</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span><span class="im"> QtQuick.Layouts 1.15</span></span></code></pre></div>
+<p><strong>Qt Reference</strong>: Qt 6 migration guide;
+<code>qt_add_qml_module</code> documentation; AOT compilation
+requirements.</p>
+<p><strong>Rationale</strong>: Versioned imports lock modules to Qt 5
+semantics. Qt 6's <code>qt_add_qml_module</code> and QML AOT compiler
+work with versionless imports. Versioned imports prevent access to Qt
+6-only features and types.</p>
+<p><strong>Affected files</strong> (all 8 QML-emitting generators):</p>
+<ul>
+<li><code>qml-dialog.rkt</code> (L189)</li>
+<li><code>qml-list.rkt</code> (L75)</li>
+<li><code>qml-saga.rkt</code> (L204)</li>
+<li><code>qml-state-machine.rkt</code> (L210)</li>
+<li><code>qml-search.rkt</code> (L285)</li>
+<li><code>qml-app.rkt</code> (L35, L106)</li>
+<li><code>e2e-qml-test.rkt</code> (L84)</li>
+</ul>
+<p><strong>Fix location</strong>: Update <code>common.rkt</code> to
+provide a <code>(qml-imports)</code> function returning versionless
+import block, then replace all inline import strings.</p>
+<hr />
+<h2 id="4-qabstractlistmodel-for-listview-data">4. QAbstractListModel
+for ListView Data</h2>
+<p><strong>CANONICAL</strong>: ViewModel <code>itemModel</code> property
+MUST expose an <code>EntityListModel*</code> (QAbstractListModel
+subclass), not <code>QVariantList</code>.</p>
+<p><strong>Status</strong>: Implemented (FTR-170, v1.44.0)</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL (C++ ViewModel header — generated by qml-viewmodel-header.rkt)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;muscovite/qt/models/entity_list_model.hpp&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span>muscovite<span class="op">::</span>qt<span class="op">::</span>models<span class="op">::</span>EntityListModel<span class="op">*</span> itemModel READ itemModel CONSTANT<span class="op">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>muscovite<span class="op">::</span>qt<span class="op">::</span>models<span class="op">::</span>EntityListModel<span class="op">*</span> <span class="va">itemModel_</span><span class="op">{</span><span class="kw">nullptr</span><span class="op">};</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Constructor initializes: itemModel_ = new EntityListModel(this);</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Load replaces items:     itemModel_-&gt;replaceItems(items);</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL (QML ListView — generated by qml-list.rkt)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">ListView</span> {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">model</span><span class="op">:</span> viewModel<span class="op">.</span><span class="at">itemModel</span>    <span class="co">// EntityListModel* (CONSTANT, no signal needed)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">delegate</span><span class="op">:</span> ItemDelegate {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">required</span> <span class="kw">property</span> <span class="dt">int</span> index</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">required</span> <span class="kw">property</span> <span class="dt">string</span> id</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">required</span> <span class="kw">property</span> <span class="dt">string</span> display</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        Label { <span class="dt">text</span><span class="op">:</span> model<span class="op">.</span><span class="at">title</span> <span class="op">??</span> <span class="st">&quot;&quot;</span> }      <span class="co">// Direct role access</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        Button { <span class="dt">onClicked</span><span class="op">:</span> viewModel<span class="op">.</span><span class="fu">load</span>(model<span class="op">.</span><span class="at">id</span>) }</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QVariantList</span> items READ items NOTIFY itemsChanged<span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">QVariantList</span> <span class="va">items_</span><span class="op">;</span>  <span class="co">// Forces full replacement, no animations, no role binding</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model<span class="op">:</span> viewModel<span class="op">.</span><span class="at">items</span>                        <span class="co">// QVariantList → copies all items to JS</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Label { <span class="dt">text</span><span class="op">:</span> model<span class="op">.</span><span class="at">modelData</span><span class="op">.</span><span class="at">title</span> <span class="op">||</span> <span class="st">&quot;&quot;</span> }   <span class="co">// QVariantMap index access, slow</span></span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Models/Views — use proper model for
+incremental updates, animations, and delegate recycling"
+(Performance)</p>
+<p><strong>Rationale</strong>: <code>QVariantList</code> forces complete
+model replacement on every change. This destroys ListView animations,
+breaks delegate recycling, converts every item to QVariant → QVariantMap
+→ JavaScript object (expensive), and prevents role-based data
+access.</p>
+<p><strong>Framework class</strong>:
+<code>muscovite::qt::models::EntityListModel</code>
+(framework/qt/include/muscovite/qt/models/entity_list_model.hpp)</p>
+<ul>
+<li>Extends <code>QAbstractListModel</code> with auto-derived roles from
+<code>QVariantMap</code> keys</li>
+<li><code>replaceItems()</code> / <code>appendItem()</code> /
+<code>removeItem()</code> / <code>clear()</code></li>
+<li><code>Qt::DisplayRole</code> maps to "display" key (or first key as
+fallback)</li>
+<li>FK ComboBox models also use <code>EntityListModel*</code> (property:
+<code>{rel}ItemModel</code>)</li>
+<li>Child ViewModels use <code>EntityListModel*</code> for child entity
+lists</li>
+</ul>
+<p><strong>Generator files</strong> (all updated for FTR-170):</p>
+<ul>
+<li><code>qml-viewmodel-header.rkt</code> —
+<code>EntityListModel*</code> property + include + member</li>
+<li><code>qml-viewmodel.rkt</code> — constructor initializes
+<code>EntityListModel*</code></li>
+<li><code>qml-viewmodel-grpc.rkt</code> — <code>replaceItems()</code> in
+load/FK-load methods</li>
+<li><code>qml-list.rkt</code> — <code>viewModel.itemModel</code>,
+<code>model.x</code> role access</li>
+<li><code>qml-dialog.rkt</code> — FK ComboBox model uses
+<code>{rel}ItemModel</code></li>
+<li><code>qml-dialog-children.rkt</code> — child Repeater uses
+<code>model.x</code> role access</li>
+<li><code>qml-child-viewmodel.rkt</code> — child ViewModel
+<code>EntityListModel*</code> property</li>
+</ul>
+<p><strong>Test enforcement</strong>: Rule 7 in
+<code>test-qml-patterns.rkt</code> (4 test cases)</p>
+<hr />
+<h2 id="5-loader-for-dynamic-dialog-loading">5. Loader for Dynamic
+Dialog Loading</h2>
+<p><strong>CANONICAL</strong>: Dynamic dialog instantiation MUST use
+<code>Loader</code>, not <code>Qt.createComponent()</code>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — Loader with asynchronous loading</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ot">Loader</span> {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">id</span><span class="op">:</span> dialogLoader</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">active</span><span class="op">:</span> <span class="kw">false</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">asynchronous</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">source</span><span class="op">:</span> <span class="st">&quot;../dialogs/patient_dialog.qml&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">onLoaded</span><span class="op">:</span> item<span class="op">.</span><span class="fu">open</span>()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Button {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">onClicked</span><span class="op">:</span> {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        viewModel<span class="op">.</span><span class="fu">createNew</span>()</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        dialogLoader<span class="op">.</span><span class="at">active</span> <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN (qml-list.rkt L83-92)</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">openEditDialog</span>() {</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> component <span class="op">=</span> <span class="ex">Qt</span><span class="op">.</span><span class="fu">createComponent</span>(<span class="st">&quot;../dialogs/entity_dialog.qml&quot;</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (component<span class="op">.</span><span class="at">status</span> <span class="op">===</span> <span class="ot">Component</span><span class="op">.</span><span class="at">Ready</span>) {</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> dialog <span class="op">=</span> component<span class="op">.</span><span class="fu">createObject</span>(root<span class="op">,</span> { <span class="dt">viewModel</span><span class="op">:</span> viewModel })</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (dialog) dialog<span class="op">.</span><span class="fu">open</span>()</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Lazy Initialization — use Loader with
+asynchronous: true to defer creation costs" (Performance)</p>
+<p><strong>Rationale</strong>: <code>Qt.createComponent()</code> is
+synchronous — it blocks the UI thread while parsing and compiling the
+QML file. <code>Loader</code> with <code>asynchronous: true</code>
+defers compilation to a background thread.</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-list.rkt</code> — L83-92 (<code>openEditDialog</code>
+function)</li>
+</ul>
+<hr />
+<h2 id="6-spinbox-onvaluemodified-vs-onvaluechanged">6. SpinBox:
+onValueModified vs onValueChanged</h2>
+<p><strong>CANONICAL</strong>: SpinBox user interaction MUST use
+<code>onValueModified</code>.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — fires only on user interaction</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>SpinBox {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> viewModel<span class="op">.</span><span class="at">age</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">onValueModified</span><span class="op">:</span> { viewModel<span class="op">.</span><span class="fu">setAge</span>(value)<span class="op">;</span> dialog<span class="op">.</span><span class="at">dirty</span> <span class="op">=</span> <span class="kw">true</span> }</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — fires on programmatic changes too</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>SpinBox {</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">value</span><span class="op">:</span> viewModel<span class="op">.</span><span class="at">age</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">onValueChanged</span><span class="op">:</span> { viewModel<span class="op">.</span><span class="fu">setAge</span>(value)<span class="op">;</span> dialog<span class="op">.</span><span class="at">dirty</span> <span class="op">=</span> <span class="kw">true</span> }</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Prefer explicit interaction signals
+over value-changed signals" (Best Practices)</p>
+<p><strong>Rationale</strong>: <code>onValueChanged</code> fires when
+the ViewModel sets the SpinBox value programmatically (e.g., loading an
+entity). This causes a feedback loop: load → set value →
+<code>onValueChanged</code> fires → dirty flag set.</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-dialog.rkt</code> — L95 (Integer/SpinBox case)</li>
+<li><code>view.rkt</code> — L114 (legacy path SpinBox)</li>
+</ul>
+<hr />
+<h2 id="7-listview-clipping">7. ListView Clipping</h2>
+<p><strong>CANONICAL</strong>: ListView MUST NOT have
+<code>clip: true</code>.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ot">ListView</span> {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Layout</span><span class="op">.</span><span class="at">fillWidth</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Layout</span><span class="op">.</span><span class="at">fillHeight</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">model</span><span class="op">:</span> viewModel<span class="op">.</span><span class="at">items</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN (qml-list.rkt L136)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ot">ListView</span> {</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">clip</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Clipping — disabled by default,
+increases renderer complexity. Especially detrimental in delegates."
+(Performance)</p>
+<p><strong>Rationale</strong>: ListView already handles delegate
+visibility through its internal viewport management. Adding
+<code>clip: true</code> forces the GPU to set up a scissor
+rectangle.</p>
+<p><strong>Note</strong>: <code>clip: true</code> on
+<code>ScrollView</code> is acceptable — it is designed to clip viewport
+content.</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-list.rkt</code> — L136</li>
+</ul>
+<hr />
+<h2 id="8-theme-constants-no-magic-numbers">8. Theme Constants (No Magic
+Numbers)</h2>
+<p><strong>CANONICAL</strong>: Layout dimensions MUST reference theme
+constants, not hardcoded pixel values.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — theme property</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Label { <span class="dt">text</span><span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;Name:&quot;</span>)<span class="op">;</span> <span class="ex">Layout</span><span class="op">.</span><span class="at">preferredWidth</span><span class="op">:</span> <span class="ex">Theme</span><span class="op">.</span><span class="at">formLabelWidth</span> }</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN (qml-dialog.rkt L81, L85, L90, L95, L112, L134)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>Label { <span class="dt">text</span><span class="op">:</span> <span class="st">&quot;Name:&quot;</span><span class="op">;</span> <span class="ex">Layout</span><span class="op">.</span><span class="at">preferredWidth</span><span class="op">:</span> <span class="dv">140</span> }</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Scalable UIs — avoid explicit pixel
+sizes; use anchors, layouts, and scalable measurements" (Best
+Practices)</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-dialog.rkt</code> — 6 occurrences of
+<code>Layout.preferredWidth: 140</code></li>
+<li><code>qml-app.rkt</code> — theme file generation (needs new
+properties)</li>
+</ul>
+<hr />
+<h2 id="9-qml-property-ordering">9. QML Property Ordering</h2>
+<p><strong>CANONICAL</strong>: Properties MUST follow Qt convention
+order.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL order</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Dialog {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">id</span><span class="op">:</span> patientDialog                                    <span class="co">// 1. id</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">required</span> <span class="kw">property</span> PatientViewModel viewModel          <span class="co">// 2. required properties</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">property</span> <span class="dt">string</span> parentEntityId: <span class="st">&quot;&quot;</span>                   <span class="co">// 3. property declarations</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">property</span> <span class="dt">bool</span> dirty: <span class="kw">false</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">signal</span> saved()                                        // 4. signal declarations</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">validate</span>() { <span class="op">...</span> }                          <span class="co">// 5. JavaScript functions</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">title</span><span class="op">:</span> <span class="fu">qsTr</span>(<span class="st">&quot;Edit Patient&quot;</span>)                          <span class="co">// 6. object properties</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">width</span><span class="op">:</span> <span class="dv">560</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">modal</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">contentItem</span><span class="op">:</span> ColumnLayout { <span class="op">...</span> }                    <span class="co">// 7. child objects</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Qt Reference</strong>: "id → property declarations → signal
+declarations → JavaScript functions → object properties → child objects"
+(Coding Conventions)</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-dialog.rkt</code> — entire
+<code>generate-qml-edit-dialog</code> function</li>
+</ul>
+<hr />
+<h2 id="10-grouped-anchor-notation">10. Grouped Anchor Notation</h2>
+<p><strong>CANONICAL</strong>: When setting 3+ properties from the same
+group, use block notation.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — group notation for 3+ properties</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>anchors {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fill</span><span class="op">:</span> parent</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leftMargin</span><span class="op">:</span> <span class="dv">8</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">rightMargin</span><span class="op">:</span> <span class="dv">8</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — dot notation for 1-2 properties</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — dot notation for 3+ properties</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>anchors<span class="op">.</span><span class="at">fill</span><span class="op">:</span> parent</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>anchors<span class="op">.</span><span class="at">leftMargin</span><span class="op">:</span> <span class="dv">8</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>anchors<span class="op">.</span><span class="at">rightMargin</span><span class="op">:</span> <span class="dv">8</span></span></code></pre></div>
+<p><strong>Qt Reference</strong>: "Use group notation when setting
+several properties from one group" (Coding Conventions)</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-list.rkt</code> — delegate RowLayout anchors</li>
+</ul>
+<hr />
+<h2 id="11-type-dispatch-consolidation">11. Type Dispatch
+Consolidation</h2>
+<p><strong>CANONICAL</strong>: All QML type dispatch MUST go through
+<code>common.rkt</code> functions.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CANONICAL — centralized in common.rkt</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>dsl-type-&gt;qml-read-expr type-sym field-name<span class="op">)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> type-sym</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>UUID Email Phone<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;~a().value()&quot;</span> field-name<span class="op">)]</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Date<span class="op">)</span> <span class="op">(</span>format <span class="st">&quot;muscovite::grpc::to_date(~a())&quot;</span> field-name<span class="op">)]</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    ...<span class="op">))</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ ANTI-PATTERN — duplicated case block in each generator file</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; qml-viewmodel-mapping.rkt:  (case type-sym [(UUID) ...] [(Date) ...] ...)</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; qml-viewmodel-grpc.rkt:     (case type-sym [(UUID) ...] [(Date) ...] ...)</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">;; qml-child-viewmodel.rkt:    (case type-sym [(UUID) ...] [(Date) ...] ...)</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; display-helper-codegen.rkt:  (case type-sym [(UUID) ...] [(Date) ...] ...)</span></span></code></pre></div>
+<p><strong>Rationale</strong>: Four separate type-dispatch blocks drift
+independently. Adding a new type requires updating all four.</p>
+<p><strong>Affected files</strong>:</p>
+<ul>
+<li><code>qml-viewmodel-mapping.rkt</code></li>
+<li><code>qml-viewmodel-grpc.rkt</code></li>
+<li><code>qml-child-viewmodel.rkt</code></li>
+<li><code>display-helper-codegen.rkt</code></li>
+</ul>
+<hr />
+<h2 id="12-module-import-pattern-except-in-resolution">12. Module Import
+Pattern (except-in Resolution)</h2>
+<p><strong>CANONICAL</strong>: Qt generators MUST import through
+<code>common.rkt</code>, not directly from <code>ddd-types.rkt</code>
+with exclusions.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CANONICAL — import curated exports from common.rkt</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;common.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ ANTI-PATTERN — fragile exclusion (21 files)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="op">(</span>except-in <span class="st">&quot;../../model/ddd-types.rkt&quot;</span> dsl-type-&gt;cpp-type dsl-type-&gt;proto-type<span class="op">))</span></span></code></pre></div>
+<p><strong>Rationale</strong>: 21 files exclude the same 2 identifiers
+from <code>ddd-types.rkt</code>. If <code>ddd-types.rkt</code> adds
+another conflicting export, all 21 files break simultaneously.</p>
+<p><strong>Affected files</strong>: 21 generator files (see ADR for
+complete list)</p>
+<hr />
+<h2 id="13-template-dsl-compliance">13. Template DSL Compliance</h2>
+<p><strong>CANONICAL</strong>: All QML generator functions MUST use
+<code>define-template</code> per ADR 20260226.</p>
+<p>See <code>doc/RACKET-PATTERNS.md</code> Section 9 and
+<code>doc/TEMPLATE-DSL.md</code> for authoring patterns.</p>
+<p><strong>Current status</strong>: Zero compliance — 0 out of 17 QML
+generator files use <code>define-template</code>.</p>
+<p><strong>Note</strong>: Template DSL migration is tracked as part of
+the v1.35.0/v1.36.0 wave (ADR 20260226). QML generators are in Wave 2b
+(v1.36.0 — higher-risk migration). The patterns in this document (1–12)
+can be fixed independently of the template DSL migration.</p>
+<hr />
+<h2 id="summary-quick-reference">Summary: Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pattern</th>
+<th>Rating</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>qsTr()</code> all user strings</td>
+<td>CANONICAL</td>
+<td>Small — string wrapping</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Typed <code>required property</code></td>
+<td>CANONICAL</td>
+<td>Small — format string change</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Versionless imports</td>
+<td>CANONICAL</td>
+<td>Small — search-replace in 8 files</td>
+</tr>
+<tr>
+<td>4</td>
+<td>QAbstractListModel</td>
+<td>CANONICAL</td>
+<td>Medium — new framework class + generator</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Loader pattern</td>
+<td>CANONICAL</td>
+<td>Medium — restructure dialog loading</td>
+</tr>
+<tr>
+<td>6</td>
+<td>onValueModified</td>
+<td>CANONICAL</td>
+<td>Small — 2-line fix</td>
+</tr>
+<tr>
+<td>7</td>
+<td>No clip on ListView</td>
+<td>CANONICAL</td>
+<td>Small — remove 1 line</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Theme constants</td>
+<td>CANONICAL</td>
+<td>Small — extract to theme</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Property ordering</td>
+<td>CANONICAL</td>
+<td>Medium — reorder emitted QML</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Grouped anchors</td>
+<td>CANONICAL</td>
+<td>Small — format change</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Centralized type dispatch</td>
+<td>CANONICAL</td>
+<td>Medium — refactor 4 files</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Clean module imports</td>
+<td>CANONICAL</td>
+<td>Medium — refactor 21 files</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Template DSL</td>
+<td>CANONICAL</td>
+<td>Large — separate iteration (v1.36.0)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Created for <a
+href="adr/20260227-qml-idiomatic-output-quality.html">ADR 20260227 — QML
+Idiomatic Output Quality</a>.</em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

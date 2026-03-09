@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semantic Model Delta
+Computation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Semantic Model Delta Computation</span>
+</nav>
+
+<h1>Semantic Model Delta Computation</h1>
+
+
+<h1 id="semantic-model-delta-computation">Semantic Model Delta
+Computation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Tags: diff, migration, semantic-ir, schema-evolution</li>
+<li>Related:
+<ul>
+<li><a href="20260109-git-model-version-selection.html">Git Model Version
+Selection</a> (ADR 2.5 - version extraction)</li>
+<li><a href="20260109-stable-uuid-identity.html">Stable UUID Identity</a>
+(ADR 2 - UUIDs for identity)</li>
+<li><a href="20260109-declarative-migration-language.html">Declarative
+Migration Language</a> (ADR 4 - migration DSL)</li>
+<li><a href="20260109-fhir-health-sample-domain.html">FHIR Health Sample
+Domain</a> (test domain)</li>
+</ul></li>
+</ul>
+<p>Technical Story: Compute structural differences between two DDD model
+versions to generate precise migration operations.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite currently regenerates all artifacts from scratch on every
+run. This works for greenfield development but fails for schema
+evolution:</p>
+<ol type="1">
+<li><strong>Full regeneration destroys data</strong>: DROP TABLE +
+CREATE TABLE loses production data</li>
+<li><strong>No change detection</strong>: Cannot determine what actually
+changed between versions</li>
+<li><strong>No rename support</strong>: Entity rename looks like DELETE
++ ADD</li>
+<li><strong>No safe/unsafe classification</strong>: All changes treated
+equally</li>
+</ol>
+<p>The migration system needs a <strong>semantic diff engine</strong>
+that:</p>
+<ul>
+<li>Compares two IR graphs by UUID identity (not name)</li>
+<li>Produces a list of atomic change operations</li>
+<li>Classifies each operation as safe, unsafe, or destructive</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Detect adds, deletes, renames, moves, type changes, cardinality
+changes</li>
+<li>Generate a <strong>lossless Migration IR</strong> that can be
+reviewed before execution</li>
+<li>Distinguish safe vs unsafe operations for policy enforcement</li>
+<li>Support complex cross-domain references</li>
+<li>Deterministic output (same inputs → same diff)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Diff raw SQL (post-generation)</strong>: Rejected - loses
+semantic intent, hard to reverse</li>
+<li><strong>Diff DSL text</strong>: Rejected - whitespace-sensitive,
+doesn't handle renames</li>
+<li><strong>Diff database schema (introspection)</strong>: Rejected -
+only works after deployment</li>
+<li><strong>Diff IR using UUID identity</strong>: Accepted - semantic
+comparison, rename-aware</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Diff IR using UUID identity", implemented as a pure
+function that takes two model versions and produces migration
+operations.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Safe rename detection (same UUID, different name → RENAME op)</li>
+<li>Deterministic migration generation</li>
+<li>Supports complex cross-context FK changes</li>
+<li>Can be validated before execution</li>
+<li>Enables review workflow for destructive changes</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Cannot infer human intent for ambiguous changes</li>
+<li>Requires strict UUID enforcement from ADR 0002</li>
+<li>Complex dependency tracking for cross-entity changes</li>
+<li>May produce suboptimal migrations for radical restructures</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-1-core-diff-engine">Phase 1: Core Diff Engine</h3>
+<p>Create <code>src/dslgen/migration/diff-model.rkt</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> diff-model<span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; Main diff function</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Returns list of migration-operation structs</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-model ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">append</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-contexts ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-aggregates ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-entities ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-fields ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-relationships ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>diff-indexes ir-old ir-new<span class="op">)))</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">;; Compare entities by UUID</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-entities ir-old ir-new<span class="op">)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> old-entities </span><span class="op">(</span>model-&gt;entity-map ir-old<span class="op">))</span>  <span class="co">;; UUID → entity</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> new-entities </span><span class="op">(</span>model-&gt;entity-map ir-new<span class="op">))</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> operations </span>&#39;<span class="op">())</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Find additions (in new, not in old)</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid ent<span class="op">)</span> <span class="op">(</span>in-hash new-entities<span class="op">)])</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>unless <span class="op">(</span>hash-has-key? old-entities uuid<span class="op">)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>add-entity-op uuid ent<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Find deletions (in old, not in new)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid ent<span class="op">)</span> <span class="op">(</span>in-hash old-entities<span class="op">)])</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>unless <span class="op">(</span>hash-has-key? new-entities uuid<span class="op">)</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>remove-entity-op uuid ent<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Find modifications (in both, but different)</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid new-ent<span class="op">)</span> <span class="op">(</span>in-hash new-entities<span class="op">)])</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>when <span class="op">(</span>hash-has-key? old-entities uuid<span class="op">)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="ex">define</span><span class="fu"> old-ent </span><span class="op">(</span>hash-ref old-entities uuid<span class="op">))</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">append</span> <span class="op">(</span>diff-single-entity old-ent new-ent<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  operations<span class="op">)</span></span></code></pre></div>
+<h3 id="phase-2-change-detection-functions">Phase 2: Change Detection
+Functions</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Detect specific changes within an entity</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-single-entity old-ent new-ent<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> operations </span>&#39;<span class="op">())</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Name change = RENAME</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span>entity-name old-ent<span class="op">)</span> <span class="op">(</span>entity-name new-ent<span class="op">))</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> operations </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>rename-entity-op <span class="op">(</span>entity-uuid old-ent<span class="op">)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="op">(</span>entity-name old-ent<span class="op">)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                  <span class="op">(</span>entity-name new-ent<span class="op">))</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                operations<span class="op">)))</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Parent change = MOVE (in inheritance hierarchy)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span>entity-parent-name old-ent<span class="op">)</span> <span class="op">(</span>entity-parent-name new-ent<span class="op">))</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> operations</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>change-parent-op <span class="op">(</span>entity-uuid old-ent<span class="op">)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                                  <span class="op">(</span>entity-parent-name old-ent<span class="op">)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                                  <span class="op">(</span>entity-parent-name new-ent<span class="op">))</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                operations<span class="op">)))</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Field-level changes</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">set!</span> operations </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span><span class="kw">append</span> <span class="op">(</span>diff-entity-fields old-ent new-ent<span class="op">)</span> operations<span class="op">))</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  operations<span class="op">)</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">;; Detect field changes</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-entity-fields old-ent new-ent<span class="op">)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> old-fields </span><span class="op">(</span>entity-&gt;field-map old-ent<span class="op">))</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> new-fields </span><span class="op">(</span>entity-&gt;field-map new-ent<span class="op">))</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> operations </span>&#39;<span class="op">())</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Added fields</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid fld<span class="op">)</span> <span class="op">(</span>in-hash new-fields<span class="op">)])</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>unless <span class="op">(</span>hash-has-key? old-fields uuid<span class="op">)</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>add-field-op <span class="op">(</span>entity-uuid new-ent<span class="op">)</span> uuid fld<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Removed fields</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid fld<span class="op">)</span> <span class="op">(</span>in-hash old-fields<span class="op">)])</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>unless <span class="op">(</span>hash-has-key? new-fields uuid<span class="op">)</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>remove-field-op <span class="op">(</span>entity-uuid old-ent<span class="op">)</span> uuid fld<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Modified fields</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([(</span>uuid new-fld<span class="op">)</span> <span class="op">(</span>in-hash new-fields<span class="op">)])</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>when <span class="op">(</span>hash-has-key? old-fields uuid<span class="op">)</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="ex">define</span><span class="fu"> old-fld </span><span class="op">(</span>hash-ref old-fields uuid<span class="op">))</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">set!</span> operations <span class="op">(</span><span class="kw">append</span> <span class="op">(</span>diff-single-field old-fld new-fld<span class="op">)</span> operations<span class="op">))))</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  operations<span class="op">)</span></span></code></pre></div>
+<h3 id="phase-3-field-level-change-detection">Phase 3: Field-Level
+Change Detection</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Detect changes to a single field</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>diff-single-field old-fld new-fld<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> uuid </span><span class="op">(</span>field-uuid old-fld<span class="op">))</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> operations </span>&#39;<span class="op">())</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Name change</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span>field-name old-fld<span class="op">)</span> <span class="op">(</span>field-name new-fld<span class="op">))</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> operations</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>rename-field-op uuid <span class="op">(</span>field-name old-fld<span class="op">)</span> <span class="op">(</span>field-name new-fld<span class="op">))</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                operations<span class="op">)))</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Type change</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span>field-type old-fld<span class="op">)</span> <span class="op">(</span>field-type new-fld<span class="op">))</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> operations</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>change-type-op uuid </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                                <span class="op">(</span>field-type old-fld<span class="op">)</span> </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                                <span class="op">(</span>field-type new-fld<span class="op">)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                                <span class="op">(</span>classify-type-change <span class="op">(</span>field-type old-fld<span class="op">)</span> <span class="op">(</span>field-type new-fld<span class="op">)))</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                operations<span class="op">)))</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Nullability change</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>unless <span class="op">(</span><span class="kw">equal?</span> <span class="op">(</span>field-nullable? old-fld<span class="op">)</span> <span class="op">(</span>field-nullable? new-fld<span class="op">))</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">set!</span> operations</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>change-nullable-op uuid</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">(</span>field-nullable? old-fld<span class="op">)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="op">(</span>field-nullable? new-fld<span class="op">))</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                operations<span class="op">)))</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  operations<span class="op">)</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">;; Classify type changes as safe/unsafe</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>classify-type-change old-type new-type<span class="op">)</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Widening is safe</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span>string-type? old-type<span class="op">)</span> <span class="op">(</span>string-type? new-type<span class="op">))</span> &#39;safe<span class="op">]</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span>integer-type? old-type<span class="op">)</span> <span class="op">(</span>bigint-type? new-type<span class="op">))</span> &#39;safe<span class="op">]</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Narrowing is unsafe</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span>text-type? old-type<span class="op">)</span> <span class="op">(</span>varchar-type? new-type<span class="op">))</span> &#39;unsafe<span class="op">]</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">and</span> <span class="op">(</span>bigint-type? old-type<span class="op">)</span> <span class="op">(</span>integer-type? new-type<span class="op">))</span> &#39;unsafe<span class="op">]</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Type family change is destructive</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span><span class="kw">not</span> <span class="op">(</span>same-type-family? old-type new-type<span class="op">))</span> &#39;destructive<span class="op">]</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="kw">else</span> &#39;review<span class="op">]))</span></span></code></pre></div>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/migration/diff-model.rkt</code> - Main diff
+engine</li>
+<li><code>src/dslgen/migration/change-classifier.rkt</code> - Safety
+classification</li>
+<li><code>src/dslgen/migration/operations.rkt</code> - Operation struct
+definitions</li>
+<li><code>src/dslgen/tests/test-diff-model.rkt</code> - Diff engine
+tests</li>
+</ul>
+<h3 id="operation-types">Operation Types</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Description</th>
+<th>Safety</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add-context</code></td>
+<td>New bounded context</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>remove-context</code></td>
+<td>Delete context (cascade)</td>
+<td>Destructive</td>
+</tr>
+<tr>
+<td><code>add-entity</code></td>
+<td>New table</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>remove-entity</code></td>
+<td>Drop table</td>
+<td>Destructive</td>
+</tr>
+<tr>
+<td><code>rename-entity</code></td>
+<td>Rename table</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>move-entity</code></td>
+<td>Change aggregate/context</td>
+<td>Review</td>
+</tr>
+<tr>
+<td><code>add-field</code></td>
+<td>Add nullable column</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>add-field</code></td>
+<td>Add NOT NULL column</td>
+<td>Unsafe (needs default)</td>
+</tr>
+<tr>
+<td><code>remove-field</code></td>
+<td>Drop column</td>
+<td>Destructive</td>
+</tr>
+<tr>
+<td><code>rename-field</code></td>
+<td>Rename column</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>change-type</code></td>
+<td>Alter column type</td>
+<td>Varies</td>
+</tr>
+<tr>
+<td><code>change-nullable</code></td>
+<td>NOT NULL ↔︎ NULL</td>
+<td>Varies</td>
+</tr>
+<tr>
+<td><code>add-relationship</code></td>
+<td>Add FK constraint</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>remove-relationship</code></td>
+<td>Drop FK</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>add-index</code></td>
+<td>Create index</td>
+<td>Safe</td>
+</tr>
+<tr>
+<td><code>remove-index</code></td>
+<td>Drop index</td>
+<td>Safe</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li><strong>Depends on</strong>: ADR 0001 (Canonical IR), ADR 0002
+(Stable UUID Identity), ADR 2.5 (Git Version Selection)</li>
+<li><strong>Required by</strong>: ADR 0004 (Declarative Migration
+Language)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When implementing model version comparison</li>
+<li>When generating migration scripts</li>
+<li>When detecting schema changes for CI/CD</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Runtime data comparisons</li>
+<li>Generated code diffs (use git for that)</li>
+<li>SQL schema introspection (that's verification, not diff)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Diff engine MUST use UUID for identity matching</li>
+<li>Diff engine MUST classify all operations by safety</li>
+<li>Diff engine MUST be a pure function (no side effects)</li>
+<li>Output MUST be deterministic (same inputs → same output)</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create <code>diff-model.rkt</code>
+with main entry point</label></li>
+<li><label><input type="checkbox" />Implement <code>diff-contexts</code>
+function</label></li>
+<li><label><input type="checkbox" />Implement
+<code>diff-aggregates</code> function</label></li>
+<li><label><input type="checkbox" />Implement <code>diff-entities</code>
+function</label></li>
+<li><label><input type="checkbox" />Implement <code>diff-fields</code>
+function</label></li>
+<li><label><input type="checkbox" />Implement
+<code>diff-relationships</code> function</label></li>
+<li><label><input type="checkbox" />Implement <code>diff-indexes</code>
+function</label></li>
+<li><label><input type="checkbox" />Implement
+<code>classify-type-change</code> for safety annotation</label></li>
+<li><label><input type="checkbox" />Add comprehensive tests with known
+diffs</label></li>
+<li><label><input type="checkbox" />Test rename detection with UUID
+matching</label></li>
+<li><label><input type="checkbox" />Test cross-context relationship
+changes</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>ADR 3 of 7</strong> - Depends on ADR 0001, 0002, and 2.5 (Git
+Version Selection). Complete this before ADR 0004 (Migration
+Language).</p>
+<p><strong>Chain</strong>:
+<code>ADR 1 → ADR 2 → ADR 2.5 → **ADR 3** → ADR 4 → ADR 5 → ADR 6 → ADR 7</code></p>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li><code>(diff-model ir-v1 ir-v2)</code> returns list of
+operations</li>
+<li>Entity rename (same UUID, different name) produces
+<code>rename-entity-op</code></li>
+<li>New entity (UUID not in old) produces
+<code>add-entity-op</code></li>
+<li>Removed entity (UUID not in new) produces
+<code>remove-entity-op</code></li>
+<li>Type widening classified as <code>'safe</code></li>
+<li>Type narrowing classified as <code>'unsafe</code></li>
+<li>Cross-type-family change classified as
+<code>'destructive</code></li>
+<li>Diff of identical models returns empty list</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

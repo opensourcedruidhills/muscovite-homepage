@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muscovite — AI Project
+Context — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/guides/">guides</a>
+  <span class="sep">/</span>
+  <span>Muscovite — AI Project Context</span>
+</nav>
+
+<h1>Muscovite — AI Project Context</h1>
+
+
+<h1 id="muscovite--ai-project-context">Muscovite — AI Project
+Context</h1>
+<blockquote>
+<p><strong>Generated</strong>: 2026-03-09 | <strong>Commit</strong>:
+8d63cd74 | <strong>Branch</strong>: main <strong>Regenerate</strong>:
+<code>./tools/generate-context.sh</code></p>
+</blockquote>
+<p>This is the single structured context file for AI agents and human
+reviewers. For rules and conventions, see <a
+href="../AGENTS.html">AGENTS.md</a>. For IR struct details, see <a
+href="GROUND-TRUTH.html">GROUND-TRUTH.md</a>.</p>
+<hr />
+<h2 id="1-project-summary">1. Project Summary</h2>
+<p><strong>Muscovite</strong> is a Racket-based DDD code generation
+framework that transforms declarative domain models (<code>.ddd</code>
+files) into:</p>
+<ul>
+<li>PostgreSQL schemas (Sqitch migrations, DOMAINs, constraints, seed
+data)</li>
+<li>C++ backend (domain services, repositories via pqxx, event emission,
+event sourcing)</li>
+<li>gRPC/Protobuf services with pagination and FK resolution</li>
+<li>Qt Widgets desktop clients (master-detail, state machine
+validation)</li>
+<li>Qt Quick/QML clients (ViewModel pattern, all-fields Q_PROPERTY)</li>
+<li>CMake/Conan build system for standalone generated projects</li>
+</ul>
+<p><strong>Dual-licensed</strong>: AGPL-3.0 + Commercial. Copyright ©
+2025-2026 Johannes Lochmann.</p>
+<h2 id="2-project-metrics">2. Project Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version</td>
+<td>1.59.0</td>
+</tr>
+<tr>
+<td>Git commits</td>
+<td>1299 (since 2025-11-17)</td>
+</tr>
+<tr>
+<td><strong>DSL model (.ddd)</strong></td>
+<td><strong>11621 lines / 40 files</strong></td>
+</tr>
+<tr>
+<td><strong>Generated output</strong></td>
+<td><strong>1048272 lines</strong></td>
+</tr>
+<tr>
+<td><strong>DSL amplification</strong></td>
+<td><strong>90× (.ddd → generated)</strong></td>
+</tr>
+<tr>
+<td>Generator targets</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Racket source (dslgen/)</td>
+<td>124961 lines</td>
+</tr>
+<tr>
+<td>C++ framework</td>
+<td>41531 lines</td>
+</tr>
+<tr>
+<td>Architecture Decision Records</td>
+<td>190</td>
+</tr>
+<tr>
+<td>Racket tests</td>
+<td>29047 lines</td>
+</tr>
+<tr>
+<td>C++ tests</td>
+<td>6121 lines</td>
+</tr>
+</tbody>
+</table>
+<h3 id="specification-coverage-grammar-parser-parity">Specification
+Coverage (Grammar-Parser Parity)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PEG grammar rules</td>
+<td>277</td>
+</tr>
+<tr>
+<td>Grammar keywords</td>
+<td>318</td>
+</tr>
+<tr>
+<td>Lexer keywords</td>
+<td>319</td>
+</tr>
+<tr>
+<td>Keyword intersection</td>
+<td>314</td>
+</tr>
+<tr>
+<td>Keyword parity</td>
+<td>97.2%</td>
+</tr>
+<tr>
+<td>Opaque stubs (BracedBlock)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Run <code>racket dslgen/tests/test-grammar-conformance.rkt</code> for
+full drift detection report.</p>
+<h2 id="3-three-layer-architecture">3. Three-Layer Architecture</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Name</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layer 0</strong></td>
+<td>The Brain (Generator/IR)</td>
+<td><code>dslgen/</code> (Racket)</td>
+<td>DSL parser, IR model, all generators</td>
+</tr>
+<tr>
+<td><strong>Layer 1</strong></td>
+<td>The Framework</td>
+<td><code>framework/</code> (C++)</td>
+<td>Reusable base classes (Repository, UnitOfWork, errors). No domain
+logic.</td>
+</tr>
+<tr>
+<td><strong>Layer 2</strong></td>
+<td>Generated Applications</td>
+<td><code>examples/*/generated/</code></td>
+<td>100% generated from <code>.ddd</code> models. <strong>Never manually
+edited.</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Critical rule</strong>: Changes flow Layer 0 → Layer 1 →
+Layer 2. Never edit Layer 2 directly.</p>
+<h2 id="4-repository-structure">4. Repository Structure</h2>
+<pre><code>muscovite/
+├── dslgen/                  # Racket DSL generators (Layer 0)
+│   ├── model/               # Core structs (entity, aggregate, saga)
+│   │   ├── ddd-types.rkt    # Main model definitions
+│   │   └── type-registry.rkt # Central type mappings (strict)
+│   ├── parser/              # DSL parser
+│   │   ├── lexer.rkt        # Tokenizer
+│   │   └── parser.rkt       # Recursive descent parser
+│   ├── grammar/             # PEG grammar (authoritative syntax spec)
+│   ├── generators/          # Code generators
+│   │   ├── postgres/        # Sqitch migrations
+│   │   ├── cpp/             # C++ domain code + DBA repositories
+│   │   ├── grpc/            # Proto + gRPC services
+│   │   ├── qt/              # Qt Widgets + QML clients
+│   │   └── cmake/           # CMake build system
+│   ├── targets/             # Target configuration (layout → widget mapping)
+│   ├── migration/           # Semantic diff migration pipeline
+│   ├── validation/          # Cross-reference validation
+│   └── tests/               # Racket tests
+├── framework/               # C++ libraries (Layer 1: muscovite::*)
+│   ├── dba/                 # Database access layer
+│   ├── server/              # gRPC server utilities
+│   ├── grpc/                # gRPC type mapping helpers
+│   ├── qt/                  # Qt validation framework
+│   ├── types/               # Strong type validators
+│   ├── spatial/             # PostGIS helpers
+│   └── geo/                 # Geographic utilities
+├── examples/                # Domain model examples (.ddd files)
+│   ├── fhir-health/         # Healthcare domain (9 contexts)
+│   └── geosciences/         # Geology domain (26 contexts)
+├── doc/                     # Documentation
+│   ├── GROUND-TRUTH.md      # Canonical IR/type reference
+│   ├── VISION.md            # Strategic vision
+│   ├── adr/                 # Architecture decision records
+│   └── CONTEXT.md           # THIS FILE (AI context)
+├── workflow/                # Feature lifecycle + iteration planning
+├── tests/                   # C++ tests
+└── tools/                   # Build/maintenance scripts</code></pre>
+<h2 id="5-type-mappings-strict--unknown-types-fail">5. Type Mappings
+(Strict — Unknown Types Fail)</h2>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL</th>
+<th>C++ DBA</th>
+<th>gRPC Proto</th>
+<th>Qt Widget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UUID</td>
+<td><code>UUID</code></td>
+<td><code>boost::uuids::uuid</code></td>
+<td><code>muscovite.common.UUID</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>String, TEXT</td>
+<td><code>TEXT</code></td>
+<td><code>std::string</code></td>
+<td><code>string</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Integer, INT</td>
+<td><code>INTEGER</code></td>
+<td><code>std::int32_t</code></td>
+<td><code>int32</code></td>
+<td><code>QSpinBox</code></td>
+</tr>
+<tr>
+<td>BigInteger, BIGINT</td>
+<td><code>BIGINT</code></td>
+<td><code>std::int64_t</code></td>
+<td><code>int64</code></td>
+<td><code>QSpinBox</code></td>
+</tr>
+<tr>
+<td>Decimal, NUMERIC</td>
+<td><code>NUMERIC</code></td>
+<td><code>muscovite::dba::Decimal</code></td>
+<td><code>muscovite.common.Decimal</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Boolean, BOOL</td>
+<td><code>BOOLEAN</code></td>
+<td><code>bool</code></td>
+<td><code>bool</code></td>
+<td><code>QCheckBox</code></td>
+</tr>
+<tr>
+<td>Date, DATE</td>
+<td><code>DATE</code></td>
+<td><code>muscovite::dba::Date</code></td>
+<td><code>muscovite.common.Date</code></td>
+<td><code>QDateEdit</code></td>
+</tr>
+<tr>
+<td>DateTime, TIMESTAMPTZ</td>
+<td><code>TIMESTAMPTZ</code></td>
+<td><code>muscovite::dba::Timestamp</code></td>
+<td><code>muscovite.common.Timestamp</code></td>
+<td><code>QDateTimeEdit</code></td>
+</tr>
+<tr>
+<td>Email</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Email</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Phone</td>
+<td><code>TEXT</code> (DOMAIN)</td>
+<td><code>std::string</code></td>
+<td><code>muscovite.common.Phone</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+<tr>
+<td>Point</td>
+<td><code>GEOGRAPHY(POINT, 4326)</code></td>
+<td><code>std::string</code> (WKT)</td>
+<td><code>muscovite.common.Point</code></td>
+<td><code>QLineEdit</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-naming-conventions">6. Naming Conventions</h2>
+<p>Given DSL entity <code>Patient</code> in context
+<code>PatientContext</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Artifact</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL schema</td>
+<td><code>symbol-&gt;sql-id</code> (snake_case)</td>
+<td><code>patient</code></td>
+</tr>
+<tr>
+<td>PostgreSQL table</td>
+<td><code>symbol-&gt;sql-id</code></td>
+<td><code>patient.patient</code></td>
+</tr>
+<tr>
+<td>C++ class</td>
+<td><code>symbol-&gt;cpp-class</code> (PascalCase)</td>
+<td><code>Patient</code></td>
+</tr>
+<tr>
+<td>C++ member</td>
+<td><code>symbol-&gt;cpp-member</code> (snake_case_)</td>
+<td><code>family_name_</code></td>
+</tr>
+<tr>
+<td>C++ filename</td>
+<td><code>symbol-&gt;cpp-filename</code></td>
+<td><code>patient.hpp</code></td>
+</tr>
+<tr>
+<td>gRPC service</td>
+<td><code>{Class}Service</code></td>
+<td><code>PatientService</code></td>
+</tr>
+<tr>
+<td>gRPC message</td>
+<td>PascalCase</td>
+<td><code>Patient</code></td>
+</tr>
+<tr>
+<td>Proto field</td>
+<td>snake_case</td>
+<td><code>family_name</code></td>
+</tr>
+<tr>
+<td>Qt ViewModel</td>
+<td><code>{Class}ViewModel</code></td>
+<td><code>PatientViewModel</code></td>
+</tr>
+<tr>
+<td>QML property</td>
+<td>camelCase</td>
+<td><code>familyName</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="servicerepository-naming">Service/Repository Naming</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Repository</th>
+<th>Service</th>
+<th>gRPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aggregate Root</td>
+<td><code>PatientCommandRepository</code></td>
+<td><code>PatientCommandService</code></td>
+<td><code>PatientService</code></td>
+</tr>
+<tr>
+<td>Child Entity</td>
+<td><code>EncounterCommandRepository</code></td>
+<td><em>(via parent service)</em></td>
+<td><em>(via parent RPCs)</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-dsl-syntax-reference">7. DSL Syntax Reference</h2>
+<blockquote>
+<p>Formal grammar: <a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
+(authoritative)</p>
+</blockquote>
+<h3 id="quick-reference">Quick Reference</h3>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Keyword</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bounded Context</td>
+<td><code>CONTEXT</code></td>
+<td><code>CONTEXT Patient @uuid "..." { ... }</code></td>
+</tr>
+<tr>
+<td>Entity</td>
+<td><code>ENTITY</code></td>
+<td><code>ENTITY Patient @uuid "..." IDENTIFIED_BY id (...)</code></td>
+</tr>
+<tr>
+<td>Value Object</td>
+<td><code>VALUE_OBJECT</code></td>
+<td><code>VALUE_OBJECT Address @inline @uuid "..." (...)</code></td>
+</tr>
+<tr>
+<td>Strong Type</td>
+<td><code>STRONG_TYPE</code></td>
+<td><code>STRONG_TYPE Email BASED_ON TEXT @uuid "..."</code></td>
+</tr>
+<tr>
+<td>Aggregate</td>
+<td><code>AGGREGATE</code></td>
+<td><code>AGGREGATE Patient ROOT Patient</code></td>
+</tr>
+<tr>
+<td>Lookup Table</td>
+<td><code>LOOKUP_TABLE</code></td>
+<td><code>LOOKUP_TABLE Status @uuid "..." SEED_JSON "..."</code></td>
+</tr>
+<tr>
+<td>Domain Event</td>
+<td><code>EVENT</code></td>
+<td><code>EVENT PatientCreated (...)</code></td>
+</tr>
+<tr>
+<td>Sourced Event</td>
+<td><code>SOURCED_EVENT</code></td>
+<td><code>SOURCED_EVENT PatientRegistered @uuid "..." (...) APPLIES_TO Patient</code></td>
+</tr>
+<tr>
+<td>Command</td>
+<td><code>COMMAND</code></td>
+<td><code>COMMAND Register ON Patient (...)</code></td>
+</tr>
+<tr>
+<td>Repository</td>
+<td><code>REPOSITORY</code></td>
+<td><code>REPOSITORY PatientRepo FOR Patient (...)</code></td>
+</tr>
+<tr>
+<td>Specification</td>
+<td><code>SPECIFICATION</code></td>
+<td><code>SPECIFICATION Active FOR Patient WHERE active = true</code></td>
+</tr>
+<tr>
+<td>Domain Service</td>
+<td><code>SERVICE</code></td>
+<td><code>SERVICE Pricing (...)</code></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td><code>POLICY</code></td>
+<td><code>POLICY Notify WHEN OrderPlaced THEN ...</code></td>
+</tr>
+<tr>
+<td>Saga</td>
+<td><code>SAGA</code></td>
+<td><code>SAGA Fulfillment @uuid "..." TRIGGERED_BY OrderPlaced CORRELATE_BY order_id { ... }</code></td>
+</tr>
+<tr>
+<td>Projection</td>
+<td><code>PROJECTION</code></td>
+<td><code>PROJECTION PatientSummary FOR Patient (...)</code></td>
+</tr>
+<tr>
+<td>Context Map</td>
+<td><code>MAP</code></td>
+<td><code>MAP { Patient -&gt; Observation : CUSTOMER_SUPPLIER VIA grpc; }</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="annotations">Annotations</h3>
+<table>
+<thead>
+<tr>
+<th>Annotation</th>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@uuid "..."</code></td>
+<td>All constructs, fields</td>
+<td>Stable identity for semantic diff</td>
+</tr>
+<tr>
+<td><code>@required</code></td>
+<td>Fields</td>
+<td>NOT NULL constraint</td>
+</tr>
+<tr>
+<td><code>@unique</code></td>
+<td>Fields</td>
+<td>UNIQUE constraint</td>
+</tr>
+<tr>
+<td><code>@inline</code></td>
+<td>Value objects</td>
+<td>Mixin — fields flattened into parent</td>
+</tr>
+<tr>
+<td><code>@owned</code></td>
+<td>Value objects</td>
+<td>Child table with CASCADE delete</td>
+</tr>
+<tr>
+<td><code>@shared</code></td>
+<td>Value objects</td>
+<td>Dimension/lookup table</td>
+</tr>
+<tr>
+<td><code>@cascade</code></td>
+<td>Relationships</td>
+<td>CASCADE delete</td>
+</tr>
+<tr>
+<td><code>@embedded</code></td>
+<td>Relationships</td>
+<td>Show child embedded in parent UI</td>
+</tr>
+<tr>
+<td><code>@spatial-queryable</code></td>
+<td>Fields</td>
+<td>Generate spatial query RPCs</td>
+</tr>
+<tr>
+<td><code>@constants</code></td>
+<td>Lookup tables</td>
+<td>Generate compile-time C++ constants</td>
+</tr>
+</tbody>
+</table>
+<h3 id="entity-example">Entity Example</h3>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id          UUID        NOT_NULL @uuid &quot;...&quot;,
+    mrn         TEXT        NOT_NULL @unique @uuid &quot;...&quot;,
+    birth_date  DATE        @uuid &quot;...&quot;,
+    created_at  TIMESTAMPTZ NOT_NULL @uuid &quot;...&quot;
+)
+CHECK birth_date_not_future @uuid &quot;...&quot;: birth_date &lt;= CURRENT_DATE
+DOC &quot;A person receiving care&quot;
+SYNONYMS &quot;client&quot;, &quot;subject&quot;;</code></pre>
+<h3 id="relationships-explicit-only">Relationships (Explicit Only)</h3>
+<pre class="ddd"><code>ENTITY Observation @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id          UUID NOT_NULL,
+    patient_id  UUID NOT_NULL  -- Just a UUID field, NOT auto-FK
+)
+RELATIONSHIPS {
+    patient -&gt; Patient REQUIRED ONE;          -- Same context
+    status -&gt; Basedata.Status REQUIRED ONE;   -- Cross-context
+    encounter -&gt; Encounter OPTIONAL ONE @embedded;
+}</code></pre>
+<h3 id="saga-example">Saga Example</h3>
+<pre class="ddd"><code>SAGA Fulfillment @uuid &quot;...&quot; TRIGGERED_BY OrderPlaced CORRELATE_BY order_id {
+    STEP ReserveInventory
+        INVOKE ReserveItems(order_id = $order_id)
+        ON SUCCESS InventoryReserved -&gt; ProcessPayment
+        ON FAILURE InventoryNotAvailable -&gt; COMPENSATE -&gt; FAILED
+        TIMEOUT 5m;
+
+    STEP ProcessPayment
+        INVOKE ChargePayment(order_id = $order_id)
+        ON SUCCESS PaymentCharged -&gt; COMPLETED
+        ON FAILURE PaymentDeclined -&gt; COMPENSATE -&gt; FAILED
+        COMPENSATES_WITH ReleaseInventory(order_id = $order_id)
+        TIMEOUT 30s;
+}
+ON COMPLETED EMIT OrderFulfilled(order_id = $order_id)
+ON FAILED EMIT OrderFailed(order_id = $order_id)
+DOC &quot;Order fulfillment workflow&quot;;</code></pre>
+<h3 id="data-types">Data Types</h3>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PostgreSQL</th>
+<th>C++</th>
+<th>Protobuf</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UUID</td>
+<td>UUID</td>
+<td>boost::uuids::uuid</td>
+<td>string</td>
+</tr>
+<tr>
+<td>String, TEXT</td>
+<td>TEXT</td>
+<td>std::string</td>
+<td>string</td>
+</tr>
+<tr>
+<td>INTEGER, INT</td>
+<td>INTEGER</td>
+<td>std::int32_t</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>DECIMAL, NUMERIC</td>
+<td>NUMERIC</td>
+<td>cpp_dec_float_50</td>
+<td>muscovite.common.Decimal</td>
+</tr>
+<tr>
+<td>BOOLEAN, BOOL</td>
+<td>BOOLEAN</td>
+<td>bool</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>DATE</td>
+<td>DATE</td>
+<td>muscovite::dba::Date</td>
+<td>muscovite.common.Date</td>
+</tr>
+<tr>
+<td>DATETIME, TIMESTAMPTZ</td>
+<td>TIMESTAMPTZ</td>
+<td>muscovite::dba::Timestamp</td>
+<td>muscovite.common.Timestamp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="forbidden-patterns">Forbidden Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>❌ Pattern</th>
+<th>✅ Alternative</th>
+<th>ADR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VARCHAR(n)</code></td>
+<td><code>TEXT</code></td>
+<td>20251223</td>
+</tr>
+<tr>
+<td><code>TIMESTAMP</code> (no TZ)</td>
+<td><code>TIMESTAMPTZ</code></td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>JSON/JSONB columns</td>
+<td>Typed fields</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CHECK-based enums</td>
+<td><code>LOOKUP_TABLE</code></td>
+<td>20260116</td>
+</tr>
+<tr>
+<td>Implicit FK from <code>_id</code></td>
+<td>Explicit <code>RELATIONSHIPS {}</code></td>
+<td>20260106</td>
+</tr>
+<tr>
+<td>Stored procedures</td>
+<td>Domain services (C++)</td>
+<td>20260120</td>
+</tr>
+<tr>
+<td>Manual edits to generated code</td>
+<td>Fix the generator</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Runtime lookup for framework constants</td>
+<td>Compile-time <code>lookup::</code> constants</td>
+<td>20260212</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-database-conventions-non-negotiable">8. Database Conventions
+(Non-Negotiable)</h2>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>ADR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All PKs named <code>id</code> (UUID)</td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>All strings as <code>TEXT</code> (no VARCHAR)</td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>All datetime as <code>TIMESTAMPTZ</code></td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>No JSONB/JSON columns</td>
+<td>Schema generation</td>
+</tr>
+<tr>
+<td>Lookup tables (no CHECK/ENUM)</td>
+<td>20260116</td>
+</tr>
+<tr>
+<td>Compile-time lookup constants</td>
+<td>20260212</td>
+</tr>
+<tr>
+<td>Deploy via Sqitch only</td>
+<td>20251223</td>
+</tr>
+<tr>
+<td>Explicit relationships only</td>
+<td>20260106</td>
+</tr>
+<tr>
+<td>No stored procedures</td>
+<td>20260120</td>
+</tr>
+</tbody>
+</table>
+<h3 id="schema-naming">Schema Naming</h3>
+<p>Context <code>PatientContext</code> → schema <code>patient</code>,
+API schema <code>patient_api</code>.</p>
+<h3 id="foreign-keys">Foreign Keys</h3>
+<p><strong>No inference</strong> from <code>_id</code> naming. Must use
+explicit <code>RELATIONSHIPS {}</code> block.</p>
+<h3 id="migration-pipeline">Migration Pipeline</h3>
+<p>All schema changes use UUID-based semantic diff:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen/migration</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--repo</span> ../../examples/fhir-health</span></code></pre></div>
+<p><strong>FORBIDDEN</strong>: <code>DROP DATABASE</code>, hand-written
+<code>ALTER TABLE</code>, direct <code>psql</code> schema changes,
+editing generated Sqitch files.</p>
+<h2 id="9-architecture-patterns">9. Architecture Patterns</h2>
+<h3 id="domain-services-as-aggregate-boundary-adr-20260120">Domain
+Services as Aggregate Boundary (ADR 20260120)</h3>
+<p>All aggregate access through CommandService/QueryService. No stored
+procedures.</p>
+<pre><code>gRPC → CommandService → CommandRepository (pqxx) → PostgreSQL
+         └── emit event to domain_events table</code></pre>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Transaction</th>
+<th>Methods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CommandRepository</td>
+<td><code>pqxx::work</code></td>
+<td><code>insert()</code>, <code>update()</code>,
+<code>remove()</code></td>
+</tr>
+<tr>
+<td>QueryRepository</td>
+<td><code>pqxx::nontransaction</code></td>
+<td><code>find_by_id()</code>, <code>find_all()</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-sourcing-adr-20260204">Event Sourcing (ADR 20260204)</h3>
+<p>Opt-in per aggregate with <code>EVENT_SOURCED</code>. Generates:</p>
+<ul>
+<li>Typed event tables (no JSON) in <code>event_store</code> schema</li>
+<li>Snapshot tables for current state</li>
+<li>Dual-write: event + snapshot + entity table in single
+transaction</li>
+</ul>
+<h3 id="cqrs-adr-20260120">CQRS (ADR 20260120)</h3>
+<ul>
+<li>Command/query separation with separate repositories</li>
+<li>Domain event emission on every write</li>
+<li>Projection support (VIEWs + MATERIALIZED VIEWs)</li>
+</ul>
+<h3 id="multi-frontend-generation-adr-20260206">Multi-Frontend
+Generation (ADR 20260206)</h3>
+<table>
+<thead>
+<tr>
+<th>Frontend</th>
+<th>Flag</th>
+<th>Transport</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qt Widgets</td>
+<td><code>--qt-frontend widgets</code></td>
+<td>Direct C++ DBA</td>
+</tr>
+<tr>
+<td>Qt Quick/QML</td>
+<td><code>--qt-frontend qml</code></td>
+<td>Direct C++ DBA</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-build-workflow">10. Build Workflow</h2>
+<h3 id="generate-from-dsl">Generate from DSL</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">racket</span> generate.rkt <span class="at">--project</span> ../examples/fhir-health/project.mus</span></code></pre></div>
+<p>Options: <code>--cpp-dba</code>, <code>--cpp-dba-test</code>,
+<code>--grpc</code>, <code>--qt-frontend widgets|qml|both</code>,
+<code>--test</code>, <code>--full</code>, <code>--dry-run</code>,
+<code>--fresh</code></p>
+<h3 id="build-c-backend">Build C++ Backend</h3>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conan</span> install <span class="at">--profile</span> conan_profiles/debug .</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--preset</span> debug</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug</span></code></pre></div>
+<p>Presets: <code>debug</code>, <code>release</code>, <code>asan</code>,
+<code>tsan</code>, <code>coverage</code></p>
+<h3 id="run-tests">Run Tests</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Racket tests</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">racket</span> tests/test-dsl-integration.rkt</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># C++ tests</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> debug <span class="at">--output-on-failure</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> unit    <span class="co"># No database needed</span></span></code></pre></div>
+<h3 id="database-setup">Database Setup</h3>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--target</span> docker-start      <span class="co"># Start PostgreSQL</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--target</span> db-setup-fhir      <span class="co"># Full setup</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--target</span> db-fresh-fhir      <span class="co"># Drop + recreate</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--target</span> db-help            <span class="co"># List all targets</span></span></code></pre></div>
+<h3 id="build-acceleration">Build Acceleration</h3>
+<p>Install <code>mold</code> + <code>ccache</code> for 6× faster
+rebuilds (auto-detected, ON by default).</p>
+<h3 id="database-test-environment">Database Test Environment</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">MUSCOVITE_TEST_DB</span><span class="op">=</span><span class="st">&quot;postgresql://postgres:postgres@localhost:5555/fhir_health&quot;</span> <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">ctest</span> <span class="at">--preset</span> debug <span class="at">-L</span> db <span class="at">--output-on-failure</span></span></code></pre></div>
+<h3 id="cmake-database-target-patterns">CMake Database Target
+Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker-*</code></td>
+<td>Container lifecycle (start/stop/logs/psql)</td>
+</tr>
+<tr>
+<td><code>generate-*</code></td>
+<td>Run Racket DSL generator</td>
+</tr>
+<tr>
+<td><code>sqitch-*</code></td>
+<td>Sqitch migrations (deploy/verify/revert)</td>
+</tr>
+<tr>
+<td><code>db-setup-*</code></td>
+<td>Full setup (generate + deploy)</td>
+</tr>
+<tr>
+<td><code>db-reset-*</code></td>
+<td>Revert + deploy</td>
+</tr>
+<tr>
+<td><code>db-fresh-*</code></td>
+<td>Drop + create + deploy</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-generator-entry-points">11. Generator Entry Points</h2>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main orchestrator</td>
+<td><code>dslgen/generate.rkt</code></td>
+</tr>
+<tr>
+<td><strong>License headers</strong></td>
+<td><strong><code>dslgen/generators/headers.rkt</code></strong></td>
+</tr>
+<tr>
+<td>PostgreSQL/Sqitch</td>
+<td><code>dslgen/generators/postgres/sqitch-unified.rkt</code></td>
+</tr>
+<tr>
+<td>C++ DBA (unified)</td>
+<td><code>dslgen/generators/cpp/dba/unified.rkt</code></td>
+</tr>
+<tr>
+<td>C++ domain services</td>
+<td><code>dslgen/generators/cpp/domain-services.rkt</code></td>
+</tr>
+<tr>
+<td>gRPC proto</td>
+<td><code>dslgen/generators/grpc/proto.rkt</code></td>
+</tr>
+<tr>
+<td>gRPC services</td>
+<td><code>dslgen/generators/grpc/cpp-service-v2.rkt</code></td>
+</tr>
+<tr>
+<td>Qt Widgets</td>
+<td><code>dslgen/generators/qt/widgets-main.rkt</code></td>
+</tr>
+<tr>
+<td>Qt Quick/QML</td>
+<td><code>dslgen/generators/qt/quick-views.rkt</code></td>
+</tr>
+<tr>
+<td>CMake/Conan</td>
+<td><code>dslgen/generators/cmake/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-model-files">Key Model Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/model/ddd-types.rkt</code></td>
+<td>Core struct definitions</td>
+</tr>
+<tr>
+<td><code>dslgen/model/type-registry.rkt</code></td>
+<td>Type mappings (strict)</td>
+</tr>
+<tr>
+<td><code>dslgen/model/ir-serialization.rkt</code></td>
+<td>JSON IR serialization</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/parser.rkt</code></td>
+<td>DSL parser (recursive descent)</td>
+</tr>
+<tr>
+<td><code>dslgen/parser/lexer.rkt</code></td>
+<td>Tokenizer</td>
+</tr>
+<tr>
+<td><code>dslgen/targets/target-config.rkt</code></td>
+<td>Target config struct + resolution</td>
+</tr>
+<tr>
+<td><code>dslgen/grammar/muscovite.peg</code></td>
+<td>Formal PEG grammar</td>
+</tr>
+<tr>
+<td><code>dslgen/generators/headers.rkt</code></td>
+<td>Centralized SPDX dual-license headers for all generator targets
+(v1.11.0)</td>
+</tr>
+<tr>
+<td><code>dslgen/migration/migrate.rkt</code></td>
+<td>Semantic diff migration CLI</td>
+</tr>
+<tr>
+<td><code>dslgen/migration/diff-model.rkt</code></td>
+<td>Model diff algorithm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-glossary-ubiquitous-language">12. Glossary (Ubiquitous
+Language)</h2>
+<h3 id="ddd-constructs">DDD Constructs</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bounded Context</strong></td>
+<td>Semantic boundary. <code>CONTEXT name { ... }</code> → schema +
+service + UI</td>
+</tr>
+<tr>
+<td><strong>Aggregate</strong></td>
+<td>Consistency boundary with root entity.
+<code>AGGREGATE name ROOT entity</code></td>
+</tr>
+<tr>
+<td><strong>Entity</strong></td>
+<td>Object with identity.
+<code>ENTITY name IDENTIFIED_BY id (...)</code></td>
+</tr>
+<tr>
+<td><strong>Value Object</strong></td>
+<td>Immutable, value-equality.
+<code>VALUE_OBJECT name @inline (...)</code></td>
+</tr>
+<tr>
+<td><strong>Strong Type</strong></td>
+<td>PostgreSQL DOMAIN.
+<code>STRONG_TYPE Email BASED_ON TEXT CHECK ...</code></td>
+</tr>
+<tr>
+<td><strong>Lookup Table</strong></td>
+<td>Extensible enum.
+<code>LOOKUP_TABLE Status SEED_JSON "..."</code></td>
+</tr>
+<tr>
+<td><strong>Specification</strong></td>
+<td>Named query predicate.
+<code>SPECIFICATION Active FOR Patient WHERE ...</code></td>
+</tr>
+<tr>
+<td><strong>Saga</strong></td>
+<td>Long-running process with compensation.
+<code>SAGA name TRIGGERED_BY ...</code></td>
+</tr>
+<tr>
+<td><strong>Sourced Event</strong></td>
+<td>Typed event payload for event-sourced aggregates</td>
+</tr>
+<tr>
+<td><strong>Projection</strong></td>
+<td>CQRS read model (VIEW or MATERIALIZED VIEW)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="type-system">Type System</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Type Spec</strong></td>
+<td>Type info: name, nullable?, collection?, precision, scale, SRID</td>
+</tr>
+<tr>
+<td><strong>Optional</strong></td>
+<td>Nullable type, <code>?</code> suffix</td>
+</tr>
+<tr>
+<td><strong>Collection</strong></td>
+<td>Array type, <code>[]</code> suffix</td>
+</tr>
+<tr>
+<td><strong>SRID</strong></td>
+<td>Spatial Reference System ID (default 4326 = WGS84)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="annotations-1">Annotations</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>@uuid</strong></td>
+<td>Stable UUID for semantic diff tracking</td>
+</tr>
+<tr>
+<td><strong>@required</strong></td>
+<td>NOT NULL in SQL</td>
+</tr>
+<tr>
+<td><strong>@unique</strong></td>
+<td>UNIQUE constraint in SQL</td>
+</tr>
+<tr>
+<td><strong>@inline</strong></td>
+<td>Value object fields flattened into parent table</td>
+</tr>
+<tr>
+<td><strong>@embedded</strong></td>
+<td>Child shown embedded in parent UI</td>
+</tr>
+<tr>
+<td><strong>@constants</strong></td>
+<td>Generate compile-time C++ constants for lookup</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generated-artifacts">Generated Artifacts</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sqitch Migration</strong></td>
+<td>Versioned schema change (deploy/revert/verify)</td>
+</tr>
+<tr>
+<td><strong>CommandService</strong></td>
+<td>Write-side aggregate boundary (single txn per command)</td>
+</tr>
+<tr>
+<td><strong>QueryService</strong></td>
+<td>Read-side query interface</td>
+</tr>
+<tr>
+<td><strong>CommandRepository</strong></td>
+<td>Write operations (<code>pqxx::work</code>)</td>
+</tr>
+<tr>
+<td><strong>QueryRepository</strong></td>
+<td>Read operations (<code>pqxx::nontransaction</code>)</td>
+</tr>
+<tr>
+<td><strong>ViewModel</strong></td>
+<td>Qt QML binding class (all-fields Q_PROPERTY)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-key-adr-summaries">13. Key ADR Summaries</h2>
+<h3 id="schema-evolution-critical">Schema Evolution (Critical)</h3>
+<ul>
+<li><strong>20260109</strong>: Canonical Semantic IR — every DSL element
+has UUID</li>
+<li><strong>20260109</strong>: Stable UUID Identity — enables rename
+detection</li>
+<li><strong>20260109</strong>: Semantic Model Delta — diff-model.rkt for
+migrations</li>
+</ul>
+<h3 id="architecture">Architecture</h3>
+<ul>
+<li><strong>20260120</strong>: Remove PL/pgSQL API Layer — direct SQL in
+repositories</li>
+<li><strong>20260120</strong>: Domain Services as Aggregate Boundary —
+CommandService/QueryService</li>
+<li><strong>20260120</strong>: CQRS-Ready Architecture — event emission
+on every write</li>
+<li><strong>20260124</strong>: Unconditional Domain Events — always
+create <code>domain_events</code> tables</li>
+</ul>
+<h3 id="event-sourcing">Event Sourcing</h3>
+<ul>
+<li><strong>20260204</strong>: Typed Event Store — per-aggregate, no
+JSON, dual-write</li>
+</ul>
+<h3 id="frontend">Frontend</h3>
+<ul>
+<li><strong>20260206</strong>: QML ViewModel Binding — all-fields
+Q_PROPERTY pattern</li>
+<li><strong>20260211</strong>: gRPC Transport for Non-C++ Clients — no
+DBA linkage</li>
+</ul>
+<h3 id="build--test">Build &amp; Test</h3>
+<ul>
+<li><strong>20260212</strong>: doctest Adoption — new C++ tests use
+doctest (not Catch2)</li>
+<li><strong>20260212</strong>: Compile-Time Lookup Constants — UUIDv5 +
+constexpr headers</li>
+<li><strong>20260211</strong>: Grammar-First Language Evolution — PEG
+grammar before parser changes</li>
+</ul>
+<h3 id="database">Database</h3>
+<ul>
+<li><strong>20251223</strong>: TEXT for all strings, TIMESTAMPTZ for all
+datetime, <code>id</code> for all PKs</li>
+<li><strong>20260106</strong>: Explicit Relationships Only — no FK
+inference from <code>_id</code></li>
+<li><strong>20260116</strong>: Lookup Tables Over CHECK Constraints</li>
+<li><strong>20260126</strong>: Geography Over Geometry — GEOGRAPHY type
+for spatial</li>
+</ul>
+<h3 id="licensing-v1110--complete-enforcement">Licensing (v1.11.0 —
+Complete Enforcement)</h3>
+<ul>
+<li><strong>SPDX dual-license header on all ~400 authored source
+files</strong> (AGPL-3.0 + Commercial)</li>
+<li><strong>Centralized header module</strong>:
+<code>dslgen/generators/headers.rkt</code> provides 5 functions (C++,
+SQL, Proto, CMake, Python) — single source of truth for license
+text</li>
+<li><strong>All 5 generator chains delegate to
+<code>headers.rkt</code></strong> — no inline header strings in
+generators</li>
+<li><strong>SQL choke point</strong>: <code>sqitch-unified.rkt</code>
+<code>generate-change-scripts</code> prepends SPDX to all
+deploy/revert/verify SQL</li>
+<li>Copyright holder: Johannes Lochmann (unified, zero stale
+attributions)</li>
+<li>Generated output carries same dual license across all targets</li>
+</ul>
+<h2 id="14-example-projects">14. Example Projects</h2>
+<h3 id="fhir-health-examplesfhir-health">FHIR Health
+(<code>examples/fhir-health/</code>)</h3>
+<p>Healthcare domain: 9 bounded contexts (Patient, Observation,
+Encounter, Condition, etc.)</p>
+<h3 id="geosciences-examplesgeosciences">Geosciences
+(<code>examples/geosciences/</code>)</h3>
+<p>Geology domain: 26 bounded contexts (Chemistry, Mineralogy,
+Petrology, Drilling, etc.) 4 sagas: MetamorphicPathway,
+SampleAnalysisWorkflow, FieldCampaignWorkflow, ExplorationToResource</p>
+<p>Both serve as integration tests for all generator targets.</p>
+<h2 id="15-current-iteration">15. Current Iteration</h2>
+<h1
+id="iteration-v1630--behavioral-sovereignty-tier-4-testing--documentation">Iteration:
+v1.63.0 — Behavioral Sovereignty Tier 4: Testing + Documentation</h1>
+<p><strong>Goal</strong>: Exploit the rich domain model for automated
+quality assurance (property-based test generation from ENSURES) and
+documentation (Mermaid decision diagrams, Business Logic chapter in
+system manual). <strong>Start</strong>: After v1.62.0
+<strong>Target</strong>: TBD <strong>Status</strong>: planning</p>
+<h2 id="theme">Theme</h2>
+<p>With the expression language and DECIDE blocks complete, this
+iteration harvests the investment. Property-based test generation fuzzes
+DECIDE pure functions with random inputs and verifies ENSURES
+postconditions hold — automated correctness proofs. The docs generator
+produces Mermaid.js decision flow diagrams from DECIDE blocks and a
+"Business Logic" chapter per aggregate. Branch coverage reporting
+measures test adequacy.</p>
+<p>This iteration is primarily new generator targets — no grammar or
+parser changes. All four features are independent and highly
+parallelizable.</p>
+<p>ADRs: 20260307-ensures-postconditions,
+20260307-behavioral-sovereignty-roadmap.</p>
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Feature</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Branch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FTR-301</td>
+<td>Property-based test generator — fuzz DECIDE inputs, verify
+ENSURES</td>
+<td>must</td>
+<td>planned</td>
+<td>feature/ftr-301-property-tests</td>
+</tr>
+<tr>
+<td>FTR-302</td>
+<td>DECIDE block documentation generator — Mermaid decision flow
+diagrams</td>
+<td>should</td>
+<td>planned</td>
+<td>feature/ftr-302-decide-mermaid</td>
+</tr>
+<tr>
+<td>FTR-303</td>
+<td>System manual Business Logic chapter generation from DECIDE
+blocks</td>
+<td>should</td>
+<td>planned</td>
+<td>feature/ftr-303-business-logic-docs</td>
+</tr>
+<tr>
+<td>FTR-304</td>
+<td>DECIDE branch coverage reporting and test adequacy metrics</td>
+<td>could</td>
+<td>planned</td>
+<td>feature/ftr-304-branch-coverage</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dependency-chain">Dependency Chain</h2>
+<pre><code>All four features are independent (different generator targets):
+  FTR-301 (property tests)    ── depends on v1.62.0 (full expression language)
+  FTR-302 (Mermaid diagrams)  ── depends on v1.62.0 (DECIDE AST)
+  FTR-303 (docs chapter)      ── depends on FTR-302 (embeds Mermaid diagrams)
+  FTR-304 (coverage metrics)  ── depends on FTR-301 (extends test output)</code></pre>
+<h2 id="parallel-agent-plan">Parallel Agent Plan</h2>
+<p>Maximum parallelism — four independent generators.</p>
+<p><strong>Agent A</strong>: FTR-301 (property-based test generator) —
+C++ doctest output. <strong>Agent B</strong>: FTR-302 (Mermaid diagram
+generator) — AsciiDoc output. <strong>Agent C</strong>: FTR-303
+(Business Logic chapter) — AsciiDoc output. Starts after FTR-302.
+<strong>Agent D</strong>: FTR-304 (branch coverage) — extends FTR-301
+output. Starts after FTR-301.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Agent A</th>
+<th>Agent B</th>
+<th>Agent C</th>
+<th>Agent D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>FTR-301 (property tests)</td>
+<td>FTR-302 (Mermaid)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>—</td>
+<td>—</td>
+<td>FTR-303 (docs chapter)</td>
+<td>FTR-304 (coverage)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Review all PRs</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong>: FTR-304 is <code>could</code> priority — may
+be deferred if iteration is large enough.</p>
+<h2 id="quality-gateway-definition-of-done--iteration-level">Quality
+Gateway (Definition of Done — Iteration Level)</h2>
+<h3 id="per-feature-quality-gates-run-during-development">Per-Feature
+Quality Gates (run during development)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Test Command</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FTR-301</td>
+<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-302</td>
+<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-303</td>
+<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-304</td>
+<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>- [ ] Pass</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fast-smoke-tests-run-frequently-during-development">Fast Smoke
+Tests (run frequently during development)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Fast tier passes:
+<code>racket dslgen/tests/run-fast.rkt</code></label></li>
+</ul>
+<h3 id="release-gate-run-once-before-tagging--full-suite">Release Gate
+(run once before tagging — full suite)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />All Racket tests pass:
+<code>racket dslgen/tests/run-all-tests.rkt</code></label></li>
+<li><label><input type="checkbox" />Generated FHIR Health project
+compiles: <code>cmake --build --preset debug</code></label></li>
+<li><label><input type="checkbox" />C++ tests pass:
+<code>ctest --preset debug --output-on-failure</code></label></li>
+<li><label><input type="checkbox" />System manual HTML renders
+correctly:
+<code>cmake --build --preset debug --target system-manual-html-fhirhealth</code></label></li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />README.md updated with Behavioral
+Sovereignty feature summary</label></li>
+<li><label><input type="checkbox" />VISION.md updated with completed
+Behavioral Sovereignty status</label></li>
+<li><label><input type="checkbox" />SYSTEM-BRIEF.md
+regenerated</label></li>
+<li><label><input type="checkbox" />CHANGELOG.md updated with release
+notes</label></li>
+<li><label><input type="checkbox" />DSL.md regenerated</label></li>
+</ul>
+<h3 id="release">Release</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Feature branches merged to develop
+via <code>agent-pr.sh</code></label></li>
+<li><label><input type="checkbox" />All tests pass on
+develop</label></li>
+<li><label><input type="checkbox" />Release via
+<code>workflow/scripts/release.sh v1.63.0</code></label></li>
+<li><label><input type="checkbox" />Pushed to origin</label></li>
+</ul>
+<h2 id="retrospective">Retrospective</h2>
+<p>[After release: what went well, what didn't, what to change.]</p>
+<h2 id="16-strategic-direction">16. Strategic Direction</h2>
+<p>Muscovite validates a 25-year thesis: <strong>a declarative domain
+model should be the single source of truth for an entire application
+stack</strong>.</p>
+<h3 id="target-independence-via-ir">Target Independence via IR</h3>
+<p>The IR supports arbitrary retargeting:</p>
+<table>
+<thead>
+<tr>
+<th>Current</th>
+<th>Alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL</td>
+<td>Oracle, SQL Server, CockroachDB</td>
+</tr>
+<tr>
+<td>C++ / pqxx</td>
+<td>.NET / EF Core, Java / Spring, Rust / SQLx</td>
+</tr>
+<tr>
+<td>gRPC / Protobuf</td>
+<td>REST / OpenAPI, GraphQL</td>
+</tr>
+<tr>
+<td>Qt Widgets / QML</td>
+<td>React, Blazor</td>
+</tr>
+</tbody>
+</table>
+<p>Adding a target = writing a generator (~1K–5K lines of Racket).</p>
+<h3 id="legacy-modernization-pipeline-long-term-vision">Legacy
+Modernization Pipeline (Long-Term Vision)</h3>
+<pre><code>Brownfield System → AI Extraction (LLM + grammar) → .ddd Model → Human Review → New Stack</code></pre>
+<p>The <code>.ddd</code> file is the review artifact between AI
+extraction and human validation.</p>
+<h2 id="15-active-agent-sessions">15. Active Agent Sessions</h2>
+<p>No active agent sessions.</p>
+<h2 id="17-key-references">17. Key References</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../AGENTS.html">AGENTS.md</a></td>
+<td>AI agent rules, conventions, build workflow</td>
+</tr>
+<tr>
+<td><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a></td>
+<td>Canonical IR structs, type mappings, naming conventions</td>
+</tr>
+<tr>
+<td><a href="VISION.html">VISION.md</a></td>
+<td>Architectural vision and design philosophy</td>
+</tr>
+<tr>
+<td><a href="../CHANGELOG.html">CHANGELOG.md</a></td>
+<td>Release history</td>
+</tr>
+<tr>
+<td><a href="adr/">doc/adr/</a></td>
+<td>Architecture decision records</td>
+</tr>
+<tr>
+<td><a href="../workflow/">workflow/</a></td>
+<td>Feature lifecycle and iteration planning</td>
+</tr>
+<tr>
+<td><a
+href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a></td>
+<td>Formal PEG grammar (authoritative syntax spec)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Generated by <code>tools/generate-context.sh</code></em></p>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

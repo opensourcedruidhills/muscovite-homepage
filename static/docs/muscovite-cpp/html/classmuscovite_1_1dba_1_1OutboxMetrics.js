@@ -1,0 +1,26 @@
+var classmuscovite_1_1dba_1_1OutboxMetrics =
+[
+    [ "all_health_status", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a70bb89815fb519d012ed22a91fc33eff", null ],
+    [ "current_lag", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8", null ],
+    [ "failed_total", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a6797b8b71450b4b37ec9368ca2a80f42", null ],
+    [ "health_status", "classmuscovite_1_1dba_1_1OutboxMetrics.html#ac0b849c4572d69a090328d9f8e159407", null ],
+    [ "instance", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a4e94cac0f4c9ae4b81015fe58a8d9452", null ],
+    [ "is_broker_connected", "classmuscovite_1_1dba_1_1OutboxMetrics.html#aa0c4ee8ca5e3d3c23f5b2fef14913f3c", null ],
+    [ "is_publisher_running", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a58a0047562f3de221635869ef29d1c5e", null ],
+    [ "last_batch_size", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a2ec6cb6fbc9b65e25b9032bb464a64d8", null ],
+    [ "prometheus_exposition", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a17aeb14d7a08de6aacddd820dabdce59", null ],
+    [ "published_total", "classmuscovite_1_1dba_1_1OutboxMetrics.html#ad19ce1c5827cadb930c7efd598909d09", null ],
+    [ "queue_depth", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a4550591d3581c75abd8ff97d106102b1", null ],
+    [ "record_batch_size", "classmuscovite_1_1dba_1_1OutboxMetrics.html#ad268298739b5d24a751371f3a6409659", null ],
+    [ "record_broker_connected", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a5c78dedf841e4583535bedaf71276185", null ],
+    [ "record_failed", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a9efe0123ee2824af2e178bac3ca01f91", null ],
+    [ "record_lag", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a249bbd55c3cbf341a5baac93b38ff897", null ],
+    [ "record_published", "classmuscovite_1_1dba_1_1OutboxMetrics.html#ad88b0cec8c5588242eefed83339ebd61", null ],
+    [ "record_publisher_running", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a160b26fe5e8dfb71aa89153cda300e63", null ],
+    [ "record_queue_depth", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a996023eb4ea194ebccf6cfac6238f2ca", null ],
+    [ "record_retry", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a1e4c2c66c56cf6df1d33cedffb6a3857", null ],
+    [ "registered_schemas", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a3f6880b238ed09098ce4e3fc8222e627", null ],
+    [ "reset", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a08f228176eccea3bf574c5e9fefc46fc", null ],
+    [ "retried_total", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a541da14571f50dc883a27397040cd3e5", null ],
+    [ "summary", "classmuscovite_1_1dba_1_1OutboxMetrics.html#a8e79de648d86355fffb3f5dd414ffc9f", null ]
+];

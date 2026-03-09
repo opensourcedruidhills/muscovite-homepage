@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality Tooling in Generated
+Projects — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Quality Tooling in Generated Projects</span>
+</nav>
+
+<h1>Quality Tooling in Generated Projects</h1>
+
+
+<h1 id="quality-tooling-in-generated-projects">Quality Tooling in
+Generated Projects</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-27</li>
+<li>Tags: cmake, sanitizers, linters, clang-tidy, cppcheck,
+generated-code, layer2</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: Generated standalone projects (Layer 2) lack the
+quality infrastructure that the framework (Layer 1) already has —
+sanitizer presets, clang-tidy integration, cppcheck, and coverage
+tooling. This means consumers of generated projects get a degraded
+development experience compared to the framework itself.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The Muscovite framework (Layer 1) has mature quality tooling:</p>
+<ul>
+<li><strong>clang-tidy</strong> integration via
+<code>cmake/StaticAnalysis.cmake</code> with 3 options
+(<code>MUSCOVITE_ENABLE_CLANG_TIDY</code>,
+<code>MUSCOVITE_ENABLE_CPPCHECK</code>,
+<code>MUSCOVITE_ENABLE_IWYU</code>)</li>
+<li><strong>Compiler warnings</strong> via
+<code>cmake/CompilerWarnings.cmake</code>
+(<code>-Wall -Wextra -Wpedantic -Werror</code> as an interface
+library)</li>
+<li><strong>AddressSanitizer + UBSan</strong> preset (<code>asan</code>)
+in <code>CMakePresets.json</code></li>
+<li><strong>ThreadSanitizer</strong> preset (<code>tsan</code>) in
+<code>CMakePresets.json</code></li>
+<li><strong>Code coverage</strong> preset (<code>coverage</code>) with
+lcov/genhtml targets</li>
+<li><strong><code>.clang-tidy</code></strong> configuration with 90+
+checks tuned for C++23/Qt/Boost/pqxx</li>
+</ul>
+<p>However, generated standalone projects
+(<code>examples/*/generated/</code>) receive <strong>none</strong> of
+this:</p>
+<ul>
+<li><code>CMakePresets.json</code> emitted by
+<code>build-system-packaging.rkt</code> only has <code>debug</code>,
+<code>release</code>, <code>relwithdebinfo</code> — no
+<code>asan</code>, <code>tsan</code>, or <code>coverage</code>
+presets</li>
+<li>No <code>.clang-tidy</code> file is generated</li>
+<li>No <code>StaticAnalysis.cmake</code> is generated</li>
+<li>The generated <code>CMakeLists.txt</code> has inline
+<code>-Wall -Wextra -Wpedantic -Werror</code> but no clang-tidy/cppcheck
+option hooks</li>
+<li>Framework sanitizer presets lack shared-library linker flags
+(<code>BUILD_SHARED_LIBS=ON</code> is the default)</li>
+</ul>
+<p>This violates the project's principle that <strong>generated projects
+should be production-grade standalone applications</strong> — a consumer
+who <code>git clone</code>s a generated project should get the same
+quality infrastructure as the framework developer.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Generated projects are the <strong>product</strong> — they must be
+self-contained with production-grade tooling</li>
+<li>The framework already has working quality infrastructure; generated
+projects should inherit equivalent capability</li>
+<li>Sanitizers catch real bugs: UB, use-after-free, data races,
+uninitialized reads — particularly important for generated pqxx
+repository code and gRPC service code</li>
+<li>clang-tidy catches style regressions and common C++23 pitfalls in
+generated code</li>
+<li>Coverage tooling enables consumers to measure their test coverage
+from day one</li>
+<li><code>BUILD_SHARED_LIBS=ON</code> requires sanitizer flags on both
+compile and link lines</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Emit full quality tooling into generated projects</strong> —
+CMake presets, <code>.clang-tidy</code>,
+<code>StaticAnalysis.cmake</code>, all wired into the generated build
+system</li>
+<li><strong>Partial: presets only</strong> — add
+<code>asan</code>/<code>tsan</code>/<code>coverage</code> presets but
+skip linter integration</li>
+<li><strong>No change</strong> — keep quality tooling in framework only,
+consumers add their own</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Emit full quality tooling</strong>,
+because:</p>
+<ul>
+<li>It aligns with the "one <code>.ddd</code> file generates a complete
+project" value proposition</li>
+<li>The marginal generator complexity is low (CMake preset generation is
+templated)</li>
+<li>Consumers get immediate value without manual CMake setup</li>
+<li>The <code>.clang-tidy</code> configuration can be sensibly scoped
+for generated code patterns</li>
+</ul>
+<h3 id="detailed-decisions">Detailed Decisions</h3>
+<h4
+id="1-generated-cmakepresetsjson-add-sanitizer-and-coverage-presets">1.
+Generated CMakePresets.json: Add Sanitizer and Coverage Presets</h4>
+<p>The <code>generate-cmake-presets</code> function in
+<code>build-system-packaging.rkt</code> MUST emit:</p>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Type</th>
+<th>Flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>asan</code></td>
+<td>configure + build + test</td>
+<td><code>-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer</code>
+on compile + link</td>
+</tr>
+<tr>
+<td><code>tsan</code></td>
+<td>configure + build + test</td>
+<td><code>-fsanitize=thread -g -O1</code> on compile + link</td>
+</tr>
+<tr>
+<td><code>coverage</code></td>
+<td>configure + build + test</td>
+<td><code>-fprofile-arcs -ftest-coverage --coverage -g -O0</code> on
+compile + link</td>
+</tr>
+</tbody>
+</table>
+<p>Test presets MUST include <code>ASAN_OPTIONS</code> and
+<code>TSAN_OPTIONS</code> environment variables.</p>
+<h4 id="2-generated-clang-tidy">2. Generated .clang-tidy</h4>
+<p>A <code>.clang-tidy</code> file MUST be emitted at the project root
+with checks appropriate for generated C++23 code. Derived from the
+framework's configuration but with relaxed naming checks (generated code
+uses its own conventions consistently).</p>
+<h4 id="3-generated-staticanalysiscmake">3. Generated
+StaticAnalysis.cmake</h4>
+<p>A <code>cmake/StaticAnalysis.cmake</code> MUST be emitted with
+options for <code>ENABLE_CLANG_TIDY</code> and
+<code>ENABLE_CPPCHECK</code>. The generated <code>CMakeLists.txt</code>
+MUST <code>include(StaticAnalysis)</code>.</p>
+<h4 id="4-framework-preset-linker-flag-fix">4. Framework Preset Linker
+Flag Fix</h4>
+<p>The framework's own <code>CMakePresets.json</code> <code>asan</code>
+and <code>tsan</code> presets MUST add
+<code>CMAKE_EXE_LINKER_FLAGS</code> and
+<code>CMAKE_SHARED_LINKER_FLAGS</code> with the sanitizer flags, since
+<code>BUILD_SHARED_LIBS=ON</code> is the default.</p>
+<h4 id="5-mold-linker-exclusion-for-sanitizer-builds">5. Mold Linker
+Exclusion for Sanitizer Builds</h4>
+<p><code>BuildAcceleration.cmake</code> MUST explicitly skip mold for
+sanitizer builds. Mold + sanitizers can produce false positives or miss
+instrumented symbols.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Generated projects are truly standalone with production-grade
+quality infrastructure</li>
+<li>Consumers discover UB, memory errors, and data races from day
+one</li>
+<li>clang-tidy enforces consistent code quality in generated output</li>
+<li>Coverage measurement available without manual CMake setup</li>
+<li>Framework sanitizer presets work correctly with shared
+libraries</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Additional generator complexity (~100 lines in
+build-system-packaging.rkt)</li>
+<li>Generated <code>.clang-tidy</code> needs maintenance when framework
+config evolves</li>
+<li>Sanitizer builds are slower (expected, acceptable)</li>
+</ul>
+<h2 id="compliance">Compliance</h2>
+<p>This ADR does NOT change DSL syntax, IR structs, or parser behavior.
+It only affects:</p>
+<ul>
+<li>CMake generator output (Layer 0 → Layer 2)</li>
+<li>Framework build configuration (Layer 1)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a href="20260211-build-acceleration-toolchain.html">Build
+Acceleration Toolchain</a> — mold/ccache integration</li>
+<li>Related: <a
+href="20260212-doctest-adoption-and-tdd-practice.html">doctest Adoption
+and TDD Practice</a> — test framework for sanitizer-exercised tests</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying
+<code>dslgen/generators/cmake/build-system-packaging.rkt</code> — ensure
+sanitizer/coverage presets are emitted</li>
+<li>When modifying
+<code>dslgen/generators/cmake/build-system-generator.rkt</code> — ensure
+<code>include(StaticAnalysis)</code> is in generated CMakeLists.txt</li>
+<li>When modifying framework <code>CMakePresets.json</code> — ensure
+sanitizer presets have both compile AND link flags</li>
+<li>When modifying <code>cmake/BuildAcceleration.cmake</code> — ensure
+mold is excluded for sanitizer builds</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/cmake/build-system-packaging.rkt</code> —
+CMakePresets.json generation</li>
+<li><code>dslgen/generators/cmake/build-system-generator.rkt</code> —
+CMakeLists.txt generation</li>
+<li><code>CMakePresets.json</code> — framework presets (fix linker
+flags)</li>
+<li><code>cmake/BuildAcceleration.cmake</code> — mold/ccache (sanitizer
+exclusion)</li>
+<li><code>cmake/StaticAnalysis.cmake</code> — template for generated
+version</li>
+<li><code>.clang-tidy</code> — template for generated version</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

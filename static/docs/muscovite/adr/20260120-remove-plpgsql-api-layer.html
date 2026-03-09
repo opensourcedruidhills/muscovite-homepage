@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remove PL/pgSQL Stored Procedure API
+Layer — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Remove PL/pgSQL Stored Procedure API Layer</span>
+</nav>
+
+<h1>Remove PL/pgSQL Stored Procedure API Layer</h1>
+
+
+<h1 id="remove-plpgsql-stored-procedure-api-layer">Remove PL/pgSQL
+Stored Procedure API Layer</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-01-20</li>
+<li>Tags: architecture, postgresql, dba, stored-procedures</li>
+<li>Supersedes: <a
+href="20251223-api-only-testing-with-ddd-seeding.html">20251223-api-only-testing-with-ddd-seeding.md</a>
+(partially)</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite currently generates PL/pgSQL stored procedures
+(<code>{schema}_api.{entity}_insert/select/update/delete</code>) as a
+database API layer. The C++ DBA repositories call these stored
+procedures via libpqxx. However, these stored procedures contain only
+pure CRUD operations with no business logic—they are essentially SQL
+wrappers that add complexity without benefit.</p>
+<p>The question is: should we retain this stored procedure layer, or
+move to direct SQL execution in C++ repositories?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Simplicity</strong>: Two layers (C++ → SP → SQL) vs one
+layer (C++ → SQL) for simple CRUD</li>
+<li><strong>Debugging</strong>: Stored procedures obscure the actual SQL
+being executed</li>
+<li><strong>Portability</strong>: Business logic in C++ is portable;
+PL/pgSQL is PostgreSQL-specific</li>
+<li><strong>Performance</strong>: Minor overhead from SP calls
+(negligible, not primary driver)</li>
+<li><strong>Testing</strong>: Current pgTAP tests test SPs, not business
+logic</li>
+<li><strong>DDD Alignment</strong>: Stored procedures bypass aggregate
+boundaries (see ADR: Domain Services as Aggregate Boundary)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Keep stored procedures as public API</strong>: Current
+architecture</li>
+<li><strong>Remove stored procedures, direct SQL in
+repositories</strong>: Proposed change</li>
+<li><strong>Keep SPs as internal implementation detail</strong>: Hybrid
+approach</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Remove stored procedures, direct SQL in
+repositories"</strong>, because:</p>
+<ul>
+<li>Stored procedures contain zero business logic—they are pure CRUD
+wrappers</li>
+<li>Direct SQL in C++ is easier to debug (see actual queries in
+logs)</li>
+<li>Business logic in C++ enables proper aggregate boundary
+enforcement</li>
+<li>Removes an unnecessary abstraction layer</li>
+<li>Enables CQRS-ready architecture (see ADR: CQRS-Ready
+Architecture)</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<p><strong>Before</strong> (current):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// DBA Repository calls stored procedure</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;SELECT * FROM patient_api.patient_insert($1, $2, $3)&quot;</span><span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    id<span class="op">,</span> name<span class="op">,</span> birth_date</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div>
+<p><strong>After</strong> (new):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// DBA Repository executes SQL directly</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec_params<span class="op">(</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSERT INTO fhir.patient (id, name, birth_date) &quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;VALUES ($1, $2, $3) RETURNING *&quot;</span><span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    id<span class="op">,</span> name<span class="op">,</span> birth_date</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div>
+<p><strong>Generator Changes</strong>:</p>
+<ul>
+<li>Remove <code>plpgsql-api.rkt</code> from generation pipeline</li>
+<li>Modify <code>repository.rkt</code> to emit direct SQL instead of SP
+calls</li>
+<li>Keep schema/table generation in <code>sqitch-unified.rkt</code></li>
+<li>Keep <code>domain_events</code> table for event storage</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Simpler architecture: one less layer to understand and maintain</li>
+<li>Better debugging: actual SQL visible in logs and profilers</li>
+<li>Portable business logic: C++ code works with any SQL database
+(future)</li>
+<li>Enables proper DDD: aggregate boundaries enforced in domain
+services</li>
+<li>Cleaner Sqitch migrations: only DDL, no function definitions</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Loss of <code>\df {schema}_api.*</code> for quick API discovery in
+psql</li>
+<li>Existing pgTAP tests become obsolete (replaced by Catch2 tests)</li>
+<li>FK validation errors surface at SQL execution time, not SP pre-check
+<ul>
+<li>Mitigation: PostgreSQL FK constraints provide clear error
+messages</li>
+<li>Mitigation: Domain services can add application-level validation if
+needed</li>
+</ul></li>
+</ul>
+<h2
+id="amendment-defense-in-depth-invariant-triggers-2026-02-23">Amendment:
+Defense-in-Depth Invariant Triggers (2026-02-23)</h2>
+<p><strong>Context</strong>: BUG-003 (TransitionState lost-update) and
+the introduction of <code>STATE_MACHINE</code> blocks (ADR 20260221)
+raised the question of whether PostgreSQL triggers should guard state
+machine transitions at the storage level.</p>
+<h3 id="the-distinction-that-matters">The Distinction That Matters</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Banned?</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRUD API stored procedures (<code>{schema}_api.entity_insert</code>,
+etc.)</td>
+<td><strong>YES</strong></td>
+<td>Pure wrappers with zero business logic; added a useless abstraction
+layer</td>
+</tr>
+<tr>
+<td>Triggers with business logic (pricing, fee calculation, complex
+derivations)</td>
+<td><strong>YES</strong></td>
+<td>Business logic belongs in C++ domain services (ADR
+20260120-domain-services)</td>
+</tr>
+<tr>
+<td><strong>Invariant enforcement triggers</strong> (state machine
+guards, cross-row constraints that CHECK cannot express)</td>
+<td><strong>NO — explicitly allowed</strong></td>
+<td>Defense-in-depth; guards the DB against bypasses of the app
+layer</td>
+</tr>
+<tr>
+<td>Standard CHECK constraints, FK constraints, UNIQUE constraints</td>
+<td><strong>Always allowed</strong></td>
+<td>Core PostgreSQL invariants</td>
+</tr>
+</tbody>
+</table>
+<h3 id="invariant-enforcement-triggers-when-to-use">Invariant
+Enforcement Triggers: When to Use</h3>
+<p>A trigger is appropriate for defense-in-depth when
+<strong>all</strong> of these are true:</p>
+<ol type="1">
+<li>The constraint cannot be expressed as a standard CHECK constraint
+(which is row-local)</li>
+<li>The constraint enforces an <em>invariant</em> (a rule that must
+always hold), not business logic</li>
+<li>Direct database modifications (e.g., <code>psql</code>, migration
+scripts, admin tools) would silently violate the invariant without the
+trigger</li>
+<li>The application layer (C++ domain service or StateMachine class) is
+the <em>primary</em> enforcement point — the trigger is a
+<em>secondary</em> guard, not a substitute</li>
+</ol>
+<p><strong>Prime example</strong>: state machine transition guards.</p>
+<ul>
+<li>The C++ <code>OrderStateMachine::transition()</code> is the primary
+guardian.</li>
+<li>A trigger
+<code>BEFORE UPDATE ON order WHEN (NEW.current_state_id &lt;&gt; OLD.current_state_id)</code>
+that validates the transition UUID pair against
+<code>order_state_transition_log</code> is the secondary guard.</li>
+<li>Without the trigger, a direct
+<code>UPDATE order SET current_state_id = '...'</code> bypasses all
+guards.</li>
+</ul>
+<h3
+id="decision-state-machine-transition-triggers--generate-as-opt-in">Decision:
+State Machine Transition Triggers — Generate as Opt-In</h3>
+<p>State machine transition enforcement triggers are
+<strong>architecturally legitimate</strong> and <strong>recommended for
+production domains</strong>. They will be generated as opt-in via a
+<code>STATE_MACHINE</code> annotation (exact DSL syntax TBD, pending
+grammar extension):</p>
+<pre class="ddd"><code>STATE_MACHINE OrderLifecycle @uuid &quot;...&quot; FOR Order
+    ENFORCE_AT DB_LEVEL  -- generates trigger; default is app-level only
+{ ... }</code></pre>
+<p>When <code>ENFORCE_AT DB_LEVEL</code> is present, the generator emits
+an additional Sqitch change with a <code>BEFORE UPDATE</code> trigger
+that:</p>
+<ol type="1">
+<li>Raises <code>SQLSTATE '23514'</code> (CHECK violation) on an invalid
+transition</li>
+<li>Delegates to a <em>single</em> PL/pgSQL function that reads from the
+lookup-table constants (no business logic — pure UUID pair validation
+against a allowed-transitions table)</li>
+</ol>
+<p><strong>Without <code>ENFORCE_AT DB_LEVEL</code></strong>: no trigger
+is generated; the default is app-layer-only enforcement via the C++
+StateMachine class (existing behavior).</p>
+<h3 id="prohibition-boundary-no-exceptions">Prohibition Boundary (NO
+EXCEPTIONS)</h3>
+<p>This amendment does <strong>not</strong> open the door to stored
+procedures containing business logic. The following remain banned:</p>
+<ul>
+<li>PL/pgSQL functions with conditional branching on domain values
+(e.g., pricing, discounts)</li>
+<li>Stored procedures replacing domain service methods</li>
+<li>Triggers that perform DML on other tables (cascading side-effect
+triggers)</li>
+<li>Functions called by application code as an API substitute</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Refined by <a
+href="20260120-domain-services-as-aggregate-boundary.html">20260120-domain-services-as-aggregate-boundary.md</a></li>
+<li>Refined by <a
+href="20260120-catch2-integration-tests.html">20260120-catch2-integration-tests.md</a></li>
+<li>Supersedes <a
+href="20251223-api-only-testing-with-ddd-seeding.html">20251223-api-only-testing-with-ddd-seeding.md</a>
+for testing strategy</li>
+<li>Amended by: BUG-003 analysis (2026-02-23) — defense-in-depth trigger
+carve-out</li>
+<li>See also: <a
+href="20260221-entity-state-machines.html">20260221-entity-state-machines.md</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating C++ DBA repository code</li>
+<li>When generating database migrations (Sqitch)</li>
+<li>When implementing CRUD operations for any entity</li>
+<li>When debugging database operations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Complex queries that benefit from database-side optimization (use
+views instead)</li>
+<li>Standard <code>CHECK</code>, <code>UNIQUE</code>,
+<code>FOREIGN KEY</code> constraints — always use these freely</li>
+<li><code>domain_events</code> table and related infrastructure</li>
+<li><strong>Invariant enforcement triggers</strong> — explicitly
+<em>permitted</em> (see Amendment above)</li>
+<li>State machine transition guard triggers with
+<code>ENFORCE_AT DB_LEVEL</code> — permitted and generated</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><code>plpgsql-api.rkt</code> generation is disabled/removed</li>
+<li><code>repository.rkt</code> generates direct SQL statements</li>
+<li>Code review rejects stored procedure creation for CRUD
+operations</li>
+<li>Catch2 tests validate repository behavior directly</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/plpgsql-api.rkt</code> - TO BE
+REMOVED</li>
+<li><code>src/dslgen/generators/cpp/repository.rkt</code> - Modified for
+direct SQL</li>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+Schema/table only</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

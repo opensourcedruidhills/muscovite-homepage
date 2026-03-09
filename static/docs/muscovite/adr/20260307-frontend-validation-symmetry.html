@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Validation Symmetry for Qt Widgets and
+QML — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Frontend Validation Symmetry for Qt Widgets and QML</span>
+</nav>
+
+<h1>Frontend Validation Symmetry for Qt Widgets and QML</h1>
+
+
+<h1 id="frontend-validation-symmetry-for-qt-widgets-and-qml">Frontend
+Validation Symmetry for Qt Widgets and QML</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-07</li>
+<li>Tags: qt, qml, widgets, validation, frontend, symmetry</li>
+</ul>
+<p>Technical Story: The backend three-tier validation architecture needs
+symmetric representation in both frontend frameworks. Qt Widgets already
+has an EntityValidator with a rule system but it is not populated from
+DSL constraints. QML has no validation infrastructure.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates two frontend frameworks from the same DSL: Qt
+Widgets and Qt QML (ADR 20260206). The backend introduces a three-tier
+validation architecture (ADR
+20260307-three-tier-validation-architecture) with strong types (Tier 1),
+cross-field invariants (Tier 2), and plugin business rules (Tier 3).</p>
+<p>Without frontend validation symmetry, users experience:</p>
+<ol type="1">
+<li><strong>Delayed feedback</strong> — invalid data is submitted to the
+backend, rejected, and the error must be displayed retroactively</li>
+<li><strong>Inconsistent behavior</strong> — some constraints are
+enforced in the UI (e.g., spin box ranges) while others are not</li>
+<li><strong>Duplicated effort</strong> — developers manually add
+frontend validation that already exists in the DSL</li>
+</ol>
+<p>The DSL already declares all the information needed to generate
+frontend validation. The question is how to map the three backend tiers
+to idiomatic Qt Widgets and QML patterns.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Both frontends must validate the same constraints as the backend
+(consistency)</li>
+<li>Frontend validation is optimistic — backend validation is
+authoritative</li>
+<li>Qt Widgets uses QValidator subclasses and widget configuration
+APIs</li>
+<li>QML uses declarative Validator components and JavaScript
+expressions</li>
+<li>Tier 3 (plugin) must be extensible without editing generated code in
+both frameworks</li>
+<li>All validation must report field-level errors for UI binding</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Mirror three tiers in both frontends</strong> — each tier
+maps to idiomatic Qt Widgets and QML patterns</li>
+<li><strong>Backend-only validation</strong> — frontends submit to
+backend and display returned errors</li>
+<li><strong>Shared C++ validation library</strong> — frontends call the
+same C++ validators via bindings</li>
+<li><strong>Schema-driven validation</strong> — backend sends validation
+schema, frontends interpret it at runtime</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Mirror three tiers in both
+frontends</strong>, because it provides immediate user feedback,
+leverages native Qt/QML validation patterns, and maintains the DSL as
+single source of truth.</p>
+<h3 id="qt-widgets-tier-mapping">Qt Widgets Tier Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Backend</th>
+<th>Qt Widgets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tier 1</strong></td>
+<td><code>Entity::try_from()</code> with strong types</td>
+<td>Widget configuration: <code>QSpinBox::setMinimum/setMaximum</code>,
+<code>QLineEdit</code> + <code>QRegularExpressionValidator</code>,
+<code>QDateEdit::setMaximumDate(QDate::currentDate())</code></td>
+</tr>
+<tr>
+<td><strong>Tier 2</strong></td>
+<td><code>EntityValidator::validate()</code></td>
+<td><code>EntityValidator</code> rules generated from cross-field
+constraints, called on form submission</td>
+</tr>
+<tr>
+<td><strong>Tier 3</strong></td>
+<td><code>PluginValidator::validate()</code></td>
+<td>Plugin hooks in EntityValidator — virtual method in sidecar
+file</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tier 1 (Widget Configuration)</strong>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: age Integer @min(0) @max(150)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">age_spin_box_</span><span class="op">-&gt;</span>setMinimum<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">age_spin_box_</span><span class="op">-&gt;</span>setMaximum<span class="op">(</span><span class="dv">150</span><span class="op">);</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: name String @not_empty</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="va">name_line_edit_</span><span class="op">-&gt;</span>setValidator<span class="op">(</span><span class="kw">new</span> <span class="ex">QRegularExpressionValidator</span><span class="op">(</span><span class="ex">QRegularExpression</span><span class="op">(</span><span class="st">&quot;.+&quot;</span><span class="op">),</span> <span class="kw">this</span><span class="op">));</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: birth_date Date @not_in_future</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">birth_date_edit_</span><span class="op">-&gt;</span>setMaximumDate<span class="op">(</span><span class="ex">QDate::currentDate</span><span class="op">());</span></span></code></pre></div>
+<p><strong>Tier 2 (EntityValidator)</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: end_date @after(start_date)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ValidationResult EntityValidator<span class="op">::</span>validate<span class="op">()</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ValidationResult result<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span><span class="va">end_date_edit_</span><span class="op">-&gt;</span>date<span class="op">()</span> <span class="op">&lt;=</span> <span class="va">start_date_edit_</span><span class="op">-&gt;</span>date<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        result<span class="op">.</span>addError<span class="op">(</span><span class="st">&quot;end_date&quot;</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;must be after start date&quot;</span><span class="op">));</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Tier 3 (Plugin Hooks)</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated sidecar stub — user-owned after sentinel removal</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ValidationResult EntityValidatorPlugin<span class="op">::</span>validate<span class="op">(</span><span class="at">const</span> EntityFormData<span class="op">&amp;</span> data<span class="op">)</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// MUSCOVITE:SIDECAR:UNMODIFIED — remove this line when editing this file</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">{};</span>  <span class="co">// Default: no additional business rules</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="qml-tier-mapping">QML Tier Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Backend</th>
+<th>QML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tier 1</strong></td>
+<td><code>Entity::try_from()</code> with strong types</td>
+<td><code>IntValidator</code>, <code>DoubleValidator</code>,
+<code>RegularExpressionValidator</code> on TextFields</td>
+</tr>
+<tr>
+<td><strong>Tier 2</strong></td>
+<td><code>EntityValidator::validate()</code></td>
+<td><code>ViewModel::validate()</code> method with cross-field
+comparison logic</td>
+</tr>
+<tr>
+<td><strong>Tier 3</strong></td>
+<td><code>PluginValidator::validate()</code></td>
+<td>Virtual <code>validatePlugin()</code> method in ViewModel
+sidecar</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tier 1 (QML Validators)</strong>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode qml"><code class="sourceCode qml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: age Integer @min(0) @max(150)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>TextField {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">id</span><span class="op">:</span> ageField</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">validator</span><span class="op">:</span> IntValidator { <span class="dt">bottom</span><span class="op">:</span> <span class="dv">0</span><span class="op">;</span> <span class="dt">top</span><span class="op">:</span> <span class="dv">150</span> }</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated from: email String @pattern(&quot;[^@]+@[^@]+\\.[^@]+&quot;)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>TextField {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">id</span><span class="op">:</span> emailField</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">validator</span><span class="op">:</span> RegularExpressionValidator {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">regularExpression</span><span class="op">:</span> <span class="ss">/</span><span class="sc">[^@]+</span><span class="ss">@</span><span class="sc">[^@]+\.[^@]+</span><span class="ss">/</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Tier 2 (ViewModel Validation)</strong>:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated ViewModel method from: end_date @after(start_date)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">QVariantMap</span> ViewModel<span class="op">::</span>validate<span class="op">()</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QVariantMap</span> errors<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>endDate<span class="op">()</span> <span class="op">&lt;=</span> startDate<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        errors<span class="op">.</span>insert<span class="op">(</span><span class="st">&quot;end_date&quot;</span><span class="op">,</span> <span class="fu">tr</span><span class="op">(</span><span class="st">&quot;must be after start date&quot;</span><span class="op">));</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> errors<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Tier 3 (ViewModel Plugin)</strong>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated sidecar stub — user-owned after sentinel removal</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">QVariantMap</span> ViewModelPlugin<span class="op">::</span>validatePlugin<span class="op">(</span><span class="at">const</span> <span class="ex">QVariantMap</span><span class="op">&amp;</span> formData<span class="op">)</span> <span class="at">const</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// MUSCOVITE:SIDECAR:UNMODIFIED — remove this line when editing this file</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">{};</span>  <span class="co">// Default: no additional business rules</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="validationresult-shared">ValidationResult (Shared)</h3>
+<p>Both frontends use a <code>ValidationResult</code> that maps field
+names to error messages, enabling UI binding:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Qt Widgets: highlight field with red border, show tooltip</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">// QML: bind to error text below field, conditional styling</span></span></code></pre></div>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Immediate feedback — users see validation errors as they type or
+when fields lose focus</li>
+<li>Single source of truth — DSL constraint annotations generate
+validation in backend + 2 frontends + SQL</li>
+<li>DSL amplification increases further — one <code>@min(0)</code>
+generates 4+ validation sites</li>
+<li>Native patterns — Qt Widgets uses QValidator, QML uses declarative
+Validators</li>
+<li>Plugin extensibility — Tier 3 sidecar pattern works identically in
+both frontends</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Frontend validation is optimistic — backend remains authoritative,
+so validation logic exists in two places</li>
+<li>Widget configuration APIs differ between Qt Widgets and QML —
+generator must handle both idioms</li>
+<li>Temporal constraints (<code>@not_in_future</code>) in QML require
+JavaScript date comparison (less robust than C++)</li>
+<li>Increased generated code volume per entity (~30% more lines in both
+frontend targets)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Related: <a
+href="20260307-three-tier-validation-architecture.html">ADR 20260307 —
+Three-Tier Validation Architecture</a> (backend tiers being
+mirrored)</li>
+<li>Related: <a href="20260307-field-constraint-annotations.html">ADR
+20260307 — Field Constraint Annotations</a> (DSL syntax driving
+generation)</li>
+<li>Related: <a href="20260307-cross-field-constraint-syntax.html">ADR
+20260307 — Cross-Field Constraint Syntax</a> (Tier 2 source)</li>
+<li>Related: <a href="20260206-multi-frontend-ui-generation.html">ADR
+20260206 — Multi-Frontend UI Generation</a> (Qt Widgets + QML dual
+generation)</li>
+<li>Related: <a href="20260223-layer-2-sidecar-protocol.html">ADR 20260223
+— Layer 2 Sidecar Protocol</a> (Tier 3 extension mechanism)</li>
+<li>Related: <a href="20260303-qt-style-guide.html">ADR 20260303 — Qt
+Style Guide</a> (Qt Widgets patterns)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating Qt Widgets form code — configure widgets from DSL
+constraint annotations</li>
+<li>When generating QML form code — add Validator components from DSL
+constraint annotations</li>
+<li>When generating EntityValidator for Qt Widgets — produce cross-field
+validation rules</li>
+<li>When generating ViewModel::validate() for QML — produce cross-field
+validation logic</li>
+<li>When generating sidecar stubs for frontend plugin validation (Tier
+3)</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Backend validation code — that follows the backend three-tier
+architecture ADR</li>
+<li>List/table views — validation applies to form/detail views only</li>
+<li>Read-only displays — no validation needed for display-only
+fields</li>
+<li>Navigation and routing — UI structure decisions are separate from
+validation</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Qt Widgets generator in
+<code>dslgen/generators/qt/widgets-main.rkt</code> produces widget
+configuration from constraints</li>
+<li>QML generator in <code>dslgen/generators/qt/qml-main.rkt</code>
+produces Validator components from constraints</li>
+<li>Integration tests verify frontend validators accept/reject the same
+values as backend validators</li>
+<li>Generated sidecar stubs follow sentinel protocol (ADR 20260223)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/qt/widgets-main.rkt</code> — Qt Widgets form
+generation</li>
+<li><code>dslgen/generators/qt/widgets-detail-view.rkt</code> — Qt
+Widgets detail/edit views</li>
+<li><code>dslgen/generators/qt/qml-main.rkt</code> — QML form
+generation</li>
+<li><code>dslgen/generators/qt/qml-viewmodel.rkt</code> — QML ViewModel
+generation</li>
+<li><code>dslgen/generators/sidecar.rkt</code> — sidecar stub generation
+(shared by all targets)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

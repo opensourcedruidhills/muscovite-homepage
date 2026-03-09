@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Muscovite Embedded Prompts (MEP) for Platform-Agnostic AI
+Orchestration — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Muscovite Embedded Prompts (MEP) for Platform-Agnostic AI
+Orchestration</span>
+</nav>
+
+<h1>ADR: Muscovite Embedded Prompts (MEP) for Platform-Agnostic AI
+Orchestration</h1>
+
+
+<h1
+id="adr-muscovite-embedded-prompts-mep-for-platform-agnostic-ai-orchestration">ADR:
+Muscovite Embedded Prompts (MEP) for Platform-Agnostic AI
+Orchestration</h1>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Deciders</strong>: jolo, Muscovite AI</li>
+<li><strong>Date</strong>: 2026-02-05</li>
+<li><strong>Refers to</strong>: (Domain-Specific AI Interactions)</li>
+</ul>
+<h2 id="1-context-and-problem-statement">1. Context and Problem
+Statement</h2>
+<p>Muscovite aims to be a "Single Source of Truth" across a full
+application stack (PostgreSQL, C++, gRPC, Qt). While structural modeling
+(entities, relationships) is well-defined, complex behavioral logic like
+<strong>validations</strong> and <strong>long-running sagas</strong>
+often requires manual C++ or SQL coding and drifts between
+platforms.</p>
+<p>As the project shifts toward a workflow where 95% of the code is
+generated via AI agents, we need a way to embed <strong>business
+intent</strong> into the DSL that is optimal for an AI agent to
+interpret and implement across multiple, divergent platforms without
+causing "model drift".</p>
+<h2 id="2-decision-drivers">2. Decision Drivers</h2>
+<ul>
+<li><strong>Platform Agnosticism</strong>: Logic must be defined once
+and be applicable to C++ domain services, PostgreSQL constraints, and Qt
+frontend validators.</li>
+<li><strong>Offline Determinism</strong>: The build system (CI/CD) must
+work without LLM API keys. Generation must be deterministic.</li>
+<li><strong>Verification</strong>: AI-generated code must be verifiable
+against the original intent to prevent "ghost in the machine" bugs.</li>
+<li><strong>Maintainability</strong>: The embedded prompt must be a
+first-class citizen in the DSL, versioned alongside the schema.</li>
+</ul>
+<h2 id="3-proposed-architecture-the-instruct-block">3. Proposed
+Architecture: The <code>INSTRUCT</code> Block</h2>
+<p>The DSL will be extended with a structured <code>INSTRUCT</code>
+block. This block does not contain code, but a <strong>formalized
+contract of intent</strong>.</p>
+<h3 id="a-syntax-specification">A. Syntax Specification</h3>
+<pre class="ddd"><code>ENTITY Patient IDENTIFIED_BY id {
+    -- ... structural fields ...
+
+    INSTRUCT VALIDATION Eligibility {
+        INTENT: &quot;A patient is eligible for trial enrollment only if they are over 18 
+                and have a &#39;Stable&#39; clinical status.&quot;
+        INPUTS: { self.birth_date, self.status_id }
+        OUTPUT: VAL700_INELIGIBLE
+        STRATEGY: DETERMINISTIC
+    }
+}</code></pre>
+<h3 id="b-two-phase-generation-offline-support">B. Two-Phase Generation
+(Offline Support)</h3>
+<p>To ensure builds are fast and deterministic, generation is split:</p>
+<ol type="1">
+<li><p><strong>Enrichment Phase</strong>
+(<code>racket enrich</code>):</p>
+<ul>
+<li>Detects changed <code>INSTRUCT</code> blocks (via SHA-256
+hash).</li>
+<li>Calls LLM API with type context + INTENT.</li>
+<li>Generates <strong>Artifacts</strong>: Implementation (C++/SQL/Qt)
+AND <strong>Test Vectors</strong> (JSON).</li>
+<li>Writes to <code>dslgen/instruct-cache/&lt;hash&gt;.json</code>.</li>
+<li><em>This file is committed to Git.</em></li>
+</ul></li>
+<li><p><strong>Generation Phase</strong>
+(<code>racket generate</code>):</p>
+<ul>
+<li>Reads <code>dslgen/instruct-cache/</code>.</li>
+<li>Emits code into target files (<code>.hpp</code>, <code>.sql</code>,
+<code>.cpp</code>).</li>
+<li><strong>Requirements</strong>: Runs offline, zero latency.</li>
+</ul></li>
+</ol>
+<h3 id="c-platform-agnostic-generation-logic">C. Platform-Agnostic
+Generation Logic</h3>
+<p>The Muscovite generators will transform the cached artifacts into
+target-specific code:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Generator Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>C++</strong></td>
+<td>Emits a <code>bool checkEligibility()</code> function in the Domain
+Service.</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>Emits a <code>CHECK</code> constraint or trigger function to enforce
+logic at the data layer.</td>
+</tr>
+<tr>
+<td><strong>Qt (UI)</strong></td>
+<td>Generates an <code>AsyncValidator</code> that provides real-time
+feedback in the <code>PatientEditDialog</code>.</td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td>Generates a Catch2 test suite that loads the <strong>Test
+Vectors</strong> and asserts that C++ and SQL implementations match the
+vector's expected output.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-mitigating-non-determinism--drift">4. Mitigating
+Non-Determinism &amp; Drift</h2>
+<p>To ensure AI-generated code remains stable and platform-agnostic:</p>
+<ol type="1">
+<li><strong>Instruction Anchoring</strong>: The generator prompts the
+LLM with the full <code>ENTITY</code> and <code>VALUE_OBJECT</code>
+definitions to ensure type correctness.</li>
+<li><strong>Logic Hashing</strong>: A SHA-256 hash of the
+<code>INSTRUCT</code> block tracks changes. Regeneration only occurs if
+the block's text or inputs change.</li>
+<li><strong>Universal Test Vectors</strong>: The Enrichment Phase must
+produce a set of input/output pairs (e.g.,
+<code>{age: 17, status: 'Stable'} -&gt; False</code>,
+<code>{age: 18, status: 'Stable'} -&gt; True</code>).</li>
+<li><strong>Cross-Platform Verification</strong>: The build fails if the
+Generated C++ or SQL implementation disagrees with the Test
+Vectors.</li>
+</ol>
+<h2 id="5-consequences">5. Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Intent as Truth</strong>: The "What" is stored in the DSL;
+the "How" is handled by the platform-specific generators.</li>
+<li><strong>Zero-Drift Validations</strong>: Ensures that a validation
+rule in the UI is identical to the rule in the database.</li>
+<li><strong>Offline CI/CD</strong>: Committing the
+<code>instruct-cache</code> ensures reproducible builds without API
+dependencies.</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Context Overhead</strong>: Prompting for every small logic
+change increases token usage during the enrichment phase.</li>
+<li><strong>Cache Management</strong>: The <code>instruct-cache</code>
+must be managed (pruning old hashes) to prevent repository bloat.</li>
+</ul>
+<h2 id="6-implementation-plan">6. Implementation Plan</h2>
+<ul>
+<li><strong>Phase 1</strong>: Update
+<code>dslgen/parser/lexer.rkt</code> and <code>parser.rkt</code> to
+support <code>INSTRUCT</code> keyword and struct.</li>
+<li><strong>Phase 2</strong>: Create <code>dslgen/enrich.rkt</code>
+(Enrichment Tool) to handle LLM orchestration and cache management.</li>
+<li><strong>Phase 3</strong>: Update <code>dslgen/generators/</code> to
+read from Cache and emit code.</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

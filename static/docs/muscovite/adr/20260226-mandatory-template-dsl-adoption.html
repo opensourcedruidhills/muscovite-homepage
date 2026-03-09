@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mandatory Template DSL Adoption for All
+Generators — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Mandatory Template DSL Adoption for All Generators</span>
+</nav>
+
+<h1>Mandatory Template DSL Adoption for All Generators</h1>
+
+
+<h1 id="mandatory-template-dsl-adoption-for-all-generators">Mandatory
+Template DSL Adoption for All Generators</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-26</li>
+<li>Tags: racket, generators, template-dsl, code-quality,
+enforcement</li>
+<li>Supersedes: <a
+href="20260218-template-dsl-for-code-generation.html">20260218-template-dsl-for-code-generation.md</a>
+(supersedes optional adoption; now mandatory)</li>
+<li>Relates to: <a
+href="20260226-racket-idiomatic-style-and-byte-compilation.html">20260226-racket-idiomatic-style-and-byte-compilation.md</a></li>
+<li>Relates to: <a
+href="20260223-racket-generator-unit-testing-strategy.html">20260223-racket-generator-unit-testing-strategy.md</a></li>
+</ul>
+<p>Technical Story: ADR 20260218 introduced the template DSL (FTR-069)
+as an optional alternative to
+<code>format</code>/<code>string-append</code> code generation. Eight
+months later, adoption is 8 <code>define-template</code> invocations in
+1 file out of ~200 generator files (53,529 lines). The remaining 99.9%
+of generators still use raw <code>format</code> (3,461 calls) and
+<code>string-append</code> (1,488 calls). Optional adoption has failed —
+the template DSL must become mandatory for all new and modified
+generator code.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The template DSL was introduced in v1.21.0 (ADR 20260218) with an
+incremental migration plan:</p>
+<ol type="1">
+<li>✅ Value objects (v1.21.0) — <strong>done, 8 templates</strong></li>
+<li>❌ Entities (v1.22.0 candidate) — <strong>never
+started</strong></li>
+<li>❌ Repositories, services (v1.23.0+) — <strong>never
+started</strong></li>
+<li>❌ Cross-target templates (v1.24.0+) — <strong>never
+started</strong></li>
+</ol>
+<p>The migration stalled because:</p>
+<ul>
+<li><strong>No enforcement mechanism</strong> — ADR 20260218 says
+"migrate incrementally" but doesn't define when or block non-template
+code</li>
+<li><strong>Path of least resistance</strong> — <code>format</code>
+strings are faster to write for a single generator; the template DSL's
+value is in composition and reuse, which emerges only when multiple
+generators use it</li>
+<li><strong>AI agents default to <code>format</code></strong> — agents
+copy existing patterns; 99.9% of existing patterns are
+<code>format</code>/<code>string-append</code></li>
+</ul>
+<p>The result: 3,461 <code>format</code> calls and 1,488
+<code>string-append</code> calls across generators, each one a potential
+positional placeholder error, indentation bug, or duplication that the
+template DSL was designed to prevent.</p>
+<h3 id="the-duplication-problem-quantified">The Duplication Problem
+(Quantified)</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Approximate Duplications</th>
+<th>Template DSL Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C++ struct generation</td>
+<td>5 generators (entity, VO, event, projection, migration)</td>
+<td><code>cpp-struct</code> template</td>
+</tr>
+<tr>
+<td>C++ include guard + header</td>
+<td>every <code>.hpp</code> generator</td>
+<td><code>cpp-header-file</code> template</td>
+</tr>
+<tr>
+<td>C++ Doxygen comment block</td>
+<td>every C++ generator</td>
+<td><code>cpp-doc-comment</code> template</td>
+</tr>
+<tr>
+<td>SQL <code>CREATE TABLE</code> + columns</td>
+<td>entity, lookup, event store, saga, projection</td>
+<td><code>sql-create-table</code> template</td>
+</tr>
+<tr>
+<td>SQL <code>COMMENT ON</code> generation</td>
+<td>6+ generators</td>
+<td><code>sql-comment-on</code> template</td>
+</tr>
+<tr>
+<td>Proto message definition</td>
+<td>entity, event, saga, projection</td>
+<td><code>proto-message</code> template</td>
+</tr>
+<tr>
+<td>Proto field mapping</td>
+<td>entity, relationship, lookup</td>
+<td><code>proto-field</code> template</td>
+</tr>
+<tr>
+<td>Qt property declaration</td>
+<td>widgets and QML generators</td>
+<td><code>qt-property</code> template</td>
+</tr>
+<tr>
+<td>CMake <code>target_sources</code></td>
+<td>every build generator</td>
+<td><code>cmake-target-sources</code> template</td>
+</tr>
+</tbody>
+</table>
+<p>Each duplication is a site where a fix in one generator must be
+manually replicated to N others. The template DSL eliminates this by
+composition.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Optional adoption failed after 8 months — 0.1% adoption rate</li>
+<li>3,461 <code>format</code> + 1,488 <code>string-append</code> = 4,949
+raw string generation sites</li>
+<li>Duplication across generators is a correctness multiplier (per ADR
+20260223's amplification argument)</li>
+<li>AI agents will follow the dominant pattern — which must become
+template DSL</li>
+<li>The template DSL is proven (byte-identical output, 4× acceptable
+overhead, passing tests)</li>
+<li>Cross-target template sharing is impossible with raw
+<code>format</code> strings</li>
+<li>Source location in template errors (via <code>define-template</code>
+macro) is strictly better than <code>format</code> arity errors</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Status quo</strong> — keep template DSL optional, hope for
+organic adoption</li>
+<li><strong>Mandatory for new code only</strong> — all new generator
+functions must use templates; existing code migrates when touched</li>
+<li><strong>Big-bang migration</strong> — rewrite all generators to
+templates in one release</li>
+<li><strong>Abandon template DSL</strong> — accept
+<code>format</code>/<code>string-append</code> as the permanent
+pattern</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — Mandatory for new code, migrate
+existing when touched</strong>, because it avoids a feature freeze while
+establishing an irreversible trend toward template adoption. This is the
+same strategy used for <code>for/fold</code> vs <code>set!</code> in ADR
+20260226.</p>
+<h3 id="rules-no-exceptions-for-new-code">Rules (NO EXCEPTIONS for new
+code)</h3>
+<h4
+id="rule-1-all-new-generator-functions-must-use-the-template-dsl">Rule
+1: All new generator functions MUST use the template DSL</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN in new generator code</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-foo entity ctx<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>format <span class="st">&quot;struct ~a {</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">)))</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>format <span class="st">&quot;    ~a ~a;</span><span class="ch">\n</span><span class="st">&quot;</span> cpp-type field-name<span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;};</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">))</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; REQUIRED in new generator code</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template generate-foo</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity ctx<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;struct ~a {&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>map-items</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>λ <span class="op">(</span>fld<span class="op">)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>indent <span class="dv">1</span> <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a ~a;&quot;</span> <span class="op">(</span>field-&gt;cpp-type fld<span class="op">)</span> <span class="op">(</span>field-&gt;cpp-name fld<span class="op">)))))</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>entity-fields entity<span class="op">))</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)))</span></span></code></pre></div>
+<h4
+id="rule-2-modified-generator-functions-must-be-converted-to-template-dsl">Rule
+2: Modified generator functions MUST be converted to template DSL</h4>
+<p>When a generator function is modified for any reason (feature,
+bugfix, refactor), the entire function must be converted to template
+DSL. Do not mix <code>format</code>/<code>string-append</code> with
+template nodes in the same function.</p>
+<h4 id="rule-3-cross-target-patterns-must-be-shared-templates">Rule 3:
+Cross-target patterns MUST be shared templates</h4>
+<p>When two or more targets generate structurally similar output (e.g.,
+C++ struct for entity vs C++ struct for value object), extract a shared
+template. Shared templates live in
+<code>dslgen/generators/shared/templates/</code>.</p>
+<h4
+id="rule-4-template-dsl-node-types-are-the-only-permitted-output-mechanism">Rule
+4: Template DSL node types are the ONLY permitted output mechanism</h4>
+<table>
+<thead>
+<tr>
+<th>Permitted</th>
+<th>Forbidden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(line ...)</code></td>
+<td><code>(string-append ... "\n")</code></td>
+</tr>
+<tr>
+<td><code>(block ...)</code></td>
+<td>Nested <code>string-append</code></td>
+</tr>
+<tr>
+<td><code>(join ...)</code></td>
+<td><code>(string-join ... sep)</code> for template output</td>
+</tr>
+<tr>
+<td><code>(when-true ...)</code></td>
+<td><code>(if cond (format ...) "")</code></td>
+</tr>
+<tr>
+<td><code>(map-items ...)</code></td>
+<td><code>(apply string-append (map (λ (x) (format ...)) xs))</code></td>
+</tr>
+<tr>
+<td><code>(indent ...)</code></td>
+<td>Manual <code>"    "</code> whitespace strings</td>
+</tr>
+<tr>
+<td><code>(text ...)</code></td>
+<td>Raw string returns from generator functions</td>
+</tr>
+</tbody>
+</table>
+<p>Exception: Utility functions that compute names, types, or other
+non-template values may use
+<code>format</code>/<code>string-append</code> for string computation
+(not output construction).</p>
+<h3 id="migration-plan">Migration Plan</h3>
+<h4 id="tier-1--foundation-templates-v1360">Tier 1 — Foundation
+Templates (v1.36.0)</h4>
+<p>Create shared templates for the most duplicated patterns:</p>
+<pre><code>dslgen/generators/shared/templates/
+├── cpp-templates.rkt       # cpp-struct, cpp-header-file, cpp-doc-comment, cpp-namespace
+├── sql-templates.rkt       # sql-create-table, sql-comment-on, sql-alter-table
+├── proto-templates.rkt     # proto-message, proto-field, proto-service
+├── qt-templates.rkt        # qt-property, qt-signal, qt-model
+└── cmake-templates.rkt     # cmake-target, cmake-find-package</code></pre>
+<h4 id="tier-2--high-value-generator-migration-v1370v1380">Tier 2 —
+High-Value Generator Migration (v1.37.0–v1.38.0)</h4>
+<p>Convert generators with most duplication:</p>
+<ol type="1">
+<li><code>cpp/dba/entity.rkt</code> — entity struct generation (used by
+~5 downstream generators)</li>
+<li><code>postgres/sqitch-entity.rkt</code> — CREATE TABLE + COMMENT
+ON</li>
+<li><code>grpc/proto.rkt</code> — proto message definitions</li>
+<li><code>qt/widgets-views.rkt</code> + <code>qt/quick-views.rkt</code>
+— shared widget/QML patterns</li>
+</ol>
+<h4 id="tier-3--remaining-generators-ongoing">Tier 3 — Remaining
+Generators (Ongoing)</h4>
+<p>All remaining generators convert when touched. Track progress:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Migration audit</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>       <span class="co"># files using templates</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span>  <span class="co"># files NOT using templates</span></span></code></pre></div>
+<h3 id="template-dsl-extensions-required">Template DSL Extensions
+Required</h3>
+<p>The current template DSL (233 lines, 7 node types) may need
+extensions for full adoption:</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Purpose</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(indent-block n ...)</code></td>
+<td>Shorthand for <code>(block n (indent n ...))</code></td>
+<td>High — most common pattern</td>
+</tr>
+<tr>
+<td><code>(blank-line)</code></td>
+<td>Empty line separator</td>
+<td>High — all generators need it</td>
+</tr>
+<tr>
+<td><code>(comment style text)</code></td>
+<td>Target-aware comments (<code>//</code>, <code>--</code>,
+<code>#</code>)</td>
+<td>High — replaces manual comment formatting</td>
+</tr>
+<tr>
+<td><code>(guard cond template)</code></td>
+<td>Like <code>when-true</code> but raises on #f</td>
+<td>Medium — for required sections</td>
+</tr>
+<tr>
+<td><code>(choose pred items)</code></td>
+<td>Filter + map in one node</td>
+<td>Medium — replaces <code>filter-map</code> chains</td>
+</tr>
+<tr>
+<td><code>(include-template name args)</code></td>
+<td>Cross-file template reference</td>
+<td>High — enables shared templates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Duplication eliminated: N×M (N patterns × M targets) reduced to N
+shared templates</li>
+<li>Indentation bugs eliminated: <code>indent</code> node handles all
+whitespace</li>
+<li>Positional placeholder errors eliminated: named template
+parameters</li>
+<li>Source location in errors: <code>define-template</code> macro
+provides file:line</li>
+<li>AI agents naturally adopt templates when dominant pattern</li>
+<li>Cross-target consistency: shared templates guarantee identical
+structure</li>
+<li>Testable output: template nodes can be tested structurally without
+string matching</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Learning curve: contributors must learn template DSL before writing
+generators</li>
+<li>Transition period: two output mechanisms coexist (shrinking, never
+growing)</li>
+<li>Template overhead: 4× slower than <code>format</code> (acceptable
+for offline generators; optimize if needed)</li>
+<li>Initial investment: shared template library (~500–1000 lines) must
+be written before Tier 2 migration</li>
+</ul>
+<h2 id="enforcement">Enforcement</h2>
+<h3 id="ai-agent-instructions">AI Agent Instructions</h3>
+<p>Add to copilot-instructions.md, CLAUDE.md, AGENTS.md:</p>
+<pre><code>### N. Template DSL Mandatory (NO EXCEPTIONS for new generator code)
+
+Per ADR 20260226-mandatory-template-dsl-adoption:
+- ALL new generator functions MUST use `define-template` + template nodes
+- ALL modified generator functions MUST be converted to template DSL
+- Shared patterns (C++ struct, SQL CREATE TABLE, proto message) MUST use shared templates from `generators/shared/templates/`
+
+**FORBIDDEN**: New `format`/`string-append` for output construction in generators |
+  Mixed template + format in same function | Duplicating output patterns across targets</code></pre>
+<h3 id="code-review-gate">Code Review Gate</h3>
+<p>Generator PRs must not introduce new <code>format</code>-based output
+construction. The audit command:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Should trend toward zero over time</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span></code></pre></div>
+<h3 id="test-requirement">Test Requirement</h3>
+<p>Per ADR 20260223, every new generator function gets a unit test.
+Template-based functions are tested by:</p>
+<ol type="1">
+<li>Constructing a minimal IR fixture</li>
+<li>Calling the template function</li>
+<li>Asserting structural properties of the emitted string (not exact
+match — structural)</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes <a
+href="20260218-template-dsl-for-code-generation.html">Template DSL for
+Code Generation</a> — from optional to mandatory</li>
+<li>Extends <a
+href="20260226-racket-idiomatic-style-and-byte-compilation.html">Racket
+Idiomatic Style</a> — templates are idiomatic Racket (s-expressions over
+strings)</li>
+<li>Extends <a
+href="20260223-racket-generator-unit-testing-strategy.html">Generator Unit
+Testing Strategy</a> — template functions are more testable</li>
+<li>Relates to <a
+href="20260218-generator-modularization-and-dependency-hygiene.html">Generator
+Modularization</a> — shared templates are the compositional unit</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When writing any new function in <code>dslgen/generators/</code>
+that produces output text</li>
+<li>When modifying an existing generator function for any reason</li>
+<li>When adding a new generator target</li>
+<li>When reviewing AI-generated generator code</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Utility functions computing names, types, or paths (these return
+strings, not templates)</li>
+<li>Parser code (<code>dslgen/parser/</code>)</li>
+<li>Model/IR code (<code>dslgen/model/</code>)</li>
+<li>Migration pipeline (<code>dslgen/migration/</code>) — uses
+<code>format</code> for SQL, not code generation patterns</li>
+<li>Test code (<code>dslgen/tests/</code>)</li>
+</ul>
+<h3 id="template-authoring-quick-reference">Template Authoring Quick
+Reference</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../template-dsl.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template my-generator</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>entity ctx<span class="op">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Section comment</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;// ~a&quot;</span> <span class="op">(</span>entity-doc entity<span class="op">)))</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>blank-line<span class="op">)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Conditional section</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>when-true <span class="op">(</span>entity-has-events? entity<span class="op">)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>line <span class="st">&quot;// Events&quot;</span><span class="op">)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>map-items</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>λ <span class="op">(</span>evt<span class="op">)</span> <span class="op">(</span>indent <span class="dv">1</span> <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a,&quot;</span> <span class="op">(</span>event-name evt<span class="op">)))))</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>entity-events entity<span class="op">))))</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Join with separator</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>join <span class="st">&quot;,</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">(</span><span class="kw">map</span> field-&gt;declaration <span class="op">(</span>entity-fields entity<span class="op">)))))</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">;; Use it</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> output </span><span class="op">(</span>emit <span class="op">(</span>my-generator entity ctx<span class="op">)))</span></span></code></pre></div>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

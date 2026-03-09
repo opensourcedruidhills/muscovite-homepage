@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gRPC Resilience Sandwich — Full Deadline and Retry
+Architecture — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>gRPC Resilience Sandwich — Full Deadline and Retry
+Architecture</span>
+</nav>
+
+<h1>gRPC Resilience Sandwich — Full Deadline and Retry Architecture</h1>
+
+
+<h1
+id="grpc-resilience-sandwich--full-deadline-and-retry-architecture">gRPC
+Resilience Sandwich — Full Deadline and Retry Architecture</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-28</li>
+<li>Tags: grpc, resilience, retry, deadline, circuit-breaker,
+idempotency, dsl, code-generation</li>
+<li>Relates: 20260228-grpc-deadline-to-statement-timeout-propagation.md,
+20260120-domain-services-as-aggregate-boundary.md,
+20260120-cqrs-ready-architecture.md,
+20260212-compile-time-lookup-constants.md</li>
+</ul>
+<p>Technical Story: The initial ADR
+(20260228-grpc-deadline-to-statement-timeout-propagation) addresses
+server-side deadline-to-timeout conversion. This companion ADR proposes
+the full resilience architecture: DSL-configured client-side deadlines
+with override hierarchy, retry coordination between gRPC and pqxx
+layers, client-side graceful handling of deadline failures, and the
+"Resilience Sandwich" pattern catalog entry.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The initial deadline ADR solves the server-side plumbing: gRPC
+remaining time becomes PostgreSQL <code>statement_timeout</code>. But a
+production-grade system needs the full picture:</p>
+<ol type="1">
+<li><strong>Who sets the deadline?</strong> Currently no client code
+sets <code>set_deadline()</code>. A client-side default must exist,
+configurable from the DSL with an override hierarchy (global → context →
+aggregate → RPC).</li>
+<li><strong>How do retries interact with deadlines?</strong> The
+framework transactor retries serialization failures and deadlocks with
+exponential backoff. But retries must respect the <em>remaining</em>
+gRPC deadline — no point retrying if 4.8s of a 5s deadline are already
+spent.</li>
+<li><strong>How do C++ gRPC clients handle
+<code>DEADLINE_EXCEEDED</code>?</strong> Generated client stubs (e2e
+tests, inter-service calls) must distinguish
+<code>DEADLINE_EXCEEDED</code> from <code>UNAVAILABLE</code> and react
+appropriately (no retry for the former, retry for the latter).</li>
+<li><strong>How is the pattern documented?</strong> The "Resilience
+Sandwich" mental model (gRPC deadline / business logic / pqxx retry)
+needs a pattern catalog entry for developers and AI agents.</li>
+</ol>
+<h3 id="the-resilience-sandwich">The Resilience Sandwich</h3>
+<pre><code>┌─────────────────────────────────────────────────┐
+│  TOP SOURDOUGH: gRPC set_deadline()             │
+│  Circuit breaker behavior — client gives up      │
+│  after N seconds. Prevents cascade starvation.   │
+├─────────────────────────────────────────────────┤
+│  THE FILLING: Business Logic                     │
+│  Idempotent operations. Transactional writes.    │
+│  Domain services as aggregate boundary.          │
+│  Single UoW per command — commit or rollback.    │
+├─────────────────────────────────────────────────┤
+│  BOTTOM SOURDOUGH: libpqxx Transactor            │
+│  Exponential backoff retry for transient errors. │
+│  statement_timeout from remaining gRPC deadline. │
+│  Retry budget = remaining_deadline - buffer.     │
+└─────────────────────────────────────────────────┘</code></pre>
+<p><strong>Key insight</strong>: The two "breads" operate on
+<strong>different failure modes</strong>:</p>
+<ul>
+<li><strong>Top</strong>: Protects the <em>caller</em> from slow
+downstream (wall-clock timeout)</li>
+<li><strong>Bottom</strong>: Protects the <em>operation</em> from
+transient infrastructure glitches (retry with backoff)</li>
+</ul>
+<p>The filling must be <strong>idempotent</strong> because the bottom
+bread may replay it. The top bread must be <strong>strict</strong>
+because once the client has moved on, server-side work is wasted.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>DSL-first: deadline configuration must be expressible in
+<code>.ddd</code> / <code>.mus</code> and propagate to all generated
+layers</li>
+<li>Override hierarchy must be intuitive: global default → context →
+aggregate → specific RPC</li>
+<li>Retry budget must be coordinated: pqxx retries must not exceed the
+gRPC deadline</li>
+<li>Generated C++ clients must handle <code>DEADLINE_EXCEEDED</code>
+distinctly from other errors</li>
+<li>The pattern must compose with existing features: sagas (multi-step,
+longer deadlines), event sourcing (dual-write), specifications
+(read-only, shorter deadlines)</li>
+<li>Framework code must be testable without a running gRPC server</li>
+</ul>
+<h2 id="proposed-architecture">Proposed Architecture</h2>
+<h3 id="1-dsl-syntax-deadline-override-hierarchy">1. DSL Syntax:
+Deadline Override Hierarchy</h3>
+<p><strong>Project-level default</strong> (<code>.mus</code>):</p>
+<pre class="mus"><code>SERVER {
+    GRPC_DEFAULT_DEADLINE &quot;5s&quot;;
+    GRPC_MAX_DEADLINE &quot;120s&quot;;    -- safety cap, server-side
+}</code></pre>
+<p><strong>Context-level override</strong> (<code>.ddd</code>):</p>
+<pre class="ddd"><code>CONTEXT HeavyComputation @uuid &quot;...&quot; {
+    GRPC { DEADLINE &quot;30s&quot;; }
+    ...
+}</code></pre>
+<p><strong>Aggregate-level override</strong> (<code>.ddd</code>):</p>
+<pre class="ddd"><code>AGGREGATE DataImport @uuid &quot;...&quot; ROOT DataImport
+    GRPC_DEADLINE &quot;60s&quot;
+    DOC &quot;Long-running batch import&quot;;</code></pre>
+<p><strong>RPC-level override</strong> (via command annotation):</p>
+<pre class="ddd"><code>COMMAND RunAnalysis ON DataSet (
+    dataset_id UUID NOT_NULL @uuid &quot;...&quot;
+)
+GRPC_DEADLINE &quot;120s&quot;
+DOC &quot;CPU-intensive analysis, needs extended deadline&quot;;</code></pre>
+<p><strong>Resolution order</strong>: RPC → Aggregate → Context →
+Project → hardcoded 5s default.</p>
+<h3 id="2-retry-budget-coordination">2. Retry Budget Coordination</h3>
+<p>The transactor's <code>RetryPolicy</code> gains a deadline-aware
+mode:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RetryPolicy <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... existing fields ...</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// When set, retries stop when remaining time &lt; min_remaining.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Prevents wasting the last fraction of the deadline on a retry</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// that will almost certainly be aborted by statement_timeout anyway.</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span><span class="bu">std::</span>chrono::system_clock::time_point<span class="op">&gt;</span> deadline<span class="op">{};</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>chrono::milliseconds min_remaining_for_retry<span class="op">{</span><span class="dv">1000</span><span class="op">};</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Retry loop logic:</p>
+<pre><code>for each attempt:
+    remaining = deadline - now
+    if remaining &lt; min_remaining_for_retry:
+        return DeadlineExceeded(&quot;insufficient time for retry&quot;)
+    statement_timeout = remaining - buffer
+    execute(fn, statement_timeout)
+    if transient_error and should_retry:
+        backoff_delay = min(calculated_backoff, remaining - min_remaining_for_retry)
+        sleep(backoff_delay)</code></pre>
+<h3 id="3-client-side-deadline-injection-generated">3. Client-Side
+Deadline Injection (Generated)</h3>
+<p><strong>e2e test stubs</strong> (<code>e2e-grpc-test.rkt</code>):</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>ClientContext ctx<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ctx<span class="op">.</span>set_deadline<span class="op">(</span><span class="bu">std::</span>chrono::system_clock::now<span class="op">()</span> <span class="op">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>chrono::milliseconds<span class="op">{</span><span class="dv">5000</span><span class="op">});</span>  <span class="co">// from DSL or default</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> status <span class="op">=</span> stub<span class="op">-&gt;</span>CreateEntity<span class="op">(&amp;</span>ctx<span class="op">,</span> request<span class="op">,</span> <span class="op">&amp;</span>response<span class="op">);</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>status<span class="op">.</span>error_code<span class="op">()</span> <span class="op">==</span> grpc<span class="op">::</span>StatusCode<span class="op">::</span>DEADLINE_EXCEEDED<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Log, metric, do NOT retry — the server may have committed</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    spdlog<span class="op">::</span>warn<span class="op">(</span><span class="st">&quot;CreateEntity: deadline exceeded&quot;</span><span class="op">);</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Inter-service calls</strong> (future: context map gRPC
+clients):</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Deadline shrinkage: each hop reduces the deadline by a buffer</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> remaining <span class="op">=</span> incoming_ctx<span class="op">-&gt;</span>deadline<span class="op">()</span> <span class="op">-</span> <span class="bu">std::</span>chrono::system_clock::now<span class="op">();</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> downstream_deadline <span class="op">=</span> remaining <span class="op">-</span> hop_buffer<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>outbound_ctx<span class="op">.</span>set_deadline<span class="op">(</span><span class="bu">std::</span>chrono::system_clock::now<span class="op">()</span> <span class="op">+</span> downstream_deadline<span class="op">);</span></span></code></pre></div>
+<h3 id="4-generated-error-handling-for-clients">4. Generated Error
+Handling for Clients</h3>
+<p>New generated client-side error classification:</p>
+<table>
+<thead>
+<tr>
+<th>gRPC Status</th>
+<th>Client Action</th>
+<th>Retry Safe?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OK</code></td>
+<td>Success</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>DEADLINE_EXCEEDED</code></td>
+<td>Log warning. <strong>Do NOT retry</strong> — server may have
+committed.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>UNAVAILABLE</code></td>
+<td>Retry with backoff (server down or overloaded)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>ABORTED</code></td>
+<td>Retry with backoff (serialization conflict)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>ALREADY_EXISTS</code></td>
+<td>Idempotency hit — treat as success</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>NOT_FOUND</code></td>
+<td>Entity does not exist — domain error</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>FAILED_PRECONDITION</code></td>
+<td>FK/constraint error — domain error</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>INVALID_ARGUMENT</code></td>
+<td>Validation error — fix request</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>INTERNAL</code></td>
+<td>Bug — log error, alert</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-idempotency-future-phase">5. Idempotency (Future Phase)</h3>
+<p>For write RPCs, an optional idempotency key prevents duplicate
+creation when the client didn't receive the response (timeout between
+commit and response):</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode proto"><code class="sourceCode protobuf"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> CreatePatientRequest {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> idempotency_key <span class="op">=</span> <span class="dv">100</span>;  <span class="co">// Client-generated UUID</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... fields ...</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Server checks <code>idempotency_keys</code> table before
+<code>INSERT</code>. If key exists, returns the existing entity. This
+makes <code>DEADLINE_EXCEEDED</code> on writes safe to retry.</p>
+<h3 id="6-pattern-catalog-the-resilience-sandwich">6. Pattern Catalog:
+The Resilience Sandwich</h3>
+<p>To be added to <code>doc/RESILIENCE-PATTERNS.md</code> (new document,
+parallel to <code>CPP-PATTERNS.md</code> and
+<code>POSTGRES-PATTERNS.md</code>):</p>
+<p><strong>The Resilience Sandwich</strong> describes the three-layer
+timeout and retry architecture for any gRPC + PostgreSQL service:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Component</th>
+<th>Failure Mode</th>
+<th>Mechanism</th>
+<th>Configured By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top Bread</strong></td>
+<td>gRPC <code>set_deadline()</code></td>
+<td>Slow downstream</td>
+<td>Wall-clock timeout, <code>DEADLINE_EXCEEDED</code></td>
+<td>DSL override hierarchy</td>
+</tr>
+<tr>
+<td><strong>Filling</strong></td>
+<td>Business logic (CommandService)</td>
+<td>Domain errors</td>
+<td>Transactional UoW, single commit point</td>
+<td>Generated code</td>
+</tr>
+<tr>
+<td><strong>Bottom Bread</strong></td>
+<td><code>muscovite::dba::execute()</code></td>
+<td>Transient DB errors</td>
+<td><code>statement_timeout</code> + exponential backoff retry</td>
+<td>Framework <code>RetryPolicy</code> + remaining deadline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Invariants</strong>:</p>
+<ol type="1">
+<li><code>statement_timeout &lt; grpc_remaining - buffer</code>
+(always)</li>
+<li>Retry budget ≤ remaining deadline (stop retrying when nearly
+expired)</li>
+<li>Write operations idempotent (when idempotency keys enabled)</li>
+<li><code>DEADLINE_EXCEEDED</code> is never retried by the client
+(server may have committed)</li>
+</ol>
+<h2 id="implementation-phases-multi-sprint">Implementation Phases
+(Multi-Sprint)</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Sprint</th>
+<th>Scope</th>
+<th>Prerequisite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A — Foundation</strong></td>
+<td>Sprint 1</td>
+<td>Error enum unification, missing catches,
+<code>SerializationFailure</code> → <code>ABORTED</code> fix</td>
+<td>None (ADR 20260228 Phase 1-3)</td>
+</tr>
+<tr>
+<td><strong>B — Server-Side Deadline</strong></td>
+<td>Sprint 1</td>
+<td>Transactor deadline overload, <code>max_statement_timeout</code>
+config, generator update</td>
+<td>Phase A (ADR 20260228 Phase 4-11)</td>
+</tr>
+<tr>
+<td><strong>C — DSL Deadline Syntax</strong></td>
+<td>Sprint 2</td>
+<td>PEG grammar, parser, IR struct, project-parser for
+<code>SERVER</code> block</td>
+<td>Phase B</td>
+</tr>
+<tr>
+<td><strong>D — Client-Side Deadlines</strong></td>
+<td>Sprint 2</td>
+<td>Generate <code>set_deadline()</code> in e2e tests, client error
+classification</td>
+<td>Phase C</td>
+</tr>
+<tr>
+<td><strong>E — Retry Budget Coordination</strong></td>
+<td>Sprint 2</td>
+<td>Transactor deadline-aware retry, stop-on-expiry logic</td>
+<td>Phase B</td>
+</tr>
+<tr>
+<td><strong>F — Pattern Catalog</strong></td>
+<td>Sprint 2</td>
+<td><code>doc/RESILIENCE-PATTERNS.md</code> with Resilience Sandwich
+documentation</td>
+<td>Phase B</td>
+</tr>
+<tr>
+<td><strong>G — Idempotency Keys</strong></td>
+<td>Sprint 3+</td>
+<td>Proto field, server-side dedup table, generator changes</td>
+<td>Phase D</td>
+</tr>
+<tr>
+<td><strong>H — Deadline Shrinkage</strong></td>
+<td>Sprint 3+</td>
+<td>Inter-service deadline propagation with hop buffer</td>
+<td>Phase D</td>
+</tr>
+</tbody>
+</table>
+<h2 id="positive-consequences-expected">Positive Consequences
+(Expected)</h2>
+<ul>
+<li>Complete end-to-end deadline awareness from client to
+PostgreSQL</li>
+<li>DSL-configured deadlines — domain experts express timing
+requirements declaratively</li>
+<li>No more infinite-timeout gRPC calls or unbounded PostgreSQL
+queries</li>
+<li>Generated clients handle timeout gracefully instead of hanging</li>
+<li>Retry budget is coordinated — no wasted retries near deadline
+expiry</li>
+<li>Pattern catalog gives developers and AI agents a mental model for
+the architecture</li>
+</ul>
+<h2 id="negative-consequences-expected">Negative Consequences
+(Expected)</h2>
+<ul>
+<li>Significant generated code change — all existing services
+regenerated</li>
+<li>Grammar change required for DSL deadline syntax (grammar-first
+rule)</li>
+<li>Complexity increase in transactor (deadline + retry
+interaction)</li>
+<li>Idempotency adds storage overhead (dedup table per aggregate)</li>
+<li>Testing complexity — need to simulate deadline expiry and verify
+rollback</li>
+</ul>
+<h2 id="open-questions">Open Questions</h2>
+<ol type="1">
+<li>Should the <code>SERVER</code> block live in <code>.mus</code>
+(project config) or <code>.ddd</code> (domain model)? <code>.mus</code>
+seems right — it's deployment configuration, not domain modeling.</li>
+<li>Should <code>GRPC_DEADLINE</code> on <code>COMMAND</code> also
+affect the server-side <code>max_statement_timeout</code> (i.e., the
+server enforces the DSL-declared deadline even if the client sends a
+higher one)?</li>
+<li>How do saga step timeouts (already in DSL) interact with gRPC
+deadlines? A saga orchestrator calling a step service should propagate
+the <em>saga step timeout</em> as the gRPC deadline for that call.</li>
+<li>For read-only RPCs (Get, List, specifications), should the default
+deadline be lower than for writes? e.g., 2s for reads, 5s for
+writes.</li>
+</ol>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When designing new DSL constructs that affect gRPC service
+generation</li>
+<li>When modifying client-side gRPC code generation (e2e tests,
+inter-service calls)</li>
+<li>When implementing retry logic in any generated or framework
+code</li>
+<li>When writing pattern documentation for resilience</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Server-side deadline-to-timeout conversion (covered by companion
+ADR, already accepted)</li>
+<li>Non-gRPC transports (future REST/GraphQL — separate ADRs when those
+targets are added)</li>
+</ul>
+<h3 id="key-files-future">Key Files (Future)</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> —
+<code>GrpcDeadlineClause</code>, <code>ServerBlock</code> grammar
+rules</li>
+<li><code>dslgen/parser/project-parser.rkt</code> — <code>SERVER</code>
+block parsing</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — deadline fields on
+<code>aggregate</code>, <code>command</code>,
+<code>bounded-context</code></li>
+<li><code>dslgen/generators/grpc/e2e-grpc-test.rkt</code> — client-side
+deadline injection</li>
+<li><code>doc/RESILIENCE-PATTERNS.md</code> — Resilience Sandwich
+pattern catalog</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Foundation: <a
+href="20260228-grpc-deadline-to-statement-timeout-propagation.html">gRPC
+Deadline to PostgreSQL Statement Timeout Propagation</a> (accepted)</li>
+<li>Related: <a
+href="20260120-domain-services-as-aggregate-boundary.html">Domain Services
+as Aggregate Boundary</a></li>
+<li>Related: <a href="20260120-cqrs-ready-architecture.html">CQRS-Ready
+Architecture</a></li>
+<li>Related: <a
+href="20260212-compile-time-lookup-constants.html">Compile-Time Lookup
+Constants</a> — for saga status constants used in retry decisions</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

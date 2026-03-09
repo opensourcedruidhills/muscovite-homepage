@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration Triage UI Architecture (Qt Widgets +
+QML) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Migration Triage UI Architecture (Qt Widgets + QML)</span>
+</nav>
+
+<h1>Migration Triage UI Architecture (Qt Widgets + QML)</h1>
+
+
+<h1 id="migration-triage-ui-architecture-qt-widgets--qml">Migration
+Triage UI Architecture (Qt Widgets + QML)</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-23</li>
+<li>Tags: brownfield, migration, triage, qt-widgets, qml, dlq,
+generator</li>
+<li>Deciders: Johannes Lochmann</li>
+</ul>
+<p>Technical Story: Data quality failures during brownfield migration
+are inevitable. Records that fail strong-type validation or entity
+invariants are routed to a DLQ NATS subject. Without a generated triage
+UI, engineers must query DLQ contents in SQL, make corrections manually,
+and re-submit via curl/NATS CLI. This is unscalable for migrations
+involving thousands of dirty records.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>The DLQ (Dead Letter Queue) for migration is a NATS subject
+(<code>migration.dlq.{context}.{entity}</code>) populated by the
+transformer whenever validation fails (ADR
+20260223-migration-transformer). A human reviewer must:</p>
+<ol type="1">
+<li><strong>See</strong> all failed records — what field failed, why,
+what the original value was</li>
+<li><strong>Correct</strong> the problematic field value in-place</li>
+<li><strong>Approve</strong> (re-submit the corrected record to the
+transformer) or <strong>Reject</strong> (mark as permanently
+skipped)</li>
+<li><strong>Export</strong> the DLQ contents as CSV for batch review or
+compliance audit</li>
+</ol>
+<p>Nothing in the existing Muscovite Qt generator addresses DLQ/triage
+workflows. The standard <code>{Entity}EditDialog</code> is designed for
+normal CRUD — it has no concept of source fields, error annotations,
+approval/rejection actions, or re-submission to NATS.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Multi-frontend architecture (ADR 20260206): Qt Widgets + QML from
+one MAPPING block</li>
+<li>Triage UI is generated from MAPPING block structure — field layouts
+mirror source→target field mapping</li>
+<li>DLQ record structure is defined by the typed JSON envelope (ADR
+20260217-typed-json) — triage UI reads those fields</li>
+<li>The triage action (approve corrected record) publishes back to the
+transformer's NATS input subject — NatsMessageBroker is already in
+scope</li>
+<li>Actions (Approve, Reject, Export CSV) are uniform across all triage
+dialogs — no per-entity customization needed</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Generated Qt Widgets
+<code>{Context}{Entity}TriageDialog</code> + QML
+<code>{Context}{Entity}TriageView</code></strong> — master-detail layout
+per MAPPING block; all actions generated; driven by DLQ NATS
+subject</li>
+<li><strong>Generic triage shell + generated JSON config</strong> — one
+shared widget parameterized by a generated descriptor</li>
+<li><strong>Web-based triage UI</strong> — generated React/Vue
+component, served from a bundled HTTP server in the extractor
+binary</li>
+<li><strong>No generated triage UI</strong> — rely on DLQ database table
++ psql for manual review</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Generated per-MAPPING Qt Widgets
+dialog + QML view</strong>, because:</p>
+<ul>
+<li>Consistent with the multi-frontend generation model (ADR
+20260206)</li>
+<li>MAPPING block fields map directly to dialog rows — no generic
+renderer needed</li>
+<li>Approval re-submits to transformer input subject — reuses
+NatsMessageBroker already in the application</li>
+<li>QML counterpart follows <code>{Entity}ViewModel</code> pattern (ADR
+20260206) — no new patterns required</li>
+</ul>
+<h3 id="qt-widgets-contextentitytriagedialog">Qt Widgets:
+<code>{Context}{Entity}TriageDialog</code></h3>
+<p>Layout: <code>QSplitter</code> horizontal.</p>
+<ul>
+<li><strong>Left panel (Master)</strong>: <code>QTableWidget</code>
+showing DLQ records with columns: <code>sequence</code>,
+<code>source_key</code>, <code>error_field</code>,
+<code>error_message</code>, <code>status</code> (Pending / Approved /
+Rejected).</li>
+<li><strong>Right panel (Detail)</strong>: <code>QFormLayout</code> with
+one row per MAPPING field, showing <code>QLabel (source_value)</code> +
+<code>QLineEdit (corrected_value, pre-filled with source)</code> +
+<code>QLabel (error_annotation, red if this field failed)</code>.</li>
+<li><strong>Action bar</strong>:
+<code>[Approve] [Reject] [Export CSV]</code> buttons. Approve
+re-publishes corrected envelope to transformer input subject; Reject
+marks status in the DLQ record and acknowledges the NATS message.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: patient_care_patient_triage_dialog.hpp</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> patient_care<span class="op">::</span>migration<span class="op">::</span>widgets <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientTriageDialog <span class="op">:</span> <span class="kw">public</span> <span class="ex">QDialog</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientTriageDialog<span class="op">(</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        muscovite<span class="op">::</span>dba<span class="op">::</span>NatsMessageBroker<span class="op">&amp;</span> broker<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="ex">QWidget</span><span class="op">*</span> parent <span class="op">=</span> <span class="kw">nullptr</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="ex">slots</span><span class="op">:</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> onApprove<span class="op">();</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> onReject<span class="op">();</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> onExportCsv<span class="op">();</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> onRecordSelected<span class="op">(</span><span class="dt">int</span> row<span class="op">);</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> loadDlqRecords<span class="op">();</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> populateDetail<span class="op">(</span><span class="at">const</span> MigrationEnvelope<span class="op">&amp;</span> env<span class="op">);</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    NatsMessageBroker<span class="op">&amp;</span> <span class="va">broker_</span><span class="op">;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QTableWidget</span><span class="op">*</span> <span class="va">master_table_</span><span class="op">{};</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Per-field widgets (generated per MAPPING field):</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">field_medical_num_</span><span class="op">{};</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">field_first_name_</span><span class="op">{};</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QLineEdit</span><span class="op">*</span> <span class="va">field_email_addr_</span><span class="op">{};</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace</span></span></code></pre></div>
+<h3
+id="qml-contextentitytriageviewqml--contextentitytriageviewmodel">QML:
+<code>{Context}{Entity}TriageView.qml</code> +
+<code>{Context}{Entity}TriageViewModel</code></h3>
+<p>Follows the ViewModel pattern from ADR 20260206:</p>
+<ul>
+<li><code>{Context}{Entity}TriageViewModel</code> C++ class with
+<code>Q_PROPERTY</code> for each MAPPING field (source + corrected) and
+<code>Q_PROPERTY</code> for error, status</li>
+<li><code>{Context}{Entity}TriageView.qml</code>: <code>SplitView</code>
+horizontal — left <code>ListView</code> (master), right
+<code>ColumnLayout</code> (detail form + action buttons)</li>
+<li><code>approve()</code> and <code>reject()</code> as
+<code>Q_INVOKABLE</code> methods on the ViewModel</li>
+</ul>
+<h3 id="generated-file-structure">Generated File Structure</h3>
+<pre><code>generated/
+└── migration/
+    ├── include/{project}/migration/{context}/
+    │   ├── {entity}_triage_dialog.hpp       # Qt Widgets
+    │   └── {entity}_triage_viewmodel.hpp    # QML ViewModel
+    └── src/{context}/
+        ├── {entity}_triage_dialog.cpp
+        ├── {entity}_triage_viewmodel.cpp
+        └── qml/{Context}{Entity}TriageView.qml</code></pre>
+<h3 id="approve--reject-action-flow">Approve / Reject Action Flow</h3>
+<pre><code>Approve:
+  1. Read corrected field values from QLineEdit widgets
+  2. Reconstruct envelope with corrected values + &quot;$resubmit&quot;: true
+  3. NatsMessageBroker::publish(&quot;migration.extract.{context}.{entity}&quot;, corrected_json)
+  4. Mark DLQ record status = Approved in local model + ACK NATS message
+
+Reject:
+  1. Mark DLQ record status = Rejected in local model + ACK NATS message
+  2. Append to persistent rejection log in {project}_migration_rejections table</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Human-in-the-loop triage has a generated UI — no bespoke tooling per
+migration project</li>
+<li>Field-by-field error annotation makes the source of validation
+failure immediately visible</li>
+<li>Approve action re-uses transformer input subject — no special
+approval code path</li>
+<li>Export CSV enables batch offline review and compliance audit</li>
+<li>QML counterpart enables triage on tablet/touch form factors (useful
+for warehouse/field migrations)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>One dialog class per MAPPING block — larger generated codebase for
+projects with many mappings</li>
+<li>Triage UI is DLQ consumer — it competes with other consumers if
+multiple triage windows open simultaneously (last-ack wins; acceptable
+for human-paced triage)</li>
+<li>Export CSV is synchronous in v1.30.0 — large DLQ exports may block
+the UI thread</li>
+</ul>
+<h2 id="constraints">Constraints</h2>
+<ul>
+<li>Approve action MUST publish to transformer input subject — never
+write directly to target DB</li>
+<li>Reject MUST persist to the rejection log table — no silent
+discards</li>
+<li>Qt Widgets and QML variants MUST be generated together from the same
+MAPPING block</li>
+<li>Generated code MUST carry dual-license SPDX header</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20260217-brownfield-migration-factory-architecture.html">ADR
+20260217 — Brownfield Migration Factory Architecture</a></li>
+<li><a href="20260217-typed-json-envelope-migration-transport.html">ADR
+20260217 — Typed JSON Envelope for Migration Transport</a></li>
+<li><a
+href="20260223-migration-transformer-generator-architecture.html">ADR
+20260223 — Migration Transformer Generator Architecture</a></li>
+<li><a href="20260206-multi-frontend-architecture.html">ADR 20260206 —
+Multi-Frontend Architecture</a></li>
+<li><a href="20260206-qml-viewmodel-binding-pattern.html">ADR 20260206 —
+QML ViewModel Binding Pattern</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p>When implementing the triage UI generator:</p>
+<ul>
+<li>New file:
+<code>dslgen/generators/qt/migration-triage-widgets.rkt</code> (Qt
+Widgets variant)</li>
+<li>New file: <code>dslgen/generators/qt/migration-triage-qml.rkt</code>
+(QML variant)</li>
+<li>Follow patterns from
+<code>dslgen/generators/qt/widgets-views.rkt</code> for master-detail
+dialog structure</li>
+<li>Follow patterns from
+<code>dslgen/generators/qt/quick-views.rkt</code> for QML ViewModel</li>
+<li>For each MAPPING block: one dialog class, one ViewModel class, one
+QML file</li>
+<li>DLQ NATS subject:
+<code>(format "migration.dlq.~a.~a" (symbol-&gt;sql-id ctx-name) (symbol-&gt;sql-id entity-name))</code></li>
+<li>Transformer input subject (for Approve):
+<code>(format "migration.extract.~a.~a" (symbol-&gt;sql-id ctx-name) (symbol-&gt;sql-id entity-name))</code></li>
+<li>Per-field widget: one <code>QLineEdit</code> per
+<code>mapping-field</code> with <code>objectName</code> = source field
+name for testing</li>
+<li>Error annotation: <code>QLabel</code> with
+<code>setStyleSheet("color: red;")</code> shown only when
+<code>$error_field</code> matches this field</li>
+<li>Test: <code>ctest --preset debug -R triage</code> — dialog loads
+mock DLQ records, approve button re-publishes to mock NATS subject</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

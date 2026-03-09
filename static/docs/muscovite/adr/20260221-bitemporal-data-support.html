@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitemporal Data Support for Auditable Domain
+Models — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Bitemporal Data Support for Auditable Domain Models</span>
+</nav>
+
+<h1>Bitemporal Data Support for Auditable Domain Models</h1>
+
+
+<h1 id="bitemporal-data-support-for-auditable-domain-models">Bitemporal
+Data Support for Auditable Domain Models</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-21</li>
+<li>Tags: dsl, bitemporal, temporal, audit, iso-20022, valid-time,
+system-time, timestamptz</li>
+</ul>
+<p>Technical Story: Financial, healthcare, and regulatory domains
+require tracking two independent timelines for data: when a fact was
+true in reality (Valid Time) and when it was recorded in the system
+(System Time). Muscovite currently has full TIMESTAMPTZ support across
+all layers but no formal bitemporal semantics — no auto-generated
+temporal columns, no "as-of" queries, no overlap prevention.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Bitemporality is the requirement to answer four classes of temporal
+queries:</p>
+<ol type="1">
+<li><strong>Current</strong>: What is the current known state? (standard
+query)</li>
+<li><strong>As-of Valid Time</strong>: What was true at a specific
+real-world point in time?</li>
+<li><strong>As-of System Time</strong>: What did the system believe at a
+specific recording time?</li>
+<li><strong>As-of Both</strong>: What did the system believe about the
+real world at time X, as recorded at time Y?</li>
+</ol>
+<p>Today, developers can manually add
+<code>valid_from</code>/<code>valid_to</code> fields using
+<code>USES Basedata.Period</code>, but this provides no auto-generated
+query methods, no system-time tracking, no overlap prevention, and no
+temporal integrity constraints. The bitemporal pattern is
+well-understood (SQL:2011 temporal tables, ISO 20022 financial
+messaging, HL7 FHIR audit requirements) but tedious to implement
+correctly.</p>
+<p><strong>Question</strong>: How should Muscovite support bitemporal
+data models in the DSL with full-stack code generation?</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>TIMESTAMPTZ already has complete 5-layer mappings (PostgreSQL → C++
+<code>muscovite::dba::Timestamp</code> → Proto → Qt)</li>
+<li><code>CONCURRENCY</code> block on entities is the exact precedent
+for entity-level configuration clauses</li>
+<li>No new type registration needed if using dual-column TIMESTAMPTZ
+approach</li>
+<li>ISO 20022 / HL7 FHIR / GDPR audit requirements drive enterprise
+adoption</li>
+<li>Non-destructive updates (no physical DELETE/UPDATE on temporal data)
+align with Event Sourcing (ADR 20260204)</li>
+<li>PostgreSQL <code>EXCLUDE USING GIST</code> provides database-level
+temporal overlap prevention</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-dual-column-timestamptz-valid_from-valid_to-system_from-system_to">Option
+1: Dual-column TIMESTAMPTZ (valid_from, valid_to, system_from,
+system_to)</h3>
+<p>Use four <code>TIMESTAMPTZ</code> columns. Valid Time is user-managed
+(set explicitly in commands). System Time is auto-managed (set by
+trigger/repository on INSERT/UPDATE). Overlap prevention via
+<code>EXCLUDE USING GIST</code> on
+<code>tstzrange(valid_from, valid_to)</code>.</p>
+<h3 id="option-2-postgresql-range-types-tstzrange-daterange">Option 2:
+PostgreSQL range types (TSTZRANGE, DATERANGE)</h3>
+<p>Use native PostgreSQL range columns
+(<code>TSTZRANGE valid_period</code>,
+<code>TSTZRANGE system_period</code>). More idiomatic SQL:2011, native
+range operators (<code>@&gt;</code>, <code>&amp;&amp;</code>,
+<code>-|-</code>).</p>
+<h3 id="option-3-sql2011-temporal-tables-period-for">Option 3: SQL:2011
+temporal tables (PERIOD FOR)</h3>
+<p>Use PostgreSQL's emerging SQL:2011 <code>PERIOD FOR</code> syntax
+with <code>SYSTEM VERSIONING</code>. Most standards-compliant but
+PostgreSQL support is still evolving (PG 17+ for some features).</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — Dual-column TIMESTAMPTZ</strong>,
+because:</p>
+<ol type="1">
+<li><strong>Zero type-registry work</strong>: <code>TIMESTAMPTZ</code>
+is already mapped across all 5 layers. No new C++ strong type, no new
+Proto message, no new Qt widget needed.</li>
+<li><strong>Proto/Qt compatibility</strong>: Protocol Buffers and Qt
+have no native range types. Range columns would decompose at the gRPC
+boundary anyway — dual columns avoid the impedance mismatch.</li>
+<li><strong>GIST still works</strong>:
+<code>EXCLUDE USING GIST (id WITH =, tstzrange(valid_from, valid_to) WITH &amp;&amp;)</code>
+operates on an expression, not a stored range column. Full overlap
+prevention without range storage.</li>
+<li><strong>Simpler C++ API</strong>:
+<code>Timestamp valid_from, valid_to</code> is clearer than a custom
+<code>TemporalRange&lt;Timestamp&gt;</code> wrapper.</li>
+<li><strong>Migration simplicity</strong>: Adding 4
+<code>TIMESTAMPTZ</code> columns to existing entities is a standard
+Sqitch migration. Range columns require <code>btree_gist</code>
+extension and are harder to backfill.</li>
+</ol>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>ENTITY Balance @uuid &quot;...&quot; IDENTIFIED_BY id (
+    account_id UUID NOT_NULL
+    amount Decimal(18,2) NOT_NULL
+    currency_code Code NOT_NULL
+)
+BITEMPORAL {
+    VALID_TIME valid_from, valid_to;     -- User-managed: when the fact is true in reality
+    SYSTEM_TIME AUTO;                     -- Auto-managed: when the system recorded it
+    GRANULARITY MICROSECOND;              -- Optional: MICROSECOND (default) | MILLISECOND | SECOND
+}
+RELATIONSHIPS {
+    account -&gt; Account REQUIRED ONE;
+}</code></pre>
+<p><strong>Shorthand for valid-time-only (no system
+versioning):</strong></p>
+<pre class="ddd"><code>ENTITY InsurancePolicy @uuid &quot;...&quot; IDENTIFIED_BY id (
+    holder_id UUID NOT_NULL
+    premium Decimal(10,2) NOT_NULL
+)
+BITEMPORAL {
+    VALID_TIME effective_from, effective_to;
+}</code></pre>
+<h3 id="ir-structs">IR Structs</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> bitemporal-config</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>valid-from-field    <span class="co">;; symbol — field name for valid-time start</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   valid-to-field      <span class="co">;; symbol — field name for valid-time end</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   system-versioned?   <span class="co">;; boolean — auto-manage system_from/system_to</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>   granularity<span class="op">))</span>       <span class="co">;; symbol — &#39;microsecond | &#39;millisecond | &#39;second</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; Add to entity struct:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; (struct entity (... bitemporal ...))  ;; bitemporal-config or #f</span></span></code></pre></div>
+<h3 id="generated-artifacts-per-layer">Generated Artifacts Per
+Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>4 <code>TIMESTAMPTZ</code> columns (2 if valid-time-only),
+<code>EXCLUDE USING GIST</code> constraint, system-time trigger
+(<code>SET system_from = NOW()</code> on INSERT, close + reopen on
+UPDATE), <code>btree_gist</code> extension</td>
+</tr>
+<tr>
+<td><strong>C++ DBA</strong></td>
+<td><code>find_as_of(id, valid_at)</code>,
+<code>find_as_of(id, valid_at, system_at)</code>,
+<code>find_history(id)</code>, <code>find_corrections(id)</code>
+repository methods</td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td><code>valid_at</code> and <code>system_at</code> optional filter
+fields on <code>Get</code>/<code>List</code> RPCs,
+<code>GetHistory</code> RPC</td>
+</tr>
+<tr>
+<td><strong>Qt Widgets</strong></td>
+<td><code>QDateTimeEdit</code> range filters for valid-time and
+system-time on list views</td>
+</tr>
+<tr>
+<td><strong>Qt QML</strong></td>
+<td>ViewModel temporal filter properties</td>
+</tr>
+<tr>
+<td><strong>Sqitch</strong></td>
+<td><code>btree_gist</code> extension deploy, temporal columns in entity
+deploy scripts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="non-destructive-update-pattern">Non-Destructive Update
+Pattern</h3>
+<p>Bitemporal entities use <strong>INSERT + close</strong> instead of
+<strong>UPDATE</strong>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- &quot;Correct&quot; a balance: close the old interval, insert a new one</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> balance <span class="kw">SET</span> valid_to <span class="op">=</span> NOW() <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> $<span class="dv">1</span> <span class="kw">AND</span> valid_to <span class="op">=</span> <span class="st">&#39;infinity&#39;</span>;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> balance (<span class="kw">id</span>, account_id, amount, valid_from, valid_to, system_from, system_to)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (gen_random_uuid(), $<span class="dv">2</span>, $<span class="dv">3</span>, $<span class="dv">4</span>, <span class="st">&#39;infinity&#39;</span>, NOW(), <span class="st">&#39;infinity&#39;</span>);</span></code></pre></div>
+<p>The C++ repository's <code>update()</code> method MUST implement this
+as an atomic operation within the <code>UnitOfWork</code>.</p>
+<h3 id="temporal-query-precision">Temporal Query Precision</h3>
+<ul>
+<li><strong>C++ side</strong>: Use
+<code>muscovite::dba::Timestamp</code> (wraps
+<code>std::chrono::time_point&lt;system_clock, microseconds&gt;</code>)</li>
+<li><strong>PostgreSQL side</strong>: <code>TIMESTAMPTZ</code> stores
+microsecond precision natively</li>
+<li><strong>Proto side</strong>: <code>google.protobuf.Timestamp</code>
+has nanosecond precision (superset)</li>
+<li><strong>No rounding errors</strong> in the existing mapping chain
+for microsecond-level financial reconciliation</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Zero new type registrations — leverages existing TIMESTAMPTZ 5-layer
+mapping</li>
+<li>Financial/healthcare/regulatory domains get auditable temporal data
+out of the box</li>
+<li>Non-destructive updates align with Event Sourcing philosophy (ADR
+20260204)</li>
+<li><code>EXCLUDE USING GIST</code> provides database-level overlap
+prevention ("temporal paradox" guard)</li>
+<li>"As-of" queries are generated, not hand-written — eliminates a major
+source of temporal bugs</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>4 extra columns per bitemporal entity — storage overhead and index
+cost</li>
+<li>Non-destructive updates produce growing tables — need for
+archival/partitioning strategy (future ADR)</li>
+<li>System-time trigger adds INSERT/UPDATE overhead (~5% based on
+PostgreSQL benchmarks)</li>
+<li><code>btree_gist</code> extension must be available (standard in
+PostgreSQL, but a deployment dependency)</li>
+<li>Dual-column approach is less idiomatic than SQL:2011
+<code>PERIOD FOR</code> — may need migration path when PostgreSQL fully
+supports temporal tables</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

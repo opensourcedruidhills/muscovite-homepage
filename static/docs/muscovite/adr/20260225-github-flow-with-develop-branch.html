@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Flow with Develop Branch for Multi-Agent
+Isolation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>GitHub Flow with Develop Branch for Multi-Agent Isolation</span>
+</nav>
+
+<h1>GitHub Flow with Develop Branch for Multi-Agent Isolation</h1>
+
+
+<h1
+id="github-flow-with-develop-branch-for-multi-agent-isolation">GitHub
+Flow with Develop Branch for Multi-Agent Isolation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-25</li>
+<li>Tags: git, branching, workflow, multi-agent, gh-cli</li>
+<li>Supersedes: <a
+href="20260211-git-flow-branching-strategy.html">20260211-git-flow-branching-strategy.md</a></li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite uses a single-branch model (<code>main</code> only) with
+direct commits. This works for solo development but breaks down when
+multiple AI agents operate concurrently:</p>
+<ol type="1">
+<li><strong>No isolation</strong>: Agent A performing a release blocks
+Agent B from committing feature work.</li>
+<li><strong>No audit trail</strong>: Direct commits to <code>main</code>
+leave no review artifact showing what changed and why.</li>
+<li><strong>No integration buffer</strong>: A broken commit on
+<code>main</code> immediately affects the release branch.</li>
+</ol>
+<p>The project is hosted on GitHub (private repo, no paid org).
+Server-side branch protection is not available. All enforcement must be
+convention-based via agent instructions and scripts.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Multiple AI agents need concurrent, isolated workspaces</li>
+<li>GitHub CLI (<code>gh</code>) is installed and authenticated —
+PR-based workflow is available</li>
+<li>No server-side CI or branch protection (private repo, no paid
+org)</li>
+<li>Release ceremony (<code>release.sh</code>) must remain the sole
+release path</li>
+<li>Feature-complete PRs are the natural work unit (not per-commit
+PRs)</li>
+<li>Gitea is a local Docker container for brownfield extraction, NOT the
+project host</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-full-git-flow-masterdevelopreleasehotfix">Option 1:
+Full Git Flow (master/develop/release/hotfix)</h3>
+<p>Full Git Flow with <code>release/*</code> and <code>hotfix/*</code>
+branches, back-merges, CI gates.</p>
+<h3 id="option-2-github-flow--develop-chosen">Option 2: GitHub Flow +
+<code>develop</code> (chosen)</h3>
+<p>Add <code>develop</code> as the integration branch. Feature branches
+merge to <code>develop</code> via <code>gh pr create</code>.
+<code>release.sh</code> merges <code>develop</code> → <code>main</code>
+at release time. No <code>release/*</code> or <code>hotfix/*</code>
+branches.</p>
+<h3 id="option-3-keep-single-branch-main">Option 3: Keep single-branch
+<code>main</code></h3>
+<p>Status quo. Accept agent conflicts as the cost of simplicity.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 2 — GitHub Flow +
+<code>develop</code></strong>, because it provides agent isolation and
+audit trails with minimal ceremony. Full Git Flow (Option 1) adds
+<code>release/*</code> and <code>hotfix/*</code> branches that are
+unnecessary for a solo developer with AI agents. The single-branch model
+(Option 3) is what prompted this change.</p>
+<h3 id="branch-model">Branch Model</h3>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>Source</th>
+<th>Merges To</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td>—</td>
+<td>—</td>
+<td>Release-only. Tagged releases. Never committed to directly.</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td><code>main</code></td>
+<td><code>main</code> (via release.sh)</td>
+<td>Integration branch. Default branch on GitHub.</td>
+</tr>
+<tr>
+<td><code>feature/ftr-NNN-*</code></td>
+<td><code>develop</code></td>
+<td><code>develop</code> (via <code>gh pr create</code>)</td>
+<td>Feature work by one agent.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="feature-workflow">Feature Workflow</h3>
+<pre><code>1. git checkout develop &amp;&amp; git pull
+2. git checkout -b feature/ftr-NNN-short-desc
+3. (do work, commit)
+4. workflow/scripts/agent-pr.sh   # runs quality gates, creates PR
+5. gh pr merge --merge             # merge to develop after review</code></pre>
+<h3 id="release-workflow">Release Workflow</h3>
+<pre><code>1. cd $REPO_ROOT &amp;&amp; git checkout develop
+2. workflow/scripts/release.sh vX.Y.Z
+   - Merges develop → main (fast-forward-only)
+   - Runs quality gates on main
+   - Tags, pushes
+   - Back-merges main → develop (keep in sync)</code></pre>
+<h3 id="quality-gate-enforcement">Quality Gate Enforcement</h3>
+<p>Since no server-side CI exists, quality gates are enforced by
+scripts:</p>
+<ul>
+<li><strong><code>agent-pr.sh</code></strong>: Runs parser tests,
+generator tests, integration tests, C++ build, C++ tests. Results
+documented in PR body. Non-zero exit on any failure = no PR
+created.</li>
+<li><strong><code>release.sh</code></strong>: Same quality gates plus
+effort estimation, changelog generation, muscovite-cpp sync.</li>
+</ul>
+<p>The PR body IS the evidence artifact. No CI bot posts status — the
+creating agent documents test results.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Agents work in isolation on feature branches</li>
+<li><code>develop</code> is the integration point — broken features
+don't reach <code>main</code></li>
+<li>PRs create an audit trail per feature (visible on GitHub)</li>
+<li><code>gh pr list</code> shows what's in flight — agents check before
+starting work</li>
+<li><code>main</code> is always release-ready (only receives merged
+<code>develop</code>)</li>
+<li>No new infrastructure required — <code>gh</code> CLI is the only
+addition</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Convention-enforced only — no server-side block on direct push to
+<code>main</code></li>
+<li>Agents must remember to use <code>agent-pr.sh</code>, not
+<code>git push develop</code> directly</li>
+<li>Fast-forward-only merge to <code>main</code> requires
+<code>develop</code> to be a superset of <code>main</code></li>
+</ul>
+<h2 id="key-rules">Key Rules</h2>
+<ul>
+<li><strong>FORBIDDEN</strong>: Direct commits to <code>main</code>
+(except by <code>release.sh</code>)</li>
+<li><strong>FORBIDDEN</strong>: Direct push to <code>develop</code>
+(must go through PR via <code>agent-pr.sh</code>)</li>
+<li><strong>FORBIDDEN</strong>: Force-push to <code>develop</code> or
+<code>main</code></li>
+<li><strong>REQUIRED</strong>: <code>gh pr list --base develop</code>
+before starting new feature work</li>
+<li><strong>REQUIRED</strong>: All quality gates pass before PR creation
+(enforced by <code>agent-pr.sh</code>)</li>
+<li><strong>REQUIRED</strong>: <code>release.sh</code> is the sole path
+from <code>develop</code> to <code>main</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>Starting any new feature work (branch from <code>develop</code>, not
+<code>main</code>)</li>
+<li>Completing a feature (use <code>agent-pr.sh</code>, not
+<code>git push</code>)</li>
+<li>Preparing a release (run <code>release.sh</code> on
+<code>develop</code>)</li>
+<li>Checking what other agents are working on
+(<code>gh pr list</code>)</li>
+</ul>
+<h3 id="when-this-does-not-apply">When This Does NOT Apply</h3>
+<ul>
+<li>Experimental/throwaway branches (any name, delete after)</li>
+<li>Hotfixes: create <code>hotfix/description</code> from
+<code>main</code>, merge to both <code>main</code> and
+<code>develop</code> via <code>release.sh --hotfix</code> (future
+extension)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>workflow/scripts/agent-pr.sh</code> — Feature PR creation with
+quality gates</li>
+<li><code>workflow/scripts/release.sh</code> — Release ceremony (develop
+→ main)</li>
+<li><code>AGENTS.md</code> — Branching model documentation</li>
+<li><code>CLAUDE.md</code> — Branching rules for Claude agents</li>
+<li><code>.github/copilot-instructions.md</code> — Branching rules for
+Copilot agents</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes: <a href="20260211-git-flow-branching-strategy.html">Git
+Flow Branching Strategy</a></li>
+<li>Related: <a href="20260120-cqrs-ready-architecture.html">CQRS-Ready
+Architecture</a></li>
+<li>GitHub CLI documentation: <a
+href="https://cli.github.com/manual/">https://cli.github.com/manual/</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

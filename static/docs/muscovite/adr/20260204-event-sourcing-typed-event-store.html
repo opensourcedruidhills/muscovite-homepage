@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Sourcing with Typed Event Store (Option
+B) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Event Sourcing with Typed Event Store (Option B)</span>
+</nav>
+
+<h1>Event Sourcing with Typed Event Store (Option B)</h1>
+
+
+<h1 id="event-sourcing-with-typed-event-store-option-b">Event Sourcing
+with Typed Event Store (Option B)</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Date: 2026-02-04</li>
+<li>Deciders: User (jolo)</li>
+<li>Tags: event-sourcing, cqrs, persistence, aggregates</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite needs event sourcing capability for aggregates that
+require:</p>
+<ul>
+<li>Complete audit trail of state changes</li>
+<li>Ability to reconstruct state from events</li>
+<li>Temporal queries (state at point in time)</li>
+<li>Event replay for projections</li>
+</ul>
+<p>Event sourcing is distinct from:</p>
+<ul>
+<li><strong>Domain Events</strong> (outbox): Cross-process messaging,
+side effects, published to NATS</li>
+<li><strong>Audit Logs</strong>: Compliance records of
+who-did-what-when</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Type safety across all layers (no JSON/JSONB)</li>
+<li>Opt-in per aggregate (not all need event sourcing complexity)</li>
+<li>Backward compatible with existing DSL</li>
+<li>Consistent with existing generator architecture</li>
+<li>Per-event snapshots for fast state loading</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Option A</strong>: Single events table with JSONB
+payload</li>
+<li><strong>Option B</strong>: Strongly typed per-event payload tables
+(no JSON)</li>
+<li><strong>Option C</strong>: Per-context events with Protobuf
+BYTEA</li>
+<li><strong>Option D</strong>: Hybrid stream-based
+(EventStoreDB-inspired)</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option B — Strongly Typed Event
+Store</strong></p>
+<p>Every event type gets its own payload table with proper typed
+columns. This maintains full type safety and aligns with the "no JSON"
+rule.</p>
+<h3 id="storage-strategy">Storage Strategy</h3>
+<ul>
+<li><strong>Dual-write</strong>: Events + snapshot + entity table (for
+queries)</li>
+<li><strong>Snapshots</strong>: Updated on every event (no replay needed
+for reads)</li>
+<li><strong>Event evolution</strong>: Upcasters transform old events on
+load</li>
+</ul>
+<h2 id="dsl-syntax">DSL Syntax</h2>
+<h3 id="opt-in-event-sourcing">Opt-in Event Sourcing</h3>
+<pre class="ddd"><code>-- Standard aggregate (unchanged)
+AGGREGATE Patient @uuid &quot;...&quot; ROOT Patient
+DOC &quot;Regular aggregate&quot;;
+
+-- Event-sourced aggregate (new)
+AGGREGATE Patient @uuid &quot;...&quot; ROOT Patient
+    EVENT_SOURCED
+DOC &quot;Aggregate with event sourcing&quot;;</code></pre>
+<h3 id="sourced-events">Sourced Events</h3>
+<pre class="ddd"><code>SOURCED_EVENT PatientRegistered @uuid &quot;...&quot; (
+    patient_id    UUID NOT NULL @uuid &quot;...&quot;,
+    mrn           TEXT NOT NULL @uuid &quot;...&quot;,
+    given_name    TEXT NOT NULL @uuid &quot;...&quot;,
+    family_name   TEXT NOT NULL @uuid &quot;...&quot;
+)
+APPLIES_TO Patient
+DOC &quot;Patient was registered&quot;;
+
+SOURCED_EVENT PatientNameChanged @uuid &quot;...&quot; (
+    patient_id    UUID NOT NULL @uuid &quot;...&quot;,
+    given_name    TEXT NOT NULL @uuid &quot;...&quot;,
+    family_name   TEXT NOT NULL @uuid &quot;...&quot;
+)
+APPLIES_TO Patient
+DOC &quot;Patient name was changed&quot;;</code></pre>
+<h3 id="distinction-from-domain-events">Distinction from Domain
+Events</h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Keyword</th>
+<th>Purpose</th>
+<th>Storage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain Event</td>
+<td><code>EVENT</code></td>
+<td>Messaging, outbox</td>
+<td><code>{context}.domain_events</code> (transient)</td>
+</tr>
+<tr>
+<td>Sourced Event</td>
+<td><code>SOURCED_EVENT</code></td>
+<td>State reconstruction</td>
+<td><code>event_store.*</code> (permanent)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="schema-design">Schema Design</h2>
+<h3 id="event-envelope-table">Event Envelope Table</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">SCHEMA</span> event_store;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> event_store.<span class="kw">events</span> (</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>                BIGSERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    aggregate_type    TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    aggregate_id      UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    version           <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    event_type        TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    occurred_at       TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    correlation_id    UUID,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    causation_id      BIGINT <span class="kw">REFERENCES</span> event_store.<span class="kw">events</span>(<span class="kw">id</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> uq_aggregate_version <span class="kw">UNIQUE</span> (aggregate_type, aggregate_id, version)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_events_aggregate <span class="kw">ON</span> event_store.<span class="kw">events</span>(aggregate_type, aggregate_id);</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_events_type <span class="kw">ON</span> event_store.<span class="kw">events</span>(event_type);</span></code></pre></div>
+<h3 id="per-event-payload-tables">Per-Event Payload Tables</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> event_store.patient_registered (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    event_id      BIGINT <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">REFERENCES</span> event_store.<span class="kw">events</span>(<span class="kw">id</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    patient_id    UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    mrn           TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    given_name    TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    family_name   TEXT <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> event_store.patient_name_changed (</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    event_id      BIGINT <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">REFERENCES</span> event_store.<span class="kw">events</span>(<span class="kw">id</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    patient_id    UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    given_name    TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    family_name   TEXT <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="snapshot-table-per-aggregate-type">Snapshot Table (Per Aggregate
+Type)</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> event_store.patient_snapshot (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    aggregate_id   UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    version        <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    mrn            TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    given_name     TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    family_name    TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- All aggregate fields...</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    updated_at     TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h2 id="c-generated-code">C++ Generated Code</h2>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> patient<span class="op">::</span>event_store <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Event structs (generated from SOURCED_EVENT)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> PatientRegistered <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">boost::</span>uuids::uuid patient_id<span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string mrn<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string given_name<span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>string family_name<span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Event variant</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> PatientEvent <span class="op">=</span> <span class="bu">std::</span>variant<span class="op">&lt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    PatientRegistered<span class="op">,</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    PatientNameChanged<span class="op">,</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    PatientDeactivated</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">// Event store with dual-write</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientEventStore <span class="op">{</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> PatientEventStore<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">);</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Append event (updates snapshot + entity table in single transaction)</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> append<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> aggregate_id<span class="op">,</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                <span class="dt">int64_t</span> expected_version<span class="op">,</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">const</span> PatientEvent<span class="op">&amp;</span> event<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span><span class="dt">int64_t</span><span class="op">,</span> EventStoreError<span class="op">&gt;;</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Load from snapshot</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> load_snapshot<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> aggregate_id<span class="op">)</span> </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>PatientSnapshot<span class="op">,</span> EventStoreError<span class="op">&gt;;</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Load events (for debugging, projections)</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> load_events<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> aggregate_id<span class="op">)</span> </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>vector<span class="op">&lt;</span>PatientEvent<span class="op">&gt;;</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">// Aggregate with apply methods</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Patient <span class="op">{</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="kw">auto</span> from_snapshot<span class="op">(</span><span class="at">const</span> PatientSnapshot<span class="op">&amp;</span> snapshot<span class="op">)</span> <span class="op">-&gt;</span> Patient<span class="op">;</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Commands return events</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> register_patient<span class="op">(</span><span class="at">const</span> RegisterPatientCommand<span class="op">&amp;</span> cmd<span class="op">)</span> </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>        <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>PatientRegistered<span class="op">,</span> DomainError<span class="op">&gt;;</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> apply<span class="op">(</span><span class="at">const</span> PatientRegistered<span class="op">&amp;</span> e<span class="op">);</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> apply<span class="op">(</span><span class="at">const</span> PatientNameChanged<span class="op">&amp;</span> e<span class="op">);</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="event-evolution">Event Evolution</h2>
+<h3 id="adding-optional-field">Adding Optional Field</h3>
+<p>Old events load with <code>NULL</code> for new optional fields. No
+upcaster needed.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> event_store.patient_registered <span class="kw">ADD</span> <span class="kw">COLUMN</span> birth_date <span class="dt">DATE</span>;</span></code></pre></div>
+<h3 id="adding-mandatory-field">Adding Mandatory Field</h3>
+<p>Requires backfill migration and upcaster:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> event_store.patient_registered </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">COLUMN</span> preferred_language TEXT <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;en&#39;</span>;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> event_store.patient_registered </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SET</span> preferred_language <span class="op">=</span> <span class="st">&#39;en&#39;</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> preferred_language <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div>
+<p>C++ upcaster:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>PatientRegistered upcaster_v1_to_v2<span class="op">(</span><span class="at">const</span> PatientRegistered_v1<span class="op">&amp;</span> old<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> PatientRegistered<span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>patient_id <span class="op">=</span> old<span class="op">.</span>patient_id<span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>mrn <span class="op">=</span> old<span class="op">.</span>mrn<span class="op">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>preferred_language <span class="op">=</span> <span class="st">&quot;en&quot;</span>  <span class="co">// Default for old events</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="validation-rules">Validation Rules</h2>
+<ol type="1">
+<li><code>SOURCED_EVENT</code> must have <code>APPLIES_TO</code>
+clause</li>
+<li><code>APPLIES_TO</code> target must be an <code>EVENT_SOURCED</code>
+aggregate</li>
+<li><code>EVENT_SOURCED</code> aggregates must have at least one
+<code>SOURCED_EVENT</code></li>
+<li>First field of sourced event should reference aggregate root ID</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<h3 id="good">Good</h3>
+<ul>
+<li>Full type safety (no JSON)</li>
+<li>Schema-validated event payloads</li>
+<li>Efficient queries on event fields</li>
+<li>Opt-in complexity only where needed</li>
+<li>Backward compatible</li>
+</ul>
+<h3 id="bad">Bad</h3>
+<ul>
+<li>One table per event type (many tables)</li>
+<li>Schema migrations for event evolution</li>
+<li>More complex than JSONB approach</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Dual-write maintains query compatibility</li>
+<li>Snapshots eliminate replay overhead</li>
+</ul>
+<h2 id="implementation-phases">Implementation Phases</h2>
+<ol type="1">
+<li><strong>Parser</strong>: Add <code>SOURCED_EVENT</code>,
+<code>APPLIES_TO</code>, <code>EVENT_SOURCED</code> modifier</li>
+<li><strong>Model</strong>: Add <code>sourced-event</code> struct,
+update <code>aggregate</code> with <code>event-sourced?</code></li>
+<li><strong>PostgreSQL</strong>: Generate <code>event_store</code>
+schema with typed tables</li>
+<li><strong>C++</strong>: Generate <code>EventStore</code> class and
+aggregate <code>apply</code> methods</li>
+<li><strong>Tests</strong>: Event store integration tests</li>
+</ol>
+<h2 id="files-changed">Files Changed</h2>
+<h3 id="new-keywords">New Keywords</h3>
+<ul>
+<li><code>dslgen/parser/lexer.rkt</code>: Add <code>SOURCED</code>,
+<code>APPLIES</code></li>
+</ul>
+<h3 id="model-updates">Model Updates</h3>
+<ul>
+<li><code>dslgen/model/ddd-types.rkt</code>: Add
+<code>sourced-event</code> struct</li>
+</ul>
+<h3 id="parser-updates">Parser Updates</h3>
+<ul>
+<li><code>dslgen/parser/parser.rkt</code>:
+<code>parse-sourced-event</code>, modify
+<code>parse-aggregate</code></li>
+</ul>
+<h3 id="new-generators">New Generators</h3>
+<ul>
+<li><code>dslgen/generators/postgres/event-store.rkt</code></li>
+<li><code>dslgen/generators/cpp/dba/event-store.rkt</code></li>
+</ul>
+<h2 id="related-adrs">Related ADRs</h2>
+<ul>
+<li><a href="20260203-defer-redis-caching.html">ADR 20260203: Defer Redis
+Caching</a></li>
+<li><a href="20260120-domain-services-as-aggregate-boundary.html">ADR
+20260120: Domain Services as Aggregate Boundary</a></li>
+<li><a href="20260120-cqrs-ready-architecture.html">ADR 20260120:
+CQRS-Ready Architecture</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlantUML Salt Wireframes in Generated
+Documentation — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>PlantUML Salt Wireframes in Generated Documentation</span>
+</nav>
+
+<h1>PlantUML Salt Wireframes in Generated Documentation</h1>
+
+
+<h1 id="plantuml-salt-wireframes-in-generated-documentation">PlantUML
+Salt Wireframes in Generated Documentation</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-02-22</li>
+<li>Tags: documentation, wireframe, plantuml, salt, ui, layout,
+asciidoc, code-generation</li>
+</ul>
+<p>Technical Story: Generated AsciiDoc system manuals document the data
+model (ER diagrams, field tables) but not the generated UI structure.
+Stakeholders reviewing a domain model cannot see what the application
+will look like until C++ compiles and runs. Wireframes derived from the
+same IR that drives Qt Widgets and QML generation close this gap.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates full-stack applications from <code>.ddd</code>
+models: PostgreSQL schemas, C++ DBA, gRPC services, Qt Widgets, and Qt
+Quick/QML frontends. The AsciiDoc system manual generator
+(<code>glossary-adoc.rkt</code>) already produces ER diagrams, event
+flow diagrams, and saga workflow diagrams — all via PlantUML.</p>
+<p>However, the <strong>generated UI structure</strong> is invisible in
+documentation. The IR contains rich layout metadata:</p>
+<ul>
+<li><code>layout-spec</code> with form-factor qualifiers (desktop,
+tablet, mobile)</li>
+<li><code>master-spec</code> with table column selection</li>
+<li><code>detail-spec</code> with style (form/sidebar/card/wizard),
+grouping (tabs/sections/accordion/flat), actions, and child tabs</li>
+<li>Complete type → widget mapping (Boolean → QCheckBox, FK → QComboBox,
+Date → QDateEdit, etc.)</li>
+<li>FK detection with display field resolution for dropdowns</li>
+</ul>
+<p>This metadata drives Qt Widgets and QML generation today but is not
+surfaced in documentation. A domain expert reviewing the system manual
+sees entity fields but not the master-detail layout, tab grouping, or
+form arrangement that will be generated.</p>
+<p><strong>Three use cases identified:</strong></p>
+<ol type="1">
+<li><strong>Default wireframes</strong>: Auto-generated from IR
+structural properties — show what the generated UI looks like without
+any DSL customization</li>
+<li><strong>Customizable wireframes</strong>: Reflect
+<code>LAYOUT {}</code> block customizations from <code>.ddd</code> files
+— the DSL is the wireframe editor, regeneration shows changes</li>
+<li><strong>Structural documentation</strong>: Wireframes embedded in
+AsciiDoc system manuals alongside ER diagrams and event flows</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>PlantUML is the standardized diagram format (ADR 20260217, Decision
+5)</li>
+<li>AsciiDoc + asciidoctor-diagram pipeline already renders PlantUML in
+system manuals</li>
+<li>Layout IR is mature: <code>layout-spec</code>,
+<code>master-spec</code>, <code>detail-spec</code>,
+<code>child-tab-spec</code> fully parsed and resolved</li>
+<li>Type → widget mapping exists in
+<code>widgets-field-helpers.rkt</code> (15+ type mappings)</li>
+<li>FK → ComboBox detection exists in
+<code>widgets-fk-helpers.rkt</code></li>
+<li>Target config abstraction maps abstract vocabulary to concrete
+widgets (<code>target-config.rkt</code>)</li>
+<li>Zero new external dependencies preferred</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-plantuml-salt-wireframes-recommended">Option 1:
+PlantUML Salt Wireframes (Recommended)</h3>
+<p>PlantUML's <code>salt</code> dialect is a built-in wireframe/mockup
+syntax supporting forms, tabs, trees, tables, dropdowns, checkboxes,
+spinners, and buttons.</p>
+<pre class="plantuml"><code>@startsalt
+{+
+  {* Entity: TodoItem                       }
+  {#
+    . | Title        | Due Date   | Done
+    1 | Buy groceries | 2026-03-01 | [X]
+    2 | Write report  | 2026-03-15 | [ ]
+  }
+  ---
+  {/ &lt;b&gt;General | Comments }
+  {
+    Title:       | &quot;Buy groceries              &quot;
+    Description: | {SI
+                    Multi-line description
+                   }
+    Priority:    | ^High^
+    Status:      | ^In Progress^
+    Due Date:    | &quot;2026-03-01&quot;
+    Done:        | [X]
+    ---
+    [Create] | [Edit] | [Delete]
+  }
+}
+@endsalt</code></pre>
+<h3 id="option-2-ascii-art-wireframes">Option 2: ASCII Art
+Wireframes</h3>
+<p>Plain-text box-drawing wireframes in AsciiDoc source blocks.</p>
+<pre><code>┌─────────────────────────────────────────────┐
+│ Master: TodoItem                            │
+├─────────┬──────────┬─────────┬──────────────┤
+│ Title   │ Due Date │ Done    │              │
+├─────────┼──────────┼─────────┤  Title: ___  │
+│ Buy gro │ 2026-03  │ [X]     │  Desc:  ___ │
+└─────────┴──────────┴─────────┤  Prio:  [v] │
+                                └─────────────┘</code></pre>
+<h3 id="option-3-htmlcss-mockups">Option 3: HTML/CSS Mockups</h3>
+<p>Generate standalone <code>.html</code> files with pure CSS wireframe
+styling.</p>
+<h3 id="option-4-svg-via-racket-racketdraw">Option 4: SVG via Racket
+<code>racket/draw</code></h3>
+<p>Generate <code>.svg</code> wireframes directly using Racket's drawing
+library (as <code>diagram.rkt</code> does for architecture
+diagrams).</p>
+<h3 id="option-5-figmaexternal-tool-export">Option 5: Figma/External
+Tool Export</h3>
+<p>Generate Figma-compatible JSON or Sketch artboards from the IR.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option 1 — PlantUML Salt Wireframes</strong>,
+because it requires zero new dependencies, integrates natively with the
+existing AsciiDoc + PlantUML pipeline, and the Salt widget vocabulary
+maps directly to the IR's layout metadata.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Wireframes appear in system manuals alongside ER diagrams, event
+flows, and saga workflows — unified documentation</li>
+<li>Same PlantUML rendering pipeline, same <code>[plantuml]</code> block
+syntax, same build toolchain</li>
+<li>Layout IR metadata → Salt syntax is a straightforward, deterministic
+transformation</li>
+<li><code>LAYOUT {}</code> block customizations in <code>.ddd</code>
+immediately reflect in wireframes on regeneration</li>
+<li>Form-factor-qualified layouts produce separate wireframes per form
+factor (desktop, mobile, tablet)</li>
+<li>Stakeholders can review UI structure without building C++</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Salt syntax is schematic, not pixel-perfect — adequate for
+structural wireframes, not visual design</li>
+<li>Salt has no interactivity (no hover, no click simulation) —
+wireframes are static</li>
+<li>Requires understanding Salt's somewhat unusual syntax for the
+generator author</li>
+<li>Additional PlantUML rendering time per aggregate (one wireframe
+diagram each)</li>
+</ul>
+<h2 id="detailed-decisions">Detailed Decisions</h2>
+<h3 id="1-generator-module-dslgengeneratorsdocswireframe-saltrkt">1.
+Generator Module:
+<code>dslgen/generators/docs/wireframe-salt.rkt</code></h3>
+<p>New Racket module consuming the same IR as
+<code>widgets-views.rkt</code> and <code>quick-views.rkt</code>, but
+emitting PlantUML Salt syntax instead of C++/QML code.</p>
+<table>
+<thead>
+<tr>
+<th>IR Input</th>
+<th>Salt Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>master-spec.columns</code></td>
+<td><code>{# . | Col1 | Col2 }</code> — table with header row and sample
+data rows</td>
+</tr>
+<tr>
+<td><code>detail-spec.style = 'form</code></td>
+<td><code>{ Label: | "field" }</code> — labeled form fields</td>
+</tr>
+<tr>
+<td><code>detail-spec.style = 'sidebar</code></td>
+<td><code>{+ {/ Master | Detail } }</code> — split layout</td>
+</tr>
+<tr>
+<td><code>detail-spec.style = 'card</code></td>
+<td><code>{ ... }</code> — framed card layout</td>
+</tr>
+<tr>
+<td><code>detail-spec.style = 'wizard</code></td>
+<td><code>{/ Step 1 | Step 2 | Step 3 }</code> — wizard pages</td>
+</tr>
+<tr>
+<td><code>detail-spec.grouping = 'tabs</code></td>
+<td><code>{/ Tab1 | Tab2 }</code> — tabbed content</td>
+</tr>
+<tr>
+<td><code>detail-spec.grouping = 'sections</code></td>
+<td>Labeled sections with separators</td>
+</tr>
+<tr>
+<td><code>detail-spec.grouping = 'accordion</code></td>
+<td>Collapsible sections</td>
+</tr>
+<tr>
+<td><code>detail-spec.grouping = 'flat</code></td>
+<td>Sequential fields</td>
+</tr>
+<tr>
+<td><code>detail-spec.children</code></td>
+<td>Additional tabs with child entity tables</td>
+</tr>
+<tr>
+<td><code>detail-spec.actions</code></td>
+<td><code>[Create] | [Edit] | [Delete]</code> — button row</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-field-type--salt-widget-mapping">2. Field Type → Salt Widget
+Mapping</h3>
+<p>Reuse the existing type → widget mapping from
+<code>widgets-field-helpers.rkt</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Widget Type</th>
+<th>Salt Syntax</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>QLineEdit</code> (String, UUID, Email, URL)</td>
+<td><code>"placeholder text   "</code></td>
+<td><code>"john@example.com       "</code></td>
+</tr>
+<tr>
+<td><code>QTextEdit</code> (description, notes)</td>
+<td><code>{SI multi-line text }</code></td>
+<td>Multi-line input area</td>
+</tr>
+<tr>
+<td><code>QSpinBox</code> (Integer)</td>
+<td><code>"42       "</code></td>
+<td>Numeric input</td>
+</tr>
+<tr>
+<td><code>QDoubleSpinBox</code> (Decimal)</td>
+<td><code>"3.14     "</code></td>
+<td>Decimal input</td>
+</tr>
+<tr>
+<td><code>QCheckBox</code> (Boolean)</td>
+<td><code>[X]</code> or <code>[ ]</code></td>
+<td>Checkbox</td>
+</tr>
+<tr>
+<td><code>QDateEdit</code> (Date)</td>
+<td><code>"2026-03-01"</code></td>
+<td>Date field</td>
+</tr>
+<tr>
+<td><code>QDateTimeEdit</code> (DateTime)</td>
+<td><code>"2026-03-01 12:00"</code></td>
+<td>DateTime field</td>
+</tr>
+<tr>
+<td><code>QTimeEdit</code> (Time)</td>
+<td><code>"14:30"</code></td>
+<td>Time field</td>
+</tr>
+<tr>
+<td><code>QComboBox</code> (FK relationship)</td>
+<td><code>^Selected Value^</code></td>
+<td>Dropdown</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-integration-into-asciidoc-system-manual">3. Integration into
+AsciiDoc System Manual</h3>
+<p>Wireframes are embedded in <code>glossary-adoc-entities.rkt</code> as
+a new subsection per aggregate, immediately after the ER diagram:</p>
+<pre class="asciidoc"><code>==== UI Wireframe: TodoItem
+
+[plantuml, todoitem-wireframe, svg]
+----
+@startsalt
+...
+@endsalt
+----</code></pre>
+<h3 id="4-form-factor-qualified-wireframes">4. Form-Factor-Qualified
+Wireframes</h3>
+<p>If the aggregate has multiple <code>LAYOUT</code> blocks with
+form-factor qualifiers, generate one wireframe per form factor:</p>
+<pre class="asciidoc"><code>===== Desktop Layout
+
+[plantuml, todoitem-wireframe-desktop, svg]
+----
+@startsalt
+...sidebar layout with full table columns...
+@endsalt
+----
+
+===== Mobile Layout
+
+[plantuml, todoitem-wireframe-mobile, svg]
+----
+@startsalt
+...compact form with minimal columns...
+@endsalt
+----</code></pre>
+<h3 id="5-default-wireframe-generation-no-layout-block">5. Default
+Wireframe Generation (No LAYOUT Block)</h3>
+<p>When an aggregate has no explicit <code>LAYOUT {}</code> block,
+generate a default wireframe based on:</p>
+<ul>
+<li><strong>Master</strong>: All non-id, non-audit fields as table
+columns</li>
+<li><strong>Detail</strong>: <code>STYLE: form</code>,
+<code>GROUPING: flat</code>,
+<code>ACTIONS: [create, edit, delete]</code></li>
+<li><strong>FK fields</strong>: Rendered as dropdowns with target entity
+name</li>
+<li><strong>Boolean fields</strong>: Rendered as checkboxes</li>
+<li><strong>Audit fields</strong> (<code>created_at</code>,
+<code>updated_at</code>): Omitted from master, shown read-only in
+detail</li>
+</ul>
+<p>This mirrors the default layout resolution in
+<code>target-config.rkt</code>
+(<code>default-layout-for-target</code>).</p>
+<h3 id="6-scope-dsl-to-docs-only-phase-1">6. Scope: DSL-to-Docs Only
+(Phase 1)</h3>
+<p>Phase 1 generates wireframes from <code>.ddd</code> → AsciiDoc only.
+The mapping is:</p>
+<pre><code>.ddd model → IR (layout-spec + fields + relationships)
+           → wireframe-salt.rkt
+           → PlantUML Salt blocks
+           → AsciiDoc system manual
+           → HTML/PDF via asciidoctor-diagram</code></pre>
+<p>Future phases may add:</p>
+<ul>
+<li>Interactive wireframe editing that propagates back to
+<code>LAYOUT {}</code> blocks</li>
+<li>Wireframes as a standalone CLI output
+(<code>--wireframes</code>)</li>
+<li>Wireframe diff (before/after layout changes)</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-plantuml-salt-chosen">Option 1: PlantUML Salt
+(chosen)</h3>
+<ul>
+<li>Good, because zero new dependencies — PlantUML already required</li>
+<li>Good, because native AsciiDoc embedding via <code>[plantuml]</code>
+blocks</li>
+<li>Good, because Salt widget vocabulary maps 1:1 to the IR's layout
+metadata</li>
+<li>Good, because deterministic generation — same IR always produces
+same wireframe</li>
+<li>Bad, because schematic aesthetics, not production-quality
+mockups</li>
+<li>Bad, because no interactivity</li>
+</ul>
+<h3 id="option-2-ascii-art">Option 2: ASCII Art</h3>
+<ul>
+<li>Good, because zero dependencies, works in plain text</li>
+<li>Bad, because column alignment and box-drawing is fragile to
+generate</li>
+<li>Bad, because not renderable as images for PDF/HTML</li>
+<li>Bad, because limited widget vocabulary (no tabs, no dropdowns)</li>
+</ul>
+<h3 id="option-3-htmlcss-mockups-1">Option 3: HTML/CSS Mockups</h3>
+<ul>
+<li>Good, because closest to actual UI, potentially interactive</li>
+<li>Bad, because new toolchain separate from AsciiDoc pipeline</li>
+<li>Bad, because not embeddable in AsciiDoc documents (only
+linkable)</li>
+<li>Bad, because HTML/CSS generation is complex and fragile</li>
+</ul>
+<h3 id="option-4-svg-via-racketdraw">Option 4: SVG via
+<code>racket/draw</code></h3>
+<ul>
+<li>Good, because full rendering control</li>
+<li>Bad, because must build a complete form renderer from scratch (~1K+
+lines)</li>
+<li>Bad, because no standard wireframe vocabulary — custom rendering
+engine</li>
+<li>Bad, because <code>diagram.rkt</code> renders architecture diagrams,
+not forms</li>
+</ul>
+<h3 id="option-5-figmaexternal">Option 5: Figma/External</h3>
+<ul>
+<li>Good, because professional-quality mockups</li>
+<li>Bad, because proprietary dependency, violates
+single-source-of-truth</li>
+<li>Bad, because no round-trip back to DSL</li>
+<li>Bad, because requires API key / cloud service</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Implements <a
+href="20260217-documentation-as-generated-artifact.html">Documentation as
+Generated Artifact</a> — extends AsciiDoc system manual</li>
+<li>Depends on <a
+href="20260211-grammar-first-language-evolution.html">Grammar-First
+Language Evolution</a> — LAYOUT grammar already exists</li>
+<li>Uses layout IR from <code>layout-spec</code>,
+<code>master-spec</code>, <code>detail-spec</code> (<a
+href="../GROUND-TRUTH.html">GROUND-TRUTH.md</a> Section I.11-13)</li>
+<li>Uses target config abstraction (<a
+href="../GROUND-TRUTH.html">GROUND-TRUTH.md</a> Section I.14)</li>
+<li>Reuses type→widget mapping from Qt Widgets generator</li>
+<li>ADR 20260217 Decision 5: PlantUML as sole diagram format</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying <code>glossary-adoc-entities.rkt</code> — add
+wireframe section per aggregate</li>
+<li>When adding new DSL types — update the Salt widget mapping in
+<code>wireframe-salt.rkt</code></li>
+<li>When changing <code>LAYOUT {}</code> grammar or IR — update
+wireframe generation accordingly</li>
+<li>When adding new <code>detail-spec.style</code> or
+<code>grouping</code> values — add Salt rendering</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Interactive UI prototyping tools — out of scope</li>
+<li>Pixel-perfect visual design mockups — Salt is structural, not
+visual</li>
+<li>Generated Qt/QML code — wireframes are documentation, not runtime
+artifacts</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/docs/wireframe-salt.rkt</code> — new
+generator module (to be created)</li>
+<li><code>dslgen/generators/docs/glossary-adoc-entities.rkt</code> —
+integration point for AsciiDoc embedding</li>
+<li><code>dslgen/generators/qt/widgets-field-helpers.rkt</code> —
+type→widget mapping (reuse)</li>
+<li><code>dslgen/generators/qt/widgets-fk-helpers.rkt</code> — FK
+detection (reuse)</li>
+<li><code>dslgen/targets/target-config.rkt</code> — layout resolution
+and default generation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

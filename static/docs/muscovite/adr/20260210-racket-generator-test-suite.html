@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Racket Generator Test Suite with CTest Integration and
+Coverage — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Racket Generator Test Suite with CTest Integration and
+Coverage</span>
+</nav>
+
+<h1>Racket Generator Test Suite with CTest Integration and Coverage</h1>
+
+
+<h1
+id="racket-generator-test-suite-with-ctest-integration-and-coverage">Racket
+Generator Test Suite with CTest Integration and Coverage</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-10</li>
+<li>Tags: testing, racket, generators, ctest, coverage, rackunit</li>
+</ul>
+<p>Technical Story: Generator correctness is only verified by "file
+exists" checks. Need structured content-validation tests, unified
+runner, CTest integration, and code coverage tracking as a v1.0.0
+release gate.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite has ~30 Racket test files across <code>dslgen/tests/</code>
+and <code>dslgen/test-*.rkt</code>, but the test infrastructure has
+several gaps that undermine confidence in generator correctness:</p>
+<ol type="1">
+<li><strong>Mixed frameworks</strong>: ~12 files use
+<code>rackunit</code> (<code>test-case</code>, <code>check-*</code>),
+~10 use manual <code>displayln</code> + <code>unless/error</code>.
+Manual-style tests don't propagate exit codes reliably, making
+automation impossible.</li>
+<li><strong>No CTest integration</strong>: Zero CMake targets exist for
+any Racket test. All CTest infrastructure covers only C++ Catch2 tests.
+Racket tests must be run individually via
+<code>racket dslgen/tests/test-xxx.rkt</code>.</li>
+<li><strong>No unified runner</strong>: No script discovers and executes
+all test files. No CI configuration for Racket tests exists.</li>
+<li><strong>Shallow validation</strong>: Generator tests check file
+existence but never validate file content. A generator could emit
+syntactically broken SQL or C++ and tests would pass.</li>
+<li><strong>Orphaned fixtures</strong>: Three fixture files in
+<code>dslgen/tests/fixtures/</code> (<code>specifications.ddd</code>,
+<code>value-objects.ddd</code>,
+<code>advanced-entity-features.ddd</code>) have no consuming test.</li>
+<li><strong>No coverage tracking</strong>: No <code>raco cover</code>
+integration exists to identify untested generator code paths.</li>
+</ol>
+<h3 id="current-test-inventory">Current Test Inventory</h3>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Count</th>
+<th>Example Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rackunit</code> (structured)</td>
+<td>~12</td>
+<td><code>test-parser-features.rkt</code>,
+<code>test-diff-model.rkt</code>,
+<code>test-verification.rkt</code></td>
+</tr>
+<tr>
+<td>Manual (<code>displayln</code>+<code>error</code>)</td>
+<td>~10</td>
+<td><code>test-parser.rkt</code>, <code>test-dsl-integration.rkt</code>,
+<code>test-lookup-table-parsing.rkt</code></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~22</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="current-fixture-files">Current Fixture Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Has Consuming Test?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/tests/test-lookup-tables.ddd</code></td>
+<td>✅ <code>test-lookup-table-parsing.rkt</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-projections.ddd</code></td>
+<td>✅ (used indirectly)</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/advanced-entity-features.ddd</code></td>
+<td>❌ Orphaned</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/specifications.ddd</code></td>
+<td>❌ Orphaned</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/value-objects.ddd</code></td>
+<td>❌ Orphaned</td>
+</tr>
+</tbody>
+</table>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Single source of truth</strong>: Generators are the only
+path from DSL to code — they must be provably correct</li>
+<li><strong>Fail-fast philosophy</strong>: Catch generation bugs before
+the C++ build (saves minutes per iteration)</li>
+<li><strong>Existing <code>rackunit</code> investment</strong>: 12 files
+already use it, standardizing reduces cognitive overhead</li>
+<li><strong>CTest as unified entry point</strong>: Developers already
+use <code>ctest --preset debug</code> — Racket tests should appear
+alongside C++ tests</li>
+<li><strong>No CI budget</strong>: No GitHub Actions pipeline — CTest is
+the only automation vehicle</li>
+<li><strong>Coverage visibility</strong>: Know which generator code
+paths are untested before declaring v1.0.0</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-a-keep-ad-hoc-manual-tests-as-is">Option A: Keep ad-hoc
+manual tests as-is</h3>
+<p>Continue running tests individually, accept mixed styles, no CTest
+integration.</p>
+<ul>
+<li>Good, because zero effort</li>
+<li>Bad, because manual-style tests don't fail reliably (exit code 0 on
+<code>displayln</code> errors)</li>
+<li>Bad, because developers forget to run Racket tests</li>
+<li>Bad, because no content validation — broken generators go
+undetected</li>
+</ul>
+<h3 id="option-b-structured-rackunit-suite--ctest--raco-cover">Option B:
+Structured rackunit suite + CTest + raco cover</h3>
+<p>Migrate all tests to <code>rackunit</code>, add per-generator
+content-validation tests, integrate with CTest via
+<code>add_test()</code>, add <code>raco cover</code> for coverage
+tracking.</p>
+<ul>
+<li>Good, because generators are verified at content level</li>
+<li>Good, because CTest makes Racket tests first-class citizens</li>
+<li>Good, because coverage identifies untested code paths</li>
+<li>Good, because <code>rackunit</code> exit codes work with CTest</li>
+<li>Neutral, because requires migrating ~10 manual tests</li>
+<li>Bad, because upfront effort (~2 days)</li>
+</ul>
+<h3 id="option-c-full-ci-pipeline-with-github-actions">Option C: Full CI
+pipeline with GitHub Actions</h3>
+<p>Everything in Option B, plus GitHub Actions workflow for
+<code>ctest --preset racket</code>.</p>
+<ul>
+<li>Good, because automated on every push</li>
+<li>Bad, because no budget for CI infrastructure</li>
+<li>Bad, because requires Racket installation in CI image</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option B — Structured rackunit suite + CTest +
+raco cover</strong>.</p>
+<p>This is a v1.0.0 release gate. Generator correctness must be verified
+before declaring the release.</p>
+<h3 id="prerequisite-migrate-manual-tests-to-rackunit">Prerequisite:
+Migrate Manual Tests to rackunit</h3>
+<p>Convert ~10 manual-style tests from <code>displayln</code> +
+<code>unless/error</code> to proper <code>rackunit</code>
+<code>test-suite</code> + <code>check-*</code> assertions with exit-code
+propagation via <code>rackunit/text-ui</code>
+<code>run-tests</code>.</p>
+<p><strong>Files to migrate</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Current Style</th>
+<th>Migration Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test-parser.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Low — wrap in <code>test-suite</code>, replace prints with
+<code>check-not-false</code></td>
+</tr>
+<tr>
+<td><code>test-dsl-integration.rkt</code></td>
+<td><code>displayln</code> + file checks</td>
+<td>Medium — add <code>check-true (file-exists?)</code> assertions</td>
+</tr>
+<tr>
+<td><code>test-generators.rkt</code></td>
+<td><code>displayln</code> + manual model</td>
+<td>Medium — wrap in <code>test-suite</code></td>
+</tr>
+<tr>
+<td><code>test-context-mapping.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Low</td>
+</tr>
+<tr>
+<td><code>test-lookup-table-parsing.rkt</code></td>
+<td><code>unless/error</code></td>
+<td>Low — replace <code>unless</code> with <code>check-*</code></td>
+</tr>
+<tr>
+<td><code>test-lang-components.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Low</td>
+</tr>
+<tr>
+<td><code>test-tpt-inheritance.rkt</code></td>
+<td><code>displayln</code> + file checks</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><code>test-qt-generator.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Medium — add content checks</td>
+</tr>
+<tr>
+<td><code>test-build-system-generator.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><code>test-ctest-generator.rkt</code></td>
+<td><code>displayln</code></td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Migration pattern</strong>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; BEFORE (manual)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> ctx </span><span class="op">(</span>parse-file <span class="st">&quot;examples/fhir-health/patient.ddd&quot;</span><span class="op">))</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>displayln <span class="op">(</span>bounded-context-name ctx<span class="op">))</span>  <span class="co">;; no assertion</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; AFTER (rackunit)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> rackunit rackunit/text-ui<span class="op">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> patient-suite</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>test-suite <span class="st">&quot;Patient context parsing&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>test-case <span class="st">&quot;parses patient context&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="ex">define</span><span class="fu"> ctx </span><span class="op">(</span>parse-file <span class="st">&quot;examples/fhir-health/patient.ddd&quot;</span><span class="op">))</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>check-equal? <span class="op">(</span>bounded-context-name ctx<span class="op">)</span> &#39;Patient<span class="op">))))</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>module+ main <span class="op">(</span>run-tests patient-suite<span class="op">))</span></span></code></pre></div>
+<h3 id="phase-1-generator-smoke-tests">Phase 1: Generator Smoke
+Tests</h3>
+<p>One new <code>test-generator-{target}.rkt</code> per generator
+family. Each test:</p>
+<ol type="1">
+<li>Parses a <strong>minimal fixture DDD</strong> (not
+fhir-health/geosciences — too slow)</li>
+<li>Calls the generator</li>
+<li>Asserts <strong>no errors</strong> (no exceptions thrown)</li>
+<li>Asserts <strong>output files exist</strong> with expected names</li>
+<li>Uses <code>make-temporary-directory</code> for isolation, cleans up
+after</li>
+</ol>
+<p><strong>New files</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Generator Target</th>
+<th>Key Assertions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test-generator-postgres.rkt</code></td>
+<td><code>postgres</code>, <code>postgres-unified</code></td>
+<td><code>sqitch.conf</code> exists, <code>deploy/*.sql</code> files
+exist, <code>sqitch.plan</code> non-empty</td>
+</tr>
+<tr>
+<td><code>test-generator-cpp-dba.rkt</code></td>
+<td><code>cpp-dba</code>, <code>unified-dba</code></td>
+<td><code>include/*/dba/entities/*.hpp</code> exist,
+<code>src/*/repositories/*.cpp</code> exist</td>
+</tr>
+<tr>
+<td><code>test-generator-grpc.rkt</code></td>
+<td><code>grpc</code></td>
+<td><code>proto/*.proto</code> exist, <code>src/*_service.cpp</code>
+exist</td>
+</tr>
+<tr>
+<td><code>test-generator-qt.rkt</code></td>
+<td><code>qt-widgets</code>, <code>qt-quick</code></td>
+<td>Widget <code>*_edit_dialog.hpp</code> exist, QML
+<code>*ViewModel.hpp</code> + <code>*.qml</code> exist</td>
+</tr>
+<tr>
+<td><code>test-generator-cmake.rkt</code></td>
+<td><code>cmake</code></td>
+<td><code>CMakeLists.txt</code> exists, <code>CMakePresets.json</code>
+exists</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Test isolation pattern</strong>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>with-temp-dir proc<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> dir </span><span class="op">(</span>make-temporary-directory<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">dynamic-wind</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    void</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>proc dir<span class="op">))</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">()</span> <span class="op">(</span>delete-directory/files dir<span class="op">))))</span></span></code></pre></div>
+<p><strong>Performance</strong>: Smoke tests use the small fixture DDD
+only (~50 lines). Full fhir-health (9 contexts) and geosciences (26
+contexts) parsing/generation reserved for
+<code>racket-integration</code> CTest label (nightly/on-demand).</p>
+<h3 id="phase-2-scenario-content-validation">Phase 2: Scenario Content
+Validation</h3>
+<p>Create <code>dslgen/tests/fixtures/generator-test.ddd</code> — a
+compact but comprehensive DDD file covering all major DSL
+constructs:</p>
+<pre class="ddd"><code>CONTEXT TestDomain @uuid &quot;...&quot; {
+    STRONG_TYPE Email BASED_ON TEXT
+        CHECK email_format: VALUE ~ &#39;^.+@.+$&#39;
+        DOC &quot;Test email type&quot;;
+
+    VALUE_OBJECT Address @inline @uuid &quot;...&quot; (
+        street TEXT NOT NULL @uuid &quot;...&quot;,
+        city   TEXT NOT NULL @uuid &quot;...&quot;
+    ) DOC &quot;Test address&quot;;
+
+    ENTITY Customer @uuid &quot;...&quot; IDENTIFIED_BY id (
+        id         UUID        NOT NULL @uuid &quot;...&quot;,
+        name       TEXT        NOT NULL @uuid &quot;...&quot;,
+        email      Email       NOT NULL @uuid &quot;...&quot;,
+        created_at TIMESTAMPTZ NOT NULL @uuid &quot;...&quot;,
+        score      DECIMAL     NOT NULL @uuid &quot;...&quot;
+    )
+    RELATIONSHIPS {
+        status -&gt; CustomerStatus REQUIRED ONE;
+    }
+    PRESENTATION {
+        SHORT: &quot;{name}&quot;;
+        FULL: &quot;{name} ({email})&quot;;
+        TABLE: [name, email, created_at];
+    }
+    DOC &quot;Test customer entity&quot;;
+
+    LOOKUP_TABLE CustomerStatus
+        SEED &quot;seeds/customer_status.json&quot;
+        DOC &quot;Customer status codes&quot;;
+
+    AGGREGATE Customer @uuid &quot;...&quot; ROOT Customer
+        DOC &quot;Customer aggregate&quot;;
+
+    EVENT CustomerCreated @uuid &quot;...&quot; (
+        customer_id UUID    NOT NULL,
+        name        TEXT    NOT NULL,
+        email       Email   NOT NULL
+    ) DOC &quot;Customer was created&quot;;
+
+    SPECIFICATION ActiveCustomer FOR Customer
+        WHERE status_id IS NOT NULL
+        DOC &quot;Customers with active status&quot;;
+}</code></pre>
+<p><strong>Per-generator content assertions</strong> using
+<code>check-regexp-match</code> and <code>string-contains?</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Generator</th>
+<th>Assertion</th>
+<th>Validates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>SQL contains <code>CREATE TABLE test_domain.customer</code></td>
+<td>Schema naming convention</td>
+</tr>
+<tr>
+<td></td>
+<td>SQL contains <code>TEXT</code> (never <code>VARCHAR</code>)</td>
+<td>ADR 20251223 compliance</td>
+</tr>
+<tr>
+<td></td>
+<td>SQL contains <code>TIMESTAMPTZ</code> (never
+<code>TIMESTAMP</code>)</td>
+<td>ADR 20251223 compliance</td>
+</tr>
+<tr>
+<td></td>
+<td>SQL contains
+<code>CREATE DOMAIN test_domain.email AS TEXT</code></td>
+<td>Strong type generation</td>
+</tr>
+<tr>
+<td></td>
+<td>SQL contains <code>CONSTRAINT fk_customer_status</code></td>
+<td>Explicit FK generation</td>
+</tr>
+<tr>
+<td></td>
+<td>Sqitch plan references all deploy files</td>
+<td>Migration completeness</td>
+</tr>
+<tr>
+<td><strong>C++ DBA</strong></td>
+<td>Header contains <code>namespace test_domain::dba</code></td>
+<td>Namespace convention</td>
+</tr>
+<tr>
+<td></td>
+<td>Header contains <code>class Customer</code></td>
+<td><code>symbol-&gt;cpp-class</code> naming</td>
+</tr>
+<tr>
+<td></td>
+<td>Header contains <code>class CustomerCommandRepository</code></td>
+<td>Repository naming</td>
+</tr>
+<tr>
+<td></td>
+<td>Header contains <code>class CustomerCommandService</code></td>
+<td>Service naming</td>
+</tr>
+<tr>
+<td></td>
+<td>Source contains <code>#include</code> with correct paths</td>
+<td>Include path correctness</td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td>Proto contains <code>message Customer</code></td>
+<td>Message naming</td>
+</tr>
+<tr>
+<td></td>
+<td>Proto contains <code>service CustomerService</code></td>
+<td>Service naming</td>
+</tr>
+<tr>
+<td></td>
+<td>Proto field types match <code>type-registry.rkt</code> mappings</td>
+<td>Type mapping correctness</td>
+</tr>
+<tr>
+<td></td>
+<td>Proto imports <code>muscovite/common/decimal.proto</code> for
+Decimal</td>
+<td>Common type imports</td>
+</tr>
+<tr>
+<td><strong>Qt Widgets</strong></td>
+<td>Header contains <code>Q_OBJECT</code></td>
+<td>Qt macro presence</td>
+</tr>
+<tr>
+<td></td>
+<td>Header contains
+<code>: public muscovite::qt::widgets::EntityEditDialogBase</code></td>
+<td>Base class inheritance</td>
+</tr>
+<tr>
+<td></td>
+<td>Source contains FK combo widget for <code>status</code></td>
+<td>Relationship UI generation</td>
+</tr>
+<tr>
+<td><strong>Qt Quick</strong></td>
+<td>ViewModel contains <code>Q_PROPERTY</code> for each field</td>
+<td>All-fields binding pattern</td>
+</tr>
+<tr>
+<td></td>
+<td>ViewModel contains <code>class CustomerViewModel</code></td>
+<td>ViewModel naming</td>
+</tr>
+<tr>
+<td></td>
+<td>QML file contains <code>TextField</code> or <code>CheckBox</code>
+bindings</td>
+<td>QML form generation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Wire orphaned fixtures</strong>:</p>
+<ul>
+<li><code>specifications.ddd</code> → test that
+<code>SPECIFICATION</code> generates correct C++ query methods and SQL
+WHERE clauses</li>
+<li><code>value-objects.ddd</code> → test <code>@inline</code> /
+<code>@owned</code> / <code>@shared</code> storage modes produce correct
+SQL and C++ structs</li>
+<li><code>advanced-entity-features.ddd</code> → test audit fields,
+lifecycle hooks, TPT inheritance chain</li>
+</ul>
+<h3 id="phase-3-ctest-integration--coverage">Phase 3: CTest Integration
++ Coverage</h3>
+<p><strong>New file</strong>: <code>dslgen/CMakeLists.txt</code></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Racket generator test suite</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Included from top-level CMakeLists.txt</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">find_program</span>(RACKET_EXECUTABLE racket <span class="ot">REQUIRED</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Smoke tests (Phase 1) ---</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(RACKET_SMOKE_TESTS</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    test-generator-postgres</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    test-generator-cpp-dba</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    test-generator-grpc</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    test-generator-qt</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    test-generator-cmake</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span>(test_name <span class="ot">IN</span> <span class="ot">LISTS</span> RACKET_SMOKE_TESTS)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">add_test</span>(</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="ot">NAME</span> <span class="bn">racket::smoke</span>::<span class="dv">${test_name}</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="ot">COMMAND</span> <span class="dv">${RACKET_EXECUTABLE}</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/<span class="dv">${test_name}</span>.rkt</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set_tests_properties</span>(<span class="bn">racket::smoke</span>::<span class="dv">${test_name}</span> <span class="ot">PROPERTIES</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="ot">LABELS</span> <span class="st">&quot;racket;racket-smoke&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="ot">TIMEOUT</span> 60</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="cf">endforeach</span>()</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Parser tests (existing, migrated to rackunit) ---</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(RACKET_PARSER_TESTS</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    test-parser</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    test-parser-features</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    test-dsl-integration</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    test-lookup-table-parsing</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    test-lang-components</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    test-tpt-inheritance</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    test-instruct-block</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    test-context-mapping</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span>(test_name <span class="ot">IN</span> <span class="ot">LISTS</span> RACKET_PARSER_TESTS)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">add_test</span>(</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        <span class="ot">NAME</span> <span class="bn">racket::parser</span>::<span class="dv">${test_name}</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="ot">COMMAND</span> <span class="dv">${RACKET_EXECUTABLE}</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>            <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/<span class="dv">${test_name}</span>.rkt</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set_tests_properties</span>(<span class="bn">racket::parser</span>::<span class="dv">${test_name}</span> <span class="ot">PROPERTIES</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>        <span class="ot">LABELS</span> <span class="st">&quot;racket;racket-parser&quot;</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        <span class="ot">TIMEOUT</span> 120</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="cf">endforeach</span>()</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Scenario tests (Phase 2) ---</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(RACKET_SCENARIO_TESTS</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    test-generator-postgres</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    test-generator-cpp-dba</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    test-generator-grpc</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    test-generator-qt</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    test-generator-cmake</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="co"># (Scenario assertions are embedded in smoke test files — same binary, deeper checks)</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Migration tests ---</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(RACKET_MIGRATION_TESTS</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    test-diff-model</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    test-adr1-canonical-ir</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    test-incremental-gen</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    test-verification</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    test-version-reader</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    test-migration-language</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>    test-migration-safety</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>    test-sqitch-from-migration</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span>(test_name <span class="ot">IN</span> <span class="ot">LISTS</span> RACKET_MIGRATION_TESTS)</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">add_test</span>(</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>        <span class="ot">NAME</span> <span class="bn">racket::migration</span>::<span class="dv">${test_name}</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>        <span class="ot">COMMAND</span> <span class="dv">${RACKET_EXECUTABLE}</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>            <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/<span class="dv">${test_name}</span>.rkt</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set_tests_properties</span>(<span class="bn">racket::migration</span>::<span class="dv">${test_name}</span> <span class="ot">PROPERTIES</span></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>        <span class="ot">LABELS</span> <span class="st">&quot;racket;racket-migration&quot;</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>        <span class="ot">TIMEOUT</span> 120</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="cf">endforeach</span>()</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Integration tests (full project parsing, slow) ---</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="kw">add_test</span>(</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    <span class="ot">NAME</span> <span class="bn">racket::integration::fhir-health</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>    <span class="ot">COMMAND</span> <span class="dv">${RACKET_EXECUTABLE}</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/test-dsl-integration.rkt</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>    <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="kw">set_tests_properties</span>(<span class="bn">racket::integration::fhir-health</span> <span class="ot">PROPERTIES</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>    <span class="ot">LABELS</span> <span class="st">&quot;racket;racket-integration&quot;</span></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>    <span class="ot">TIMEOUT</span> 300</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Coverage target ---</span></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a><span class="kw">find_program</span>(RACO_EXECUTABLE raco)</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(RACO_EXECUTABLE)</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>    <span class="kw">add_custom_target</span>(<span class="bn">racket-coverage</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>        <span class="ot">COMMAND</span> <span class="dv">${RACO_EXECUTABLE}</span> cover</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>            -f html</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>            -d <span class="dv">${CMAKE_BINARY_DIR}</span>/racket-coverage</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>            <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>        <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>        <span class="ot">COMMENT</span> <span class="st">&quot;Running raco cover on Racket test suite&quot;</span></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a><span class="cf">endif</span>()</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Convenience target: run all Racket tests ---</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="kw">add_custom_target</span>(<span class="bn">racket-tests</span></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>    <span class="ot">COMMAND</span> <span class="dv">${RACKET_EXECUTABLE}</span></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>        <span class="dv">${CMAKE_SOURCE_DIR}</span>/dslgen/tests/run-all-tests.rkt</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>    <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_SOURCE_DIR}</span></span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>    <span class="ot">COMMENT</span> <span class="st">&quot;Running all Racket generator tests&quot;</span></span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><strong>Unified runner</strong>:
+<code>dslgen/tests/run-all-tests.rkt</code></p>
+<p>Discovers all <code>test-*.rkt</code> files in the tests directory,
+requires each, runs all exported test suites via
+<code>rackunit/text-ui</code>, and exits with non-zero on any
+failure.</p>
+<p><strong>CTest preset</strong> (add to
+<code>CMakePresets.json</code>):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;racket&quot;</span><span class="fu">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;displayName&quot;</span><span class="fu">:</span> <span class="st">&quot;Racket Generator Tests&quot;</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;configurePreset&quot;</span><span class="fu">:</span> <span class="st">&quot;debug&quot;</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;filter&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;include&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;racket&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Usage</strong>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> racket                    <span class="co"># All Racket tests</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> debug <span class="at">-L</span> racket-smoke     <span class="co"># Smoke tests only</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> debug <span class="at">-L</span> racket-parser    <span class="co"># Parser tests only</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ctest</span> <span class="at">--preset</span> debug <span class="at">-L</span> racket-migration <span class="co"># Migration tests only</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">--build</span> <span class="at">--preset</span> debug <span class="at">--target</span> racket-coverage  <span class="co"># Coverage report</span></span></code></pre></div>
+<h2 id="implementation-phases">Implementation Phases</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Description</th>
+<th>Effort</th>
+<th>Prerequisite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prereq</strong></td>
+<td>Migrate ~10 manual tests to <code>rackunit</code></td>
+<td>0.5 day</td>
+<td>None</td>
+</tr>
+<tr>
+<td><strong>Phase 1</strong></td>
+<td>Smoke tests (5 generator test files)</td>
+<td>0.5 day</td>
+<td>Prereq</td>
+</tr>
+<tr>
+<td><strong>Phase 2</strong></td>
+<td>Content validation (fixture DDD + assertions)</td>
+<td>1 day</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td><strong>Phase 3</strong></td>
+<td>CTest integration + coverage</td>
+<td>0.5 day</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>2.5 days</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="files-changed">Files Changed</h2>
+<h3 id="new-files">New Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/tests/test-generator-postgres.rkt</code></td>
+<td>PostgreSQL generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-cpp-dba.rkt</code></td>
+<td>C++ DBA generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-grpc.rkt</code></td>
+<td>gRPC generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-qt.rkt</code></td>
+<td>Qt Widgets + Quick generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-cmake.rkt</code></td>
+<td>CMake/Conan generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/generator-test.ddd</code></td>
+<td>Comprehensive test fixture DDD</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/run-all-tests.rkt</code></td>
+<td>Unified test runner with exit-code propagation</td>
+</tr>
+<tr>
+<td><code>dslgen/CMakeLists.txt</code></td>
+<td>CTest targets for Racket tests + coverage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modified-files">Modified Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CMakeLists.txt</code></td>
+<td>Add <code>add_subdirectory(dslgen)</code></td>
+</tr>
+<tr>
+<td><code>CMakePresets.json</code></td>
+<td>Add <code>racket</code> test preset</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-parser.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-dsl-integration.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generators.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-context-mapping.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-lookup-table-parsing.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-lang-components.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-tpt-inheritance.rkt</code></td>
+<td>Migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/test-qt-generator.rkt</code></td>
+<td>Move to <code>tests/</code>, migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/test-build-system-generator.rkt</code></td>
+<td>Move to <code>tests/</code>, migrate to <code>rackunit</code></td>
+</tr>
+<tr>
+<td><code>dslgen/test-ctest-generator.rkt</code></td>
+<td>Move to <code>tests/</code>, migrate to <code>rackunit</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="20260120-catch2-integration-tests.html">ADR 20260120 — Catch2
+Integration Tests</a> (C++ test counterpart)</li>
+<li><a href="20260210-qml-testcase-ui-test-automation.html">ADR 20260210 —
+QML TestCase UI Test Automation</a> (Qt test counterpart)</li>
+<li><a href="20260109-incremental-artifact-generation.html">ADR 20260109 —
+Incremental Artifact Generation</a> (incremental gen tests)</li>
+<li><a href="20260109-cross-layer-verification.html">ADR 20260109 —
+Cross-Layer Verification</a> (verification tests)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>Adding a <strong>new generator target</strong> (e.g., Rust backend)
+→ must add <code>test-generator-{target}.rkt</code></li>
+<li>Adding a <strong>new DSL construct</strong> (e.g.,
+<code>SAGA</code>) → must add assertions in the relevant generator test
+files</li>
+<li>Modifying <strong>type-registry.rkt</strong> mappings → must verify
+content assertions still pass</li>
+<li>Modifying any <strong>generator template</strong> → run
+<code>ctest --preset racket</code> to validate</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>C++ framework tests → use Catch2 (ADR 20260120)</li>
+<li>Qt Quick UI tests → use QML TestCase (ADR 20260210)</li>
+<li>Database integration tests → use
+<code>ctest --preset debug -L db</code></li>
+<li>Manual exploratory testing of generated code</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>CTest preset <code>racket</code> runs all Racket tests</li>
+<li><code>rackunit</code> exit codes propagate failures to CTest</li>
+<li><code>raco cover</code> generates coverage report to
+<code>build/debug/racket-coverage/</code></li>
+<li>All tests use <code>make-temporary-directory</code> — never write to
+<code>generated-*/</code></li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dslgen/tests/run-all-tests.rkt</code></td>
+<td>Unified runner (convenience)</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/test-generator-*.rkt</code></td>
+<td>Per-generator smoke + content tests</td>
+</tr>
+<tr>
+<td><code>dslgen/tests/fixtures/generator-test.ddd</code></td>
+<td>Comprehensive test fixture</td>
+</tr>
+<tr>
+<td><code>dslgen/CMakeLists.txt</code></td>
+<td>CTest target definitions</td>
+</tr>
+<tr>
+<td><code>CMakePresets.json</code></td>
+<td><code>racket</code> test preset</td>
+</tr>
+</tbody>
+</table>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lookup Tables Over CHECK Constraints for Enumerated
+Values — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Lookup Tables Over CHECK Constraints for Enumerated
+Values</span>
+</nav>
+
+<h1>Lookup Tables Over CHECK Constraints for Enumerated Values</h1>
+
+
+<h1
+id="lookup-tables-over-check-constraints-for-enumerated-values">Lookup
+Tables Over CHECK Constraints for Enumerated Values</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Architecture team</li>
+<li>Date: 2026-01-16</li>
+<li>Tags: postgresql, schema, lookup-tables, enums, extensibility</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When modeling domain concepts with enumerated values (e.g.,
+<code>clinical_status</code>, <code>verification_status</code>,
+<code>severity</code>, <code>category</code>), we need to decide how to
+enforce valid values. Should we use PostgreSQL CHECK constraints with
+hard-coded value lists, or dedicated lookup tables that reference these
+values?</p>
+<p>FHIR and similar healthcare standards define value sets that may
+evolve over time. Organizations need the flexibility to:</p>
+<ul>
+<li>Extend standard value sets with local codes</li>
+<li>Modify display names or descriptions</li>
+<li>Retire obsolete values without breaking existing data</li>
+<li>Track value metadata (effective dates, definitions, sources)</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Extensibility</strong>: Users MUST be able to extend
+enumerated value sets</li>
+<li><strong>Modifiability</strong>: Users MUST be able to modify
+existing entries (display name, description)</li>
+<li><strong>Retirability</strong>: Users MUST be able to retire values
+without deleting them</li>
+<li><strong>Auditability</strong>: Changes to value sets must be
+trackable</li>
+<li><strong>Referential integrity</strong>: Values must be validated at
+the database level</li>
+<li><strong>Migration safety</strong>: Schema evolution must not require
+ALTER TABLE for value changes</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li>CHECK constraints with hard-coded value lists</li>
+<li>PostgreSQL ENUM types</li>
+<li>Lookup tables with foreign key references</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Lookup tables with foreign key
+references"</strong>, because they provide full extensibility,
+modifiability, and retirability while maintaining referential
+integrity.</p>
+<h3 id="implementation-pattern">Implementation Pattern</h3>
+<p>Every enumerated value set MUST be implemented as a lookup table in
+the <code>Basedata</code> context:</p>
+<pre class="ddd"><code>CONTEXT Basedata {
+    ENTITY ClinicalStatus @uuid &quot;...&quot; IDENTIFIED_BY id (
+        id           UUID        NOT NULL,
+        code         TEXT        NOT NULL @unique,
+        display      TEXT        NOT NULL,
+        definition   TEXT,
+        is_active    BOOLEAN     NOT NULL DEFAULT true,
+        effective_from TIMESTAMPTZ,
+        effective_to   TIMESTAMPTZ,
+        source_system  TEXT,
+        sort_order     INTEGER
+    )
+    DOC &quot;Clinical status codes for conditions (active, inactive, resolved, etc.)&quot;;
+    
+    AGGREGATE ClinicalStatus ROOT ClinicalStatus;
+    
+    IMPORT CSV &quot;../../seeds/basedata/clinical_status.csv&quot; INTO ClinicalStatus;
+}</code></pre>
+<p>Domain entities reference lookups via foreign keys:</p>
+<pre class="ddd"><code>ENTITY Condition IDENTIFIED_BY id (
+    id                   UUID NOT NULL,
+    clinical_status_id   UUID NOT NULL,  -- FK to Basedata.ClinicalStatus
+    ...
+)
+RELATIONSHIPS {
+    clinical_status -&gt; ClinicalStatus REQUIRED ONE;
+}</code></pre>
+<h3 id="standard-lookup-table-columns">Standard Lookup Table
+Columns</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>UUID</td>
+<td>Yes</td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>TEXT</td>
+<td>Yes</td>
+<td>Unique machine-readable code</td>
+</tr>
+<tr>
+<td><code>display</code></td>
+<td>TEXT</td>
+<td>Yes</td>
+<td>Human-readable display name</td>
+</tr>
+<tr>
+<td><code>definition</code></td>
+<td>TEXT</td>
+<td>No</td>
+<td>Full description/definition</td>
+</tr>
+<tr>
+<td><code>is_active</code></td>
+<td>BOOLEAN</td>
+<td>Yes</td>
+<td>Soft-delete / retirement flag</td>
+</tr>
+<tr>
+<td><code>effective_from</code></td>
+<td>TIMESTAMPTZ</td>
+<td>No</td>
+<td>When value became valid</td>
+</tr>
+<tr>
+<td><code>effective_to</code></td>
+<td>TIMESTAMPTZ</td>
+<td>No</td>
+<td>When value was retired</td>
+</tr>
+<tr>
+<td><code>source_system</code></td>
+<td>TEXT</td>
+<td>No</td>
+<td>Origin (e.g., "FHIR R4", "LOCAL")</td>
+</tr>
+<tr>
+<td><code>sort_order</code></td>
+<td>INTEGER</td>
+<td>No</td>
+<td>UI display ordering</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Users can add local codes without schema changes</li>
+<li>Display names can be updated without migrations</li>
+<li>Retired codes remain in database with
+<code>is_active = false</code></li>
+<li>Full audit trail via standard audit patterns</li>
+<li>Referential integrity maintained via FK constraints</li>
+<li>FHIR value sets can be seeded via CSV import</li>
+<li>UI dropdowns populated from API, not hard-coded</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>More tables in schema (one per value set)</li>
+<li>Joins required for display names</li>
+<li>Initial seed data must be provided</li>
+<li>Slightly more complex queries</li>
+</ul>
+<h2 id="forbidden-patterns">FORBIDDEN Patterns</h2>
+<p>The following patterns are <strong>STRICTLY PROHIBITED</strong>:</p>
+<h3 id="x-check-constraints-for-enumerated-values">❌ CHECK Constraints
+for Enumerated Values</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- FORBIDDEN: Hard-coded CHECK constraint</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> condition (</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    clinical_status TEXT <span class="kw">NOT</span> <span class="kw">NULL</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">CHECK</span> (clinical_status <span class="kw">IN</span> (<span class="st">&#39;active&#39;</span>, <span class="st">&#39;inactive&#39;</span>, <span class="st">&#39;resolved&#39;</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Why forbidden:</strong></p>
+<ul>
+<li>Cannot extend without ALTER TABLE</li>
+<li>Cannot modify display names</li>
+<li>Cannot retire values</li>
+<li>No metadata (definitions, sources)</li>
+<li>Schema migration required for any change</li>
+</ul>
+<h3 id="x-postgresql-enum-types">❌ PostgreSQL ENUM Types</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- FORBIDDEN: PostgreSQL ENUM</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TYPE</span> clinical_status_enum <span class="kw">AS</span> ENUM (<span class="st">&#39;active&#39;</span>, <span class="st">&#39;inactive&#39;</span>, <span class="st">&#39;resolved&#39;</span>);</span></code></pre></div>
+<p><strong>Why forbidden:</strong></p>
+<ul>
+<li>Adding values requires ALTER TYPE</li>
+<li>Cannot remove values without dropping and recreating</li>
+<li>No metadata storage</li>
+<li>Ordering changes require recreation</li>
+</ul>
+<h3 id="x-application-level-constants">❌ Application-Level
+Constants</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// FORBIDDEN: Hard-coded constants in application</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> <span class="kw">class</span> ClinicalStatus <span class="op">{</span> Active<span class="op">,</span> Inactive<span class="op">,</span> Resolved <span class="op">};</span></span></code></pre></div>
+<p><strong>Why forbidden:</strong></p>
+<ul>
+<li>Changes require code deployment</li>
+<li>No database-level validation</li>
+<li>Multiple applications may have inconsistent values</li>
+</ul>
+<h2 id="migration-from-check-constraints">Migration from CHECK
+Constraints</h2>
+<p>Existing CHECK constraints must be migrated to lookup tables:</p>
+<ol type="1">
+<li>Create lookup table in Basedata context</li>
+<li>Seed with existing valid values</li>
+<li>Add FK column to referencing table</li>
+<li>Populate FK column from existing text values</li>
+<li>Drop text column with CHECK constraint</li>
+<li>Rename FK column if needed</li>
+</ol>
+<h2 id="pros-and-cons-of-all-options">Pros and Cons of All Options</h2>
+<h3 id="lookup-tables-chosen">Lookup Tables (Chosen)</h3>
+<ul>
+<li>✅ Fully extensible by users</li>
+<li>✅ Modifiable without schema changes</li>
+<li>✅ Soft-delete via <code>is_active</code> flag</li>
+<li>✅ Rich metadata (definitions, sources, dates)</li>
+<li>✅ Referential integrity via FKs</li>
+<li>✅ Auditable via standard patterns</li>
+<li>⚠️ More tables in schema</li>
+<li>⚠️ Joins required for display names</li>
+</ul>
+<h3 id="check-constraints">CHECK Constraints</h3>
+<ul>
+<li>✅ Simple to implement</li>
+<li>✅ No additional tables</li>
+<li>❌ Cannot extend without migration</li>
+<li>❌ Cannot modify without migration</li>
+<li>❌ No soft-delete capability</li>
+<li>❌ No metadata storage</li>
+<li>❌ Violates extensibility requirement</li>
+</ul>
+<h3 id="postgresql-enum-types">PostgreSQL ENUM Types</h3>
+<ul>
+<li>✅ Type-safe at database level</li>
+<li>✅ Compact storage</li>
+<li>❌ Adding values requires ALTER TYPE</li>
+<li>❌ Removing values impossible without recreation</li>
+<li>❌ No metadata storage</li>
+<li>❌ Ordering changes require recreation</li>
+<li>❌ Violates extensibility requirement</li>
+</ul>
+<h2 id="related-decisions">Related Decisions</h2>
+<ul>
+<li><a href="20260106-shared-basedata-context.html">Shared Basedata
+Context</a> - Cross-cutting lookups</li>
+<li><a href="20251223-use-text-for-all-postgresql-strings.html">Use TEXT
+for All Strings</a> - String type policy</li>
+<li><a href="20260106-explicit-relationships-only.html">Explicit
+Relationships Only</a> - FK declaration policy</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>ANY field that represents an enumerated value set</li>
+<li>Examples: status codes, categories, types, severities,
+priorities</li>
+<li>FHIR CodeableConcept, Coding, or code elements</li>
+<li>Any "dropdown" or "picklist" field in the UI</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Boolean fields (true/false)</li>
+<li>Numeric ranges (use CHECK for min/max)</li>
+<li>Pattern validation (use CHECK for regex)</li>
+<li>Unique constraints (use @unique annotation)</li>
+</ul>
+<h3 id="how-its-enforced">How It's Enforced</h3>
+<ol type="1">
+<li><strong>Parser validation</strong>: CHECK constraints with IN
+clauses should warn</li>
+<li><strong>Code review</strong>: Reject PRs with hard-coded
+status/type/category values</li>
+<li><strong>Generator behavior</strong>: Never emit CHECK constraints
+for enumerated values</li>
+<li><strong>Seed files</strong>: All lookup tables must have
+corresponding CSV seeds</li>
+</ol>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li>Basedata context: <code>examples/*/contexts/basedata.ddd</code></li>
+<li>Lookup entity patterns: This ADR</li>
+<li>CSV seed files: <code>examples/*/seeds/basedata/*.csv</code></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration SQL Generation via
+Sqitch — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Migration SQL Generation via Sqitch</span>
+</nav>
+
+<h1>Migration SQL Generation via Sqitch</h1>
+
+
+<h1 id="migration-sql-generation-via-sqitch">Migration SQL Generation
+via Sqitch</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Tags: sqitch, sql, migration, postgresql, schema-evolution</li>
+<li>Related: <a href="20260109-migration-safety-policies.html">Migration
+Safety Policies</a>, <a
+href="20260109-cross-layer-verification.html">Cross-Layer
+Verification</a></li>
+</ul>
+<p>Technical Story: Generate Sqitch-compatible deploy/revert/verify
+scripts from approved migration plans.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Migration IR must be rendered into deployable SQL scripts. The
+existing Sqitch generator (<code>sqitch-unified.rkt</code>) performs
+<strong>full regeneration</strong>—it always produces the complete
+schema from scratch. This works for greenfield but not for schema
+evolution:</p>
+<ol type="1">
+<li><strong>Full regeneration loses data</strong>: Existing tables would
+be dropped</li>
+<li><strong>No incremental changes</strong>: Cannot add a single column
+without regenerating everything</li>
+<li><strong>No rollback awareness</strong>: Revert scripts are generic
+DROP statements</li>
+<li><strong>No verification awareness</strong>: Verify scripts don't
+check for specific changes</li>
+</ol>
+<p>The new generator must:</p>
+<ul>
+<li>Accept a <strong>migration plan</strong> (from ADR 0004) as
+input</li>
+<li>Generate <strong>incremental</strong> deploy/revert/verify
+scripts</li>
+<li>Produce <strong>deterministic</strong> change names for Sqitch</li>
+<li>Support <strong>safe rollbacks</strong> with proper revert
+scripts</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Deterministic and reversible SQL generation</li>
+<li>Preserve all semantic operations from migration IR</li>
+<li>Compatible with reviewable Migration IR from ADR 0004</li>
+<li>Only execute on <strong>approved</strong> migrations (from ADR
+0005)</li>
+<li>Versioned and deterministic change names</li>
+<li>Integrate with existing Sqitch infrastructure</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Replace sqitch-unified.rkt entirely</strong>: Rejected -
+still need full generation for new projects</li>
+<li><strong>External migration framework (Flyway, Liquibase)</strong>:
+Rejected - already invested in Sqitch</li>
+<li><strong>Add incremental mode to existing generator</strong>:
+Rejected - too much coupling</li>
+<li><strong>New generator that consumes migration-plan</strong>:
+Accepted - clean separation</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "New generator that consumes migration-plan", creating
+<code>sqitch-from-migration.rkt</code> that:</p>
+<ol type="1">
+<li>Takes an <strong>approved migration plan</strong> as input</li>
+<li>Generates a single Sqitch change with deploy/revert/verify</li>
+<li>Produces deterministic change name based on plan hash</li>
+<li>Supports both single-operation and batched changes</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Safe, reversible migrations</li>
+<li>Compatible with CI/CD pipelines</li>
+<li>Fully deterministic output</li>
+<li>Coexists with existing full-regeneration mode</li>
+<li>Each migration is a reviewable, atomic unit</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Dependency on Sqitch (acceptable, already committed)</li>
+<li>SQL must follow PostgreSQL conventions</li>
+<li>Two code paths (full regen vs incremental)</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-1-migration-to-sql-mapping">Phase 1: Migration-to-SQL
+Mapping</h3>
+<p>Create
+<code>src/dslgen/generators/postgres/sqitch-from-migration.rkt</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../../migration/migration-types.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> generate-sqitch-from-migration<span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; Main entry point</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-sqitch-from-migration approved-plan output-dir<span class="op">)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> change-name </span><span class="op">(</span>plan-&gt;change-name approved-plan<span class="op">))</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> deploy-sql </span><span class="op">(</span>generate-deploy-sql approved-plan<span class="op">))</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> revert-sql </span><span class="op">(</span>generate-revert-sql approved-plan<span class="op">))</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> verify-sql </span><span class="op">(</span>generate-verify-sql approved-plan<span class="op">))</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Write Sqitch files</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>write-sqitch-change output-dir change-name deploy-sql revert-sql verify-sql<span class="op">)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Update sqitch.plan</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>append-to-sqitch-plan output-dir change-name <span class="op">(</span>plan-dependencies approved-plan<span class="op">)))</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">;; Generate deterministic change name</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>plan-&gt;change-name plan<span class="op">)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> hash-prefix </span><span class="op">(</span><span class="kw">substring</span> <span class="op">(</span>migration-plan-target-version plan<span class="op">)</span> <span class="dv">0</span> <span class="dv">8</span><span class="op">))</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> name </span><span class="op">(</span>migration-plan-name plan<span class="op">))</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>format <span class="st">&quot;~a-~a&quot;</span> name hash-prefix<span class="op">))</span></span></code></pre></div>
+<h3 id="phase-2-operation-to-sql-generators">Phase 2: Operation-to-SQL
+Generators</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Dispatch to appropriate SQL generator</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>operation-&gt;deploy-sql op<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match op</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-entity-op uuid safety desc requires ctx-name entity-name entity-uuid fields pk parent<span class="op">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>generate-create-table ctx-name entity-name fields pk parent<span class="op">)]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-entity-op uuid safety desc requires ctx-name entity-name cascade?<span class="op">)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> cascade?</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;DROP TABLE IF EXISTS ~a.~a CASCADE;&quot;</span> ctx-name entity-name<span class="op">)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;DROP TABLE IF EXISTS ~a.~a;&quot;</span> ctx-name entity-name<span class="op">))]</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-entity-op uuid safety desc requires ctx-name old-name new-name<span class="op">)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a.~a RENAME TO ~a;&quot;</span> ctx-name old-name new-name<span class="op">)]</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-field-op uuid safety desc requires entity-uuid field-name field-uuid </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                   field-type nullable? default-value<span class="op">)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> null-clause </span><span class="op">(</span><span class="kw">if</span> nullable? <span class="st">&quot;&quot;</span> <span class="st">&quot; NOT NULL&quot;</span><span class="op">))</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> default-clause </span><span class="op">(</span><span class="kw">if</span> default-value <span class="op">(</span>format <span class="st">&quot; DEFAULT ~a&quot;</span> default-value<span class="op">)</span> <span class="st">&quot;&quot;</span><span class="op">))</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ADD COLUMN ~a ~a~a~a;&quot;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>             entity-path field-name <span class="op">(</span>type-&gt;sql field-type<span class="op">)</span> null-clause default-clause<span class="op">)]</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-field-op uuid safety desc requires entity-uuid field-name<span class="op">)</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a DROP COLUMN ~a;&quot;</span> entity-path field-name<span class="op">)]</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-field-op uuid safety desc requires entity-uuid old-name new-name<span class="op">)</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a RENAME COLUMN ~a TO ~a;&quot;</span> entity-path old-name new-name<span class="op">)]</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>change-type-op uuid safety desc requires entity-uuid field-name old-type new-type conversion<span class="op">)</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> conversion</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a TYPE ~a USING ~a;&quot;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                 entity-path field-name <span class="op">(</span>type-&gt;sql new-type<span class="op">)</span> conversion<span class="op">)</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a TYPE ~a;&quot;</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                 entity-path field-name <span class="op">(</span>type-&gt;sql new-type<span class="op">)))]</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>change-nullable-op uuid safety desc requires entity-uuid field-name old new default-for-nulls<span class="op">)</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> new  <span class="co">;; becoming nullable</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a DROP NOT NULL;&quot;</span> entity-path field-name<span class="op">)</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">if</span> default-for-nulls</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>format <span class="st">&quot;UPDATE ~a SET ~a = ~a WHERE ~a IS NULL;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                      entity-path field-name default-for-nulls field-name<span class="op">)</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a SET NOT NULL;&quot;</span> entity-path field-name<span class="op">)))]</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-relationship-op uuid safety desc requires src-uuid tgt-uuid rel-name rel-uuid card on-delete<span class="op">)</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> src-path </span><span class="op">(</span>uuid-&gt;entity-path src-uuid<span class="op">))</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> tgt-path </span><span class="op">(</span>uuid-&gt;entity-path tgt-uuid<span class="op">))</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> fk-col </span><span class="op">(</span>format <span class="st">&quot;~a_id&quot;</span> rel-name<span class="op">))</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> on-delete-clause </span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span><span class="kw">case</span> on-delete</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>         <span class="op">[(</span>cascade<span class="op">)</span> <span class="st">&quot; ON DELETE CASCADE&quot;</span><span class="op">]</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>         <span class="op">[(</span>set-null<span class="op">)</span> <span class="st">&quot; ON DELETE SET NULL&quot;</span><span class="op">]</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>         <span class="op">[(</span>restrict<span class="op">)</span> <span class="st">&quot; ON DELETE RESTRICT&quot;</span><span class="op">]</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>         <span class="op">[</span><span class="kw">else</span> <span class="st">&quot;&quot;</span><span class="op">]))</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ADD CONSTRAINT fk_~a FOREIGN KEY (~a) REFERENCES ~a(id)~a;&quot;</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>             src-path rel-name fk-col tgt-path on-delete-clause<span class="op">)]</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-index-op uuid safety desc requires entity-uuid index-name columns unique?<span class="op">)</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> unique-clause </span><span class="op">(</span><span class="kw">if</span> unique? <span class="st">&quot;UNIQUE &quot;</span> <span class="st">&quot;&quot;</span><span class="op">))</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;CREATE ~aINDEX ~a ON ~a (~a);&quot;</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>             unique-clause index-name entity-path <span class="op">(</span>string-join columns <span class="st">&quot;, &quot;</span><span class="op">))]))</span></span></code></pre></div>
+<h3 id="phase-3-revert-sql-generation">Phase 3: Revert SQL
+Generation</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Generate revert (inverse) SQL for each operation</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>operation-&gt;revert-sql op<span class="op">)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match op</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-entity-op uuid safety desc requires ctx-name entity-name entity-uuid fields pk parent<span class="op">)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;DROP TABLE IF EXISTS ~a.~a CASCADE;&quot;</span> ctx-name entity-name<span class="op">)]</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-entity-op uuid safety desc requires ctx-name entity-name cascade?<span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>     <span class="co">;; Cannot truly revert a DROP - would need to recreate</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>     <span class="co">;; This is a placeholder that will fail safely</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;-- Cannot revert DROP TABLE ~a.~a - manual intervention required&quot;</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>             ctx-name entity-name<span class="op">)]</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-entity-op uuid safety desc requires ctx-name old-name new-name<span class="op">)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a.~a RENAME TO ~a;&quot;</span> ctx-name new-name old-name<span class="op">)]</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-field-op uuid safety desc requires entity-uuid field-name field-uuid </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                   field-type nullable? default-value<span class="op">)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a DROP COLUMN IF EXISTS ~a;&quot;</span> entity-path field-name<span class="op">)]</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-field-op uuid safety desc requires entity-uuid field-name<span class="op">)</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>     <span class="co">;; Cannot truly revert a DROP COLUMN - data is lost</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;-- Cannot revert DROP COLUMN ~a - manual intervention required&quot;</span> field-name<span class="op">)]</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-field-op uuid safety desc requires entity-uuid old-name new-name<span class="op">)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a RENAME COLUMN ~a TO ~a;&quot;</span> entity-path new-name old-name<span class="op">)]</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>change-type-op uuid safety desc requires entity-uuid field-name old-type new-type conversion<span class="op">)</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> entity-path </span><span class="op">(</span>uuid-&gt;entity-path entity-uuid<span class="op">))</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>     <span class="co">;; Attempt reverse conversion - may not always work</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a TYPE ~a;&quot;</span> </span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>             entity-path field-name <span class="op">(</span>type-&gt;sql old-type<span class="op">))]</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-relationship-op uuid safety desc requires src-uuid tgt-uuid rel-name rel-uuid card on-delete<span class="op">)</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> src-path </span><span class="op">(</span>uuid-&gt;entity-path src-uuid<span class="op">))</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a DROP CONSTRAINT IF EXISTS fk_~a;&quot;</span> src-path rel-name<span class="op">)]</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-index-op uuid safety desc requires entity-uuid index-name columns unique?<span class="op">)</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;DROP INDEX IF EXISTS ~a;&quot;</span> index-name<span class="op">)]))</span></span></code></pre></div>
+<h3 id="phase-4-verify-sql-generation">Phase 4: Verify SQL
+Generation</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Generate verification SQL (returns true if migration applied correctly)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>operation-&gt;verify-sql op<span class="op">)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>match op</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-entity-op uuid safety desc requires ctx-name entity-name <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT 1 FROM information_schema.tables WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39;;&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>             ctx-name entity-name<span class="op">)]</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-entity-op uuid safety desc requires ctx-name entity-name <span class="op">_)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39;);&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>             ctx-name entity-name<span class="op">)]</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>rename-entity-op uuid safety desc requires ctx-name old-name new-name<span class="op">)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT 1 FROM information_schema.tables WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39;;&quot;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>             ctx-name new-name<span class="op">)]</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-field-op uuid safety desc requires entity-uuid field-name <span class="op">_</span> <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>define-values <span class="op">(</span>schema table<span class="op">)</span> <span class="op">(</span>uuid-&gt;schema-table entity-uuid<span class="op">))</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT 1 FROM information_schema.columns WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39; AND column_name = &#39;~a&#39;;&quot;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>             schema table field-name<span class="op">)]</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>remove-field-op uuid safety desc requires entity-uuid field-name<span class="op">)</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>define-values <span class="op">(</span>schema table<span class="op">)</span> <span class="op">(</span>uuid-&gt;schema-table entity-uuid<span class="op">))</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39; AND column_name = &#39;~a&#39;);&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>             schema table field-name<span class="op">)]</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>add-relationship-op uuid safety desc requires src-uuid <span class="op">_</span> rel-name <span class="op">_</span> <span class="op">_</span> <span class="op">_)</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>define-values <span class="op">(</span>schema table<span class="op">)</span> <span class="op">(</span>uuid-&gt;schema-table src-uuid<span class="op">))</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;SELECT 1 FROM information_schema.table_constraints WHERE table_schema = &#39;~a&#39; AND table_name = &#39;~a&#39; AND constraint_name = &#39;fk_~a&#39;;&quot;</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>             schema table rel-name<span class="op">)]))</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">;; Combine all verify statements</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-verify-sql plan<span class="op">)</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> stmts </span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>for/list <span class="op">([</span>op <span class="op">(</span>migration-plan-operations plan<span class="op">)])</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>operation-&gt;verify-sql op<span class="op">)))</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>string-join stmts <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">))</span></span></code></pre></div>
+<h3 id="phase-5-sqitch-integration">Phase 5: Sqitch Integration</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Write Sqitch change files</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>write-sqitch-change output-dir change-name deploy revert verify<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> deploy-path </span><span class="op">(</span>build-path output-dir <span class="st">&quot;deploy&quot;</span> <span class="op">(</span>format <span class="st">&quot;~a.sql&quot;</span> change-name<span class="op">)))</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> revert-path </span><span class="op">(</span>build-path output-dir <span class="st">&quot;revert&quot;</span> <span class="op">(</span>format <span class="st">&quot;~a.sql&quot;</span> change-name<span class="op">)))</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> verify-path </span><span class="op">(</span>build-path output-dir <span class="st">&quot;verify&quot;</span> <span class="op">(</span>format <span class="st">&quot;~a.sql&quot;</span> change-name<span class="op">)))</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>make-directory* <span class="op">(</span>build-path output-dir <span class="st">&quot;deploy&quot;</span><span class="op">))</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>make-directory* <span class="op">(</span>build-path output-dir <span class="st">&quot;revert&quot;</span><span class="op">))</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>make-directory* <span class="op">(</span>build-path output-dir <span class="st">&quot;verify&quot;</span><span class="op">))</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-output-file</span> deploy-path</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">(</span>out<span class="op">)</span> <span class="op">(</span><span class="kw">display</span> deploy out<span class="op">))</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;replace<span class="op">)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-output-file</span> revert-path</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">(</span>out<span class="op">)</span> <span class="op">(</span><span class="kw">display</span> revert out<span class="op">))</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;replace<span class="op">)</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-output-file</span> verify-path</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">(</span>out<span class="op">)</span> <span class="op">(</span><span class="kw">display</span> verify out<span class="op">))</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;replace<span class="op">))</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">;; Append to sqitch.plan</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>append-to-sqitch-plan output-dir change-name dependencies<span class="op">)</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> plan-path </span><span class="op">(</span>build-path output-dir <span class="st">&quot;sqitch.plan&quot;</span><span class="op">))</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> dep-str </span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">if</span> <span class="op">(</span><span class="kw">null?</span> dependencies<span class="op">)</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;&quot;</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>format <span class="st">&quot; [~a]&quot;</span> <span class="op">(</span>string-join dependencies <span class="st">&quot; &quot;</span><span class="op">))))</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> entry </span><span class="op">(</span>format <span class="st">&quot;~a~a ~a&quot;</span> change-name dep-str <span class="op">(</span>current-rfc3339<span class="op">)))</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-output-file</span> plan-path</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">(</span>out<span class="op">)</span> <span class="op">(</span>displayln entry out<span class="op">))</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;append<span class="op">))</span></span></code></pre></div>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/sqitch-from-migration.rkt</code>
+- New incremental generator</li>
+<li><code>src/dslgen/generators/postgres/operation-to-sql.rkt</code> -
+Operation mapping</li>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code> -
+Existing full generator (unchanged)</li>
+</ul>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li><strong>Depends on</strong>: ADR 0004 (Migration Language), ADR 0005
+(Safety Policies)</li>
+<li><strong>Required by</strong>: ADR 0007 (Cross-Layer
+Verification)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating SQL from approved migration plans</li>
+<li>When implementing incremental schema changes</li>
+<li>When maintaining Sqitch change history</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Full schema generation for new projects (use
+sqitch-unified.rkt)</li>
+<li>Runtime SQL execution</li>
+<li>Non-PostgreSQL databases</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>MUST only accept <strong>approved</strong> migration plans (from ADR
+0005)</li>
+<li>MUST generate all three files (deploy/revert/verify)</li>
+<li>MUST produce deterministic change names</li>
+<li>MUST update sqitch.plan with dependencies</li>
+<li>Destructive operations MUST include comment warning in revert
+SQL</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create
+<code>sqitch-from-migration.rkt</code> entry point</label></li>
+<li><label><input type="checkbox" />Implement
+<code>operation-&gt;deploy-sql</code> for all operation
+types</label></li>
+<li><label><input type="checkbox" />Implement
+<code>operation-&gt;revert-sql</code> for all operation
+types</label></li>
+<li><label><input type="checkbox" />Implement
+<code>operation-&gt;verify-sql</code> for all operation
+types</label></li>
+<li><label><input type="checkbox" />Implement
+<code>plan-&gt;change-name</code> deterministic naming</label></li>
+<li><label><input type="checkbox" />Implement
+<code>write-sqitch-change</code> file writer</label></li>
+<li><label><input type="checkbox" />Implement
+<code>append-to-sqitch-plan</code> updater</label></li>
+<li><label><input type="checkbox" />Add integration tests with actual
+Sqitch deploy</label></li>
+<li><label><input type="checkbox" />Test revert scripts work
+correctly</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>ADR 6 of 7</strong> - Depends on ADR 0004 and 0005. Complete
+this before ADR 0007 (Verification).</p>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li><code>generate-sqitch-from-migration(plan, dir)</code> creates
+deploy/revert/verify files</li>
+<li>Change names are deterministic (same plan → same name)</li>
+<li>Deploy SQL executes successfully against test database</li>
+<li>Revert SQL successfully undoes deploy changes</li>
+<li>Verify SQL returns true after deploy, false after revert</li>
+<li>sqitch.plan is updated with new change entry</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

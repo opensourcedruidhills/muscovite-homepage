@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR-20260206: QML ViewModel Binding Pattern (All Fields as
+Q_PROPERTY) — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR-20260206: QML ViewModel Binding Pattern (All Fields as
+Q_PROPERTY)</span>
+</nav>
+
+<h1>ADR-20260206: QML ViewModel Binding Pattern (All Fields as
+Q_PROPERTY)</h1>
+
+
+<h1
+id="adr-20260206-qml-viewmodel-binding-pattern-all-fields-as-q_property">ADR-20260206:
+QML ViewModel Binding Pattern (All Fields as Q_PROPERTY)</h1>
+<p><strong>Status</strong>: Accepted<br />
+<strong>Date</strong>: 2026-02-06<br />
+<strong>Deciders</strong>: Jolo (Staff Engineer)</p>
+<h2 id="context">Context</h2>
+<p>Qt Quick (QML) requires C++ objects to expose state via
+<code>Q_PROPERTY</code> for binding to work. When an entity has 20+
+fields (common in geosciences domain), the question is: how many become
+properties?</p>
+<p><strong>Design Space</strong>:</p>
+<ul>
+<li><strong>Option A (Selective)</strong>: Only fields marked with
+<code>@property</code> DSL hint become Q_PROPERTY (less boilerplate, but
+requires DSL syntax decision)</li>
+<li><strong>Option B (All Fields)</strong>: Every entity field →
+Q_PROPERTY with NOTIFY signal (consistent, verbose ViewModel)</li>
+</ul>
+<p>This ADR codifies Option B for v0.10.0 as the <strong>SoC validation
+baseline</strong>. Future v1.x ADR will refine to selective approach
+with visibility/read-only hints.</p>
+<h2 id="problem-statement">Problem Statement</h2>
+<p><strong>Current (Widgets-only)</strong>:</p>
+<ul>
+<li>No Q_PROPERTY generation; dialogs are pure C++</li>
+<li>UI state is implicit in QWidget field values</li>
+</ul>
+<p><strong>Multi-Frontend Challenge</strong>:</p>
+<ul>
+<li>QML binds to C++ properties:
+<code>TextField { text: patientViewModel.name }</code></li>
+<li>Every bound field needs a Q_PROPERTY</li>
+<li>Entity might have: <code>id</code>, <code>name</code>,
+<code>mrn</code>, <code>gender_id</code>, <code>birth_date</code>,
+<code>deceased</code>, <code>created_at</code>, <code>updated_at</code>,
+... (8-40 fields)</li>
+<li>Do we generate Q_PROPERTY for all, or be selective?</li>
+</ul>
+<p><strong>Simplicity vs. Completeness Trade-Off</strong>:</p>
+<ul>
+<li><strong>All Fields</strong>: Boilerplate, but:
+<ul>
+<li>No DSL design needed (v0.10.0 focus)</li>
+<li>Guarantees all data is bindable</li>
+<li>Future v1.x ADR can hide/mark read-only without regeneration</li>
+</ul></li>
+<li><strong>Selective</strong>: Cleaner, but:
+<ul>
+<li>Requires DSL extension (<code>@property</code> or <code>@ui</code>
+hints)</li>
+<li>Missed fields become tedious to retrofit</li>
+<li>Adds complexity to parser/generator</li>
+</ul></li>
+</ul>
+<h2 id="decision">Decision</h2>
+<h3 id="viewmodel-pattern-all-entity-fields-as-q_property">ViewModel
+Pattern: All Entity Fields as Q_PROPERTY</h3>
+<p>For v0.10.0, <strong>every entity field generates a Q_PROPERTY with
+NOTIFY signal</strong>.</p>
+<p><strong>Per-Entity ViewModel C++ Class</strong>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated: PatientViewModel.hpp</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientViewModel <span class="op">:</span> <span class="kw">public</span> <span class="ex">QObject</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_OBJECT</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QUuid</span> id READ id CONSTANT<span class="op">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> mrn READ mrn WRITE setMrn NOTIFY mrnChanged<span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> givenName READ givenName WRITE setGivenName NOTIFY givenNameChanged<span class="op">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> familyName READ familyName WRITE setFamilyName NOTIFY familyNameChanged<span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QUuid</span> genderId READ genderId WRITE setGenderId NOTIFY genderIdChanged<span class="op">)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QDate</span> birthDate READ birthDate WRITE setBirthDate NOTIFY birthDateChanged<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="dt">bool</span> deceased READ deceased WRITE setDeceased NOTIFY deceasedChanged<span class="op">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QDateTime</span> createdAt READ createdAt CONSTANT<span class="op">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QDateTime</span> updatedAt READ updatedAt CONSTANT<span class="op">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... 12 more fields for a typical domain entity</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="ex">QString</span> validationError READ validationError NOTIFY validationErrorChanged<span class="op">)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_PROPERTY</span><span class="op">(</span><span class="dt">bool</span> isValid READ isValid NOTIFY isValidChanged<span class="op">)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Getters</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QUuid</span> id<span class="op">()</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">data_</span><span class="op">.</span>id<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> mrn<span class="op">()</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">data_</span><span class="op">.</span>mrn<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... etc</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Setters (only for writable fields)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> setMrn<span class="op">(</span><span class="at">const</span> <span class="ex">QString</span><span class="op">&amp;</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span><span class="va">data_</span><span class="op">.</span>mrn <span class="op">!=</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            <span class="va">data_</span><span class="op">.</span>mrn <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>            <span class="ex">emit</span> mrnChanged<span class="op">();</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            validateField<span class="op">(</span><span class="st">&quot;mrn&quot;</span><span class="op">);</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validation delegation</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> validationError<span class="op">()</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">validation_error_</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isValid<span class="op">()</span> <span class="at">const</span> <span class="op">{</span> <span class="cf">return</span> <span class="va">validation_error_</span><span class="op">.</span>isEmpty<span class="op">();</span> <span class="op">}</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">// gRPC service delegation</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Q_INVOKABLE</span> <span class="dt">void</span> save<span class="op">();</span>  <span class="co">// Calls PatientCommandService::UpdatePatient</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ex">signals</span><span class="op">:</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> mrnChanged<span class="op">();</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> givenNameChanged<span class="op">();</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> familyNameChanged<span class="op">();</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> genderIdChanged<span class="op">();</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> birthDateChanged<span class="op">();</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> deceasedChanged<span class="op">();</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> validationErrorChanged<span class="op">();</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> isValidChanged<span class="op">();</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> validateField<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> field<span class="op">);</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    Patient <span class="va">data_</span><span class="op">;</span>  <span class="co">// Entity struct from DBA layer</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>shared_ptr<span class="op">&lt;</span>PatientValidator<span class="op">&gt;</span> <span class="va">validator_</span><span class="op">;</span>  <span class="co">// Shared validator</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>shared_ptr<span class="op">&lt;</span>PatientCommandService<span class="op">&gt;</span> <span class="va">service_</span><span class="op">;</span>  <span class="co">// Shared gRPC service</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QString</span> <span class="va">validation_error_</span><span class="op">;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 id="key-principles">Key Principles</h3>
+<ol type="1">
+<li><p><strong>No Duplication of Business Logic</strong></p>
+<ul>
+<li>Validation delegates to <code>PatientValidator</code> (from DBA
+layer) ✅ Shared</li>
+<li>gRPC calls delegate to <code>PatientCommandService</code> (from gRPC
+layer) ✅ Shared</li>
+<li>Entity struct is from DBA layer ✅ Shared</li>
+</ul></li>
+<li><p><strong>CONSTANT vs. Writable</strong></p>
+<ul>
+<li><code>id</code>, <code>created_at</code>, <code>updated_at</code> →
+CONSTANT (set at construction, never change)</li>
+<li>Mutable fields → READ/WRITE with NOTIFY signal</li>
+</ul></li>
+<li><p><strong>Validation Synchronization</strong></p>
+<ul>
+<li>Property setter calls <code>validateField()</code> → triggers
+validation error property update</li>
+<li>QML binds to <code>validationError</code> property:
+<code>Label { color: "red"; text: viewModel.validationError }</code></li>
+</ul></li>
+<li><p><strong>gRPC Service Integration</strong></p>
+<ul>
+<li><code>Q_INVOKABLE void save()</code> calls
+<code>CommandService::UpdatePatient()</code></li>
+<li>Async handling deferred to v1.0.0 (ADR
+20260206-async-viewmodel-services)</li>
+<li>For now: blocking calls acceptable (UI will freeze, but iteration
+speed still faster than C++ recompilation)</li>
+</ul></li>
+</ol>
+<h3 id="code-generation-template">Code Generation Template</h3>
+<p>Racket generator produces ViewModel class from entity definition:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; dslgen/generators/qt/qml.rkt</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-viewmodel entity output-dir<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> hpp-content</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;#include &lt;QObject&gt;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;#include &lt;QString&gt;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;// ... includes from DBA, gRPC layers ...</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;class &quot;</span> <span class="op">(</span>entity-name entity<span class="op">)</span> <span class="st">&quot;ViewModel : public QObject {</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;    Q_OBJECT</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; Generate Q_PROPERTY for each field</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>string-join <span class="op">(</span><span class="kw">map</span> <span class="op">(</span><span class="kw">lambda</span> <span class="op">(</span>field<span class="op">)</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>format <span class="st">&quot;    Q_PROPERTY(~a ~a READ ~a ~a)</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>field-qml-type field<span class="op">)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>field-name field<span class="op">)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span>field-getter-name field<span class="op">)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>          <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>field-writable? field<span class="op">)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span>format <span class="st">&quot;WRITE ~a NOTIFY ~aChanged&quot;</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>field-setter-name field<span class="op">)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>field-name field<span class="op">))</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;CONSTANT&quot;</span><span class="op">)))</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>entity-fields entity<span class="op">)))</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;// ... getters, setters, signals, private methods ...</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;};</span><span class="ch">\n</span><span class="st">&quot;</span><span class="op">))</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Write to file</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">)</span></span></code></pre></div>
+<h3 id="grpc-service-bindings-in-viewmodel">Grpc Service Bindings in
+ViewModel</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Q_INVOKABLE</span> <span class="dt">void</span> PatientViewModel<span class="op">::</span>save<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validation already checked (NOTIFY on validationError)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>isValid<span class="op">())</span> <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Call shared service (from gRPC layer)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> response <span class="op">=</span> <span class="va">service_</span><span class="op">-&gt;</span>updatePatient<span class="op">(</span><span class="va">data_</span><span class="op">);</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Update local data_ from response</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="ex">emit</span> idChanged<span class="op">();</span>  <span class="co">// Re-emit to update UI</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>exception<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">validation_error_</span> <span class="op">=</span> <span class="ex">QString::fromStdString</span><span class="op">(</span>e<span class="op">.</span>what<span class="op">());</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">emit</span> validationErrorChanged<span class="op">();</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ol type="1">
+<li><strong>Simplicity</strong>: No DSL extensions needed; all fields
+are properties by default</li>
+<li><strong>Completeness</strong>: Every data field is bindable to QML,
+no surprises at iteration time</li>
+<li><strong>SoC Proven</strong>: ViewModel is pure binding bridge;
+validation and services come from shared layers</li>
+<li><strong>Future-Proof</strong>: v1.x ADR can add
+<code>@readonly</code>, <code>@hidden</code> hints without breaking
+existing QML</li>
+<li><strong>Generator Clarity</strong>: Single code path per entity (not
+multiple branches for "is this property?")</li>
+</ol>
+<h3 id="negative">Negative</h3>
+<ol type="1">
+<li><strong>Boilerplate</strong>: ViewModel can be large (50-200 lines
+per entity for 20+ fields)</li>
+<li><strong>Memory</strong>: Each ViewModel instance holds full entity
+struct + property cache</li>
+<li><strong>Signal Spam</strong>: Many NOTIFY signals for large
+entities; could impact performance if all observed simultaneously</li>
+<li><strong>Maintenance</strong>: Future changes to entity require
+ViewModel regeneration</li>
+</ol>
+<h3 id="neutral">Neutral</h3>
+<ol type="1">
+<li><strong>QML Binding Performance</strong>: No difference between 5
+properties and 25 properties (Qt engine handles)</li>
+<li><strong>Testing</strong>: ViewModel unit tests become comprehensive
+(all properties must be validated)</li>
+</ol>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<h3 id="v0100-all-fields-as-q_property">v0.10.0: All Fields as
+Q_PROPERTY</h3>
+<p><strong>Generator tasks</strong>:</p>
+<ol type="1">
+<li><code>dslgen/generators/qt/qml.rkt</code>: Generate
+<code>.hpp</code> + <code>.cpp</code> for ViewModel classes</li>
+<li><code>dslgen/generators/qt/common.rkt</code>: ViewModel base class
+in framework</li>
+<li>Framework: Add <code>ViewModel</code> base interface with property
+binding hooks</li>
+<li>Generate <code>Q_INVOKABLE</code> methods for commands (create,
+update, delete)</li>
+</ol>
+<h3 id="v1x-selective-properties--visibility-hints">v1.x: Selective
+Properties + Visibility Hints</h3>
+<p><strong>Future DSL extension</strong> (new ADR):</p>
+<pre class="ddd"><code>ENTITY Patient (
+    id UUID @readonly @hidden,
+    mrn TEXT @property,
+    givenName TEXT @property,
+    status TEXT @readonly,
+    notes TEXT @hidden   -- Never shown in UI
+)</code></pre>
+<p>Mapping:</p>
+<ul>
+<li><code>@property</code> → explicit Q_PROPERTY</li>
+<li><code>@readonly</code> → Q_PROPERTY READ only (no WRITE/NOTIFY)</li>
+<li><code>@hidden</code> → skip Q_PROPERTY entirely</li>
+</ul>
+<p>(Current: all fields treated as <code>@property</code>
+implicitly)</p>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When is this decision applicable?</strong></p>
+<ul>
+<li>Any QML frontend generation</li>
+<li>Any ViewModel generation</li>
+<li>Any C++/QML binding question</li>
+</ul>
+<p><strong>How it's enforced</strong>:</p>
+<ul>
+<li>Racket generator checks: every entity field → ViewModel
+Q_PROPERTY</li>
+<li>Tests verify: all properties are readable and (if writable)
+settable</li>
+<li>QML bindings will fail at runtime if property missing (Qt error
+messaging)</li>
+</ul>
+<p><strong>Key files affected</strong>:</p>
+<ul>
+<li><code>dslgen/generators/qt/qml.rkt</code> → new ViewModel
+generation</li>
+<li><code>framework/qt/include/muscovite/qt/viewmodel.hpp</code> → base
+ViewModel interface</li>
+<li><code>framework/qt/src/viewmodel.cpp</code> → ViewModel
+implementations</li>
+<li><code>dslgen/tests/test-qt-qml-generation.rkt</code> → new
+tests</li>
+</ul>
+<p><strong>Related ADRs</strong>:</p>
+<ul>
+<li><a
+href="20260206-multi-frontend-architecture.html">ADR-20260206-multi-frontend-architecture.md</a>
+— framework context</li>
+<li><a
+href="20260206-build-profiling-instrumentation.html">ADR-20260206-build-profiling-instrumentation.md</a>
+— generation metrics</li>
+<li>(Future) ADR-20260207-qml-viewmodel-visibility-hints.md — selective
+properties</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>Qt Documentation: <a
+href="https://doc.qt.io/qt-6/properties.html">Q_PROPERTY</a></li>
+<li>Qt Documentation: <a
+href="https://doc.qt.io/qt-6/qtquick-index.html">Qt Quick</a></li>
+<li><a href="../../AGENTS.html">AGENTS.md</a> — ViewModel pattern
+explanation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

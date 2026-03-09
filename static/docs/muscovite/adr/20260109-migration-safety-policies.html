@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration Safety and Validation
+Policies — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Migration Safety and Validation Policies</span>
+</nav>
+
+<h1>Migration Safety and Validation Policies</h1>
+
+
+<h1 id="migration-safety-and-validation-policies">Migration Safety and
+Validation Policies</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Tags: policy, safety, migration, validation, schema-evolution</li>
+<li>Related: <a
+href="20260109-declarative-migration-language.html">Declarative Migration
+Language</a>, <a href="20260109-migration-sql-generation.html">Migration
+SQL Generation</a></li>
+</ul>
+<p>Technical Story: Implement policy evaluation to classify and control
+migration operations based on safety level.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Not all inferred migrations are safe. A migration that drops a column
+destroys data. A migration that changes a type may truncate values.
+Without guardrails:</p>
+<ol type="1">
+<li><strong>Destructive changes execute silently</strong>: DROP COLUMN
+runs without warning</li>
+<li><strong>No approval workflow</strong>: All changes treated
+equally</li>
+<li><strong>No audit trail</strong>: Cannot prove destructive change was
+intentional</li>
+<li><strong>CI/CD risk</strong>: Automated pipelines may execute
+dangerous migrations</li>
+</ol>
+<p>Policy evaluation provides:</p>
+<ul>
+<li>Safety classification for all operations</li>
+<li>Approval requirements for dangerous operations</li>
+<li>Audit trail of decisions</li>
+<li>CI/CD-friendly gate mechanism</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Distinguish safe vs unsafe vs destructive migration operations</li>
+<li>Fail or warn on potentially destructive changes</li>
+<li>Enforce policies consistently across the pipeline</li>
+<li>Support explicit override for intentional destructive changes</li>
+<li>Enable CI/CD integration with approval gates</li>
+<li>Audit trail for compliance</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Auto-execute all migrations</strong>: Rejected - too
+dangerous for production</li>
+<li><strong>Manual review only</strong>: Rejected - too slow,
+error-prone</li>
+<li><strong>Binary safe/unsafe classification</strong>: Rejected - too
+coarse</li>
+<li><strong>Tiered policy evaluation with overrides</strong>:
+Accepted</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Tiered policy evaluation with overrides",
+implementing a policy evaluator that:</p>
+<ol type="1">
+<li>Classifies each operation by safety tier</li>
+<li>Applies configurable policies per tier</li>
+<li>Requires explicit approval for dangerous operations</li>
+<li>Produces audit trail of decisions</li>
+</ol>
+<h3 id="safety-tiers">Safety Tiers</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Description</th>
+<th>Default Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>safe</code></td>
+<td>No data loss possible</td>
+<td>Auto-approve</td>
+</tr>
+<tr>
+<td><code>unsafe</code></td>
+<td>Potential data issues</td>
+<td>Require strategy</td>
+</tr>
+<tr>
+<td><code>destructive</code></td>
+<td>Certain data loss</td>
+<td>Require explicit approval</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>Needs human judgment</td>
+<td>Flag for review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Prevents unintended data loss</li>
+<li>Enables safe automated migration for additive changes</li>
+<li>Supports compliance audit requirements</li>
+<li>Clear separation of concerns (diff → policy → execute)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Adds complexity to migration workflow</li>
+<li>Requires explicit intent for some legitimate changes</li>
+<li>May slow down rapid iteration (by design)</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-1-policy-definition">Phase 1: Policy Definition</h3>
+<p>Create <code>src/dslgen/migration/policy.rkt</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lang racket/base</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>all-defined-out<span class="op">))</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; Policy configuration</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> migration-policy</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>safe-action          <span class="co">;; &#39;approve | &#39;flag | &#39;reject</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   unsafe-action        <span class="co">;; &#39;approve | &#39;require-strategy | &#39;reject</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   destructive-action   <span class="co">;; &#39;approve | &#39;require-approval | &#39;reject</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   review-action        <span class="co">;; &#39;approve | &#39;flag | &#39;reject</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>   allowed-overrides    <span class="co">;; List of operation types that can be overridden</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   require-audit<span class="op">)</span>       <span class="co">;; Boolean - require audit log entry</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">;; Default policy (safe for CI/CD)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> default-policy</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-policy</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>   &#39;approve              <span class="co">;; safe → auto-approve</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>   &#39;require-strategy     <span class="co">;; unsafe → must provide strategy</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   &#39;reject               <span class="co">;; destructive → blocked by default</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>   &#39;flag                 <span class="co">;; review → flag for human review</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">()</span>                   <span class="co">;; no overrides allowed</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>   <span class="dv">#t</span><span class="op">))</span>                  <span class="co">;; require audit</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">;; Development policy (more permissive)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> development-policy</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-policy</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>   &#39;approve              <span class="co">;; safe → auto-approve</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>   &#39;approve              <span class="co">;; unsafe → auto-approve in dev</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>   &#39;require-approval     <span class="co">;; destructive → need explicit --allow-destructive</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>   &#39;approve              <span class="co">;; review → auto-approve in dev</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">(</span>remove-field-op remove-entity-op change-type-op<span class="op">)</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>   <span class="dv">#f</span><span class="op">))</span>                  <span class="co">;; no audit in dev</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">;; Strict policy (for production)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> production-policy</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-policy</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>   &#39;approve              <span class="co">;; safe → auto-approve</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>   &#39;require-strategy     <span class="co">;; unsafe → must provide strategy</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>   &#39;reject               <span class="co">;; destructive → blocked</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>   &#39;reject               <span class="co">;; review → blocked</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">()</span>                   <span class="co">;; no overrides</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>   <span class="dv">#t</span><span class="op">))</span>                  <span class="co">;; require audit</span></span></code></pre></div>
+<h3 id="phase-2-policy-evaluation">Phase 2: Policy Evaluation</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Evaluation result</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> policy-result</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>approved?          <span class="co">;; Boolean</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   operation          <span class="co">;; The original migration-op</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   decision           <span class="co">;; &#39;approved | &#39;rejected | &#39;needs-strategy | &#39;needs-approval | &#39;flagged</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   reason             <span class="co">;; Human-readable explanation</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   required-action<span class="op">)</span>   <span class="co">;; What user must do, or #f</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; Evaluate single operation against policy</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>evaluate-operation policy op<span class="op">)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> safety </span><span class="op">(</span>migration-op-safety op<span class="op">))</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> action </span><span class="op">(</span>policy-action-for-safety policy safety<span class="op">))</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> action</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>approve<span class="op">)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>policy-result <span class="dv">#t</span> op &#39;approved <span class="st">&quot;Auto-approved by policy&quot;</span> <span class="dv">#f</span><span class="op">)]</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>reject<span class="op">)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>policy-result <span class="dv">#f</span> op &#39;rejected </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                    <span class="op">(</span>format <span class="st">&quot;~a operations are blocked by policy&quot;</span> safety<span class="op">)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">#f</span><span class="op">)]</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>require-strategy<span class="op">)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> strategy </span><span class="op">(</span>migration-op-strategy op<span class="op">))</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> strategy</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>policy-result <span class="dv">#t</span> op &#39;approved </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                        <span class="op">(</span>format <span class="st">&quot;Approved with strategy: ~a&quot;</span> strategy<span class="op">)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">#f</span><span class="op">)</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>policy-result <span class="dv">#f</span> op &#39;needs-strategy</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;Unsafe operation requires a migration strategy&quot;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;Provide strategy via --strategy flag or migration annotation&quot;</span><span class="op">))]</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>require-approval<span class="op">)</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="ex">define</span><span class="fu"> approval </span><span class="op">(</span>migration-op-approval op<span class="op">))</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">if</span> approval</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>policy-result <span class="dv">#t</span> op &#39;approved</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                        <span class="op">(</span>format <span class="st">&quot;Approved by: ~a&quot;</span> approval<span class="op">)</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">#f</span><span class="op">)</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>policy-result <span class="dv">#f</span> op &#39;needs-approval</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;Destructive operation requires explicit approval&quot;</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;Provide approval via --allow-destructive flag&quot;</span><span class="op">))]</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>flag<span class="op">)</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>policy-result <span class="dv">#t</span> op &#39;flagged</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Flagged for human review&quot;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Review this operation before deployment&quot;</span><span class="op">)]))</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">;; Evaluate entire migration plan</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>evaluate-migration-plan policy plan<span class="op">)</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> results </span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">map</span> <span class="op">(</span>λ <span class="op">(</span>op<span class="op">)</span> <span class="op">(</span>evaluate-operation policy op<span class="op">))</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>migration-plan-operations plan<span class="op">)))</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> all-approved? </span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>andmap policy-result-approved? results<span class="op">))</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> blocked </span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">filter</span> <span class="op">(</span>λ <span class="op">(</span>r<span class="op">)</span> <span class="op">(</span><span class="kw">not</span> <span class="op">(</span>policy-result-approved? r<span class="op">)))</span> results<span class="op">))</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> flagged</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">filter</span> <span class="op">(</span>λ <span class="op">(</span>r<span class="op">)</span> <span class="op">(</span><span class="kw">eq?</span> <span class="op">(</span>policy-result-decision r<span class="op">)</span> &#39;flagged<span class="op">))</span> results<span class="op">))</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">values</span> all-approved? results blocked flagged<span class="op">))</span></span></code></pre></div>
+<h3 id="phase-3-strategy-definitions">Phase 3: Strategy Definitions</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Strategies for unsafe operations</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> migration-strategy</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>name              <span class="co">;; Symbol</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   description       <span class="co">;; Human-readable</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>   applies-to        <span class="co">;; List of operation types</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>   sql-template<span class="op">)</span>     <span class="co">;; Function that generates safe SQL</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; Built-in strategies</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> add-not-null-with-default</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-strategy</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   &#39;add-not-null-with-default</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Add NOT NULL column with default value for existing rows&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">(</span>add-field-op<span class="op">)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>λ <span class="op">(</span>op<span class="op">)</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ADD COLUMN ~a ~a NOT NULL DEFAULT ~a&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>add-field-op-entity-name op<span class="op">)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>add-field-op-field-name op<span class="op">)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>add-field-op-field-type op<span class="op">)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>add-field-op-default-value op<span class="op">)))))</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> backfill-then-constrain</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-strategy</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>   &#39;backfill-then-constrain</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Add nullable column, backfill data, then add NOT NULL&quot;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">(</span>add-field-op<span class="op">)</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>λ <span class="op">(</span>op<span class="op">)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">string-append</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ADD COLUMN ~a ~a;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-entity-name op<span class="op">)</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-field-name op<span class="op">)</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-field-type op<span class="op">))</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>format <span class="st">&quot;UPDATE ~a SET ~a = ~a WHERE ~a IS NULL;</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-entity-name op<span class="op">)</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-field-name op<span class="op">)</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-default-value op<span class="op">)</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-field-name op<span class="op">))</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a SET NOT NULL;&quot;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-entity-name op<span class="op">)</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>              <span class="op">(</span>add-field-op-field-name op<span class="op">))))))</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> type-change-with-using</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>migration-strategy</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>   &#39;type-change-with-using</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;Change column type with explicit USING clause&quot;</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>   &#39;<span class="op">(</span>change-type-op<span class="op">)</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>   <span class="op">(</span>λ <span class="op">(</span>op<span class="op">)</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;ALTER TABLE ~a ALTER COLUMN ~a TYPE ~a USING ~a&quot;</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>change-type-op-entity-name op<span class="op">)</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>change-type-op-field-name op<span class="op">)</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>change-type-op-new-type op<span class="op">)</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>change-type-op-conversion op<span class="op">)))))</span></span></code></pre></div>
+<h3 id="phase-4-cli-integration">Phase 4: CLI Integration</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Command-line flags</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; --policy development|production|default</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; --allow-destructive  (for CI/CD with explicit approval)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; --strategy &lt;name&gt;    (for unsafe operations)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; --approval &lt;ticket&gt;  (audit reference)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>apply-cli-overrides policy args<span class="op">)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> allow-destructive? </span><span class="op">(</span><span class="kw">member</span> <span class="st">&quot;--allow-destructive&quot;</span> args<span class="op">))</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> strategy </span><span class="op">(</span>find-arg-value args <span class="st">&quot;--strategy&quot;</span><span class="op">))</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> approval </span><span class="op">(</span>find-arg-value args <span class="st">&quot;--approval&quot;</span><span class="op">))</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">if</span> allow-destructive?</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>struct-copy migration-policy policy</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                   <span class="op">[</span>destructive-action &#39;approve<span class="op">])</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      policy<span class="op">))</span></span></code></pre></div>
+<h3 id="phase-5-audit-trail">Phase 5: Audit Trail</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Audit log entry</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> audit-entry</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>timestamp</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   migration-id</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   operation-uuid</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>   decision</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   policy-used</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   override-used?</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>   approval-reference</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   user<span class="op">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">;; Write audit log</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>write-audit-log entries path<span class="op">)</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">call-with-output-file</span> path</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>λ <span class="op">(</span>out<span class="op">)</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>for <span class="op">([</span>entry entries<span class="op">])</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>displayln <span class="op">(</span>audit-entry-&gt;json entry<span class="op">)</span> out<span class="op">)))</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    #:exists &#39;append<span class="op">))</span></span></code></pre></div>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/migration/policy.rkt</code> - Policy
+definitions</li>
+<li><code>src/dslgen/migration/policy-eval.rkt</code> - Evaluation
+functions</li>
+<li><code>src/dslgen/migration/strategies.rkt</code> - Built-in
+strategies</li>
+<li><code>src/dslgen/migration/audit.rkt</code> - Audit trail</li>
+<li><code>config/migration-policies/</code> - Custom policy
+configurations</li>
+</ul>
+<h3 id="dependencies">Dependencies</h3>
+<ul>
+<li><strong>Depends on</strong>: ADR 0004 (Declarative Migration
+Language) - migration-op structs</li>
+<li><strong>Required by</strong>: ADR 0006 (SQL Generation) - only
+approved migrations generate SQL</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When implementing migration execution pipeline</li>
+<li>When adding new migration operation types</li>
+<li>When configuring CI/CD for schema changes</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Model validation (that's parsing, not migration)</li>
+<li>SQL syntax validation (that's generation)</li>
+<li>Runtime authorization</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>All migrations MUST pass policy evaluation before SQL
+generation</li>
+<li>Destructive operations MUST be rejected by default policy</li>
+<li>Overrides MUST be audited when <code>require-audit</code> is
+true</li>
+<li>CI/CD pipelines MUST use explicit <code>--allow-destructive</code>
+flag</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create <code>policy.rkt</code> with
+policy struct and defaults</label></li>
+<li><label><input type="checkbox" />Create <code>policy-eval.rkt</code>
+with evaluation functions</label></li>
+<li><label><input type="checkbox" />Implement
+<code>evaluate-operation</code> for single ops</label></li>
+<li><label><input type="checkbox" />Implement
+<code>evaluate-migration-plan</code> for full plans</label></li>
+<li><label><input type="checkbox" />Create <code>strategies.rkt</code>
+with built-in strategies</label></li>
+<li><label><input type="checkbox" />Implement CLI flag
+handling</label></li>
+<li><label><input type="checkbox" />Implement audit trail
+logging</label></li>
+<li><label><input type="checkbox" />Add tests for each safety
+tier</label></li>
+<li><label><input type="checkbox" />Add tests for strategy
+application</label></li>
+<li><label><input type="checkbox" />Add tests for override
+handling</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>ADR 5 of 7</strong> - Depends on ADR 0004 (Migration
+Language). Complete this before ADR 0006 (SQL Generation).</p>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li><code>evaluate-migration-plan(policy, plan)</code> returns approval
+status</li>
+<li>Safe operations auto-approved with default policy</li>
+<li>Destructive operations rejected with default policy</li>
+<li><code>--allow-destructive</code> flag enables override</li>
+<li>Strategies can be applied to unsafe operations</li>
+<li>Audit entries written for all decisions when configured</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

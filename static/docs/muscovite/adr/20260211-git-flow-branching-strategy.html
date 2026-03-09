@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Flow Branching Strategy — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Git Flow Branching Strategy</span>
+</nav>
+
+<h1>Git Flow Branching Strategy</h1>
+
+
+<h1 id="git-flow-branching-strategy">Git Flow Branching Strategy</h1>
+<ul>
+<li>Status: superseded by <a
+href="20260225-github-flow-with-develop-branch.html">20260225-github-flow-with-develop-branch.md</a></li>
+<li>Deciders: jolo</li>
+<li>Date: 2026-02-11</li>
+<li>Tags: git, branching, workflow, release, ci</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite already uses a branching pattern that closely resembles Git
+Flow (<code>master</code>, <code>develop</code>, <code>feature/*</code>
+branches, semantic version tags). However, this is implicit convention,
+not a formalized strategy. Key gaps exist: no <code>release/*</code> or
+<code>hotfix/*</code> branches, no CI on develop/PR, and the release
+script references <code>main</code> instead of <code>master</code>.</p>
+<p>Should we adopt Git Flow formally and close these gaps?</p>
+<h2 id="current-state-as-of-v120">Current State (as of v1.2.0)</h2>
+<table>
+<thead>
+<tr>
+<th>Git Flow Concept</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>master</code> branch (production)</td>
+<td>✅ Exists</td>
+</tr>
+<tr>
+<td><code>develop</code> branch (integration)</td>
+<td>✅ Exists, is the working branch</td>
+</tr>
+<tr>
+<td><code>feature/*</code> branches</td>
+<td>✅ Already used (<code>feature/schema-evolution</code>, etc.)</td>
+</tr>
+<tr>
+<td>Semantic version tags</td>
+<td>✅ <code>v0.7.0</code> → <code>v1.2.0</code></td>
+</tr>
+<tr>
+<td>Release script</td>
+<td>✅ Exists (<code>workflow/scripts/release.sh</code>)</td>
+</tr>
+<tr>
+<td>File-based feature workflow</td>
+<td>✅ <code>workflow/</code> directory</td>
+</tr>
+<tr>
+<td><code>release/*</code> branches</td>
+<td>❌ Missing — tags created directly from develop</td>
+</tr>
+<tr>
+<td><code>hotfix/*</code> branches</td>
+<td>❌ Missing — no convention for emergency fixes off master</td>
+</tr>
+<tr>
+<td>CI on develop/PRs</td>
+<td>❌ Missing — only tag-triggered release.yml exists</td>
+</tr>
+<tr>
+<td>Branch protection</td>
+<td>❌ Missing — no GitHub branch protection rules</td>
+</tr>
+<tr>
+<td>Release script branch check</td>
+<td>⚠️ References <code>main</code>, actual branch is
+<code>master</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Solo developer workflow — ceremony must not outweigh value</li>
+<li>AI agents benefit from explicit, documented conventions</li>
+<li>Production hotfix path must exist before it's needed</li>
+<li>CI on develop catches regressions before release ceremony</li>
+<li>Current approach already follows ~80% of Git Flow</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-formalize-git-flow-full-ceremony">Option 1: Formalize
+Git Flow (full ceremony)</h3>
+<p>Adopt the complete Git Flow model:</p>
+<ul>
+<li><code>release/vX.Y.Z</code> branches from develop for
+stabilization</li>
+<li><code>hotfix/vX.Y.Z</code> branches from master for emergency
+fixes</li>
+<li>Back-merges from release/hotfix to develop</li>
+<li>CI gates on develop, release/<em>, hotfix/</em>, and PRs</li>
+</ul>
+<h3 id="option-2-simplified-git-flow-current--fixes">Option 2:
+Simplified Git Flow (current + fixes)</h3>
+<p>Keep current approach, add only:</p>
+<ul>
+<li>CI on develop</li>
+<li>Hotfix convention (documented, not enforced)</li>
+<li>Fix release.sh <code>main</code> → <code>master</code></li>
+</ul>
+<h3 id="option-3-trunk-based-development">Option 3: Trunk-Based
+Development</h3>
+<p>Abandon long-lived develop branch. All work on <code>master</code>
+with short-lived feature branches, feature flags, and continuous
+deployment.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Option 1: Formalize Git Flow"</strong>,
+because the project already follows 80% of it, the remaining 20%
+provides real value (hotfix path, CI gates, release stabilization), and
+formal documentation helps AI agents follow the conventions
+correctly.</p>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ol type="1">
+<li><strong>Fix release.sh</strong> — Change <code>main</code> reference
+to <code>master</code>; add release branch workflow
+(<code>release/vX.Y.Z</code> from develop → merge to master + back-merge
+to develop)</li>
+<li><strong>Add CI workflow</strong> —
+<code>.github/workflows/ci.yml</code> running Racket tests on push to
+<code>develop</code>, <code>release/*</code>, <code>hotfix/*</code>, and
+on PRs</li>
+<li><strong>Add hotfix script</strong> —
+<code>workflow/scripts/hotfix.sh vX.Y.Z</code> creating branch from
+master, merging to both master and develop</li>
+<li><strong>GitHub branch protection</strong> — Protect
+<code>master</code> (require PR, no force push) and <code>develop</code>
+(require CI pass)</li>
+<li><strong>Document in CONTRIBUTING.md</strong> — Add branching model
+section with diagram</li>
+</ol>
+<h3 id="branch-naming-conventions">Branch Naming Conventions</h3>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>Source</th>
+<th>Merges To</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>master</code></td>
+<td>—</td>
+<td>—</td>
+<td>Production-ready code, tagged releases</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td><code>master</code></td>
+<td>—</td>
+<td>Integration branch, next release</td>
+</tr>
+<tr>
+<td><code>feature/FTR-NNN-*</code></td>
+<td><code>develop</code></td>
+<td><code>develop</code></td>
+<td>Feature work (matches workflow/ feature IDs)</td>
+</tr>
+<tr>
+<td><code>release/vX.Y.Z</code></td>
+<td><code>develop</code></td>
+<td><code>master</code> + <code>develop</code></td>
+<td>Release stabilization</td>
+</tr>
+<tr>
+<td><code>hotfix/vX.Y.Z</code></td>
+<td><code>master</code></td>
+<td><code>master</code> + <code>develop</code></td>
+<td>Emergency production fixes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Clear hotfix path exists before it's needed</li>
+<li>CI catches regressions on develop before release ceremony</li>
+<li>Release branches allow stabilization without blocking feature
+work</li>
+<li>AI agents have unambiguous branch conventions to follow</li>
+<li>Aligns with existing <code>workflow/</code> feature lifecycle</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Added ceremony for releases (create branch, merge twice,
+delete)</li>
+<li>Hotfix back-merge to develop can conflict if develop has
+diverged</li>
+<li>Solo developer overhead — most value comes with multiple
+contributors</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-formalize-git-flow">Option 1: Formalize Git Flow</h3>
+<ul>
+<li>Good, because it builds on existing practice (minimal
+disruption)</li>
+<li>Good, because hotfix path is pre-established</li>
+<li>Good, because release branches decouple stabilization from feature
+work</li>
+<li>Bad, because added ceremony for a solo developer</li>
+<li>Bad, because release branch may be unnecessary if develop is always
+stable</li>
+</ul>
+<h3 id="option-2-simplified-git-flow">Option 2: Simplified Git Flow</h3>
+<ul>
+<li>Good, because minimal overhead</li>
+<li>Good, because CI on develop is the highest-value change</li>
+<li>Bad, because hotfix path is documented but not tooled</li>
+<li>Bad, because no release stabilization window</li>
+</ul>
+<h3 id="option-3-trunk-based-development-1">Option 3: Trunk-Based
+Development</h3>
+<ul>
+<li>Good, because simplest branching model</li>
+<li>Good, because eliminates merge conflicts between long-lived
+branches</li>
+<li>Bad, because requires feature flags (not natural for a code
+generator)</li>
+<li>Bad, because discards existing develop/feature branch workflow</li>
+<li>Bad, because no stabilization window for releases</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Existing release script:
+<code>workflow/scripts/release.sh</code></li>
+<li>Existing CI: <code>.github/workflows/release.yml</code>
+(tag-triggered only)</li>
+<li>Feature workflow: <code>workflow/README.md</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>Creating any new branch (use correct prefix and source)</li>
+<li>Preparing a release (create <code>release/vX.Y.Z</code> from
+develop, not tag directly)</li>
+<li>Fixing a production bug (create <code>hotfix/vX.Y.Z</code> from
+master)</li>
+<li>Setting up CI workflows</li>
+</ul>
+<h3 id="when-this-does-not-apply">When This Does NOT Apply</h3>
+<ul>
+<li>Experimental/throwaway branches (use any name, delete after)</li>
+<li>Changes to the DSL, generators, or framework (those are feature
+content, not branching decisions)</li>
+</ul>
+<h3 id="key-rules">Key Rules</h3>
+<ul>
+<li><strong>Never commit directly to <code>master</code></strong> —
+always via release or hotfix branch</li>
+<li><strong>Never commit directly to <code>develop</code></strong> —
+always via feature branch or back-merge</li>
+<li><strong>Feature branches</strong> start from <code>develop</code>
+and merge back to <code>develop</code></li>
+<li><strong>Release branches</strong> start from <code>develop</code>,
+merge to <code>master</code> AND back to <code>develop</code></li>
+<li><strong>Hotfix branches</strong> start from <code>master</code>,
+merge to <code>master</code> AND back to <code>develop</code></li>
+<li><strong>Tags</strong> are created on <code>master</code> only, after
+release branch merge</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

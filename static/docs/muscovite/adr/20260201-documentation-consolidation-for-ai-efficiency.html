@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Documentation Consolidation for AI
+Efficiency — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Documentation Consolidation for AI Efficiency</span>
+</nav>
+
+<h1>ADR: Documentation Consolidation for AI Efficiency</h1>
+
+
+<h1 id="adr-documentation-consolidation-for-ai-efficiency">ADR:
+Documentation Consolidation for AI Efficiency</h1>
+<ul>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Date</strong>: 2026-02-01</li>
+<li><strong>Deciders</strong>: Project maintainers</li>
+<li><strong>Tags</strong>: documentation, ai-agents,
+developer-experience</li>
+</ul>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite has accumulated 253 markdown files totaling 70,346 lines of
+documentation. Every AI agent conversation re-parses the same large
+instruction files:</p>
+<ul>
+<li><code>.github/copilot-instructions.md</code> (1,887 lines)</li>
+<li><code>AGENTS.md</code> (610 lines)</li>
+<li><code>doc/VISION.md</code> (678 lines)</li>
+<li><code>.github/USER_PROFILE.md</code> (varies)</li>
+</ul>
+<p>This creates <strong>~4,000+ lines of context load</strong> before
+any actual work begins, consuming token budget that could be used for
+code analysis and generation.</p>
+<p>Additionally, completed phase documentation and session summaries
+accumulate in the repository root, creating visual clutter and potential
+confusion about current project state.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ol type="1">
+<li><strong>Token efficiency</strong>: AI agents have limited context
+windows; every line of instruction consumes budget</li>
+<li><strong>Relevance</strong>: Not all documentation is relevant to
+every task</li>
+<li><strong>Maintenance burden</strong>: Duplicate content across
+multiple docs diverges over time</li>
+<li><strong>Developer experience</strong>: Clean repository structure
+aids navigation</li>
+<li><strong>AI-first project</strong>: Muscovite is designed for
+AI-assisted development; docs should optimize for this</li>
+</ol>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-status-quo">Option 1: Status Quo</h3>
+<p>Keep all documentation as-is. Accept the context overhead.</p>
+<p><strong>Pros</strong>: No migration effort <strong>Cons</strong>:
+Ongoing inefficiency, growing clutter</p>
+<h3 id="option-2-aggressive-deletion">Option 2: Aggressive Deletion</h3>
+<p>Delete all "completed" documentation and session summaries.</p>
+<p><strong>Pros</strong>: Maximum reduction <strong>Cons</strong>: Loses
+historical context, may need to re-discover decisions</p>
+<h3 id="option-3-tiered-archive-strategy-selected">Option 3: Tiered
+Archive Strategy (Selected)</h3>
+<p>Move completed/historical docs to <code>attic/</code>, keep active
+docs lean, use ADRs as single source of truth.</p>
+<p><strong>Pros</strong>: Preserves history, reduces active context,
+improves navigation <strong>Cons</strong>: Requires ongoing discipline
+to archive completed work</p>
+<h2 id="decision">Decision</h2>
+<p>Implement a <strong>tiered documentation strategy</strong>:</p>
+<h3 id="tier-1-always-loaded-minimize">Tier 1: Always-Loaded
+(Minimize)</h3>
+<p>Files attached to every AI conversation. Target: &lt;1,000 lines
+combined.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+<th>Target Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.github/copilot-instructions.md</code></td>
+<td>Core rules, critical patterns</td>
+<td>&lt;800</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>Quick-start for AI agents</td>
+<td>&lt;400</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-2-on-demand-reference">Tier 2: On-Demand Reference</h3>
+<p>Loaded when relevant to the task. Stored in <code>doc/</code> or
+<code>.github/copilot-details/</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Files</th>
+<th>When Loaded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Build workflow</td>
+<td><code>doc/DEVELOPER-GUIDE.md</code></td>
+<td>Building, CMake issues</td>
+</tr>
+<tr>
+<td>DSL syntax</td>
+<td><code>doc/DSL-REFERENCE.md</code></td>
+<td>Parser/generator work</td>
+</tr>
+<tr>
+<td>Qt patterns</td>
+<td><code>doc/qt-frontend-architecture-plan.md</code></td>
+<td>Qt client work</td>
+</tr>
+<tr>
+<td>Migration</td>
+<td>ADRs 1-7</td>
+<td>Schema evolution</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-3-archived-never-auto-loaded">Tier 3: Archived (Never
+Auto-Loaded)</h3>
+<p>Historical context preserved but not in active paths.</p>
+<table>
+<thead>
+<tr>
+<th>Content</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Completed phase docs</td>
+<td><code>attic/phase-docs/</code></td>
+</tr>
+<tr>
+<td>Session summaries</td>
+<td><code>attic/session-summaries/</code></td>
+</tr>
+<tr>
+<td>Superseded plans</td>
+<td><code>attic/planning/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="implementation-rules">Implementation Rules</h3>
+<ol type="1">
+<li><strong>Archive completed phases immediately</strong>: When
+<code>PHASE*_COMPLETE.md</code> is created, move related planning docs
+to attic</li>
+<li><strong>Session summaries are ephemeral</strong>: Move to attic
+after 7 days or next session</li>
+<li><strong>ADRs are canonical</strong>: Don't duplicate architectural
+decisions in other docs; reference ADRs</li>
+<li><strong>Prompt files stay focused</strong>: Each
+<code>.prompt.md</code> file targets one specific task</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Reduced default context load by ~40-50%</li>
+<li>Cleaner repository root (fewer <code>PHASE*.md</code>,
+<code>SESSION_*.md</code> files)</li>
+<li>Single source of truth for decisions (ADRs)</li>
+<li>Faster AI agent startup time</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Requires discipline to archive completed work</li>
+<li>Historical context requires explicit navigation to
+<code>attic/</code></li>
+<li>May need to update references in other docs</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Git history preserves all changes regardless of file location</li>
+</ul>
+<h2 id="files-affected">Files Affected</h2>
+<h3 id="executed-cleanup-2026-02-01">Executed Cleanup (2026-02-01)</h3>
+<p><strong>Repository root</strong> → <code>attic/phase-docs/</code> (14
+files):</p>
+<ul>
+<li>All <code>PHASE*.md</code> completion/plan documents</li>
+<li><code>OPTION_A_IMPLEMENTATION_PLAN.md</code></li>
+</ul>
+<p><strong>Repository root</strong> →
+<code>attic/session-summaries/</code> (5 files):</p>
+<ul>
+<li>All <code>SESSION_SUMMARY_2026-01-*.md</code> files</li>
+</ul>
+<p><strong>doc/</strong> → <code>attic/doc-deprecated/</code> (38
+files):</p>
+<ul>
+<li>All files already marked <code>## Deprecated</code></li>
+<li>Includes: DSL-SYNTAX.md, GRAMMAR.md, grammar-<em>.md,
+ARCHITECTURE.md, QUICKSTART.md, TROUBLESHOOTING.md, all
+security-</em>.md (except SECURITY.md), all phase10-<em>.md,
+jsonb-</em>.md, vo-support-*.md, pimpl-pattern.md,
+LIBPQXX-BACKEND-PLAN.md, LIBRARY-INFRASTRUCTURE-PLAN.md, etc.</li>
+</ul>
+<p><strong>Remaining active docs (7 files in doc/)</strong>: | File |
+Purpose | |------|---------| | AI-DEVELOPER-GUIDE.md | Main reference
+for AI agents and contributors | | DEVELOPER-GUIDE.md | Build,
+generation, troubleshooting | | DSL.md | Current DSL syntax reference |
+| SECURITY.md | Security architecture and status | | VISION.md | Project
+vision and roadmap | | GLOSSARY.md | Ubiquitous language definitions | |
+cmake-database-targets.md | Database workflow (Sqitch, Catch2) |</p>
+<h3 id="future-consolidation-separate-prs">Future Consolidation
+(Separate PRs)</h3>
+<ul>
+<li>Split <code>copilot-instructions.md</code> by topic for tiered
+loading</li>
+<li>Review if GLOSSARY.md content should merge into DSL.md</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<p><strong>When archiving documentation:</strong></p>
+<ol type="1">
+<li>Check if any other docs reference the file being archived</li>
+<li>Update references to point to new location or remove if
+obsolete</li>
+<li>Commit with message:
+<code>chore(docs): Archive completed phase X documentation</code></li>
+</ol>
+<p><strong>When creating new phase docs:</strong></p>
+<ol type="1">
+<li>Use naming convention: <code>PHASE{N}_{FEATURE}_PLAN.md</code> for
+planning</li>
+<li>Create <code>PHASE{N}_{FEATURE}_COMPLETE.md</code> only when phase
+is done</li>
+<li>Archive both within 7 days of completion</li>
+</ol>
+<p><strong>When to load additional context:</strong></p>
+<ul>
+<li>Ask user: "Should I review the Qt architecture docs for this
+task?"</li>
+<li>Or proactively: "I see this involves schema evolution. Loading ADRs
+1-7 for context."</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href=".github/copilot-instructions.html">Copilot
+Instructions</a></li>
+<li><a href="AGENTS.html">AGENTS.md</a></li>
+<li><a href="attic/">Attic Directory</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

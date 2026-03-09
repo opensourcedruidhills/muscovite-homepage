@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Incremental Artifact Generation via Semantic
+Diff — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Incremental Artifact Generation via Semantic Diff</span>
+</nav>
+
+<h1>Incremental Artifact Generation via Semantic Diff</h1>
+
+
+<h1 id="incremental-artifact-generation-via-semantic-diff">Incremental
+Artifact Generation via Semantic Diff</h1>
+<ul>
+<li>Status: superseded by <a
+href="20260210-incremental-code-generation.html">20260210-incremental-code-generation</a></li>
+<li>Deciders: Project maintainers</li>
+<li>Date: 2026-01-09</li>
+<li>Tags: codegen, incremental, semantic-diff, artifacts,
+schema-evolution</li>
+<li>Related:
+<ul>
+<li><a href="20260109-semantic-model-delta.html">Semantic Model Delta</a>
+(ADR 3 - provides change set)</li>
+<li><a href="20260109-migration-sql-generation.html">Migration SQL
+Generation</a> (ADR 6 - DB artifact generation)</li>
+<li><a href="20260109-cross-layer-verification.html">Cross-Layer
+Verification</a> (ADR 7 - multi-layer consistency)</li>
+</ul></li>
+</ul>
+<p>Technical Story: Leverage semantic diff output to regenerate only
+artifacts affected by actual model changes, reducing build times and
+unnecessary file writes.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Currently, all generated artifacts (DB scripts, C++ backend, gRPC
+code, Qt Widgets) are <strong>fully regenerated on each run</strong>,
+even if only a small subset of the model changed.</p>
+<p>With thousands of generated files, this causes:</p>
+<ul>
+<li>Long build times</li>
+<li>High disk I/O</li>
+<li>Unnecessary rebuilds of unchanged code</li>
+<li>CMake/Ninja re-linking when source files are touched but
+unchanged</li>
+</ul>
+<p>We already implement <strong>semantic diffing</strong> on the DDD
+model to detect incremental changes and derive migrations. We want to
+leverage the same information to <strong>regenerate only artifacts
+affected by actual model changes</strong>.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Reduce generation and build time</li>
+<li>Avoid unnecessary file writes</li>
+<li>Maintain deterministic, traceable generation</li>
+<li>Preserve existing artifact mappings to semantic elements</li>
+<li>Support cross-layer dependencies (DB, backend, gRPC, Qt)</li>
+<li>Align with migration workflow (ADRs 3-6)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><p><strong>Full regeneration (current approach)</strong></p>
+<ul>
+<li>Simple, always up-to-date</li>
+<li>Too slow for large projects → rejected</li>
+</ul></li>
+<li><p><strong>Timestamp / file change detection</strong></p>
+<ul>
+<li>Detect changes based on DSL file modification times</li>
+<li>Does not account for semantic equivalence → can regenerate
+unnecessarily → rejected</li>
+</ul></li>
+<li><p><strong>Git-based change detection</strong></p>
+<ul>
+<li>Use Git diff to detect changed files</li>
+<li>Only detects textual changes → insufficient for semantic renames or
+moves → rejected</li>
+</ul></li>
+<li><p><strong>Semantic diff-based incremental generation
+(accepted)</strong></p>
+<ul>
+<li>Leverage existing semantic diff / Migration IR</li>
+<li>Map changed elements to artifacts</li>
+<li>Regenerate only affected files</li>
+</ul></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Use the semantic diff output to trigger incremental artifact
+generation</strong>:</p>
+<ol type="1">
+<li>Compute semantic diff between old and new model IR → Migration IR /
+Change Set</li>
+<li>Map changed elements → generated artifacts</li>
+<li>Regenerate <strong>only affected artifacts</strong></li>
+<li>Update manifest of artifact hashes and element mappings for next
+run</li>
+<li>Propagate changes transitively for dependent artifacts (e.g., value
+objects used by multiple entities)</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Drastically reduced generation and build times</li>
+<li>Deterministic and traceable artifact updates</li>
+<li>Fully aligned with migration and semantic diff workflow</li>
+<li>Supports multi-layer generation: DB, C++, gRPC, Qt</li>
+<li>Minimizes CMake rebuild triggers</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Requires maintaining <strong>artifact → semantic element
+mapping</strong></li>
+<li>Dependency propagation must be handled carefully (e.g., nested value
+objects)</li>
+<li>Slightly more complex generation logic than full regeneration</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="phase-1-artifact-manifest">Phase 1: Artifact Manifest</h3>
+<p>Create a manifest file tracking all generated artifacts:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; src/dslgen/manifest/artifact-manifest.rkt</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> artifact-entry</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>path           <span class="co">; String - relative path to generated file</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   element-uuids  <span class="co">; (Listof UUID) - contributing semantic elements</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   content-hash   <span class="co">; String - SHA-256 of generated content</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   generator      <span class="co">; Symbol - which generator produced this</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   timestamp<span class="op">)</span>     <span class="co">; Integer - generation timestamp</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> artifact-manifest</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>version        <span class="co">; String - manifest format version</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   model-hash     <span class="co">; String - hash of source IR</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   entries<span class="op">)</span>       <span class="co">; (HashTable String artifact-entry) - path -&gt; entry</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">;; Persistence</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>write-manifest manifest path<span class="op">)</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ...<span class="op">)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>read-manifest path<span class="op">)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  ...<span class="op">)</span></span></code></pre></div>
+<h3 id="phase-2-element-to-artifact-mapping">Phase 2:
+Element-to-Artifact Mapping</h3>
+<p>Define mappings from semantic elements to generated artifacts:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Element UUID -&gt; List of artifact paths</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> element-&gt;artifacts </span><span class="op">(</span>make-hash<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; Example mappings:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; Entity UUID -&gt; [</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;sqitch/deploy/{schema}-table-{entity}.sql&quot;,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;sqitch/revert/{schema}-table-{entity}.sql&quot;,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;api/{schema}_api-func-{entity}.sql&quot;,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;proto/{context}.proto&quot;,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;src/grpc/{context}_service.cpp&quot;,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;src/qt/models/{entity}Model.cpp&quot;,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">;;   &quot;src/qt/widgets/{entity}Widget.cpp&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">;; ]</span></span></code></pre></div>
+<h3 id="phase-3-incremental-generation-algorithm">Phase 3: Incremental
+Generation Algorithm</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-incremental old-ir new-ir output-dir<span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 1. Load previous manifest (or create empty)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> manifest </span><span class="op">(</span>read-manifest <span class="op">(</span>build-path output-dir <span class="st">&quot;.artifact-manifest&quot;</span><span class="op">)))</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 2. Compute semantic diff</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> change-set </span><span class="op">(</span>diff-model old-ir new-ir<span class="op">))</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 3. Identify affected elements (with transitive closure)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> affected-uuids </span><span class="op">(</span>compute-affected-elements change-set<span class="op">))</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 4. Map to affected artifacts</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> affected-paths </span><span class="op">(</span>uuids-&gt;artifact-paths affected-uuids manifest<span class="op">))</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 5. Regenerate only affected artifacts</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([</span>path affected-paths<span class="op">])</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="ex">define</span><span class="fu"> entry </span><span class="op">(</span>hash-ref <span class="op">(</span>artifact-manifest-entries manifest<span class="op">)</span> path <span class="dv">#f</span><span class="op">))</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="ex">define</span><span class="fu"> new-content </span><span class="op">(</span>regenerate-artifact path new-ir<span class="op">))</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="ex">define</span><span class="fu"> new-hash </span><span class="op">(</span>sha256 new-content<span class="op">))</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Skip write if content unchanged (avoids rebuild triggers)</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>unless <span class="op">(</span><span class="kw">and</span> entry <span class="op">(</span><span class="kw">equal?</span> new-hash <span class="op">(</span>artifact-entry-content-hash entry<span class="op">)))</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>write-file path new-content<span class="op">))</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Update manifest entry</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>update-manifest! manifest path new-hash ...<span class="op">))</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 6. Handle deletions (elements removed from model)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([</span>deleted <span class="op">(</span>change-set-deletions change-set<span class="op">)])</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="ex">define</span><span class="fu"> paths </span><span class="op">(</span>uuid-&gt;artifact-paths <span class="op">(</span>deleted-uuid deleted<span class="op">)))</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>for <span class="op">([</span>path paths<span class="op">])</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">delete-file</span> path<span class="op">)</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>remove-from-manifest! manifest path<span class="op">)))</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; 7. Save updated manifest</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>write-manifest manifest <span class="op">(</span>build-path output-dir <span class="st">&quot;.artifact-manifest&quot;</span><span class="op">)))</span></span></code></pre></div>
+<h3 id="phase-4-transitive-dependency-propagation">Phase 4: Transitive
+Dependency Propagation</h3>
+<p>When an element changes, all dependent artifacts must be
+regenerated:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>compute-affected-elements change-set<span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> directly-affected </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="kw">append</span> <span class="op">(</span><span class="kw">map</span> change-uuid <span class="op">(</span>change-set-additions change-set<span class="op">))</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">map</span> change-uuid <span class="op">(</span>change-set-modifications change-set<span class="op">))</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span><span class="kw">map</span> change-uuid <span class="op">(</span>change-set-renames change-set<span class="op">))))</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; Expand to include dependents</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> all-affected </span><span class="op">(</span>mutable-set<span class="op">))</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>for <span class="op">([</span>uuid directly-affected<span class="op">])</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>set-add! all-affected uuid<span class="op">)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Add all elements that reference this one</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>for <span class="op">([</span>dependent <span class="op">(</span>get-dependents uuid<span class="op">)])</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>set-add! all-affected dependent<span class="op">)))</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>set-&gt;list all-affected<span class="op">))</span></span></code></pre></div>
+<p><strong>Dependency examples:</strong></p>
+<ul>
+<li>Entity field type changed → regenerate entity + all referencing
+entities</li>
+<li>Value object changed → regenerate all entities embedding it</li>
+<li>Relationship changed → regenerate both sides + junction table</li>
+</ul>
+<h3 id="phase-5-layer-specific-regeneration">Phase 5: Layer-Specific
+Regeneration</h3>
+<p>Each generator layer handles incremental updates:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Affected By</th>
+<th>Artifacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sqitch</strong></td>
+<td>Entity/field/index/FK changes</td>
+<td>deploy/revert/verify SQL</td>
+</tr>
+<tr>
+<td><strong>PL/pgSQL API</strong></td>
+<td>Entity/field changes</td>
+<td>API function SQL</td>
+</tr>
+<tr>
+<td><strong>gRPC Proto</strong></td>
+<td>Entity/field/service changes</td>
+<td>.proto files</td>
+</tr>
+<tr>
+<td><strong>C++ Service</strong></td>
+<td>Proto changes</td>
+<td>service impl .cpp/.hpp</td>
+</tr>
+<tr>
+<td><strong>C++ DBA</strong></td>
+<td>Entity/field changes</td>
+<td>repository .cpp/.hpp</td>
+</tr>
+<tr>
+<td><strong>Qt Models</strong></td>
+<td>Entity/field changes</td>
+<td>model .cpp/.hpp</td>
+</tr>
+<tr>
+<td><strong>Qt Widgets</strong></td>
+<td>Entity/relationship changes</td>
+<td>widget .cpp/.hpp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/manifest/artifact-manifest.rkt</code> - Manifest
+data structures</li>
+<li><code>src/dslgen/manifest/element-mapping.rkt</code> -
+Element→artifact mappings</li>
+<li><code>src/dslgen/incremental/incremental-gen.rkt</code> -
+Incremental generation orchestrator</li>
+<li><code>src/dslgen/incremental/dependency-graph.rkt</code> -
+Transitive dependency computation</li>
+</ul>
+<h3 id="cli-integration">CLI Integration</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Full regeneration (ignore manifest, regenerate everything)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> project.ddd <span class="at">--full</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Incremental regeneration (default, uses manifest)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> project.ddd</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show what would be regenerated without doing it</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> project.ddd <span class="at">--dry-run</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Force regeneration of specific layers</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> project.ddd <span class="at">--force</span> sqitch,api</span></code></pre></div>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When implementing code generation optimizations</li>
+<li>When adding new generator layers</li>
+<li>When modifying semantic diff output</li>
+<li>When debugging "why wasn't X regenerated" issues</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>First-time generation (no previous manifest)</li>
+<li>When <code>--full</code> flag is specified</li>
+<li>When manifest is corrupted or missing</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>All generators MUST register their element→artifact mappings</li>
+<li>Artifact writes MUST go through manifest-aware writer</li>
+<li>Content hash comparison MUST happen before file write</li>
+<li>Deleted elements MUST trigger artifact cleanup</li>
+</ul>
+<h3 id="implementation-checklist">Implementation Checklist</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Define artifact-manifest data
+structures</label></li>
+<li><label><input type="checkbox" />Create element→artifact mapping
+registry</label></li>
+<li><label><input type="checkbox" />Implement transitive dependency
+computation</label></li>
+<li><label><input type="checkbox" />Update Sqitch generator for
+incremental mode</label></li>
+<li><label><input type="checkbox" />Update API generator for incremental
+mode</label></li>
+<li><label><input type="checkbox" />Update gRPC generator for
+incremental mode</label></li>
+<li><label><input type="checkbox" />Update C++ generators for
+incremental mode</label></li>
+<li><label><input type="checkbox" />Update Qt generators for incremental
+mode</label></li>
+<li><label><input type="checkbox" />Add <code>--dry-run</code> CLI
+option</label></li>
+<li><label><input type="checkbox" />Add <code>--full</code> CLI option
+for forced regeneration</label></li>
+<li><label><input type="checkbox" />Integration tests with change
+scenarios</label></li>
+</ul>
+<h3 id="prompt-chain-position">Prompt Chain Position</h3>
+<p><strong>ADR 8 of 8</strong> - This ADR builds on the semantic diff
+infrastructure (ADRs 1-7) to optimize artifact generation.</p>
+<table>
+<thead>
+<tr>
+<th>Dependencies</th>
+<th>This ADR</th>
+<th>Used By</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR 3 (Semantic Diff), ADR 6 (SQL Gen), ADR 7 (Verification)</td>
+<td>Incremental Artifact Generation</td>
+<td>All generators</td>
+</tr>
+</tbody>
+</table>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ol type="1">
+<li>Manifest file created/updated on each generation run</li>
+<li>Unchanged artifacts NOT rewritten (verified by timestamp)</li>
+<li>Changed elements trigger regeneration of all dependent
+artifacts</li>
+<li>Deleted elements trigger artifact cleanup</li>
+<li><code>--dry-run</code> shows affected files without writing</li>
+<li><code>--full</code> bypasses manifest and regenerates
+everything</li>
+<li>Generation time reduced by &gt;50% for small model changes</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

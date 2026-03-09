@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostgreSQL Generator Patterns — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>PostgreSQL Generator Patterns</span>
+</nav>
+
+<h1>PostgreSQL Generator Patterns</h1>
+
+
+<h1 id="postgresql-generator-patterns">PostgreSQL Generator
+Patterns</h1>
+<blockquote>
+<p><strong>Purpose</strong>: Canonical pattern catalog for AI agents
+working on PostgreSQL Sqitch generators. <strong>Companion to</strong>:
+<a href="adr/20260227-postgresql-idiomatic-output-quality.html">ADR
+20260227 — PostgreSQL Idiomatic Output Quality</a> <strong>Sibling
+to</strong>: <a href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> (Racket
+coding constraints)</p>
+</blockquote>
+<hr />
+<h2 id="rating-system">Rating System</h2>
+<table>
+<thead>
+<tr>
+<th>Rating</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CANONICAL</strong></td>
+<td>The only acceptable pattern for new and modified code</td>
+</tr>
+<tr>
+<td><strong>ACCEPTABLE</strong></td>
+<td>Tolerated in existing code; convert when touching the file</td>
+</tr>
+<tr>
+<td><strong>ANTI-PATTERN</strong></td>
+<td>Must never appear in new code; fix immediately when found</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-uuid-default-functions">1. UUID Default Functions</h2>
+<p><strong>CANONICAL</strong>: Use <code>(uuid-default-fn)</code> from
+<code>sqitch-common.rkt</code> (returns <code>"uuidv7()"</code>).</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> uuidv7()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: hardcoded gen_random_uuid()</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid()</span></code></pre></div>
+<p><strong>Rationale</strong>: UUIDv7 provides time-ordered UUIDs that
+improve B-tree index locality and enable temporal ordering without a
+separate <code>created_at</code> column. <code>sqitch-common.rkt</code>
+L61-63 defines the single source of truth.</p>
+<p><strong>Affected files</strong> (current violations):</p>
+<ul>
+<li><code>sqitch-event-changes.rkt</code> — 4 occurrences (L38, L159,
+L180, L200)</li>
+<li><code>sqitch-state-machine.rkt</code> — 2 occurrences (L121,
+L220)</li>
+<li><code>sqitch-saga.rkt</code> — 3 occurrences (L132, L151, L166)</li>
+<li><code>sqitch-events.rkt</code> — 2 occurrences (L46, L150)</li>
+<li><code>migration-sql-deploy.rkt</code> — 1 occurrence (L174)</li>
+<li><code>sqitch-bitemporal.rkt</code> — 1 occurrence (system
+trigger)</li>
+</ul>
+<p><strong>FTR</strong>: FTR-159</p>
+<hr />
+<h2 id="2-foreign-key-constraints">2. Foreign Key Constraints</h2>
+<p><strong>CANONICAL</strong>: Named constraints via
+<code>ALTER TABLE ... ADD CONSTRAINT</code>.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> encounter.encounter</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_encounter_patient_id</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (patient_id) <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>);</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: inline REFERENCES in CREATE TABLE</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> encounter.encounter (</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    patient_id UUID <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>)  <span class="co">-- unnamed, inline</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Rationale</strong>: Named constraints appear in
+<code>pg_constraint</code>, error messages, and migration scripts.
+Inline <code>REFERENCES</code> produces auto-generated names like
+<code>encounter_patient_id_fkey</code> that vary across PostgreSQL
+versions.</p>
+<p><strong>Reference implementation</strong>:
+<code>migration-sql-deploy.rkt</code> L127 already uses named FK
+constraints.</p>
+<p><strong>Affected files</strong> (current violations):</p>
+<ul>
+<li><code>sqitch-entity.rkt</code> — L66, L111</li>
+<li><code>sqitch-entity-columns.rkt</code> — L93, L112, L146</li>
+<li><code>sqitch-state-machine.rkt</code> — L113, L122-126,
+L221-223</li>
+<li><code>sqitch-event-changes.rkt</code> — L181, L201</li>
+</ul>
+<p><strong>FTR</strong>: FTR-160</p>
+<hr />
+<h2 id="3-fk-column-indexes">3. FK Column Indexes</h2>
+<p><strong>CANONICAL</strong>: Every FK column gets a B-tree index.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: index immediately after FK constraint</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> encounter.encounter</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_encounter_patient_id</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (patient_id) <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>);</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_encounter_patient_id</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> encounter.encounter (patient_id);</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: FK without index</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- (causes sequential scan on JOIN/CASCADE DELETE)</span></span></code></pre></div>
+<p><strong>Rationale</strong>: PostgreSQL does NOT auto-create indexes
+on FK columns (unlike MySQL InnoDB). Without indexes, <code>JOIN</code>
+through FK and <code>CASCADE DELETE</code> from parent trigger
+sequential scans.</p>
+<p><strong>Existing infrastructure</strong>:
+<code>indexes-triggers.rkt</code> L58 generates metadata-driven indexes
+but does not systematically cover all FK columns.</p>
+<p><strong>FTR</strong>: FTR-161</p>
+<hr />
+<h2 id="4-column-documentation-comment-on-column">4. Column
+Documentation (COMMENT ON COLUMN)</h2>
+<p><strong>CANONICAL</strong>: Every column with <code>field-doc</code>
+gets a <code>COMMENT ON COLUMN</code>.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">COLUMN</span> patient.patient.family_name</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;The patient</span><span class="ch">&#39;&#39;</span><span class="st">s legal family name as recorded in official documents&#39;</span>;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: table-level comment (already implemented)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.patient</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;A person receiving healthcare services&#39;</span>;</span></code></pre></div>
+<p><strong>Rationale</strong>: Per ADR 20260217, all database objects
+that support <code>COMMENT ON</code> must have generated comments.
+Column comments appear in <code>\d+</code> output, pg_admin, and BI tool
+metadata discovery.</p>
+<p><strong>Current state</strong>:
+<code>sqitch-entity-columns.rkt</code> generates
+<code>COMMENT ON TABLE</code> (L313-422) but not
+<code>COMMENT ON COLUMN</code>.</p>
+<p><strong>FTR</strong>: FTR-162</p>
+<hr />
+<h2 id="5-string-quoting-in-seeds">5. String Quoting in Seeds</h2>
+<p><strong>CANONICAL</strong>: Standard SQL single quotes with doubled
+escaping.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> basedata.priority (<span class="kw">id</span>, code, display)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;high&#39;</span>, <span class="st">&#39;High Priority&#39;</span>);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: escaped single quote</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;o</span><span class="ch">&#39;&#39;</span><span class="st">brien&#39;</span>, <span class="st">&#39;O</span><span class="ch">&#39;&#39;</span><span class="st">Brien&#39;</span>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: E-prefix string literals</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (E<span class="st">&#39;...&#39;</span>, E<span class="st">&#39;high&#39;</span>, E<span class="st">&#39;High Priority&#39;</span>);</span></code></pre></div>
+<p><strong>Rationale</strong>: <code>E'...'</code> is
+PostgreSQL-specific escape string syntax. Standard <code>'...'</code>
+quoting with <code>''</code> for embedded quotes is SQL-standard and
+portable. No seed data requires backslash escapes.</p>
+<p><strong>Affected file</strong>: <code>sqitch-unified-seeds.rkt</code>
+<code>sql-escape-value</code> (L68-85).</p>
+<p><strong>FTR</strong>: FTR-163</p>
+<hr />
+<h2 id="6-idempotent-seed-data">6. Idempotent Seed Data</h2>
+<p><strong>CANONICAL</strong>:
+<code>INSERT ... ON CONFLICT (id) DO UPDATE SET</code>.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: idempotent upsert</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> basedata.priority (<span class="kw">id</span>, code, display, sort_order, is_active)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;low&#39;</span>, <span class="st">&#39;Low&#39;</span>, <span class="dv">1</span>, <span class="kw">true</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;medium&#39;</span>, <span class="st">&#39;Medium&#39;</span>, <span class="dv">2</span>, <span class="kw">true</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;high&#39;</span>, <span class="st">&#39;High&#39;</span>, <span class="dv">3</span>, <span class="kw">true</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> CONFLICT (<span class="kw">id</span>) DO <span class="kw">UPDATE</span> <span class="kw">SET</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    code <span class="op">=</span> EXCLUDED.code,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    display <span class="op">=</span> EXCLUDED.display,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    sort_order <span class="op">=</span> EXCLUDED.sort_order,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    is_active <span class="op">=</span> EXCLUDED.is_active;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: bare INSERT (fails on re-deploy)</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> basedata.priority (<span class="kw">id</span>, code, display)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">&#39;...&#39;</span>, <span class="st">&#39;low&#39;</span>, <span class="st">&#39;Low&#39;</span>);</span></code></pre></div>
+<p><strong>Rationale</strong>: Sqitch <code>deploy</code> may run seeds
+multiple times during development. Bare <code>INSERT</code> fails with
+duplicate key violation on second run.
+<code>ON CONFLICT ... DO UPDATE</code> makes deploys idempotent.</p>
+<p><strong>Additional improvement</strong>: Multi-row
+<code>VALUES</code> instead of one <code>INSERT</code> per row (reduces
+round-trips).</p>
+<p><strong>Affected file</strong>: <code>sqitch-unified-seeds.rkt</code>
+INSERT generation (L136-141).</p>
+<p><strong>FTR</strong>: FTR-163</p>
+<hr />
+<h2 id="7-sql-object-naming-conventions">7. SQL Object Naming
+Conventions</h2>
+<p><strong>CANONICAL</strong>: Consistent prefixed names for all SQL
+objects.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Prefix</th>
+<th>Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foreign key</td>
+<td><code>fk_</code></td>
+<td><code>fk_{table}_{column}</code></td>
+<td><code>fk_encounter_patient_id</code></td>
+</tr>
+<tr>
+<td>B-tree index</td>
+<td><code>idx_</code></td>
+<td><code>idx_{table}_{column}</code></td>
+<td><code>idx_encounter_patient_id</code></td>
+</tr>
+<tr>
+<td>Trigger</td>
+<td><code>trg_</code></td>
+<td><code>trg_{table}_{purpose}</code></td>
+<td><code>trg_patient_audit</code></td>
+</tr>
+<tr>
+<td>Check constraint</td>
+<td><code>chk_</code></td>
+<td><code>chk_{table}_{rule}</code></td>
+<td><code>chk_patient_birth_date_not_future</code></td>
+</tr>
+<tr>
+<td>Unique constraint</td>
+<td><code>uq_</code></td>
+<td><code>uq_{table}_{columns}</code></td>
+<td><code>uq_patient_mrn</code></td>
+</tr>
+<tr>
+<td>Exclusion</td>
+<td><code>excl_</code></td>
+<td><code>excl_{table}_{purpose}</code></td>
+<td><code>excl_patient_valid_time</code></td>
+</tr>
+<tr>
+<td>Primary key</td>
+<td><code>pk_</code></td>
+<td><code>pk_{table}</code></td>
+<td><code>pk_patient</code></td>
+</tr>
+<tr>
+<td>Sequence</td>
+<td><code>seq_</code></td>
+<td><code>seq_{table}_{column}</code></td>
+<td><code>seq_order_number</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> fk_patient_status_id</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (status_id) <span class="kw">REFERENCES</span> basedata.status(<span class="kw">id</span>);</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_patient_status_id</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> patient.patient (status_id);</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: inconsistent or missing prefixes</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> patient_status_fkey <span class="op">..</span>.  <span class="co">-- PostgreSQL auto-name</span></span></code></pre></div>
+<p><strong>FTR</strong>: FTR-165</p>
+<hr />
+<h2 id="8-verify-script-depth">8. Verify Script Depth</h2>
+<p><strong>CANONICAL</strong>: Verify scripts check structure, not just
+existence.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: deep verify</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>DO $$</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Verify table exists with correct columns</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    ASSERT (</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> information_schema.<span class="kw">columns</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span> table_schema <span class="op">=</span> <span class="st">&#39;patient&#39;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>          <span class="kw">AND</span> table_name <span class="op">=</span> <span class="st">&#39;patient&#39;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>          <span class="kw">AND</span> column_name <span class="kw">IN</span> (<span class="st">&#39;id&#39;</span>, <span class="st">&#39;mrn&#39;</span>, <span class="st">&#39;family_name&#39;</span>, <span class="st">&#39;given_name&#39;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">=</span> <span class="dv">4</span>, <span class="st">&#39;patient.patient missing expected columns&#39;</span>;</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Verify FK constraint exists</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    ASSERT <span class="kw">EXISTS</span> (</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> pg_constraint</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span> conname <span class="op">=</span> <span class="st">&#39;fk_patient_status_id&#39;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>          <span class="kw">AND</span> contype <span class="op">=</span> <span class="st">&#39;f&#39;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    ), <span class="st">&#39;FK constraint fk_patient_status_id missing&#39;</span>;</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Verify index exists</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    ASSERT <span class="kw">EXISTS</span> (</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> pg_indexes</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">WHERE</span> indexname <span class="op">=</span> <span class="st">&#39;idx_patient_status_id&#39;</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    ), <span class="st">&#39;Index idx_patient_status_id missing&#39;</span>;</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span> $$;</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: shallow verify</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> patient.patient <span class="kw">WHERE</span> <span class="kw">FALSE</span>;</span></code></pre></div>
+<p><strong>Rationale</strong>: Shallow verify only checks table
+existence. A table could exist with wrong columns, missing constraints,
+or missing indexes and shallow verify would pass. Deep verify catches
+deployment drift.</p>
+<p><strong>FTR</strong>: FTR-164</p>
+<hr />
+<h2 id="9-jsonb-exception-for-infrastructure-tables">9. JSONB Exception
+for Infrastructure Tables</h2>
+<p><strong>CANONICAL</strong>: <code>JSONB</code> is allowed for event
+infrastructure tables only.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: JSONB in domain_events (infrastructure)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.domain_events (</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>              UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> uuidv7(),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    aggregate_type  TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    aggregate_id    UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    event_type      TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    payload         JSONB <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    occurred_at     TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: JSONB in domain entity (parser rejects this)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    metadata JSONB  <span class="co">-- NEVER in domain entities</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Rationale</strong>: The parser-level JSONB prohibition
+applies to domain model fields in <code>.ddd</code> files.
+Infrastructure tables (<code>domain_events</code>,
+<code>saga_state</code>, <code>event_store.*</code>) have fixed schemas
+defined by generators and serialize typed C++ structs to JSON for
+messaging. They are never queried by payload field.</p>
+<p><strong>Exempt tables</strong>: <code>{schema}.domain_events</code>,
+<code>event_store.*</code>, <code>{schema}.saga_*</code></p>
+<hr />
+<h2 id="10-schema-qualification">10. Schema Qualification</h2>
+<p><strong>CANONICAL</strong>: All table references in generated SQL are
+schema-qualified.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (<span class="op">..</span>.);</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.encounter <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> <span class="op">..</span>. <span class="kw">REFERENCES</span> patient.patient(<span class="kw">id</span>);</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.patient <span class="kw">IS</span> <span class="st">&#39;...&#39;</span>;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- ❌ ANTI-PATTERN: unqualified references</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient (<span class="op">..</span>.);  <span class="co">-- which schema?</span></span></code></pre></div>
+<p><strong>Rationale</strong>: Schema qualification prevents ambiguity
+when <code>search_path</code> is not set. All generated SQL must work
+regardless of connection <code>search_path</code> settings.</p>
+<hr />
+<h2 id="11-transaction-safety">11. Transaction Safety</h2>
+<p><strong>CANONICAL</strong>: DDL operations should be safe for
+Sqitch's single-transaction deploy.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: DDL is transactional in PostgreSQL</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span>;</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (<span class="op">..</span>.);</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> patient.patient <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> <span class="op">..</span>.;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_patient_status_id <span class="kw">ON</span> patient.patient (status_id);</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- ⚠️ ACCEPTABLE: CREATE INDEX CONCURRENTLY (cannot run in transaction)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- Use only when explicitly needed for zero-downtime migrations</span></span></code></pre></div>
+<p><strong>Rationale</strong>: PostgreSQL DDL is transactional (unlike
+MySQL). Sqitch deploys each change in a transaction.
+<code>CREATE INDEX CONCURRENTLY</code> is the exception — it cannot run
+inside a transaction block.</p>
+<hr />
+<h2 id="12-enforcement-test">12. Enforcement Test</h2>
+<p><strong>CANONICAL</strong>: A Racket test scans generated SQL output
+for pattern violations.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; test-postgres-patterns.rkt</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; Scans generated SQL files and asserts:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; - No gen_random_uuid() (except documented exceptions)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All FK constraints have fk_ prefix</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All FK columns have idx_ indexes</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; - No E&#39;...&#39; string literals in seed files</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All seed INSERTs have ON CONFLICT clause</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All verify scripts use DO $$ ... </span><span class="re">END</span><span class="co"> $$ structure</span></span></code></pre></div>
+<p><strong>Rationale</strong>: Patterns enforced by tests cannot
+regress. This is the PostgreSQL equivalent of
+<code>test-grammar-conformance.rkt</code> for DSL syntax.</p>
+<p><strong>FTR</strong>: FTR-166</p>
+<hr />
+<h2 id="quick-reference-file--patterns">Quick Reference: File →
+Patterns</h2>
+<table>
+<thead>
+<tr>
+<th>Generator File</th>
+<th>Relevant Patterns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sqitch-common.rkt</code></td>
+<td>§1 (uuid-default-fn source of truth)</td>
+</tr>
+<tr>
+<td><code>sqitch-entity.rkt</code></td>
+<td>§2 (inline REFERENCES), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-entity-columns.rkt</code></td>
+<td>§2 (inline REFERENCES), §4 (COMMENT ON COLUMN), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-unified-seeds.rkt</code></td>
+<td>§5 (E' quoting), §6 (ON CONFLICT), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-state-machine.rkt</code></td>
+<td>§1 (gen_random_uuid), §2 (inline REFERENCES), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-event-changes.rkt</code></td>
+<td>§1 (gen_random_uuid), §2 (inline REFERENCES), §9 (JSONB)</td>
+</tr>
+<tr>
+<td><code>sqitch-saga.rkt</code></td>
+<td>§1 (gen_random_uuid), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-events.rkt</code></td>
+<td>§1 (gen_random_uuid), §9 (JSONB)</td>
+</tr>
+<tr>
+<td><code>migration-sql-deploy.rkt</code></td>
+<td>§1 (gen_random_uuid), §2 (✅ already has named FKs)</td>
+</tr>
+<tr>
+<td><code>indexes-triggers.rkt</code></td>
+<td>§3 (FK indexes), §7 (naming)</td>
+</tr>
+<tr>
+<td><code>sqitch-bitemporal.rkt</code></td>
+<td>§1 (gen_random_uuid)</td>
+</tr>
+<tr>
+<td>All verify generators</td>
+<td>§8 (deep verify)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="adr/20260227-postgresql-idiomatic-output-quality.html">ADR
+20260227 — PostgreSQL Idiomatic Output Quality</a></li>
+<li><a href="RACKET-PATTERNS.html">RACKET-PATTERNS.md</a> — Racket coding
+patterns (sibling document)</li>
+<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md §IV</a> — Database schema
+conventions</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

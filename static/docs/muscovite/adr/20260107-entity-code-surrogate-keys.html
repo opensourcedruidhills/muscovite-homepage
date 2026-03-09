@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use Entity Code as User-Facing Surrogate
+Key — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use Entity Code as User-Facing Surrogate Key</span>
+</nav>
+
+<h1>Use Entity Code as User-Facing Surrogate Key</h1>
+
+
+<h1 id="use-entity-code-as-user-facing-surrogate-key">Use Entity Code as
+User-Facing Surrogate Key</h1>
+<p><strong>Date</strong>: 2026-01-07<br />
+<strong>Status</strong>: Accepted<br />
+<strong>Deciders</strong>: Architecture Team<br />
+<strong>Tags</strong>: database, domain-modeling, usability</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>UUID primary keys provide excellent technical properties (global
+uniqueness, no collisions, decentralized generation) but are
+user-hostile. Users cannot remember or communicate UUIDs verbally. For
+professional geologists working with map symbols, mineral samples, or
+field localities, they need <strong>human-readable codes</strong> like
+<code>CONT-001</code>, <code>MIN-QZ</code>, or
+<code>SMP-2024-001</code>.</p>
+<p>Current challenges:</p>
+<ul>
+<li>Users must reference entities by UUID in UI/API</li>
+<li>No way to quickly identify entities in logs or conversations</li>
+<li>Import/export requires UUID management</li>
+<li>Natural keys (like FGDC symbol codes) aren't enforced
+consistently</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Usability</strong>: Geologists need memorable codes for
+field work</li>
+<li><strong>Auditability</strong>: Logs and reports should show readable
+identifiers</li>
+<li><strong>Import/Export</strong>: CSV imports should use codes, not
+UUIDs</li>
+<li><strong>Flexibility</strong>: Users should be able to define their
+own codes</li>
+<li><strong>Automation</strong>: System should auto-generate codes when
+users don't provide them</li>
+<li><strong>Uniqueness</strong>: Codes must be unique per entity
+type</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-composite-natural-keys">Option 1: Composite Natural
+Keys</h3>
+<p>Use domain-specific natural keys (e.g., <code>fgdc_code</code> +
+<code>section</code> for MapSymbol).</p>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>No surrogate needed</li>
+<li>Aligns with domain concepts</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li>Different per entity (no consistency)</li>
+<li>Some entities lack natural keys</li>
+<li>Composite keys complicate FKs</li>
+<li>Hard to predict format</li>
+</ul>
+<h3 id="option-2-user-managed-codes-only">Option 2: User-Managed Codes
+Only</h3>
+<p>Require users to always provide a code.</p>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Simple implementation</li>
+<li>Users control naming</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li>Breaks bulk imports (must generate 1000+ codes manually)</li>
+<li>Creates friction in UI forms</li>
+<li>Inconsistent formatting across users</li>
+</ul>
+<h3 id="option-3-auto-generated-codes-with-prefix-system-chosen">Option
+3: Auto-Generated Codes with Prefix System (CHOSEN)</h3>
+<p>Central prefix table + sequences + auto-generation on insert.</p>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Best of both worlds: manual OR automatic</li>
+<li>Consistent formatting across entities</li>
+<li>Easy bulk imports (codes auto-assigned)</li>
+<li>Prefix identifies entity type (MIN-001 = Mineral, SMP-001 =
+Sample)</li>
+<li>Sequence ensures uniqueness</li>
+<li>Users can override for special cases</li>
+</ul>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li>Adds database complexity (triggers/functions)</li>
+<li>Prefix table needs maintenance</li>
+<li>Migration required for existing data</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p><strong>Chosen Option: Auto-Generated Codes with Prefix
+System</strong></p>
+<p>Every entity gets:</p>
+<ol type="1">
+<li><code>code TEXT NOT NULL UNIQUE</code> field</li>
+<li><code>CONSTRAINT entity_code_check CHECK (code ~ '^[A-Z0-9_-]{3,50}$')</code>
+(uppercase alphanumeric + separators)</li>
+<li>Auto-generation via trigger if code is NULL/empty on INSERT</li>
+</ol>
+<p>Architecture:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Central prefix registry</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> _system.entity_code_prefix (</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    schema_name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    entity_name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    prefix      TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    next_seq    <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="dv">1</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    seq_width   <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="dv">6</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (schema_name, entity_name),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> prefix_format <span class="kw">CHECK</span> (prefix ~ <span class="st">&#39;^[A-Z]{2,10}$&#39;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- Sequences per entity (created dynamically)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">SEQUENCE</span> geologicmapping.mapsymbol_code_seq;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- Auto-generation trigger</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TRIGGER</span> entity_code_autogen</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">BEFORE</span> <span class="kw">INSERT</span> <span class="kw">ON</span> geologicmapping.mapsymbol</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">FOR</span> <span class="kw">EACH</span> <span class="kw">ROW</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> (<span class="kw">NEW</span>.code <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">OR</span> <span class="kw">NEW</span>.code <span class="op">=</span> <span class="st">&#39;&#39;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">EXECUTE</span> <span class="kw">FUNCTION</span> _system.generate_entity_code();</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">-- Generation function</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">FUNCTION</span> _system.generate_entity_code() RETURNS <span class="kw">TRIGGER</span> <span class="kw">AS</span> $$</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">DECLARE</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    v_prefix TEXT;</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    v_seq_width <span class="dt">INTEGER</span>;</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    v_next_seq <span class="dt">INTEGER</span>;</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    v_schema TEXT <span class="op">:=</span> TG_TABLE_SCHEMA;</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    v_table TEXT <span class="op">:=</span> TG_TABLE_NAME;</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> prefix, seq_width, next_seq</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INTO</span> v_prefix, v_seq_width, v_next_seq</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> _system.entity_code_prefix</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> schema_name <span class="op">=</span> v_schema <span class="kw">AND</span> entity_name <span class="op">=</span> v_table;</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">IF</span> <span class="kw">NOT</span> FOUND <span class="cf">THEN</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        RAISE <span class="kw">EXCEPTION</span> <span class="st">&#39;No code prefix registered for %.%&#39;</span>, v_schema, v_table;</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span> <span class="cf">IF</span>;</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Generate code: PREFIX-000001</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">NEW</span>.code <span class="op">:=</span> v_prefix <span class="op">||</span> <span class="st">&#39;-&#39;</span> <span class="op">||</span> <span class="fu">LPAD</span>(v_next_seq:<span class="ch">:TEXT</span>, v_seq_width, <span class="st">&#39;0&#39;</span>);</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Increment sequence</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UPDATE</span> _system.entity_code_prefix</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SET</span> next_seq <span class="op">=</span> next_seq <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> schema_name <span class="op">=</span> v_schema <span class="kw">AND</span> entity_name <span class="op">=</span> v_table;</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">RETURN</span> <span class="kw">NEW</span>;</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="cf">END</span>;</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>$$ LANGUAGE plpgsql;</span></code></pre></div>
+<h3 id="examples">Examples</h3>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Prefix</th>
+<th>Auto-Generated Code</th>
+<th>User Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MapSymbol</td>
+<td>MS</td>
+<td>MS-000001</td>
+<td>FGDC-1.1.1</td>
+</tr>
+<tr>
+<td>Mineral</td>
+<td>MIN</td>
+<td>MIN-000001</td>
+<td>QZ</td>
+</tr>
+<tr>
+<td>Sample</td>
+<td>SMP</td>
+<td>SMP-000001</td>
+<td>FW-2024-001</td>
+</tr>
+<tr>
+<td>Borehole</td>
+<td>BH</td>
+<td>BH-000001</td>
+<td>DH-2024-AB-001</td>
+</tr>
+</tbody>
+</table>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>✅ UUIDs remain PKs (globally unique, no sequence gaps)</li>
+<li>✅ Codes provide user-facing identifiers (searchable,
+memorable)</li>
+<li>✅ Bulk imports work: leave code empty → auto-generated</li>
+<li>✅ Custom codes work: provide code → used as-is</li>
+<li>✅ Consistent format across system</li>
+<li>✅ Prefix identifies entity type at a glance</li>
+<li>✅ Sequences prevent collisions</li>
+<li>✅ Audit logs show readable codes</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>❌ Adds database complexity (triggers on all entity tables)</li>
+<li>❌ Prefix table must be maintained (new entities need
+registration)</li>
+<li>❌ Sequence gaps if transactions rollback (acceptable
+trade-off)</li>
+<li>❌ Code uniqueness constraint may fail for user-provided codes
+(handled via constraint error)</li>
+</ul>
+<h2 id="implementation-details">Implementation Details</h2>
+<h3 id="generator-changes">Generator Changes</h3>
+<p><strong>DSL Syntax</strong> (add to all entities):</p>
+<pre><code>ENTITY MapSymbol IDENTIFIED_BY id (
+    id          UUID NOT NULL,
+    code        TEXT NOT NULL,
+    category_id UUID NOT NULL,
+    ...
+)
+@code_prefix(&quot;MS&quot;)
+@code_seq_width(6)</code></pre>
+<p><strong>SQL Generation</strong>:</p>
+<ol type="1">
+<li>Add <code>code TEXT NOT NULL UNIQUE</code> to all CREATE TABLE
+statements</li>
+<li>Generate <code>CREATE SEQUENCE {schema}.{table}_code_seq</code></li>
+<li>Generate trigger for each table</li>
+<li>Populate <code>_system.entity_code_prefix</code> from
+<code>@code_prefix</code> annotations</li>
+</ol>
+<p><strong>API Changes</strong>:</p>
+<ul>
+<li><code>{entity}_insert()</code> accepts
+<code>p_code TEXT DEFAULT NULL</code></li>
+<li>If NULL, trigger generates code</li>
+<li>If provided, used as-is (uniqueness enforced by constraint)</li>
+</ul>
+<p><strong>CSV Import</strong>:</p>
+<ul>
+<li>Code column optional in seed CSVs</li>
+<li>If empty, auto-generated on INSERT</li>
+<li>If present, used verbatim</li>
+</ul>
+<h3 id="migration-strategy">Migration Strategy</h3>
+<ol type="1">
+<li><strong>Add code column</strong> to all existing tables (nullable
+initially)</li>
+<li><strong>Backfill codes</strong> for existing rows using
+sequence</li>
+<li><strong>Make NOT NULL</strong> after backfill</li>
+<li><strong>Add UNIQUE constraint</strong></li>
+<li><strong>Create triggers</strong></li>
+</ol>
+<p>For USGS seed data:</p>
+<ul>
+<li>MapSymbol: use <code>fgdc_code</code> as <code>code</code> (already
+unique)</li>
+<li>LithologyPattern: use <code>fgdc_code</code> as
+<code>code</code></li>
+<li>Other entities: auto-generate</li>
+</ul>
+<h2 id="compliance">Compliance</h2>
+<ul>
+<li><strong>COPILOT-INSTRUCTIONS.md</strong>: Update with code-key
+patterns</li>
+<li><strong>AGENTS.md</strong>: Document code field in entity
+examples</li>
+<li><strong>ADR Index</strong>: Link from relationship/FK ADRs</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-applies">When This Applies</h3>
+<ul>
+<li>Generating CREATE TABLE migrations</li>
+<li>Generating INSERT API functions</li>
+<li>Generating seed CSV templates</li>
+<li>Parsing entity definitions</li>
+</ul>
+<h3 id="how-its-enforced">How It's Enforced</h3>
+<ul>
+<li>Parser checks for <code>code TEXT</code> field on all entities</li>
+<li>Generator adds <code>@code_prefix</code> annotation validation</li>
+<li>Sqitch migration includes <code>_system.entity_code_prefix</code>
+table</li>
+<li>Triggers created for all entity tables</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/dslgen/generators/postgres/sqitch-unified.rkt</code>: Add
+code field + triggers</li>
+<li><code>src/dslgen/generators/postgres/plpgsql-api.rkt</code>: Update
+INSERT functions</li>
+<li><code>src/dslgen/model/ddd-types.rkt</code>: Add code-prefix to
+entity struct</li>
+</ul>
+<h3 id="common-mistakes-to-avoid">Common Mistakes to Avoid</h3>
+<ul>
+<li>❌ Forgetting <code>UNIQUE</code> constraint on code</li>
+<li>❌ Not registering prefix in
+<code>_system.entity_code_prefix</code></li>
+<li>❌ Using lowercase in prefix (must be uppercase)</li>
+<li>❌ Making code a PK (UUID remains PK)</li>
+<li>❌ Not handling NULL code in INSERT functions</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="20251223-use-text-for-all-postgresql-strings.html">Use TEXT
+for All PostgreSQL Strings</a></li>
+<li><a href="20251223-name-all-primary-keys-id.html">Name All Primary Keys
+"id"</a></li>
+<li><a href="20260106-explicit-relationships-only.html">Explicit
+Relationships Only</a></li>
+<li>PostgreSQL Sequences: <a
+href="https://www.postgresql.org/docs/current/sql-createsequence.html">https://www.postgresql.org/docs/current/sql-createsequence.html</a></li>
+<li>Trigger Functions: <a
+href="https://www.postgresql.org/docs/current/plpgsql-trigger.html">https://www.postgresql.org/docs/current/plpgsql-trigger.html</a></li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
