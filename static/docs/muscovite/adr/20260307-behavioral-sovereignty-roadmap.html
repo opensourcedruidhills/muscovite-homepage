@@ -188,16 +188,24 @@ packaging, amendment/cancellation logic.</p>
 <ul>
 <li><code>MAP(list, var -&gt; expr)</code></li>
 <li><code>FILTER(list, var -&gt; expr)</code></li>
+</ul>
+<h3
+id="v1620--list-comprehensions--property-based-test-generation--doc-visualization">v1.62.0
+— List Comprehensions + Property-Based Test Generation + Doc
+Visualization</h3>
+<p><strong>Completes the functional expression language AND exploits the
+rich domain model</strong> for automated quality assurance and
+documentation. Consolidated from originally separate v1.62.0 +
+v1.63.0.</p>
+<p>Tier 3 — List Comprehensions:</p>
+<ul>
+<li><code>MAP(list, var -&gt; expr)</code>,
+<code>FILTER(list, var -&gt; predicate)</code></li>
 <li><code>REDUCE(list, init, acc var -&gt; expr)</code></li>
 <li>Built-in aggregations: <code>SUM</code>, <code>COUNT</code>,
 <code>MIN</code>, <code>MAX</code>, <code>AVG</code></li>
 </ul>
-<p>Depends on: v1.61.0 (LET bindings for intermediate results)</p>
-<h3
-id="v1630--property-based-test-generation--doc-visualization">v1.63.0 —
-Property-Based Test Generation + Doc Visualization</h3>
-<p><strong>Exploits the rich domain model</strong> for automated quality
-assurance and documentation.</p>
+<p>Tier 4 — Testing &amp; Documentation:</p>
 <ul>
 <li>Property-based test generator: fuzz DECIDE inputs, verify
 ENSURES</li>
@@ -205,7 +213,7 @@ ENSURES</li>
 <li>System manual "Business Logic" chapter generation</li>
 <li>Test coverage reporting for DECIDE branch paths</li>
 </ul>
-<p>Depends on: v1.62.0 (full expression language)</p>
+<p>Depends on: v1.61.0 (LET bindings for intermediate results)</p>
 <h2 id="versioning-note">Versioning Note</h2>
 <p>These versions follow v1.55.0–v1.59.0 (Domain Layer initiative +
 Stabilization sprints). The Domain Layer provides the DomainService
@@ -220,8 +228,7 @@ v1.58.0  Cross-field invariants → EntityValidator codegen
 v1.59.0  Frontend validation symmetry (Qt Widgets + QML)
 v1.60.0  Collection predicates (Tier 1 expressions)          ← Behavioral Sovereignty starts
 v1.61.0  EFFECT/DECIDE/ENSURES + computation language (Tier 2)
-v1.62.0  List comprehensions + complex business logic (Tier 3)
-v1.63.0  Property-based tests + doc visualization</code></pre>
+v1.62.0  List comprehensions + tests + doc visualization (Tiers 3+4, consolidated)</code></pre>
 <h2 id="consequences">Consequences</h2>
 <ul>
 <li><code>.ddd</code> amplification ratio will increase significantly

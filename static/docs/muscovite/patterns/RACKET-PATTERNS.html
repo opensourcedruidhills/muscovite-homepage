@@ -872,11 +872,11 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb35-1"><a h
 <span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)))</span></span>
 <span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Main content</span></span>
 <span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;struct ~a final {&quot;</span> <span class="op">(</span>symbol-&gt;cpp-class <span class="op">(</span>entity-name entity<span class="op">))))</span></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Map over fields with indentation</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; Map over fields with indentation (indent wraps a string, inside line)</span></span>
 <span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>map-items</span>
 <span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>λ <span class="op">(</span>fld<span class="op">)</span></span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>indent <span class="dv">1</span></span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a ~a{};&quot;</span> <span class="op">(</span>field-&gt;cpp-type fld<span class="op">)</span> <span class="op">(</span>field-&gt;cpp-member fld<span class="op">)))))</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>       <span class="op">(</span>line <span class="op">(</span>indent <span class="dv">1</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>         <span class="op">(</span>format <span class="st">&quot;~a ~a{};&quot;</span> <span class="op">(</span>field-&gt;cpp-type fld<span class="op">)</span> <span class="op">(</span>field-&gt;cpp-member fld<span class="op">)))))</span></span>
 <span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>entity-id-field entity<span class="op">)</span> <span class="op">(</span>entity-fields entity<span class="op">)))</span></span>
 <span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>line <span class="st">&quot;};&quot;</span><span class="op">)))</span></span></code></pre></div>
 <h3 id="white_check_mark-canonical-template-composition">✅ CANONICAL:
@@ -908,89 +908,373 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb37-1"><a h
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; Or in a generator function that returns string</span></span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>generate-entity-hpp entity ctx<span class="op">)</span></span>
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>emit <span class="op">(</span>entity-header entity ctx<span class="op">)))</span></span></code></pre></div>
-<h3 id="key-template-node-reference">Key template node reference</h3>
+<h3 id="complete-template-node-quick-reference">Complete Template Node
+Quick Reference</h3>
+<p>Every primitive, its exact signature, return type, and what it
+accepts as children.</p>
+<h4
+id="template-nodes-return-template-node-evaluated-by-template-eval">Template
+Nodes (return <code>template-node?</code>, evaluated by
+<code>template-eval</code>)</h4>
 <table>
 <thead>
 <tr>
-<th>Node</th>
-<th>Purpose</th>
-<th>Example</th>
+<th>Primitive</th>
+<th>Signature</th>
+<th>Accepts Children?</th>
+<th>Produces</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>(text str)</code></td>
-<td>Raw text, no newline</td>
-<td><code>(text (copyright-header))</code></td>
+<td><code>String → template-node</code></td>
+<td>No (leaf)</td>
+<td>Raw text, <strong>no</strong> trailing newline</td>
 </tr>
 <tr>
 <td><code>(line str)</code></td>
-<td>Text + newline</td>
-<td><code>(line "#pragma once")</code></td>
+<td><code>String → template-node</code></td>
+<td>No (leaf)</td>
+<td>Text + <code>\n</code></td>
 </tr>
 <tr>
-<td><code>(line "")</code></td>
-<td>Blank line</td>
-<td>Separator between sections</td>
+<td><code>(blank-line)</code></td>
+<td><code>→ template-node</code></td>
+<td>No (leaf)</td>
+<td><code>\n</code> only (prefer over <code>(line "")</code>)</td>
 </tr>
 <tr>
 <td><code>(block n items ...)</code></td>
-<td>Indented block</td>
-<td><code>(block 0 (line "class {") ...)</code></td>
+<td><code>Integer, Template ... → template-node</code></td>
+<td>Yes (rest args)</td>
+<td>Concatenated items (n is metadata, <strong>not
+auto-indent</strong>)</td>
 </tr>
 <tr>
-<td><code>(indent n str)</code></td>
-<td>Indent string by n×4 spaces</td>
-<td><code>(indent 1 (line "int x;"))</code></td>
+<td><code>(indent-block n body ...)</code></td>
+<td><code>Integer, Template ... → template-node</code></td>
+<td>Yes (rest args)</td>
+<td>All nested content indented n×4 spaces</td>
 </tr>
 <tr>
 <td><code>(join sep items)</code></td>
-<td>Join with separator</td>
-<td><code>(join ", " field-strings)</code></td>
+<td><code>String, (Listof Template) → template-node</code></td>
+<td>Yes (list arg)</td>
+<td>Items separated by <code>sep</code></td>
 </tr>
 <tr>
 <td><code>(when-true cond tmpl)</code></td>
-<td>Conditional</td>
-<td><code>(when-true has-doc? (line doc))</code></td>
+<td><code>Any, Template → Template</code></td>
+<td>Yes (single)</td>
+<td><code>tmpl</code> if truthy, <code>(text "")</code> otherwise</td>
+</tr>
+<tr>
+<td><code>(when-false cond tmpl)</code></td>
+<td><code>Any, Template → Template</code></td>
+<td>Yes (single)</td>
+<td><code>tmpl</code> if falsy, <code>(text "")</code> otherwise</td>
 </tr>
 <tr>
 <td><code>(map-items fn lst)</code></td>
-<td>Map to templates</td>
-<td><code>(map-items field-&gt;line fields)</code></td>
+<td><code>(α → Template), (Listof α) → template-node</code></td>
+<td>Yes (via fn)</td>
+<td>Mapped + concatenated</td>
+</tr>
+<tr>
+<td><code>(guard name body ...)</code></td>
+<td><code>String, Template ... → template-node</code></td>
+<td>Yes (rest args)</td>
+<td><code>#pragma once\n</code> + body</td>
+</tr>
+<tr>
+<td><code>(choose (pred . tmpl) ...)</code></td>
+<td><code>(Listof (Pair Any Template)) → template-node</code></td>
+<td>Yes (alist)</td>
+<td>First truthy clause wins</td>
+</tr>
+<tr>
+<td><code>(include-template name args ...)</code></td>
+<td><code>Symbol, Any ... → template-node</code></td>
+<td>Yes (indirect)</td>
+<td>Registry lookup + eval</td>
 </tr>
 </tbody>
 </table>
+<h4
+id="string-helpers-return-string-not-template-nodes--use-inside-linetext">String
+Helpers (return <code>string?</code>, NOT template nodes — use inside
+<code>line</code>/<code>text</code>)</h4>
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(indent n str)</code></td>
+<td><code>Integer, String → String</code></td>
+<td><code>str</code> prefixed with n×4 spaces</td>
+</tr>
+<tr>
+<td><code>(comment style content)</code></td>
+<td><code>Symbol, String → String</code></td>
+<td>Prefixed comment (<code>'cpp</code> → <code>// </code>,
+<code>'sql</code> → <code>-- </code>, <code>'shell</code> →
+<code># </code>, <code>'racket</code> → <code>;; </code>)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="evaluation">Evaluation</h4>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(emit tmpl)</code></td>
+<td><code>Template → String</code></td>
+<td>Evaluate template tree to output string</td>
+</tr>
+<tr>
+<td><code>(emit tmpl #:target 'cpp)</code></td>
+<td><code>Template, Symbol → String</code></td>
+<td>Target-scoped emit (reserved for future)</td>
+</tr>
+<tr>
+<td><code>(template? v)</code></td>
+<td><code>Any → Boolean</code></td>
+<td>Check if value is a valid template</td>
+</tr>
+<tr>
+<td><code>(define-template name (params ...) body)</code></td>
+<td>Macro</td>
+<td>Define + register named template function</td>
+</tr>
+</tbody>
+</table>
+<h4 id="type-hierarchy">Type Hierarchy</h4>
+<p>A <code>Template</code> is one of: <code>template-node?</code> |
+<code>string?</code> | <code>(listof template?)</code>. All three are
+accepted wherever a template is expected.</p>
+<h3 id="x-anti-pattern-indent-on-template-nodes">❌ ANTI-PATTERN:
+<code>indent</code> on template nodes</h3>
+<p><strong>THE #1 source of agent errors.</strong> <code>indent</code>
+returns a <strong>string</strong>, not a template node. It cannot wrap
+<code>block</code>, <code>line</code>, or other template nodes.</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ WRONG — indent takes a string, not a template node</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>indent <span class="dv">2</span> <span class="op">(</span>block <span class="dv">0</span> <span class="op">(</span>line <span class="st">&quot;foo&quot;</span><span class="op">)))</span>           <span class="co">;; ERROR: contract violation</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>indent <span class="dv">1</span> <span class="op">(</span>line <span class="st">&quot;int x;&quot;</span><span class="op">))</span>                  <span class="co">;; ERROR: line returns template-node, not string</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — indent wraps a string, use inside (line ...)</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>line <span class="op">(</span>indent <span class="dv">1</span> <span class="st">&quot;int x;&quot;</span><span class="op">))</span>                  <span class="co">;; → &quot;    int x;\n&quot;</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>line <span class="op">(</span>indent <span class="dv">2</span> <span class="op">(</span>format <span class="st">&quot;~a ~a;&quot;</span> type name<span class="op">)))</span> <span class="co">;; → &quot;        int age;\n&quot;</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — use indent-block for indenting template sub-trees</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>indent-block <span class="dv">1</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>line <span class="st">&quot;int x;&quot;</span><span class="op">)</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>line <span class="st">&quot;int y;&quot;</span><span class="op">))</span>                          <span class="co">;; All lines indented 4 spaces</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — embed padding in format strings for statement compilers</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> pad </span><span class="op">(</span><span class="kw">make-string</span> <span class="op">(*</span> <span class="dv">4</span> depth<span class="op">)</span> <span class="ch">#\</span><span class="er">space</span><span class="op">))</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>format <span class="st">&quot;~aconst auto ~a = ~a;</span><span class="ch">\n</span><span class="st">&quot;</span> pad name value<span class="op">)</span></span></code></pre></div>
+<h3 id="x-anti-pattern-line--instead-of-blank-line">❌ ANTI-PATTERN:
+<code>(line "")</code> instead of <code>(blank-line)</code></h3>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ ACCEPTABLE but reads poorly</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>line <span class="st">&quot;&quot;</span><span class="op">)</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ PREFERRED — intent is clear</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>blank-line<span class="op">)</span></span></code></pre></div>
+<h3 id="x-anti-pattern-name-collisions-with-template-dsl-exports">❌
+ANTI-PATTERN: Name collisions with template DSL exports</h3>
+<p><code>indent</code> is exported by both <code>template-dsl.rkt</code>
+and common utility modules. Import conflicts cause silent failures or
+wrong-function calls.</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ WRONG — if common.rkt exports &#39;indent&#39;, this shadows the template-dsl one</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../common.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../../template-dsl.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — exclude conflicting names</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="op">(</span>except-in <span class="st">&quot;../common.rkt&quot;</span> indent<span class="op">))</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../../template-dsl.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — use prefix to disambiguate</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="op">(</span>prefix-in tmpl: <span class="st">&quot;../../template-dsl.rkt&quot;</span><span class="op">))</span></span></code></pre></div>
+<h3 id="x-anti-pattern-assuming-struct-constructors">❌ ANTI-PATTERN:
+Assuming struct constructors</h3>
+<p>IR struct constructors vary in arity. Some require
+<code>make-*</code> helpers, some have optional keyword arguments.
+Always verify in <code>dslgen/model/ddd-types.rkt</code>.</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ WRONG — invariant has 5 fields, positional constructor may not exist</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>invariant &#39;name <span class="st">&quot;description&quot;</span> expr<span class="op">)</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — use the make-* helper which handles defaults</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>make-invariant &#39;name <span class="st">&quot;description&quot;</span> <span class="op">(</span>binary-expr &#39;= lhs rhs<span class="op">)</span> <span class="dv">#f</span> <span class="dv">#f</span><span class="op">)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ WRONG — make-command positional args have changed across versions</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>command &#39;DoThing fields<span class="op">)</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT — keyword args are stable</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>make-command &#39;DoThing fields #:preconditions &#39;<span class="op">()</span> #:emits &#39;<span class="op">())</span></span></code></pre></div>
+<h3 id="x-anti-pattern-assuming-string-downcase-in-commonrkt">❌
+ANTI-PATTERN: Assuming <code>string-downcase</code> in common.rkt</h3>
+<p>Racket string functions live in <code>racket/string</code>, not in
+project utility modules.</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; ❌ WRONG — string-downcase is not in common.rkt</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> <span class="st">&quot;../common.rkt&quot;</span><span class="op">)</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">string-downcase</span> name<span class="op">)</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; ✅ CORRECT</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">require</span> racket/string<span class="op">)</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">string-downcase</span> name<span class="op">)</span></span></code></pre></div>
+<h3
+id="white_check_mark-canonical-hybrid-template--statement-compiler-pattern">✅
+CANONICAL: Hybrid template + statement compiler pattern</h3>
+<p>For deeply nested or recursive structures (like DECIDE statement
+trees), use <code>define-template</code> for top-level structure and raw
+<code>format</code> for recursive statement compilation. This is
+<strong>not</strong> a Rule 19 violation — the templates own the overall
+shape, <code>format</code> handles recursion.</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Top-level structure: define-template</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>define-template decide-method-impl-template</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>cmd root-class ctx-name<span class="op">)</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let</span> <span class="op">([</span>body <span class="op">(</span>string-append*</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>               <span class="op">(</span>for/list <span class="op">([</span>stmt <span class="op">(</span>in-list <span class="op">(</span>decide-block-statements</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="op">(</span>command-decide-block cmd<span class="op">)))])</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>                 <span class="op">(</span>compile-stmt stmt <span class="dv">1</span><span class="op">)))])</span>  <span class="co">;; ← recursive, uses format</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span>block <span class="dv">0</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;~a ~a::~a::~a(&quot;</span> struct-name ctx-name ds-class method<span class="op">))</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;        const ~a&amp; entity,&quot;</span> root-class<span class="op">))</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;        const ~a&amp; params) const {&quot;</span> params-struct<span class="op">))</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="op">(</span>format <span class="st">&quot;    ~a decision;&quot;</span> struct-name<span class="op">))</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>text body<span class="op">)</span>                            <span class="co">;; ← raw string from compiler</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="st">&quot;    return decision;&quot;</span><span class="op">)</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span>line <span class="st">&quot;}&quot;</span><span class="op">))))</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="co">;; Recursive compilation: format + manual indentation</span></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>compile-stmt stmt depth<span class="op">)</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="ex">define</span><span class="fu"> pad </span><span class="op">(</span><span class="kw">make-string</span> <span class="op">(*</span> <span class="dv">4</span> depth<span class="op">)</span> <span class="ch">#\</span><span class="er">space</span><span class="op">))</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">cond</span></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>let-stmt? stmt<span class="op">)</span></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>     <span class="op">(</span>format <span class="st">&quot;~aconst auto ~a = ~a;</span><span class="ch">\n</span><span class="st">&quot;</span> pad</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>symbol-&gt;cpp-local <span class="op">(</span>let-stmt-name stmt<span class="op">))</span></span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>             <span class="op">(</span>expression-&gt;cpp <span class="op">(</span>let-stmt-expr stmt<span class="op">)</span> <span class="st">&quot;entity&quot;</span><span class="op">))]</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">;; ... more statement types</span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>    <span class="op">))</span></span></code></pre></div>
+<h3
+id="white_check_mark-canonical-gold-standard-generator--decide-compilerrkt">✅
+CANONICAL: Gold Standard Generator —
+<code>decide-compiler.rkt</code></h3>
+<p><strong>Canonical reference</strong>:
+<code>dslgen/generators/cpp/dba/decide-compiler.rkt</code> (382 lines,
+FTR-294)</p>
+<p>This file demonstrates every real-world template DSL pattern in one
+place:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Lines</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>define-template</code> with <code>let</code> bindings</td>
+<td>89–97</td>
+<td>Local naming inside templates</td>
+</tr>
+<tr>
+<td><code>when-true</code> for conditional sections</td>
+<td>258–266</td>
+<td>REQUIRES/ENSURES guards</td>
+</tr>
+<tr>
+<td><code>text</code> for raw string embedding</td>
+<td>207</td>
+<td>Injecting format-compiled statements</td>
+</tr>
+<tr>
+<td><code>block 0</code> as top-level container</td>
+<td>92, 112, 202, 252</td>
+<td>Non-indenting structural wrapper</td>
+</tr>
+<tr>
+<td>Hybrid template + recursive compiler</td>
+<td>130–186</td>
+<td><code>compile-stmt</code> recursion with manual padding</td>
+</tr>
+<tr>
+<td><code>(except-in ... indent)</code></td>
+<td>36–37</td>
+<td>Avoiding template DSL name collision</td>
+</tr>
+<tr>
+<td><code>make-command</code> with keywords</td>
+<td>287–302</td>
+<td>Correct IR struct construction in tests</td>
+</tr>
+<tr>
+<td>12 inline tests in <code>module+ test</code></td>
+<td>279–382</td>
+<td>Structural assertions, not exact string match</td>
+</tr>
+</tbody>
+</table>
+<p>When writing a new generator, <strong>start by copying the structure
+of this file</strong>: SPDX header → requires with
+<code>except-in</code> → <code>provide</code> → naming helpers →
+<code>define-template</code> blocks → public API wrappers →
+<code>module+ test</code>.</p>
+<p>Also see
+<code>dslgen/generators/cpp/dba/domain-service-gen.rkt</code> (581
+lines) for a fully template-native example with no raw
+<code>format</code> fallback — use it when your output has no recursive
+structures.</p>
 <hr />
 <h2 id="10-command-line-configuration-pattern">10. Command-Line
 Configuration Pattern</h2>
 <h3 id="white_check_mark-canonical-config-struct-from-command-line">✅
 CANONICAL: Config struct from <code>command-line</code></h3>
-<div class="sourceCode" id="cb38"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define an immutable config struct</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> gen-config</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>project-path cpp-dba? grpc? qt-frontend fresh? dry-run?<span class="op">)</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Build config from command-line, then resolve dependencies purely</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> raw-config</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>command-line</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>   #:program <span class="st">&quot;generate&quot;</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>   #:once-each</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--project&quot;</span><span class="op">)</span> path <span class="st">&quot;Project file&quot;</span> <span class="op">(</span><span class="kw">set!</span> project-path path<span class="op">)]</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--cpp-dba&quot;</span><span class="op">)</span> <span class="st">&quot;Generate C++ DBA&quot;</span> <span class="op">(</span><span class="kw">set!</span> cpp-dba? <span class="dv">#t</span><span class="op">)]</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--grpc&quot;</span><span class="op">)</span> <span class="st">&quot;Generate gRPC&quot;</span> <span class="op">(</span><span class="kw">set!</span> grpc? <span class="dv">#t</span><span class="op">)]</span></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; ...</span></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>   <span class="op">))</span></span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>resolve-dependencies config<span class="op">)</span></span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; WHY: Pure function — dependencies resolved without mutation</span></span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let*</span> <span class="op">([</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-qt-frontend config<span class="op">)</span></span>
-<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>grpc? <span class="dv">#t</span><span class="op">])</span></span>
-<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)]</span></span>
-<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>         <span class="op">[</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-grpc? config<span class="op">)</span></span>
-<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>cpp-dba? <span class="dv">#t</span><span class="op">])</span></span>
-<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)])</span></span>
-<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>    config<span class="op">))</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define an immutable config struct</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> gen-config</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>project-path cpp-dba? grpc? qt-frontend fresh? dry-run?<span class="op">)</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co">;; Build config from command-line, then resolve dependencies purely</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> raw-config</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>command-line</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>   #:program <span class="st">&quot;generate&quot;</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>   #:once-each</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--project&quot;</span><span class="op">)</span> path <span class="st">&quot;Project file&quot;</span> <span class="op">(</span><span class="kw">set!</span> project-path path<span class="op">)]</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--cpp-dba&quot;</span><span class="op">)</span> <span class="st">&quot;Generate C++ DBA&quot;</span> <span class="op">(</span><span class="kw">set!</span> cpp-dba? <span class="dv">#t</span><span class="op">)]</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>   <span class="op">[(</span><span class="st">&quot;--grpc&quot;</span><span class="op">)</span> <span class="st">&quot;Generate gRPC&quot;</span> <span class="op">(</span><span class="kw">set!</span> grpc? <span class="dv">#t</span><span class="op">)]</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; ...</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>   <span class="op">))</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>resolve-dependencies config<span class="op">)</span></span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">;; WHY: Pure function — dependencies resolved without mutation</span></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">let*</span> <span class="op">([</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-qt-frontend config<span class="op">)</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>grpc? <span class="dv">#t</span><span class="op">])</span></span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)]</span></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>         <span class="op">[</span>config <span class="op">(</span><span class="kw">if</span> <span class="op">(</span>gen-config-grpc? config<span class="op">)</span></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>cpp-dba? <span class="dv">#t</span><span class="op">])</span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)])</span></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>    config<span class="op">))</span></span></code></pre></div>
 <p><strong>Note</strong>: <code>set!</code> inside
 <code>command-line</code> flag handlers is acceptable — Racket's
 <code>command-line</code> macro specifically uses this pattern. The key
@@ -1078,27 +1362,27 @@ resolve dependencies via a pure function.</p>
 <hr />
 <h2 id="audit-commands">Audit Commands</h2>
 <p>Track migration progress with these commands:</p>
-<div class="sourceCode" id="cb39"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count remaining set! in generators</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Files missing in-list</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Files without contracts</span></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files still using all-defined-out</span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;all-defined-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Template DSL adoption (files using define-template)</span></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw format/string-append in generators (should trend toward zero)</span></span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Files using #lang racket instead of racket/base</span></span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;^#lang racket$&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count remaining set! in generators</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Files missing in-list</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Files without contracts</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files still using all-defined-out</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;all-defined-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Template DSL adoption (files using define-template)</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw format/string-append in generators (should trend toward zero)</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Files using #lang racket instead of racket/base</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;^#lang racket$&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
 <hr />
 <h2 id="related-documents">Related Documents</h2>
 <ul>

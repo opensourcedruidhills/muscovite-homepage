@@ -809,8 +809,8 @@ clients receive all failures in one response. The
 validation before persistence. gRPC handlers become thin controllers:
 deserialize → DomainService → serialize.</p>
 <hr />
-<h2 id="behavioral-sovereignty-v1600v1630">Behavioral Sovereignty
-(v1.60.0–v1.63.0)</h2>
+<h2 id="behavioral-sovereignty-v1600v1620">Behavioral Sovereignty
+(v1.60.0–v1.62.0)</h2>
 <p>Muscovite's third sovereignty tier — moving business logic from
 manual C++ stubs into the DSL.</p>
 <p><strong>The problem</strong>: COMMANDs currently declare
@@ -1232,6 +1232,35 @@ PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
 <td>11 built-in types</td>
 </tr>
 <tr>
+<td>Field Constraint Annotations</td>
+<td>✅ Complete</td>
+<td>@min, @max, @not_empty, @not_in_future, @pattern — shipped
+v1.54.0</td>
+</tr>
+<tr>
+<td>Strong Type Template Families</td>
+<td>✅ Complete</td>
+<td>BoundedInteger, ConstrainedDate, BoundedDecimal, BoundedString —
+shipped v1.54.0</td>
+</tr>
+<tr>
+<td>Domain Service Layer</td>
+<td>✅ Complete</td>
+<td>DomainService above CommandService/QueryService — shipped
+v1.55.0</td>
+</tr>
+<tr>
+<td>Three-Tier Validation</td>
+<td>✅ Complete</td>
+<td>Strong types → EntityValidator → PluginValidator — shipped
+v1.55.0</td>
+</tr>
+<tr>
+<td>Cross-Field Codegen</td>
+<td>✅ Complete</td>
+<td>@after/@same_day → EntityValidator C++ — shipped v1.55.0</td>
+</tr>
+<tr>
 <td>SPECIFICATION queries</td>
 <td>⚠️ Partial</td>
 <td>Parsing complete, generators in progress</td>
@@ -1249,12 +1278,12 @@ PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
 <tr>
 <td>PEG Grammar Governance</td>
 <td>✅ Complete</td>
-<td>Grammar-first mandate enforced, 98%+ keyword parity</td>
+<td>Grammar-first mandate enforced, 295 rules, 98%+ keyword parity</td>
 </tr>
 <tr>
 <td>AI Persistence (ADRs)</td>
 <td>✅ Complete</td>
-<td>129+ records serving as agent context persistence</td>
+<td>200 records serving as agent context persistence</td>
 </tr>
 <tr>
 <td>Qt Widgets Frontend</td>
@@ -1265,6 +1294,11 @@ PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
 <td>Qt Quick/QML Frontend</td>
 <td>✅ Complete</td>
 <td>ViewModel pattern, input validation, dirty tracking</td>
+</tr>
+<tr>
+<td>Frontend Validation Symmetry</td>
+<td>✅ Complete</td>
+<td>Qt Widgets + QML mirror backend validation — shipped v1.59.0</td>
 </tr>
 <tr>
 <td>Flutter/Dart Frontend</td>
@@ -1302,57 +1336,26 @@ PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
 <td>Context-level skip, 10-100× speedup</td>
 </tr>
 <tr>
-<td>Legacy Ingestion</td>
-<td>⚠️ In Progress</td>
-<td>Multi-source extraction (ORM + services + UI + API) with direct .ddd
-output</td>
-</tr>
-<tr>
 <td>Concurrency Control</td>
 <td>✅ Complete</td>
 <td>Optimistic locking + advisory locks (ADR 20260215)</td>
 </tr>
 <tr>
-<td>Field Constraint Annotations</td>
-<td>🔲 Planned</td>
-<td>@min, @max, @not_empty, @not_in_future, @pattern — v1.54.0</td>
-</tr>
-<tr>
-<td>Strong Type Template Families</td>
-<td>🔲 Planned</td>
-<td>BoundedInteger, ConstrainedDate, BoundedDecimal, BoundedString —
-v1.54.0</td>
-</tr>
-<tr>
-<td>Domain Service Layer</td>
-<td>🔲 Planned</td>
-<td>DomainService above CommandService/QueryService — v1.55.0</td>
-</tr>
-<tr>
-<td>Three-Tier Validation</td>
-<td>🔲 Planned</td>
-<td>Strong types → EntityValidator → PluginValidator — v1.55.0</td>
-</tr>
-<tr>
-<td>Cross-Field Codegen</td>
-<td>🔲 Planned</td>
-<td>@after/@same_day → EntityValidator C++ — v1.58.0</td>
-</tr>
-<tr>
-<td>Frontend Validation Symmetry</td>
-<td>🔲 Planned</td>
-<td>Qt Widgets + QML mirror backend validation — v1.59.0</td>
-</tr>
-<tr>
 <td>Collection Predicates</td>
-<td>🔲 Planned</td>
-<td>NOT IN, IS EMPTY, INTERSECTS, SUBSET OF — v1.60.0</td>
+<td>✅ Complete</td>
+<td>ANY/ALL/NONE/COUNT over child collections — shipped v1.60.0</td>
 </tr>
 <tr>
 <td>EFFECT/DECIDE/ENSURES</td>
-<td>🔲 Planned</td>
-<td>COMMAND behavioral evolution, pure function compilation —
+<td>✅ Complete</td>
+<td>COMMAND behavioral evolution, pure function compilation — shipped
 v1.61.0</td>
+</tr>
+<tr>
+<td>Legacy Ingestion</td>
+<td>⚠️ In Progress</td>
+<td>Multi-source extraction (ORM + services + UI + API) with direct .ddd
+output</td>
 </tr>
 <tr>
 <td>List Comprehensions</td>
@@ -1362,7 +1365,12 @@ v1.61.0</td>
 <tr>
 <td>Property-Based Test Gen</td>
 <td>🔲 Planned</td>
-<td>Fuzz DECIDE inputs, verify ENSURES postconditions — v1.63.0</td>
+<td>Fuzz DECIDE inputs, verify ENSURES postconditions — v1.62.0</td>
+</tr>
+<tr>
+<td>Negative Grammar Test Suite</td>
+<td>🔲 Planned</td>
+<td>150+ rejection tests, mutation testing — v1.62.0</td>
 </tr>
 </tbody>
 </table>
