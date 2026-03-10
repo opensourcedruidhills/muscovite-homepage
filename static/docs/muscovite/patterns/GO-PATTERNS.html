@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Patterns — `muscovite-go-extractor` Coding
+Guide — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/patterns/">patterns</a>
+  <span class="sep">/</span>
+  <span>Go Patterns — `muscovite-go-extractor` Coding Guide</span>
+</nav>
+
+<h1>Go Patterns — `muscovite-go-extractor` Coding Guide</h1>
+
+
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+
+<h1 id="go-patterns--muscovite-go-extractor-coding-guide">Go Patterns —
+<code>muscovite-go-extractor</code> Coding Guide</h1>
+<p><strong>Applies to:</strong> <code>muscovite-go-extractor</code>
+repository and <code>tools/go-extractor/</code> subtree
+<strong>ADR:</strong> 20260310-brownfield-extraction-architecture
+<strong>Severity levels:</strong> 🔴 FORBIDDEN (PR-blocking) | 🟡
+REQUIRED (review-blocking) | 🟢 PREFERRED</p>
+<hr />
+<h2 id="1-language-version-and-module-setup">1. Language Version and
+Module Setup</h2>
+<p>🟡 <strong>Go 1.22+</strong> — use latest stable Go. Module path:
+<code>github.com/opensourcedruidhills/muscovite-go-extractor</code>.</p>
+<p>🔴 <strong>FORBIDDEN</strong>: <code>replace</code> directives in
+<code>go.mod</code> for released code. Development-only
+<code>replace</code> must be removed before merge.</p>
+<h2 id="2-zero-external-dependencies-for-core-logic">2. Zero External
+Dependencies for Core Logic</h2>
+<p>🟡 <strong>Core extraction logic uses Go stdlib only</strong>:
+<code>go/ast</code>, <code>go/parser</code>, <code>go/types</code>,
+<code>go/token</code>, <code>os</code>, <code>path/filepath</code>,
+<code>strings</code>, <code>fmt</code>, <code>encoding/json</code>,
+<code>text/template</code>.</p>
+<p>🟢 <strong>Allowed external dependencies</strong> (minimal
+surface):</p>
+<ul>
+<li>YAML parser: <code>gopkg.in/yaml.v3</code> (config files only)</li>
+<li>PEG generator: build-time only, not a runtime dependency</li>
+</ul>
+<p>🔴 <strong>FORBIDDEN</strong>: ORM libraries, database drivers, HTTP
+frameworks, logging frameworks (use <code>log/slog</code>).</p>
+<h2 id="3-package-layout">3. Package Layout</h2>
+<p>🟡 Follow the standard Go project layout:</p>
+<pre><code>cmd/go-extractor/main.go    # CLI entry, flag parsing, orchestration
+pkg/ast/                     # Go AST walking, type resolution
+pkg/orm/xorm/                # XORM-specific tag parsing
+pkg/orm/gorm/                # GORM-specific tag parsing (future)
+pkg/relationship/            # Relationship inference from pointer fields
+pkg/behavioral/              # Service layer analysis (commands, events, state machines)
+pkg/ui/                      # Template + Swagger analysis
+pkg/confidence/              # Multi-source confidence scoring
+pkg/emitter/                 # .ddd file generation
+pkg/validator/               # PEG-based .ddd validation
+pkg/config/                  # YAML configuration</code></pre>
+<p>🔴 <strong>FORBIDDEN</strong>: Circular imports between packages.
+Each package has a single responsibility.</p>
+<h2 id="4-error-handling">4. Error Handling</h2>
+<p>🟡 <strong>Return errors, don't panic</strong>. Use
+<code>fmt.Errorf("context: %w", err)</code> for wrapping.</p>
+<p>🟡 <strong>Errors must include source location</strong>: file path,
+line number, struct/field name.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// GOOD</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> fmt<span class="op">.</span>Errorf<span class="op">(</span><span class="st">&quot;parsing struct %s in %s:%d: %w&quot;</span><span class="op">,</span> name<span class="op">,</span> file<span class="op">,</span> line<span class="op">,</span> err<span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">// BAD</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> err</span></code></pre></div>
+<p>🔴 <strong>FORBIDDEN</strong>: <code>panic()</code> outside of test
+code. <code>log.Fatal()</code> outside of <code>main()</code>.</p>
+<h2 id="5-ast-walking-patterns">5. AST Walking Patterns</h2>
+<p>🟡 <strong>Use <code>ast.Inspect</code> for simple
+traversals</strong>, <code>ast.Walk</code> with a visitor for complex
+ones.</p>
+<p>🟡 <strong>Resolve types via <code>go/types</code></strong> — don't
+rely on string matching for type names.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// GOOD: type-checked resolution</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>info <span class="op">:=</span> <span class="op">&amp;</span>types<span class="op">.</span>Info<span class="op">{</span>Types<span class="op">:</span> <span class="bu">make</span><span class="op">(</span><span class="kw">map</span><span class="op">[</span>ast<span class="op">.</span>Expr<span class="op">]</span>types<span class="op">.</span>TypeAndValue<span class="op">)}</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>conf <span class="op">:=</span> types<span class="op">.</span>Config<span class="op">{</span>Importer<span class="op">:</span> importer<span class="op">.</span>ForCompiler<span class="op">(</span>fset<span class="op">,</span> <span class="st">&quot;source&quot;</span><span class="op">,</span> <span class="ot">nil</span><span class="op">)}</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">,</span> err <span class="op">:=</span> conf<span class="op">.</span>Check<span class="op">(</span><span class="st">&quot;path&quot;</span><span class="op">,</span> fset<span class="op">,</span> files<span class="op">,</span> info<span class="op">)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// BAD: string matching</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> fieldType <span class="op">==</span> <span class="st">&quot;*repo_model.Repository&quot;</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+<p>🟢 <strong>Cache parsed packages</strong> — don't reparse the same
+package for different analysis passes.</p>
+<h2 id="6-struct-tag-parsing">6. Struct Tag Parsing</h2>
+<p>🟡 <strong>Use <code>reflect.StructTag.Lookup()</code></strong> for
+standard Go struct tags. For XORM's non-standard format
+(space-separated, not <code>key:"value"</code>), use a custom
+tokenizer.</p>
+<p>🟡 <strong>XORM tag tokenizer must handle all 15 keywords</strong>
+documented in FTR-350: <code>pk</code>, <code>autoincr</code>,
+<code>INDEX</code>, <code>UNIQUE(name)</code>, <code>NOT NULL</code>,
+<code>DEFAULT x</code>, <code>TEXT</code>, <code>LONGTEXT</code>,
+<code>VARCHAR(n)</code>, <code>created</code>, <code>updated</code>,
+<code>JSON</code>, <code>-</code>, <code>name</code>,
+<code>'column'</code>.</p>
+<p>🔴 <strong>FORBIDDEN</strong>: Regex-only tag parsing. XORM tags have
+context-dependent semantics (e.g., <code>UNIQUE</code> vs
+<code>UNIQUE(group_name)</code>).</p>
+<h2 id="7-confidence-scoring">7. Confidence Scoring</h2>
+<p>🟡 <strong>Every extracted construct carries a confidence
+score</strong> (0.0–1.0) and an evidence list.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Evidence <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    Source     <span class="dt">string</span>  <span class="co">// &quot;schema&quot;, &quot;service&quot;, &quot;template&quot;, &quot;api&quot;, &quot;constraint&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    File       <span class="dt">string</span>  <span class="co">// source file path</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    Line       <span class="dt">int</span>     <span class="co">// source line number</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    Detail     <span class="dt">string</span>  <span class="co">// human-readable description</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Construct <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    Confidence <span class="dt">float64</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    Evidence   <span class="op">[]</span>Evidence</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>🟡 <strong>Score thresholds are configurable</strong> via
+extractor-config.yaml, not hardcoded.</p>
+<h2 id="8-ddd-output-generation">8. .ddd Output Generation</h2>
+<p>🟡 <strong>Use <code>text/template</code></strong> for .ddd output —
+never raw <code>fmt.Sprintf</code> concatenation.</p>
+<p>🟡 <strong>Templates live in
+<code>pkg/emitter/templates/</code></strong> — one template per .ddd
+construct type.</p>
+<p>🟡 <strong>Every output file must include the SPDX license
+header</strong> and generation metadata comment.</p>
+<p>🟡 <strong>Validate output before writing</strong>: call the Go PEG
+validator on the rendered .ddd string. If validation fails, log the
+error and skip the file (don't write invalid .ddd).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// GOOD</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>rendered <span class="op">:=</span> renderDDD<span class="op">(</span>entity<span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> err <span class="op">:=</span> validator<span class="op">.</span>Validate<span class="op">(</span>rendered<span class="op">);</span> err <span class="op">!=</span> <span class="ot">nil</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    slog<span class="op">.</span>Error<span class="op">(</span><span class="st">&quot;invalid .ddd output&quot;</span><span class="op">,</span> <span class="st">&quot;entity&quot;</span><span class="op">,</span> entity<span class="op">.</span>Name<span class="op">,</span> <span class="st">&quot;err&quot;</span><span class="op">,</span> err<span class="op">)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> err  <span class="co">// skip, don&#39;t write broken output</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>os<span class="op">.</span>WriteFile<span class="op">(</span>path<span class="op">,</span> <span class="op">[]</span><span class="dt">byte</span><span class="op">(</span>rendered<span class="op">),</span> <span class="bn">0644</span><span class="op">)</span></span></code></pre></div>
+<p>🔴 <strong>FORBIDDEN</strong>: Writing .ddd files that haven't passed
+PEG validation.</p>
+<h2 id="9-testing">9. Testing</h2>
+<p>🟡 <strong>Table-driven tests</strong> for all tag parsing,
+relationship detection, and type mapping.</p>
+<p>🟡 <strong>Golden file tests</strong> for .ddd output:
+<code>testdata/golden/</code> contains expected .ddd output, tests
+compare actual output against golden files. Update goldens with
+<code>-update</code> flag.</p>
+<p>🟡 <strong>Use <code>testdata/</code> directory</strong> for test
+fixtures — vendored Go model subsets from real projects.</p>
+<p>🟢 <strong>Fuzz testing</strong> for XORM tag parser:
+<code>func FuzzXORMTags(f *testing.F)</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// GOOD: table-driven</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> TestXORMTagParser<span class="op">(</span>t <span class="op">*</span>testing<span class="op">.</span>T<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    tests <span class="op">:=</span> <span class="op">[]</span><span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        name     <span class="dt">string</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        tag      <span class="dt">string</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        wantPK   <span class="dt">bool</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        wantNull <span class="dt">bool</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}{</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span><span class="st">&quot;primary key&quot;</span><span class="op">,</span> <span class="st">&quot;pk autoincr&quot;</span><span class="op">,</span> <span class="ot">true</span><span class="op">,</span> <span class="ot">false</span><span class="op">},</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span><span class="st">&quot;nullable text&quot;</span><span class="op">,</span> <span class="st">&quot;TEXT&quot;</span><span class="op">,</span> <span class="ot">false</span><span class="op">,</span> <span class="ot">true</span><span class="op">},</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span><span class="st">&quot;unique group&quot;</span><span class="op">,</span> <span class="st">&quot;UNIQUE(repo_index)&quot;</span><span class="op">,</span> <span class="ot">false</span><span class="op">,</span> <span class="ot">false</span><span class="op">},</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _<span class="op">,</span> tt <span class="op">:=</span> <span class="kw">range</span> tests <span class="op">{</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        t<span class="op">.</span>Run<span class="op">(</span>tt<span class="op">.</span>name<span class="op">,</span> <span class="kw">func</span><span class="op">(</span>t <span class="op">*</span>testing<span class="op">.</span>T<span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">})</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>🔴 <strong>FORBIDDEN</strong>: Tests that require network access or
+external services.</p>
+<h2 id="10-naming-conventions">10. Naming Conventions</h2>
+<p>🟡 Follow standard Go naming:</p>
+<ul>
+<li>Exported types: <code>PascalCase</code> (<code>EntityModel</code>,
+<code>RelationshipDetector</code>)</li>
+<li>Unexported: <code>camelCase</code> (<code>parseStructTag</code>,
+<code>resolvePointerField</code>)</li>
+<li>Acronyms: <code>ID</code> not <code>Id</code>, <code>URL</code> not
+<code>Url</code>, <code>ORM</code> not <code>Orm</code></li>
+<li>Interfaces: verb-based (<code>Parser</code>, <code>Detector</code>,
+<code>Emitter</code>), not <code>IParser</code></li>
+</ul>
+<p>🟡 <strong>DDD-specific names</strong>: Use Muscovite terminology
+consistently:</p>
+<ul>
+<li><code>Entity</code> (not <code>Table</code> or <code>Model</code> —
+those are source concepts)</li>
+<li><code>Field</code> (not <code>Column</code> — that's the legacy
+name)</li>
+<li><code>Relationship</code> (not <code>ForeignKey</code> or
+<code>Reference</code>)</li>
+<li><code>BoundedContext</code> (not <code>Module</code> or
+<code>Package</code>)</li>
+</ul>
+<h2 id="11-logging">11. Logging</h2>
+<p>🟡 <strong>Use <code>log/slog</code></strong> (Go 1.21+ structured
+logging). No third-party loggers.</p>
+<p>🟡 <strong>Log levels</strong>:</p>
+<ul>
+<li><code>slog.Info</code>: Extraction progress (per-context,
+per-pass)</li>
+<li><code>slog.Warn</code>: Low-confidence constructs, ambiguous
+patterns</li>
+<li><code>slog.Error</code>: Extraction failures, validation errors</li>
+<li><code>slog.Debug</code>: Per-struct, per-field details
+(verbose)</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>slog<span class="op">.</span>Info<span class="op">(</span><span class="st">&quot;extraction pass complete&quot;</span><span class="op">,</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;pass&quot;</span><span class="op">,</span> <span class="st">&quot;schema&quot;</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;entities&quot;</span><span class="op">,</span> <span class="bu">len</span><span class="op">(</span>entities<span class="op">),</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;relationships&quot;</span><span class="op">,</span> <span class="bu">len</span><span class="op">(</span>rels<span class="op">),</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;duration&quot;</span><span class="op">,</span> elapsed<span class="op">)</span></span></code></pre></div>
+<h2 id="12-cli-interface">12. CLI Interface</h2>
+<p>🟡 <strong>Use <code>flag</code> package</strong> (stdlib). No
+cobra/urfave unless complexity demands it later.</p>
+<p>🟡 <strong>Required flags</strong>: <code>--config</code> (YAML
+path), <code>--output</code> (output directory). 🟢 <strong>Optional
+flags</strong>: <code>--passes</code> (comma-separated:
+schema,behavioral,ui), <code>--min-confidence</code>,
+<code>--validate-only</code> (dry run), <code>--verbose</code>.</p>
+<p>🟡 <strong>Exit codes</strong>: 0=success, 1=extraction error,
+2=validation error, 3=config error.</p>
+<h2 id="13-concurrency">13. Concurrency</h2>
+<p>🟢 <strong>Parallelize per-file AST parsing</strong> — files within a
+package are independent.</p>
+<p>🟡 <strong>Don't parallelize cross-package type resolution</strong> —
+type checker needs sequential package loading.</p>
+<p>🟡 <strong>Triangulation is single-threaded</strong> — merging
+evidence across passes requires consistent ordering.</p>
+<h2 id="14-grammar-synchronization">14. Grammar Synchronization</h2>
+<p>🟡 <strong>The PEG grammar (<code>grammar/muscovite.peg</code>) must
+be synced from <code>dslgen/grammar/muscovite.peg</code></strong> at
+build time. A <code>go generate</code> directive or Makefile target
+handles this.</p>
+<p>🟡 <strong>The Go PEG validator is regenerated</strong> when the
+grammar changes. CI enforces that the generated validator matches the
+current grammar.</p>
+<p>🔴 <strong>FORBIDDEN</strong>: Modifying the grammar copy in the
+go-extractor — the <code>dslgen/grammar/</code> copy is the single
+source of truth (ADR 20260211).</p>
+<h2 id="15-spdx-headers">15. SPDX Headers</h2>
+<p>🟡 <strong>All Go source files</strong> must include the SPDX
+header:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// </span><span class="an">SPDX-License-Identifier:</span><span class="co"> AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Copyright (c) 2025-2026 Johannes Lochmann</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">// This software is dual-licensed:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">//  - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">//  - Commercial license, contact muscovite-licensing@johanneslochmann.net</span></span></code></pre></div>
+<p>🔴 <strong>FORBIDDEN</strong>: Files without SPDX header.</p>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>Don't</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>go/types</code> for type resolution</td>
+<td>String matching on type names</td>
+</tr>
+<tr>
+<td><code>text/template</code> for .ddd output</td>
+<td><code>fmt.Sprintf</code> concatenation</td>
+</tr>
+<tr>
+<td><code>log/slog</code> for logging</td>
+<td><code>fmt.Println</code> or third-party loggers</td>
+</tr>
+<tr>
+<td>Table-driven + golden file tests</td>
+<td>Tests requiring network/external services</td>
+</tr>
+<tr>
+<td>Validate .ddd before writing</td>
+<td>Write unvalidated output</td>
+</tr>
+<tr>
+<td><code>fmt.Errorf("context: %w", err)</code></td>
+<td>Bare <code>return err</code></td>
+</tr>
+<tr>
+<td>Zero external deps in core</td>
+<td>ORM/HTTP/logging frameworks</td>
+</tr>
+</tbody>
+</table>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

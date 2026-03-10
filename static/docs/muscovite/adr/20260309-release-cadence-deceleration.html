@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Release Cadence Deceleration — Stabilization
+Phase — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Release Cadence Deceleration — Stabilization Phase</span>
+</nav>
+
+<h1>ADR: Release Cadence Deceleration — Stabilization Phase</h1>
+
+
+<h1 id="adr-release-cadence-deceleration--stabilization-phase">ADR:
+Release Cadence Deceleration — Stabilization Phase</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-09</li>
+<li><strong>Deciders</strong>: Johannes Lochmann</li>
+</ul>
+<h2 id="context">Context</h2>
+<h3 id="current-state">Current State</h3>
+<p>Between v1.35.0 (early February 2026) and v1.60.0 (March 9, 2026),
+Muscovite shipped <strong>26 releases in approximately 5 weeks</strong>
+— averaging roughly one release per working day. This velocity was
+appropriate during rapid feature buildout when the priority was
+establishing the core generator pipeline, database conventions, and
+multi-target code generation.</p>
+<h3 id="release-ceremony-cost">Release Ceremony Cost</h3>
+<p>The release ceremony has grown substantially as quality gates were
+added (ADR 20260307):</p>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Approximate Duration</th>
+<th>Added In</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>validate-release.sh</code></td>
+<td>30s</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>Racket full test suite</td>
+<td>5–10 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>C++ build (3 scopes)</td>
+<td>3–5 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>C++ tests (ctest)</td>
+<td>1–2 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>Database deploy</td>
+<td>1–2 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>clang-tidy</td>
+<td>2–4 min</td>
+<td>v1.58.0</td>
+</tr>
+<tr>
+<td>Code coverage collection</td>
+<td>3–5 min</td>
+<td>v1.60.0</td>
+</tr>
+<tr>
+<td>Build profiling + metrics</td>
+<td>1–2 min</td>
+<td>v1.60.0</td>
+</tr>
+<tr>
+<td>Full code generation</td>
+<td>2–3 min</td>
+<td>v1.60.0</td>
+</tr>
+<tr>
+<td>Documentation publishing</td>
+<td>1–2 min</td>
+<td>v1.60.0</td>
+</tr>
+<tr>
+<td>Subtree push (muscovite-cpp)</td>
+<td>5–15 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>Submodule updates</td>
+<td>2–3 min</td>
+<td>v1.55.0</td>
+</tr>
+<tr>
+<td>Metrics collection + trending</td>
+<td>1–2 min</td>
+<td>v1.60.0</td>
+</tr>
+<tr>
+<td><strong>Total ceremony</strong></td>
+<td><strong>~30–55 min</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>At daily release cadence, this means <strong>30–55 minutes per
+day</strong> spent on release ceremony alone — a significant fraction of
+productive time. The ratio of feature development time to QA/release
+overhead is deteriorating.</p>
+<h3 id="feature-base-maturity">Feature Base Maturity</h3>
+<p>The product has reached a strong feature base:</p>
+<ul>
+<li>8 generation targets (PostgreSQL, Sqitch, gRPC, C++ DBA, C++ DBA
+tests, Qt Widgets, QML, CMake/Conan)</li>
+<li>Expression AST with collection predicates (v1.60.0)</li>
+<li>Behavioral Sovereignty roadmap defined (v1.61.0–v1.63.0)</li>
+<li>Documentation pipeline automated</li>
+<li>Metrics and trending operational</li>
+<li>191 ADRs documenting all architectural decisions</li>
+</ul>
+<p>The priority is shifting from "ship features fast" to "ship features
+correctly." Stability, correctness, and documentation quality matter
+more than velocity.</p>
+<h3 id="the-algebra">The Algebra</h3>
+<p>For <code>N</code> features requiring <code>F</code> hours of
+development and a release ceremony costing <code>C</code> hours:</p>
+<ul>
+<li><strong>Daily releases, 1 feature each</strong>:
+<code>N × (F + C)</code> total hours</li>
+<li><strong>Bi-weekly releases, 5 features each</strong>:
+<code>⌈N/5⌉ × (5F + C)</code> = <code>NF + ⌈N/5⌉C</code> total
+hours</li>
+<li><strong>Savings</strong>: <code>(N - ⌈N/5⌉) × C</code> = ~80%
+reduction in ceremony overhead</li>
+</ul>
+<p>With <code>C ≈ 0.75 hours</code> and <code>N = 20</code> features per
+quarter:</p>
+<ul>
+<li>Daily: <code>20 × 0.75 = 15 hours</code> of ceremony</li>
+<li>Bi-weekly: <code>4 × 0.75 = 3 hours</code> of ceremony</li>
+<li><strong>12 hours saved per quarter</strong> — roughly 1.5 full
+working days reclaimed for features</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p><strong>Shift from near-daily releases to bi-weekly (or larger)
+releases, effective after v1.60.0.</strong></p>
+<h3 id="new-cadence-rules">New Cadence Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Minimum iteration size</strong></td>
+<td>4+ FTRs per release (exceptions: hotfixes, security patches)</td>
+</tr>
+<tr>
+<td><strong>Target cadence</strong></td>
+<td>Bi-weekly releases (~every 10 working days)</td>
+</tr>
+<tr>
+<td><strong>Maximum cadence</strong></td>
+<td>No more than one release per week unless critical fix</td>
+</tr>
+<tr>
+<td><strong>Hotfix path</strong></td>
+<td>Patch releases (vX.Y.Z, Z&gt;0) permitted anytime for regressions or
+security</td>
+</tr>
+<tr>
+<td><strong>RC practice</strong></td>
+<td>For iterations with ≥8 FTRs, tag an RC (<code>vX.Y.0-rc1</code>) and
+soak for 48h</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iteration-sizing-guidelines">Iteration Sizing Guidelines</h3>
+<table>
+<thead>
+<tr>
+<th>Iteration Size</th>
+<th>FTRs</th>
+<th>Appropriate For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small</td>
+<td>4–6</td>
+<td>Focused infrastructure or tooling iterations</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>7–10</td>
+<td>Standard feature iterations (Behavioral Sovereignty tiers)</td>
+</tr>
+<tr>
+<td>Large</td>
+<td>11–15</td>
+<td>Cross-cutting iterations with parallel agent tracks</td>
+</tr>
+<tr>
+<td>Extra-large</td>
+<td>16+</td>
+<td>Discouraged — split into two iterations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="quality-gate-efficiency">Quality Gate Efficiency</h3>
+<p>The ceremony cost is justified — removing gates is not an option.
+Instead:</p>
+<ol type="1">
+<li><strong>Per-PR gates via <code>agent-pr.sh</code></strong> catch
+most regressions at merge time, meaning the release ceremony should be a
+confirmation, not a discovery.</li>
+<li><strong>Parallel gate execution</strong> (future): run Racket tests,
+C++ build, and clang-tidy concurrently. Potential savings: ~10
+minutes.</li>
+<li><strong>Incremental subtree push</strong> (future):
+<code>git subtree push</code> rewrites full history (~10 min at 1,100
+commits). CI-driven sync would eliminate this.</li>
+</ol>
+<h3 id="what-this-changes-for-agents">What This Changes for Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent completes 1–2 FTRs → release</td>
+<td>Agent completes FTRs → merge to develop → wait for iteration</td>
+</tr>
+<tr>
+<td>Pressure to release each FTR individually</td>
+<td>FTRs accumulate on develop, tested continuously</td>
+</tr>
+<tr>
+<td>Release ceremony per 1–2 features</td>
+<td>Release ceremony per 5–10 features</td>
+</tr>
+<tr>
+<td><code>develop</code> and <code>main</code> nearly identical</td>
+<td><code>develop</code> is the working branch, <code>main</code> is
+release-only (as designed)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="branch-strategy-alignment">Branch Strategy Alignment</h3>
+<p>This decision reinforces ADR 20260225 (branching model):</p>
+<ul>
+<li><code>develop</code> becomes the true integration branch where
+features soak together</li>
+<li><code>main</code> is release-only — updated bi-weekly, always
+production-quality</li>
+<li>Feature branches merge to develop via <code>agent-pr.sh</code> as
+before</li>
+<li>The release branch (<code>release/vX.Y.0</code>) is cut from develop
+when the iteration is complete and all gates pass</li>
+</ul>
+<h3 id="version-number-semantics">Version Number Semantics</h3>
+<p>With fewer, larger releases, version numbers gain more meaning:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Major (X)</td>
+<td>Breaking DSL changes (reserved, currently 1.x)</td>
+</tr>
+<tr>
+<td>Minor (Y)</td>
+<td>Feature iteration — now represents 2 weeks of work, not 1 day</td>
+</tr>
+<tr>
+<td>Patch (Z)</td>
+<td>Hotfix for regressions in the corresponding minor release</td>
+</tr>
+</tbody>
+</table>
+<p>The gap from v1.55.x to v1.58.0 (intentional renumbering for
+stabilization sprints) becomes unnecessary — larger iterations naturally
+provide stabilization time.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Feature/QA ratio improves</strong>: Ceremony cost amortized
+over 5–10 features instead of 1–2</li>
+<li><strong>Higher release quality</strong>: Features soak together on
+<code>develop</code> before release</li>
+<li><strong>Meaningful versions</strong>: Each minor version represents
+a substantial capability increment</li>
+<li><strong>Reduced context switching</strong>: Agents focus on
+implementation, not ceremony</li>
+<li><strong>Better changelogs</strong>: Each release tells a coherent
+story (e.g., "Behavioral Sovereignty Tier 2")</li>
+<li><strong>RC practice</strong>: Large iterations get a soak period,
+catching integration issues</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Longer feedback cycle</strong>: Bugs in merged features wait
+for the next release (mitigated: <code>develop</code> is the working
+branch, issues found there are fixed immediately)</li>
+<li><strong>Larger diffs per release</strong>: More changes to review in
+release notes (mitigated: each FTR is reviewed at PR time; release is
+confirmation)</li>
+<li><strong>Temptation to slip scope</strong>: "While we're waiting for
+the release, add one more feature" (mitigated: iteration scope locked at
+planning time per existing governance)</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>All quality gates remain mandatory — no gates removed or
+weakened</li>
+<li><code>agent-pr.sh</code> continues to enforce per-PR quality
+gates</li>
+<li>Hotfix path remains available for critical regressions</li>
+<li>The v1.61.0–v1.63.0 Behavioral Sovereignty iterations already follow
+this pattern naturally (9, 4, and 4 FTRs respectively)</li>
+</ul>
+<h2 id="review-trigger">Review Trigger</h2>
+<p>Re-evaluate this decision if:</p>
+<ul>
+<li>Release ceremony drops below 15 minutes (parallel gates, CI subtree
+sync)</li>
+<li>Team size grows beyond 3 concurrent agents (may need faster
+integration feedback)</li>
+<li>A critical regression in a released version is traced to features
+soaking too long on develop</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1304,7 +1304,8 @@ PostgreSQL      gRPC/Proto     Domain Layer     Frontends          │
 <tr>
 <td>Legacy Ingestion</td>
 <td>⚠️ In Progress</td>
-<td>AI-assisted DDL/code extraction to DSL</td>
+<td>Multi-source extraction (ORM + services + UI + API) with direct .ddd
+output</td>
 </tr>
 <tr>
 <td>Concurrency Control</td>
@@ -1474,12 +1475,13 @@ Pipeline</h3>
 modeled, climate-efficient applications.</p>
 <p>The pipeline has four stages:</p>
 <ol type="1">
-<li><strong>Grasping</strong> — Using AI agents to analyze existing SQL
-DDL, API specs, stored procedures, ORM mappings, and runtime logs to
-extract an intermediate representation</li>
-<li><strong>Transformation</strong> — Mapping the IR into the Muscovite
-<code>.ddd</code> DSL via human-in-the-loop verification, constrained by
-the PEG grammar</li>
+<li><strong>Grasping</strong> — Multi-source extraction: analyzing ORM
+model structs, service layer functions, UI templates, API specs, and
+notification systems to extract structural AND behavioral domain
+knowledge with confidence scoring</li>
+<li><strong>Transformation</strong> — Emitting .ddd files directly from
+extractors, constrained by the PEG grammar, with confidence annotations
+guiding human review</li>
 <li><strong>Generation</strong> — Materializing a clean,
 high-performance, climate-efficient C++ backend and modern
 frontends</li>
@@ -1488,26 +1490,52 @@ layers to move legacy data into the new, validated UUID-based
 schema</li>
 </ol>
 <pre><code>Brownfield System
-    ├── pg_dump / schema inspection
-    ├── Stored procedure analysis
-    ├── ORM mapping extraction
-    └── API controller analysis
+    ├── ORM model structs (entities, fields, relationships, enums)
+    ├── Service layer (commands, events, state machines, workflows)
+    ├── UI templates (domain-visible fields, user actions, dropdowns)
+    ├── API specs / Swagger (endpoints, request/response schemas)
+    └── Notification system (event types, publishers)
             ↓
-    AI Extraction (LLM + formal grammar + world knowledge)
+    Multi-Source Extractor (5-pass: schema → behavioral → UI/API → triangulate → emit)
             ↓
-    Candidate .ddd Model (constrained by PEG grammar)
+    Confidence-Annotated .ddd Files (direct output, PEG-validated)
+      ├── ≥0.8: Full construct (high confidence)
+      ├── 0.4–0.8: REVIEW marker (needs human verification)
+      └── &lt;0.4: TODO comment (needs human authoring)
             ↓
-    Human Review (domain expert + consultant)
+    Human Review (domain expert + consultant curates .ddd)
             ↓
     Muscovite IR → New Stack + Data Migration</code></pre>
-<p><strong>What AI can extract structurally</strong> (high
-confidence):</p>
+<p><strong>What multi-source extraction discovers</strong> (three
+confidence tiers):</p>
+<p><em>Tier 1 — High confidence (signatures, always
+extractable):</em></p>
 <ul>
-<li>Database tables → Entities with fields and types</li>
-<li>Foreign keys → Explicit relationships</li>
-<li>CHECK constraints → Invariants</li>
-<li>Unique indexes → <code>@unique</code> annotations</li>
-<li>Stored procedures → Command/query candidates</li>
+<li>ORM model structs → Entities with typed fields, relationships,
+constraints</li>
+<li><code>Create*/Update*/Delete*</code> service functions → COMMAND
+declarations</li>
+<li>Notification types and <code>*Event</code> structs → DOMAIN_EVENT
+declarations</li>
+<li>Go interface definitions → EXTENSION_POINT / plugin contracts</li>
+<li>Status const/iota blocks → STATE_MACHINE states</li>
+<li><code>SearchOptions</code> filter structs → SPECIFICATION
+candidates</li>
+</ul>
+<p><em>Tier 2 — Medium confidence (structure + heuristics):</em></p>
+<ul>
+<li>Methods mutating status fields → STATE_MACHINE transitions</li>
+<li>Event handler registrations → POLICY declarations</li>
+<li>Multi-step service functions with rollback → SAGA candidates</li>
+</ul>
+<p><em>Tier 3 — Low confidence (deep analysis, needs human
+review):</em></p>
+<ul>
+<li>Conditional branches in command handlers → DECIDE block
+structure</li>
+<li>Cross-package external calls → EFFECT catalog candidates</li>
+<li><code>defer</code> blocks and error-path cleanup → Compensation
+patterns</li>
 </ul>
 <p><strong>What requires human judgment</strong> (domain expertise):</p>
 <ul>
@@ -1517,16 +1545,20 @@ confidence):</p>
 intent)</li>
 <li>Value object vs. entity distinction (identity semantics)</li>
 <li>Which business rules are essential vs. accidental</li>
+<li>Full DECIDE block logic (domain semantics, not just branch
+structure)</li>
 </ul>
 <p>The <code>.ddd</code> file sits at exactly the right abstraction
-level to be the <strong>review artifact</strong> between AI extraction
-and human validation. It is small enough to read (the FHIR example is
-~10K lines for 9 bounded contexts), semantically rich enough to capture
-domain intent, and machine-parseable enough to generate from.</p>
+level to be the <strong>review artifact</strong> between multi-source
+extraction and human validation. It is small enough to read (the FHIR
+example is ~10K lines for 9 bounded contexts), semantically rich enough
+to capture domain intent, and machine-parseable enough to generate
+from.</p>
 <h3 id="brownfield-extraction-current-capabilities">Brownfield
 Extraction: Current Capabilities</h3>
 <p>The brownfield extraction pipeline is no longer purely theoretical.
-Muscovite v1.31+ includes concrete DSL and generator support:</p>
+Muscovite v1.31+ includes concrete DSL and generator support, and
+v1.64.0 adds a complete multi-source extraction toolchain:</p>
 <p><strong>MAPPING blocks</strong> (FTR-080, ADR 20260224-002) — A
 dedicated DSL construct for declaring field-level transformations
 between legacy schema structures and Muscovite target entities:</p>
@@ -1544,27 +1576,47 @@ between legacy schema structures and Muscovite target entities:</p>
 <p>Each MAPPING block generates type-safe extractor and transformer
 components, bridging the gap between "AI extracted a candidate model"
 and "we can actually move the data."</p>
+<p><strong>Multi-source Go extractor</strong>
+(<code>muscovite-go-extractor</code>, ADR 20260310) — A generic Go
+application analyzer that performs five extraction passes (schema →
+behavioral → UI/API → triangulation → emit) and outputs
+confidence-annotated .ddd files directly. Key features:</p>
+<ul>
+<li>Analyzes ORM models, service functions, Go templates, and Swagger
+specs</li>
+<li>Extracts structural (entities, relationships) AND behavioral
+(commands, events, state machines) constructs</li>
+<li>Confidence scoring via multi-source triangulation (evidence from
+schema + code + UI + API)</li>
+<li>Dual conformance validation: Go-side PEG validator + Racket
+parse-back gate</li>
+<li>System-agnostic: works on any Go/XORM application (Gitea, Gogs,
+Drone, etc.)</li>
+<li>Integrated as git subtree at <code>tools/go-extractor/</code></li>
+</ul>
 <p><strong>Gitea brownfield test</strong>
-(<code>examples/brownfield-gitea-test/</code>) — A working
-proof-of-concept that extracts a subset of the Gitea (self-hosted Git
-forge) schema into a Muscovite domain model, demonstrating the
-end-to-end flow: legacy DDL analysis → <code>.ddd</code> model →
-generated stack with migration artifacts.</p>
+(<code>examples/brownfield-gitea-test/</code>) — A comprehensive
+proof-of-concept extracting the full Gitea v1.21.0 schema (107 tables,
+973 columns, 12 bounded contexts, zero foreign keys) into a Muscovite
+domain model. Demonstrates the complete flow: Go source analysis →
+multi-source extraction → .ddd generation → human curation → full stack
+generation with migration artifacts.</p>
 <p><strong>Near-term brownfield goals</strong>:</p>
 <ol type="1">
-<li><strong>Automated DDL-to-DSL extraction</strong> — AI agents analyze
-<code>pg_dump</code> output, ORM mappings, and API controllers to
-produce candidate <code>.ddd</code> files constrained by the PEG
-grammar</li>
+<li><strong>Complete Gitea extraction</strong> — 107 tables across 12
+contexts with behavioral constructs (commands, events, state machines,
+specifications)</li>
+<li><strong>FHIR extraction tool</strong> — Python script parsing FHIR
+R4 StructureDefinition JSON → .ddd files directly</li>
 <li><strong>MAPPING validation</strong> — Generator-side enforcement
 that every source field in a MAPPING block corresponds to a real column
 in the legacy schema (via schema introspection)</li>
 <li><strong>Data migration Sqitch scripts</strong> — Generate Sqitch
 change sets that <code>INSERT INTO ... SELECT</code> from legacy tables
 through the MAPPING transformations</li>
-<li><strong>Regression oracle</strong> — Run the legacy system and the
-generated system side-by-side, comparing query results to validate
-behavioral equivalence</li>
+<li><strong>Future extractors</strong> — Python (Django/SQLAlchemy),
+Java (JPA/Hibernate), Ruby (ActiveRecord) — all outputting .ddd directly
+using the same multi-source triangulation pattern</li>
 </ol>
 <h3 id="potential-future-directions">Potential Future Directions</h3>
 <p><strong>Personal force-multiplier</strong>: Continue as a consultant
@@ -1573,9 +1625,11 @@ full-stack spikes, schema evolution management for client
 engagements.</p>
 <p><strong>Small team methodology</strong>: Formalize the brownfield
 extraction pipeline into a repeatable consulting engagement: extract →
-model → validate → generate → iterate. The <code>.ddd</code> files
-become the shared language between technical and domain
-stakeholders.</p>
+curate → generate → iterate. Multi-source extraction (schema + service
+layer + UI templates + API specs) produces confidence-annotated
+<code>.ddd</code> stubs; domain experts review and enrich them. The
+<code>.ddd</code> files become the shared language between technical and
+domain stakeholders.</p>
 <p><strong>Additional generator targets</strong>: A stub generator for a
 second backend stack (e.g., TypeScript/Express, Kotlin/Spring) would
 concretely demonstrate target independence with ~500–1,000 lines of

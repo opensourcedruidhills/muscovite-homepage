@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.60.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -113,10 +113,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:affe56d92a451af3b3af853628ed67a39" id="r_affe56d92a451af3b3af853628ed67a39"><td class="memItemLeft"><a id="affe56d92a451af3b3af853628ed67a39" name="affe56d92a451af3b3af853628ed67a39"></a>
 <a class="el" href="#ad901fec190589a237cbfd96995b920ab">UnitOfWork</a> &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const <a class="el" href="#ad901fec190589a237cbfd96995b920ab">UnitOfWork</a> &amp;)=delete</td></tr>
 <tr class="memitem:ad948fd9c59d2ac2ec28b09143368cbc2" id="r_ad948fd9c59d2ac2ec28b09143368cbc2"><td class="memItemLeft"><a class="el" href="#ad901fec190589a237cbfd96995b920ab">UnitOfWork</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#ad948fd9c59d2ac2ec28b09143368cbc2">operator=</a> (<a class="el" href="#ad901fec190589a237cbfd96995b920ab">UnitOfWork</a> &amp;&amp;) noexcept</td></tr>
+<tr class="memitem:a0a9b794c6560449bf907f69c095188a6" id="r_a0a9b794c6560449bf907f69c095188a6"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a0a9b794c6560449bf907f69c095188a6">pending_effect_count</a> () const noexcept -&gt; std::size_t</td></tr>
+<tr class="memdesc:a0a9b794c6560449bf907f69c095188a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of pending effect intents (FTR-294).  <br /></td></tr>
+<tr class="memitem:a25250de22d84d6cffa6e5b0205c204b0" id="r_a25250de22d84d6cffa6e5b0205c204b0"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a25250de22d84d6cffa6e5b0205c204b0">pending_effects</a> () const noexcept -&gt; const std::vector&lt; <a class="el" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a> &gt; &amp;</td></tr>
+<tr class="memdesc:a25250de22d84d6cffa6e5b0205c204b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get read-only access to pending effect intents (FTR-294).  <br /></td></tr>
 <tr class="memitem:a9c37e9a8442b169415b01a66ffefe23a" id="r_a9c37e9a8442b169415b01a66ffefe23a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a9c37e9a8442b169415b01a66ffefe23a">pending_event_count</a> () const noexcept -&gt; std::size_t</td></tr>
 <tr class="memdesc:a9c37e9a8442b169415b01a66ffefe23a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of pending events.  <br /></td></tr>
 <tr class="memitem:a1a527f90a4e7509264295a8cdda0908c" id="r_a1a527f90a4e7509264295a8cdda0908c"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a1a527f90a4e7509264295a8cdda0908c">pending_events</a> () const noexcept -&gt; const std::vector&lt; <a class="el" href="structmuscovite_1_1dba_1_1DomainEvent.html">DomainEvent</a> &gt; &amp;</td></tr>
 <tr class="memdesc:a1a527f90a4e7509264295a8cdda0908c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get read-only access to pending events.  <br /></td></tr>
+<tr class="memitem:a927cba93dbf4edb9e0abd0d65e89b112" id="r_a927cba93dbf4edb9e0abd0d65e89b112"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a927cba93dbf4edb9e0abd0d65e89b112">plan_effect</a> (<a class="el" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a> effect)</td></tr>
 <tr class="memitem:ab90062b8011175c80b27809de82dfed4" id="r_ab90062b8011175c80b27809de82dfed4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab90062b8011175c80b27809de82dfed4">rollback</a> () noexcept</td></tr>
 <tr class="memdesc:ab90062b8011175c80b27809de82dfed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rollback the transaction and discard all pending events.  <br /></td></tr>
 <tr class="memitem:afc90543643f7019c722dcb6e1a8f0b4f" id="r_afc90543643f7019c722dcb6e1a8f0b4f"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#afc90543643f7019c722dcb6e1a8f0b4f">transaction</a> () -&gt; pqxx::work &amp;</td></tr>
@@ -147,7 +152,7 @@ Public Member Functions</h2></td></tr>
 <div class="line">    uow.commit();  <span class="comment">// Events persisted atomically</span></div>
 <div class="line">}</div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ad901fec190589a237cbfd96995b920ab"><div class="ttname"><a href="#ad901fec190589a237cbfd96995b920ab">muscovite::dba::UnitOfWork::UnitOfWork</a></div><div class="ttdeci">UnitOfWork(pqxx::connection &amp;connection, std::string_view schema=&quot;public&quot;)</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8cpp_source.html#l00033">unit_of_work.cpp:33</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_af32ab1974cccb6f3eae38dd0281c7c2f"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#af32ab1974cccb6f3eae38dd0281c7c2f">muscovite::dba::DomainEvent::create</a></div><div class="ttdeci">static auto create(std::string_view event_type, const boost::uuids::uuid &amp;aggregate_id, std::string_view aggregate_type, const std::string &amp;json_payload) -&gt; DomainEvent</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00048">unit_of_work.hpp:48</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_af32ab1974cccb6f3eae38dd0281c7c2f"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#af32ab1974cccb6f3eae38dd0281c7c2f">muscovite::dba::DomainEvent::create</a></div><div class="ttdeci">static auto create(std::string_view event_type, const boost::uuids::uuid &amp;aggregate_id, std::string_view aggregate_type, const std::string &amp;json_payload) -&gt; DomainEvent</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00049">unit_of_work.hpp:49</a></div></div>
 </div><!-- fragment --><p><b>Design Notes:</b></p><ul>
 <li>Repositories remain pure CRUD (no event logic)</li>
 <li>Services decide WHAT events to emit</li>
@@ -155,7 +160,7 @@ Public Member Functions</h2></td></tr>
 <li>Same physical transaction for data + events (atomicity) </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="unit__of__work_8hpp_source.html#l00141">141</a> of file <a class="el" href="unit__of__work_8hpp_source.html">unit_of_work.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8hpp_source.html#l00142">142</a> of file <a class="el" href="unit__of__work_8hpp_source.html">unit_of_work.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad901fec190589a237cbfd96995b920ab" name="ad901fec190589a237cbfd96995b920ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad901fec190589a237cbfd96995b920ab">&#9670;&#160;</a></span>UnitOfWork() <span class="overload">[1/3]</span></h2>
@@ -293,7 +298,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00103">103</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="unit__of__work_8hpp_source.html#l00037">muscovite::dba::DomainEvent::aggregate_id</a>, <a class="el" href="unit__of__work_8hpp_source.html#l00038">muscovite::dba::DomainEvent::aggregate_type</a>, and <a class="el" href="unit__of__work_8hpp_source.html#l00036">muscovite::dba::DomainEvent::event_type</a>.</p>
+<p class="reference">References <a class="el" href="unit__of__work_8hpp_source.html#l00038">muscovite::dba::DomainEvent::aggregate_id</a>, <a class="el" href="unit__of__work_8hpp_source.html#l00039">muscovite::dba::DomainEvent::aggregate_type</a>, and <a class="el" href="unit__of__work_8hpp_source.html#l00037">muscovite::dba::DomainEvent::event_type</a>.</p>
 
 </div>
 </div>
@@ -321,9 +326,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Persist all pending events and commit the transaction </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="structmuscovite_1_1dba_1_1Error.html" title="Error information with code and message.">Error</a> if commit fails </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00158">158</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00192">192</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="unit__of__work_8cpp_source.html#l00238">commit_or_throw()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="unit__of__work_8cpp_source.html#l00278">commit_or_throw()</a>.</p>
 
 </div>
 </div>
@@ -348,9 +353,9 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00238">238</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00278">278</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00158">commit()</a>.</p>
+<p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00192">commit()</a>.</p>
 
 </div>
 </div>
@@ -379,7 +384,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Check if the unit of work has been committed or rolled back. </p>
 
-<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00245">245</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00285">285</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
 </div>
 </div>
@@ -407,6 +412,64 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00075">75</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a0a9b794c6560449bf907f69c095188a6" name="a0a9b794c6560449bf907f69c095188a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a9b794c6560449bf907f69c095188a6">&#9670;&#160;</a></span>pending_effect_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto muscovite::dba::UnitOfWork::pending_effect_count </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const -&gt; std::size_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of pending effect intents (FTR-294). </p>
+
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00132">132</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a25250de22d84d6cffa6e5b0205c204b0" name="a25250de22d84d6cffa6e5b0205c204b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25250de22d84d6cffa6e5b0205c204b0">&#9670;&#160;</a></span>pending_effects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto muscovite::dba::UnitOfWork::pending_effects </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const -&gt; const std::vector&lt; <a class="el" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a> &gt; &amp;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get read-only access to pending effect intents (FTR-294). </p>
+
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00136">136</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
 </div>
 </div>
@@ -468,6 +531,28 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a927cba93dbf4edb9e0abd0d65e89b112" name="a927cba93dbf4edb9e0abd0d65e89b112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a927cba93dbf4edb9e0abd0d65e89b112">&#9670;&#160;</a></span>plan_effect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void muscovite::dba::UnitOfWork::plan_effect </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a></td>          <td class="paramname"><span class="paramname"><em>effect</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add an effect intent to be persisted to the outbox on commit (FTR-294) </p><dl class="section see"><dt>See also</dt><dd>ADR: 20260307-emit-plan-intent-separation.md </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00122">122</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="effect__intent_8hpp_source.html#l00044">muscovite::dba::EffectIntent::aggregate_id</a>, and <a class="el" href="effect__intent_8hpp_source.html#l00038">muscovite::dba::EffectIntent::effect_type</a>.</p>
+
+</div>
+</div>
 <a id="ab90062b8011175c80b27809de82dfed4" name="ab90062b8011175c80b27809de82dfed4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab90062b8011175c80b27809de82dfed4">&#9670;&#160;</a></span>rollback()</h2>
 
@@ -493,7 +578,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Rollback the transaction and discard all pending events. </p>
 
-<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00222">222</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00262">262</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
 </div>
 </div>

@@ -65,15 +65,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
-"classmuscovite_1_1geo_1_1Polygon.html#a08e7e32f688179565fc1b19f76aa1bdc",
-"classmuscovite_1_1qt_1_1AuthManager.html#a26534df73ef405862221eb1bbcc2d020",
-"classmuscovite_1_1qt_1_1validation_1_1MockUniquenessChecker.html#a331ce4d118f19b6190ce6787d019811c",
-"classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#ab0b09deffc296cf8468ea1e72aa70ab9",
-"dir_89e9a5ea7a1e9d96c4dba264603e8d44.html",
-"logging_8hpp.html#a79b45b4a15467381c9e4eb48594a921aadc54f9b709ee06d4c6d984d41f99fe9e",
-"server_2include_2muscovite_2server_2server_8hpp.html#ac82976cdcbc3ada030a4b8067e62be71a00efb5c075b1015d9058edd14ed93029",
-"structmuscovite_1_1qt_1_1grpc_1_1ValidationError.html#a0985247b9af3ad59fc9b265a0143c413",
-"token__storage_8hpp.html"
+"classmuscovite_1_1geo_1_1Point.html#ad63508111f08136c4208d7ccfb680bf8",
+"classmuscovite_1_1qt_1_1AuthManager.html",
+"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#ace7031073b403d1ff6ea582870232b21",
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html",
+"dir_75806cab04f0f24be0994357d1716eed.html",
+"jsonb__converters_8hpp_source.html",
+"search__query_8hpp.html#a88b1e49a4289ff7b11438be414347eb3a5fc8b9a31666e95fddf7fdc19ba6070c",
+"structmuscovite_1_1qt_1_1OAuth2Session.html",
+"structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedDecimal_3_01Min_00_01Max_01_4_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

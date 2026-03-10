@@ -24,9 +24,11 @@ var searchData=
   ['positivedecimalvalidator_21',['PositiveDecimalValidator',['../classmuscovite_1_1qt_1_1PositiveDecimalValidator.html',1,'muscovite::qt']]],
   ['postalcode_22',['PostalCode',['../classmuscovite_1_1types_1_1PostalCode.html',1,'muscovite::types']]],
   ['postalcodevalidator_23',['PostalCodeValidator',['../classmuscovite_1_1qt_1_1PostalCodeValidator.html',1,'muscovite::qt']]],
-  ['principal_24',['Principal',['../structmuscovite_1_1server_1_1security_1_1Principal.html',1,'muscovite::server::security']]],
-  ['privilegechecker_25',['PrivilegeChecker',['../classmuscovite_1_1qt_1_1PrivilegeChecker.html',1,'muscovite::qt']]],
-  ['privilegeserviceimpl_26',['PrivilegeServiceImpl',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html',1,'muscovite::server::security::grpc']]],
-  ['publishack_27',['PublishAck',['../structmuscovite_1_1messaging_1_1PublishAck.html',1,'muscovite::messaging']]],
-  ['publisher_28',['Publisher',['../classmuscovite_1_1messaging_1_1Publisher.html',1,'muscovite::messaging']]]
+  ['postconditionfailed_24',['PostconditionFailed',['../classmuscovite_1_1dba_1_1PostconditionFailed.html',1,'muscovite::dba']]],
+  ['preconditionfailed_25',['PreconditionFailed',['../classmuscovite_1_1dba_1_1PreconditionFailed.html',1,'muscovite::dba']]],
+  ['principal_26',['Principal',['../structmuscovite_1_1server_1_1security_1_1Principal.html',1,'muscovite::server::security']]],
+  ['privilegechecker_27',['PrivilegeChecker',['../classmuscovite_1_1qt_1_1PrivilegeChecker.html',1,'muscovite::qt']]],
+  ['privilegeserviceimpl_28',['PrivilegeServiceImpl',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html',1,'muscovite::server::security::grpc']]],
+  ['publishack_29',['PublishAck',['../structmuscovite_1_1messaging_1_1PublishAck.html',1,'muscovite::messaging']]],
+  ['publisher_30',['Publisher',['../classmuscovite_1_1messaging_1_1Publisher.html',1,'muscovite::messaging']]]
 ];

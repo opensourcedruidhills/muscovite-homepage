@@ -7,8 +7,11 @@ var classmuscovite_1_1dba_1_1UnitOfWork =
     [ "commit", "classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515", null ],
     [ "commit_or_throw", "classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe", null ],
     [ "is_completed", "classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7", null ],
+    [ "pending_effect_count", "classmuscovite_1_1dba_1_1UnitOfWork.html#a0a9b794c6560449bf907f69c095188a6", null ],
+    [ "pending_effects", "classmuscovite_1_1dba_1_1UnitOfWork.html#a25250de22d84d6cffa6e5b0205c204b0", null ],
     [ "pending_event_count", "classmuscovite_1_1dba_1_1UnitOfWork.html#a9c37e9a8442b169415b01a66ffefe23a", null ],
     [ "pending_events", "classmuscovite_1_1dba_1_1UnitOfWork.html#a1a527f90a4e7509264295a8cdda0908c", null ],
+    [ "plan_effect", "classmuscovite_1_1dba_1_1UnitOfWork.html#a927cba93dbf4edb9e0abd0d65e89b112", null ],
     [ "rollback", "classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4", null ],
     [ "transaction", "classmuscovite_1_1dba_1_1UnitOfWork.html#afc90543643f7019c722dcb6e1a8f0b4f", null ]
 ];

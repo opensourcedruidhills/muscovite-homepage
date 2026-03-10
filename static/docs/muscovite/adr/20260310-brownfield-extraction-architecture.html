@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Brownfield Extraction Architecture — Multi-Source
+Triangulation with Direct .ddd Output — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Brownfield Extraction Architecture — Multi-Source
+Triangulation with Direct .ddd Output</span>
+</nav>
+
+<h1>ADR: Brownfield Extraction Architecture — Multi-Source Triangulation
+with Direct .ddd Output</h1>
+
+
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+
+<h1
+id="adr-brownfield-extraction-architecture--multi-source-triangulation-with-direct-ddd-output">ADR:
+Brownfield Extraction Architecture — Multi-Source Triangulation with
+Direct .ddd Output</h1>
+<p><strong>Date:</strong> 2026-03-10 <strong>Status:</strong> Accepted
+(revised 2026-03-10) <strong>Deciders:</strong> Johannes Lochmann
+<strong>Supersedes:</strong> Original version (neutral IR + ir-to-ddd
+converter)</p>
+<h2 id="context">Context</h2>
+<p>Muscovite's brownfield modeling feature (MAPPING blocks, ADR
+20260102) allows generated code to coexist with legacy databases.
+FTR-349 (Gitea extraction) revealed that real-world brownfield targets
+have:</p>
+<ul>
+<li><strong>No database-level foreign keys</strong> — relationships are
+enforced in application code (XORM, GORM, Django ORM, JPA, etc.)</li>
+<li><strong>ORM struct tags</strong> that encode constraints, indexes,
+nullability, and column mappings</li>
+<li><strong>Application-level documentation</strong> in source code
+comments that should become DSL DOC blocks</li>
+<li><strong>Integer enums, Unix timestamps, VARCHAR limits</strong> that
+need type transformation metadata</li>
+<li><strong>Service layers</strong> that encode commands, events, state
+transitions, and workflows</li>
+<li><strong>UI templates and API specs</strong> that reveal which fields
+and actions are domain-visible</li>
+</ul>
+<p>Extracting this information requires parsing <strong>multiple source
+layers</strong>, not just the database schema or ORM models. Different
+brownfield targets use different languages and ORMs:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Language</th>
+<th>ORM</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gitea</td>
+<td>Go</td>
+<td>XORM</td>
+<td>107 tables, 229 <code>_id</code> columns, 0 FKs</td>
+</tr>
+<tr>
+<td>FHIR R4</td>
+<td>N/A</td>
+<td>StructureDefinition JSON</td>
+<td>Schema specification, not application code</td>
+</tr>
+<tr>
+<td>Future: Django apps</td>
+<td>Python</td>
+<td>Django ORM</td>
+<td><code>models.ForeignKey()</code> declarations</td>
+</tr>
+<tr>
+<td>Future: Rails apps</td>
+<td>Ruby</td>
+<td>ActiveRecord</td>
+<td><code>belongs_to</code>/<code>has_many</code> declarations</td>
+</tr>
+<tr>
+<td>Future: Spring apps</td>
+<td>Java</td>
+<td>JPA/Hibernate</td>
+<td><code>@ManyToOne</code>/<code>@JoinColumn</code> annotations</td>
+</tr>
+</tbody>
+</table>
+<p>Building one monolithic extractor for all languages is
+unmaintainable. Building per-system extractors (one for Gitea, one for
+another Go app) wastes effort on duplicate Go parsing logic.</p>
+<h3 id="why-not-a-neutral-intermediate-representation">Why Not a Neutral
+Intermediate Representation?</h3>
+<p>The original design proposed a three-layer pipeline: Extractor →
+Brownfield IR (JSON) → ir-to-ddd (Racket) → .ddd. Analysis revealed this
+adds complexity without value:</p>
+<ol type="1">
+<li><strong>The .ddd format IS the intermediate representation</strong>
+— it's human-readable, well-defined, stable (grammar-first mandate, ADR
+20260211), and the only format with downstream consumers.</li>
+<li><strong>A neutral IR has no standalone consumer</strong> — it exists
+only to be transformed into .ddd. That's pure overhead.</li>
+<li><strong>Behavioral constructs</strong> (commands, events, sagas,
+state machines) would require extending the IR to essentially mirror the
+.ddd AST — reinventing a format that already exists.</li>
+<li><strong>.ddd is already the lingua franca</strong> — every extractor
+(Go, Python, Java) speaks .ddd as output, every downstream tool (parser,
+generators) consumes .ddd as input.</li>
+</ol>
+<h2 id="decision">Decision</h2>
+<h3 id="direct-ddd-output-with-multi-source-triangulation">Direct .ddd
+Output with Multi-Source Triangulation</h3>
+<pre><code>┌─────────────┐     ┌─────────────────┐     ┌──────────────────┐
+│  Database    │     │   Source Code    │     │   User Interface │
+│  (schema)   │     │ (AST + types)    │     │ (templates + API)│
+│             │     │                  │     │                  │
+│ • columns   │     │ • service funcs  │     │ • form fields    │
+│ • types     │     │ • event types    │     │ • buttons/actions│
+│ • indexes   │     │ • interfaces     │     │ • dropdowns      │
+│ • sequences │     │ • state consts   │     │ • navigation     │
+└──────┬──────┘     └────────┬─────────┘     └────────┬─────────┘
+       │                     │                         │
+       └─────────────────────┼─────────────────────────┘
+                             ▼
+                    Confidence scoring
+                             ▼
+                    .ddd files (direct)
+                             ▼
+                    Human curation</code></pre>
+<h3
+id="language-specific-extractors-each-its-own-repository">Language-Specific
+Extractors (each its own repository)</h3>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>Language</th>
+<th>Parses</th>
+<th>Uses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>muscovite-go-extractor</code></td>
+<td>Go</td>
+<td>Go structs, services, templates, Swagger</td>
+<td><code>go/ast</code>, <code>go/types</code>, <code>go/parser</code>
+stdlib</td>
+</tr>
+<tr>
+<td>(future) <code>muscovite-python-extractor</code></td>
+<td>Python</td>
+<td>Django/SQLAlchemy models + views</td>
+<td><code>ast</code> stdlib</td>
+</tr>
+<tr>
+<td>(future) <code>muscovite-java-extractor</code></td>
+<td>Java</td>
+<td>JPA/Hibernate + Spring controllers</td>
+<td><code>javaparser</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each extractor:</p>
+<ul>
+<li>Is a standalone CLI tool in its own repository</li>
+<li>Integrated into Muscovite as a <strong>git subtree</strong> (same
+pattern as <code>muscovite-cpp</code> at <code>framework/</code>)</li>
+<li>Takes a configuration file pointing at source paths, ORM type,
+context classification</li>
+<li><strong>Outputs .ddd files directly</strong> — conformance validated
+by dual PEG checking</li>
+<li>Analyzes <strong>multiple source layers</strong>, not just ORM
+models</li>
+</ul>
+<h3 id="five-pass-extraction-pipeline">Five-Pass Extraction
+Pipeline</h3>
+<p>Each extractor performs five sequential passes:</p>
+<table>
+<thead>
+<tr>
+<th>Pass</th>
+<th>Source Layer</th>
+<th>Extracts</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Schema</strong></td>
+<td>ORM model structs (<code>models/</code>)</td>
+<td>Entities, fields, types, relationships, enums, indexes</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>2. Behavioral</strong></td>
+<td>Service layer (<code>services/</code>)</td>
+<td>Commands, state transitions, workflows, event emissions</td>
+<td>Medium–High</td>
+</tr>
+<tr>
+<td><strong>3. UI/API</strong></td>
+<td>Templates + Swagger/OpenAPI (<code>templates/</code>,
+<code>routers/</code>)</td>
+<td>Domain-visible fields, user commands, enum values, navigation</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>4. Triangulation</strong></td>
+<td>Cross-reference all passes</td>
+<td>Merge evidence, compute confidence scores per construct</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>5. Emit</strong></td>
+<td>—</td>
+<td>Write .ddd files with confidence annotations as comments</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="three-tier-behavioral-extraction">Three-Tier Behavioral
+Extraction</h3>
+<p>Behavioral constructs are extractable at three confidence tiers:</p>
+<p><strong>Tier 1 — High confidence (signatures, always
+extractable):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Muscovite Construct</th>
+<th>Source Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMMAND</td>
+<td><code>func Create*(ctx, opts)</code>,
+<code>func Update*(...)</code>, <code>func Delete*(...)</code></td>
+<td><code>services/issue/NewIssue()</code></td>
+</tr>
+<tr>
+<td>DOMAIN EVENT</td>
+<td>Notification types, <code>*Event</code> structs, publisher
+calls</td>
+<td><code>modules/notification/NotifyNewIssue()</code></td>
+</tr>
+<tr>
+<td>EXTENSION_POINT</td>
+<td><code>type FooInterface interface { ... }</code></td>
+<td><code>modules/markup/Renderer</code></td>
+</tr>
+<tr>
+<td>STATE_MACHINE states</td>
+<td><code>const ( Open = iota; Closed; Merged )</code></td>
+<td>Issue/PR status enums</td>
+</tr>
+<tr>
+<td>SPECIFICATION</td>
+<td><code>type SearchOptions struct { ... }</code> with filter
+fields</td>
+<td><code>models/issues/IssuesOptions</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tier 2 — Medium confidence (structure +
+heuristics):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Source Pattern</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STATE_MACHINE transitions</td>
+<td><code>func ChangeStatus()</code>,
+<code>func (i *Issue) Close()</code></td>
+<td>Method receivers that mutate status fields</td>
+</tr>
+<tr>
+<td>POLICY</td>
+<td>Event handler registrations, <code>func On*Event()</code></td>
+<td>Notification listeners with conditional logic</td>
+</tr>
+<tr>
+<td>SAGA candidates</td>
+<td>Multi-step service functions with rollback/cleanup</td>
+<td>3+ sequential service calls with error handling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tier 3 — Low confidence (deep analysis, needs human
+review):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Source Pattern</th>
+<th>What we CAN extract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DECIDE logic</td>
+<td>Conditional branches in command handlers</td>
+<td>Branch structure and conditions, not domain semantics</td>
+</tr>
+<tr>
+<td>EFFECT catalog</td>
+<td>External calls (email, webhook, queue publish)</td>
+<td>Cross-package function calls</td>
+</tr>
+<tr>
+<td>Compensations</td>
+<td><code>defer</code> blocks, error-path cleanup</td>
+<td>Paired create/delete in error handlers</td>
+</tr>
+</tbody>
+</table>
+<p>Where automated extraction fails, <strong>plugin interfaces are still
+extractable</strong> — Go <code>interface</code> definitions provide the
+contract name, method signatures, and parameters, mapping directly to
+EXTENSION_POINT constructs.</p>
+<h3 id="confidence-scoring-and-ddd-annotations">Confidence Scoring and
+.ddd Annotations</h3>
+<p>Each extracted construct receives a confidence score from 0.0 to 1.0
+based on evidence triangulation:</p>
+<pre><code>confidence = 0.0
+  + 0.2 if in database schema / ORM model
+  + 0.2 if in Go struct with typed fields
+  + 0.2 if rendered in template / present in API spec
+  + 0.2 if present in service layer
+  + 0.2 if validated or constrained</code></pre>
+<p>The score determines how the construct is emitted:</p>
+<table>
+<thead>
+<tr>
+<th>Confidence</th>
+<th>Emission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ 0.8</td>
+<td>Full .ddd construct</td>
+</tr>
+<tr>
+<td>0.4–0.8</td>
+<td>.ddd construct with
+<code>-- REVIEW: confidence &lt;score&gt; — &lt;evidence&gt;</code>
+comment</td>
+</tr>
+<tr>
+<td>&lt; 0.4</td>
+<td><code>-- TODO: confidence &lt;score&gt; — &lt;description&gt;</code>
+comment block only</td>
+</tr>
+</tbody>
+</table>
+<p>Example output:</p>
+<pre class="ddd"><code>COMMAND CreateIssue {            -- CONFIDENCE: 1.0 (schema + service + template + API)
+  -- Source: services/issue/issue.go:142
+  title TEXT NOT_NULL             -- form field: required input
+  content TEXT                    -- form field: optional textarea
+  milestone_id REFERENCE Milestone  -- dropdown in template
+}
+
+-- REVIEW: confidence 0.6 — state transitions inferred from ChangeIssueStatus()
+STATE_MACHINE IssueLifecycle FOR Issue {
+  STATES { Open, Closed }
+  INITIAL Open
+  TERMINAL Closed
+  TRANSITION Open -&gt; Closed ON CloseIssue
+  TRANSITION Closed -&gt; Open ON ReopenIssue
+}
+
+-- TODO: confidence 0.2 — multi-step pattern in services/pull/merge.go
+-- Potential SAGA: MergePullRequest (3 sequential service calls with error rollback)
+-- Steps: UpdatePullRequest → MergeGitBranch → ClosePullRequest
+-- Compensation detected: defer branch cleanup on merge failure</code></pre>
+<h3 id="dual-conformance-validation-belt-and-suspenders">Dual
+Conformance Validation (Belt and Suspenders)</h3>
+<p>All extractor output <strong>must</strong> be syntactically valid
+.ddd:</p>
+<p><strong>1. Go-side PEG validator (fast, self-contained):</strong></p>
+<ul>
+<li>The Muscovite PEG grammar
+(<code>dslgen/grammar/muscovite.peg</code>) is compiled into a Go parser
+using a PEG generator library (e.g., <code>pointlander/peg</code> or
+<code>mna/pigeon</code>)</li>
+<li>The go-extractor validates its own output before writing — instant
+feedback during extraction</li>
+<li>Grammar-first mandate (ADR 20260211) ensures both parsers accept the
+same language</li>
+</ul>
+<p><strong>2. Racket parse-back gate (authoritative,
+CI-enforced):</strong></p>
+<ul>
+<li>After extraction, <code>racket parser.rkt --parse-only *.ddd</code>
+validates all output files</li>
+<li>The Racket parser is the conformance oracle — if it parses, the
+output is legal</li>
+<li>This runs as a CI gate in the go-extractor repository and during
+<code>agent-pr.sh</code></li>
+</ul>
+<h3 id="subtree-integration-pattern">Subtree Integration Pattern</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial setup (once)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add go-extractor git@github.com:opensourcedruidhills/muscovite-go-extractor.git</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> subtree add <span class="at">--prefix</span><span class="op">=</span>tools/go-extractor go-extractor main</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync during release (same as muscovite-cpp)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> subtree push <span class="at">--prefix</span><span class="op">=</span>tools/go-extractor go-extractor main</span></code></pre></div>
+<h3 id="per-project-configuration">Per-Project Configuration</h3>
+<p>Each brownfield sample project provides a configuration file:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examples/gitea-brownfield/extractor-config.yaml</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">repository</span><span class="kw">:</span><span class="at"> vendor/gitea</span><span class="co">           # submodule path</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">version</span><span class="kw">:</span><span class="at"> v1.21.0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">language</span><span class="kw">:</span><span class="at"> go</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">orm</span><span class="kw">:</span><span class="at"> xorm</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">model_paths</span><span class="kw">:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> models/</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">service_paths</span><span class="kw">:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> services/</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">template_paths</span><span class="kw">:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> templates/</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">router_paths</span><span class="kw">:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> routers/</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">notification_paths</span><span class="kw">:</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> modules/notification/</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contexts</span><span class="kw">:</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">Repository</span><span class="kw">:</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">packages</span><span class="kw">:</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> code.gitea.io/gitea/models/repo</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">doc</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Git repository management and metadata&quot;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">IssueTracking</span><span class="kw">:</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">packages</span><span class="kw">:</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> code.gitea.io/gitea/models/issues</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">doc</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Issue lifecycle, labels, milestones, and time tracking&quot;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="fu">type_overrides</span><span class="kw">:</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">timeutil.TimeStamp</span><span class="kw">:</span><span class="at"> DateTime</span><span class="co">       # Unix epoch → TIMESTAMPTZ</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">api.GitServiceType</span><span class="kw">:</span><span class="at"> Integer</span><span class="co">        # Enum integer</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">extraction</span><span class="kw">:</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">behavioral</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">                   # Enable service/template analysis</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">min_confidence</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span><span class="co">                # Emit constructs above this threshold</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">swagger_path</span><span class="kw">:</span><span class="at"> templates/swagger/v1_json.tmpl</span><span class="co">  # Optional: Swagger spec for API triangulation</span></span></code></pre></div>
+<h3 id="fhir-extractor-alignment">FHIR Extractor Alignment</h3>
+<p>FTR-345 (FHIR extraction tool) parses FHIR R4 StructureDefinition
+JSON — not application source code. It <strong>outputs .ddd files
+directly</strong> (same principle: no intermediate IR). The FHIR
+extractor stays as a Python script in <code>tools/</code> (not its own
+repo — FHIR is a schema format, not a programming language).</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>One Go extractor serves all Go projects</strong> — Gitea,
+Gogs, Drone, any XORM/GORM application</li>
+<li><strong>Extractors are independently testable</strong> — Go tests
+parse Go, no Racket dependency</li>
+<li><strong>Direct .ddd output</strong> — no intermediate format to
+design, maintain, or version</li>
+<li><strong>.ddd is the lingua franca</strong> — every extractor outputs
+it, every tool consumes it</li>
+<li><strong>Multi-source triangulation</strong> — dramatically richer
+extraction than ORM-only analysis</li>
+<li><strong>Behavioral extraction</strong> — commands, events, state
+machines, interfaces — not just tables and columns</li>
+<li><strong>Confidence annotations</strong> — human curators see exactly
+what needs review and why</li>
+<li><strong>Dual conformance validation</strong> — malformed .ddd is
+caught at extraction time AND in CI</li>
+<li><strong>Subtree pattern is proven</strong> — same governance as
+muscovite-cpp (release.sh pushes subtree)</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Extractors must know .ddd syntax</strong> — mitigated by the
+Go-side PEG validator compiled from the same grammar, and by the
+stability of .ddd syntax (grammar-first mandate)</li>
+<li><strong>New repository</strong> — go-extractor needs its own CI,
+releases, documentation</li>
+<li><strong>Multi-source analysis is complex</strong> — service layer,
+templates, and API add extraction scope</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>FHIR extractor also outputs .ddd directly (consistent with
+architecture)</li>
+<li>Future extractors follow an established pattern — reduced design
+effort</li>
+<li><code>doc/GO-PATTERNS.md</code> governs Go coding style for the
+extractor codebase</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20260102 — Brownfield modeling with MAPPING blocks</li>
+<li>ADR 20260211 — Grammar-first language evolution</li>
+<li>ADR 20260310 — Sample project enrichment strategy</li>
+<li>ADR 20260310 — Field-level documentation in DSL</li>
+<li>FTR-349 — Gitea full brownfield extraction</li>
+<li>FTR-345 — FHIR R4 StructureDefinition extraction tool</li>
+<li>FTR-350 — Generic Go ORM extractor repository</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

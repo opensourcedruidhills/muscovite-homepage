@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.60.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -224,153 +224,202 @@ $(function(){initNavTree('unit__of__work_8cpp_source.html','',''); });
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}</div>
 </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keywordtype">void</span> UnitOfWork::persist_event(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1DomainEvent.html">DomainEvent</a>&amp; event) {</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="comment">// ADR: Outbox Pattern - Events stored as JSON string (TEXT)</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="comment">// FTR-237: correlation_id column for request tracing</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordflow">if</span> (event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#a7ded0241d0542925d5edb5f1617969e6">metadata</a>.has_value()) {</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="keyword">auto</span> query = <span class="stringliteral">&quot;INSERT INTO &quot;</span> + m_schema + <span class="stringliteral">&quot;.domain_events &quot;</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                     <span class="stringliteral">&quot;(event_type, aggregate_id, aggregate_type, payload, metadata, correlation_id) &quot;</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                     <span class="stringliteral">&quot;VALUES ($1, $2, $3, $4, $5::jsonb, $6::uuid)&quot;</span>;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        m_txn-&gt;exec(</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            pqxx::zview{query},</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            pqxx::params{</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>                <span class="keyword">event</span>.event_type,</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                boost::uuids::to_string(event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">aggregate_id</a>),</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                <span class="keyword">event</span>.aggregate_type,</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                <span class="keyword">event</span>.payload,</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                <span class="keyword">event</span>.metadata-&gt;dump(),</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                <span class="keyword">event</span>.correlation_id</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            }</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        );</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keyword">auto</span> query = <span class="stringliteral">&quot;INSERT INTO &quot;</span> + m_schema + <span class="stringliteral">&quot;.domain_events &quot;</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                     <span class="stringliteral">&quot;(event_type, aggregate_id, aggregate_type, payload, correlation_id) &quot;</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                     <span class="stringliteral">&quot;VALUES ($1, $2, $3, $4, $5::uuid)&quot;</span>;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        m_txn-&gt;exec(</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            pqxx::zview{query},</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            pqxx::params{</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                <span class="keyword">event</span>.event_type,</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                boost::uuids::to_string(event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">aggregate_id</a>),</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                <span class="keyword">event</span>.aggregate_type,</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                <span class="keyword">event</span>.payload,</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                <span class="keyword">event</span>.correlation_id</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            }</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        );</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    }</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>}</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="foldopen" id="foldopen00158" data-start="{" data-end="}">
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">  158</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">UnitOfWork::commit</a>() -&gt; std::expected&lt;void, Error&lt;DbError&gt;&gt; {</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordflow">if</span> (m_completed) {</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca1cd5ecce6fe138df5c3f7e8854a1a66d">DbError::InvalidOperation</a>,</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            <span class="stringliteral">&quot;UnitOfWork: Already completed&quot;</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        ));</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="comment">// Persist all collected events</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; event : m_events) {</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            persist_event(event);</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        }</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        spdlog::debug(<span class="stringliteral">&quot;UnitOfWork: Committing transaction with {} events&quot;</span>, m_events.size());</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        m_txn-&gt;commit();</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordflow">return</span> {};</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::unique_violation&amp; e) {</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e">DbError::UniqueViolation</a>,</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            std::string{<span class="stringliteral">&quot;Unique constraint violation: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        ));</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::foreign_key_violation&amp; e) {</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca8ddc68a0303404e48f34d9659e263dbe">DbError::ForeignKeyViolation</a>,</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            std::string{<span class="stringliteral">&quot;Foreign key violation: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        ));</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::check_violation&amp; e) {</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caefd8a9e75c229fa65c3ffc508708207c">DbError::CheckViolation</a>,</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            std::string{<span class="stringliteral">&quot;Check constraint violation: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        ));</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::serialization_failure&amp; e) {</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a">DbError::SerializationFailure</a>,</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>            std::string{<span class="stringliteral">&quot;Serialization failure: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        ));</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::deadlock_detected&amp; e) {</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cab5b078c00f1f60fe13c379ba56a7eb79">DbError::Deadlock</a>,</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            std::string{<span class="stringliteral">&quot;Deadlock detected: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        ));</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::sql_error&amp; e) {</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca867c029fc56ad1803650254d7882d878">DbError::SqlError</a>,</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            std::string{<span class="stringliteral">&quot;SQL error: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        ));</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="foldopen" id="foldopen00122" data-start="{" data-end="}">
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a927cba93dbf4edb9e0abd0d65e89b112">  122</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a927cba93dbf4edb9e0abd0d65e89b112">UnitOfWork::plan_effect</a>(<a class="code hl_struct" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a> effect) {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">if</span> (m_completed) {</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;UnitOfWork: Cannot plan effect after commit/rollback&quot;</span>);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    }</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    spdlog::debug(<span class="stringliteral">&quot;UnitOfWork: Planned effect &#39;{}&#39; for aggregate {}&quot;</span>,</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                  effect.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1EffectIntent.html#a156bdd6a42f29b97db2853c0cc28368d">effect_type</a>,</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                  boost::uuids::to_string(effect.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1EffectIntent.html#abc5cc01a855e86ce53c91cecf93699ae">aggregate_id</a>));</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    m_effects.push_back(std::move(effect));</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>}</div>
+</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="foldopen" id="foldopen00132" data-start="{" data-end="}">
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a0a9b794c6560449bf907f69c095188a6">  132</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a0a9b794c6560449bf907f69c095188a6">UnitOfWork::pending_effect_count</a>() const noexcept -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> {</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordflow">return</span> m_effects.size();</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>}</div>
+</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="foldopen" id="foldopen00136" data-start="{" data-end="}">
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a25250de22d84d6cffa6e5b0205c204b0">  136</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a25250de22d84d6cffa6e5b0205c204b0">UnitOfWork::pending_effects</a>() const noexcept -&gt; const <a class="code hl_namespace" href="namespacestd.html">std</a>::vector&lt;<a class="code hl_struct" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a>&gt;&amp; {</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keywordflow">return</span> m_effects;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>}</div>
+</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="keywordtype">void</span> UnitOfWork::persist_event(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1DomainEvent.html">DomainEvent</a>&amp; event) {</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="comment">// ADR: Outbox Pattern - Events stored as JSON string (TEXT)</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="comment">// FTR-237: correlation_id column for request tracing</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keywordflow">if</span> (event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#a7ded0241d0542925d5edb5f1617969e6">metadata</a>.has_value()) {</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="keyword">auto</span> query = <span class="stringliteral">&quot;INSERT INTO &quot;</span> + m_schema + <span class="stringliteral">&quot;.domain_events &quot;</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                     <span class="stringliteral">&quot;(event_type, aggregate_id, aggregate_type, payload, metadata, correlation_id) &quot;</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                     <span class="stringliteral">&quot;VALUES ($1, $2, $3, $4, $5::jsonb, $6::uuid)&quot;</span>;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        m_txn-&gt;exec(</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>            pqxx::zview{query},</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            pqxx::params{</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                <span class="keyword">event</span>.event_type,</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                boost::uuids::to_string(event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">aggregate_id</a>),</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                <span class="keyword">event</span>.aggregate_type,</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>                <span class="keyword">event</span>.payload,</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                <span class="keyword">event</span>.metadata-&gt;dump(),</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                <span class="keyword">event</span>.correlation_id</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        );</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keyword">auto</span> query = <span class="stringliteral">&quot;INSERT INTO &quot;</span> + m_schema + <span class="stringliteral">&quot;.domain_events &quot;</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                     <span class="stringliteral">&quot;(event_type, aggregate_id, aggregate_type, payload, correlation_id) &quot;</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>                     <span class="stringliteral">&quot;VALUES ($1, $2, $3, $4, $5::uuid)&quot;</span>;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        m_txn-&gt;exec(</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            pqxx::zview{query},</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            pqxx::params{</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>                <span class="keyword">event</span>.event_type,</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                boost::uuids::to_string(event.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">aggregate_id</a>),</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                <span class="keyword">event</span>.aggregate_type,</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                <span class="keyword">event</span>.payload,</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                <span class="keyword">event</span>.correlation_id</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        );</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    }</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>}</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="keywordtype">void</span> UnitOfWork::persist_effect(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a>&amp; effect) {</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="comment">// FTR-294/295: Effects persisted to outbox table for async relay</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    <span class="comment">// ADR: 20260307-emit-plan-intent-separation — PLAN goes to outbox, not domain_events</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keyword">auto</span> query = <span class="stringliteral">&quot;INSERT INTO &quot;</span> + m_schema + <span class="stringliteral">&quot;.outbox &quot;</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                 <span class="stringliteral">&quot;(effect_type, payload, aggregate_id) &quot;</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                 <span class="stringliteral">&quot;VALUES ($1, $2::jsonb, $3)&quot;</span>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    m_txn-&gt;exec(</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        pqxx::zview{query},</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        pqxx::params{</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            effect.effect_type,</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            effect.payload,</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            boost::uuids::to_string(effect.aggregate_id)</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        }</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    );</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>}</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="foldopen" id="foldopen00192" data-start="{" data-end="}">
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">  192</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">UnitOfWork::commit</a>() -&gt; std::expected&lt;void, Error&lt;DbError&gt;&gt; {</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordflow">if</span> (m_completed) {</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca1cd5ecce6fe138df5c3f7e8854a1a66d">DbError::InvalidOperation</a>,</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            <span class="stringliteral">&quot;UnitOfWork: Already completed&quot;</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        ));</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    }</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="comment">// Persist all collected events</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; event : m_events) {</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>            persist_event(event);</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        }</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="comment">// Persist all collected effect intents to outbox (FTR-294)</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; effect : m_effects) {</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>            persist_effect(effect);</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        }</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        spdlog::debug(<span class="stringliteral">&quot;UnitOfWork: Committing transaction with {} events, {} effects&quot;</span>,</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                      m_events.size(), m_effects.size());</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        m_txn-&gt;commit();</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca88183b946cc5f0e8c96b2e66e1c74a7e">DbError::Unknown</a>,</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            std::string{<span class="stringliteral">&quot;Unknown error: &quot;</span>} + e.what()</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        ));</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    }</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>}</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keywordflow">return</span> {};</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::unique_violation&amp; e) {</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e">DbError::UniqueViolation</a>,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            std::string{<span class="stringliteral">&quot;Unique constraint violation: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        ));</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::foreign_key_violation&amp; e) {</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca8ddc68a0303404e48f34d9659e263dbe">DbError::ForeignKeyViolation</a>,</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            std::string{<span class="stringliteral">&quot;Foreign key violation: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        ));</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::check_violation&amp; e) {</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caefd8a9e75c229fa65c3ffc508708207c">DbError::CheckViolation</a>,</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            std::string{<span class="stringliteral">&quot;Check constraint violation: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        ));</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::serialization_failure&amp; e) {</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a">DbError::SerializationFailure</a>,</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            std::string{<span class="stringliteral">&quot;Serialization failure: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        ));</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::deadlock_detected&amp; e) {</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cab5b078c00f1f60fe13c379ba56a7eb79">DbError::Deadlock</a>,</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            std::string{<span class="stringliteral">&quot;Deadlock detected: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        ));</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> pqxx::sql_error&amp; e) {</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca867c029fc56ad1803650254d7882d878">DbError::SqlError</a>,</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            std::string{<span class="stringliteral">&quot;SQL error: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        ));</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        <span class="keywordflow">return</span> std::unexpected(make_error(</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>            <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca88183b946cc5f0e8c96b2e66e1c74a7e">DbError::Unknown</a>,</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            std::string{<span class="stringliteral">&quot;Unknown error: &quot;</span>} + e.what()</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        ));</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    }</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
 </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="foldopen" id="foldopen00222" data-start="{" data-end="}">
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">  222</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">UnitOfWork::rollback</a>() noexcept {</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <span class="keywordflow">if</span> (m_completed) {</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    }</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        spdlog::debug(<span class="stringliteral">&quot;UnitOfWork: Rolling back transaction, discarding {} events&quot;</span>, m_events.size());</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        m_txn-&gt;abort();</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        spdlog::error(<span class="stringliteral">&quot;UnitOfWork: Rollback error: {}&quot;</span>, e.what());</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    }</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    m_events.clear();</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    m_completed = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>}</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
+<div class="foldopen" id="foldopen00262" data-start="{" data-end="}">
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">  262</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">UnitOfWork::rollback</a>() noexcept {</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    <span class="keywordflow">if</span> (m_completed) {</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    }</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        spdlog::debug(<span class="stringliteral">&quot;UnitOfWork: Rolling back transaction, discarding {} events&quot;</span>, m_events.size());</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        m_txn-&gt;abort();</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        spdlog::error(<span class="stringliteral">&quot;UnitOfWork: Rollback error: {}&quot;</span>, e.what());</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    }</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    m_events.clear();</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    m_completed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>}</div>
 </div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="foldopen" id="foldopen00238" data-start="{" data-end="}">
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">  238</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">UnitOfWork::commit_or_throw</a>() {</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keyword">auto</span> result = <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">commit</a>();</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keywordflow">if</span> (!result) {</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <span class="keywordflow">throw</span> std::runtime_error(result.error().message);</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    }</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>}</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="foldopen" id="foldopen00278" data-start="{" data-end="}">
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">  278</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">UnitOfWork::commit_or_throw</a>() {</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keyword">auto</span> result = <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">commit</a>();</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordflow">if</span> (!result) {</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        <span class="keywordflow">throw</span> std::runtime_error(result.error().message);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    }</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>}</div>
 </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="foldopen" id="foldopen00245" data-start="{" data-end="}">
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">  245</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">UnitOfWork::is_completed</a>() const noexcept -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="keywordflow">return</span> m_completed;</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>}</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="foldopen" id="foldopen00285" data-start="{" data-end="}">
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">  285</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">UnitOfWork::is_completed</a>() const noexcept -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="keywordflow">return</span> m_completed;</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>}</div>
 </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>} <span class="comment">// namespace muscovite::dba</span></div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>} <span class="comment">// namespace muscovite::dba</span></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html">muscovite::dba::ConnectionPool</a></div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8hpp_source.html#l00093">connection_pool.hpp:93</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html">muscovite::dba::UnitOfWork</a></div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00141">unit_of_work.hpp:141</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html">muscovite::dba::UnitOfWork</a></div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00142">unit_of_work.hpp:142</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a0a9b794c6560449bf907f69c095188a6"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a0a9b794c6560449bf907f69c095188a6">muscovite::dba::UnitOfWork::pending_effect_count</a></div><div class="ttdeci">auto pending_effect_count() const noexcept -&gt; std::size_t</div><div class="ttdoc">Get the number of pending effect intents (FTR-294).</div><div class="ttdef"><b>Definition</b> <a href="#l00132">unit_of_work.cpp:132</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a1a527f90a4e7509264295a8cdda0908c"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a1a527f90a4e7509264295a8cdda0908c">muscovite::dba::UnitOfWork::pending_events</a></div><div class="ttdeci">auto pending_events() const noexcept -&gt; const std::vector&lt; DomainEvent &gt; &amp;</div><div class="ttdoc">Get read-only access to pending events.</div><div class="ttdef"><b>Definition</b> <a href="#l00118">unit_of_work.cpp:118</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a25250de22d84d6cffa6e5b0205c204b0"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a25250de22d84d6cffa6e5b0205c204b0">muscovite::dba::UnitOfWork::pending_effects</a></div><div class="ttdeci">auto pending_effects() const noexcept -&gt; const std::vector&lt; EffectIntent &gt; &amp;</div><div class="ttdoc">Get read-only access to pending effect intents (FTR-294).</div><div class="ttdef"><b>Definition</b> <a href="#l00136">unit_of_work.cpp:136</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a50f0efe94301294e123bcd04ff2fc366"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a50f0efe94301294e123bcd04ff2fc366">muscovite::dba::UnitOfWork::add_event</a></div><div class="ttdeci">void add_event(DomainEvent event)</div><div class="ttdoc">Add a domain event to be persisted on commit.</div><div class="ttdef"><b>Definition</b> <a href="#l00103">unit_of_work.cpp:103</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a56e0e17a1f99a8ce32b2991394dea515"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">muscovite::dba::UnitOfWork::commit</a></div><div class="ttdeci">auto commit() -&gt; std::expected&lt; void, Error&lt; DbError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="#l00158">unit_of_work.cpp:158</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a56e0e17a1f99a8ce32b2991394dea515"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a56e0e17a1f99a8ce32b2991394dea515">muscovite::dba::UnitOfWork::commit</a></div><div class="ttdeci">auto commit() -&gt; std::expected&lt; void, Error&lt; DbError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="#l00192">unit_of_work.cpp:192</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a7c5ed673bcba8e662cc12a80119babe9"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a7c5ed673bcba8e662cc12a80119babe9">muscovite::dba::UnitOfWork::~UnitOfWork</a></div><div class="ttdeci">~UnitOfWork()</div><div class="ttdoc">Destructor - rolls back if not committed.</div><div class="ttdef"><b>Definition</b> <a href="#l00053">unit_of_work.cpp:53</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a927cba93dbf4edb9e0abd0d65e89b112"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a927cba93dbf4edb9e0abd0d65e89b112">muscovite::dba::UnitOfWork::plan_effect</a></div><div class="ttdeci">void plan_effect(EffectIntent effect)</div><div class="ttdef"><b>Definition</b> <a href="#l00122">unit_of_work.cpp:122</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_a9c37e9a8442b169415b01a66ffefe23a"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#a9c37e9a8442b169415b01a66ffefe23a">muscovite::dba::UnitOfWork::pending_event_count</a></div><div class="ttdeci">auto pending_event_count() const noexcept -&gt; std::size_t</div><div class="ttdoc">Get the number of pending events.</div><div class="ttdef"><b>Definition</b> <a href="#l00114">unit_of_work.cpp:114</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_aa0daa918d67e0b533025a801cc212ff7"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">muscovite::dba::UnitOfWork::is_completed</a></div><div class="ttdeci">auto is_completed() const noexcept -&gt; bool</div><div class="ttdoc">Check if the unit of work has been committed or rolled back.</div><div class="ttdef"><b>Definition</b> <a href="#l00245">unit_of_work.cpp:245</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ab90062b8011175c80b27809de82dfed4"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">muscovite::dba::UnitOfWork::rollback</a></div><div class="ttdeci">void rollback() noexcept</div><div class="ttdoc">Rollback the transaction and discard all pending events.</div><div class="ttdef"><b>Definition</b> <a href="#l00222">unit_of_work.cpp:222</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_aa0daa918d67e0b533025a801cc212ff7"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#aa0daa918d67e0b533025a801cc212ff7">muscovite::dba::UnitOfWork::is_completed</a></div><div class="ttdeci">auto is_completed() const noexcept -&gt; bool</div><div class="ttdoc">Check if the unit of work has been committed or rolled back.</div><div class="ttdef"><b>Definition</b> <a href="#l00285">unit_of_work.cpp:285</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ab90062b8011175c80b27809de82dfed4"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4">muscovite::dba::UnitOfWork::rollback</a></div><div class="ttdeci">void rollback() noexcept</div><div class="ttdoc">Rollback the transaction and discard all pending events.</div><div class="ttdef"><b>Definition</b> <a href="#l00262">unit_of_work.cpp:262</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ad901fec190589a237cbfd96995b920ab"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#ad901fec190589a237cbfd96995b920ab">muscovite::dba::UnitOfWork::UnitOfWork</a></div><div class="ttdeci">UnitOfWork(pqxx::connection &amp;connection, std::string_view schema=&quot;public&quot;)</div><div class="ttdef"><b>Definition</b> <a href="#l00033">unit_of_work.cpp:33</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ae414795c8fc66d0b8be12b8c80c215fe"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">muscovite::dba::UnitOfWork::commit_or_throw</a></div><div class="ttdeci">void commit_or_throw()</div><div class="ttdef"><b>Definition</b> <a href="#l00238">unit_of_work.cpp:238</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_ae414795c8fc66d0b8be12b8c80c215fe"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#ae414795c8fc66d0b8be12b8c80c215fe">muscovite::dba::UnitOfWork::commit_or_throw</a></div><div class="ttdeci">void commit_or_throw()</div><div class="ttdef"><b>Definition</b> <a href="#l00278">unit_of_work.cpp:278</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1UnitOfWork_html_afc90543643f7019c722dcb6e1a8f0b4f"><div class="ttname"><a href="classmuscovite_1_1dba_1_1UnitOfWork.html#afc90543643f7019c722dcb6e1a8f0b4f">muscovite::dba::UnitOfWork::transaction</a></div><div class="ttdeci">auto transaction() -&gt; pqxx::work &amp;</div><div class="ttdoc">Get the active transaction for repository operations.</div><div class="ttdef"><b>Definition</b> <a href="#l00096">unit_of_work.cpp:96</a></div></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419c"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">muscovite::dba::DbError</a></div><div class="ttdeci">DbError</div><div class="ttdoc">Database error codes.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00021">error.hpp:21</a></div></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e">muscovite::dba::DbError::UniqueViolation</a></div><div class="ttdeci">@ UniqueViolation</div><div class="ttdoc">Unique constraint violated.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00028">error.hpp:28</a></div></div>
@@ -382,11 +431,14 @@ $(function(){initNavTree('unit__of__work_8cpp_source.html','',''); });
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419cab5b078c00f1f60fe13c379ba56a7eb79"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cab5b078c00f1f60fe13c379ba56a7eb79">muscovite::dba::DbError::Deadlock</a></div><div class="ttdeci">@ Deadlock</div><div class="ttdoc">Deadlock detected (retry).</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00033">error.hpp:33</a></div></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419caefd8a9e75c229fa65c3ffc508708207c"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caefd8a9e75c229fa65c3ffc508708207c">muscovite::dba::DbError::CheckViolation</a></div><div class="ttdeci">@ CheckViolation</div><div class="ttdoc">Check constraint violated.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00029">error.hpp:29</a></div></div>
 <div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html">muscovite::dba::DomainEvent</a></div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00035">unit_of_work.hpp:35</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_a43eea21f24eebcce8e7889ed44821490"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#a43eea21f24eebcce8e7889ed44821490">muscovite::dba::DomainEvent::aggregate_type</a></div><div class="ttdeci">std::string aggregate_type</div><div class="ttdoc">Type of the aggregate (e.g., &quot;Patient&quot;).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00038">unit_of_work.hpp:38</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_a7ded0241d0542925d5edb5f1617969e6"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#a7ded0241d0542925d5edb5f1617969e6">muscovite::dba::DomainEvent::metadata</a></div><div class="ttdeci">std::optional&lt; nlohmann::json &gt; metadata</div><div class="ttdoc">Optional metadata (user_id, etc.).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00040">unit_of_work.hpp:40</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_aa6c093db136c988f8ab5df56527e7f50"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">muscovite::dba::DomainEvent::aggregate_id</a></div><div class="ttdeci">boost::uuids::uuid aggregate_id</div><div class="ttdoc">ID of the aggregate that emitted the event.</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00037">unit_of_work.hpp:37</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_adf1a451741c3800264d630a5e1838d5c"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#adf1a451741c3800264d630a5e1838d5c">muscovite::dba::DomainEvent::event_type</a></div><div class="ttdeci">std::string event_type</div><div class="ttdoc">Event type (e.g., &quot;PatientCreated&quot;).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00036">unit_of_work.hpp:36</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html">muscovite::dba::DomainEvent</a></div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00036">unit_of_work.hpp:36</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_a43eea21f24eebcce8e7889ed44821490"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#a43eea21f24eebcce8e7889ed44821490">muscovite::dba::DomainEvent::aggregate_type</a></div><div class="ttdeci">std::string aggregate_type</div><div class="ttdoc">Type of the aggregate (e.g., &quot;Patient&quot;).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00039">unit_of_work.hpp:39</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_a7ded0241d0542925d5edb5f1617969e6"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#a7ded0241d0542925d5edb5f1617969e6">muscovite::dba::DomainEvent::metadata</a></div><div class="ttdeci">std::optional&lt; nlohmann::json &gt; metadata</div><div class="ttdoc">Optional metadata (user_id, etc.).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00041">unit_of_work.hpp:41</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_aa6c093db136c988f8ab5df56527e7f50"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#aa6c093db136c988f8ab5df56527e7f50">muscovite::dba::DomainEvent::aggregate_id</a></div><div class="ttdeci">boost::uuids::uuid aggregate_id</div><div class="ttdoc">ID of the aggregate that emitted the event.</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00038">unit_of_work.hpp:38</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1DomainEvent_html_adf1a451741c3800264d630a5e1838d5c"><div class="ttname"><a href="structmuscovite_1_1dba_1_1DomainEvent.html#adf1a451741c3800264d630a5e1838d5c">muscovite::dba::DomainEvent::event_type</a></div><div class="ttdeci">std::string event_type</div><div class="ttdoc">Event type (e.g., &quot;PatientCreated&quot;).</div><div class="ttdef"><b>Definition</b> <a href="unit__of__work_8hpp_source.html#l00037">unit_of_work.hpp:37</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1EffectIntent_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1EffectIntent.html">muscovite::dba::EffectIntent</a></div><div class="ttdef"><b>Definition</b> <a href="effect__intent_8hpp_source.html#l00036">effect_intent.hpp:36</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1EffectIntent_html_a156bdd6a42f29b97db2853c0cc28368d"><div class="ttname"><a href="structmuscovite_1_1dba_1_1EffectIntent.html#a156bdd6a42f29b97db2853c0cc28368d">muscovite::dba::EffectIntent::effect_type</a></div><div class="ttdeci">std::string effect_type</div><div class="ttdoc">The EFFECT type name (e.g., &quot;SendEmail&quot;, &quot;NotifyPayer&quot;).</div><div class="ttdef"><b>Definition</b> <a href="effect__intent_8hpp_source.html#l00038">effect_intent.hpp:38</a></div></div>
+<div class="ttc" id="astructmuscovite_1_1dba_1_1EffectIntent_html_abc5cc01a855e86ce53c91cecf93699ae"><div class="ttname"><a href="structmuscovite_1_1dba_1_1EffectIntent.html#abc5cc01a855e86ce53c91cecf93699ae">muscovite::dba::EffectIntent::aggregate_id</a></div><div class="ttdeci">boost::uuids::uuid aggregate_id</div><div class="ttdoc">The aggregate that produced this effect.</div><div class="ttdef"><b>Definition</b> <a href="effect__intent_8hpp_source.html#l00044">effect_intent.hpp:44</a></div></div>
 <div class="ttc" id="astructmuscovite_1_1dba_1_1Error_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1Error.html">muscovite::dba::Error</a></div><div class="ttdoc">Error information with code and message.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00056">error.hpp:56</a></div></div>
 <div class="ttc" id="aunit__of__work_8hpp_html"><div class="ttname"><a href="unit__of__work_8hpp.html">unit_of_work.hpp</a></div><div class="ttdoc">Unit of Work pattern implementation with domain event collection.</div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -41,6 +41,7 @@ var hierarchy =
     ] ],
     [ "muscovite::search::DocumentResponse", "structmuscovite_1_1search_1_1DocumentResponse.html", null ],
     [ "muscovite::dba::DomainEvent", "structmuscovite_1_1dba_1_1DomainEvent.html", null ],
+    [ "muscovite::dba::EffectIntent", "structmuscovite_1_1dba_1_1EffectIntent.html", null ],
     [ "muscovite::dba::Error&lt; E &gt;", "structmuscovite_1_1dba_1_1Error.html", null ],
     [ "muscovite::server::Error&lt; E &gt;", "structmuscovite_1_1server_1_1Error.html", null ],
     [ "muscovite::dba::ErrorContext", "structmuscovite_1_1dba_1_1ErrorContext.html", null ],
@@ -56,6 +57,8 @@ var hierarchy =
         ] ]
       ] ],
       [ "std::runtime_error", null, [
+        [ "muscovite::dba::PostconditionFailed", "classmuscovite_1_1dba_1_1PostconditionFailed.html", null ],
+        [ "muscovite::dba::PreconditionFailed", "classmuscovite_1_1dba_1_1PreconditionFailed.html", null ],
         [ "muscovite::dba::concurrency_exception", "classmuscovite_1_1dba_1_1concurrency__exception.html", [
           [ "muscovite::dba::advisory_lock_timeout_exception", "classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html", null ],
           [ "muscovite::dba::optimistic_lock_exception", "classmuscovite_1_1dba_1_1optimistic__lock__exception.html", null ]
