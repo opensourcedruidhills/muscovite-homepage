@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Context</h1>
 <blockquote>
 <p><strong>Generated</strong>: 2026-03-11 | <strong>Commit</strong>:
-66b3d17f | <strong>Branch</strong>: main <strong>Regenerate</strong>:
+7fb0e8c4 | <strong>Branch</strong>: main <strong>Regenerate</strong>:
 <code>./tools/generate-context.sh</code></p>
 </blockquote>
 <p>This is the single structured context file for AI agents and human
@@ -219,11 +219,11 @@ validation)</li>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.62.1</td>
+<td>1.62.2</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1398 (since 2025-11-17)</td>
+<td>1408 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td><strong>DSL model (.ddd)</strong></td>
@@ -251,7 +251,7 @@ validation)</li>
 </tr>
 <tr>
 <td>Architecture Decision Records</td>
-<td>201</td>
+<td>202</td>
 </tr>
 <tr>
 <td>Racket tests</td>
@@ -1409,20 +1409,18 @@ Petrology, Drilling, etc.) 4 sagas: MetamorphicPathway,
 SampleAnalysisWorkflow, FieldCampaignWorkflow, ExplorationToResource</p>
 <p>Both serve as integration tests for all generator targets.</p>
 <h2 id="15-current-iteration">15. Current Iteration</h2>
-<h1 id="iteration-v1621">Iteration: v1.62.1</h1>
-<p><strong>Goal</strong>: Build Python coordinator daemon for
-leader-worker multi-agent iteration execution <strong>Start</strong>:
-2026-03-11 <strong>Target</strong>: 2026-03-13 <strong>Status</strong>:
-active</p>
+<h1 id="iteration-v1622">Iteration: v1.62.2</h1>
+<p><strong>Goal</strong>: Harden NATS coordinator with gate NACK, crash
+recovery, infra locking, sync broadcast, concurrency governor, and merge
+queue. <strong>Start</strong>: 2026-03-11 <strong>Target</strong>:
+2026-03-11 <strong>Status</strong>: active</p>
 <h2 id="theme">Theme</h2>
-<p>Replace manual human relay between copilot CLI sessions with
-automated NATS-based coordination. A Python daemon manages FTR
-assignment (dependency-aware), PR review routing, and iteration
-lifecycle. NATS is mandatory — no silent degradation. An observer daemon
-provides <code>tail -f</code> observability. Per-FTR proxy metrics
-quantify iteration cost.</p>
-<p>First dogfood target: v1.63.0 (standalone infra generators, 6 FTRs, 2
-workers).</p>
+<p>Six hardening features for the multi-agent coordinator: gate failure
+NACK with rework loop (FTR-371), event-sourced crash recovery with
+idempotent commands (FTR-372), infrastructure-impactful FTR locking
+(FTR-373), develop-sync broadcast for worktree coherence (FTR-374),
+concurrency governor for compute-bound operations (FTR-375), and
+automated merge queue (FTR-376).</p>
 <h2 id="scope">Scope</h2>
 <table>
 <thead>
@@ -1436,61 +1434,60 @@ workers).</p>
 </thead>
 <tbody>
 <tr>
-<td>FTR-370</td>
-<td>DEPENDENCIES.toml + Graphviz</td>
+<td>FTR-371</td>
+<td>Gate failure NACK + rework loop</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-367</td>
-<td>Python coordinator daemon</td>
+<td>FTR-372</td>
+<td>Event-sourced crash recovery</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-368</td>
-<td>Event observer daemon</td>
+<td>FTR-373</td>
+<td>Infrastructure-impactful FTR locking</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-369</td>
-<td>Per-FTR metrics + iteration rollup</td>
+<td>FTR-374</td>
+<td>Develop-sync broadcast</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-375</td>
+<td>Concurrency governor</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-376</td>
+<td>Automated merge queue</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-377</td>
+<td>TLA+ coordinator state machine verification</td>
+<td>must</td>
+<td>complete</td>
+<td>develop</td>
 </tr>
 </tbody>
 </table>
 <h2 id="dependencies">Dependencies</h2>
-<pre><code>FTR-370 (DEPENDENCIES.toml) ──→ FTR-367 (coordinator daemon)
-                                    ├──→ FTR-368 (observer daemon)
-                                    └──→ FTR-369 (metrics + rollup)</code></pre>
-<p>FTR-370 first: coordinator needs the dependency graph module. FTR-367
-next: core daemon that FTR-368 and FTR-369 extend. FTR-368 and FTR-369
-are independent of each other.</p>
-<h2 id="deferred">Deferred</h2>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Feature</th>
-<th>Reason</th>
-<th>Target</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-</tbody>
-</table>
+<p>Machine-readable dependency graph: <code>DEPENDENCIES.toml</code>
+(same directory). Parsed by <code>agents/depgraph.py</code> for
+coordinator scheduling and Graphviz visualization.</p>
 <h2 id="quality-gateway-definition-of-done--iteration-level">Quality
 Gateway (Definition of Done — Iteration Level)</h2>
 <h3 id="per-feature-quality-gates-run-during-development">Per-Feature
@@ -1505,49 +1502,22 @@ Quality Gates (run during development)</h3>
 </thead>
 <tbody>
 <tr>
-<td>FTR-370</td>
-<td><code>cd agents &amp;&amp; python -m pytest tests/test_depgraph.py -v</code></td>
-<td>- [x] Pass (41/41)</td>
+<td>FTR-371–376</td>
+<td><code>cd agents &amp;&amp; python -m pytest tests/ -q</code></td>
+<td>- [x] Pass (193 tests)</td>
 </tr>
 <tr>
-<td>FTR-367</td>
-<td><code>cd agents &amp;&amp; python -m pytest tests/test_coordinator.py -v</code></td>
-<td>- [x] Pass (44/44)</td>
-</tr>
-<tr>
-<td>FTR-368</td>
-<td><code>cd agents &amp;&amp; python -m pytest tests/test_observer.py -v</code></td>
-<td>- [x] Pass (12/12)</td>
-</tr>
-<tr>
-<td>FTR-369</td>
-<td><code>cd agents &amp;&amp; python -m pytest tests/test_metrics.py -v</code></td>
-<td>- [x] Pass (22/22)</td>
+<td>FTR-377 (TLA+)</td>
+<td><code>java -XX:+UseParallelGC -cp tools/tla2tools.jar tlc2.TLC -config agents/tlaplus/Coordinator.cfg -workers auto -deadlock agents/tlaplus/MC</code></td>
+<td>- [x] Pass (417K states, 0 violations)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="integration-smoke-test">Integration Smoke Test</h3>
-<ul class="task-list">
-<li><label><input type="checkbox" />Start NATS server
-(systemd)</label></li>
-<li><label><input type="checkbox" />Start coordinator daemon with test
-iteration</label></li>
-<li><label><input type="checkbox" />Start observer, verify
-event-stream.log output</label></li>
-<li><label><input type="checkbox" />Register 1 worker, complete full FTR
-lifecycle</label></li>
-<li><label><input type="checkbox" />Verify metrics report
-generated</label></li>
-</ul>
 <h3 id="release-gate-run-once-before-tagging--full-suite">Release Gate
 (run once before tagging — full suite)</h3>
 <ul class="task-list">
-<li><label><input type="checkbox" checked="" />All pytest tests pass:
-<code>cd agents &amp;&amp; python -m pytest -v</code>
-(119/119)</label></li>
-<li><label><input type="checkbox" />All Racket tests pass:
-<code>racket dslgen/tests/run-all-tests.rkt</code> (no
-regressions)</label></li>
+<li><label><input type="checkbox" />All Python coordinator tests pass:
+<code>cd agents &amp;&amp; python -m pytest tests/ -q</code></label></li>
 <li><label><input type="checkbox" />Generated FHIR Health project
 compiles: <code>cmake --build --preset debug</code></label></li>
 <li><label><input type="checkbox" />C++ tests pass:
@@ -1555,12 +1525,10 @@ compiles: <code>cmake --build --preset debug</code></label></li>
 </ul>
 <h3 id="documentation">Documentation</h3>
 <ul class="task-list">
-<li><label><input type="checkbox" checked="" />AGENTS.md updated with
-coordinator setup instructions</label></li>
 <li><label><input type="checkbox" />CHANGELOG.md updated with release
 notes</label></li>
-<li><label><input type="checkbox" />ADR 20260311 written (leader-worker
-coordination)</label></li>
+<li><label><input type="checkbox" />FTR files marked
+complete</label></li>
 </ul>
 <h3 id="release">Release</h3>
 <ul class="task-list">
@@ -1568,11 +1536,11 @@ coordination)</label></li>
 develop</label></li>
 <li><label><input type="checkbox" />All tests pass on
 develop</label></li>
-<li><label><input type="checkbox" />Release ceremony via
-<code>workflow/scripts/release.sh v1.62.1</code></label></li>
+<li><label><input type="checkbox" />Git tag created:
+<code>git tag v1.62.2</code></label></li>
+<li><label><input type="checkbox" />Pushed to origin:
+<code>git push origin develop --tags</code></label></li>
 </ul>
-<h2 id="retrospective">Retrospective</h2>
-<p>[After release: what went well, what didn't, what to change.]</p>
 <h2 id="16-strategic-direction">16. Strategic Direction</h2>
 <p>Muscovite validates a 25-year thesis: <strong>a declarative domain
 model should be the single source of truth for an entire application

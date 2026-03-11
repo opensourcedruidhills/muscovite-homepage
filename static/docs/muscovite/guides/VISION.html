@@ -414,10 +414,18 @@ Coordination</h3>
 become a bottleneck. Muscovite supports <strong>concurrent agent
 sessions</strong> — a planning agent analyzing the codebase, an
 implementation agent executing the current iteration, and a hotfix agent
-resolving release issues, all operating simultaneously. Coordination
-uses file-based claims and git worktrees (ADR 20260306) — primitives
-that LLMs can reliably operate without external infrastructure. This is
-the natural evolution from "AI-developed" to "AI-coordinated."</p>
+resolving release issues, all operating simultaneously.</p>
+<p>Coordination evolved from file-based claims and git worktrees (ADR
+20260306) to a <strong>NATS-based coordinator daemon</strong> (v1.62.1)
+— a Python state machine that manages FTR assignment, quality gate
+enforcement, sync barriers, and merge queuing via JetStream messaging.
+The coordinator's state machine is <strong>formally verified with
+TLA+</strong> (ADR 20260311): 8 safety invariants checked across 417,965
+states with zero violations, proving properties like exclusive resource
+locking, one-worker-one-FTR assignment, and merge queue single-threading
+that are invisible to conventional testing. This is one of the few
+AI-agent coordination systems with model-checked correctness
+guarantees.</p>
 <h3 id="grammar-first-evolution">Grammar-First Evolution</h3>
 <p>Every syntax change starts with a <strong>PEG grammar edit</strong>
 (ADR 20260211). This ensures that the DSL remains a formal language,

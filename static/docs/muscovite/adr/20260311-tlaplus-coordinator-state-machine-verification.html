@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: TLA+ Formal Verification of Coordinator State
+Machine — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: TLA+ Formal Verification of Coordinator State
+Machine</span>
+</nav>
+
+<h1>ADR: TLA+ Formal Verification of Coordinator State Machine</h1>
+
+
+<h1 id="adr-tla-formal-verification-of-coordinator-state-machine">ADR:
+TLA+ Formal Verification of Coordinator State Machine</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-11</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Deciders</strong>: Johannes Lochmann</li>
+<li><strong>Category</strong>: verification, coordinator, tooling</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The multi-agent coordinator (<code>agents/coordinator.py</code>, ADR
+20260311-leader-worker) manages FTR lifecycle, resource locking, sync
+barriers, and merge queuing for N concurrent AI agent workers. The state
+machine has 6 states, 9 transitions, and interacts with 3 subsystems
+(ConcurrencyGovernor, resource locks, MergeQueue) under concurrent
+access.</p>
+<p>Three classes of bugs have already manifested during development:</p>
+<ol type="1">
+<li><strong>Missing transitions</strong> —
+<code>REVIEWING → PR_READY</code> was absent from the transition graph,
+discovered only when implementing merge failure recovery. A formal spec
+would have caught this as a deadlock state.</li>
+<li><strong>Resource leak on worker death</strong> — compute semaphore
+slots were not released when a worker unregistered, causing permanent
+capacity reduction. The invariant "sum of held slots ≤ limit" held, but
+the liveness property "every queued request is eventually granted" was
+violated.</li>
+<li><strong>Idempotency gaps</strong> — the command deduplication
+infrastructure existed but was not wired into handlers, allowing
+duplicate state transitions on NATS timeout retries.</li>
+</ol>
+<p>These bugs are invisible to unit tests (which test single-actor
+paths) and emerge only under specific interleavings of concurrent
+workers — the domain of TLA+ model checking.</p>
+<h2 id="decision">Decision</h2>
+<p><strong>Write a hand-authored TLA+ specification of the coordinator
+state machine and verify it with TLC as a development-time
+check.</strong> Unlike the saga TLA+ generator (ADR 20260311-tlaplus-
+saga-formal-verification), this is a one-off specification — not
+generated from IR.</p>
+<h3 id="scope">Scope</h3>
+<p>The spec models the coordinator's core state machine, NOT the NATS
+transport layer. Message delivery semantics (at-least-once, ordering)
+are modeled as nondeterministic choices in the environment process.</p>
+<h3 id="module-structure">Module Structure</h3>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agents/tlaplus/Coordinator.tla</code></td>
+<td>Main spec: state variables, Next relation</td>
+</tr>
+<tr>
+<td><code>agents/tlaplus/CoordinatorProps.tla</code></td>
+<td>Invariants and temporal properties</td>
+</tr>
+<tr>
+<td><code>agents/tlaplus/Coordinator.cfg</code></td>
+<td>TLC configuration (constants, properties)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="state-variables-modeled">State Variables Modeled</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ftr_state</code></td>
+<td><code>[FTR_IDS -&gt; States]</code></td>
+<td><code>IterationState.ftrs[].state</code></td>
+</tr>
+<tr>
+<td><code>ftr_worker</code></td>
+<td><code>[FTR_IDS -&gt; Workers ∪ {None}]</code></td>
+<td><code>IterationState.ftrs[].worker</code></td>
+</tr>
+<tr>
+<td><code>worker_ftr</code></td>
+<td><code>[WORKERS -&gt; FTR_IDS ∪ {None}]</code></td>
+<td><code>WorkerRecord.current_ftr</code></td>
+</tr>
+<tr>
+<td><code>resource_locks</code></td>
+<td><code>[TAGS -&gt; FTR_IDS ∪ {None}]</code></td>
+<td><code>IterationState._resource_locks</code></td>
+</tr>
+<tr>
+<td><code>semaphore_held</code></td>
+<td><code>[RESOURCES -&gt; SUBSET FTR_IDS]</code></td>
+<td><code>ConcurrencyGovernor._held</code></td>
+</tr>
+<tr>
+<td><code>merge_queue</code></td>
+<td><code>Seq(MergeRequest)</code></td>
+<td><code>MergeQueue._queue</code></td>
+</tr>
+<tr>
+<td><code>merge_current</code></td>
+<td><code>MergeRequest ∪ {None}</code></td>
+<td><code>MergeQueue._current</code></td>
+</tr>
+<tr>
+<td><code>seen_commands</code></td>
+<td><code>SUBSET CommandIDs</code></td>
+<td><code>IterationState._seen_commands</code></td>
+</tr>
+<tr>
+<td><code>sync_point</code></td>
+<td><code>[WORKERS -&gt; Commits ∪ {None}]</code></td>
+<td><code>WorkerRecord.last_synced_commit</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="properties-verified">Properties Verified</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No two workers hold same FTR</td>
+<td>Safety (invariant)</td>
+<td><code>∀ w1, w2 ∈ WORKERS: w1 ≠ w2 ⇒ worker_ftr[w1] = None ∨ worker_ftr[w1] ≠ worker_ftr[w2]</code></td>
+</tr>
+<tr>
+<td>Worker holds at most 1 FTR</td>
+<td>Safety (invariant)</td>
+<td>Structural (single <code>worker_ftr</code> field)</td>
+</tr>
+<tr>
+<td>Exclusive tags mutually exclusive</td>
+<td>Safety (invariant)</td>
+<td>`∀ t ∈ EXCLUSIVE_TAGS:</td>
+</tr>
+<tr>
+<td>Semaphore limit respected</td>
+<td>Safety (invariant)</td>
+<td><code>∀ r ∈ RESOURCES: Cardinality(semaphore_held[r]) ≤ limit[r]</code></td>
+</tr>
+<tr>
+<td>Single merge writer</td>
+<td>Safety (invariant)</td>
+<td><code>merge_current ≠ None ⇒ merge_queue_not_dequeuing</code></td>
+</tr>
+<tr>
+<td>Sync barrier blocks PR_READY</td>
+<td>Safety (invariant)</td>
+<td><code>∀ f: ftr_state[f] = "pr_ready" ⇒ worker_synced(ftr_worker[f])</code></td>
+</tr>
+<tr>
+<td>Every assigned FTR eventually merges or returns to pending</td>
+<td>Liveness</td>
+<td><code>∀ f: ftr_state[f] = "assigned" ↝ ftr_state[f] ∈ {"merged", "pending"}</code></td>
+</tr>
+<tr>
+<td>No permanent semaphore leak</td>
+<td>Liveness</td>
+<td><code>∀ f, r: f ∈ semaphore_held[r] ↝ f ∉ semaphore_held[r]</code></td>
+</tr>
+<tr>
+<td>Merge queue fairness</td>
+<td>Liveness</td>
+<td><code>∀ f ∈ merge_queue: f ↝ merge_current = f</code></td>
+</tr>
+<tr>
+<td>Idempotent command replay</td>
+<td>Safety</td>
+<td><code>∀ cmd: cmd ∈ seen_commands ⇒ replay(cmd) = noop</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-parameters-tlc">Model Parameters (TLC)</h3>
+<pre><code>CONSTANTS
+  FTR_IDS = {&quot;FTR-1&quot;, &quot;FTR-2&quot;, &quot;FTR-3&quot;}
+  WORKERS = {&quot;w1&quot;, &quot;w2&quot;}
+  EXCLUSIVE_TAGS = {&quot;framework&quot;, &quot;ir&quot;}
+  RESOURCES = {&quot;build&quot;, &quot;ctest&quot;}
+  RESOURCE_LIMITS = [build |-&gt; 2, ctest |-&gt; 1]</code></pre>
+<p>Small model (3 FTRs, 2 workers) keeps state space tractable while
+exercising all concurrency interleavings. Symmetry reduction on WORKERS
+and FTR_IDS.</p>
+<h3 id="not-a-release-gate">NOT a Release Gate</h3>
+<p>Unlike saga TLA+ specs (which are generated and gated), this
+coordinator spec is a <strong>development-time verification
+tool</strong>. It is run manually when the state machine changes, not on
+every release. Rationale: the coordinator is infrastructure code that
+changes infrequently, and TLC runs take minutes for meaningful state
+spaces.</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>State machine bugs that manifest only under concurrent interleaving
+are caught before they reach production</li>
+<li>The spec serves as executable documentation of the coordinator's
+invariants</li>
+<li>Adding new transitions or states requires updating the spec first —
+"spec-first" discipline</li>
+<li>TLC counterexample traces provide concrete reproduction scenarios
+for bugs</li>
+</ul>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<ol type="1">
+<li><strong>Property-based testing (Hypothesis)</strong> — good for
+single-actor properties, poor at exploring concurrent interleavings
+across multiple actors</li>
+<li><strong>Generated spec from Python</strong> — rejected; the
+coordinator is a one-off, and translating Python async patterns to TLA+
+automatically adds complexity without value</li>
+<li><strong>No formal verification</strong> — rejected; we already found
+3 bugs that formal verification would have caught</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

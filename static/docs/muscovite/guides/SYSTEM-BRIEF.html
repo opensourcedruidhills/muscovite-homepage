@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.62.1 | <strong>Generated</strong>:
-2026-03-11 | <strong>Commit</strong>: 66b3d17f |
+<p><strong>Version</strong>: 1.62.2 | <strong>Generated</strong>:
+2026-03-11 | <strong>Commit</strong>: 7fb0e8c4 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -213,7 +213,7 @@ edited.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>201</td>
+<td>202</td>
 </tr>
 </tbody>
 </table>
@@ -334,8 +334,47 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1621----2026-03-11">[1.62.1] -- 2026-03-11</h2>
+<h2 id="1622----2026-03-11">[1.62.2] -- 2026-03-11</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li>(coordinator): TLA+ formal verification of state machine
+(FTR-377)</li>
+<li>Merge pull request #129 from
+opensourcedruidhills/feature/v1.62.2-coordinator-hardening</li>
+<li>(coordinator): implement FTR-371–376 coordinator hardening
+(v1.62.2)</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>(coordinator): address protocol review feedback (B-D)</li>
+<li>BFX-006 + BFX-007 — eliminate duplicate test runs and subtree push
+O(n)</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>add coordinator reference and update multi-agent instructions</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>add .copilot/ and <strong>pycache</strong>/ to gitignore</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>governance: mark FTR-377 complete with all acceptance criteria</li>
+<li>Merge pull request #129 from
+opensourcedruidhills/feature/v1.62.2-coordinator-hardening</li>
+<li>governance: plan v1.62.2 — coordinator hardening (FTR-371–376)</li>
+</ul>
+<h3 id="added-1">Added</h3>
+<ul>
+<li>FTR-377: TLA+ formal verification of coordinator state machine — 8
+safety invariants, 417K states, 0 violations (ADR 20260311)</li>
+<li>Protocol review feedback: command_id idempotency (B), resource
+cleanup on worker death (C), merge failure recovery with re-enqueue
+(D)</li>
+</ul>
+<h2 id="1621----2026-03-11">[1.62.1] -- 2026-03-11</h2>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>v1.62.1 — Python coordinator daemon (FTR-367/368/369/370, 119
 tests)</li>
@@ -345,11 +384,11 @@ tests)</li>
 (#120)</li>
 <li>feature/ftr-lifecycle-automation (#119)</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 <ul>
 <li>rebrand as 'business intent to software system compiler' (#121)</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>governance: tick FTR acceptance criteria for v1.62.1</li>
 <li>Merge #124: restore enrichment FTRs (346-348) to v1.63.0 as Pillar
@@ -366,7 +405,7 @@ FTRs)</li>
 repos</li>
 </ul>
 <h2 id="1620----2026-03-11">[1.62.0] -- 2026-03-11</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-3">Added</h3>
 <ul>
 <li>(framework): FTR-320 — zero clang-tidy warnings on framework code
 (#118)</li>
@@ -389,7 +428,7 @@ generation</li>
 (#107)</li>
 <li>automate README metrics update in release ceremony</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>exclude compiled/ and shared/ from generator target counts</li>
 <li>(docs): generate index.html for fact-base directories</li>
@@ -398,7 +437,7 @@ SYSTEM-BRIEF</li>
 <li>(docs): support submodule .git file in publish-docs.sh</li>
 <li>(release): auto-detect homepage submodule for docs deployment</li>
 </ul>
-<h3 id="documentation-1">Documentation</h3>
+<h3 id="documentation-2">Documentation</h3>
 <ul>
 <li>tick all acceptance criteria checkboxes for v1.62.0 FTRs</li>
 <li>mark all v1.62.0 FTRs complete — iteration ready for release</li>
@@ -411,7 +450,7 @@ comprehensions</li>
 <li>template DSL quick-reference, anti-pattern catalog, gold standard
 guide (#102)</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>FTR-351: Negative grammar and parser test suite (151 rejection
 tests) (#115)</li>
@@ -433,26 +472,19 @@ neutral IR</li>
 <li>plan: add FTR-349 Gitea full brownfield extraction to v1.64.0</li>
 <li>plan: v1.64.0 — Sample Project Enrichment (5 FTRs)</li>
 </ul>
-<h2 id="1610----2026-03-10">[1.61.0] -- 2026-03-10</h2>
-<h3 id="maintenance">Maintenance</h3>
-<ul>
-<li>update example submodule refs and test output for v1.61.0</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
-<h1 id="iteration-v1621">Iteration: v1.62.1</h1>
-<p><strong>Goal</strong>: Build Python coordinator daemon for
-leader-worker multi-agent iteration execution <strong>Start</strong>:
-2026-03-11 <strong>Target</strong>: 2026-03-13 <strong>Status</strong>:
-active</p>
+<h1 id="iteration-v1622">Iteration: v1.62.2</h1>
+<p><strong>Goal</strong>: Harden NATS coordinator with gate NACK, crash
+recovery, infra locking, sync broadcast, concurrency governor, and merge
+queue. <strong>Start</strong>: 2026-03-11 <strong>Target</strong>:
+2026-03-11 <strong>Status</strong>: active</p>
 <h2 id="theme">Theme</h2>
-<p>Replace manual human relay between copilot CLI sessions with
-automated NATS-based coordination. A Python daemon manages FTR
-assignment (dependency-aware), PR review routing, and iteration
-lifecycle. NATS is mandatory — no silent degradation. An observer daemon
-provides <code>tail -f</code> observability. Per-FTR proxy metrics
-quantify iteration cost.</p>
-<p>First dogfood target: v1.63.0 (standalone infra generators, 6 FTRs, 2
-workers).</p>
+<p>Six hardening features for the multi-agent coordinator: gate failure
+NACK with rework loop (FTR-371), event-sourced crash recovery with
+idempotent commands (FTR-372), infrastructure-impactful FTR locking
+(FTR-373), develop-sync broadcast for worktree coherence (FTR-374),
+concurrency governor for compute-bound operations (FTR-375), and
+automated merge queue (FTR-376).</p>
 <h2 id="scope">Scope</h2>
 <table>
 <thead>
@@ -466,61 +498,60 @@ workers).</p>
 </thead>
 <tbody>
 <tr>
-<td>FTR-370</td>
-<td>DEPENDENCIES.toml + Graphviz</td>
+<td>FTR-371</td>
+<td>Gate failure NACK + rework loop</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-367</td>
-<td>Python coordinator daemon</td>
+<td>FTR-372</td>
+<td>Event-sourced crash recovery</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-368</td>
-<td>Event observer daemon</td>
+<td>FTR-373</td>
+<td>Infrastructure-impactful FTR locking</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
 </tr>
 <tr>
-<td>FTR-369</td>
-<td>Per-FTR metrics + iteration rollup</td>
+<td>FTR-374</td>
+<td>Develop-sync broadcast</td>
 <td>must</td>
 <td>complete</td>
-<td>feature/ftr-367-coordinator</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-375</td>
+<td>Concurrency governor</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-376</td>
+<td>Automated merge queue</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/v1.62.2-coordinator-hardening</td>
+</tr>
+<tr>
+<td>FTR-377</td>
+<td>TLA+ coordinator state machine verification</td>
+<td>must</td>
+<td>complete</td>
+<td>develop</td>
 </tr>
 </tbody>
 </table>
 <h2 id="dependencies">Dependencies</h2>
-<pre><code>FTR-370 (DEPENDENCIES.toml) ──→ FTR-367 (coordinator daemon)
-                                    ├──→ FTR-368 (observer daemon)
-                                    └──→ FTR-369 (metrics + rollup)</code></pre>
-<p>FTR-370 first: coordinator needs the dependency graph module. FTR-367
-next: core daemon that FTR-368 and FTR-369 extend. FTR-368 and FTR-369
-are independent of each other.</p>
-<h2 id="deferred">Deferred</h2>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Feature</th>
-<th>Reason</th>
-<th>Target</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-</tbody>
-</table>
+<p>Machine-readable dependency graph: <code>DEPENDENCIES.toml</code>
+(same directory). Parsed by <code>agents/depgraph.py</code> for
+coordinator scheduling and Graphviz visualization.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
 <table>
 <thead>
@@ -538,7 +569,7 @@ infrastructure, build the</td>
 </tbody>
 </table>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
-<p>52 ideas in backlog.</p>
+<p>46 ideas in backlog.</p>
 <table>
 <thead>
 <tr>
@@ -747,32 +778,6 @@ LicenseRef-Muscovite-Commercial</td>
 <td>-- SPDX-License-Identifier: AGPL-3.0-or-later OR
 LicenseRef-Muscovite-Commercial</td>
 </tr>
-<tr>
-<td>IDEA-054</td>
-<td>IDEA-054: Quality Gate Failure NACK and Rework Loop</td>
-</tr>
-<tr>
-<td>IDEA-055</td>
-<td>IDEA-055: Event-Sourced Crash Recovery and Idempotent Commands</td>
-</tr>
-<tr>
-<td>IDEA-056</td>
-<td>IDEA-056: Infrastructure-Impactful FTR Locking (Worktree Leakage
-Prevention)</td>
-</tr>
-<tr>
-<td>IDEA-057</td>
-<td>IDEA-057: Develop-Sync Broadcast Event for Worktree Coherence</td>
-</tr>
-<tr>
-<td>IDEA-058</td>
-<td>IDEA-058: Concurrency Governor for Compute-Bound Operations</td>
-</tr>
-<tr>
-<td>IDEA-059</td>
-<td>IDEA-059: Dedicated Merge Agent with Automated Rebase-and-Merge
-Queue</td>
-</tr>
 </tbody>
 </table>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
@@ -803,7 +808,7 @@ Queue</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>66b3d17f</code> (project:
+<p>Last measured at commit <code>7fb0e8c4</code> (project:
 fhir-health):</p>
 <table>
 <thead>
@@ -816,17 +821,17 @@ fhir-health):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1213.6s</td>
+<td>1033.9s</td>
 <td>283 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
-<td>3.1s</td>
+<td>1.2s</td>
 <td>All generator targets</td>
 </tr>
 </tbody>
 </table>
-<p>Build history: 5 recorded runs.</p>
+<p>Build history: 6 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -846,7 +851,7 @@ fhir-health):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>506.3s</td>
+<td>384.7s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -854,16 +859,16 @@ fhir-health):</p>
 <td>27</td>
 <td>1</td>
 <td>96%</td>
-<td>11.2s</td>
+<td>11.1s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (107.3s)</li>
-<li><strong>slow</strong>: 54/54 passed (342.8s)</li>
-<li><strong>integration</strong>: 12/12 passed (56.1s)</li>
+<li><strong>fast</strong>: 29/29 passed (99.9s)</li>
+<li><strong>slow</strong>: 54/54 passed (260.4s)</li>
+<li><strong>integration</strong>: 12/12 passed (24.3s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -880,6 +885,14 @@ fhir-health):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.62.2</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>27/28</td>
+</tr>
 <tr>
 <td>v1.62.1</td>
 <td>8</td>
@@ -938,7 +951,7 @@ fhir-health):</p>
 </tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.62.1).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.62.2).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <h1 id="user-profile-jolo">User Profile: Jolo</h1>
 <blockquote>
