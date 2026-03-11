@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -122,7 +122,7 @@ $(function(){initNavTree('server_2src_2security_2auth__interceptor_8cpp_source.h
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    }</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    std::string auth_header(it-&gt;second.data(), it-&gt;second.length());</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">const</span> std::string auth_header(it-&gt;second.data(), it-&gt;second.length());</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="comment">// Check for &quot;Bearer &quot; prefix (case-insensitive)</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">const</span> std::string bearer_prefix = <span class="stringliteral">&quot;Bearer &quot;</span>;</div>
@@ -132,7 +132,7 @@ $(function(){initNavTree('server_2src_2security_2auth__interceptor_8cpp_source.h
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    std::string prefix = auth_header.substr(0, bearer_prefix.length());</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">// Case-insensitive comparison for &quot;Bearer &quot;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::transform(prefix.begin(), prefix.end(), prefix.begin(), ::tolower);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::ranges::transform(prefix, prefix.begin(), ::tolower);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">if</span> (prefix != <span class="stringliteral">&quot;bearer &quot;</span>) {</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    }</div>
@@ -162,7 +162,7 @@ $(function(){initNavTree('server_2src_2security_2auth__interceptor_8cpp_source.h
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        , method_privileges(std::move(method_privileges_)) {}</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">bool</span> is_public_method(<span class="keyword">const</span> std::string&amp; method)<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">return</span> public_methods.find(method) != public_methods.end();</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">return</span> public_methods.contains(method);</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    }</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    std::vector&lt;std::string&gt; get_required_privileges(<span class="keyword">const</span> std::string&amp; method)<span class="keyword"> const </span>{</div>

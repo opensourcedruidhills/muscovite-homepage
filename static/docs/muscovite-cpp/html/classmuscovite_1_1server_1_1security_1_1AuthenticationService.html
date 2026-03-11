@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -111,8 +111,8 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight"><b>AuthenticationService</b> (const AuthenticationService &amp;)=delete</td></tr>
 <tr class="memitem:ada0c3653c5e5e9c69dd1c48d31f7e950" id="r_ada0c3653c5e5e9c69dd1c48d31f7e950"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ada0c3653c5e5e9c69dd1c48d31f7e950">AuthenticationService</a> (std::shared_ptr&lt; <a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">muscovite::dba::ConnectionPool</a> &gt; pool, std::shared_ptr&lt; <a class="el" href="classmuscovite_1_1server_1_1security_1_1JwtService.html">JwtService</a> &gt; jwt_service, std::shared_ptr&lt; <a class="el" href="classmuscovite_1_1server_1_1security_1_1PasswordService.html">PasswordService</a> &gt; password_service, const <a class="el" href="structmuscovite_1_1server_1_1security_1_1AuthenticationService_1_1Config.html">Config</a> &amp;config)</td></tr>
 <tr class="memdesc:ada0c3653c5e5e9c69dd1c48d31f7e950"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct authentication service.  <br /></td></tr>
-<tr class="memitem:a67ccd60b45d3645bbe6e9f5b45336fb4" id="r_a67ccd60b45d3645bbe6e9f5b45336fb4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a67ccd60b45d3645bbe6e9f5b45336fb4">blacklist_token</a> (const std::string &amp;jti, const std::string &amp;principal_id, std::chrono::system_clock::time_point expiry, const std::string &amp;reason)</td></tr>
-<tr class="memdesc:a67ccd60b45d3645bbe6e9f5b45336fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blacklist a JWT token (for immediate revocation).  <br /></td></tr>
+<tr class="memitem:abd6ac43b3a397865cf7f367f029b9aa6" id="r_abd6ac43b3a397865cf7f367f029b9aa6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#abd6ac43b3a397865cf7f367f029b9aa6">blacklist_token</a> (const std::string &amp;jti, const std::string &amp;principal_id, std::chrono::system_clock::time_point expires_at, const std::string &amp;reason)</td></tr>
+<tr class="memdesc:abd6ac43b3a397865cf7f367f029b9aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blacklist a JWT token (for immediate revocation).  <br /></td></tr>
 <tr class="memitem:a6119b505b732489d7d008161f7141a33" id="r_a6119b505b732489d7d008161f7141a33"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a6119b505b732489d7d008161f7141a33">change_password</a> (const std::string &amp;principal_id, const std::string &amp;current_password, const std::string &amp;new_password)</td></tr>
 <tr class="memdesc:a6119b505b732489d7d008161f7141a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change a user's password.  <br /></td></tr>
 <tr class="memitem:aeffdc0795d9e873b52c913940e73144e" id="r_aeffdc0795d9e873b52c913940e73144e"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aeffdc0795d9e873b52c913940e73144e">is_token_blacklisted</a> (const std::string &amp;jti)</td></tr>
@@ -184,15 +184,15 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00334">334</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00338">338</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00346">login()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00350">login()</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a67ccd60b45d3645bbe6e9f5b45336fb4" name="a67ccd60b45d3645bbe6e9f5b45336fb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67ccd60b45d3645bbe6e9f5b45336fb4">&#9670;&#160;</a></span>blacklist_token()</h2>
+<a id="abd6ac43b3a397865cf7f367f029b9aa6" name="abd6ac43b3a397865cf7f367f029b9aa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd6ac43b3a397865cf7f367f029b9aa6">&#9670;&#160;</a></span>blacklist_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,7 +210,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::chrono::system_clock::time_point</td>          <td class="paramname"><span class="paramname"><em>expiry</em></span>, </td>
+          <td class="paramtype">std::chrono::system_clock::time_point</td>          <td class="paramname"><span class="paramname"><em>expires_at</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -225,17 +225,17 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">jti</td><td>The JWT ID claim. </td></tr>
     <tr><td class="paramname">principal_id</td><td>The user ID. </td></tr>
-    <tr><td class="paramname">expiry</td><td>When the token would have expired. </td></tr>
+    <tr><td class="paramname">expires_at</td><td>When the token would have expired. </td></tr>
     <tr><td class="paramname">reason</td><td>Reason for blacklisting. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00662">662</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00666">666</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00662">blacklist_token()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00666">blacklist_token()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00662">blacklist_token()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00666">blacklist_token()</a>.</p>
 
 </div>
 </div>
@@ -282,11 +282,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if password was changed successfully. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00606">606</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00610">610</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00606">change_password()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00610">change_password()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00606">change_password()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00610">change_password()</a>.</p>
 
 </div>
 </div>
@@ -322,11 +322,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the token is blacklisted. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00694">694</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00700">700</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00694">is_token_blacklisted()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00700">is_token_blacklisted()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00694">is_token_blacklisted()</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00586">validate_token()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00700">is_token_blacklisted()</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00590">validate_token()</a>.</p>
 
 </div>
 </div>
@@ -385,11 +385,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Authentication result with tokens if successful. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00346">346</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00350">350</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00334">AuthenticationService()</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00346">login()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00338">AuthenticationService()</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00350">login()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00346">login()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00350">login()</a>.</p>
 
 </div>
 </div>
@@ -422,11 +422,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if session was revoked. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00453">453</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00457">457</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00453">logout()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00457">logout()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00453">logout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00457">logout()</a>.</p>
 
 </div>
 </div>
@@ -459,11 +459,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of sessions revoked. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00489">489</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00493">493</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00489">logout_all()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8cpp_source.html#l00493">logout_all()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00489">logout_all()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00493">logout_all()</a>.</p>
 
 </div>
 </div>
@@ -510,11 +510,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>New tokens if successful. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00509">509</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00513">513</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8hpp_source.html#l00031">muscovite::server::security::Principal::display_name</a>, <a class="el" href="authentication__service_8hpp_source.html#l00029">muscovite::server::security::Principal::id</a>, <a class="el" href="authentication__service_8cpp_source.html#l00509">refresh()</a>, and <a class="el" href="authentication__service_8hpp_source.html#l00030">muscovite::server::security::Principal::username</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8hpp_source.html#l00031">muscovite::server::security::Principal::display_name</a>, <a class="el" href="authentication__service_8hpp_source.html#l00029">muscovite::server::security::Principal::id</a>, <a class="el" href="authentication__service_8cpp_source.html#l00513">refresh()</a>, and <a class="el" href="authentication__service_8hpp_source.html#l00030">muscovite::server::security::Principal::username</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00509">refresh()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00513">refresh()</a>.</p>
 
 </div>
 </div>
@@ -550,11 +550,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The principal if token is valid, nullopt otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00586">586</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="authentication__service_8cpp_source.html#l00590">590</a> of file <a class="el" href="authentication__service_8cpp_source.html">authentication_service.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="authentication__service_8hpp_source.html#l00031">muscovite::server::security::Principal::display_name</a>, <a class="el" href="authentication__service_8hpp_source.html#l00041">muscovite::server::security::Principal::groups</a>, <a class="el" href="authentication__service_8hpp_source.html#l00029">muscovite::server::security::Principal::id</a>, <a class="el" href="authentication__service_8cpp_source.html#l00694">is_token_blacklisted()</a>, <a class="el" href="authentication__service_8hpp_source.html#l00042">muscovite::server::security::Principal::privileges</a>, <a class="el" href="authentication__service_8hpp_source.html#l00030">muscovite::server::security::Principal::username</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00586">validate_token()</a>.</p>
+<p class="reference">References <a class="el" href="authentication__service_8hpp_source.html#l00031">muscovite::server::security::Principal::display_name</a>, <a class="el" href="authentication__service_8hpp_source.html#l00041">muscovite::server::security::Principal::groups</a>, <a class="el" href="authentication__service_8hpp_source.html#l00029">muscovite::server::security::Principal::id</a>, <a class="el" href="authentication__service_8cpp_source.html#l00700">is_token_blacklisted()</a>, <a class="el" href="authentication__service_8hpp_source.html#l00042">muscovite::server::security::Principal::privileges</a>, <a class="el" href="authentication__service_8hpp_source.html#l00030">muscovite::server::security::Principal::username</a>, and <a class="el" href="authentication__service_8cpp_source.html#l00590">validate_token()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00586">validate_token()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="authentication__service_8cpp_source.html#l00590">validate_token()</a>.</p>
 
 </div>
 </div>

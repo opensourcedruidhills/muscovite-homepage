@@ -1,7 +1,7 @@
 var classmuscovite_1_1qt_1_1TokenStorage =
 [
     [ "clearTokens", "classmuscovite_1_1qt_1_1TokenStorage.html#a064fc1d019f395760be48c944a428b7f", null ],
-    [ "errorOccurred", "classmuscovite_1_1qt_1_1TokenStorage.html#ae39d19b7333afc38557fa238071c16f9", null ],
+    [ "errorOccurred", "classmuscovite_1_1qt_1_1TokenStorage.html#a81e7d0547a64c0ad98e2a86557da369a", null ],
     [ "hasStoredTokens", "classmuscovite_1_1qt_1_1TokenStorage.html#a3e40af78d0479afd7e6537115f1a5275", null ],
     [ "instance", "classmuscovite_1_1qt_1_1TokenStorage.html#ac75f5b536d42659e374b7de918d041f2", null ],
     [ "loadTokens", "classmuscovite_1_1qt_1_1TokenStorage.html#aa0f6a9f3cf1b25f3b37793d01d45bbfc", null ],

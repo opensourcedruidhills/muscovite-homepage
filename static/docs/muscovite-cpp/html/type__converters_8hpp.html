@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -97,6 +97,7 @@ $(function(){initNavTree('type__converters_8hpp.html','',''); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;boost/uuid/uuid.hpp&gt;</code><br />
 <code>#include &lt;pqxx/pqxx&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
@@ -225,7 +226,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Date-only (PostgreSQL DATE). </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00055">55</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00056">56</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -243,7 +244,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Decimal values stored as high-precision decimal (50 digits). </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00037">37</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00038">38</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -261,7 +262,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Interval (PostgreSQL INTERVAL). </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00061">61</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00062">62</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +280,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Time-only with microsecond precision (PostgreSQL TIME). </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00058">58</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00059">59</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -297,7 +298,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Timestamp with timezone (PostgreSQL TIMESTAMPTZ). </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00052">52</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00053">53</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -325,7 +326,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00262">262</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8hpp_source.html#l00263">263</a> of file <a class="el" href="type__converters_8hpp_source.html">type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -615,7 +616,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Parse YYYY-MM-DD string to Date. </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00346">346</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00351">351</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -644,7 +645,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Parse PostgreSQL interval string to Interval. </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00393">393</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00402">402</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -673,7 +674,7 @@ ADR 20251223 — TIMESTAMPTZ for all datetime columns</dd></dl>
 
 <p>Parse HH:MM:SS[.fraction] string to TimeOfDay. </p>
 
-<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00364">364</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="type__converters_8cpp_source.html#l00371">371</a> of file <a class="el" href="type__converters_8cpp_source.html">type_converters.cpp</a>.</p>
 
 </div>
 </div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -134,7 +134,7 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2qt_2include_2musco
 <div class="line">    [[nodiscard]] <span class="keyword">auto</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classmuscovite_1_1qt_1_1QtPhone.html#a2a260832caff9c72ead2033f9019213a">digitsOnly</a>() <span class="keyword">const</span> -&gt; QString {</div>
 <div class="line">        QString result;</div>
 <div class="line">        result.reserve(value_.size());</div>
-<div class="line">        <span class="keywordflow">for</span> (QChar c : value_) {</div>
+<div class="line">        <span class="keywordflow">for</span> (QChar <span class="keyword">const</span> c : value_) {</div>
 <div class="line">            <span class="keywordflow">if</span> (c.isDigit()) {</div>
 <div class="line">                result.append(c);</div>
 <div class="line">            }</div>

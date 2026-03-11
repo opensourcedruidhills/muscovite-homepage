@@ -2,7 +2,7 @@ var classmuscovite_1_1server_1_1security_1_1AuthenticationService =
 [
     [ "Config", "structmuscovite_1_1server_1_1security_1_1AuthenticationService_1_1Config.html", "structmuscovite_1_1server_1_1security_1_1AuthenticationService_1_1Config" ],
     [ "AuthenticationService", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#ada0c3653c5e5e9c69dd1c48d31f7e950", null ],
-    [ "blacklist_token", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#a67ccd60b45d3645bbe6e9f5b45336fb4", null ],
+    [ "blacklist_token", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#abd6ac43b3a397865cf7f367f029b9aa6", null ],
     [ "change_password", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#a6119b505b732489d7d008161f7141a33", null ],
     [ "is_token_blacklisted", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#aeffdc0795d9e873b52c913940e73144e", null ],
     [ "login", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html#a1806dcebcc253b9d4cff9e55c8c8f22c", null ],

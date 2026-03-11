@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -109,33 +109,30 @@ $(function(){initNavTree('precondition__failed_8hpp_source.html','',''); });
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">namespace </span>muscovite::dba {</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span></div>
 <div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html">   30</a></span><span class="keyword">class </span><a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a424643f72d3b9728625d03bce07e0ffd">PreconditionFailed</a> : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html">   30</a></span><span class="keyword">class </span><a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a1b7199b6a2e595c5e46866712053e677">PreconditionFailed</a> : <span class="keyword">public</span> std::runtime_error {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">public</span>:</div>
 <div class="foldopen" id="foldopen00035" data-start="{" data-end="}">
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a424643f72d3b9728625d03bce07e0ffd">   35</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a424643f72d3b9728625d03bce07e0ffd">PreconditionFailed</a>(std::string <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                                std::string message = {})</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        : <a class="code hl_namespace" href="namespacestd.html">std</a>::runtime_error(</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>              message.empty()</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                  ? <a class="code hl_namespace" href="namespacestd.html">std</a>::string(<span class="stringliteral">&quot;Precondition failed: &quot;</span>) + <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                  : <a class="code hl_namespace" href="namespacestd.html">std</a>::string(<span class="stringliteral">&quot;Precondition &#39;&quot;</span>) + <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a> + <span class="stringliteral">&quot;&#39; failed: &quot;</span> + message)</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        , precondition_name_(<a class="code hl_namespace" href="namespacestd.html">std</a>::move(<a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>))</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    {}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a1b7199b6a2e595c5e46866712053e677">   35</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a1b7199b6a2e595c5e46866712053e677">PreconditionFailed</a>(std::string <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>, <span class="keyword">const</span> std::string&amp; message = {})</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        : <a class="code hl_namespace" href="namespacestd.html">std</a>::runtime_error(message.empty()</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                                 ? <a class="code hl_namespace" href="namespacestd.html">std</a>::string(<span class="stringliteral">&quot;Precondition failed: &quot;</span>) + <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                                 : <a class="code hl_namespace" href="namespacestd.html">std</a>::string(<span class="stringliteral">&quot;Precondition &#39;&quot;</span>) + <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a> + <span class="stringliteral">&quot;&#39; failed: &quot;</span> + message),</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>          precondition_name_(<a class="code hl_namespace" href="namespacestd.html">std</a>::move(<a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>)) {}</div>
 </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
-<div class="foldopen" id="foldopen00045" data-start="{" data-end="}">
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">   45</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>() const noexcept -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::string_view {</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">return</span> precondition_name_;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="foldopen" id="foldopen00042" data-start="{" data-end="}">
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">   42</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">precondition_name</a>() const noexcept -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::string_view {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">return</span> precondition_name_;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    }</div>
 </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    std::string precondition_name_;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    std::string precondition_name_;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>};</div>
 </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>} <span class="comment">// namespace muscovite::dba</span></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1PreconditionFailed_html_a424643f72d3b9728625d03bce07e0ffd"><div class="ttname"><a href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a424643f72d3b9728625d03bce07e0ffd">muscovite::dba::PreconditionFailed::PreconditionFailed</a></div><div class="ttdeci">PreconditionFailed(std::string precondition_name, std::string message={})</div><div class="ttdef"><b>Definition</b> <a href="#l00035">precondition_failed.hpp:35</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1PreconditionFailed_html_abe9b85fec816474d22c87a4ee5398145"><div class="ttname"><a href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">muscovite::dba::PreconditionFailed::precondition_name</a></div><div class="ttdeci">auto precondition_name() const noexcept -&gt; std::string_view</div><div class="ttdoc">The name of the violated precondition (from REQUIRES clause).</div><div class="ttdef"><b>Definition</b> <a href="#l00045">precondition_failed.hpp:45</a></div></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>} <span class="comment">// namespace muscovite::dba</span></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1PreconditionFailed_html_a1b7199b6a2e595c5e46866712053e677"><div class="ttname"><a href="classmuscovite_1_1dba_1_1PreconditionFailed.html#a1b7199b6a2e595c5e46866712053e677">muscovite::dba::PreconditionFailed::PreconditionFailed</a></div><div class="ttdeci">PreconditionFailed(std::string precondition_name, const std::string &amp;message={})</div><div class="ttdef"><b>Definition</b> <a href="#l00035">precondition_failed.hpp:35</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1PreconditionFailed_html_abe9b85fec816474d22c87a4ee5398145"><div class="ttname"><a href="classmuscovite_1_1dba_1_1PreconditionFailed.html#abe9b85fec816474d22c87a4ee5398145">muscovite::dba::PreconditionFailed::precondition_name</a></div><div class="ttdeci">auto precondition_name() const noexcept -&gt; std::string_view</div><div class="ttdoc">The name of the violated precondition (from REQUIRES clause).</div><div class="ttdef"><b>Definition</b> <a href="#l00042">precondition_failed.hpp:42</a></div></div>
 <div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

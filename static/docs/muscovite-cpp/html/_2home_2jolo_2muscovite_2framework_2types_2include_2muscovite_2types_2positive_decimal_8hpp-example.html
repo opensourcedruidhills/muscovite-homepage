@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -143,8 +143,8 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line">        </div>
 <div class="line">        <span class="comment">// Parse and check &gt; 0</span></div>
 <div class="line">        <span class="keywordtype">double</span> d = 0.0;</div>
-<div class="line">        <span class="keyword">auto</span> [ptr, ec] = std::from_chars(<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data(), <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data() + <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.size(), d);</div>
-<div class="line">        <span class="keywordflow">if</span> (ec != std::errc{} || ptr != <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data() + <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.size()) {</div>
+<div class="line">        <span class="keyword">auto</span> [ptr, ec] = std::from_chars(<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data(), <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data() + <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.size(), d); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line">        <span class="keywordflow">if</span> (ec != std::errc{} || ptr != <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.data() + <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.size()) { <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line">            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line">        }</div>
 <div class="line">        </div>
@@ -153,7 +153,7 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line"></div>
 <div class="line">    [[nodiscard]] <span class="keyword">auto</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classmuscovite_1_1types_1_1PositiveDecimal.html#a9eaf7ba37944a9071d50eeedc37173dd">to_double</a>() <span class="keyword">const</span> -&gt; <span class="keywordtype">double</span> {</div>
 <div class="line">        <span class="keywordtype">double</span> result = 0.0;</div>
-<div class="line">        std::from_chars(value_.data(), value_.data() + value_.size(), result);</div>
+<div class="line">        std::from_chars(value_.data(), value_.data() + value_.size(), result); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line">        <span class="keywordflow">return</span> result;</div>
 <div class="line">    }</div>
 <div class="line"></div>

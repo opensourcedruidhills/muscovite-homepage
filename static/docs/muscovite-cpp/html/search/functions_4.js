@@ -10,7 +10,7 @@ var searchData=
   ['entityidat_7',['entityIdAt',['../classmuscovite_1_1qt_1_1models_1_1GrpcItemModel.html#a33c255aeef4532bff9ef75c69d9d6ee5',1,'muscovite::qt::models::GrpcItemModel']]],
   ['error_5fname_8',['error_name',['../error_8hpp.html#a755daa9fd529cc32648ccd1c56200875',1,'muscovite::dba']]],
   ['errorcolor_9',['errorColor',['../classmuscovite_1_1qt_1_1Theme.html#a7e784f607baac4d97365c4334a9489d1',1,'muscovite::qt::Theme']]],
-  ['erroroccurred_10',['errorOccurred',['../classmuscovite_1_1qt_1_1AuthManager.html#a37f3dcddb17de9f87639b31f16255fd8',1,'muscovite::qt::AuthManager::errorOccurred()'],['../classmuscovite_1_1qt_1_1TokenStorage.html#ae39d19b7333afc38557fa238071c16f9',1,'muscovite::qt::TokenStorage::errorOccurred()']]],
+  ['erroroccurred_10',['errorOccurred',['../classmuscovite_1_1qt_1_1AuthManager.html#a7ee817609032baf528d810cc1774d724',1,'muscovite::qt::AuthManager::errorOccurred()'],['../classmuscovite_1_1qt_1_1TokenStorage.html#a81e7d0547a64c0ad98e2a86557da369a',1,'muscovite::qt::TokenStorage::errorOccurred()']]],
   ['errors_11',['errors',['../classmuscovite_1_1validation_1_1ValidationErrors.html#a1f017db577d8c466f960566dddc24305',1,'muscovite::validation::ValidationErrors']]],
   ['errors_5ffor_5ffield_12',['errors_for_field',['../classmuscovite_1_1validation_1_1ValidationErrors.html#a2fb3a30b38ffa6929d630157363fdfd6',1,'muscovite::validation::ValidationErrors']]],
   ['errors_5ffor_5ftier_13',['errors_for_tier',['../classmuscovite_1_1validation_1_1ValidationErrors.html#a89ff757097b3136f5a456198ac5b9001',1,'muscovite::validation::ValidationErrors']]],

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -122,48 +122,47 @@ $(function(){initNavTree('login__dialog_8hpp_source.html','',''); });
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#a83d92db9dce9f0a9af1ebac91854b45f">setServerAddress</a>(<span class="keyword">const</span> QString&amp; <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aeb6ea03b7918e413b9af68793e2e92bc">serverAddress</a>);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    QString <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aeb6ea03b7918e413b9af68793e2e92bc">serverAddress</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    [[nodiscard]] QString <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aeb6ea03b7918e413b9af68793e2e92bc">serverAddress</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#a5602e8d055256edf36008a92e4ea2dd3">rememberMe</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    [[nodiscard]] <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#a5602e8d055256edf36008a92e4ea2dd3">rememberMe</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    std::optional&lt;Session&gt; <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aef42bd0336b0036d6add72e4467ca3b5">session</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    [[nodiscard]] std::optional&lt;Session&gt; <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aef42bd0336b0036d6add72e4467ca3b5">session</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">protected</span>:</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">void</span> showEvent(QShowEvent* event) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">void</span> closeEvent(QCloseEvent* event) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">private</span> slots:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">void</span> onLoginClicked();</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> onCancelClicked();</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordtype">void</span> onLoginSucceeded(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1qt_1_1Session.html">Session</a>&amp; <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aef42bd0336b0036d6add72e4467ca3b5">session</a>);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">void</span> onLoginFailed(<span class="keyword">const</span> QString&amp; error);</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">void</span> onLoginProgressChanged();</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">void</span> createUI();</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordtype">void</span> setupConnections();</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordtype">void</span> updateUI();</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="comment">// UI components</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    QLabel* serverLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    QLineEdit* serverEdit = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    QLabel* usernameLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    QLineEdit* usernameEdit = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    QLabel* passwordLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    QLineEdit* passwordEdit = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    QCheckBox* rememberCheckbox = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    QPushButton* loginButton = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    QPushButton* cancelButton = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    QLabel* errorLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    QLabel* statusLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="comment">// State</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    QString serverAddress_;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    std::optional&lt;Session&gt; session_;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>};</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">void</span> createUI();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> setupConnections();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordtype">void</span> updateUI();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="comment">// UI components</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    QLabel* serverLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    QLineEdit* serverEdit = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    QLabel* usernameLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    QLineEdit* usernameEdit = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    QLabel* passwordLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    QLineEdit* passwordEdit = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    QCheckBox* rememberCheckbox = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    QPushButton* loginButton = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    QPushButton* cancelButton = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    QLabel* errorLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    QLabel* statusLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="comment">// State</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    QString serverAddress_;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    std::optional&lt;Session&gt; session_;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    Q_SLOT <span class="keywordtype">void</span> onLoginClicked();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    Q_SLOT <span class="keywordtype">void</span> onCancelClicked();</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    Q_SLOT <span class="keywordtype">void</span> onLoginSucceeded(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1qt_1_1Session.html">Session</a>&amp; <a class="code hl_function" href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aef42bd0336b0036d6add72e4467ca3b5">session</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    Q_SLOT <span class="keywordtype">void</span> onLoginFailed(<span class="keyword">const</span> QString&amp; error);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    Q_SLOT <span class="keywordtype">void</span> onLoginProgressChanged();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>};</div>
 </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>} <span class="comment">// namespace muscovite::qt::ui</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>} <span class="comment">// namespace muscovite::qt::ui</span></div>
 <div class="ttc" id="aauth__manager_8hpp_html"><div class="ttname"><a href="auth__manager_8hpp.html">auth_manager.hpp</a></div><div class="ttdoc">Qt authentication manager for built-in authentication.</div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1ui_1_1LoginDialog_html_a5602e8d055256edf36008a92e4ea2dd3"><div class="ttname"><a href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#a5602e8d055256edf36008a92e4ea2dd3">muscovite::qt::ui::LoginDialog::rememberMe</a></div><div class="ttdeci">bool rememberMe() const</div><div class="ttdoc">Check if &quot;remember me&quot; is enabled.</div><div class="ttdef"><b>Definition</b> <a href="login__dialog_8cpp_source.html#l00110">login_dialog.cpp:110</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1ui_1_1LoginDialog_html_a83d92db9dce9f0a9af1ebac91854b45f"><div class="ttname"><a href="classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#a83d92db9dce9f0a9af1ebac91854b45f">muscovite::qt::ui::LoginDialog::setServerAddress</a></div><div class="ttdeci">void setServerAddress(const QString &amp;serverAddress)</div><div class="ttdoc">Set gRPC server address.</div><div class="ttdef"><b>Definition</b> <a href="login__dialog_8cpp_source.html#l00101">login_dialog.cpp:101</a></div></div>

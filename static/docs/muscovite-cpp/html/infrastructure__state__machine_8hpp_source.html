@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -127,7 +127,7 @@ $(function(){initNavTree('infrastructure__state__machine_8hpp_source.html','',''
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1ExponentialBackoffPolicy.html#a7808431a8dd7a0b0029a3c0fc5ad4e00">   45</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1ExponentialBackoffPolicy.html#a7808431a8dd7a0b0029a3c0fc5ad4e00">next_delay</a>(<span class="keywordtype">int</span> attempt) -&gt; std::chrono::milliseconds {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="comment">// 2^attempt * base, capped at max</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">auto</span> raw = std::min(</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>(BaseMsV) &lt;&lt; std::min(attempt, 30),</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            BaseMsV &lt;&lt; std::min(attempt, 30),</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            MaxMsV);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">return</span> apply_jitter(raw);</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
@@ -245,7 +245,7 @@ $(function(){initNavTree('infrastructure__state__machine_8hpp_source.html','',''
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <span class="keywordflow">switch</span> (state_) {</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <span class="keywordflow">case</span> State::Closed: {</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            <span class="keywordtype">bool</span> ok = std::invoke(std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> ok = std::invoke(std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>            <span class="keywordflow">if</span> (ok) {</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                on_success_internal();</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            } <span class="keywordflow">else</span> {</div>
@@ -262,7 +262,7 @@ $(function(){initNavTree('infrastructure__state__machine_8hpp_source.html','',''
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>                ++open_attempt_;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                <a class="code hl_function" href="classmuscovite_1_1dba_1_1InfrastructureStateMachineBase.html#a0845c17828c660015fb399707b268595">on_half_open</a>();</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>                <span class="comment">// Allow single probe</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                <span class="keywordtype">bool</span> ok = std::invoke(std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                <span class="keyword">const</span> <span class="keywordtype">bool</span> ok = std::invoke(std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>                <span class="keywordflow">if</span> (ok) {</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                    on_success_internal();</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>                } <span class="keywordflow">else</span> {</div>
@@ -342,7 +342,7 @@ $(function(){initNavTree('infrastructure__state__machine_8hpp_source.html','',''
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="keywordtype">int</span>   failure_count_{0};</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    <span class="keywordtype">int</span>   failure_threshold_;</div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keywordtype">int</span>   open_attempt_{0};</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    std::chrono::steady_clock::time_point open_since_{};</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    std::chrono::steady_clock::time_point open_since_;</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    BackoffPolicy backoff_{};</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    std::mutex mutex_;</div>
 <div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>};</div>

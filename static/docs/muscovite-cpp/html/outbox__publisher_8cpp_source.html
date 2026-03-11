@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -151,7 +151,7 @@ $(function(){initNavTree('outbox__publisher_8cpp_source.html','',''); });
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    metrics.record_broker_connected(m_config.schema_name, <span class="keyword">true</span>);</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="comment">// Ensure message broker infrastructure exists (e.g., JetStream streams)</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::string subject_prefix = <span class="stringliteral">&quot;muscovite.&quot;</span> + m_config.schema_name;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">const</span> std::string subject_prefix = <span class="stringliteral">&quot;muscovite.&quot;</span> + m_config.schema_name;</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">if</span> (!m_broker-&gt;ensure_infrastructure(m_config.schema_name, subject_prefix)) {</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        spdlog::error(<span class="stringliteral">&quot;OutboxPublisher: Failed to ensure broker infrastructure for {}&quot;</span>,</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                      m_config.schema_name);</div>

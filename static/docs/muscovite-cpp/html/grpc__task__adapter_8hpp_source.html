@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -139,7 +139,7 @@ $(function(){initNavTree('grpc__task__adapter_8hpp_source.html','',''); });
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a7cf7183d9d21f4bb382d9dfdd15c9c32">  107</a></span>    [[nodiscard]] <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a7cf7183d9d21f4bb382d9dfdd15c9c32">succeeded</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> status_.ok(); }</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>Q_SIGNALS:</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a112bcd3594504561cad42f52c938d8d8">  112</a></span>    <span class="keywordtype">void</span> <a class="code hl_signal" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a112bcd3594504561cad42f52c938d8d8">done</a>(QtTaskTree::DoneResult result);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a673021585992a353cffbba897db07714">  112</a></span>    <span class="keywordtype">void</span> <a class="code hl_signal" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a673021585992a353cffbba897db07714">done</a>(QtTaskTree::DoneResult _t1);</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <a class="code hl_typedef" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ada46286c5c8b312b3d8747a6fb0b3566">CallFunction</a> call_fn_;</div>
@@ -150,7 +150,7 @@ $(function(){initNavTree('grpc__task__adapter_8hpp_source.html','',''); });
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="grpc__task__adapter_8hpp.html#a8fffb238fa56f38dd16bee42f915f97e">  131</a></span><span class="keyword">using </span><a class="code hl_typedef" href="grpc__task__adapter_8hpp.html#a8fffb238fa56f38dd16bee42f915f97e">GrpcUnaryTask</a> = QtTaskTree::QCustomTask&lt;GrpcCallTask&gt;;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>} <span class="comment">// namespace muscovite::qt</span></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_a112bcd3594504561cad42f52c938d8d8"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a112bcd3594504561cad42f52c938d8d8">muscovite::qt::GrpcCallTask::done</a></div><div class="ttdeci">void done(QtTaskTree::DoneResult result)</div><div class="ttdoc">Emitted when the gRPC call completes (success or error).</div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_a673021585992a353cffbba897db07714"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a673021585992a353cffbba897db07714">muscovite::qt::GrpcCallTask::done</a></div><div class="ttdeci">void done(QtTaskTree::DoneResult _t1)</div><div class="ttdoc">Emitted when the gRPC call completes (success or error).</div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_a7cf7183d9d21f4bb382d9dfdd15c9c32"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a7cf7183d9d21f4bb382d9dfdd15c9c32">muscovite::qt::GrpcCallTask::succeeded</a></div><div class="ttdeci">bool succeeded() const</div><div class="ttdoc">Check if the call succeeded.</div><div class="ttdef"><b>Definition</b> <a href="#l00107">grpc_task_adapter.hpp:107</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_a9f25e27d2b3f5f257c5d64dadda2aa47"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">muscovite::qt::GrpcCallTask::setCallFunction</a></div><div class="ttdeci">void setCallFunction(CallFunction fn)</div><div class="ttdoc">Set the function that performs the blocking gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="grpc__task__adapter_8cpp_source.html#l00026">grpc_task_adapter.cpp:26</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_aa61ee344e2d630c1c6cc5300a21ab347"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#aa61ee344e2d630c1c6cc5300a21ab347">muscovite::qt::GrpcCallTask::status</a></div><div class="ttdeci">const ::grpc::Status &amp; status() const</div><div class="ttdoc">Get the gRPC status after completion.</div><div class="ttdef"><b>Definition</b> <a href="#l00103">grpc_task_adapter.hpp:103</a></div></div>

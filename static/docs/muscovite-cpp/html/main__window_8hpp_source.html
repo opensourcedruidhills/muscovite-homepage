@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -127,33 +127,32 @@ $(function(){initNavTree('main__window_8hpp_source.html','',''); });
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">protected</span>:</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span> closeEvent(QCloseEvent* event) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">private</span> slots:</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">void</span> onAuthStateChanged();</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">void</span> onLogout();</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">void</span> onTokenRefreshed();</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> onSessionExpiring(<span class="keywordtype">int</span> secondsRemaining);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">void</span> onSessionExpired();</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span> onErrorOccurred(<span class="keyword">const</span> QString&amp; error);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">void</span> createUI();</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">void</span> setupConnections();</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">void</span> updateUserInfo();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">void</span> createUI();</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">void</span> setupConnections();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">void</span> updateUserInfo();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="comment">// Components</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    QLabel* userInfoLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    QLabel* statusBar_ = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    QLabel* sessionStatusLabel = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    QTabWidget* tabWidget = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    QAction* logoutAction = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    QMenu* userMenu = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="comment">// Components</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    QLabel* userInfoLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    QLabel* statusBar_ = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    QLabel* sessionStatusLabel = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    QTabWidget* tabWidget = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    QAction* logoutAction = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    QMenu* userMenu = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="comment">// State</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <a class="code hl_class" href="classmuscovite_1_1qt_1_1AuthManager.html">AuthManager</a>* authMgr = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>};</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="comment">// State</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_class" href="classmuscovite_1_1qt_1_1AuthManager.html">AuthManager</a>* authMgr = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    Q_SLOT <span class="keywordtype">void</span> onAuthStateChanged();</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    Q_SLOT <span class="keywordtype">void</span> onLogout();</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    Q_SLOT <span class="keywordtype">void</span> onTokenRefreshed();</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    Q_SLOT <span class="keywordtype">void</span> onSessionExpiring(<span class="keywordtype">int</span> secondsRemaining);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    Q_SLOT <span class="keywordtype">void</span> onSessionExpired();</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    Q_SLOT <span class="keywordtype">void</span> onErrorOccurred(<span class="keyword">const</span> QString&amp; error);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>};</div>
 </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>} <span class="comment">// namespace muscovite::qt::ui</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>} <span class="comment">// namespace muscovite::qt::ui</span></div>
 <div class="ttc" id="aauth__manager_8hpp_html"><div class="ttname"><a href="auth__manager_8hpp.html">auth_manager.hpp</a></div><div class="ttdoc">Qt authentication manager for built-in authentication.</div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1AuthManager.html">muscovite::qt::AuthManager</a></div><div class="ttdoc">Authentication manager for built-in username/password authentication.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8hpp_source.html#l00075">auth_manager.hpp:75</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1ui_1_1MainWindow_html_a8f5f0fe03883841bdf3cbfcc0d7acfde"><div class="ttname"><a href="classmuscovite_1_1qt_1_1ui_1_1MainWindow.html#a8f5f0fe03883841bdf3cbfcc0d7acfde">muscovite::qt::ui::MainWindow::addServiceTab</a></div><div class="ttdeci">void addServiceTab(const QString &amp;title, QWidget *widget)</div><div class="ttdoc">Add a tab with gRPC service content.</div><div class="ttdef"><b>Definition</b> <a href="main__window_8cpp_source.html#l00107">main_window.cpp:107</a></div></div>

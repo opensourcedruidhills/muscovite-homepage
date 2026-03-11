@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -114,10 +114,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2b0b9cc49fb1764d27c83b4664829975"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a bulk document mapper for reindexing.  <br /></td></tr>
 <tr class="memitem:a5cc6c6de41c3d5f80fdd461602c114d1" id="r_a5cc6c6de41c3d5f80fdd461602c114d1"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a5cc6c6de41c3d5f80fdd461602c114d1">registered_types</a> () const -&gt; std::vector&lt; std::string &gt;</td></tr>
 <tr class="memdesc:a5cc6c6de41c3d5f80fdd461602c114d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">List registered entity types.  <br /></td></tr>
-<tr class="memitem:a051a301d8d5aa24ba6d0cda97f0bf722" id="r_a051a301d8d5aa24ba6d0cda97f0bf722"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a051a301d8d5aa24ba6d0cda97f0bf722">reindex_all</a> (const <a class="el" href="structmuscovite_1_1search_1_1ReindexConfig.html">ReindexConfig</a> &amp;config={}, <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> on_progress=nullptr) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexResult.html">ReindexResult</a></td></tr>
-<tr class="memdesc:a051a301d8d5aa24ba6d0cda97f0bf722"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reindex all registered entity types.  <br /></td></tr>
-<tr class="memitem:a22c95777120259b59fd3aaf963a4e564" id="r_a22c95777120259b59fd3aaf963a4e564"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a22c95777120259b59fd3aaf963a4e564">reindex_entity</a> (const std::string &amp;entity_type, const <a class="el" href="structmuscovite_1_1search_1_1ReindexConfig.html">ReindexConfig</a> &amp;config={}, <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> on_progress=nullptr) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexEntityResult.html">ReindexEntityResult</a></td></tr>
-<tr class="memdesc:a22c95777120259b59fd3aaf963a4e564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reindex a single entity type.  <br /></td></tr>
+<tr class="memitem:ab0bac9e9813577976990b92202ff1ca8" id="r_ab0bac9e9813577976990b92202ff1ca8"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ab0bac9e9813577976990b92202ff1ca8">reindex_all</a> (const <a class="el" href="structmuscovite_1_1search_1_1ReindexConfig.html">ReindexConfig</a> &amp;config={}, const <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> &amp;on_progress=nullptr) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexResult.html">ReindexResult</a></td></tr>
+<tr class="memdesc:ab0bac9e9813577976990b92202ff1ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reindex all registered entity types.  <br /></td></tr>
+<tr class="memitem:a7290e2f1437d87d35fb4951e6130bf21" id="r_a7290e2f1437d87d35fb4951e6130bf21"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a7290e2f1437d87d35fb4951e6130bf21">reindex_entity</a> (const std::string &amp;entity_type, const <a class="el" href="structmuscovite_1_1search_1_1ReindexConfig.html">ReindexConfig</a> &amp;config={}, const <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> &amp;on_progress=nullptr) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexEntityResult.html">ReindexEntityResult</a></td></tr>
+<tr class="memdesc:a7290e2f1437d87d35fb4951e6130bf21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reindex a single entity type.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Bulk reindexer for OpenSearch. </p>
@@ -133,7 +133,7 @@ Public Member Functions</h2></td></tr>
 <div class="line">        spdlog::info(<span class="stringliteral">&quot;Reindexing {}: {}/{}&quot;</span>, type, processed, total);</div>
 <div class="line">    });</div>
 <div class="ttc" id="aclassmuscovite_1_1search_1_1OpenSearchClient_html"><div class="ttname"><a href="classmuscovite_1_1search_1_1OpenSearchClient.html">muscovite::search::OpenSearchClient</a></div><div class="ttdoc">Low-level REST client for OpenSearch.</div><div class="ttdef"><b>Definition</b> <a href="opensearch__client_8hpp_source.html#l00065">opensearch_client.hpp:65</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1search_1_1SearchReindexer_html_ad1c5e6a31740a8a4e7e8bb2122f3854c"><div class="ttname"><a href="#ad1c5e6a31740a8a4e7e8bb2122f3854c">muscovite::search::SearchReindexer::SearchReindexer</a></div><div class="ttdeci">SearchReindexer(OpenSearchClient &amp;client)</div><div class="ttdoc">Construct a reindexer with an OpenSearch client.</div><div class="ttdef"><b>Definition</b> <a href="search__reindexer_8cpp_source.html#l00072">search_reindexer.cpp:72</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1search_1_1SearchReindexer_html_ad1c5e6a31740a8a4e7e8bb2122f3854c"><div class="ttname"><a href="#ad1c5e6a31740a8a4e7e8bb2122f3854c">muscovite::search::SearchReindexer::SearchReindexer</a></div><div class="ttdeci">SearchReindexer(OpenSearchClient &amp;client)</div><div class="ttdoc">Construct a reindexer with an OpenSearch client.</div><div class="ttdef"><b>Definition</b> <a href="search__reindexer_8cpp_source.html#l00071">search_reindexer.cpp:71</a></div></div>
 <div class="ttc" id="astructmuscovite_1_1search_1_1ReindexConfig_html"><div class="ttname"><a href="structmuscovite_1_1search_1_1ReindexConfig.html">muscovite::search::ReindexConfig</a></div><div class="ttdoc">Configuration for search reindex operations.</div><div class="ttdef"><b>Definition</b> <a href="search__reindexer_8hpp_source.html#l00060">search_reindexer.hpp:60</a></div></div>
 </div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classmuscovite_1_1search_1_1BulkDocumentMapper.html" title="Extended DocumentMapper interface for paginated bulk fetch.">BulkDocumentMapper</a> for entity-specific bulk fetch </dd>
 <dd>
@@ -172,7 +172,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00072">72</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00071">71</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +206,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00079">79</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00078">78</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
 
 </div>
 </div>
@@ -235,14 +235,14 @@ Public Member Functions</h2></td></tr>
 
 <p>List registered entity types. </p>
 
-<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00207">207</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00201">201</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__reindexer_8cpp_source.html#l00095">reindex_all()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__reindexer_8cpp_source.html#l00094">reindex_all()</a>.</p>
 
 </div>
 </div>
-<a id="a051a301d8d5aa24ba6d0cda97f0bf722" name="a051a301d8d5aa24ba6d0cda97f0bf722"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a051a301d8d5aa24ba6d0cda97f0bf722">&#9670;&#160;</a></span>reindex_all()</h2>
+<a id="ab0bac9e9813577976990b92202ff1ca8" name="ab0bac9e9813577976990b92202ff1ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0bac9e9813577976990b92202ff1ca8">&#9670;&#160;</a></span>reindex_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,7 +255,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a></td>          <td class="paramname"><span class="paramname"><em>on_progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexResult.html">ReindexResult</a></td>
+          <td class="paramtype">const <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>on_progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexResult.html">ReindexResult</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -277,14 +277,14 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Aggregate result with per-entity details </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00095">95</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00094">94</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="search__reindexer_8hpp_source.html#l00101">muscovite::search::ReindexResult::entity_results</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00207">registered_types()</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00116">reindex_entity()</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00032">muscovite::search::ReindexResult::total_failed()</a>, and <a class="el" href="search__reindexer_8cpp_source.html#l00027">muscovite::search::ReindexResult::total_indexed()</a>.</p>
+<p class="reference">References <a class="el" href="search__reindexer_8hpp_source.html#l00101">muscovite::search::ReindexResult::entity_results</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00201">registered_types()</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00113">reindex_entity()</a>, <a class="el" href="search__reindexer_8cpp_source.html#l00032">muscovite::search::ReindexResult::total_failed()</a>, and <a class="el" href="search__reindexer_8cpp_source.html#l00027">muscovite::search::ReindexResult::total_indexed()</a>.</p>
 
 </div>
 </div>
-<a id="a22c95777120259b59fd3aaf963a4e564" name="a22c95777120259b59fd3aaf963a4e564"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22c95777120259b59fd3aaf963a4e564">&#9670;&#160;</a></span>reindex_entity()</h2>
+<a id="a7290e2f1437d87d35fb4951e6130bf21" name="a7290e2f1437d87d35fb4951e6130bf21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7290e2f1437d87d35fb4951e6130bf21">&#9670;&#160;</a></span>reindex_entity()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -302,7 +302,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a></td>          <td class="paramname"><span class="paramname"><em>on_progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexEntityResult.html">ReindexEntityResult</a></td>
+          <td class="paramtype">const <a class="el" href="search__reindexer_8hpp.html#ad9e97b1326f0c04cf85635c8302e9e45">ReindexProgressCallback</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>on_progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) -&gt; <a class="el" href="structmuscovite_1_1search_1_1ReindexEntityResult.html">ReindexEntityResult</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -324,11 +324,11 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00116">116</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__reindexer_8cpp_source.html#l00113">113</a> of file <a class="el" href="search__reindexer_8cpp_source.html">search_reindexer.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="search__reindexer_8hpp_source.html#l00089">muscovite::search::ReindexEntityResult::batches</a>, <a class="el" href="search__reindexer_8hpp_source.html#l00086">muscovite::search::ReindexEntityResult::documents_failed</a>, <a class="el" href="search__reindexer_8hpp_source.html#l00083">muscovite::search::ReindexEntityResult::documents_indexed</a>, <a class="el" href="search__reindexer_8hpp_source.html#l00077">muscovite::search::ReindexEntityResult::entity_type</a>, <a class="el" href="search__reindexer_8hpp_source.html#l00095">muscovite::search::ReindexEntityResult::error</a>, <a class="el" href="search__reindexer_8hpp_source.html#l00080">muscovite::search::ReindexEntityResult::index_name</a>, and <a class="el" href="search__reindexer_8hpp_source.html#l00092">muscovite::search::ReindexEntityResult::success</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__reindexer_8cpp_source.html#l00095">reindex_all()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__reindexer_8cpp_source.html#l00094">reindex_all()</a>.</p>
 
 </div>
 </div>

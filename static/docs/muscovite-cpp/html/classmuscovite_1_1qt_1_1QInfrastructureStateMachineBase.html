@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -104,15 +104,6 @@ Inheritance diagram for muscovite::qt::QInfrastructureStateMachineBase:</div>
   <img src="classmuscovite_1_1qt_1_1QInfrastructureStateMachineBase.png" alt=""/>
  </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-slots" class="groupheader"><a id="pub-slots" name="pub-slots"></a>
-Public Slots</h2></td></tr>
-<tr class="memitem:a7357dc275d3f5d0f067ad2fedced966a" id="r_a7357dc275d3f5d0f067ad2fedced966a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7357dc275d3f5d0f067ad2fedced966a">recordFailure</a> ()</td></tr>
-<tr class="memdesc:a7357dc275d3f5d0f067ad2fedced966a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a failed call. Increments failure count, may trip circuit.  <br /></td></tr>
-<tr class="memitem:ab1aa4c8ccad5e54b3f39c2ab16a0c72c" id="r_ab1aa4c8ccad5e54b3f39c2ab16a0c72c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab1aa4c8ccad5e54b3f39c2ab16a0c72c">recordSuccess</a> ()</td></tr>
-<tr class="memdesc:ab1aa4c8ccad5e54b3f39c2ab16a0c72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a successful call. Resets failure count and returns to Closed.  <br /></td></tr>
-<tr class="memitem:aa099653d320a48bef7dd07bd1223ddaa" id="r_aa099653d320a48bef7dd07bd1223ddaa"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa099653d320a48bef7dd07bd1223ddaa">resetCircuit</a> ()</td></tr>
-<tr class="memdesc:aa099653d320a48bef7dd07bd1223ddaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manual reset to Closed state.  <br /></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
 Signals</h2></td></tr>
 <tr class="memitem:a8a187e46abdc6eda57ece2fd8b93c0cf" id="r_a8a187e46abdc6eda57ece2fd8b93c0cf"><td class="memItemLeft"><a id="a8a187e46abdc6eda57ece2fd8b93c0cf" name="a8a187e46abdc6eda57ece2fd8b93c0cf"></a>
@@ -136,6 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1f4fc719d97f630c817c717e37a8c0e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of consecutive failures in current cycle.  <br /></td></tr>
 <tr class="memitem:adc23d73cfc144e8dfd8ba052554dc555" id="r_adc23d73cfc144e8dfd8ba052554dc555"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#adc23d73cfc144e8dfd8ba052554dc555">failureThreshold</a> () const noexcept -&gt; int</td></tr>
 <tr class="memdesc:adc23d73cfc144e8dfd8ba052554dc555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configured failure threshold.  <br /></td></tr>
+<tr class="memitem:a7357dc275d3f5d0f067ad2fedced966a" id="r_a7357dc275d3f5d0f067ad2fedced966a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7357dc275d3f5d0f067ad2fedced966a">recordFailure</a> ()</td></tr>
+<tr class="memdesc:a7357dc275d3f5d0f067ad2fedced966a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a failed call. Increments failure count, may trip circuit.  <br /></td></tr>
+<tr class="memitem:ab1aa4c8ccad5e54b3f39c2ab16a0c72c" id="r_ab1aa4c8ccad5e54b3f39c2ab16a0c72c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab1aa4c8ccad5e54b3f39c2ab16a0c72c">recordSuccess</a> ()</td></tr>
+<tr class="memdesc:ab1aa4c8ccad5e54b3f39c2ab16a0c72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record a successful call. Resets failure count and returns to Closed.  <br /></td></tr>
+<tr class="memitem:aa099653d320a48bef7dd07bd1223ddaa" id="r_aa099653d320a48bef7dd07bd1223ddaa"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa099653d320a48bef7dd07bd1223ddaa">resetCircuit</a> ()</td></tr>
+<tr class="memdesc:aa099653d320a48bef7dd07bd1223ddaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manual reset to Closed state.  <br /></td></tr>
 <tr class="memitem:a48e9dcb72fad91a0ae91b3a66a5df362" id="r_a48e9dcb72fad91a0ae91b3a66a5df362"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a48e9dcb72fad91a0ae91b3a66a5df362">stateName</a> () const -&gt; QString</td></tr>
 <tr class="memdesc:a48e9dcb72fad91a0ae91b3a66a5df362"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current state name ("Closed", "Open", or "HalfOpen").  <br /></td></tr>
 </table><table class="memberdecls">
@@ -219,7 +216,7 @@ Properties</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00018">18</a> of file <a class="el" href="q__infrastructure__state__machine_8cpp_source.html">q_infrastructure_state_machine.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00108">closed_state_</a>.</p>
+<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00107">closed_state_</a>.</p>
 
 </div>
 </div>
@@ -311,7 +308,7 @@ Properties</h2></td></tr>
 
 <p>Called when circuit enters Half-Open. Override for probe setup. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00103">103</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00102">102</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 </div>
 </div>
@@ -340,7 +337,7 @@ Properties</h2></td></tr>
 
 <p>Called when circuit trips to Open. Override for plugin-specific behavior. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00100">100</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00099">99</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 </div>
 </div>
@@ -369,20 +366,17 @@ Properties</h2></td></tr>
 
 <p>Called on the failure that trips the circuit. Override for logging. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00106">106</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00105">105</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00058">recordFailure()</a>.</p>
 
 </div>
 </div>
 <a id="a7357dc275d3f5d0f067ad2fedced966a" name="a7357dc275d3f5d0f067ad2fedced966a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7357dc275d3f5d0f067ad2fedced966a">&#9670;&#160;</a></span>recordFailure</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7357dc275d3f5d0f067ad2fedced966a">&#9670;&#160;</a></span>recordFailure()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::QInfrastructureStateMachineBase::recordFailure </td>
@@ -391,29 +385,21 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Record a failed call. Increments failure count, may trip circuit. </p>
 
 <p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00058">58</a> of file <a class="el" href="q__infrastructure__state__machine_8cpp_source.html">q_infrastructure_state_machine.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00110">half_open_state_</a>, and <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00106">onTrip()</a>.</p>
+<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">half_open_state_</a>, and <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00105">onTrip()</a>.</p>
 
 </div>
 </div>
 <a id="ab1aa4c8ccad5e54b3f39c2ab16a0c72c" name="ab1aa4c8ccad5e54b3f39c2ab16a0c72c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1aa4c8ccad5e54b3f39c2ab16a0c72c">&#9670;&#160;</a></span>recordSuccess</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1aa4c8ccad5e54b3f39c2ab16a0c72c">&#9670;&#160;</a></span>recordSuccess()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::QInfrastructureStateMachineBase::recordSuccess </td>
@@ -422,29 +408,21 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Record a successful call. Resets failure count and returns to Closed. </p>
 
 <p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00050">50</a> of file <a class="el" href="q__infrastructure__state__machine_8cpp_source.html">q_infrastructure_state_machine.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00110">half_open_state_</a>.</p>
+<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">half_open_state_</a>.</p>
 
 </div>
 </div>
 <a id="aa099653d320a48bef7dd07bd1223ddaa" name="aa099653d320a48bef7dd07bd1223ddaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa099653d320a48bef7dd07bd1223ddaa">&#9670;&#160;</a></span>resetCircuit</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa099653d320a48bef7dd07bd1223ddaa">&#9670;&#160;</a></span>resetCircuit()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::QInfrastructureStateMachineBase::resetCircuit </td>
@@ -453,11 +431,6 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Manual reset to Closed state. </p>
@@ -493,7 +466,7 @@ Properties</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00036">36</a> of file <a class="el" href="q__infrastructure__state__machine_8cpp_source.html">q_infrastructure_state_machine.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00108">closed_state_</a>, <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00110">half_open_state_</a>, and <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">open_state_</a>.</p>
+<p class="reference">References <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00107">closed_state_</a>, <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">half_open_state_</a>, and <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00108">open_state_</a>.</p>
 
 </div>
 </div>
@@ -520,7 +493,7 @@ Properties</h2></td></tr>
 
 <p>The Closed state object. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00108">108</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00107">107</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00018">QInfrastructureStateMachineBase()</a>, and <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00036">stateName()</a>.</p>
 
@@ -548,7 +521,7 @@ Properties</h2></td></tr>
 
 <p>The Half-Open state object. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00110">110</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">109</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00058">recordFailure()</a>, <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00050">recordSuccess()</a>, and <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00036">stateName()</a>.</p>
 
@@ -576,7 +549,7 @@ Properties</h2></td></tr>
 
 <p>The Open state object. </p>
 
-<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00109">109</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="q__infrastructure__state__machine_8hpp_source.html#l00108">108</a> of file <a class="el" href="q__infrastructure__state__machine_8hpp_source.html">q_infrastructure_state_machine.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="q__infrastructure__state__machine_8cpp_source.html#l00036">stateName()</a>.</p>
 

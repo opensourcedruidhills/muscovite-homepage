@@ -689,11 +689,11 @@ on <code>GetXxxRequest</code> | | gRPC |
 <code>Q_PROPERTY(QDateTime validAt)</code> +
 <code>Q_PROPERTY(QDateTime systemAt)</code> (system-versioned only)
 |</p>
-<h3 id="18-expression-ast-ftr-284-adr-20260307-tier-12">18. Expression
-AST (FTR-284, ADR 20260307 Tier 1+2)</h3>
+<h3 id="18-expression-ast-ftr-284-adr-20260307-tier-123">18. Expression
+AST (FTR-284, ADR 20260307 Tier 1+2+3)</h3>
 <p>Expression nodes for CHECK constraints, guards, lifecycle hooks, and
 DECIDE block logic. 9 base nodes + 5 collection predicate nodes + 3
-computation nodes.</p>
+computation nodes + 4 list comprehension nodes.</p>
 <p><strong>Base expression nodes</strong>
 (<code>ddd-types.rkt:807-852</code>):</p>
 <table>
@@ -828,6 +828,43 @@ mandatory default (total function)</td>
 </tr>
 </tbody>
 </table>
+<p><strong>List comprehension nodes</strong> (FTR-297, ADR 20260307 Tier
+3, <code>ddd-types.rkt:932-963</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Struct</th>
+<th>Fields</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map-expr</code></td>
+<td><code>list-expr lambda-expr</code></td>
+<td>Transform: <code>MAP(list, var -&gt; body)</code> — applies lambda
+to each element</td>
+</tr>
+<tr>
+<td><code>filter-expr</code></td>
+<td><code>list-expr lambda-expr</code></td>
+<td>Filter: <code>FILTER(list, var -&gt; predicate)</code> — keeps
+elements where predicate is true</td>
+</tr>
+<tr>
+<td><code>reduce-expr</code></td>
+<td><code>list-expr init-expr lambda-expr</code></td>
+<td>Fold: <code>REDUCE(list, init, acc var -&gt; body)</code> —
+accumulates over elements</td>
+</tr>
+<tr>
+<td><code>lambda-expr</code></td>
+<td><code>param body</code></td>
+<td>Lambda: <code>var -&gt; expr</code> — anonymous function, param is
+symbol, body is expression</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Compilation targets:</strong></p>
 <table>
 <thead>
@@ -852,6 +889,21 @@ mandatory default (total function)</td>
 <td><code>match-case-expr</code></td>
 <td><code>switch</code>/<code>if-else-if</code> chain</td>
 <td><code>CASE field WHEN v1 THEN e1 ... ELSE default END</code></td>
+</tr>
+<tr>
+<td><code>map-expr</code></td>
+<td><code>list | std::ranges::views::transform([&amp;](const auto&amp; var) { return body; }) | std::ranges::to&lt;std::vector&gt;()</code></td>
+<td><code>(SELECT body FROM unnest(list) AS var)</code></td>
+</tr>
+<tr>
+<td><code>filter-expr</code></td>
+<td><code>list | std::ranges::views::filter([&amp;](const auto&amp; var) { return body; }) | std::ranges::to&lt;std::vector&gt;()</code></td>
+<td><code>(SELECT var FROM unnest(list) AS var WHERE body)</code></td>
+</tr>
+<tr>
+<td><code>reduce-expr</code></td>
+<td><code>std::ranges::fold_left(list, init, [&amp;](auto acc, const auto&amp; var) { return body; })</code></td>
+<td><code>(SELECT COALESCE(body, init) FROM unnest(list) AS var)</code></td>
 </tr>
 </tbody>
 </table>

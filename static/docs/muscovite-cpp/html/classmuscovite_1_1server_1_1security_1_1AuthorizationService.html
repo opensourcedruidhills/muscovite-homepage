@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -123,8 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a299eeda5615cfa62d8cd0768deb015d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check all of a set of privileges.  <br /></td></tr>
 <tr class="memitem:ac78191e5fff11b96bcb7ddd26f0fc253" id="r_ac78191e5fff11b96bcb7ddd26f0fc253"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac78191e5fff11b96bcb7ddd26f0fc253">has_any_privilege</a> (const std::string &amp;principal_id, const std::vector&lt; std::string &gt; &amp;privilege_names) const</td></tr>
 <tr class="memdesc:ac78191e5fff11b96bcb7ddd26f0fc253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check any of a set of privileges.  <br /></td></tr>
-<tr class="memitem:a461328fcf35e8fb98151b58b23859c51" id="r_a461328fcf35e8fb98151b58b23859c51"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a461328fcf35e8fb98151b58b23859c51">has_privilege</a> (const std::string &amp;principal_id, const std::string &amp;privilege_code) const</td></tr>
-<tr class="memdesc:a461328fcf35e8fb98151b58b23859c51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a user has a specific privilege.  <br /></td></tr>
+<tr class="memitem:a4a06a7e8cb8517d19778fbfba34cbf94" id="r_a4a06a7e8cb8517d19778fbfba34cbf94"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4a06a7e8cb8517d19778fbfba34cbf94">has_privilege</a> (const std::string &amp;principal_id, const std::string &amp;privilege_name) const</td></tr>
+<tr class="memdesc:a4a06a7e8cb8517d19778fbfba34cbf94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a user has a specific privilege.  <br /></td></tr>
 <tr class="memitem:ad076228cc1618700ab41082b7e928307" id="r_ad076228cc1618700ab41082b7e928307"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad076228cc1618700ab41082b7e928307">invalidate_cache</a> (const std::string &amp;principal_id=&quot;&quot;)</td></tr>
 <tr class="memdesc:ad076228cc1618700ab41082b7e928307"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invalidate cached privileges for a user.  <br /></td></tr>
 <tr class="memitem:a5a0607f269340abdd077f6ea156829ea" id="r_a5a0607f269340abdd077f6ea156829ea"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5a0607f269340abdd077f6ea156829ea">is_admin</a> (const std::string &amp;principal_id) const</td></tr>
@@ -399,8 +399,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a461328fcf35e8fb98151b58b23859c51" name="a461328fcf35e8fb98151b58b23859c51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a461328fcf35e8fb98151b58b23859c51">&#9670;&#160;</a></span>has_privilege()</h2>
+<a id="a4a06a7e8cb8517d19778fbfba34cbf94" name="a4a06a7e8cb8517d19778fbfba34cbf94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a06a7e8cb8517d19778fbfba34cbf94">&#9670;&#160;</a></span>has_privilege()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,7 +416,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>privilege_code</em></span>&#160;) const</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>privilege_name</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -430,7 +430,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">principal_id</td><td>The user ID. </td></tr>
-    <tr><td class="paramname">privilege_code</td><td>The privilege code (e.g., "mineralogy.read"). </td></tr>
+    <tr><td class="paramname">privilege_name</td><td>The privilege name (e.g., "mineralogy.read"). </td></tr>
   </table>
   </dd>
 </dl>

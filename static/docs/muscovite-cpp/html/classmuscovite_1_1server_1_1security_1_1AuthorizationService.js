@@ -8,7 +8,7 @@ var classmuscovite_1_1server_1_1security_1_1AuthorizationService =
     [ "get_user_privileges", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a554fd87dc8304647b2c71002a3461695", null ],
     [ "has_all_privileges", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a299eeda5615cfa62d8cd0768deb015d9", null ],
     [ "has_any_privilege", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#ac78191e5fff11b96bcb7ddd26f0fc253", null ],
-    [ "has_privilege", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a461328fcf35e8fb98151b58b23859c51", null ],
+    [ "has_privilege", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a4a06a7e8cb8517d19778fbfba34cbf94", null ],
     [ "invalidate_cache", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#ad076228cc1618700ab41082b7e928307", null ],
     [ "is_admin", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea", null ],
     [ "is_in_group", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a9f935544361806703ba57ea4899b7c9b", null ]

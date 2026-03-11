@@ -8,7 +8,7 @@ var searchData=
   ['updateprivilege_5',['UpdatePrivilege',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#aac1c1ecc6d5cc48615f4089eb9f606b3',1,'muscovite::server::security::grpc::PrivilegeServiceImpl']]],
   ['updatesample_6',['updateSample',['../classmuscovite_1_1qt_1_1services_1_1GeosciencesServiceClient.html#a55821a5f1064b96391e7dfa68787d7bf',1,'muscovite::qt::services::GeosciencesServiceClient']]],
   ['updateuser_7',['UpdateUser',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a5dd11501f5ea16c569c1570b5ed04587',1,'muscovite::server::security::grpc::UserServiceImpl']]],
-  ['username_8',['username',['../classmuscovite_1_1qt_1_1AuthManager.html#a51e7c0dc9a322eae98089f5d12a301fe',1,'muscovite::qt::AuthManager::username()'],['../classmuscovite_1_1qt_1_1PrivilegeChecker.html#af2035a05062100e52e697a363fdeb349',1,'muscovite::qt::PrivilegeChecker::username()']]],
+  ['username_8',['username',['../classmuscovite_1_1qt_1_1AuthManager.html#a51e7c0dc9a322eae98089f5d12a301fe',1,'muscovite::qt::AuthManager::username()'],['../classmuscovite_1_1qt_1_1PrivilegeChecker.html#a46eee133c08e9381b070c0d2421c4ce0',1,'muscovite::qt::PrivilegeChecker::username()']]],
   ['userserviceimpl_9',['UserServiceImpl',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a31d839dde62f0b04fff1c286b9585a16',1,'muscovite::server::security::grpc::UserServiceImpl']]],
   ['uuid_5ffrom_5fstring_10',['uuid_from_string',['../namespacemuscovite_1_1grpc.html#a356867699320180aeed2fda2eab174ec',1,'muscovite::grpc']]],
   ['uuid_5fto_5fstring_11',['uuid_to_string',['../namespacemuscovite_1_1grpc.html#a9df30eaf9a975ff30ded5eeb26c20474',1,'muscovite::grpc']]]

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -111,11 +111,11 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line"><span class="preprocessor">#pragma once</span></div>
 <div class="line"></div>
 <div class="line"> </div>
-<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
-<div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;regex&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">namespace </span>muscovite::types {</div>
 <div class="line"></div>
@@ -144,8 +144,7 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line">    [[nodiscard]] <span class="keyword">auto</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classmuscovite_1_1types_1_1Phone.html#a72b600ce477ede1d6a9f661957af23af">digits_only</a>() <span class="keyword">const</span> -&gt; std::string {</div>
 <div class="line">        std::string result;</div>
 <div class="line">        result.reserve(value_.size());</div>
-<div class="line">        std::copy_if(value_.begin(), value_.end(), std::back_inserter(result),</div>
-<div class="line">                     [](<span class="keywordtype">char</span> c) { return c &gt;= <span class="stringliteral">&#39;0&#39;</span> &amp;&amp; c &lt;= <span class="stringliteral">&#39;9&#39;</span>; });</div>
+<div class="line">        std::ranges::copy_if(value_, std::back_inserter(result), [](<span class="keywordtype">char</span> c) { <span class="keywordflow">return</span> c &gt;= <span class="charliteral">&#39;0&#39;</span> &amp;&amp; c &lt;= <span class="charliteral">&#39;9&#39;</span>; });</div>
 <div class="line">        <span class="keywordflow">return</span> result;</div>
 <div class="line">    }</div>
 <div class="line"></div>
@@ -155,7 +154,7 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line">}  <span class="comment">// namespace muscovite::types</span></div>
-<div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a0dee45fd5b3a9e9edc2148511915f273"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">muscovite::types::Phone::is_international</a></div><div class="ttdeci">auto is_international() const noexcept -&gt; bool</div><div class="ttdoc">Check if international format (starts with +).</div><div class="ttdef"><b>Definition</b> <a href="phone_8hpp_source.html#l00077">phone.hpp:77</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a0dee45fd5b3a9e9edc2148511915f273"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">muscovite::types::Phone::is_international</a></div><div class="ttdeci">auto is_international() const noexcept -&gt; bool</div><div class="ttdoc">Check if international format (starts with +).</div><div class="ttdef"><b>Definition</b> <a href="phone_8hpp_source.html#l00076">phone.hpp:76</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a27590b873b23d31f8cf6f7724d300ff4"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a27590b873b23d31f8cf6f7724d300ff4">muscovite::types::Phone::pattern</a></div><div class="ttdeci">static constexpr auto pattern() noexcept -&gt; std::string_view</div><div class="ttdoc">Validation pattern (matches PostgreSQL CHECK).</div><div class="ttdef"><b>Definition</b> <a href="phone_8hpp_source.html#l00049">phone.hpp:49</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a5bf3c8ea746f4b8ead531b5f407c0938"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a5bf3c8ea746f4b8ead531b5f407c0938">muscovite::types::Phone::type_name</a></div><div class="ttdeci">static constexpr auto type_name() noexcept -&gt; std::string_view</div><div class="ttdoc">Type name for error messages.</div><div class="ttdef"><b>Definition</b> <a href="phone_8hpp_source.html#l00044">phone.hpp:44</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a72b600ce477ede1d6a9f661957af23af"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a72b600ce477ede1d6a9f661957af23af">muscovite::types::Phone::digits_only</a></div><div class="ttdeci">auto digits_only() const -&gt; std::string</div><div class="ttdoc">Extract digits only.</div><div class="ttdef"><b>Definition</b> <a href="phone_8hpp_source.html#l00068">phone.hpp:68</a></div></div>

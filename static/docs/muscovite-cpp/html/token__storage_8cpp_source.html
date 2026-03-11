@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -139,12 +139,12 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>QByteArray generateMachineKey() {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// Generate a key based on machine-specific data</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">// This is still not secure, but better than nothing</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    QString machineData = QSysInfo::machineUniqueId() + QSysInfo::prettyProductName();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">const</span> QString machineData = QSysInfo::machineUniqueId() + QSysInfo::prettyProductName();</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">return</span> QCryptographicHash::hash(machineData.toUtf8(), QCryptographicHash::Sha256);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>QString getStoragePath() {</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">const</span> QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    QDir().mkpath(dataDir);</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">return</span> dataDir + <span class="stringliteral">&quot;/tokens.dat&quot;</span>;</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
@@ -283,9 +283,9 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    </div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="comment">// Fallback file storage (encrypted with machine key)</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordtype">bool</span> saveToFile(<span class="keyword">const</span> StoredTokens&amp; tokens) {</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        QByteArray data = serializeTokens(tokens);</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        QByteArray encrypted = xorEncrypt(data, generateMachineKey());</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> saveToFile(<span class="keyword">const</span> StoredTokens&amp; tokens) {</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <span class="keyword">const</span> QByteArray data = serializeTokens(tokens);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keyword">const</span> QByteArray encrypted = xorEncrypt(data, generateMachineKey());</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        </div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        QFile file(getStoragePath());</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        <span class="keywordflow">if</span> (!file.open(QIODevice::WriteOnly)) {</div>
@@ -295,23 +295,23 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    }</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    std::optional&lt;StoredTokens&gt; loadFromFile() {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keyword">static</span> std::optional&lt;StoredTokens&gt; loadFromFile() {</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        QFile file(getStoragePath());</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordflow">if</span> (!file.open(QIODevice::ReadOnly)) {</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        }</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        </div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        QByteArray encrypted = file.readAll();</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        QByteArray data = xorEncrypt(encrypted, generateMachineKey());</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        <span class="keyword">const</span> QByteArray encrypted = file.readAll();</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="keyword">const</span> QByteArray data = xorEncrypt(encrypted, generateMachineKey());</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        </div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <span class="keywordflow">return</span> deserializeTokens(data);</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    }</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    </div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    <span class="keywordtype">bool</span> clearFromFile() {</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> clearFromFile() {</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        <span class="keywordflow">return</span> QFile::remove(getStoragePath());</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    }</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    QByteArray serializeTokens(<span class="keyword">const</span> StoredTokens&amp; tokens) {</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keyword">static</span> QByteArray serializeTokens(<span class="keyword">const</span> StoredTokens&amp; tokens) {</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        QByteArray data;</div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        QDataStream stream(&amp;data, QIODevice::WriteOnly);</div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        stream &lt;&lt; tokens.accessToken &lt;&lt; tokens.refreshToken </div>
@@ -319,7 +319,7 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        <span class="keywordflow">return</span> data;</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    }</div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    std::optional&lt;StoredTokens&gt; deserializeTokens(<span class="keyword">const</span> QByteArray&amp; data) {</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">static</span> std::optional&lt;StoredTokens&gt; deserializeTokens(<span class="keyword">const</span> QByteArray&amp; data) {</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        QDataStream stream(data);</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        StoredTokens tokens;</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        stream &gt;&gt; tokens.accessToken &gt;&gt; tokens.refreshToken </div>
@@ -351,19 +351,19 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    </div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#ifdef Q_OS_MACOS</span></div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    success = impl_-&gt;saveToKeychain(tokens);</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#elif defined(Q_OS_WIN)</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#elifdef Q_OS_WIN</span></div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    success = impl_-&gt;saveToCredentialManager(tokens);</div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    </div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    <span class="comment">// Fallback to file storage</span></div>
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    <span class="keywordflow">if</span> (!success) {</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        success = impl_-&gt;saveToFile(tokens);</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        success = Impl::saveToFile(tokens);</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    }</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    </div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    <span class="keywordflow">if</span> (success) {</div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        emit <a class="code hl_signal" href="classmuscovite_1_1qt_1_1TokenStorage.html#a7c2e89a2c50db8012bbfc240e3329800">tokensSaved</a>();</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        emit <a class="code hl_signal" href="classmuscovite_1_1qt_1_1TokenStorage.html#ae39d19b7333afc38557fa238071c16f9">errorOccurred</a>(<span class="stringliteral">&quot;Failed to save tokens&quot;</span>);</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        emit <a class="code hl_signal" href="classmuscovite_1_1qt_1_1TokenStorage.html#a81e7d0547a64c0ad98e2a86557da369a">errorOccurred</a>(<span class="stringliteral">&quot;Failed to save tokens&quot;</span>);</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    }</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    </div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    <span class="keywordflow">return</span> success;</div>
@@ -375,28 +375,28 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="preprocessor">#ifdef Q_OS_MACOS</span></div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keyword">auto</span> tokens = impl_-&gt;loadFromKeychain();</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordflow">if</span> (tokens) <span class="keywordflow">return</span> tokens;</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="preprocessor">#elif defined(Q_OS_WIN)</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="preprocessor">#elifdef Q_OS_WIN</span></div>
 <div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keyword">auto</span> tokens = impl_-&gt;loadFromCredentialManager();</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="keywordflow">if</span> (tokens) <span class="keywordflow">return</span> tokens;</div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    </div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <span class="comment">// Fallback to file storage</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    <span class="keywordflow">return</span> impl_-&gt;loadFromFile();</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    <span class="keywordflow">return</span> Impl::loadFromFile();</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>}</div>
 </div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
 <div class="foldopen" id="foldopen00288" data-start="{" data-end="}">
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1TokenStorage.html#a064fc1d019f395760be48c944a428b7f">  288</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1TokenStorage.html#a064fc1d019f395760be48c944a428b7f">TokenStorage::clearTokens</a>() {</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="keywordtype">bool</span> success = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> success = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    </div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="preprocessor">#ifdef Q_OS_MACOS</span></div>
 <div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    success = impl_-&gt;clearFromKeychain();</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="preprocessor">#elif defined(Q_OS_WIN)</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="preprocessor">#elifdef Q_OS_WIN</span></div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    success = impl_-&gt;clearFromCredentialManager();</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    </div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="comment">// Also clear file storage</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    impl_-&gt;clearFromFile();</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    Impl::clearFromFile();</div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    </div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="keywordflow">if</span> (success) {</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>        emit <a class="code hl_signal" href="classmuscovite_1_1qt_1_1TokenStorage.html#aa482258f3f0bf78a398b0ade095841f7">tokensCleared</a>();</div>
@@ -426,15 +426,15 @@ $(function(){initNavTree('token__storage_8cpp_source.html','',''); });
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>} <span class="comment">// namespace muscovite::qt</span></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a064fc1d019f395760be48c944a428b7f"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a064fc1d019f395760be48c944a428b7f">muscovite::qt::TokenStorage::clearTokens</a></div><div class="ttdeci">bool clearTokens()</div><div class="ttdoc">Clear stored tokens.</div><div class="ttdef"><b>Definition</b> <a href="#l00288">token_storage.cpp:288</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a3e40af78d0479afd7e6537115f1a5275"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a3e40af78d0479afd7e6537115f1a5275">muscovite::qt::TokenStorage::hasStoredTokens</a></div><div class="ttdeci">bool hasStoredTokens()</div><div class="ttdoc">Check if tokens are stored.</div><div class="ttdef"><b>Definition</b> <a href="#l00307">token_storage.cpp:307</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a3e40af78d0479afd7e6537115f1a5275"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a3e40af78d0479afd7e6537115f1a5275">muscovite::qt::TokenStorage::hasStoredTokens</a></div><div class="ttdeci">static bool hasStoredTokens()</div><div class="ttdoc">Check if tokens are stored.</div><div class="ttdef"><b>Definition</b> <a href="#l00307">token_storage.cpp:307</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a586ab591da8a85717a97540177341c8c"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a586ab591da8a85717a97540177341c8c">muscovite::qt::TokenStorage::saveTokens</a></div><div class="ttdeci">bool saveTokens(const StoredTokens &amp;tokens)</div><div class="ttdoc">Save tokens to secure storage.</div><div class="ttdef"><b>Definition</b> <a href="#l00252">token_storage.cpp:252</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a7c2e89a2c50db8012bbfc240e3329800"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a7c2e89a2c50db8012bbfc240e3329800">muscovite::qt::TokenStorage::tokensSaved</a></div><div class="ttdeci">void tokensSaved()</div><div class="ttdoc">Emitted when tokens are saved.</div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a81e7d0547a64c0ad98e2a86557da369a"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a81e7d0547a64c0ad98e2a86557da369a">muscovite::qt::TokenStorage::errorOccurred</a></div><div class="ttdeci">void errorOccurred(const QString &amp;_t1)</div><div class="ttdoc">Emitted when an error occurs.</div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_a8a7e55f5c19f1814044fbc983e9d8c3c"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#a8a7e55f5c19f1814044fbc983e9d8c3c">muscovite::qt::TokenStorage::setServiceName</a></div><div class="ttdeci">void setServiceName(const QString &amp;serviceName)</div><div class="ttdoc">Set the service name for keychain.</div><div class="ttdef"><b>Definition</b> <a href="#l00311">token_storage.cpp:311</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_aa0f6a9f3cf1b25f3b37793d01d45bbfc"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#aa0f6a9f3cf1b25f3b37793d01d45bbfc">muscovite::qt::TokenStorage::loadTokens</a></div><div class="ttdeci">std::optional&lt; StoredTokens &gt; loadTokens()</div><div class="ttdoc">Load tokens from secure storage.</div><div class="ttdef"><b>Definition</b> <a href="#l00275">token_storage.cpp:275</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_aa0f6a9f3cf1b25f3b37793d01d45bbfc"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#aa0f6a9f3cf1b25f3b37793d01d45bbfc">muscovite::qt::TokenStorage::loadTokens</a></div><div class="ttdeci">static std::optional&lt; StoredTokens &gt; loadTokens()</div><div class="ttdoc">Load tokens from secure storage.</div><div class="ttdef"><b>Definition</b> <a href="#l00275">token_storage.cpp:275</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_aa482258f3f0bf78a398b0ade095841f7"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#aa482258f3f0bf78a398b0ade095841f7">muscovite::qt::TokenStorage::tokensCleared</a></div><div class="ttdeci">void tokensCleared()</div><div class="ttdoc">Emitted when tokens are cleared.</div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_ac75f5b536d42659e374b7de918d041f2"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#ac75f5b536d42659e374b7de918d041f2">muscovite::qt::TokenStorage::instance</a></div><div class="ttdeci">static TokenStorage &amp; instance()</div><div class="ttdoc">Get singleton instance.</div><div class="ttdef"><b>Definition</b> <a href="#l00241">token_storage.cpp:241</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_ad9b1a7692ed0be2d6d4ac9f7b6ab3532"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#ad9b1a7692ed0be2d6d4ac9f7b6ab3532">muscovite::qt::TokenStorage::serviceName</a></div><div class="ttdeci">QString serviceName() const</div><div class="ttdoc">Get the current service name.</div><div class="ttdef"><b>Definition</b> <a href="#l00315">token_storage.cpp:315</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1TokenStorage_html_ae39d19b7333afc38557fa238071c16f9"><div class="ttname"><a href="classmuscovite_1_1qt_1_1TokenStorage.html#ae39d19b7333afc38557fa238071c16f9">muscovite::qt::TokenStorage::errorOccurred</a></div><div class="ttdeci">void errorOccurred(const QString &amp;error)</div><div class="ttdoc">Emitted when an error occurs.</div></div>
 <div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
 <div class="ttc" id="astructmuscovite_1_1qt_1_1StoredTokens_html"><div class="ttname"><a href="structmuscovite_1_1qt_1_1StoredTokens.html">muscovite::qt::StoredTokens</a></div><div class="ttdoc">Stored token data.</div><div class="ttdef"><b>Definition</b> <a href="token__storage_8hpp_source.html#l00021">token_storage.hpp:21</a></div></div>
 <div class="ttc" id="atoken__storage_8hpp_html"><div class="ttname"><a href="token__storage_8hpp.html">token_storage.hpp</a></div><div class="ttdoc">Secure token persistence using platform-specific keychain.</div></div>

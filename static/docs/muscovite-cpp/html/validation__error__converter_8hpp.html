@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -113,8 +113,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a761d17aed290e9031c2b8e164e9324f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract ValidationResult from a <a class="el" href="structmuscovite_1_1qt_1_1grpc_1_1GrpcResult.html" title="Result wrapper for a unary gRPC call.">GrpcResult</a> if it has a validation error.  <br /></td></tr>
 <tr class="memitem:a51151ad99f2bf3a0b7d3c5597c8d863a" id="r_a51151ad99f2bf3a0b7d3c5597c8d863a"><td class="memItemLeft"><a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a>&#160;</td><td class="memItemRight"><a class="el" href="#a51151ad99f2bf3a0b7d3c5597c8d863a">muscovite::qt::grpc::fromBackendError</a> (const <a class="el" href="structmuscovite_1_1qt_1_1grpc_1_1ValidationError.html">ValidationError</a> &amp;error)</td></tr>
 <tr class="memdesc:a51151ad99f2bf3a0b7d3c5597c8d863a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a ValidationResult from a gRPC <a class="el" href="structmuscovite_1_1qt_1_1grpc_1_1ValidationError.html" title="Structured validation error extracted from gRPC trailing metadata.">ValidationError</a>.  <br /></td></tr>
-<tr class="memitem:a925973791b42aed1e15aee5820337cb9" id="r_a925973791b42aed1e15aee5820337cb9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a925973791b42aed1e15aee5820337cb9">muscovite::qt::grpc::handleValidationMetadata</a> (const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status, std::function&lt; void(const <a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a> &amp;)&gt; showResult, std::function&lt; void(bool)&gt; setLoading)</td></tr>
-<tr class="memdesc:a925973791b42aed1e15aee5820337cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for validation errors and show them in a dialog.  <br /></td></tr>
+<tr class="memitem:ac8e0b0a49cb9d40403d14f77821a4441" id="r_ac8e0b0a49cb9d40403d14f77821a4441"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac8e0b0a49cb9d40403d14f77821a4441">muscovite::qt::grpc::handleValidationMetadata</a> (const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status, const std::function&lt; void(const <a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a> &amp;)&gt; &amp;showResult, const std::function&lt; void(bool)&gt; &amp;setLoading)</td></tr>
+<tr class="memdesc:ac8e0b0a49cb9d40403d14f77821a4441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for validation errors and show them in a dialog.  <br /></td></tr>
 <tr class="memitem:add1e7e59106a393ff9f73a907944c76c" id="r_add1e7e59106a393ff9f73a907944c76c"><td class="memItemLeft"><a class="el" href="validation__codes_8hpp.html#a2e703ae6e1d16a0a8c4b7962a40bce96">validation::ValidationCode</a>&#160;</td><td class="memItemRight"><a class="el" href="#add1e7e59106a393ff9f73a907944c76c">muscovite::qt::grpc::parseValidationCode</a> (const QString &amp;codeStr)</td></tr>
 <tr class="memdesc:add1e7e59106a393ff9f73a907944c76c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse a validation code string to ValidationCode enum.  <br /></td></tr>
 <tr class="memitem:a9359eee2ee8e6e31530ff9a73dfbf201" id="r_a9359eee2ee8e6e31530ff9a73dfbf201"><td class="memItemLeft"><a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationMessage.html">validation::ValidationMessage</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9359eee2ee8e6e31530ff9a73dfbf201">muscovite::qt::grpc::toValidationMessage</a> (const <a class="el" href="structmuscovite_1_1qt_1_1grpc_1_1ValidationError.html">ValidationError</a> &amp;error)</td></tr>
@@ -201,7 +201,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="validation__error__converter_8hpp_source.html#l00157">157</a> of file <a class="el" href="validation__error__converter_8hpp_source.html">validation_error_converter.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00033">muscovite::qt::grpc::ValidationError::code</a>, <a class="el" href="service__client__base_8hpp_source.html#l00034">muscovite::qt::grpc::ValidationError::field</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00035">muscovite::qt::grpc::ValidationError::message</a>.</p>
+<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00034">muscovite::qt::grpc::ValidationError::code</a>, <a class="el" href="service__client__base_8hpp_source.html#l00035">muscovite::qt::grpc::ValidationError::field</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00036">muscovite::qt::grpc::ValidationError::message</a>.</p>
 
 </div>
 </div>
@@ -239,7 +239,7 @@ template&lt;typename Response&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="validation__error__converter_8hpp_source.html#l00137">137</a> of file <a class="el" href="validation__error__converter_8hpp_source.html">validation_error_converter.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00064">muscovite::qt::grpc::GrpcResult&lt; Response &gt;::hasValidationError()</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00059">muscovite::qt::grpc::GrpcResult&lt; Response &gt;::validationError</a>.</p>
+<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00065">muscovite::qt::grpc::GrpcResult&lt; Response &gt;::hasValidationError()</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00060">muscovite::qt::grpc::GrpcResult&lt; Response &gt;::validationError</a>.</p>
 
 </div>
 </div>
@@ -279,8 +279,8 @@ template&lt;typename Response&gt; </div>
 
 </div>
 </div>
-<a id="a925973791b42aed1e15aee5820337cb9" name="a925973791b42aed1e15aee5820337cb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a925973791b42aed1e15aee5820337cb9">&#9670;&#160;</a></span>handleValidationMetadata()</h2>
+<a id="ac8e0b0a49cb9d40403d14f77821a4441" name="ac8e0b0a49cb9d40403d14f77821a4441"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8e0b0a49cb9d40403d14f77821a4441">&#9670;&#160;</a></span>handleValidationMetadata()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -301,12 +301,12 @@ template&lt;typename Response&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(const <a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a> &amp;)&gt;</td>          <td class="paramname"><span class="paramname"><em>showResult</em></span>, </td>
+          <td class="paramtype">const std::function&lt; void(const <a class="el" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a> &amp;)&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>showResult</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(bool)&gt;</td>          <td class="paramname"><span class="paramname"><em>setLoading</em></span>&#160;)</td>
+          <td class="paramtype">const std::function&lt; void(bool)&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>setLoading</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -402,7 +402,7 @@ template&lt;typename Response&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="validation__error__converter_8hpp_source.html#l00089">89</a> of file <a class="el" href="validation__error__converter_8hpp_source.html">validation_error_converter.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00033">muscovite::qt::grpc::ValidationError::code</a>, <a class="el" href="validation__result_8cpp_source.html#l00024">muscovite::qt::validation::ValidationMessage::custom()</a>, <a class="el" href="service__client__base_8hpp_source.html#l00034">muscovite::qt::grpc::ValidationError::field</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00035">muscovite::qt::grpc::ValidationError::message</a>.</p>
+<p class="reference">References <a class="el" href="service__client__base_8hpp_source.html#l00034">muscovite::qt::grpc::ValidationError::code</a>, <a class="el" href="validation__result_8cpp_source.html#l00025">muscovite::qt::validation::ValidationMessage::custom()</a>, <a class="el" href="service__client__base_8hpp_source.html#l00035">muscovite::qt::grpc::ValidationError::field</a>, and <a class="el" href="service__client__base_8hpp_source.html#l00036">muscovite::qt::grpc::ValidationError::message</a>.</p>
 
 </div>
 </div>

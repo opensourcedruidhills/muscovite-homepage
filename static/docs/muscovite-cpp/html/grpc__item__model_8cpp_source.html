@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -192,7 +192,7 @@ $(function(){initNavTree('grpc__item__model_8cpp_source.html','',''); });
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>std::unique_ptr&lt;::grpc::ClientContext&gt; GrpcItemModel::makeContext(std::chrono::milliseconds deadline)<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keyword">auto</span> ctx = std::make_unique&lt;::grpc::ClientContext&gt;();</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    ctx-&gt;set_deadline(std::chrono::system_clock::now() + deadline);</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keywordflow">if</span> (authMgr_ &amp;&amp; authMgr_-&gt;isAuthenticated()) {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keywordflow">if</span> (authMgr_ != <span class="keyword">nullptr</span> &amp;&amp; authMgr_-&gt;isAuthenticated()) {</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keyword">const</span> QString token = authMgr_-&gt;accessToken();</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">if</span> (!token.isEmpty()) {</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <span class="keyword">const</span> std::string authHeader = <span class="stringliteral">&quot;Bearer &quot;</span> + token.toStdString();</div>
@@ -206,7 +206,7 @@ $(function(){initNavTree('grpc__item__model_8cpp_source.html','',''); });
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1models_1_1GrpcItemModel.html#a9416d25338d443443ab4e3796ff8127b">  109</a></span>std::shared_ptr&lt;::grpc::ClientContext&gt; <a class="code hl_function" href="classmuscovite_1_1qt_1_1models_1_1GrpcItemModel.html#a9416d25338d443443ab4e3796ff8127b">GrpcItemModel::makeSharedContext</a>(std::chrono::milliseconds deadline)<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keyword">auto</span> ctx = std::make_shared&lt;::grpc::ClientContext&gt;();</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    ctx-&gt;set_deadline(std::chrono::system_clock::now() + deadline);</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordflow">if</span> (authMgr_ &amp;&amp; authMgr_-&gt;isAuthenticated()) {</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordflow">if</span> (authMgr_ != <span class="keyword">nullptr</span> &amp;&amp; authMgr_-&gt;isAuthenticated()) {</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keyword">const</span> QString token = authMgr_-&gt;accessToken();</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordflow">if</span> (!token.isEmpty()) {</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <span class="keyword">const</span> std::string authHeader = <span class="stringliteral">&quot;Bearer &quot;</span> + token.toStdString();</div>
@@ -268,7 +268,7 @@ $(function(){initNavTree('grpc__item__model_8cpp_source.html','',''); });
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordflow">return</span> simplified.toUtf8();</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>}</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keywordtype">int</span> GrpcItemModel::columnForRole(<span class="keywordtype">int</span> role)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keywordtype">int</span> GrpcItemModel::columnForRole(<span class="keywordtype">int</span> role) {</div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keywordflow">if</span> (role == Qt::DisplayRole) {</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    }</div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -104,56 +104,49 @@ Inheritance diagram for muscovite::qt::AuthManager:</div>
   <img src="classmuscovite_1_1qt_1_1AuthManager.png" alt=""/>
  </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-slots" class="groupheader"><a id="pub-slots" name="pub-slots"></a>
-Public Slots</h2></td></tr>
-<tr class="memitem:a0271b551aa6a11ebcb837858e0052dab" id="r_a0271b551aa6a11ebcb837858e0052dab"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0271b551aa6a11ebcb837858e0052dab">changePassword</a> (const QString &amp;currentPassword, const QString &amp;newPassword)</td></tr>
-<tr class="memdesc:a0271b551aa6a11ebcb837858e0052dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the current user's password.  <br /></td></tr>
-<tr class="memitem:a754411ab7b1fa528d0e364e0d61937eb" id="r_a754411ab7b1fa528d0e364e0d61937eb"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a754411ab7b1fa528d0e364e0d61937eb">login</a> (const QString &amp;<a class="el" href="#a9153139b0253d15a7e2cbed32e3e565c">username</a>, const QString &amp;password)</td></tr>
-<tr class="memdesc:a754411ab7b1fa528d0e364e0d61937eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Login with username and password.  <br /></td></tr>
-<tr class="memitem:adaf72e99eb61423470ee02bb9c70edcc" id="r_adaf72e99eb61423470ee02bb9c70edcc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#adaf72e99eb61423470ee02bb9c70edcc">logout</a> ()</td></tr>
-<tr class="memdesc:adaf72e99eb61423470ee02bb9c70edcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logout and invalidate the current session.  <br /></td></tr>
-<tr class="memitem:a1f87d220b26f61491ac4fcfc6de6a0a9" id="r_a1f87d220b26f61491ac4fcfc6de6a0a9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1f87d220b26f61491ac4fcfc6de6a0a9">logoutAll</a> ()</td></tr>
-<tr class="memdesc:a1f87d220b26f61491ac4fcfc6de6a0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logout from all sessions.  <br /></td></tr>
-<tr class="memitem:a8e2c6995ea55fe8cdc078effb5124d24" id="r_a8e2c6995ea55fe8cdc078effb5124d24"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8e2c6995ea55fe8cdc078effb5124d24">refreshToken</a> ()</td></tr>
-<tr class="memdesc:a8e2c6995ea55fe8cdc078effb5124d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh the access token.  <br /></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
 Signals</h2></td></tr>
 <tr class="memitem:a1a8652d524f4071470be51a4693dc131" id="r_a1a8652d524f4071470be51a4693dc131"><td class="memItemLeft"><a id="a1a8652d524f4071470be51a4693dc131" name="a1a8652d524f4071470be51a4693dc131"></a>
 void&#160;</td><td class="memItemRight"><b>authStateChanged</b> ()</td></tr>
 <tr class="memdesc:a1a8652d524f4071470be51a4693dc131"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when authentication state changes. <br /></td></tr>
-<tr class="memitem:a37f3dcddb17de9f87639b31f16255fd8" id="r_a37f3dcddb17de9f87639b31f16255fd8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred</a> (const QString &amp;error)</td></tr>
-<tr class="memdesc:a37f3dcddb17de9f87639b31f16255fd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when an error occurs.  <br /></td></tr>
+<tr class="memitem:a7ee817609032baf528d810cc1774d724" id="r_a7ee817609032baf528d810cc1774d724"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred</a> (const QString &amp;_t1)</td></tr>
+<tr class="memdesc:a7ee817609032baf528d810cc1774d724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when an error occurs.  <br /></td></tr>
 <tr class="memitem:a1547f1862f71063ecb63502ef822c209" id="r_a1547f1862f71063ecb63502ef822c209"><td class="memItemLeft"><a id="a1547f1862f71063ecb63502ef822c209" name="a1547f1862f71063ecb63502ef822c209"></a>
 void&#160;</td><td class="memItemRight"><b>loggedOut</b> ()</td></tr>
 <tr class="memdesc:a1547f1862f71063ecb63502ef822c209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when logout completes. <br /></td></tr>
-<tr class="memitem:adf7fe5a137f9f5c570ccd74c68230d22" id="r_adf7fe5a137f9f5c570ccd74c68230d22"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#adf7fe5a137f9f5c570ccd74c68230d22">loginFailed</a> (const QString &amp;error)</td></tr>
-<tr class="memdesc:adf7fe5a137f9f5c570ccd74c68230d22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when login fails.  <br /></td></tr>
+<tr class="memitem:a4fbc4d2c121bd5aa93cdc78a2d256c13" id="r_a4fbc4d2c121bd5aa93cdc78a2d256c13"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">loginFailed</a> (const QString &amp;_t1)</td></tr>
+<tr class="memdesc:a4fbc4d2c121bd5aa93cdc78a2d256c13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when login fails.  <br /></td></tr>
 <tr class="memitem:a22f487627d9246f774cbc4c213ff3824" id="r_a22f487627d9246f774cbc4c213ff3824"><td class="memItemLeft"><a id="a22f487627d9246f774cbc4c213ff3824" name="a22f487627d9246f774cbc4c213ff3824"></a>
 void&#160;</td><td class="memItemRight"><b>loginProgressChanged</b> ()</td></tr>
 <tr class="memdesc:a22f487627d9246f774cbc4c213ff3824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when login progress changes. <br /></td></tr>
-<tr class="memitem:a55ee17eae332e55c763903f16783992b" id="r_a55ee17eae332e55c763903f16783992b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a55ee17eae332e55c763903f16783992b">loginSucceeded</a> (const <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &amp;<a class="el" href="#a6b24e889b95843738a94010eb44fdbb1">session</a>)</td></tr>
-<tr class="memdesc:a55ee17eae332e55c763903f16783992b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when login succeeds.  <br /></td></tr>
+<tr class="memitem:a937f9c6a90ee03a349e06b75fbd895d3" id="r_a937f9c6a90ee03a349e06b75fbd895d3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a937f9c6a90ee03a349e06b75fbd895d3">loginSucceeded</a> (const <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &amp;_t1)</td></tr>
+<tr class="memdesc:a937f9c6a90ee03a349e06b75fbd895d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when login succeeds.  <br /></td></tr>
 <tr class="memitem:a781f85d13736954a750b1430c152822d" id="r_a781f85d13736954a750b1430c152822d"><td class="memItemLeft"><a id="a781f85d13736954a750b1430c152822d" name="a781f85d13736954a750b1430c152822d"></a>
 void&#160;</td><td class="memItemRight"><b>passwordChanged</b> ()</td></tr>
 <tr class="memdesc:a781f85d13736954a750b1430c152822d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when password change succeeds. <br /></td></tr>
-<tr class="memitem:a3c8bcce9b97c346aa44895fa9e8921f6" id="r_a3c8bcce9b97c346aa44895fa9e8921f6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3c8bcce9b97c346aa44895fa9e8921f6">passwordChangeFailed</a> (const QString &amp;error)</td></tr>
-<tr class="memdesc:a3c8bcce9b97c346aa44895fa9e8921f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when password change fails.  <br /></td></tr>
+<tr class="memitem:a2a1ce5a70bf342d6371c5e9b3e5547c5" id="r_a2a1ce5a70bf342d6371c5e9b3e5547c5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2a1ce5a70bf342d6371c5e9b3e5547c5">passwordChangeFailed</a> (const QString &amp;_t1)</td></tr>
+<tr class="memdesc:a2a1ce5a70bf342d6371c5e9b3e5547c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when password change fails.  <br /></td></tr>
 <tr class="memitem:ae9c4d21b6715cdb7f02429691d32ea5d" id="r_ae9c4d21b6715cdb7f02429691d32ea5d"><td class="memItemLeft"><a id="ae9c4d21b6715cdb7f02429691d32ea5d" name="ae9c4d21b6715cdb7f02429691d32ea5d"></a>
 void&#160;</td><td class="memItemRight"><b>sessionExpired</b> ()</td></tr>
 <tr class="memdesc:ae9c4d21b6715cdb7f02429691d32ea5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when the session has expired. <br /></td></tr>
-<tr class="memitem:a22b73a4b03f75874540c7e37a015d5c0" id="r_a22b73a4b03f75874540c7e37a015d5c0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a22b73a4b03f75874540c7e37a015d5c0">sessionExpiring</a> (int secondsRemaining)</td></tr>
-<tr class="memdesc:a22b73a4b03f75874540c7e37a015d5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when the session is about to expire.  <br /></td></tr>
+<tr class="memitem:a6218c96d391047ed354b6f8e1dd9573e" id="r_a6218c96d391047ed354b6f8e1dd9573e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6218c96d391047ed354b6f8e1dd9573e">sessionExpiring</a> (int _t1)</td></tr>
+<tr class="memdesc:a6218c96d391047ed354b6f8e1dd9573e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when the session is about to expire.  <br /></td></tr>
 <tr class="memitem:a50be82c6ced4ce7641974500550cd3da" id="r_a50be82c6ced4ce7641974500550cd3da"><td class="memItemLeft"><a id="a50be82c6ced4ce7641974500550cd3da" name="a50be82c6ced4ce7641974500550cd3da"></a>
 void&#160;</td><td class="memItemRight"><b>tokenRefreshed</b> ()</td></tr>
 <tr class="memdesc:a50be82c6ced4ce7641974500550cd3da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when token refresh succeeds. <br /></td></tr>
-<tr class="memitem:a9357f51c6b4ba1c0f1ce78729f2a8cdd" id="r_a9357f51c6b4ba1c0f1ce78729f2a8cdd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9357f51c6b4ba1c0f1ce78729f2a8cdd">tokenRefreshFailed</a> (const QString &amp;error)</td></tr>
-<tr class="memdesc:a9357f51c6b4ba1c0f1ce78729f2a8cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when token refresh fails.  <br /></td></tr>
+<tr class="memitem:a47312ed5bd8e7a3d458a4c36d4119d77" id="r_a47312ed5bd8e7a3d458a4c36d4119d77"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a47312ed5bd8e7a3d458a4c36d4119d77">tokenRefreshFailed</a> (const QString &amp;_t1)</td></tr>
+<tr class="memdesc:a47312ed5bd8e7a3d458a4c36d4119d77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when token refresh fails.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aaec071d586f3f193b0d704f2f55586aa" id="r_aaec071d586f3f193b0d704f2f55586aa"><td class="memItemLeft"><a id="aaec071d586f3f193b0d704f2f55586aa" name="aaec071d586f3f193b0d704f2f55586aa"></a>
+&#160;</td><td class="memItemRight"><b>AuthManager</b> (AuthManager &amp;&amp;)=delete</td></tr>
+<tr class="memitem:a473cffec55119b2dc5a11bdd7c97e0b1" id="r_a473cffec55119b2dc5a11bdd7c97e0b1"><td class="memItemLeft"><a id="a473cffec55119b2dc5a11bdd7c97e0b1" name="a473cffec55119b2dc5a11bdd7c97e0b1"></a>
+&#160;</td><td class="memItemRight"><b>AuthManager</b> (const AuthManager &amp;)=delete</td></tr>
 <tr class="memitem:a98629b680cde8528111cfd2ef5dcd4bd" id="r_a98629b680cde8528111cfd2ef5dcd4bd"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a98629b680cde8528111cfd2ef5dcd4bd">accessToken</a> () const</td></tr>
 <tr class="memdesc:a98629b680cde8528111cfd2ef5dcd4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current access token.  <br /></td></tr>
+<tr class="memitem:a0271b551aa6a11ebcb837858e0052dab" id="r_a0271b551aa6a11ebcb837858e0052dab"><td class="memItemLeft">Q_SLOT void&#160;</td><td class="memItemRight"><a class="el" href="#a0271b551aa6a11ebcb837858e0052dab">changePassword</a> (const QString &amp;currentPassword, const QString &amp;newPassword)</td></tr>
+<tr class="memdesc:a0271b551aa6a11ebcb837858e0052dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the current user's password.  <br /></td></tr>
 <tr class="memitem:a71bd546e3c9218544bd8a6daddae5bbb" id="r_a71bd546e3c9218544bd8a6daddae5bbb"><td class="memItemLeft">const <a class="el" href="structmuscovite_1_1qt_1_1AuthConfig.html">AuthConfig</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a71bd546e3c9218544bd8a6daddae5bbb">config</a> () const</td></tr>
 <tr class="memdesc:a71bd546e3c9218544bd8a6daddae5bbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current configuration.  <br /></td></tr>
 <tr class="memitem:a0f76ec80c4f037bb171ff89df071e49d" id="r_a0f76ec80c4f037bb171ff89df071e49d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0f76ec80c4f037bb171ff89df071e49d">configure</a> (const <a class="el" href="structmuscovite_1_1qt_1_1AuthConfig.html">AuthConfig</a> &amp;<a class="el" href="#a71bd546e3c9218544bd8a6daddae5bbb">config</a>)</td></tr>
@@ -178,8 +171,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a321adb488bc5eea36f7637c09f3c6d75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a login operation is in progress.  <br /></td></tr>
 <tr class="memitem:a88b9c6d9367777249883121a52eb0906" id="r_a88b9c6d9367777249883121a52eb0906"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a88b9c6d9367777249883121a52eb0906">lastError</a> () const</td></tr>
 <tr class="memdesc:a88b9c6d9367777249883121a52eb0906"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the last error message.  <br /></td></tr>
+<tr class="memitem:a754411ab7b1fa528d0e364e0d61937eb" id="r_a754411ab7b1fa528d0e364e0d61937eb"><td class="memItemLeft">Q_SLOT void&#160;</td><td class="memItemRight"><a class="el" href="#a754411ab7b1fa528d0e364e0d61937eb">login</a> (const QString &amp;<a class="el" href="#a9153139b0253d15a7e2cbed32e3e565c">username</a>, const QString &amp;password)</td></tr>
+<tr class="memdesc:a754411ab7b1fa528d0e364e0d61937eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Login with username and password.  <br /></td></tr>
+<tr class="memitem:adaf72e99eb61423470ee02bb9c70edcc" id="r_adaf72e99eb61423470ee02bb9c70edcc"><td class="memItemLeft">Q_SLOT void&#160;</td><td class="memItemRight"><a class="el" href="#adaf72e99eb61423470ee02bb9c70edcc">logout</a> ()</td></tr>
+<tr class="memdesc:adaf72e99eb61423470ee02bb9c70edcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logout and invalidate the current session.  <br /></td></tr>
+<tr class="memitem:a1f87d220b26f61491ac4fcfc6de6a0a9" id="r_a1f87d220b26f61491ac4fcfc6de6a0a9"><td class="memItemLeft">Q_SLOT void&#160;</td><td class="memItemRight"><a class="el" href="#a1f87d220b26f61491ac4fcfc6de6a0a9">logoutAll</a> ()</td></tr>
+<tr class="memdesc:a1f87d220b26f61491ac4fcfc6de6a0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logout from all sessions.  <br /></td></tr>
+<tr class="memitem:abf2befa8d3498b6962166cf516a15a5e" id="r_abf2befa8d3498b6962166cf516a15a5e"><td class="memItemLeft"><a id="abf2befa8d3498b6962166cf516a15a5e" name="abf2befa8d3498b6962166cf516a15a5e"></a>
+AuthManager &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (AuthManager &amp;&amp;)=delete</td></tr>
+<tr class="memitem:a2ab6a7676e6da3af6eabf7791bb3c2fa" id="r_a2ab6a7676e6da3af6eabf7791bb3c2fa"><td class="memItemLeft"><a id="a2ab6a7676e6da3af6eabf7791bb3c2fa" name="a2ab6a7676e6da3af6eabf7791bb3c2fa"></a>
+AuthManager &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const AuthManager &amp;)=delete</td></tr>
 <tr class="memitem:aaa682d9b5795a6085602c84b2b4954f5" id="r_aaa682d9b5795a6085602c84b2b4954f5"><td class="memItemLeft">QStringList&#160;</td><td class="memItemRight"><a class="el" href="#aaa682d9b5795a6085602c84b2b4954f5">privileges</a> () const</td></tr>
 <tr class="memdesc:aaa682d9b5795a6085602c84b2b4954f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current user's privileges.  <br /></td></tr>
+<tr class="memitem:a8e2c6995ea55fe8cdc078effb5124d24" id="r_a8e2c6995ea55fe8cdc078effb5124d24"><td class="memItemLeft">Q_SLOT void&#160;</td><td class="memItemRight"><a class="el" href="#a8e2c6995ea55fe8cdc078effb5124d24">refreshToken</a> ()</td></tr>
+<tr class="memdesc:a8e2c6995ea55fe8cdc078effb5124d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh the access token.  <br /></td></tr>
 <tr class="memitem:a6b24e889b95843738a94010eb44fdbb1" id="r_a6b24e889b95843738a94010eb44fdbb1"><td class="memItemLeft">std::optional&lt; <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a6b24e889b95843738a94010eb44fdbb1">session</a> () const</td></tr>
 <tr class="memdesc:a6b24e889b95843738a94010eb44fdbb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current session.  <br /></td></tr>
 <tr class="memitem:a51e7c0dc9a322eae98089f5d12a301fe" id="r_a51e7c0dc9a322eae98089f5d12a301fe"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a51e7c0dc9a322eae98089f5d12a301fe">username</a> () const</td></tr>
@@ -213,19 +218,19 @@ Properties</h2></td></tr>
 <p>Usage: </p><div class="fragment"><div class="line"><span class="keyword">auto</span>&amp; auth = <a class="code hl_function" href="#af0634476e1cffaec261e5517469b5f5b">AuthManager::instance</a>();</div>
 <div class="line">auth.configure(<a class="code hl_struct" href="structmuscovite_1_1qt_1_1AuthConfig.html">AuthConfig</a>{.serverAddress = <span class="stringliteral">&quot;localhost:50051&quot;</span>});</div>
 <div class="line"> </div>
-<div class="line">connect(&amp;auth, &amp;<a class="code hl_signal" href="#a55ee17eae332e55c763903f16783992b">AuthManager::loginSucceeded</a>, [](<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1qt_1_1Session.html">Session</a>&amp; <a class="code hl_function" href="#a6b24e889b95843738a94010eb44fdbb1">session</a>) {</div>
+<div class="line">connect(&amp;auth, &amp;<a class="code hl_signal" href="#a937f9c6a90ee03a349e06b75fbd895d3">AuthManager::loginSucceeded</a>, [](<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1qt_1_1Session.html">Session</a>&amp; <a class="code hl_function" href="#a6b24e889b95843738a94010eb44fdbb1">session</a>) {</div>
 <div class="line">    qDebug() &lt;&lt; <span class="stringliteral">&quot;Logged in as&quot;</span> &lt;&lt; <a class="code hl_function" href="#a6b24e889b95843738a94010eb44fdbb1">session</a>.username;</div>
 <div class="line">});</div>
 <div class="line"> </div>
-<div class="line">connect(&amp;auth, &amp;<a class="code hl_signal" href="#adf7fe5a137f9f5c570ccd74c68230d22">AuthManager::loginFailed</a>, [](<span class="keyword">const</span> QString&amp; error) {</div>
+<div class="line">connect(&amp;auth, &amp;<a class="code hl_signal" href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">AuthManager::loginFailed</a>, [](<span class="keyword">const</span> QString&amp; error) {</div>
 <div class="line">    qWarning() &lt;&lt; <span class="stringliteral">&quot;Login failed:&quot;</span> &lt;&lt; error;</div>
 <div class="line">});</div>
 <div class="line"> </div>
 <div class="line">auth.login(<span class="stringliteral">&quot;admin&quot;</span>, <span class="stringliteral">&quot;password&quot;</span>);</div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_a55ee17eae332e55c763903f16783992b"><div class="ttname"><a href="#a55ee17eae332e55c763903f16783992b">muscovite::qt::AuthManager::loginSucceeded</a></div><div class="ttdeci">void loginSucceeded(const Session &amp;session)</div><div class="ttdoc">Emitted when login succeeds.</div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_a6b24e889b95843738a94010eb44fdbb1"><div class="ttname"><a href="#a6b24e889b95843738a94010eb44fdbb1">muscovite::qt::AuthManager::session</a></div><div class="ttdeci">std::optional&lt; Session &gt; session() const</div><div class="ttdoc">Get the current session.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00200">auth_manager.cpp:200</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_adf7fe5a137f9f5c570ccd74c68230d22"><div class="ttname"><a href="#adf7fe5a137f9f5c570ccd74c68230d22">muscovite::qt::AuthManager::loginFailed</a></div><div class="ttdeci">void loginFailed(const QString &amp;error)</div><div class="ttdoc">Emitted when login fails.</div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_af0634476e1cffaec261e5517469b5f5b"><div class="ttname"><a href="#af0634476e1cffaec261e5517469b5f5b">muscovite::qt::AuthManager::instance</a></div><div class="ttdeci">static AuthManager &amp; instance()</div><div class="ttdoc">Get singleton instance.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00145">auth_manager.cpp:145</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_a4fbc4d2c121bd5aa93cdc78a2d256c13"><div class="ttname"><a href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">muscovite::qt::AuthManager::loginFailed</a></div><div class="ttdeci">void loginFailed(const QString &amp;_t1)</div><div class="ttdoc">Emitted when login fails.</div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_a6b24e889b95843738a94010eb44fdbb1"><div class="ttname"><a href="#a6b24e889b95843738a94010eb44fdbb1">muscovite::qt::AuthManager::session</a></div><div class="ttdeci">std::optional&lt; Session &gt; session() const</div><div class="ttdoc">Get the current session.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00201">auth_manager.cpp:201</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_a937f9c6a90ee03a349e06b75fbd895d3"><div class="ttname"><a href="#a937f9c6a90ee03a349e06b75fbd895d3">muscovite::qt::AuthManager::loginSucceeded</a></div><div class="ttdeci">void loginSucceeded(const Session &amp;_t1)</div><div class="ttdoc">Emitted when login succeeds.</div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_af0634476e1cffaec261e5517469b5f5b"><div class="ttname"><a href="#af0634476e1cffaec261e5517469b5f5b">muscovite::qt::AuthManager::instance</a></div><div class="ttdeci">static AuthManager &amp; instance()</div><div class="ttdoc">Get singleton instance.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00146">auth_manager.cpp:146</a></div></div>
 <div class="ttc" id="astructmuscovite_1_1qt_1_1AuthConfig_html"><div class="ttname"><a href="structmuscovite_1_1qt_1_1AuthConfig.html">muscovite::qt::AuthConfig</a></div><div class="ttdoc">Configuration for authentication.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8hpp_source.html#l00038">auth_manager.hpp:38</a></div></div>
 <div class="ttc" id="astructmuscovite_1_1qt_1_1Session_html"><div class="ttname"><a href="structmuscovite_1_1qt_1_1Session.html">muscovite::qt::Session</a></div><div class="ttdoc">Session information after successful authentication.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8hpp_source.html#l00024">auth_manager.hpp:24</a></div></div>
 </div><!-- fragment --> 
@@ -236,6 +241,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString muscovite::qt::AuthManager::accessToken </td>
@@ -244,25 +252,27 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current access token. </p>
 <dl class="section return"><dt>Returns</dt><dd>Access token for gRPC calls </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00205">205</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00206">206</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00416">changePassword()</a>, and <a class="el" href="qt_2src_2auth_2auth__interceptor_8cpp_source.html#l00037">muscovite::qt::CreateAuthCallCredentials()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00411">changePassword()</a>, and <a class="el" href="qt_2src_2auth_2auth__interceptor_8cpp_source.html#l00037">muscovite::qt::CreateAuthCallCredentials()</a>.</p>
 
 </div>
 </div>
 <a id="a0271b551aa6a11ebcb837858e0052dab" name="a0271b551aa6a11ebcb837858e0052dab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0271b551aa6a11ebcb837858e0052dab">&#9670;&#160;</a></span>changePassword</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0271b551aa6a11ebcb837858e0052dab">&#9670;&#160;</a></span>changePassword()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::changePassword </td>
@@ -275,11 +285,6 @@ Properties</h2></td></tr>
           <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>newPassword</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Change the current user's password. </p>
@@ -291,9 +296,9 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00416">416</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00411">411</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00205">accessToken()</a>, <a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred()</a>, <a class="el" href="#a781f85d13736954a750b1430c152822d">passwordChanged()</a>, and <a class="el" href="#a3c8bcce9b97c346aa44895fa9e8921f6">passwordChangeFailed()</a>.</p>
+<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00206">accessToken()</a>, <a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred()</a>, <a class="el" href="#a781f85d13736954a750b1430c152822d">passwordChanged()</a>, and <a class="el" href="#a2a1ce5a70bf342d6371c5e9b3e5547c5">passwordChangeFailed()</a>.</p>
 
 </div>
 </div>
@@ -302,6 +307,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="structmuscovite_1_1qt_1_1AuthConfig.html">AuthConfig</a> &amp; muscovite::qt::AuthManager::config </td>
@@ -310,14 +318,19 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current configuration. </p>
 <dl class="section return"><dt>Returns</dt><dd>Current authentication configuration </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00163">163</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00164">164</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00158">configure()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00159">configure()</a>.</p>
 
 </div>
 </div>
@@ -344,9 +357,9 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00158">158</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00159">159</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00163">config()</a>.</p>
+<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00164">config()</a>.</p>
 
 </div>
 </div>
@@ -355,6 +368,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString muscovite::qt::AuthManager::displayName </td>
@@ -363,17 +379,22 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current display name. </p>
 <dl class="section return"><dt>Returns</dt><dd>Display name or empty string if not authenticated </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00177">177</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00178">178</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a37f3dcddb17de9f87639b31f16255fd8" name="a37f3dcddb17de9f87639b31f16255fd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37f3dcddb17de9f87639b31f16255fd8">&#9670;&#160;</a></span>errorOccurred</h2>
+<a id="a7ee817609032baf528d810cc1774d724" name="a7ee817609032baf528d810cc1774d724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee817609032baf528d810cc1774d724">&#9670;&#160;</a></span>errorOccurred</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -384,7 +405,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::errorOccurred </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>error</em></span></td><td>)</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -403,9 +424,9 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred()</a>.</p>
+<p class="reference">References <a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00416">changePassword()</a>, <a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00250">login()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00369">refreshToken()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00411">changePassword()</a>, <a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00245">login()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00364">refreshToken()</a>.</p>
 
 </div>
 </div>
@@ -414,6 +435,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QStringList muscovite::qt::AuthManager::groups </td>
@@ -422,12 +446,17 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current user's groups. </p>
 <dl class="section return"><dt>Returns</dt><dd>List of group names </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00187">187</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00188">188</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -436,6 +465,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::hasAllPrivileges </td>
@@ -444,6 +476,11 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user has all specified privileges. </p>
@@ -455,7 +492,7 @@ Properties</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if user has all privileges </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00228">228</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00226">226</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="auth__manager_8hpp_source.html#l00088">privileges</a>.</p>
 
@@ -468,6 +505,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::hasAnyPrivilege </td>
@@ -476,6 +516,11 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user has any of the specified privileges. </p>
@@ -487,7 +532,7 @@ Properties</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if user has at least one privilege </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00216">216</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00217">217</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="auth__manager_8hpp_source.html#l00088">privileges</a>.</p>
 
@@ -500,6 +545,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::hasPrivilege </td>
@@ -508,6 +556,11 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user has a specific privilege. </p>
@@ -519,7 +572,7 @@ Properties</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if user has the privilege </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00210">210</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00211">211</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="privilege__checker_8cpp_source.html#l00035">muscovite::qt::PrivilegeChecker::has()</a>.</p>
 
@@ -543,7 +596,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -551,11 +604,11 @@ Properties</h2></td></tr>
 <p>Get singleton instance. </p>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the global <a class="el" href="classmuscovite_1_1qt_1_1AuthManager.html" title="Authentication manager for built-in username/password authentication.">AuthManager</a> instance </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00145">145</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00146">146</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00145">instance()</a>.</p>
+<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00146">instance()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="qt_2src_2auth_2auth__interceptor_8cpp_source.html#l00037">muscovite::qt::CreateAuthCallCredentials()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00063">muscovite::qt::PrivilegeChecker::displayName()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00035">muscovite::qt::PrivilegeChecker::has()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00043">muscovite::qt::PrivilegeChecker::hasAll()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00039">muscovite::qt::PrivilegeChecker::hasAny()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00047">muscovite::qt::PrivilegeChecker::inGroup()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00145">instance()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00051">muscovite::qt::PrivilegeChecker::isAdmin()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00055">muscovite::qt::PrivilegeChecker::isAuthenticated()</a>, <a class="el" href="application_8cpp_source.html#l00016">muscovite::qt::example::MuscoviteApplication::run()</a>, and <a class="el" href="privilege__checker_8cpp_source.html#l00059">muscovite::qt::PrivilegeChecker::username()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="qt_2src_2auth_2auth__interceptor_8cpp_source.html#l00037">muscovite::qt::CreateAuthCallCredentials()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00063">muscovite::qt::PrivilegeChecker::displayName()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00035">muscovite::qt::PrivilegeChecker::has()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00043">muscovite::qt::PrivilegeChecker::hasAll()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00039">muscovite::qt::PrivilegeChecker::hasAny()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00047">muscovite::qt::PrivilegeChecker::inGroup()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00146">instance()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00051">muscovite::qt::PrivilegeChecker::isAdmin()</a>, <a class="el" href="privilege__checker_8cpp_source.html#l00055">muscovite::qt::PrivilegeChecker::isAuthenticated()</a>, <a class="el" href="application_8cpp_source.html#l00016">muscovite::qt::example::MuscoviteApplication::run()</a>, and <a class="el" href="privilege__checker_8cpp_source.html#l00059">muscovite::qt::PrivilegeChecker::username()</a>.</p>
 
 </div>
 </div>
@@ -564,6 +617,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::isAdmin </td>
@@ -572,14 +628,19 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user is an administrator. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if user is in the admin group </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00246">246</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00241">241</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00240">isInGroup()</a>.</p>
+<p class="reference">References <a class="el" href="auth__manager_8cpp_source.html#l00235">isInGroup()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="privilege__checker_8cpp_source.html#l00051">muscovite::qt::PrivilegeChecker::isAdmin()</a>.</p>
 
@@ -590,6 +651,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::isAuthenticated </td>
@@ -598,12 +662,17 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user is currently authenticated. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if authenticated, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00167">167</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00168">168</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="privilege__checker_8cpp_source.html#l00055">muscovite::qt::PrivilegeChecker::isAuthenticated()</a>.</p>
 
@@ -614,6 +683,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::isInGroup </td>
@@ -622,6 +694,11 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if the user is in a specific group. </p>
@@ -633,9 +710,9 @@ Properties</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if user is in the group </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00240">240</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00235">235</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="privilege__checker_8cpp_source.html#l00047">muscovite::qt::PrivilegeChecker::inGroup()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00246">isAdmin()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="privilege__checker_8cpp_source.html#l00047">muscovite::qt::PrivilegeChecker::inGroup()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00241">isAdmin()</a>.</p>
 
 </div>
 </div>
@@ -644,6 +721,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::AuthManager::isLoginInProgress </td>
@@ -652,12 +732,17 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if a login operation is in progress. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if login/logout in progress </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00192">192</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00193">193</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -666,6 +751,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString muscovite::qt::AuthManager::lastError </td>
@@ -674,23 +762,25 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the last error message. </p>
 <dl class="section return"><dt>Returns</dt><dd>Error message or empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00196">196</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00197">197</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a754411ab7b1fa528d0e364e0d61937eb" name="a754411ab7b1fa528d0e364e0d61937eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a754411ab7b1fa528d0e364e0d61937eb">&#9670;&#160;</a></span>login</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a754411ab7b1fa528d0e364e0d61937eb">&#9670;&#160;</a></span>login()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::login </td>
@@ -703,11 +793,6 @@ Properties</h2></td></tr>
           <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>password</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Login with username and password. </p>
@@ -720,14 +805,14 @@ Properties</h2></td></tr>
 </dl>
 <p>This is an asynchronous operation. Connect to loginSucceeded or loginFailed signals to handle the result. </p>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00250">250</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00245">245</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, <a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred()</a>, <a class="el" href="#adf7fe5a137f9f5c570ccd74c68230d22">loginFailed()</a>, <a class="el" href="#a22f487627d9246f774cbc4c213ff3824">loginProgressChanged()</a>, <a class="el" href="#a55ee17eae332e55c763903f16783992b">loginSucceeded()</a>, and <a class="el" href="auth__manager_8hpp_source.html#l00082">username</a>.</p>
+<p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, <a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred()</a>, <a class="el" href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">loginFailed()</a>, <a class="el" href="#a22f487627d9246f774cbc4c213ff3824">loginProgressChanged()</a>, <a class="el" href="#a937f9c6a90ee03a349e06b75fbd895d3">loginSucceeded()</a>, and <a class="el" href="auth__manager_8hpp_source.html#l00082">username</a>.</p>
 
 </div>
 </div>
-<a id="adf7fe5a137f9f5c570ccd74c68230d22" name="adf7fe5a137f9f5c570ccd74c68230d22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf7fe5a137f9f5c570ccd74c68230d22">&#9670;&#160;</a></span>loginFailed</h2>
+<a id="a4fbc4d2c121bd5aa93cdc78a2d256c13" name="a4fbc4d2c121bd5aa93cdc78a2d256c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">&#9670;&#160;</a></span>loginFailed</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -738,7 +823,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::loginFailed </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>error</em></span></td><td>)</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -757,14 +842,14 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#adf7fe5a137f9f5c570ccd74c68230d22">loginFailed()</a>.</p>
+<p class="reference">References <a class="el" href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">loginFailed()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00250">login()</a>, and <a class="el" href="#adf7fe5a137f9f5c570ccd74c68230d22">loginFailed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00245">login()</a>, and <a class="el" href="#a4fbc4d2c121bd5aa93cdc78a2d256c13">loginFailed()</a>.</p>
 
 </div>
 </div>
-<a id="a55ee17eae332e55c763903f16783992b" name="a55ee17eae332e55c763903f16783992b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55ee17eae332e55c763903f16783992b">&#9670;&#160;</a></span>loginSucceeded</h2>
+<a id="a937f9c6a90ee03a349e06b75fbd895d3" name="a937f9c6a90ee03a349e06b75fbd895d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a937f9c6a90ee03a349e06b75fbd895d3">&#9670;&#160;</a></span>loginSucceeded</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -775,7 +860,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::loginSucceeded </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>session</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -794,20 +879,17 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#a55ee17eae332e55c763903f16783992b">loginSucceeded()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00200">session()</a>.</p>
+<p class="reference">References <a class="el" href="#a937f9c6a90ee03a349e06b75fbd895d3">loginSucceeded()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00250">login()</a>, and <a class="el" href="#a55ee17eae332e55c763903f16783992b">loginSucceeded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00245">login()</a>, and <a class="el" href="#a937f9c6a90ee03a349e06b75fbd895d3">loginSucceeded()</a>.</p>
 
 </div>
 </div>
 <a id="adaf72e99eb61423470ee02bb9c70edcc" name="adaf72e99eb61423470ee02bb9c70edcc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adaf72e99eb61423470ee02bb9c70edcc">&#9670;&#160;</a></span>logout</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adaf72e99eb61423470ee02bb9c70edcc">&#9670;&#160;</a></span>logout()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::logout </td>
@@ -816,29 +898,21 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Logout and invalidate the current session. </p>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00312">312</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00307">307</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, and <a class="el" href="#a1547f1862f71063ecb63502ef822c209">loggedOut()</a>.</p>
 
 </div>
 </div>
 <a id="a1f87d220b26f61491ac4fcfc6de6a0a9" name="a1f87d220b26f61491ac4fcfc6de6a0a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f87d220b26f61491ac4fcfc6de6a0a9">&#9670;&#160;</a></span>logoutAll</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f87d220b26f61491ac4fcfc6de6a0a9">&#9670;&#160;</a></span>logoutAll()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::logoutAll </td>
@@ -847,23 +921,18 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Logout from all sessions. </p>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00342">342</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00337">337</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, and <a class="el" href="#a1547f1862f71063ecb63502ef822c209">loggedOut()</a>.</p>
 
 </div>
 </div>
-<a id="a3c8bcce9b97c346aa44895fa9e8921f6" name="a3c8bcce9b97c346aa44895fa9e8921f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c8bcce9b97c346aa44895fa9e8921f6">&#9670;&#160;</a></span>passwordChangeFailed</h2>
+<a id="a2a1ce5a70bf342d6371c5e9b3e5547c5" name="a2a1ce5a70bf342d6371c5e9b3e5547c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a1ce5a70bf342d6371c5e9b3e5547c5">&#9670;&#160;</a></span>passwordChangeFailed</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -874,7 +943,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::passwordChangeFailed </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>error</em></span></td><td>)</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -893,9 +962,9 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#a3c8bcce9b97c346aa44895fa9e8921f6">passwordChangeFailed()</a>.</p>
+<p class="reference">References <a class="el" href="#a2a1ce5a70bf342d6371c5e9b3e5547c5">passwordChangeFailed()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00416">changePassword()</a>, and <a class="el" href="#a3c8bcce9b97c346aa44895fa9e8921f6">passwordChangeFailed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00411">changePassword()</a>, and <a class="el" href="#a2a1ce5a70bf342d6371c5e9b3e5547c5">passwordChangeFailed()</a>.</p>
 
 </div>
 </div>
@@ -904,6 +973,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QStringList muscovite::qt::AuthManager::privileges </td>
@@ -912,23 +984,25 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current user's privileges. </p>
 <dl class="section return"><dt>Returns</dt><dd>List of privilege names </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00182">182</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00183">183</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a8e2c6995ea55fe8cdc078effb5124d24" name="a8e2c6995ea55fe8cdc078effb5124d24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e2c6995ea55fe8cdc078effb5124d24">&#9670;&#160;</a></span>refreshToken</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e2c6995ea55fe8cdc078effb5124d24">&#9670;&#160;</a></span>refreshToken()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::refreshToken </td>
@@ -937,21 +1011,16 @@ Properties</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel slot">slot</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Refresh the access token. </p>
 <p>This is called automatically if autoRefresh is enabled. </p>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00369">369</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00364">364</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, <a class="el" href="#a37f3dcddb17de9f87639b31f16255fd8">errorOccurred()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00369">refreshToken()</a>, <a class="el" href="#ae9c4d21b6715cdb7f02429691d32ea5d">sessionExpired()</a>, <a class="el" href="#a50be82c6ced4ce7641974500550cd3da">tokenRefreshed()</a>, and <a class="el" href="#a9357f51c6b4ba1c0f1ce78729f2a8cdd">tokenRefreshFailed()</a>.</p>
+<p class="reference">References <a class="el" href="#a1a8652d524f4071470be51a4693dc131">authStateChanged()</a>, <a class="el" href="#a7ee817609032baf528d810cc1774d724">errorOccurred()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00364">refreshToken()</a>, <a class="el" href="#ae9c4d21b6715cdb7f02429691d32ea5d">sessionExpired()</a>, <a class="el" href="#a50be82c6ced4ce7641974500550cd3da">tokenRefreshed()</a>, and <a class="el" href="#a47312ed5bd8e7a3d458a4c36d4119d77">tokenRefreshFailed()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00369">refreshToken()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00364">refreshToken()</a>.</p>
 
 </div>
 </div>
@@ -960,6 +1029,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt; <a class="el" href="structmuscovite_1_1qt_1_1Session.html">Session</a> &gt; muscovite::qt::AuthManager::session </td>
@@ -968,19 +1040,22 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current session. </p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structmuscovite_1_1qt_1_1Session.html" title="Session information after successful authentication.">Session</a> info or nullopt if not authenticated </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00200">200</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="#a55ee17eae332e55c763903f16783992b">loginSucceeded()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00201">201</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a22b73a4b03f75874540c7e37a015d5c0" name="a22b73a4b03f75874540c7e37a015d5c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22b73a4b03f75874540c7e37a015d5c0">&#9670;&#160;</a></span>sessionExpiring</h2>
+<a id="a6218c96d391047ed354b6f8e1dd9573e" name="a6218c96d391047ed354b6f8e1dd9573e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6218c96d391047ed354b6f8e1dd9573e">&#9670;&#160;</a></span>sessionExpiring</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -991,7 +1066,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::sessionExpiring </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>secondsRemaining</em></span></td><td>)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1010,14 +1085,14 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#a22b73a4b03f75874540c7e37a015d5c0">sessionExpiring()</a>.</p>
+<p class="reference">References <a class="el" href="#a6218c96d391047ed354b6f8e1dd9573e">sessionExpiring()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="#a22b73a4b03f75874540c7e37a015d5c0">sessionExpiring()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="#a6218c96d391047ed354b6f8e1dd9573e">sessionExpiring()</a>.</p>
 
 </div>
 </div>
-<a id="a9357f51c6b4ba1c0f1ce78729f2a8cdd" name="a9357f51c6b4ba1c0f1ce78729f2a8cdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9357f51c6b4ba1c0f1ce78729f2a8cdd">&#9670;&#160;</a></span>tokenRefreshFailed</h2>
+<a id="a47312ed5bd8e7a3d458a4c36d4119d77" name="a47312ed5bd8e7a3d458a4c36d4119d77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47312ed5bd8e7a3d458a4c36d4119d77">&#9670;&#160;</a></span>tokenRefreshFailed</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1028,7 +1103,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::AuthManager::tokenRefreshFailed </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>error</em></span></td><td>)</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1047,9 +1122,9 @@ Properties</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="#a9357f51c6b4ba1c0f1ce78729f2a8cdd">tokenRefreshFailed()</a>.</p>
+<p class="reference">References <a class="el" href="#a47312ed5bd8e7a3d458a4c36d4119d77">tokenRefreshFailed()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00369">refreshToken()</a>, and <a class="el" href="#a9357f51c6b4ba1c0f1ce78729f2a8cdd">tokenRefreshFailed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00364">refreshToken()</a>, and <a class="el" href="#a47312ed5bd8e7a3d458a4c36d4119d77">tokenRefreshFailed()</a>.</p>
 
 </div>
 </div>
@@ -1058,6 +1133,9 @@ Properties</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString muscovite::qt::AuthManager::username </td>
@@ -1066,12 +1144,17 @@ Properties</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current username. </p>
 <dl class="section return"><dt>Returns</dt><dd>Username or empty string if not authenticated </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00172">172</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="auth__manager_8cpp_source.html#l00173">173</a> of file <a class="el" href="auth__manager_8cpp_source.html">auth_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -1232,7 +1315,7 @@ Properties</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="auth__manager_8hpp_source.html#l00088">88</a> of file <a class="el" href="auth__manager_8hpp_source.html">auth_manager.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00228">hasAllPrivileges()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00216">hasAnyPrivilege()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="auth__manager_8cpp_source.html#l00226">hasAllPrivileges()</a>, and <a class="el" href="auth__manager_8cpp_source.html#l00217">hasAnyPrivilege()</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1343,7 @@ Properties</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="auth__manager_8hpp_source.html#l00082">82</a> of file <a class="el" href="auth__manager_8hpp_source.html">auth_manager.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="geosciences__service__client_8cpp_source.html#l00055">muscovite::qt::services::GeosciencesServiceClient::createSample()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00103">muscovite::qt::services::GeosciencesServiceClient::deleteSample()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00032">muscovite::qt::services::GeosciencesServiceClient::fetchSamples()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00250">login()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00079">muscovite::qt::services::GeosciencesServiceClient::updateSample()</a>, and <a class="el" href="privilege__checker_8cpp_source.html#l00059">muscovite::qt::PrivilegeChecker::username()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="geosciences__service__client_8cpp_source.html#l00055">muscovite::qt::services::GeosciencesServiceClient::createSample()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00103">muscovite::qt::services::GeosciencesServiceClient::deleteSample()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00032">muscovite::qt::services::GeosciencesServiceClient::fetchSamples()</a>, <a class="el" href="auth__manager_8cpp_source.html#l00245">login()</a>, <a class="el" href="geosciences__service__client_8cpp_source.html#l00079">muscovite::qt::services::GeosciencesServiceClient::updateSample()</a>, and <a class="el" href="privilege__checker_8cpp_source.html#l00059">muscovite::qt::PrivilegeChecker::username()</a>.</p>
 
 </div>
 </div>

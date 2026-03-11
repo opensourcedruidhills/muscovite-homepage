@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -120,7 +120,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">explicit</span> TTLCache(std::chrono::seconds ttl) : ttl_(ttl) {}</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    std::optional&lt;V&gt; get(<span class="keyword">const</span> K&amp; key) {</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        std::shared_lock lock(mutex_);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">const</span> std::shared_lock lock(mutex_);</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keyword">auto</span> it = cache_.find(key);</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keywordflow">if</span> (it == cache_.end()) {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <span class="keywordflow">return</span> std::nullopt;</div>
@@ -135,17 +135,17 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">void</span> put(<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> V&amp; value) {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        std::unique_lock lock(mutex_);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">const</span> std::unique_lock lock(mutex_);</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        cache_[key] = {value, std::chrono::steady_clock::now() + ttl_};</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    }</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> invalidate(<span class="keyword">const</span> K&amp; key) {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        std::unique_lock lock(mutex_);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">const</span> std::unique_lock lock(mutex_);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        cache_.erase(key);</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordtype">void</span> clear() {</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        std::unique_lock lock(mutex_);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">const</span> std::unique_lock lock(mutex_);</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        cache_.clear();</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
@@ -256,14 +256,14 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><a class="code hl_class" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html">AuthorizationService</a>&amp; <a class="code hl_class" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html">AuthorizationService</a>::operator=(<a class="code hl_class" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html">AuthorizationService</a>&amp;&amp;) noexcept = default;</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
 <div class="foldopen" id="foldopen00162" data-start="{" data-end="}">
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a461328fcf35e8fb98151b58b23859c51">  162</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#acb378a09dc97cacc90594595b437126d">AuthorizationService</a>::<a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a461328fcf35e8fb98151b58b23859c51">has_privilege</a>(</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a4a06a7e8cb8517d19778fbfba34cbf94">  162</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#acb378a09dc97cacc90594595b437126d">AuthorizationService</a>::<a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a4a06a7e8cb8517d19778fbfba34cbf94">has_privilege</a>(</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    const <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">string</span>&amp; principal_id,</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    const <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">string</span>&amp; privilege_name)<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    </div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="comment">// Check cache first</span></div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordflow">if</span> (<span class="keyword">auto</span> cached = impl_-&gt;privilege_cache.get(principal_id)) {</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        const auto&amp; privileges = *cached;</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        return std::find(privileges.begin(), privileges.end(), privilege_name) </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        return std::ranges::find(privileges, privilege_name) </div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>               != privileges.end();</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    }</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    </div>
@@ -271,7 +271,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keyword">auto</span> privileges = impl_-&gt;fetch_privileges(principal_id);</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    impl_-&gt;privilege_cache.put(principal_id, privileges);</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    </div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordflow">return</span> std::find(privileges.begin(), privileges.end(), privilege_name) </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordflow">return</span> std::ranges::find(privileges, privilege_name) </div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>           != privileges.end();</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>}</div>
 </div>
@@ -284,7 +284,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keyword">auto</span> privileges = <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a554fd87dc8304647b2c71002a3461695">get_user_privileges</a>(principal_id);</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    </div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; required : privilege_names) {</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <span class="keywordflow">if</span> (std::find(privileges.begin(), privileges.end(), required) </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <span class="keywordflow">if</span> (std::ranges::find(privileges, required) </div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            != privileges.end()) {</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        }</div>
@@ -302,7 +302,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keyword">auto</span> privileges = <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a554fd87dc8304647b2c71002a3461695">get_user_privileges</a>(principal_id);</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    </div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; required : privilege_names) {</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordflow">if</span> (std::find(privileges.begin(), privileges.end(), required) </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordflow">if</span> (std::ranges::find(privileges, required) </div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            == privileges.end()) {</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        }</div>
@@ -333,11 +333,11 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    </div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <span class="comment">// Build privilege name from resource and action</span></div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="comment">// Convention: resource:action (e.g., &quot;minerals:read&quot;, &quot;users:write&quot;)</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    std::string privilege_name = resource + <span class="stringliteral">&quot;:&quot;</span> + action;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keyword">const</span> std::string privilege_name = resource + <span class="stringliteral">&quot;:&quot;</span> + action;</div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    </div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="comment">// Also check for wildcard privileges</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    std::string wildcard_resource = resource + <span class="stringliteral">&quot;:*&quot;</span>;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    std::string wildcard_all = <span class="stringliteral">&quot;*:*&quot;</span>;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keyword">const</span> std::string wildcard_resource = resource + <span class="stringliteral">&quot;:*&quot;</span>;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="keyword">const</span> std::string wildcard_all = <span class="stringliteral">&quot;*:*&quot;</span>;</div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    </div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keyword">auto</span> privileges = <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a554fd87dc8304647b2c71002a3461695">get_user_privileges</a>(principal_id);</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    </div>
@@ -396,7 +396,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    }</div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    </div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="comment">// Fetch and cache</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea">is_admin</a> = impl_-&gt;fetch_is_admin(principal_id);</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea">is_admin</a> = impl_-&gt;fetch_is_admin(principal_id);</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    impl_-&gt;admin_cache.put(principal_id, <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea">is_admin</a>);</div>
 <div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    </div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea">is_admin</a>;</div>
@@ -409,7 +409,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">const</span> std::string&amp; group_name)<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    </div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="keyword">auto</span> groups = <a class="code hl_function" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#aaafca43012b349d4772a766dc089085f">get_user_groups</a>(principal_id);</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="keywordflow">return</span> std::find(groups.begin(), groups.end(), group_name) != groups.end();</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="keywordflow">return</span> std::ranges::find(groups, group_name) != groups.end();</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>}</div>
 </div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
@@ -433,7 +433,7 @@ $(function(){initNavTree('authorization__service_8cpp_source.html','',''); });
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html">muscovite::server::security::AuthorizationService</a></div><div class="ttdoc">Authorization service for privilege checking.</div><div class="ttdef"><b>Definition</b> <a href="authorization__service_8hpp_source.html#l00048">authorization_service.hpp:48</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a1331325425b08c74633d3fe3284aaca6"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a1331325425b08c74633d3fe3284aaca6">muscovite::server::security::AuthorizationService::check_access</a></div><div class="ttdeci">AccessCheckResult check_access(const std::string &amp;principal_id, const std::string &amp;resource, const std::string &amp;action) const</div><div class="ttdoc">Check if a user can access a resource with a given action.</div><div class="ttdef"><b>Definition</b> <a href="#l00213">authorization_service.cpp:213</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a299eeda5615cfa62d8cd0768deb015d9"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a299eeda5615cfa62d8cd0768deb015d9">muscovite::server::security::AuthorizationService::has_all_privileges</a></div><div class="ttdeci">bool has_all_privileges(const std::string &amp;principal_id, const std::vector&lt; std::string &gt; &amp;privilege_names) const</div><div class="ttdoc">Check all of a set of privileges.</div><div class="ttdef"><b>Definition</b> <a href="#l00197">authorization_service.cpp:197</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a461328fcf35e8fb98151b58b23859c51"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a461328fcf35e8fb98151b58b23859c51">muscovite::server::security::AuthorizationService::has_privilege</a></div><div class="ttdeci">bool has_privilege(const std::string &amp;principal_id, const std::string &amp;privilege_code) const</div><div class="ttdoc">Check if a user has a specific privilege.</div><div class="ttdef"><b>Definition</b> <a href="#l00162">authorization_service.cpp:162</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a4a06a7e8cb8517d19778fbfba34cbf94"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a4a06a7e8cb8517d19778fbfba34cbf94">muscovite::server::security::AuthorizationService::has_privilege</a></div><div class="ttdeci">bool has_privilege(const std::string &amp;principal_id, const std::string &amp;privilege_name) const</div><div class="ttdoc">Check if a user has a specific privilege.</div><div class="ttdef"><b>Definition</b> <a href="#l00162">authorization_service.cpp:162</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a554fd87dc8304647b2c71002a3461695"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a554fd87dc8304647b2c71002a3461695">muscovite::server::security::AuthorizationService::get_user_privileges</a></div><div class="ttdeci">std::vector&lt; std::string &gt; get_user_privileges(const std::string &amp;principal_id) const</div><div class="ttdoc">Get all privileges for a user (via group membership).</div><div class="ttdef"><b>Definition</b> <a href="#l00253">authorization_service.cpp:253</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a5a0607f269340abdd077f6ea156829ea"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a5a0607f269340abdd077f6ea156829ea">muscovite::server::security::AuthorizationService::is_admin</a></div><div class="ttdeci">bool is_admin(const std::string &amp;principal_id) const</div><div class="ttdoc">Check if a user is an administrator.</div><div class="ttdef"><b>Definition</b> <a href="#l00283">authorization_service.cpp:283</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1security_1_1AuthorizationService_html_a9f935544361806703ba57ea4899b7c9b"><div class="ttname"><a href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html#a9f935544361806703ba57ea4899b7c9b">muscovite::server::security::AuthorizationService::is_in_group</a></div><div class="ttdeci">bool is_in_group(const std::string &amp;principal_id, const std::string &amp;group_name) const</div><div class="ttdoc">Check whether a user belongs to a specific group.</div><div class="ttdef"><b>Definition</b> <a href="#l00296">authorization_service.cpp:296</a></div></div>

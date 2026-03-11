@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -161,42 +161,42 @@ $(function(){initNavTree('outbox__metrics_8cpp_source.html','',''); });
 <div class="foldopen" id="foldopen00055" data-start="{" data-end="}">
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#ad19ce1c5827cadb930c7efd598909d09">   55</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#ad19ce1c5827cadb930c7efd598909d09">OutboxMetrics::published_total</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; std::uint64_t {</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordflow">return</span> m ? m-&gt;published.load() : 0;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;published.load() : 0;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>}</div>
 </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
 <div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a6797b8b71450b4b37ec9368ca2a80f42">   60</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a6797b8b71450b4b37ec9368ca2a80f42">OutboxMetrics::failed_total</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; std::uint64_t {</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordflow">return</span> m ? m-&gt;failed.load() : 0;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;failed.load() : 0;</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>}</div>
 </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
 <div class="foldopen" id="foldopen00065" data-start="{" data-end="}">
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a541da14571f50dc883a27397040cd3e5">   65</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a541da14571f50dc883a27397040cd3e5">OutboxMetrics::retried_total</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; std::uint64_t {</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">return</span> m ? m-&gt;retried.load() : 0;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;retried.load() : 0;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>}</div>
 </div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="foldopen" id="foldopen00070" data-start="{" data-end="}">
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8">   70</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8">OutboxMetrics::current_lag</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; <span class="keywordtype">double</span> {</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">return</span> m ? m-&gt;lag.load() : 0.0;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;lag.load() : 0.0;</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
 </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
 <div class="foldopen" id="foldopen00075" data-start="{" data-end="}">
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a2ec6cb6fbc9b65e25b9032bb464a64d8">   75</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a2ec6cb6fbc9b65e25b9032bb464a64d8">OutboxMetrics::last_batch_size</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; std::size_t {</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordflow">return</span> m ? m-&gt;batch_size.load() : 0;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;batch_size.load() : 0;</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
 </div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="foldopen" id="foldopen00080" data-start="{" data-end="}">
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a4550591d3581c75abd8ff97d106102b1">   80</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a4550591d3581c75abd8ff97d106102b1">OutboxMetrics::queue_depth</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; std::size_t {</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">return</span> m ? m-&gt;queue_depth.load() : 0;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;queue_depth.load() : 0;</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>}</div>
 </div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
@@ -317,14 +317,14 @@ $(function(){initNavTree('outbox__metrics_8cpp_source.html','',''); });
 <div class="foldopen" id="foldopen00189" data-start="{" data-end="}">
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#aa0c4ee8ca5e3d3c23f5b2fef14913f3c">  189</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#aa0c4ee8ca5e3d3c23f5b2fef14913f3c">OutboxMetrics::is_broker_connected</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordflow">return</span> m ? m-&gt;broker_connected.load() : <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;broker_connected.load() : <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>}</div>
 </div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
 <div class="foldopen" id="foldopen00194" data-start="{" data-end="}">
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a58a0047562f3de221635869ef29d1c5e">  194</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1OutboxMetrics.html#a58a0047562f3de221635869ef29d1c5e">OutboxMetrics::is_publisher_running</a>(<span class="keyword">const</span> std::string&amp; schema) <span class="keyword">const</span> -&gt; <span class="keywordtype">bool</span> {</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordflow">return</span> m ? m-&gt;publisher_running.load() : <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordflow">return</span> m != <span class="keyword">nullptr</span> ? m-&gt;publisher_running.load() : <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>}</div>
 </div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
@@ -334,7 +334,7 @@ $(function(){initNavTree('outbox__metrics_8cpp_source.html','',''); });
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    status.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1OutboxHealthStatus.html#ac118c069021e05e55c58c4be16a46ad6">schema</a> = schema;</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    </div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* m = get_metrics(schema);</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">if</span> (m) {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">if</span> (m != <span class="keyword">nullptr</span>) {</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        status.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1OutboxHealthStatus.html#adaf1d2fd9b290d0cc307c9c97fc17de9">broker_connected</a> = m-&gt;broker_connected.load();</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        status.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1OutboxHealthStatus.html#a8b6332bdfce715cc321ebe7e0b443823">publisher_running</a> = m-&gt;publisher_running.load();</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        status.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1OutboxHealthStatus.html#a8ce7a771fafb9450996c0ed340bd1db5">lag_seconds</a> = m-&gt;lag.load();</div>

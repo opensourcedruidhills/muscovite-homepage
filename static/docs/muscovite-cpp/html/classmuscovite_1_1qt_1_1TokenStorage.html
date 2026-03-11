@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -106,8 +106,8 @@ Inheritance diagram for muscovite::qt::TokenStorage:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
 Signals</h2></td></tr>
-<tr class="memitem:ae39d19b7333afc38557fa238071c16f9" id="r_ae39d19b7333afc38557fa238071c16f9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae39d19b7333afc38557fa238071c16f9">errorOccurred</a> (const QString &amp;error)</td></tr>
-<tr class="memdesc:ae39d19b7333afc38557fa238071c16f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when an error occurs.  <br /></td></tr>
+<tr class="memitem:a81e7d0547a64c0ad98e2a86557da369a" id="r_a81e7d0547a64c0ad98e2a86557da369a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a81e7d0547a64c0ad98e2a86557da369a">errorOccurred</a> (const QString &amp;_t1)</td></tr>
+<tr class="memdesc:a81e7d0547a64c0ad98e2a86557da369a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when an error occurs.  <br /></td></tr>
 <tr class="memitem:aa482258f3f0bf78a398b0ade095841f7" id="r_aa482258f3f0bf78a398b0ade095841f7"><td class="memItemLeft"><a id="aa482258f3f0bf78a398b0ade095841f7" name="aa482258f3f0bf78a398b0ade095841f7"></a>
 void&#160;</td><td class="memItemRight"><b>tokensCleared</b> ()</td></tr>
 <tr class="memdesc:aa482258f3f0bf78a398b0ade095841f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when tokens are cleared. <br /></td></tr>
@@ -117,12 +117,16 @@ void&#160;</td><td class="memItemRight"><b>tokensSaved</b> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a7d57cc240fa90751c4cfd9b364a05a48" id="r_a7d57cc240fa90751c4cfd9b364a05a48"><td class="memItemLeft"><a id="a7d57cc240fa90751c4cfd9b364a05a48" name="a7d57cc240fa90751c4cfd9b364a05a48"></a>
+&#160;</td><td class="memItemRight"><b>TokenStorage</b> (const TokenStorage &amp;)=delete</td></tr>
+<tr class="memitem:a45d54442fcd062295b574c0d78c400bb" id="r_a45d54442fcd062295b574c0d78c400bb"><td class="memItemLeft"><a id="a45d54442fcd062295b574c0d78c400bb" name="a45d54442fcd062295b574c0d78c400bb"></a>
+&#160;</td><td class="memItemRight"><b>TokenStorage</b> (TokenStorage &amp;&amp;)=delete</td></tr>
 <tr class="memitem:a064fc1d019f395760be48c944a428b7f" id="r_a064fc1d019f395760be48c944a428b7f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a064fc1d019f395760be48c944a428b7f">clearTokens</a> ()</td></tr>
 <tr class="memdesc:a064fc1d019f395760be48c944a428b7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear stored tokens.  <br /></td></tr>
-<tr class="memitem:a3e40af78d0479afd7e6537115f1a5275" id="r_a3e40af78d0479afd7e6537115f1a5275"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a3e40af78d0479afd7e6537115f1a5275">hasStoredTokens</a> ()</td></tr>
-<tr class="memdesc:a3e40af78d0479afd7e6537115f1a5275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if tokens are stored.  <br /></td></tr>
-<tr class="memitem:aa0f6a9f3cf1b25f3b37793d01d45bbfc" id="r_aa0f6a9f3cf1b25f3b37793d01d45bbfc"><td class="memItemLeft">std::optional&lt; <a class="el" href="structmuscovite_1_1qt_1_1StoredTokens.html">StoredTokens</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa0f6a9f3cf1b25f3b37793d01d45bbfc">loadTokens</a> ()</td></tr>
-<tr class="memdesc:aa0f6a9f3cf1b25f3b37793d01d45bbfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load tokens from secure storage.  <br /></td></tr>
+<tr class="memitem:a736cb551a9cd9feec8e713c9dc1e14cd" id="r_a736cb551a9cd9feec8e713c9dc1e14cd"><td class="memItemLeft"><a id="a736cb551a9cd9feec8e713c9dc1e14cd" name="a736cb551a9cd9feec8e713c9dc1e14cd"></a>
+TokenStorage &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const TokenStorage &amp;)=delete</td></tr>
+<tr class="memitem:a02cac8c6965229ae2fe71574e21e6d5f" id="r_a02cac8c6965229ae2fe71574e21e6d5f"><td class="memItemLeft"><a id="a02cac8c6965229ae2fe71574e21e6d5f" name="a02cac8c6965229ae2fe71574e21e6d5f"></a>
+TokenStorage &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (TokenStorage &amp;&amp;)=delete</td></tr>
 <tr class="memitem:a586ab591da8a85717a97540177341c8c" id="r_a586ab591da8a85717a97540177341c8c"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a586ab591da8a85717a97540177341c8c">saveTokens</a> (const <a class="el" href="structmuscovite_1_1qt_1_1StoredTokens.html">StoredTokens</a> &amp;tokens)</td></tr>
 <tr class="memdesc:a586ab591da8a85717a97540177341c8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save tokens to secure storage.  <br /></td></tr>
 <tr class="memitem:ad9b1a7692ed0be2d6d4ac9f7b6ab3532" id="r_ad9b1a7692ed0be2d6d4ac9f7b6ab3532"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#ad9b1a7692ed0be2d6d4ac9f7b6ab3532">serviceName</a> () const</td></tr>
@@ -132,8 +136,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3e40af78d0479afd7e6537115f1a5275" id="r_a3e40af78d0479afd7e6537115f1a5275"><td class="memItemLeft">static bool&#160;</td><td class="memItemRight"><a class="el" href="#a3e40af78d0479afd7e6537115f1a5275">hasStoredTokens</a> ()</td></tr>
+<tr class="memdesc:a3e40af78d0479afd7e6537115f1a5275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if tokens are stored.  <br /></td></tr>
 <tr class="memitem:ac75f5b536d42659e374b7de918d041f2" id="r_ac75f5b536d42659e374b7de918d041f2"><td class="memItemLeft">static TokenStorage &amp;&#160;</td><td class="memItemRight"><a class="el" href="#ac75f5b536d42659e374b7de918d041f2">instance</a> ()</td></tr>
 <tr class="memdesc:ac75f5b536d42659e374b7de918d041f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get singleton instance.  <br /></td></tr>
+<tr class="memitem:aa0f6a9f3cf1b25f3b37793d01d45bbfc" id="r_aa0f6a9f3cf1b25f3b37793d01d45bbfc"><td class="memItemLeft">static std::optional&lt; <a class="el" href="structmuscovite_1_1qt_1_1StoredTokens.html">StoredTokens</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa0f6a9f3cf1b25f3b37793d01d45bbfc">loadTokens</a> ()</td></tr>
+<tr class="memdesc:aa0f6a9f3cf1b25f3b37793d01d45bbfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load tokens from secure storage.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Secure token storage using platform keychain. </p>
@@ -166,8 +174,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae39d19b7333afc38557fa238071c16f9" name="ae39d19b7333afc38557fa238071c16f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae39d19b7333afc38557fa238071c16f9">&#9670;&#160;</a></span>errorOccurred</h2>
+<a id="a81e7d0547a64c0ad98e2a86557da369a" name="a81e7d0547a64c0ad98e2a86557da369a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81e7d0547a64c0ad98e2a86557da369a">&#9670;&#160;</a></span>errorOccurred</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,7 +186,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void muscovite::qt::TokenStorage::errorOccurred </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>error</em></span></td><td>)</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>_t1</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -206,6 +214,9 @@ Static Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool muscovite::qt::TokenStorage::hasStoredTokens </td>
@@ -214,6 +225,11 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Check if tokens are stored. </p>
@@ -263,6 +279,9 @@ Static Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt; <a class="el" href="structmuscovite_1_1qt_1_1StoredTokens.html">StoredTokens</a> &gt; muscovite::qt::TokenStorage::loadTokens </td>
@@ -271,6 +290,11 @@ Static Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Load tokens from secure storage. </p>
@@ -308,7 +332,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="token__storage_8cpp_source.html#l00252">252</a> of file <a class="el" href="token__storage_8cpp_source.html">token_storage.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="#ae39d19b7333afc38557fa238071c16f9">errorOccurred()</a>, and <a class="el" href="#a7c2e89a2c50db8012bbfc240e3329800">tokensSaved()</a>.</p>
+<p class="reference">References <a class="el" href="#a81e7d0547a64c0ad98e2a86557da369a">errorOccurred()</a>, and <a class="el" href="#a7c2e89a2c50db8012bbfc240e3329800">tokensSaved()</a>.</p>
 
 </div>
 </div>
@@ -317,6 +341,9 @@ Static Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString muscovite::qt::TokenStorage::serviceName </td>
@@ -325,6 +352,11 @@ Static Public Member Functions</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Get the current service name. </p>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -123,7 +123,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>NatsMessageBroker::~NatsMessageBroker() {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_function" href="classmuscovite_1_1dba_1_1NatsMessageBroker.html#a6762b6cec8905a2dcd901d5961f705c3">disconnect</a>();</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_function" href="classmuscovite_1_1dba_1_1NatsMessageBroker.html#a6762b6cec8905a2dcd901d5961f705c3">disconnect</a>(); <span class="comment">// NOLINT(clang-analyzer-optin.cplusplus.VirtualCall)</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><a class="code hl_function" href="classmuscovite_1_1dba_1_1NatsMessageBroker.html#ac13620fb28a5576f2e67101a4937591d">NatsMessageBroker::NatsMessageBroker</a>(NatsMessageBroker&amp;&amp; other) noexcept</div>
@@ -226,7 +226,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="comment">// Check actual connection status</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    natsConnStatus status = natsConnection_Status(m_conn.get());</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">const</span> natsConnStatus status = natsConnection_Status(m_conn.get());</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordflow">return</span> status == NATS_CONN_STATUS_CONNECTED;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>}</div>
 </div>
@@ -293,7 +293,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    jsPubAck* ack = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    jsErrCode jerr{};  <span class="comment">// Default-initialized; values start at 10002</span></div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    natsStatus status = js_Publish(</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keyword">const</span> natsStatus status = js_Publish(</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        &amp;ack,</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        m_js.get(),</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        subject.c_str(),</div>
@@ -315,7 +315,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    <span class="comment">// Extract acknowledgment info</span></div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <a class="code hl_struct" href="structmuscovite_1_1dba_1_1JetStreamPublishAck.html">JetStreamPublishAck</a> result;</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    result.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1JetStreamPublishAck.html#ae8ff7b2680fb497f03ea4a6075a698ff">stream</a> = ack-&gt;Stream ? ack-&gt;Stream : <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    result.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1JetStreamPublishAck.html#ae8ff7b2680fb497f03ea4a6075a698ff">stream</a> = ack-&gt;Stream != <span class="keyword">nullptr</span> ? ack-&gt;Stream : <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    result.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1JetStreamPublishAck.html#a72fca97189cf5f407ba28a029ac888e4">sequence</a> = ack-&gt;Sequence;</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    result.<a class="code hl_variable" href="structmuscovite_1_1dba_1_1JetStreamPublishAck.html#a8117eaeba8a7097cca21e5c38df878c4">duplicate</a> = ack-&gt;Duplicate;</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
@@ -403,7 +403,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    cfg.Replicas = 1;  <span class="comment">// Single replica for local dev; production should use 3+</span></div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="comment">// Optional: set descriptions</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    std::string description = <span class="stringliteral">&quot;Muscovite domain events for &quot;</span> + stream_name;</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    <span class="keyword">const</span> std::string description = <span class="stringliteral">&quot;Muscovite domain events for &quot;</span> + stream_name;</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    cfg.Description = description.c_str();</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="comment">// Create the stream</span></div>
@@ -432,7 +432,7 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <span class="keyword">const</span> std::string&amp; subject_prefix) -&gt; <span class="keywordtype">bool</span></div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>{</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="comment">// Build subject pattern: &quot;muscovite.{schema}.&gt;&quot; captures all events for this schema</span></div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    std::vector&lt;std::string&gt; subjects = {</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    <span class="keyword">const</span> std::vector&lt;std::string&gt; subjects = {</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>        subject_prefix + <span class="stringliteral">&quot;.&gt;&quot;</span></div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    };</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
@@ -571,8 +571,8 @@ $(function(){initNavTree('nats__message__broker_8cpp_source.html','',''); });
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        natsConnection_Close(m_conn.get());</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> attempt = 0; attempt &lt; 200; ++attempt) {</div>
-<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>            <span class="keywordtype">bool</span> is_closed = natsConnection_IsClosed(m_conn.get());</div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>            <span class="keywordtype">bool</span> cb_done = m_cb_state &amp;&amp; m_cb_state-&gt;closed_cb_done.load();</div>
+<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> is_closed = natsConnection_IsClosed(m_conn.get());</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> cb_done = m_cb_state &amp;&amp; m_cb_state-&gt;closed_cb_done.load();</div>
 <div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>            <span class="keywordflow">if</span> (is_closed &amp;&amp; cb_done) {</div>
 <div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>                <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>            }</div>

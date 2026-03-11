@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -161,7 +161,7 @@ $(function(){initNavTree('nats__event__consumer_8hpp_source.html','',''); });
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">void</span> process_message(natsMsg* msg);</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">auto</span> parse_event(natsMsg* msg) -&gt; std::optional&lt;EventContext&gt;;</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keyword">auto</span> dispatch_event(<span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1EventContext.html">EventContext</a>&amp; ctx) -&gt; <a class="code hl_enumeration" href="event__consumer_8hpp.html#a0c6ab4f517cee21e584ff5f920fb14ce">HandlerResult</a>;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> acknowledge(natsMsg* msg, <a class="code hl_enumeration" href="event__consumer_8hpp.html#a0c6ab4f517cee21e584ff5f920fb14ce">HandlerResult</a> result);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> acknowledge(natsMsg* msg, <a class="code hl_enumeration" href="event__consumer_8hpp.html#a0c6ab4f517cee21e584ff5f920fb14ce">HandlerResult</a> result);</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="comment">// Check if event was recently processed (deduplication)</span></div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keyword">auto</span> is_duplicate(<span class="keyword">const</span> std::string&amp; event_id) -&gt; bool;</div>

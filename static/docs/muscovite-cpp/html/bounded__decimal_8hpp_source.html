@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -120,8 +120,8 @@ $(function(){initNavTree('bounded__decimal_8hpp_source.html','',''); });
 <div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="bounded__decimal_8hpp.html#aead642284834861f197a3a6c3cecccbd">   36</a></span>[[nodiscard]] <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code hl_function" href="bounded__decimal_8hpp.html#aead642284834861f197a3a6c3cecccbd">parse_decimal</a>(std::string_view sv) -&gt; <span class="keywordtype">double</span> {</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">double</span> result = 0.0;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">auto</span> [ptr, ec] = std::from_chars(sv.data(), sv.data() + sv.size(), result);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordflow">if</span> (ec != std::errc{} || ptr != sv.data() + sv.size()) {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">auto</span> [ptr, ec] = std::from_chars(sv.data(), sv.data() + sv.size(), result); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordflow">if</span> (ec != std::errc{} || ptr != sv.data() + sv.size()) { <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordflow">return</span> std::numeric_limits&lt;double&gt;::quiet_NaN();</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> result;</div>

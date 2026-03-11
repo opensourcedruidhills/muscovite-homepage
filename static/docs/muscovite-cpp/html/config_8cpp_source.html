@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -147,7 +147,7 @@ $(function(){initNavTree('config_8cpp_source.html','',''); });
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="comment">// Convert to uppercase</span></div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::ranges::transform(full_name, full_name.begin(), ::toupper);</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">if</span> (<span class="keyword">auto</span>* value = std::getenv(full_name.c_str())) {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">if</span> (<span class="keyword">auto</span>* value = std::getenv(full_name.c_str())) { <span class="comment">// NOLINT(concurrency-mt-unsafe)</span></div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">return</span> std::string{value};</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    }</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">return</span> std::nullopt;</div>
@@ -164,7 +164,7 @@ $(function(){initNavTree('config_8cpp_source.html','',''); });
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>} <span class="comment">// namespace</span></div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
 <div class="foldopen" id="foldopen00077" data-start="{" data-end="}">
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="structmuscovite_1_1server_1_1Config.html#aed6815c83cd9183d43f87ce4ca3019fc">   77</a></span><span class="keyword">auto</span> <a class="code hl_function" href="structmuscovite_1_1server_1_1Config.html#aed6815c83cd9183d43f87ce4ca3019fc">Config::load</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[], std::optional&lt;std::filesystem::path&gt; config_path,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="structmuscovite_1_1server_1_1Config.html#aed6815c83cd9183d43f87ce4ca3019fc">   77</a></span><span class="keyword">auto</span> <a class="code hl_function" href="structmuscovite_1_1server_1_1Config.html#aed6815c83cd9183d43f87ce4ca3019fc">Config::load</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[], std::optional&lt;std::filesystem::path&gt; config_path, <span class="comment">// NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                  std::string_view env_prefix) -&gt; std::expected&lt;Config, Error&lt;ConfigError&gt;&gt; {</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <a class="code hl_struct" href="structmuscovite_1_1server_1_1Config.html">Config</a> config;</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
@@ -279,17 +279,17 @@ $(function(){initNavTree('config_8cpp_source.html','',''); });
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="comment">// WHY: std::from_chars is locale-independent and non-allocating (FTR-216, CPP-PATTERNS §13)</span></div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keyword">auto</span> parse_uint16 = [](<span class="keyword">const</span> std::string&amp; s) -&gt; std::uint16_t {</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        std::uint16_t v{};</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        std::from_chars(s.data(), s.data() + s.size(), v);</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        std::from_chars(s.data(), s.data() + s.size(), v); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <span class="keywordflow">return</span> v;</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    };</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keyword">auto</span> parse_uint64 = [](<span class="keyword">const</span> std::string&amp; s) -&gt; std::uint64_t {</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        std::uint64_t v{};</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        std::from_chars(s.data(), s.data() + s.size(), v);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        std::from_chars(s.data(), s.data() + s.size(), v); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="keywordflow">return</span> v;</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    };</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    <span class="keyword">auto</span> parse_int64 = [](<span class="keyword">const</span> std::string&amp; s) -&gt; std::int64_t {</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        std::int64_t v{};</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        std::from_chars(s.data(), s.data() + s.size(), v);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        std::from_chars(s.data(), s.data() + s.size(), v); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        <span class="keywordflow">return</span> v;</div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    };</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordflow">if</span> (!env_prefix.empty()) {</div>

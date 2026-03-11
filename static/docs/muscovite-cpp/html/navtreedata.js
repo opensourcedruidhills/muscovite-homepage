@@ -67,7 +67,7 @@ var NAVTREEINDEX =
 "_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
 "classmuscovite_1_1geo_1_1Point.html#ad63508111f08136c4208d7ccfb680bf8",
 "classmuscovite_1_1qt_1_1AuthManager.html",
-"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#ace7031073b403d1ff6ea582870232b21",
+"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#abf23d0a1f517a610e1343cd3d7a21cff",
 "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html",
 "dir_75806cab04f0f24be0994357d1716eed.html",
 "jsonb__converters_8hpp_source.html",

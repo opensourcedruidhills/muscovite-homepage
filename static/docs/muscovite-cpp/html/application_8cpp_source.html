@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -108,11 +108,11 @@ $(function(){initNavTree('application_8cpp_source.html','',''); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>muscovite::qt::example {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#ae56d498f37985c732679bb5ddb33acb4">   16</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#ae56d498f37985c732679bb5ddb33acb4">MuscoviteApplication::run</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    QApplication app(argc, argv);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c">   16</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c">MuscoviteApplication::run</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">const</span> QApplication app(argc, argv);</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    app.setApplicationName(<span class="stringliteral">&quot;Muscovite&quot;</span>);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    app.setApplicationVersion(<span class="stringliteral">&quot;1.0.0&quot;</span>);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    QApplication::setApplicationName(<span class="stringliteral">&quot;Muscovite&quot;</span>);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    QApplication::setApplicationVersion(<span class="stringliteral">&quot;1.0.0&quot;</span>);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">// Show login dialog</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">auto</span> loginDialog = std::make_unique&lt;ui::LoginDialog&gt;();</div>
@@ -139,24 +139,24 @@ $(function(){initNavTree('application_8cpp_source.html','',''); });
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    mainWindow-&gt;setAuthManager(&amp;<a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthManager.html#af0634476e1cffaec261e5517469b5f5b">AuthManager::instance</a>());</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    mainWindow-&gt;show();</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> app.exec();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> QApplication::exec();</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
 </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>} <span class="comment">// namespace muscovite::qt::example</span></div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">// Main entry point</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#ae56d498f37985c732679bb5ddb33acb4">muscovite::qt::example::MuscoviteApplication::run</a>(argc, argv);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c">muscovite::qt::example::MuscoviteApplication::run</a>(argc, argv);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        std::cerr &lt;&lt; <span class="stringliteral">&quot;Fatal error: &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        std::cerr &lt;&lt; <span class="stringliteral">&quot;Fatal error: &quot;</span> &lt;&lt; e.what() &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    }</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}</div>
 <div class="ttc" id="aapplication_8hpp_html"><div class="ttname"><a href="application_8hpp.html">application.hpp</a></div><div class="ttdoc">Example Qt application demonstrating authentication and backend integration.</div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_af0634476e1cffaec261e5517469b5f5b"><div class="ttname"><a href="classmuscovite_1_1qt_1_1AuthManager.html#af0634476e1cffaec261e5517469b5f5b">muscovite::qt::AuthManager::instance</a></div><div class="ttdeci">static AuthManager &amp; instance()</div><div class="ttdoc">Get singleton instance.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00145">auth_manager.cpp:145</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1example_1_1MuscoviteApplication_html_ae56d498f37985c732679bb5ddb33acb4"><div class="ttname"><a href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#ae56d498f37985c732679bb5ddb33acb4">muscovite::qt::example::MuscoviteApplication::run</a></div><div class="ttdeci">static int run(int argc, char *argv[])</div><div class="ttdoc">Create and run the application.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">application.cpp:16</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html_af0634476e1cffaec261e5517469b5f5b"><div class="ttname"><a href="classmuscovite_1_1qt_1_1AuthManager.html#af0634476e1cffaec261e5517469b5f5b">muscovite::qt::AuthManager::instance</a></div><div class="ttdeci">static AuthManager &amp; instance()</div><div class="ttdoc">Get singleton instance.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8cpp_source.html#l00146">auth_manager.cpp:146</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1example_1_1MuscoviteApplication_html_a87dea404737fe74de59916153608859c"><div class="ttname"><a href="classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c">muscovite::qt::example::MuscoviteApplication::run</a></div><div class="ttdeci">static int run(int argc, char **argv)</div><div class="ttdoc">Create and run the application.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">application.cpp:16</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

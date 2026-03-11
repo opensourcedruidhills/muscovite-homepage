@@ -182,8 +182,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 id="muscovite--ai-project-context">Muscovite — AI Project
 Context</h1>
 <blockquote>
-<p><strong>Generated</strong>: 2026-03-10 | <strong>Commit</strong>:
-fd486180 | <strong>Branch</strong>: main <strong>Regenerate</strong>:
+<p><strong>Generated</strong>: 2026-03-11 | <strong>Commit</strong>:
+3c0e04aa | <strong>Branch</strong>: main <strong>Regenerate</strong>:
 <code>./tools/generate-context.sh</code></p>
 </blockquote>
 <p>This is the single structured context file for AI agents and human
@@ -219,11 +219,11 @@ validation)</li>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.61.0</td>
+<td>1.62.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1347 (since 2025-11-17)</td>
+<td>1384 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td><strong>DSL model (.ddd)</strong></td>
@@ -239,23 +239,23 @@ validation)</li>
 </tr>
 <tr>
 <td>Generator targets</td>
-<td>10</td>
+<td>8</td>
 </tr>
 <tr>
 <td>Racket source (dslgen/)</td>
-<td>127567 lines</td>
+<td>134143 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>41915 lines</td>
+<td>41894 lines</td>
 </tr>
 <tr>
 <td>Architecture Decision Records</td>
-<td>194</td>
+<td>198</td>
 </tr>
 <tr>
 <td>Racket tests</td>
-<td>30333 lines</td>
+<td>33758 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>
@@ -275,23 +275,23 @@ Coverage (Grammar-Parser Parity)</h3>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>295</td>
+<td>299</td>
 </tr>
 <tr>
 <td>Grammar keywords</td>
-<td>331</td>
+<td>336</td>
 </tr>
 <tr>
 <td>Lexer keywords</td>
-<td>332</td>
+<td>337</td>
 </tr>
 <tr>
 <td>Keyword intersection</td>
-<td>327</td>
+<td>332</td>
 </tr>
 <tr>
 <td>Keyword parity</td>
-<td>97.3%</td>
+<td>97.4%</td>
 </tr>
 <tr>
 <td>Opaque stubs (BracedBlock)</td>
@@ -1410,26 +1410,44 @@ SampleAnalysisWorkflow, FieldCampaignWorkflow, ExplorationToResource</p>
 <p>Both serve as integration tests for all generator targets.</p>
 <h2 id="15-current-iteration">15. Current Iteration</h2>
 <h1
-id="iteration-v1630--behavioral-sovereignty-tier-4-testing--documentation">Iteration:
-v1.63.0 — Behavioral Sovereignty Tier 4: Testing + Documentation</h1>
-<p><strong>Goal</strong>: Exploit the rich domain model for automated
-quality assurance (property-based test generation from ENSURES) and
-documentation (Mermaid decision diagrams, Business Logic chapter in
-system manual). <strong>Start</strong>: After v1.62.0
-<strong>Target</strong>: TBD <strong>Status</strong>: planning</p>
+id="iteration-v1640--sample-project-enrichment--multi-source-brownfield-extraction">Iteration:
+v1.64.0 — Sample Project Enrichment + Multi-Source Brownfield
+Extraction</h1>
+<p><strong>Goal</strong>: Build a generic multi-source Go extractor
+(structural + behavioral + UI/API triangulation) with direct .ddd
+output, enable field-level DOC syntax, enrich all sample projects, and
+fully model the Gitea brownfield extraction (107 tables, 12 contexts).
+<strong>Start</strong>: After v1.62.0 <strong>Target</strong>: TBD
+<strong>Status</strong>: planning</p>
 <h2 id="theme">Theme</h2>
-<p>With the expression language and DECIDE blocks complete, this
-iteration harvests the investment. Property-based test generation fuzzes
-DECIDE pure functions with random inputs and verifies ENSURES
-postconditions hold — automated correctness proofs. The docs generator
-produces Mermaid.js decision flow diagrams from DECIDE blocks and a
-"Business Logic" chapter per aggregate. Branch coverage reporting
-measures test adequacy.</p>
-<p>This iteration is primarily new generator targets — no grammar or
-parser changes. All four features are independent and highly
-parallelizable.</p>
-<p>ADRs: 20260307-ensures-postconditions,
-20260307-behavioral-sovereignty-roadmap.</p>
+<p>The sample projects are Muscovite's primary showcase — they
+demonstrate the <code>.ddd</code> → generated lines multiplier across 8
+targets. Currently, FHIR Health is dramatically thin (1,692 lines, 7
+resources), all projects lack field-level documentation, and the Gitea
+brownfield extraction maps only 1 of 107 tables.</p>
+<p>This iteration:</p>
+<ol type="1">
+<li>Enables field-level DOC syntax (a 3-file grammar+parser change)</li>
+<li>Builds a <strong>generic Go multi-source extractor</strong>
+(<code>muscovite-go-extractor</code> — own repo, subtree) that analyzes
+Go models, services, templates, and API specs, then outputs .ddd files
+directly with confidence-annotated structural AND behavioral
+constructs</li>
+<li>Retrofits the FHIR extraction tool to also output .ddd files
+directly</li>
+<li>Enriches all three greenfield sample projects with field-level
+documentation</li>
+<li>Models the entire Gitea schema (107 tables, 973 columns, 12 bounded
+contexts) using the extraction pipeline</li>
+</ol>
+<p><strong>Architecture decision (revised)</strong>: All extractors
+output .ddd files directly — no intermediate Brownfield IR JSON format.
+The .ddd format IS the lingua franca. Conformance guaranteed by dual PEG
+validation (Go-side validator + Racket parse-back gate). FTR-351
+(ir-to-ddd converter) was eliminated.</p>
+<p>ADRs: 20260310-field-level-documentation-in-dsl,
+20260310-sample-project-enrichment-strategy,
+20260310-brownfield-extraction-architecture (revised).</p>
 <h2 id="scope">Scope</h2>
 <table>
 <thead>
@@ -1443,88 +1461,220 @@ parallelizable.</p>
 </thead>
 <tbody>
 <tr>
-<td>FTR-301</td>
-<td>Property-based test generator — fuzz DECIDE inputs, verify
-ENSURES</td>
+<td>FTR-344</td>
+<td>Field-level DOC syntax in DSL grammar and parser</td>
 <td>must</td>
 <td>planned</td>
-<td>feature/ftr-301-property-tests</td>
+<td>feature/ftr-344-field-level-doc</td>
 </tr>
 <tr>
-<td>FTR-302</td>
-<td>DECIDE block documentation generator — Mermaid decision flow
-diagrams</td>
+<td>FTR-345</td>
+<td>FHIR R4 StructureDefinition extraction tool (→ .ddd direct)</td>
 <td>must</td>
 <td>planned</td>
-<td>feature/ftr-302-decide-mermaid</td>
+<td>feature/ftr-345-fhir-extract</td>
 </tr>
 <tr>
-<td>FTR-303</td>
-<td>System manual Business Logic chapter generation from DECIDE
-blocks</td>
+<td>FTR-346</td>
+<td>FHIR Health sample project enrichment</td>
 <td>must</td>
 <td>planned</td>
-<td>feature/ftr-303-business-logic-docs</td>
+<td>feature/ftr-346-fhir-enrichment</td>
 </tr>
 <tr>
-<td>FTR-304</td>
-<td>DECIDE branch coverage reporting and test adequacy metrics</td>
+<td>FTR-347</td>
+<td>Geosciences field documentation enrichment</td>
 <td>must</td>
 <td>planned</td>
-<td>feature/ftr-304-branch-coverage</td>
+<td>feature/ftr-347-geo-enrichment</td>
+</tr>
+<tr>
+<td>FTR-348</td>
+<td>Hello World field documentation and tutorial polish</td>
+<td>must</td>
+<td>planned</td>
+<td>feature/ftr-348-hello-world-polish</td>
+</tr>
+<tr>
+<td>FTR-349</td>
+<td>Gitea full brownfield extraction (107 tables, 12 contexts)</td>
+<td>must</td>
+<td>planned</td>
+<td>feature/ftr-349-gitea-extraction</td>
+</tr>
+<tr>
+<td>FTR-350</td>
+<td>Generic Go multi-source extractor —
+<code>muscovite-go-extractor</code> repository</td>
+<td>must</td>
+<td>planned</td>
+<td>feature/ftr-350-go-extractor</td>
 </tr>
 </tbody>
 </table>
-<h2 id="dependency-chain">Dependency Chain</h2>
-<pre><code>All four features are independent (different generator targets):
-  FTR-301 (property tests)    ── depends on v1.62.0 (full expression language)
-  FTR-302 (Mermaid diagrams)  ── depends on v1.62.0 (DECIDE AST)
-  FTR-303 (docs chapter)      ── depends on FTR-302 (embeds Mermaid diagrams)
-  FTR-304 (coverage metrics)  ── depends on FTR-301 (extends test output)</code></pre>
-<h2 id="parallel-agent-plan">Parallel Agent Plan</h2>
-<p>Maximum parallelism — four independent generators.</p>
-<p><strong>Agent A</strong>: FTR-301 (property-based test generator) —
-C++ doctest output. <strong>Agent B</strong>: FTR-302 (Mermaid diagram
-generator) — AsciiDoc output. <strong>Agent C</strong>: FTR-303
-(Business Logic chapter) — AsciiDoc output. Starts after FTR-302.
-<strong>Agent D</strong>: FTR-304 (branch coverage) — extends FTR-301
-output. Starts after FTR-301.</p>
+<p><del>FTR-351</del> (Brownfield IR to DDD converter) —
+<strong>ELIMINATED</strong>. Extractors output .ddd directly.</p>
+<h2 id="dependencies">Dependencies</h2>
+<pre><code>FTR-350 (go-extractor, direct .ddd output) ─────────────────┐
+                                                              ├──→ FTR-349 (Gitea extraction)
+FTR-344 (field-level DOC) ───────────────────────────────────┘
+                           │
+                           ├──→ FTR-345 (FHIR → .ddd direct) ──→ FTR-346 (FHIR enrichment)
+                           │
+                           ├──→ FTR-347 (Geosciences enrichment)
+                           └──→ FTR-348 (Hello World polish)</code></pre>
+<p><strong>Extraction pipeline</strong> (revised ADR
+20260310-brownfield-extraction-architecture):</p>
+<pre><code>Go Source → go-extractor (5-pass: schema → behavioral → UI/API → triangulate → emit)
+                                                                        ↓
+                                                                  .ddd files (direct)
+                                                                        ↓
+                                                                  Human curation
+                                                                        ↓
+                                                                  Final .ddd → parse → generate</code></pre>
+<ul>
+<li>FTR-344 (field-level DOC) is the grammar gate — unblocks FTR-345,
+346, 347, 348, 349</li>
+<li>FTR-350 (go-extractor) is independent — standalone Go project, no
+Muscovite deps</li>
+<li>FTR-349 (Gitea) depends on FTR-350 + FTR-344 (extractor +
+field-level DOC)</li>
+<li>FTR-346 (FHIR enrichment) depends on FTR-345 + FTR-344</li>
+<li>FTR-347 and FTR-348 depend only on FTR-344 (manual enrichment, no
+extractor)</li>
+</ul>
+<h2 id="agent-execution-plan">Agent Execution Plan</h2>
 <table>
 <thead>
 <tr>
-<th>Phase</th>
-<th>Agent A</th>
-<th>Agent B</th>
-<th>Agent C</th>
-<th>Agent D</th>
+<th>Agent</th>
+<th>FTRs</th>
+<th>Rationale</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>FTR-301 (property tests)</td>
-<td>FTR-302 (Mermaid)</td>
-<td>—</td>
-<td>—</td>
+<td>Agent A</td>
+<td>FTR-344</td>
+<td>Quick win — grammar+parser, ~half day</td>
 </tr>
 <tr>
-<td>2</td>
-<td>—</td>
-<td>—</td>
-<td>FTR-303 (docs chapter)</td>
-<td>FTR-304 (coverage)</td>
+<td>Agent B</td>
+<td>FTR-350</td>
+<td>Go project, independent, can start immediately</td>
 </tr>
 <tr>
-<td>3</td>
-<td>Review all PRs</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
+<td>Agent C</td>
+<td>FTR-345</td>
+<td>Python FHIR extractor, after FTR-344</td>
+</tr>
+<tr>
+<td>Agent D</td>
+<td>FTR-347, FTR-348</td>
+<td>Manual enrichment, after FTR-344 only</td>
+</tr>
+<tr>
+<td>Agent E</td>
+<td>FTR-349</td>
+<td>Gitea extraction, after FTR-350 + FTR-344</td>
+</tr>
+<tr>
+<td>Agent F</td>
+<td>FTR-346</td>
+<td>FHIR enrichment, after FTR-345 + FTR-344</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Note</strong>: All FTRs assigned to this iteration are must
-priority per governance (ADR 20260309).</p>
+<p>Agents A+B start in parallel (no dependency). After FTR-344 merges,
+C/D start. After FTR-350+344 merge, E starts. After FTR-345+344 merge, F
+starts.</p>
+<h2 id="target-metrics">Target Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Before</th>
+<th>After</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FHIR .ddd lines</td>
+<td>1,692</td>
+<td>8,000+</td>
+<td>+370%</td>
+</tr>
+<tr>
+<td>FHIR resources</td>
+<td>7</td>
+<td>20+</td>
+<td>+185%</td>
+</tr>
+<tr>
+<td>FHIR field DOC coverage</td>
+<td>0%</td>
+<td>&gt;80%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Geosciences .ddd lines</td>
+<td>~9,750</td>
+<td>12,000+</td>
+<td>+23%</td>
+</tr>
+<tr>
+<td>Geosciences field DOC coverage</td>
+<td>0%</td>
+<td>&gt;80%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Hello World field DOC coverage</td>
+<td>0%</td>
+<td>100%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Gitea .ddd lines</td>
+<td>40</td>
+<td>5,000+</td>
+<td>+12,400%</td>
+</tr>
+<tr>
+<td>Gitea tables modeled</td>
+<td>1</td>
+<td>107</td>
+<td>+10,600%</td>
+</tr>
+<tr>
+<td>Gitea bounded contexts</td>
+<td>1</td>
+<td>12</td>
+<td>+1,100%</td>
+</tr>
+<tr>
+<td>Gitea behavioral constructs</td>
+<td>0</td>
+<td>50+ (commands, events, state machines)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Total .ddd lines (all projects)</td>
+<td>~11,600</td>
+<td>~25,000+</td>
+<td>+115%</td>
+</tr>
+<tr>
+<td>Total generated output (all projects)</td>
+<td>~300k lines</td>
+<td>~600k+ lines</td>
+<td>+100%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deferred">Deferred</h2>
+<p>None — all FTRs are must priority.</p>
 <h2 id="quality-gateway-definition-of-done--iteration-level">Quality
 Gateway (Definition of Done — Iteration Level)</h2>
 <h3 id="per-feature-quality-gates-run-during-development">Per-Feature
@@ -1539,23 +1689,38 @@ Quality Gates (run during development)</h3>
 </thead>
 <tbody>
 <tr>
-<td>FTR-301</td>
-<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>FTR-344</td>
+<td><code>racket dslgen/tests/test-grammar-conformance.rkt &amp;&amp; racket dslgen/tests/test-parser.rkt</code></td>
 <td>- [ ] Pass</td>
 </tr>
 <tr>
-<td>FTR-302</td>
-<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>FTR-345</td>
+<td><code>python -m pytest tools/tests/test_fhir_extract.py</code></td>
 <td>- [ ] Pass</td>
 </tr>
 <tr>
-<td>FTR-303</td>
-<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>FTR-346</td>
+<td><code>racket dslgen/tests/run-all-tests.rkt &amp;&amp; cmake --build --preset debug --target db-fresh-fhir</code></td>
 <td>- [ ] Pass</td>
 </tr>
 <tr>
-<td>FTR-304</td>
-<td><code>racket dslgen/tests/run-tagged.rkt --tags generator</code></td>
+<td>FTR-347</td>
+<td><code>racket dslgen/tests/run-all-tests.rkt &amp;&amp; cmake --build --preset debug</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-348</td>
+<td><code>racket dslgen/tests/test-parser.rkt &amp;&amp; cmake --build --preset debug</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-349</td>
+<td><code>racket dslgen/tests/run-all-tests.rkt &amp;&amp; cmake --build --preset debug</code></td>
+<td>- [ ] Pass</td>
+</tr>
+<tr>
+<td>FTR-350</td>
+<td><code>cd tools/go-extractor &amp;&amp; go test ./... -v</code></td>
 <td>- [ ] Pass</td>
 </tr>
 </tbody>
@@ -1571,35 +1736,44 @@ Tests (run frequently during development)</h3>
 <ul class="task-list">
 <li><label><input type="checkbox" />All Racket tests pass:
 <code>racket dslgen/tests/run-all-tests.rkt</code></label></li>
-<li><label><input type="checkbox" />Generated FHIR Health project
-compiles: <code>cmake --build --preset debug</code></label></li>
+<li><label><input type="checkbox" />All sample projects generate:
+<code>--full</code> flag on all 3 project.mus files</label></li>
+<li><label><input type="checkbox" />C++ build succeeds:
+<code>cmake --build --preset debug</code></label></li>
 <li><label><input type="checkbox" />C++ tests pass:
 <code>ctest --preset debug --output-on-failure</code></label></li>
-<li><label><input type="checkbox" />System manual HTML renders
-correctly:
-<code>cmake --build --preset debug --target system-manual-html-fhirhealth</code></label></li>
+<li><label><input type="checkbox" />DB deploy succeeds:
+<code>cmake --build --preset debug --target db-fresh-fhir</code></label></li>
+<li><label><input type="checkbox" />clang-tidy passes:
+<code>cmake --build --preset clang-tidy</code></label></li>
+<li><label><input type="checkbox" />Docs publish succeeds:
+<code>tools/publish-docs.sh</code></label></li>
 </ul>
 <h3 id="documentation">Documentation</h3>
 <ul class="task-list">
-<li><label><input type="checkbox" />README.md updated with Behavioral
-Sovereignty feature summary</label></li>
-<li><label><input type="checkbox" />VISION.md updated with completed
-Behavioral Sovereignty status</label></li>
+<li><label><input type="checkbox" />README.md updated (field-level DOC,
+extraction toolchain)</label></li>
+<li><label><input type="checkbox" />doc/VISION.md updated (multi-source
+extraction pipeline)</label></li>
+<li><label><input type="checkbox" />doc/GO-PATTERNS.md created (Go style
+guide for extractor)</label></li>
 <li><label><input type="checkbox" />SYSTEM-BRIEF.md
 regenerated</label></li>
-<li><label><input type="checkbox" />CHANGELOG.md updated with release
-notes</label></li>
-<li><label><input type="checkbox" />DSL.md regenerated</label></li>
+<li><label><input type="checkbox" />CHANGELOG.md with enrichment
+metrics</label></li>
+<li><label><input type="checkbox" />doc/DSL.md regenerated (new
+grammar)</label></li>
 </ul>
 <h3 id="release">Release</h3>
 <ul class="task-list">
-<li><label><input type="checkbox" />Feature branches merged to develop
-via <code>agent-pr.sh</code></label></li>
-<li><label><input type="checkbox" />All tests pass on
-develop</label></li>
-<li><label><input type="checkbox" />Release via
-<code>workflow/scripts/release.sh v1.63.0</code></label></li>
-<li><label><input type="checkbox" />Pushed to origin</label></li>
+<li><label><input type="checkbox" />All feature branches merged to
+develop via agent-pr.sh</label></li>
+<li><label><input type="checkbox" />release.sh v1.64.0 completes
+successfully</label></li>
+<li><label><input type="checkbox" />Submodule refs updated for all
+sample projects</label></li>
+<li><label><input type="checkbox" />Docs deployed to
+muscovite-homepage</label></li>
 </ul>
 <h2 id="retrospective">Retrospective</h2>
 <p>[After release: what went well, what didn't, what to change.]</p>

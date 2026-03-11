@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -191,7 +191,7 @@ $(function(){initNavTree('validation__codes_8hpp_source.html','',''); });
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span></div>
 <div class="foldopen" id="foldopen00121" data-start="{" data-end="}">
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="validation__codes_8hpp.html#a9dcd2ef905ddf4d7071032121d82db00">  121</a></span><span class="keyword">inline</span> QString <a class="code hl_function" href="validation__codes_8hpp.html#a9dcd2ef905ddf4d7071032121d82db00">codeString</a>(<a class="code hl_enumeration" href="validation__codes_8hpp.html#a2e703ae6e1d16a0a8c4b7962a40bce96">ValidationCode</a> code) {</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">int</span> value = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(code);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">int</span> <span class="keyword">const</span> value = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(code);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">if</span> (value &gt;= 1000) {</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">return</span> QString(<span class="stringliteral">&quot;WAR%1&quot;</span>).arg(value - 1000, 3, 10, QChar(<span class="charliteral">&#39;0&#39;</span>));</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    }</div>

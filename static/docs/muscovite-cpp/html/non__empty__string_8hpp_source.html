@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -102,11 +102,11 @@ $(function(){initNavTree('non__empty__string_8hpp_source.html','',''); });
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;cctype&gt;</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;cctype&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span>muscovite::types {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
@@ -132,33 +132,32 @@ $(function(){initNavTree('non__empty__string_8hpp_source.html','',''); });
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.empty()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="comment">// Check for at least one non-whitespace character</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> std::any_of(<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.begin(), <a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>.end(),</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                          [](<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) { return !std::isspace(c); });</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> std::ranges::any_of(<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a6eb439f0cf3092f67d485908f956bcfd">value</a>, [](<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) { <span class="keywordflow">return</span> !std::isspace(c); });</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
 </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
-<div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">   60</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">trimmed</a>() const -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a993245ed69cf88a796ddf251e58e452d">string_view</a> {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keyword">auto</span> start = value_.find_first_not_of(<span class="stringliteral">&quot; \t\n\r&quot;</span>);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">if</span> (start == std::string::npos) <span class="keywordflow">return</span> {};</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keyword">auto</span> end = value_.find_last_not_of(<span class="stringliteral">&quot; \t\n\r&quot;</span>);</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">return</span> std::string_view{value_}.substr(start, end - start + 1);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span></div>
+<div class="foldopen" id="foldopen00059" data-start="{" data-end="}">
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">   59</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">trimmed</a>() const -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<a class="code hl_function" href="classmuscovite_1_1types_1_1strong__type__base.html#a993245ed69cf88a796ddf251e58e452d">string_view</a> {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keyword">auto</span> start = value_.find_first_not_of(<span class="stringliteral">&quot; \t\n\r&quot;</span>);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">if</span> (start == std::string::npos) <span class="keywordflow">return</span> {};</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keyword">auto</span> end = value_.find_last_not_of(<span class="stringliteral">&quot; \t\n\r&quot;</span>);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keywordflow">return</span> std::string_view{value_}.substr(start, end - start + 1);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
 </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span></div>
-<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">   68</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">length</a>() const noexcept -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordflow">return</span> value_.size();</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
+<div class="foldopen" id="foldopen00067" data-start="{" data-end="}">
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">   67</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">length</a>() const noexcept -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">return</span> value_.size();</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
 </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>};</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>};</div>
 </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}  <span class="comment">// namespace muscovite::types</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>}  <span class="comment">// namespace muscovite::types</span></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html">muscovite::types::NonEmptyString</a></div><div class="ttdef"><b>Definition</b> <a href="#l00034">non_empty_string.hpp:34</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a5152c3380f3103d4cccaf1e830b48d87"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a5152c3380f3103d4cccaf1e830b48d87">muscovite::types::NonEmptyString::pattern</a></div><div class="ttdeci">static constexpr auto pattern() noexcept -&gt; std::string_view</div><div class="ttdoc">Validation description.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">non_empty_string.hpp:44</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a5ec8600184ac4f8eb88ec4b589c77103"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">muscovite::types::NonEmptyString::trimmed</a></div><div class="ttdeci">auto trimmed() const -&gt; std::string_view</div><div class="ttdoc">Get trimmed version (whitespace removed from ends).</div><div class="ttdef"><b>Definition</b> <a href="#l00060">non_empty_string.hpp:60</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a7b0f1fc7745e68bd1a9b8b9713f3f71c"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">muscovite::types::NonEmptyString::length</a></div><div class="ttdeci">auto length() const noexcept -&gt; std::size_t</div><div class="ttdoc">Get length (character count).</div><div class="ttdef"><b>Definition</b> <a href="#l00068">non_empty_string.hpp:68</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a5ec8600184ac4f8eb88ec4b589c77103"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a5ec8600184ac4f8eb88ec4b589c77103">muscovite::types::NonEmptyString::trimmed</a></div><div class="ttdeci">auto trimmed() const -&gt; std::string_view</div><div class="ttdoc">Get trimmed version (whitespace removed from ends).</div><div class="ttdef"><b>Definition</b> <a href="#l00059">non_empty_string.hpp:59</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a7b0f1fc7745e68bd1a9b8b9713f3f71c"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a7b0f1fc7745e68bd1a9b8b9713f3f71c">muscovite::types::NonEmptyString::length</a></div><div class="ttdeci">auto length() const noexcept -&gt; std::size_t</div><div class="ttdoc">Get length (character count).</div><div class="ttdef"><b>Definition</b> <a href="#l00067">non_empty_string.hpp:67</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_a8bf414c8d9e40049cf3b5391e80bea7d"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#a8bf414c8d9e40049cf3b5391e80bea7d">muscovite::types::NonEmptyString::is_valid</a></div><div class="ttdeci">static auto is_valid(std::string_view value) noexcept -&gt; bool</div><div class="ttdoc">Validate non-empty string.</div><div class="ttdef"><b>Definition</b> <a href="#l00051">non_empty_string.hpp:51</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_aa489e6abd6728dc966020faec9ece835"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#aa489e6abd6728dc966020faec9ece835">muscovite::types::NonEmptyString::type_name</a></div><div class="ttdeci">static constexpr auto type_name() noexcept -&gt; std::string_view</div><div class="ttdoc">Type name for error messages.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">non_empty_string.hpp:39</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1NonEmptyString_html_afbf6f7b6068cc116f03cf2af9e4d75cf"><div class="ttname"><a href="classmuscovite_1_1types_1_1NonEmptyString.html#afbf6f7b6068cc116f03cf2af9e4d75cf">muscovite::types::NonEmptyString::strong_type_base</a></div><div class="ttdeci">strong_type_base()=default</div><div class="ttdoc">Default constructor creates empty value.</div></div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -138,7 +138,7 @@ $(function(){initNavTree('qt__phone_8hpp_source.html','',''); });
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1QtPhone.html#a2a260832caff9c72ead2033f9019213a">   50</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1QtPhone.html#a2a260832caff9c72ead2033f9019213a">digitsOnly</a>() const -&gt; QString {</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        QString result;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        result.reserve(value_.size());</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordflow">for</span> (QChar c : value_) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordflow">for</span> (QChar <span class="keyword">const</span> c : value_) {</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keywordflow">if</span> (c.isDigit()) {</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                result.append(c);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            }</div>

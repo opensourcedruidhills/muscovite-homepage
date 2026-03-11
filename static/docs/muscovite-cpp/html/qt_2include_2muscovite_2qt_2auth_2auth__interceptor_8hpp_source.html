@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -115,9 +115,9 @@ $(function(){initNavTree('qt_2include_2muscovite_2qt_2auth_2auth__interceptor_8h
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#a0781f4367b93b604616faabc4d024a04">AuthCallCredentials</a>(TokenProvider token_provider);</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae">   33</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae">IsBlocking</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae">   33</a></span>    [[nodiscard]] <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae">IsBlocking</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89">   37</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89">GetType</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;auth_call_credentials&quot;</span>; }</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89">   37</a></span>    [[nodiscard]] <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89">GetType</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;auth_call_credentials&quot;</span>; }</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    grpc::Status <a class="code hl_function" href="classmuscovite_1_1qt_1_1AuthCallCredentials.html#adf1d19aa12b595d610e26f8d65c5db4d">GetMetadata</a>(</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        grpc::string_ref service_url,</div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -115,7 +115,7 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    std::atomic&lt;bool&gt; replica_healthy{<span class="keyword">false</span>};</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">mutable</span> std::mutex health_mutex;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    std::chrono::steady_clock::time_point last_health_check{};</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    std::chrono::steady_clock::time_point last_health_check;</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keyword">explicit</span> Impl(std::shared_ptr&lt;ConnectionPool&gt; p)</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        : primary(std::move(p)) {}</div>
@@ -147,7 +147,7 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="comment">// Create replica pool</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <a class="code hl_struct" href="structmuscovite_1_1dba_1_1PoolConfig.html">PoolConfig</a> replica_pool_config{</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1PoolConfig.html">PoolConfig</a> replica_pool_config{</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        .connection_string = config.replica_connection_string,</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        .min_connections = config.min_connections,</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        .max_connections = config.max_connections,</div>
@@ -163,10 +163,10 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            <span class="keywordflow">return</span> router;</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        }</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">return</span> std::unexpected(<a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;PoolError&gt;</a>{</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            <a class="code hl_enumvalue" href="connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdaaf98071f760be899f4fcf1d53a29ba17">PoolError::ConnectionFailed</a>,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="stringliteral">&quot;Failed to connect to read replica: &quot;</span> + replica_result.error().message,</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            {},  <span class="comment">// detail</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            {}   <span class="comment">// sql_state</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            .code = <a class="code hl_enumvalue" href="connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdaaf98071f760be899f4fcf1d53a29ba17">PoolError::ConnectionFailed</a>,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            .message = <span class="stringliteral">&quot;Failed to connect to read replica: &quot;</span> + replica_result.error().message,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            .detail = {},</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            .sql_state = {}</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        });</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    }</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    </div>
@@ -208,10 +208,10 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    </div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordflow">return</span> std::unexpected(<a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;PoolError&gt;</a>{</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <a class="code hl_enumvalue" href="connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdaaf98071f760be899f4fcf1d53a29ba17">PoolError::ConnectionFailed</a>,</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="stringliteral">&quot;Read replica unavailable and fallback disabled&quot;</span>,</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        {},  <span class="comment">// detail</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        {}   <span class="comment">// sql_state</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        .code = <a class="code hl_enumvalue" href="connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdaaf98071f760be899f4fcf1d53a29ba17">PoolError::ConnectionFailed</a>,</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        .message = <span class="stringliteral">&quot;Read replica unavailable and fallback disabled&quot;</span>,</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        .detail = {},</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        .sql_state = {}</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    });</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>}</div>
 </div>

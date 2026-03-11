@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -204,7 +204,7 @@ $(function(){initNavTree('connection__pool_8cpp_source.html','',''); });
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keyword">auto</span> deadline = std::chrono::steady_clock::now() + timeout;</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keywordtype">bool</span> acquired = m_cv.wait_until(lock, deadline, [<span class="keyword">this</span>] {</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keyword">const</span> <span class="keywordtype">bool</span> acquired = m_cv.wait_until(lock, deadline, [<span class="keyword">this</span>] {</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            <span class="keywordflow">return</span> m_shutdown || !m_available.empty() || (m_active_count + m_available.size() &lt; m_config.max_connections);</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        });</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
@@ -338,7 +338,7 @@ $(function(){initNavTree('connection__pool_8cpp_source.html','',''); });
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>PooledConnection&amp; PooledConnection::operator=(PooledConnection&amp;&amp; other) <span class="keyword">noexcept</span> {</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;other) {</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keywordflow">if</span> (m_conn &amp;&amp; m_pool) {</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keywordflow">if</span> (m_conn &amp;&amp; m_pool != <span class="keyword">nullptr</span>) {</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            m_pool-&gt;return_connection(std::move(m_conn));</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        }</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        m_conn = std::move(other.m_conn);</div>
@@ -349,7 +349,7 @@ $(function(){initNavTree('connection__pool_8cpp_source.html','',''); });
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>}</div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>PooledConnection::~PooledConnection() {</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    <span class="keywordflow">if</span> (m_conn &amp;&amp; m_pool) {</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    <span class="keywordflow">if</span> (m_conn &amp;&amp; m_pool != <span class="keyword">nullptr</span>) {</div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        m_pool-&gt;return_connection(std::move(m_conn));</div>
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    }</div>
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>}</div>

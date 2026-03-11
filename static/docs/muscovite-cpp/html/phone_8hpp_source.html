@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -102,11 +102,11 @@ $(function(){initNavTree('phone_8hpp_source.html','',''); });
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;regex&gt;</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;regex&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;<a class="code" href="strong__type__base_8hpp.html">muscovite/types/strong_type_base.hpp</a>&gt;</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span>muscovite::types {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
@@ -143,23 +143,22 @@ $(function(){initNavTree('phone_8hpp_source.html','',''); });
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1Phone.html#a72b600ce477ede1d6a9f661957af23af">   68</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1Phone.html#a72b600ce477ede1d6a9f661957af23af">digits_only</a>() const -&gt; <a class="code hl_namespace" href="namespacestd.html">std</a>::<span class="keywordtype">string</span> {</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        std::string result;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        result.reserve(value_.size());</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        std::copy_if(value_.begin(), value_.end(), std::back_inserter(result),</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                     [](<span class="keywordtype">char</span> c) { return c &gt;= <span class="stringliteral">&#39;0&#39;</span> &amp;&amp; c &lt;= <span class="stringliteral">&#39;9&#39;</span>; });</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        std::ranges::copy_if(value_, std::back_inserter(result), [](<span class="keywordtype">char</span> c) { <span class="keywordflow">return</span> c &gt;= <span class="charliteral">&#39;0&#39;</span> &amp;&amp; c &lt;= <span class="charliteral">&#39;9&#39;</span>; });</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
 </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span></div>
-<div class="foldopen" id="foldopen00077" data-start="{" data-end="}">
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">   77</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">is_international</a>() const noexcept -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordflow">return</span> !value_.empty() &amp;&amp; value_[0] == <span class="charliteral">&#39;+&#39;</span>;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    }</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span></div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">   76</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">is_international</a>() const noexcept -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keywordflow">return</span> !value_.empty() &amp;&amp; value_[0] == <span class="charliteral">&#39;+&#39;</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    }</div>
 </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>};</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>};</div>
 </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>}  <span class="comment">// namespace muscovite::types</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>}  <span class="comment">// namespace muscovite::types</span></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html">muscovite::types::Phone</a></div><div class="ttdef"><b>Definition</b> <a href="#l00039">phone.hpp:39</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a0dee45fd5b3a9e9edc2148511915f273"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">muscovite::types::Phone::is_international</a></div><div class="ttdeci">auto is_international() const noexcept -&gt; bool</div><div class="ttdoc">Check if international format (starts with +).</div><div class="ttdef"><b>Definition</b> <a href="#l00077">phone.hpp:77</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a0dee45fd5b3a9e9edc2148511915f273"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a0dee45fd5b3a9e9edc2148511915f273">muscovite::types::Phone::is_international</a></div><div class="ttdeci">auto is_international() const noexcept -&gt; bool</div><div class="ttdoc">Check if international format (starts with +).</div><div class="ttdef"><b>Definition</b> <a href="#l00076">phone.hpp:76</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a27590b873b23d31f8cf6f7724d300ff4"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a27590b873b23d31f8cf6f7724d300ff4">muscovite::types::Phone::pattern</a></div><div class="ttdeci">static constexpr auto pattern() noexcept -&gt; std::string_view</div><div class="ttdoc">Validation pattern (matches PostgreSQL CHECK).</div><div class="ttdef"><b>Definition</b> <a href="#l00049">phone.hpp:49</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a5bf3c8ea746f4b8ead531b5f407c0938"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a5bf3c8ea746f4b8ead531b5f407c0938">muscovite::types::Phone::type_name</a></div><div class="ttdeci">static constexpr auto type_name() noexcept -&gt; std::string_view</div><div class="ttdoc">Type name for error messages.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">phone.hpp:44</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1Phone_html_a72b600ce477ede1d6a9f661957af23af"><div class="ttname"><a href="classmuscovite_1_1types_1_1Phone.html#a72b600ce477ede1d6a9f661957af23af">muscovite::types::Phone::digits_only</a></div><div class="ttdeci">auto digits_only() const -&gt; std::string</div><div class="ttdoc">Extract digits only.</div><div class="ttdef"><b>Definition</b> <a href="#l00068">phone.hpp:68</a></div></div>

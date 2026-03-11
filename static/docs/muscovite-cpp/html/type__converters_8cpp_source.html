@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.61.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.62.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -132,7 +132,7 @@ $(function(){initNavTree('type__converters_8cpp_source.html','',''); });
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordflow">if</span> (f.is_null()) {</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        throw_null_error(f);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    boost::uuids::string_generator gen;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">const</span> boost::uuids::string_generator gen;</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">return</span> gen(f.c_str());</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>}</div>
 </div>
@@ -236,7 +236,7 @@ $(function(){initNavTree('type__converters_8cpp_source.html','',''); });
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordflow">if</span> (f.is_null()) {</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    }</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    boost::uuids::string_generator gen;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keyword">const</span> boost::uuids::string_generator gen;</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordflow">return</span> gen(f.c_str());</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>}</div>
 </div>
@@ -440,178 +440,189 @@ $(function(){initNavTree('type__converters_8cpp_source.html','',''); });
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="comment">//   &quot;2024-12-20 14:30:45&quot;</span></div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    std::tm tm{};</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="keywordtype">int</span> year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0;</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordtype">long</span> micros = 0;</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="comment">// Parse date part</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keyword">auto</span> pos = s.find_first_of(<span class="stringliteral">&quot;T &quot;</span>);</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <span class="keywordflow">if</span> (pos == std::string_view::npos || pos &lt; 10) {</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid timestamp format: &quot;</span> + std::string{s}};</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    }</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="comment">// Parse YYYY-MM-DD - extract substrings to satisfy clang-tidy</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    std::string year_str{s.substr(0, 4)};</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    std::string month_str{s.substr(5, 2)};</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    std::string day_str{s.substr(8, 2)};</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    std::from_chars(year_str.data(), year_str.data() + year_str.size(), year);</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    std::from_chars(month_str.data(), month_str.data() + month_str.size(), month);</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    std::from_chars(day_str.data(), day_str.data() + day_str.size(), day);</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <span class="comment">// Parse HH:MM:SS</span></div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    <span class="keyword">auto</span> time_start = pos + 1;</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    <span class="keywordflow">if</span> (s.size() &lt; time_start + 8) {</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid timestamp format: &quot;</span> + std::string{s}};</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    }</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    std::string hour_str{s.substr(time_start, 2)};</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    std::string min_str{s.substr(time_start + 3, 2)};</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    std::string sec_str{s.substr(time_start + 6, 2)};</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour);</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    std::from_chars(min_str.data(), min_str.data() + min_str.size(), min);</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec);</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    <span class="comment">// Parse optional microseconds</span></div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keyword">auto</span> frac_pos = s.find(<span class="charliteral">&#39;.&#39;</span>, time_start);</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    <span class="keywordflow">if</span> (frac_pos != std::string_view::npos) {</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>        <span class="keyword">auto</span> frac_end = s.find_first_of(<span class="stringliteral">&quot;+-Z&quot;</span>, frac_pos);</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>        <span class="keywordflow">if</span> (frac_end == std::string_view::npos) {</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>            frac_end = s.size();</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        }</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        std::string frac_str{s.substr(frac_pos + 1, frac_end - frac_pos - 1)};</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        <span class="comment">// Pad to 6 digits</span></div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>        <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="keywordtype">int</span> year = 0;</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordtype">int</span> month = 0;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keywordtype">int</span> day = 0;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keywordtype">int</span> hour = 0;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordtype">int</span> min = 0;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <span class="keywordtype">int</span> sec = 0;</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordtype">long</span> micros = 0;</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="comment">// Parse date part</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keyword">auto</span> pos = s.find_first_of(<span class="stringliteral">&quot;T &quot;</span>);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    <span class="keywordflow">if</span> (pos == std::string_view::npos || pos &lt; 10) {</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid timestamp format: &quot;</span> + std::string{s}};</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    }</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    <span class="comment">// Parse YYYY-MM-DD - extract substrings to satisfy clang-tidy</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    std::string year_str{s.substr(0, 4)};</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    std::string month_str{s.substr(5, 2)};</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    std::string day_str{s.substr(8, 2)};</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    std::from_chars(year_str.data(), year_str.data() + year_str.size(), year); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    std::from_chars(month_str.data(), month_str.data() + month_str.size(), month); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    std::from_chars(day_str.data(), day_str.data() + day_str.size(), day); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    <span class="comment">// Parse HH:MM:SS</span></div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="keyword">auto</span> time_start = pos + 1;</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keywordflow">if</span> (s.size() &lt; time_start + 8) {</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid timestamp format: &quot;</span> + std::string{s}};</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    }</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    std::string hour_str{s.substr(time_start, 2)};</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    std::string min_str{s.substr(time_start + 3, 2)};</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    std::string sec_str{s.substr(time_start + 6, 2)};</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    std::from_chars(min_str.data(), min_str.data() + min_str.size(), min); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <span class="comment">// Parse optional microseconds</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="keyword">auto</span> frac_pos = s.find(<span class="charliteral">&#39;.&#39;</span>, time_start);</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keywordflow">if</span> (frac_pos != std::string_view::npos) {</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        <span class="keyword">auto</span> frac_end = s.find_first_of(<span class="stringliteral">&quot;+-Z&quot;</span>, frac_pos);</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>        <span class="keywordflow">if</span> (frac_end == std::string_view::npos) {</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            frac_end = s.size();</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        }</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>        frac_str = frac_str.substr(0, 6);</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros);</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    }</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span> </div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    tm.tm_year = year - 1900;</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    tm.tm_mon = month - 1;</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>    tm.tm_mday = day;</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    tm.tm_hour = hour;</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    tm.tm_min = min;</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    tm.tm_sec = sec;</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    <span class="comment">// Convert to time_point (assuming UTC)</span></div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <span class="keyword">auto</span> time_t = timegm(&amp;tm);</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keywordflow">return</span> std::chrono::system_clock::from_time_t(time_t) + std::chrono::microseconds{micros};</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>}</div>
-</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>        std::string frac_str{s.substr(frac_pos + 1, frac_end - frac_pos - 1)};</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        <span class="comment">// Pad to 6 digits</span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>            frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>        }</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        frac_str = frac_str.substr(0, 6);</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    }</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    tm.tm_year = year - 1900;</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    tm.tm_mon = month - 1;</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    tm.tm_mday = day;</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    tm.tm_hour = hour;</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    tm.tm_min = min;</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    tm.tm_sec = sec;</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
-<div class="foldopen" id="foldopen00346" data-start="{" data-end="}">
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">  346</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">parse_date</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#a350cd49fe479a0f4b4bbc32e14d38518">Date</a> {</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="comment">// Format: &quot;YYYY-MM-DD&quot;</span></div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <span class="keywordflow">if</span> (s.size() &lt; 10) {</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid date format: &quot;</span> + std::string{s}};</div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    }</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keywordtype">int</span> year = 0, month = 0, day = 0;</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    std::string year_str{s.substr(0, 4)};</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    std::string month_str{s.substr(5, 2)};</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    std::string day_str{s.substr(8, 2)};</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    std::from_chars(year_str.data(), year_str.data() + year_str.size(), year);</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    std::from_chars(month_str.data(), month_str.data() + month_str.size(), month);</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    std::from_chars(day_str.data(), day_str.data() + day_str.size(), day);</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordflow">return</span> std::chrono::year{year} / std::chrono::month{<span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span><span class="keyword">&gt;</span>(month)} /</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>           std::chrono::day{<span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span><span class="keyword">&gt;</span>(day)};</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>}</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="comment">// Convert to time_point (assuming UTC)</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="keyword">auto</span> time_t = timegm(&amp;tm);</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <span class="keywordflow">return</span> std::chrono::system_clock::from_time_t(time_t) + std::chrono::microseconds{micros};</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>}</div>
 </div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span> </div>
-<div class="foldopen" id="foldopen00364" data-start="{" data-end="}">
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">  364</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">parse_time</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#af652eb12cf187d6b5cb59f310e95bb6d">TimeOfDay</a> {</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <span class="comment">// Format: &quot;HH:MM:SS&quot; or &quot;HH:MM:SS.microseconds&quot;</span></div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <span class="keywordflow">if</span> (s.size() &lt; 8) {</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid time format: &quot;</span> + std::string{s}};</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    }</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    <span class="keywordtype">int</span> hour = 0, min = 0, sec = 0;</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    <span class="keywordtype">long</span> micros = 0;</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    std::string hour_str{s.substr(0, 2)};</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    std::string min_str{s.substr(3, 2)};</div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    std::string sec_str{s.substr(6, 2)};</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour);</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    std::from_chars(min_str.data(), min_str.data() + min_str.size(), min);</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec);</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordflow">if</span> (s.size() &gt; 8 &amp;&amp; s[8] == <span class="charliteral">&#39;.&#39;</span>) {</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        std::string frac_str{s.substr(9)};</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>            frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>        }</div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>        frac_str = frac_str.substr(0, 6);</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros);</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    }</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="foldopen" id="foldopen00351" data-start="{" data-end="}">
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">  351</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">parse_date</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#a350cd49fe479a0f4b4bbc32e14d38518">Date</a> {</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="comment">// Format: &quot;YYYY-MM-DD&quot;</span></div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    <span class="keywordflow">if</span> (s.size() &lt; 10) {</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid date format: &quot;</span> + std::string{s}};</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    }</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="keywordtype">int</span> year = 0;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    <span class="keywordtype">int</span> month = 0;</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keywordtype">int</span> day = 0;</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    std::string year_str{s.substr(0, 4)};</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    std::string month_str{s.substr(5, 2)};</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    std::string day_str{s.substr(8, 2)};</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    std::from_chars(year_str.data(), year_str.data() + year_str.size(), year); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    std::from_chars(month_str.data(), month_str.data() + month_str.size(), month); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    std::from_chars(day_str.data(), day_str.data() + day_str.size(), day); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>    <span class="keywordflow">return</span> std::chrono::year{year} / std::chrono::month{<span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span><span class="keyword">&gt;</span>(month)} /</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>           std::chrono::day{<span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span><span class="keyword">&gt;</span>(day)};</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>}</div>
+</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
+<div class="foldopen" id="foldopen00371" data-start="{" data-end="}">
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">  371</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">parse_time</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#af652eb12cf187d6b5cb59f310e95bb6d">TimeOfDay</a> {</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    <span class="comment">// Format: &quot;HH:MM:SS&quot; or &quot;HH:MM:SS.microseconds&quot;</span></div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keywordflow">if</span> (s.size() &lt; 8) {</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Invalid time format: &quot;</span> + std::string{s}};</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    }</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    <span class="keywordtype">int</span> hour = 0;</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <span class="keywordtype">int</span> min = 0;</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    <span class="keywordtype">int</span> sec = 0;</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordtype">long</span> micros = 0;</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span> </div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    std::string hour_str{s.substr(0, 2)};</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    std::string min_str{s.substr(3, 2)};</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    std::string sec_str{s.substr(6, 2)};</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    std::from_chars(min_str.data(), min_str.data() + min_str.size(), min); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    <span class="keywordflow">return</span> std::chrono::hours{hour} + std::chrono::minutes{min} + std::chrono::seconds{sec} +</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>           std::chrono::microseconds{micros};</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>}</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    <span class="keywordflow">if</span> (s.size() &gt; 8 &amp;&amp; s[8] == <span class="charliteral">&#39;.&#39;</span>) {</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>        std::string frac_str{s.substr(9)};</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>        <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>            frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        }</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        frac_str = frac_str.substr(0, 6);</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    }</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="keywordflow">return</span> std::chrono::hours{hour} + std::chrono::minutes{min} + std::chrono::seconds{sec} +</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>           std::chrono::microseconds{micros};</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>}</div>
 </div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span> </div>
-<div class="foldopen" id="foldopen00393" data-start="{" data-end="}">
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">  393</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">parse_interval</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a> {</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    <span class="comment">// PostgreSQL interval format can be complex:</span></div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    <span class="comment">//   &quot;1 day 02:30:00&quot;</span></div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="comment">//   &quot;00:30:00&quot;</span></div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    <span class="comment">//   &quot;1 year 2 mons 3 days 04:05:06&quot;</span></div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="comment">// For simplicity, we support HH:MM:SS format and basic day/hour formats</span></div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    <span class="keywordtype">long</span> total_micros = 0;</div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    <span class="comment">// Check for day component</span></div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    <span class="keyword">auto</span> day_pos = s.find(<span class="stringliteral">&quot; day&quot;</span>);</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="keywordflow">if</span> (day_pos != std::string_view::npos) {</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        <span class="keywordtype">int</span> days = 0;</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        std::string days_str{s.substr(0, day_pos)};</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        std::from_chars(days_str.data(), days_str.data() + days_str.size(), days);</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        total_micros += <span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(days) * 24 * 3600 * 1&#39;000&#39;000;</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>        <span class="comment">// Find time part after &quot;day&quot; or &quot;days&quot;</span></div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>        <span class="keyword">auto</span> time_pos = s.find(<span class="charliteral">&#39; &#39;</span>, day_pos + 1);</div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>        <span class="keywordflow">if</span> (time_pos != std::string_view::npos) {</div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>            s = s.substr(time_pos + 1);</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>            <span class="keywordflow">return</span> <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a>{total_micros};</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        }</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    }</div>
+<div class="foldopen" id="foldopen00402" data-start="{" data-end="}">
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno"><a class="line" href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">  402</a></span><span class="keyword">auto</span> <a class="code hl_function" href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">parse_interval</a>(std::string_view s) -&gt; <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a> {</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    <span class="comment">// PostgreSQL interval format can be complex:</span></div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="comment">//   &quot;1 day 02:30:00&quot;</span></div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    <span class="comment">//   &quot;00:30:00&quot;</span></div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <span class="comment">//   &quot;1 year 2 mons 3 days 04:05:06&quot;</span></div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="comment">// For simplicity, we support HH:MM:SS format and basic day/hour formats</span></div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    <span class="keywordtype">long</span> total_micros = 0;</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    <span class="comment">// Check for day component</span></div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>    <span class="keyword">auto</span> day_pos = s.find(<span class="stringliteral">&quot; day&quot;</span>);</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keywordflow">if</span> (day_pos != std::string_view::npos) {</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <span class="keywordtype">int</span> days = 0;</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        std::string days_str{s.substr(0, day_pos)};</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        std::from_chars(days_str.data(), days_str.data() + days_str.size(), days); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>        total_micros += <span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(days) * 24 * 3600 * 1&#39;000&#39;000;</div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span> </div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    <span class="comment">// Parse HH:MM:SS[.fraction]</span></div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <span class="keywordflow">if</span> (s.size() &gt;= 8 &amp;&amp; s[2] == <span class="charliteral">&#39;:&#39;</span> &amp;&amp; s[5] == <span class="charliteral">&#39;:&#39;</span>) {</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keywordtype">int</span> hour = 0, min = 0, sec = 0;</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>        <span class="keywordtype">long</span> micros = 0;</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span> </div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        std::string hour_str{s.substr(0, 2)};</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        std::string min_str{s.substr(3, 2)};</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>        std::string sec_str{s.substr(6, 2)};</div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>        std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour);</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>        std::from_chars(min_str.data(), min_str.data() + min_str.size(), min);</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>        std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec);</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span> </div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        <span class="keywordflow">if</span> (s.size() &gt; 8 &amp;&amp; s[8] == <span class="charliteral">&#39;.&#39;</span>) {</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>            std::string frac_str{s.substr(9)};</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>            <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>                frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>            }</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>            frac_str = frac_str.substr(0, 6);</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>            std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros);</div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        }</div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span> </div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        total_micros += <span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(hour) * 3600 * 1&#39;000&#39;000 + <span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(min) * 60 * 1&#39;000&#39;000 +</div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>                        <span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(sec) * 1&#39;000&#39;000 + micros;</div>
-<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>    }</div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span> </div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>    <span class="keywordflow">return</span> <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a>{total_micros};</div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>}</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="comment">// Find time part after &quot;day&quot; or &quot;days&quot;</span></div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        <span class="keyword">auto</span> time_pos = s.find(<span class="charliteral">&#39; &#39;</span>, day_pos + 1);</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keywordflow">if</span> (time_pos != std::string_view::npos) {</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>            s = s.substr(time_pos + 1);</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>            <span class="keywordflow">return</span> <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a>{total_micros};</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        }</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>    }</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span> </div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    <span class="comment">// Parse HH:MM:SS[.fraction]</span></div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    <span class="keywordflow">if</span> (s.size() &gt;= 8 &amp;&amp; s[2] == <span class="charliteral">&#39;:&#39;</span> &amp;&amp; s[5] == <span class="charliteral">&#39;:&#39;</span>) {</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>        <span class="keywordtype">int</span> hour = 0;</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        <span class="keywordtype">int</span> min = 0;</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>        <span class="keywordtype">int</span> sec = 0;</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        <span class="keywordtype">long</span> micros = 0;</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        std::string hour_str{s.substr(0, 2)};</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>        std::string min_str{s.substr(3, 2)};</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>        std::string sec_str{s.substr(6, 2)};</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        std::from_chars(hour_str.data(), hour_str.data() + hour_str.size(), hour); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>        std::from_chars(min_str.data(), min_str.data() + min_str.size(), min); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        std::from_chars(sec_str.data(), sec_str.data() + sec_str.size(), sec); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span> </div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>        <span class="keywordflow">if</span> (s.size() &gt; 8 &amp;&amp; s[8] == <span class="charliteral">&#39;.&#39;</span>) {</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>            std::string frac_str{s.substr(9)};</div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>            <span class="keywordflow">while</span> (frac_str.size() &lt; 6) {</div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>                frac_str += <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>            }</div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>            frac_str = frac_str.substr(0, 6);</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>            std::from_chars(frac_str.data(), frac_str.data() + frac_str.size(), micros); <span class="comment">// NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)</span></div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>        }</div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span> </div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>        total_micros += (<span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(hour) * 3600 * 1&#39;000&#39;000) + (<span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(min) * 60 * 1&#39;000&#39;000) +</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>                        (<span class="keyword">static_cast&lt;</span><span class="keywordtype">long</span><span class="keyword">&gt;</span>(sec) * 1&#39;000&#39;000) + micros;</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>    }</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span> </div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>    <span class="keywordflow">return</span> <a class="code hl_typedef" href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">Interval</a>{total_micros};</div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>}</div>
 </div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span> </div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>} <span class="comment">// namespace muscovite::dba</span></div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span> </div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>} <span class="comment">// namespace muscovite::dba</span></div>
 <div class="ttc" id="atype__converters_8hpp_html"><div class="ttname"><a href="type__converters_8hpp.html">type_converters.hpp</a></div><div class="ttdoc">PostgreSQL field to C++ type converters.</div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a01379710ebc2cbe7829313713c152169"><div class="ttname"><a href="type__converters_8hpp.html#a01379710ebc2cbe7829313713c152169">muscovite::dba::to_date</a></div><div class="ttdeci">auto to_date(const pqxx::field &amp;f) -&gt; Date</div><div class="ttdoc">Convert pqxx::field to Date (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00096">type_converters.cpp:96</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a0e28d68c939a168022fd4a2338022fa9"><div class="ttname"><a href="type__converters_8hpp.html#a0e28d68c939a168022fd4a2338022fa9">muscovite::dba::from_date_opt</a></div><div class="ttdeci">auto from_date_opt(const std::optional&lt; Date &gt; &amp;v) -&gt; std::optional&lt; std::string &gt;</div><div class="ttdoc">Convert optional Date.</div><div class="ttdef"><b>Definition</b> <a href="#l00264">type_converters.cpp:264</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a31ecabb3d4de2194f2ffd3c644527168"><div class="ttname"><a href="type__converters_8hpp.html#a31ecabb3d4de2194f2ffd3c644527168">muscovite::dba::from_uuid</a></div><div class="ttdeci">auto from_uuid(const boost::uuids::uuid &amp;v) -&gt; std::string</div><div class="ttdoc">Convert UUID to PostgreSQL-compatible string.</div><div class="ttdef"><b>Definition</b> <a href="#l00207">type_converters.cpp:207</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a337b98ddd4004d390cf609554cd050c9"><div class="ttname"><a href="type__converters_8hpp.html#a337b98ddd4004d390cf609554cd050c9">muscovite::dba::to_uuid</a></div><div class="ttdeci">auto to_uuid(const pqxx::field &amp;f) -&gt; boost::uuids::uuid</div><div class="ttdoc">Convert pqxx::field to UUID (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00039">type_converters.cpp:39</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_a350cd49fe479a0f4b4bbc32e14d38518"><div class="ttname"><a href="type__converters_8hpp.html#a350cd49fe479a0f4b4bbc32e14d38518">muscovite::dba::Date</a></div><div class="ttdeci">std::chrono::year_month_day Date</div><div class="ttdoc">Date-only (PostgreSQL DATE).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00055">type_converters.hpp:55</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_a350cd49fe479a0f4b4bbc32e14d38518"><div class="ttname"><a href="type__converters_8hpp.html#a350cd49fe479a0f4b4bbc32e14d38518">muscovite::dba::Date</a></div><div class="ttdeci">std::chrono::year_month_day Date</div><div class="ttdoc">Date-only (PostgreSQL DATE).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00056">type_converters.hpp:56</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a3614e338cf353e2222be44c0176dddba"><div class="ttname"><a href="type__converters_8hpp.html#a3614e338cf353e2222be44c0176dddba">muscovite::dba::to_int64</a></div><div class="ttdeci">auto to_int64(const pqxx::field &amp;f) -&gt; std::int64_t</div><div class="ttdoc">Convert pqxx::field to int64 (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00061">type_converters.cpp:61</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a388896250cb43709ee02dab2d4da4ead"><div class="ttname"><a href="type__converters_8hpp.html#a388896250cb43709ee02dab2d4da4ead">muscovite::dba::to_decimal</a></div><div class="ttdeci">auto to_decimal(const pqxx::field &amp;f) -&gt; Decimal</div><div class="ttdoc">Convert pqxx::field to Decimal (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00082">type_converters.cpp:82</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a39310c97bbad6e99618e981255712b09"><div class="ttname"><a href="type__converters_8hpp.html#a39310c97bbad6e99618e981255712b09">muscovite::dba::decimal_to_string</a></div><div class="ttdeci">auto decimal_to_string(const Decimal &amp;v) -&gt; std::string</div><div class="ttdoc">Convert Decimal to PostgreSQL-compatible string.</div><div class="ttdef"><b>Definition</b> <a href="#l00171">type_converters.cpp:171</a></div></div>
@@ -622,30 +633,30 @@ $(function(){initNavTree('type__converters_8cpp_source.html','',''); });
 <div class="ttc" id="atype__converters_8hpp_html_a64365cd99b300168dfab09917f3c24d3"><div class="ttname"><a href="type__converters_8hpp.html#a64365cd99b300168dfab09917f3c24d3">muscovite::dba::to_timestamp_opt</a></div><div class="ttdeci">auto to_timestamp_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; Timestamp &gt;</div><div class="ttdoc">Convert pqxx::field to optional Timestamp.</div><div class="ttdef"><b>Definition</b> <a href="#l00175">type_converters.cpp:175</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a66698ff0eb66bbde0181bd833003169d"><div class="ttname"><a href="type__converters_8hpp.html#a66698ff0eb66bbde0181bd833003169d">muscovite::dba::to_int64_opt</a></div><div class="ttdeci">auto to_int64_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; std::int64_t &gt;</div><div class="ttdoc">Convert pqxx::field to optional int64.</div><div class="ttdef"><b>Definition</b> <a href="#l00143">type_converters.cpp:143</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a6705de0cf7dfd8ca2484726892f93e61"><div class="ttname"><a href="type__converters_8hpp.html#a6705de0cf7dfd8ca2484726892f93e61">muscovite::dba::to_int32_opt</a></div><div class="ttdeci">auto to_int32_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; std::int32_t &gt;</div><div class="ttdoc">Convert pqxx::field to optional int32.</div><div class="ttdef"><b>Definition</b> <a href="#l00136">type_converters.cpp:136</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_a6f7284eaa0b40f734b91b5c139f196fa"><div class="ttname"><a href="type__converters_8hpp.html#a6f7284eaa0b40f734b91b5c139f196fa">muscovite::dba::Timestamp</a></div><div class="ttdeci">std::chrono::system_clock::time_point Timestamp</div><div class="ttdoc">Timestamp with timezone (PostgreSQL TIMESTAMPTZ).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00052">type_converters.hpp:52</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_a6f7284eaa0b40f734b91b5c139f196fa"><div class="ttname"><a href="type__converters_8hpp.html#a6f7284eaa0b40f734b91b5c139f196fa">muscovite::dba::Timestamp</a></div><div class="ttdeci">std::chrono::system_clock::time_point Timestamp</div><div class="ttdoc">Timestamp with timezone (PostgreSQL TIMESTAMPTZ).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00053">type_converters.hpp:53</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a7e16d8381ba235f001cd42944846d3c3"><div class="ttname"><a href="type__converters_8hpp.html#a7e16d8381ba235f001cd42944846d3c3">muscovite::dba::to_interval_opt</a></div><div class="ttdeci">auto to_interval_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; Interval &gt;</div><div class="ttdoc">Convert pqxx::field to optional Interval.</div><div class="ttdef"><b>Definition</b> <a href="#l00196">type_converters.cpp:196</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a8134f187ccf0185700ff1baf8ace0f08"><div class="ttname"><a href="type__converters_8hpp.html#a8134f187ccf0185700ff1baf8ace0f08">muscovite::dba::to_string_opt</a></div><div class="ttdeci">auto to_string_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; std::string &gt;</div><div class="ttdoc">Convert pqxx::field to optional string.</div><div class="ttdef"><b>Definition</b> <a href="#l00129">type_converters.cpp:129</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a8cbd274cb843df5b1c5d33cbe2408605"><div class="ttname"><a href="type__converters_8hpp.html#a8cbd274cb843df5b1c5d33cbe2408605">muscovite::dba::from_date</a></div><div class="ttdeci">auto from_date(const Date &amp;v) -&gt; std::string</div><div class="ttdoc">Convert Date to PostgreSQL-compatible YYYY-MM-DD string.</div><div class="ttdef"><b>Definition</b> <a href="#l00227">type_converters.cpp:227</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_a918b938ba1ccf97ec5ef0387e67bc3b8"><div class="ttname"><a href="type__converters_8hpp.html#a918b938ba1ccf97ec5ef0387e67bc3b8">muscovite::dba::from_timestamp_opt</a></div><div class="ttdeci">auto from_timestamp_opt(const std::optional&lt; Timestamp &gt; &amp;v) -&gt; std::optional&lt; std::string &gt;</div><div class="ttdoc">Convert optional Timestamp.</div><div class="ttdef"><b>Definition</b> <a href="#l00257">type_converters.cpp:257</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_a959c3c3a685cda7fc87fb3d85b5df638"><div class="ttname"><a href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">muscovite::dba::Interval</a></div><div class="ttdeci">std::chrono::microseconds Interval</div><div class="ttdoc">Interval (PostgreSQL INTERVAL).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00061">type_converters.hpp:61</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_a98ad8a75b44ae07ebc2e6bd33c34941c"><div class="ttname"><a href="type__converters_8hpp.html#a98ad8a75b44ae07ebc2e6bd33c34941c">muscovite::dba::Decimal</a></div><div class="ttdeci">boost::multiprecision::cpp_dec_float_50 Decimal</div><div class="ttdoc">Decimal values stored as high-precision decimal (50 digits).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00037">type_converters.hpp:37</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_a959c3c3a685cda7fc87fb3d85b5df638"><div class="ttname"><a href="type__converters_8hpp.html#a959c3c3a685cda7fc87fb3d85b5df638">muscovite::dba::Interval</a></div><div class="ttdeci">std::chrono::microseconds Interval</div><div class="ttdoc">Interval (PostgreSQL INTERVAL).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00062">type_converters.hpp:62</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_a98ad8a75b44ae07ebc2e6bd33c34941c"><div class="ttname"><a href="type__converters_8hpp.html#a98ad8a75b44ae07ebc2e6bd33c34941c">muscovite::dba::Decimal</a></div><div class="ttdeci">boost::multiprecision::cpp_dec_float_50 Decimal</div><div class="ttdoc">Decimal values stored as high-precision decimal (50 digits).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00038">type_converters.hpp:38</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_aa255dba968f117c01d4c02ac365163d9"><div class="ttname"><a href="type__converters_8hpp.html#aa255dba968f117c01d4c02ac365163d9">muscovite::dba::parse_timestamp</a></div><div class="ttdeci">auto parse_timestamp(std::string_view s) -&gt; Timestamp</div><div class="ttdoc">Parse ISO 8601 timestamp string to Timestamp.</div><div class="ttdef"><b>Definition</b> <a href="#l00282">type_converters.cpp:282</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_aa9e37d769b9249d08e044b5df30f786f"><div class="ttname"><a href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">muscovite::dba::parse_time</a></div><div class="ttdeci">auto parse_time(std::string_view s) -&gt; TimeOfDay</div><div class="ttdoc">Parse HH:MM:SS[.fraction] string to TimeOfDay.</div><div class="ttdef"><b>Definition</b> <a href="#l00364">type_converters.cpp:364</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_aa9e37d769b9249d08e044b5df30f786f"><div class="ttname"><a href="type__converters_8hpp.html#aa9e37d769b9249d08e044b5df30f786f">muscovite::dba::parse_time</a></div><div class="ttdeci">auto parse_time(std::string_view s) -&gt; TimeOfDay</div><div class="ttdoc">Parse HH:MM:SS[.fraction] string to TimeOfDay.</div><div class="ttdef"><b>Definition</b> <a href="#l00371">type_converters.cpp:371</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_aabb4d0742f9304a35ba254a72897816d"><div class="ttname"><a href="type__converters_8hpp.html#aabb4d0742f9304a35ba254a72897816d">muscovite::dba::to_string</a></div><div class="ttdeci">auto to_string(const pqxx::field &amp;f) -&gt; std::string</div><div class="ttdoc">Convert pqxx::field to string (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00047">type_converters.cpp:47</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_aaceb5b0c5b9277de4db85002c4951b0a"><div class="ttname"><a href="type__converters_8hpp.html#aaceb5b0c5b9277de4db85002c4951b0a">muscovite::dba::to_bool</a></div><div class="ttdeci">auto to_bool(const pqxx::field &amp;f) -&gt; bool</div><div class="ttdoc">Convert pqxx::field to bool (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00075">type_converters.cpp:75</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_aad7e10fe5064a36d83bfc1eeca33dbde"><div class="ttname"><a href="type__converters_8hpp.html#aad7e10fe5064a36d83bfc1eeca33dbde">muscovite::dba::to_decimal_opt</a></div><div class="ttdeci">auto to_decimal_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; Decimal &gt;</div><div class="ttdoc">Convert pqxx::field to optional Decimal.</div><div class="ttdef"><b>Definition</b> <a href="#l00164">type_converters.cpp:164</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_ab33f78c75df3b0074dcaa48c169ec595"><div class="ttname"><a href="type__converters_8hpp.html#ab33f78c75df3b0074dcaa48c169ec595">muscovite::dba::to_uuid_opt</a></div><div class="ttdeci">auto to_uuid_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; boost::uuids::uuid &gt;</div><div class="ttdoc">Convert pqxx::field to optional UUID.</div><div class="ttdef"><b>Definition</b> <a href="#l00121">type_converters.cpp:121</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_ac08bcfbe176618b46b7e404e79796299"><div class="ttname"><a href="type__converters_8hpp.html#ac08bcfbe176618b46b7e404e79796299">muscovite::dba::to_double</a></div><div class="ttdeci">auto to_double(const pqxx::field &amp;f) -&gt; double</div><div class="ttdoc">Convert pqxx::field to double (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00068">type_converters.cpp:68</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_ac0fcde063f436ff97d3cd69c5ce487d5"><div class="ttname"><a href="type__converters_8hpp.html#ac0fcde063f436ff97d3cd69c5ce487d5">muscovite::dba::from_uuid_opt</a></div><div class="ttdeci">auto from_uuid_opt(const std::optional&lt; boost::uuids::uuid &gt; &amp;v) -&gt; std::optional&lt; std::string &gt;</div><div class="ttdoc">Convert optional UUID (returns nullopt → pqxx treats as NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00250">type_converters.cpp:250</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_acafdf7a1a9816d11eb5da108dcf44ca3"><div class="ttname"><a href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">muscovite::dba::parse_interval</a></div><div class="ttdeci">auto parse_interval(std::string_view s) -&gt; Interval</div><div class="ttdoc">Parse PostgreSQL interval string to Interval.</div><div class="ttdef"><b>Definition</b> <a href="#l00393">type_converters.cpp:393</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_acafdf7a1a9816d11eb5da108dcf44ca3"><div class="ttname"><a href="type__converters_8hpp.html#acafdf7a1a9816d11eb5da108dcf44ca3">muscovite::dba::parse_interval</a></div><div class="ttdeci">auto parse_interval(std::string_view s) -&gt; Interval</div><div class="ttdoc">Parse PostgreSQL interval string to Interval.</div><div class="ttdef"><b>Definition</b> <a href="#l00402">type_converters.cpp:402</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_acb976af3470bfd5ff354ab1e776df545"><div class="ttname"><a href="type__converters_8hpp.html#acb976af3470bfd5ff354ab1e776df545">muscovite::dba::to_double_opt</a></div><div class="ttdeci">auto to_double_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; double &gt;</div><div class="ttdoc">Convert pqxx::field to optional double.</div><div class="ttdef"><b>Definition</b> <a href="#l00150">type_converters.cpp:150</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_acbf3b0fc766f56bf629d1bd5b0e18fa6"><div class="ttname"><a href="type__converters_8hpp.html#acbf3b0fc766f56bf629d1bd5b0e18fa6">muscovite::dba::from_time</a></div><div class="ttdeci">auto from_time(const TimeOfDay &amp;v) -&gt; std::string</div><div class="ttdoc">Convert TimeOfDay to PostgreSQL-compatible HH:MM:SS.microseconds string.</div><div class="ttdef"><b>Definition</b> <a href="#l00234">type_converters.cpp:234</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_aded33b3b9cd97fec3a78f8085f2099e4"><div class="ttname"><a href="type__converters_8hpp.html#aded33b3b9cd97fec3a78f8085f2099e4">muscovite::dba::from_timestamp</a></div><div class="ttdeci">auto from_timestamp(const Timestamp &amp;v) -&gt; std::string</div><div class="ttdoc">Convert Timestamp to PostgreSQL-compatible ISO 8601 string.</div><div class="ttdef"><b>Definition</b> <a href="#l00211">type_converters.cpp:211</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_ae030ed0f2a5fdc4b5fcda274ce499029"><div class="ttname"><a href="type__converters_8hpp.html#ae030ed0f2a5fdc4b5fcda274ce499029">muscovite::dba::to_time_opt</a></div><div class="ttdeci">auto to_time_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; TimeOfDay &gt;</div><div class="ttdoc">Convert pqxx::field to optional TimeOfDay.</div><div class="ttdef"><b>Definition</b> <a href="#l00189">type_converters.cpp:189</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_af0040f86201c67950d14c6ca037ea194"><div class="ttname"><a href="type__converters_8hpp.html#af0040f86201c67950d14c6ca037ea194">muscovite::dba::to_date_opt</a></div><div class="ttdeci">auto to_date_opt(const pqxx::field &amp;f) -&gt; std::optional&lt; Date &gt;</div><div class="ttdoc">Convert pqxx::field to optional Date.</div><div class="ttdef"><b>Definition</b> <a href="#l00182">type_converters.cpp:182</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_af2eb2697daf5062cb35e57ab6f967e3a"><div class="ttname"><a href="type__converters_8hpp.html#af2eb2697daf5062cb35e57ab6f967e3a">muscovite::dba::to_time</a></div><div class="ttdeci">auto to_time(const pqxx::field &amp;f) -&gt; TimeOfDay</div><div class="ttdoc">Convert pqxx::field to TimeOfDay (throws if NULL).</div><div class="ttdef"><b>Definition</b> <a href="#l00103">type_converters.cpp:103</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_af652eb12cf187d6b5cb59f310e95bb6d"><div class="ttname"><a href="type__converters_8hpp.html#af652eb12cf187d6b5cb59f310e95bb6d">muscovite::dba::TimeOfDay</a></div><div class="ttdeci">std::chrono::microseconds TimeOfDay</div><div class="ttdoc">Time-only with microsecond precision (PostgreSQL TIME).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00058">type_converters.hpp:58</a></div></div>
-<div class="ttc" id="atype__converters_8hpp_html_af9f1ed7010887f0c1572e3f2fa6769a5"><div class="ttname"><a href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">muscovite::dba::parse_date</a></div><div class="ttdeci">auto parse_date(std::string_view s) -&gt; Date</div><div class="ttdoc">Parse YYYY-MM-DD string to Date.</div><div class="ttdef"><b>Definition</b> <a href="#l00346">type_converters.cpp:346</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_af652eb12cf187d6b5cb59f310e95bb6d"><div class="ttname"><a href="type__converters_8hpp.html#af652eb12cf187d6b5cb59f310e95bb6d">muscovite::dba::TimeOfDay</a></div><div class="ttdeci">std::chrono::microseconds TimeOfDay</div><div class="ttdoc">Time-only with microsecond precision (PostgreSQL TIME).</div><div class="ttdef"><b>Definition</b> <a href="type__converters_8hpp_source.html#l00059">type_converters.hpp:59</a></div></div>
+<div class="ttc" id="atype__converters_8hpp_html_af9f1ed7010887f0c1572e3f2fa6769a5"><div class="ttname"><a href="type__converters_8hpp.html#af9f1ed7010887f0c1572e3f2fa6769a5">muscovite::dba::parse_date</a></div><div class="ttdeci">auto parse_date(std::string_view s) -&gt; Date</div><div class="ttdoc">Parse YYYY-MM-DD string to Date.</div><div class="ttdef"><b>Definition</b> <a href="#l00351">type_converters.cpp:351</a></div></div>
 <div class="ttc" id="atype__converters_8hpp_html_affef178e6b3ed4a4b23ef881e51f7976"><div class="ttname"><a href="type__converters_8hpp.html#affef178e6b3ed4a4b23ef881e51f7976">muscovite::dba::from_time_opt</a></div><div class="ttdeci">auto from_time_opt(const std::optional&lt; TimeOfDay &gt; &amp;v) -&gt; std::optional&lt; std::string &gt;</div><div class="ttdoc">Convert optional TimeOfDay.</div><div class="ttdef"><b>Definition</b> <a href="#l00271">type_converters.cpp:271</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -23,7 +23,7 @@ var searchData=
   ['servicename_20',['serviceName',['../classmuscovite_1_1qt_1_1TokenStorage.html#ad9b1a7692ed0be2d6d4ac9f7b6ab3532',1,'muscovite::qt::TokenStorage']]],
   ['session_21',['session',['../classmuscovite_1_1qt_1_1AuthManager.html#a6b24e889b95843738a94010eb44fdbb1',1,'muscovite::qt::AuthManager::session()'],['../classmuscovite_1_1qt_1_1ui_1_1LoginDialog.html#aef42bd0336b0036d6add72e4467ca3b5',1,'muscovite::qt::ui::LoginDialog::session()']]],
   ['sessionexpired_22',['sessionExpired',['../classmuscovite_1_1qt_1_1AuthManager.html#ae9c4d21b6715cdb7f02429691d32ea5d',1,'muscovite::qt::AuthManager']]],
-  ['sessionexpiring_23',['sessionExpiring',['../classmuscovite_1_1qt_1_1AuthManager.html#a22b73a4b03f75874540c7e37a015d5c0',1,'muscovite::qt::AuthManager']]],
+  ['sessionexpiring_23',['sessionExpiring',['../classmuscovite_1_1qt_1_1AuthManager.html#a6218c96d391047ed354b6f8e1dd9573e',1,'muscovite::qt::AuthManager']]],
   ['set_24',['set',['../classmuscovite_1_1grpc_1_1CorrelationContext.html#a333d685aa1c95d938fcbcb4b963ccc8b',1,'muscovite::grpc::CorrelationContext']]],
   ['set_5fpublish_5fcallback_25',['set_publish_callback',['../classmuscovite_1_1dba_1_1OutboxPublisher.html#a8ef5c28f2aadc83b7f1bb40a9d679888',1,'muscovite::dba::OutboxPublisher']]],
   ['setallowedtype_26',['setAllowedType',['../classmuscovite_1_1qt_1_1widgets_1_1WktValidator.html#a5d18c2bf5e71c7dc4c6911425beb1795',1,'muscovite::qt::widgets::WktValidator::setAllowedType()'],['../classmuscovite_1_1qt_1_1widgets_1_1WktLineEdit.html#a0a21945e761433727a01c599d63ccb49',1,'muscovite::qt::widgets::WktLineEdit::setAllowedType()'],['../classmuscovite_1_1qt_1_1widgets_1_1WktTextEdit.html#a26efa6e95131fd256927f06c520381f0',1,'muscovite::qt::widgets::WktTextEdit::setAllowedType()']]],
