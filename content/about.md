@@ -7,7 +7,7 @@ ShowToc: true
 
 ## What Is Muscovite?
 
-Muscovite is a **model-driven Domain-Driven Design framework** that transforms declarative domain models into a complete, production-ready full-stack application. You write a `.ddd` domain model once — Muscovite generates **9 targets** from it.
+Muscovite is a **business intent to software system compiler**. It compiles declarative domain models into complete, production-ready software systems. You write a `.ddd` domain model once — Muscovite compiles it into **9 targets**.
 
 **Dual-licensed**: AGPL-3.0 for open-source use, commercial license for proprietary applications.
 

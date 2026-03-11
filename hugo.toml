@@ -4,7 +4,7 @@ title = "Muscovite"
 theme = "PaperMod"
 
 [params]
-  description = "A declarative DDD code generation framework — write the domain model once, generate the entire stack."
+  description = "Business intent to software system compiler — compiles domain models into complete, deployable software systems from a single specification."
   author = "Johannes Lochmann"
   ShowReadingTime = true
   ShowShareButtons = true
