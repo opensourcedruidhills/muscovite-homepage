@@ -114,17 +114,18 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.62.0 | <strong>Generated</strong>:
-2026-03-11 | <strong>Commit</strong>: 3c0e04aa |
+<p><strong>Version</strong>: 1.62.1 | <strong>Generated</strong>:
+2026-03-11 | <strong>Commit</strong>: 66b3d17f |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
 </blockquote>
 <hr />
 <h2 id="1-system-purpose">1. System Purpose</h2>
-<p>Muscovite is a <strong>Racket-based DDD code generation
-framework</strong> that transforms declarative domain models
-(<code>.ddd</code> files) into a complete full-stack application.</p>
+<p>Muscovite is a <strong>business intent to software system
+compiler</strong>. It compiles declarative domain models
+(<code>.ddd</code> files) into complete, deployable software
+systems.</p>
 <p><strong>Generator targets</strong> (from
 <code>dslgen/generators/</code>):</p>
 <ul>
@@ -212,7 +213,7 @@ edited.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>198</td>
+<td>201</td>
 </tr>
 </tbody>
 </table>
@@ -333,8 +334,39 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1620----2026-03-11">[1.62.0] -- 2026-03-11</h2>
+<h2 id="1621----2026-03-11">[1.62.1] -- 2026-03-11</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li>v1.62.1 — Python coordinator daemon (FTR-367/368/369/370, 119
+tests)</li>
+<li>(planning): fact-base completeness — FTRs 365-366, IDEA-052/053
+(#122)</li>
+<li>(planning): TLA+ saga formal verification — ADR, ideas, FTRs 362-364
+(#120)</li>
+<li>feature/ftr-lifecycle-automation (#119)</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>rebrand as 'business intent to software system compiler' (#121)</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>governance: tick FTR acceptance criteria for v1.62.1</li>
+<li>Merge #124: restore enrichment FTRs (346-348) to v1.63.0 as Pillar
+E</li>
+<li>plan: FTR-369 — add context pressure proxy metrics per FTR</li>
+<li>plan: restore enrichment FTRs (346-348) to v1.63.0 as Pillar E,
+remove v1.64.0</li>
+<li>plan: v1.62.1 — leader-worker coordinator infrastructure</li>
+<li>plan: consolidate v1.64.0 into v1.63.0, defer enrichment to
+downstream repos (#123)</li>
+<li>Merge feature/v1.63.0-planning: plan v1.63.0 standalone infra (6
+FTRs)</li>
+<li>plan: v1.63.0 — standalone development infrastructure for example
+repos</li>
+</ul>
+<h2 id="1620----2026-03-11">[1.62.0] -- 2026-03-11</h2>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>(framework): FTR-320 — zero clang-tidy warnings on framework code
 (#118)</li>
@@ -366,7 +398,7 @@ SYSTEM-BRIEF</li>
 <li>(docs): support submodule .git file in publish-docs.sh</li>
 <li>(release): auto-detect homepage submodule for docs deployment</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 <ul>
 <li>tick all acceptance criteria checkboxes for v1.62.0 FTRs</li>
 <li>mark all v1.62.0 FTRs complete — iteration ready for release</li>
@@ -379,7 +411,7 @@ comprehensions</li>
 <li>template DSL quick-reference, anti-pattern catalog, gold standard
 guide (#102)</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>FTR-351: Negative grammar and parser test suite (151 rejection
 tests) (#115)</li>
@@ -406,53 +438,89 @@ neutral IR</li>
 <ul>
 <li>update example submodule refs and test output for v1.61.0</li>
 </ul>
-<h2 id="1600----2026-03-09">[1.60.0] -- 2026-03-09</h2>
-<h3 id="added-1">Added</h3>
-<ul>
-<li>Merge pull request #95 from
-opensourcedruidhills/feature/ftr-338-release-full-generation</li>
-<li>(FTR-338): full code generation in release ceremony</li>
-<li>Merge pull request #93 from
-opensourcedruidhills/feature/ftr-330-build-profiling-release</li>
-<li>Merge pull request #94 from
-opensourcedruidhills/feature/ftr-286-collection-predicate-grammar</li>
-<li>(FTR-334/337): system brief trends + docs metrics collection</li>
-<li>collection predicate integration tests (FTR-287)</li>
-<li>(FTR-333/335): metrics trend analysis + docs release gate</li>
-<li>collection predicate emitters — SQL and C++ (FTR-285)</li>
-<li>collection predicate grammar, parser, and IR nodes (FTR-286,
-FTR-284)</li>
-<li>(FTR-331/332): C++ and Racket code coverage collection</li>
-<li>(FTR-330): wire build profiling into release ceremony</li>
-<li>(FTR-336): --full implies --doc, publish-docs fails on missing
-manuals</li>
-</ul>
-<h3 id="maintenance-1">Maintenance</h3>
-<ul>
-<li>tick release gate checkboxes in ITERATION.md</li>
-<li>normalize FTR header format for governance validation</li>
-<li>back-plan FTR-338 into v1.60.0 — release-only change</li>
-<li>consolidate v1.60.0 — all 12 FTRs complete, PRs merged</li>
-<li>mark Track A complete (FTR-284/285/286/287)</li>
-<li>mark Track B FTRs 330-337 as complete</li>
-</ul>
-<h3 id="other-1">Other</h3>
-<ul>
-<li>Merge pull request #95 from
-opensourcedruidhills/feature/ftr-338-release-full-generation</li>
-<li>Merge pull request #93 from
-opensourcedruidhills/feature/ftr-330-build-profiling-release</li>
-<li>Merge pull request #94 from
-opensourcedruidhills/feature/ftr-286-collection-predicate-grammar</li>
-<li>plan: v1.60.0 — add FTR-336 (all sample manuals) + FTR-337 (docs
-metrics)</li>
-<li>Merge branch 'feature/metrics-time-series-planning' into
-develop</li>
-<li>plan: v1.60.0 Track B — release metrics time series + docs gateway
-(FTR-330..335)</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
-<p>No active iteration.</p>
+<h1 id="iteration-v1621">Iteration: v1.62.1</h1>
+<p><strong>Goal</strong>: Build Python coordinator daemon for
+leader-worker multi-agent iteration execution <strong>Start</strong>:
+2026-03-11 <strong>Target</strong>: 2026-03-13 <strong>Status</strong>:
+active</p>
+<h2 id="theme">Theme</h2>
+<p>Replace manual human relay between copilot CLI sessions with
+automated NATS-based coordination. A Python daemon manages FTR
+assignment (dependency-aware), PR review routing, and iteration
+lifecycle. NATS is mandatory — no silent degradation. An observer daemon
+provides <code>tail -f</code> observability. Per-FTR proxy metrics
+quantify iteration cost.</p>
+<p>First dogfood target: v1.63.0 (standalone infra generators, 6 FTRs, 2
+workers).</p>
+<h2 id="scope">Scope</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Feature</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Branch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FTR-370</td>
+<td>DEPENDENCIES.toml + Graphviz</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/ftr-367-coordinator</td>
+</tr>
+<tr>
+<td>FTR-367</td>
+<td>Python coordinator daemon</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/ftr-367-coordinator</td>
+</tr>
+<tr>
+<td>FTR-368</td>
+<td>Event observer daemon</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/ftr-367-coordinator</td>
+</tr>
+<tr>
+<td>FTR-369</td>
+<td>Per-FTR metrics + iteration rollup</td>
+<td>must</td>
+<td>complete</td>
+<td>feature/ftr-367-coordinator</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dependencies">Dependencies</h2>
+<pre><code>FTR-370 (DEPENDENCIES.toml) ──→ FTR-367 (coordinator daemon)
+                                    ├──→ FTR-368 (observer daemon)
+                                    └──→ FTR-369 (metrics + rollup)</code></pre>
+<p>FTR-370 first: coordinator needs the dependency graph module. FTR-367
+next: core daemon that FTR-368 and FTR-369 extend. FTR-368 and FTR-369
+are independent of each other.</p>
+<h2 id="deferred">Deferred</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Feature</th>
+<th>Reason</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
 <h2 id="8-planned-work">8. Planned Work</h2>
 <table>
 <thead>
@@ -463,14 +531,14 @@ develop</li>
 </thead>
 <tbody>
 <tr>
-<td>v1.64.0</td>
-<td>Build a generic multi-source Go extractor (structural + behavioral +
-UI/API triangulation)</td>
+<td>v1.63.0</td>
+<td>Bootstrap example repositories with standalone AI agent
+infrastructure, build the</td>
 </tr>
 </tbody>
 </table>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
-<p>41 ideas in backlog.</p>
+<p>52 ideas in backlog.</p>
 <table>
 <thead>
 <tr>
@@ -657,6 +725,54 @@ stubs</td>
 <td>IDEA-048</td>
 <td>Idea: DDD model version exposure in generated gRPC services</td>
 </tr>
+<tr>
+<td>IDEA-049</td>
+<td>IDEA-049: TLA+ Saga Specification Generator</td>
+</tr>
+<tr>
+<td>IDEA-050</td>
+<td>IDEA-050: TLA+ CMake Integration and Release Gate</td>
+</tr>
+<tr>
+<td>IDEA-051</td>
+<td>IDEA-051: TLA+ Counterexample Trace Reporter</td>
+</tr>
+<tr>
+<td>IDEA-052</td>
+<td>-- SPDX-License-Identifier: AGPL-3.0-or-later OR
+LicenseRef-Muscovite-Commercial</td>
+</tr>
+<tr>
+<td>IDEA-053</td>
+<td>-- SPDX-License-Identifier: AGPL-3.0-or-later OR
+LicenseRef-Muscovite-Commercial</td>
+</tr>
+<tr>
+<td>IDEA-054</td>
+<td>IDEA-054: Quality Gate Failure NACK and Rework Loop</td>
+</tr>
+<tr>
+<td>IDEA-055</td>
+<td>IDEA-055: Event-Sourced Crash Recovery and Idempotent Commands</td>
+</tr>
+<tr>
+<td>IDEA-056</td>
+<td>IDEA-056: Infrastructure-Impactful FTR Locking (Worktree Leakage
+Prevention)</td>
+</tr>
+<tr>
+<td>IDEA-057</td>
+<td>IDEA-057: Develop-Sync Broadcast Event for Worktree Coherence</td>
+</tr>
+<tr>
+<td>IDEA-058</td>
+<td>IDEA-058: Concurrency Governor for Compute-Bound Operations</td>
+</tr>
+<tr>
+<td>IDEA-059</td>
+<td>IDEA-059: Dedicated Merge Agent with Automated Rebase-and-Merge
+Queue</td>
+</tr>
 </tbody>
 </table>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
@@ -687,7 +803,7 @@ stubs</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>3c0e04aa</code> (project:
+<p>Last measured at commit <code>66b3d17f</code> (project:
 fhir-health):</p>
 <table>
 <thead>
@@ -700,17 +816,17 @@ fhir-health):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>543.8s</td>
+<td>1213.6s</td>
 <td>283 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
-<td>1.5s</td>
+<td>3.1s</td>
 <td>All generator targets</td>
 </tr>
 </tbody>
 </table>
-<p>Build history: 4 recorded runs.</p>
+<p>Build history: 5 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -730,7 +846,7 @@ fhir-health):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>140.2s</td>
+<td>506.3s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -738,16 +854,16 @@ fhir-health):</p>
 <td>27</td>
 <td>1</td>
 <td>96%</td>
-<td>11.0s</td>
+<td>11.2s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (39.6s)</li>
-<li><strong>slow</strong>: 54/54 passed (72.2s)</li>
-<li><strong>integration</strong>: 12/12 passed (28.3s)</li>
+<li><strong>fast</strong>: 29/29 passed (107.3s)</li>
+<li><strong>slow</strong>: 54/54 passed (342.8s)</li>
+<li><strong>integration</strong>: 12/12 passed (56.1s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -764,6 +880,14 @@ fhir-health):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.62.1</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>27/28</td>
+</tr>
 <tr>
 <td>v1.62.0</td>
 <td>8</td>
@@ -814,7 +938,7 @@ fhir-health):</p>
 </tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.62.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.62.1).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <h1 id="user-profile-jolo">User Profile: Jolo</h1>
 <blockquote>

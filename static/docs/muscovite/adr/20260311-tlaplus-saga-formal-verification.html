@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: TLA+ Formal Verification for Generated Saga
+Specifications — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: TLA+ Formal Verification for Generated Saga
+Specifications</span>
+</nav>
+
+<h1>ADR: TLA+ Formal Verification for Generated Saga Specifications</h1>
+
+
+<h1
+id="adr-tla-formal-verification-for-generated-saga-specifications">ADR:
+TLA+ Formal Verification for Generated Saga Specifications</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-11</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Deciders</strong>: Johannes Lochmann</li>
+<li><strong>Category</strong>: verification, sagas, tooling</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Muscovite generates saga orchestrations from <code>.ddd</code> SAGA
+declarations: PostgreSQL state tables, C++ orchestrator/processor code,
+gRPC management RPCs, and Qt visualization. The generated code is
+structurally correct by construction — but three classes of bugs escape
+structural correctness:</p>
+<ol type="1">
+<li><strong>Compensation order violations</strong> — partial failure
+mid-chain leaves steps uncompensated</li>
+<li><strong>Liveness failures</strong> — saga instances stuck in
+<code>in_progress</code> after timeout + redelivery storms</li>
+<li><strong>Correlation isolation breaches</strong> — concurrent
+instances with same correlation_id cross-contaminate state under NATS
+at-least-once redelivery</li>
+</ol>
+<p>These bugs are invisible to unit tests (which test single steps) and
+integration tests (which test happy paths). They manifest only under
+specific interleaving of concurrent events — the domain of formal
+verification.</p>
+<h2 id="decision">Decision</h2>
+<p><strong>Generate TLA+ specifications from saga IR structs and verify
+them with the TLC model checker as a release quality gate.</strong></p>
+<h3 id="architecture">Architecture</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Location</th>
+<th>Generated?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Saga spec (state machine)</td>
+<td><code>generated/{context}/tlaplus/{SagaName}.tla</code></td>
+<td>Yes — from saga IR</td>
+</tr>
+<tr>
+<td>Property module</td>
+<td><code>generated/{context}/tlaplus/{SagaName}Props.tla</code></td>
+<td>Yes — from saga IR</td>
+</tr>
+<tr>
+<td>TLC config</td>
+<td><code>generated/{context}/tlaplus/{SagaName}.cfg</code></td>
+<td>Yes — from saga IR</td>
+</tr>
+<tr>
+<td>Event bus model</td>
+<td><code>dslgen/generators/tlaplus/lib/EventBus.tla</code></td>
+<td>No — hand-authored</td>
+</tr>
+<tr>
+<td>TLC runner (CMake)</td>
+<td><code>cmake/TLAPlus.cmake</code></td>
+<td>No — framework tooling</td>
+</tr>
+<tr>
+<td>tla2tools.jar</td>
+<td><code>tools/tla2tools.jar</code></td>
+<td>No — vendored binary</td>
+</tr>
+</tbody>
+</table>
+<h3 id="properties-verified-per-saga">Properties Verified Per Saga</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>TLA+ Formula Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Termination</td>
+<td>Liveness</td>
+<td><code>&lt;&gt;(\A i \in Instances: status[i] \in {"completed", "failed", "cancelled"})</code></td>
+</tr>
+<tr>
+<td>Compensation order</td>
+<td>Safety</td>
+<td><code>[](compensating[i] =&gt; CompensationReverseOrder(i))</code></td>
+</tr>
+<tr>
+<td>Correlation isolation</td>
+<td>Safety</td>
+<td><code>[](\A i, j \in Instances: i /= j /\ corr[i] /= corr[j] =&gt; Disjoint(steps[i], steps[j]))</code></td>
+</tr>
+<tr>
+<td>No orphaned instances</td>
+<td>Liveness</td>
+<td><code>&lt;&gt;(\A i \in Instances: status[i] /= "in_progress")</code></td>
+</tr>
+<tr>
+<td>Timeout progress</td>
+<td>Liveness</td>
+<td><code>[](step_timeout[i] =&gt; &lt;&gt;(status[i] \in {"compensating", "failed"}))</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-bus-abstraction">Event Bus Abstraction</h3>
+<p>The <code>EventBus.tla</code> module models NATS JetStream semantics
+at the right abstraction level:</p>
+<ul>
+<li><strong>At-least-once delivery</strong>: messages may be delivered
+multiple times</li>
+<li><strong>Unordered</strong>: no guaranteed ordering between
+subjects</li>
+<li><strong>Correlation routing</strong>: messages carry correlation_id,
+saga processor filters by it</li>
+<li><strong>NOT modeled</strong>: consumer groups, ack timeouts,
+backpressure (irrelevant to saga correctness)</li>
+</ul>
+<p>This keeps the state space bounded while catching the bugs we care
+about.</p>
+<h3 id="release-gate-integration">Release Gate Integration</h3>
+<pre><code>Gate 9: TLA+ model checking (conditional)
+  - Scans generated/ for *.tla files
+  - Runs: java -jar tools/tla2tools.jar -config {saga}.cfg {saga}.tla
+  - fail if any property violated, skip if no .tla files exist
+  - State space bound: configurable via MUSCOVITE_TLA_MAX_STATES (default: 1,000,000)</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Catches concurrency bugs before code generation</strong> —
+verification runs on the model, not the C++ runtime</li>
+<li><strong>Zero per-project effort</strong> — specs generated from the
+same <code>.ddd</code> developers already write</li>
+<li><strong>Executable documentation</strong> — TLA+ specs serve as
+formal semantics for saga behavior</li>
+<li><strong>Deterministic CI</strong> — TLC is deterministic (same spec
+→ same result), unlike fuzz testing</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Java dependency</strong> — TLC requires JRE 11+. Added to CI
+and developer environments.</li>
+<li><strong>State space limits</strong> — Sagas with 10+ steps and 3+
+concurrent instances may exceed 1M states. Requires abstraction or
+symmetry reduction.</li>
+<li><strong>EventBus.tla maintenance</strong> — Hand-authored module
+must be updated if NATS semantics change (e.g., switching to
+exactly-once delivery).</li>
+<li><strong>Learning curve</strong> — Developers reading counterexample
+traces need basic TLA+ literacy. Mitigated by generating human-readable
+trace summaries.</li>
+</ul>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<table>
+<thead>
+<tr>
+<th>Alternative</th>
+<th>Why Rejected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Property-based testing (QuickCheck/Hypothesis)</td>
+<td>Tests interleavings randomly; TLA+ exhaustively enumerates them. PBT
+misses rare corner cases.</td>
+</tr>
+<tr>
+<td>Alloy</td>
+<td>Better for structural modeling (ERDs, object graphs); weaker for
+temporal/liveness properties.</td>
+</tr>
+<tr>
+<td>SPIN/Promela</td>
+<td>Equivalent power to TLA+, but less ecosystem support and no
+Lamport-style operator notation.</td>
+</tr>
+<tr>
+<td>No formal verification</td>
+<td>Status quo. Acceptable for ≤3-step sagas; unacceptable for 9+ step
+sagas like MetamorphicPathway.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references">References</h2>
+<ul>
+<li>Lamport, L. "Specifying Systems" (2002) — TLA+ reference</li>
+<li>ADR 20260307-behavioral-sovereignty-roadmap.md — saga evolution
+context</li>
+<li><code>dslgen/model/ddd-types.rkt:1726-1787</code> — saga IR struct
+definitions</li>
+<li><code>dslgen/grammar/muscovite.peg:485-520</code> — saga PEG
+grammar</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
