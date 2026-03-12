@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Agent Role Governance and Separation of
+Duties — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Agent Role Governance and Separation of Duties</span>
+</nav>
+
+<h1>ADR: Agent Role Governance and Separation of Duties</h1>
+
+
+<h1 id="adr-agent-role-governance-and-separation-of-duties">ADR: Agent
+Role Governance and Separation of Duties</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-12</li>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Supersedes</strong>: Partially supersedes role definitions
+in ADR 20260306, 20260309, 20260311</li>
+<li><strong>Related</strong>: ADR
+20260312-push-based-coordinator-with-durable-nats</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>During the v1.63.0 iteration, multiple governance failures occurred
+because agent roles lacked clear privilege boundaries and code-level
+enforcement:</p>
+<ol type="1">
+<li><strong>State walk incident</strong>: A coordinator "state walk"
+marked 13 unimplemented FTRs as "merged" because no role check prevented
+the operation.</li>
+<li><strong>Self-merge</strong>: The leader session merged its own
+governance fixes directly to <code>develop</code> — acting as both
+author and reviewer.</li>
+<li><strong>Role confusion</strong>: Worker-2 fell back to file-based
+coordination when the coordinator returned <code>wait</code>, bypassing
+the assignment protocol entirely.</li>
+<li><strong>Missing QA gate</strong>: No independent quality assessment
+exists — the same agent that assigns work also approves and merges
+it.</li>
+</ol>
+<p>The root cause is a <strong>conflation of responsibilities</strong>:
+leader, reviewer, and quality gate were all the same agent session. Role
+definitions were scattered across 4 documents (AGENTS.md,
+COORDINATOR.md, copilot-instructions.md, log.sh) with no single source
+of truth and no code-level enforcement of role boundaries.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-five-canonical-roles-with-strict-privilege-separation">1. Five
+canonical roles with strict privilege separation</h3>
+<p>All agent roles are defined in a single authoritative document:
+<code>doc/AGENTROLES.md</code>. Other documents (AGENTS.md,
+copilot-instructions.md, COORDINATOR.md) reference it but do not
+redefine roles.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Scope</th>
+<th>NATS Integration</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Planner</strong></td>
+<td>Future iterations</td>
+<td>None</td>
+<td>1 (human)</td>
+</tr>
+<tr>
+<td><strong>Leader</strong></td>
+<td>Current iteration</td>
+<td>Yes — assignment commands</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>QA</strong></td>
+<td>Current iteration</td>
+<td>Yes — merge/release approval</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>Worker</strong></td>
+<td>Current iteration</td>
+<td>Yes — implementation lifecycle</td>
+<td>1–N</td>
+</tr>
+<tr>
+<td><strong>Observer</strong></td>
+<td>Any</td>
+<td>Yes — read-only subscription</td>
+<td>0–N</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-separation-of-duties-the-core-constraint">2. Separation of
+duties (the core constraint)</h3>
+<p>No single role may both <strong>produce</strong> and
+<strong>approve</strong> work:</p>
+<ul>
+<li><strong>Leader</strong> assigns FTRs and manages iteration state.
+Leader <strong>cannot</strong> merge PRs or approve releases.</li>
+<li><strong>QA</strong> reviews PRs, validates quality gates, and signs
+off on releases. QA <strong>cannot</strong> assign FTRs or amend
+coordinator state.</li>
+<li><strong>Worker</strong> implements features. Worker
+<strong>cannot</strong> merge, review, assign, or release.</li>
+<li><strong>Planner</strong> produces iteration specs (ADRs, FTRs,
+ITERATION.md, DEPENDENCIES.toml). Planner operates outside the running
+iteration — no coordinator interaction.</li>
+</ul>
+<h3 id="3-release-requires-dual-sign-off">3. Release requires dual
+sign-off</h3>
+<p><code>release.sh</code> gains a mandatory QA sign-off gate:</p>
+<ol type="1">
+<li>Leader triggers release:
+<code>coordinator.py leader release</code></li>
+<li>Automated gates run (parser, generators, C++ build, ctest,
+clang-tidy, TLA+, DB deploy)</li>
+<li>QA reviews gate results and signs off:
+<code>coordinator.py qa approve-release</code></li>
+<li>Only after QA approval does <code>release.sh</code> proceed to tag,
+merge to main, and push</li>
+</ol>
+<p>If QA is absent, release is blocked. No override. No "emergency"
+bypass.</p>
+<h3 id="4-nats-subject-level-role-isolation">4. NATS subject-level role
+isolation</h3>
+<p>Coordinator commands are partitioned by role prefix:</p>
+<table>
+<thead>
+<tr>
+<th>Subject Prefix</th>
+<th>Accessible By</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>coord.cmd.leader.*</code></td>
+<td>Leader only</td>
+<td>assign, amend-state, trigger-release</td>
+</tr>
+<tr>
+<td><code>coord.cmd.qa.*</code></td>
+<td>QA only</td>
+<td>review, approve-merge, approve-release, gate-failed</td>
+</tr>
+<tr>
+<td><code>coord.cmd.worker.*</code></td>
+<td>Workers only</td>
+<td>progress, pr-ready, ack-sync</td>
+</tr>
+<tr>
+<td><code>coord.event.&gt;</code></td>
+<td>All (subscribe)</td>
+<td>State change notifications</td>
+</tr>
+</tbody>
+</table>
+<p>Enforcement via NATS user credentials + permissions (not just subject
+naming conventions).</p>
+<h3 id="5-role-identity-in-coordinator-protocol">5. Role identity in
+coordinator protocol</h3>
+<p>Every coordinator command includes a <code>role</code> field verified
+against the registered identity:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;role&quot;</span><span class="fu">:</span> <span class="st">&quot;leader&quot;</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;worker&quot;</span><span class="fu">:</span> <span class="st">&quot;leader-1&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cmd&quot;</span><span class="fu">:</span> <span class="st">&quot;assign&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ftr&quot;</span><span class="fu">:</span> <span class="st">&quot;FTR-357&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;target_worker&quot;</span><span class="fu">:</span> <span class="st">&quot;worker-2&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>The coordinator rejects commands where <code>role</code> does not
+match the registered identity of the NATS connection. This is enforced
+in code, not documentation.</p>
+<h3 id="6-planner-operates-outside-the-coordinator">6. Planner operates
+outside the coordinator</h3>
+<p>The planner role:</p>
+<ul>
+<li>Works on <code>feature/*-planning</code> branches from
+<code>develop</code></li>
+<li>Creates ADRs, FTRs, ITERATION.md, DEPENDENCIES.toml</li>
+<li>Submits via PR (reviewed by QA or human)</li>
+<li>Has no NATS credentials and no coordinator commands</li>
+<li>Produces the artifacts that the leader loads on iteration start</li>
+</ul>
+<p>This is always the human operator, potentially in a dedicated Copilot
+session.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>No self-approval</strong>: The agent that assigns work
+cannot merge it</li>
+<li><strong>Release safety</strong>: Dual sign-off prevents accidental
+or premature releases</li>
+<li><strong>Audit trail</strong>: Role identity in every command enables
+forensic analysis</li>
+<li><strong>Single source of truth</strong>:
+<code>doc/AGENTROLES.md</code> is the canonical role reference</li>
+<li><strong>NATS-enforced</strong>: Role boundaries are in code and
+transport config, not just docs</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>Higher coordination overhead</strong>: QA must be staffed
+for every iteration</li>
+<li><strong>Latency</strong>: Merge approval requires QA availability —
+no instant self-merge</li>
+<li><strong>Complexity</strong>: NATS user management adds operational
+burden</li>
+<li><strong>Bootstrap problem</strong>: First iteration with new model
+requires careful role assignment</li>
+</ul>
+<h3 id="migration">Migration</h3>
+<ul>
+<li>v1.63.0 (current): Document roles in <code>doc/AGENTROLES.md</code>,
+update cross-references</li>
+<li>v1.64.0: Implement role identity in coordinator commands (code
+enforcement)</li>
+<li>v1.64.0: Implement NATS credential-based subject isolation</li>
+<li>v1.64.0: Add QA sign-off gate to <code>release.sh</code></li>
+</ul>
+<h2 id="risks">Risks</h2>
+<ul>
+<li><strong>QA bottleneck</strong>: If QA agent is slow or unavailable,
+all merges block. Mitigation: Human operator can always act as QA via
+CLI.</li>
+<li><strong>Role escalation</strong>: An agent could attempt to register
+as multiple roles. Mitigation: One NATS credential per role, coordinator
+rejects duplicate registrations.</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

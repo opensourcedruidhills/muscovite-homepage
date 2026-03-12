@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: NATS JetStream Crash Recovery
+Postmortem — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: NATS JetStream Crash Recovery Postmortem</span>
+</nav>
+
+<h1>ADR: NATS JetStream Crash Recovery Postmortem</h1>
+
+
+<h1 id="adr-nats-jetstream-crash-recovery-postmortem">ADR: NATS
+JetStream Crash Recovery Postmortem</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-11</li>
+<li><strong>Deciders</strong>: Johannes Lochmann</li>
+<li><strong>Category</strong>: infrastructure</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>On 2026-03-11, a VM crash during an active multi-agent iteration
+(v1.63.0) exposed five compounding bugs in the NATS JetStream
+coordinator infrastructure. The crash caused complete loss of
+coordinator state, resulting in duplicate FTR assignments (two workers
+both claimed FTR-350) and an open PR (#132) being invisible to the
+restarted coordinator.</p>
+<p>Recovery took approximately 90 minutes of manual debugging and
+multiple failed NATS restart attempts.</p>
+<h2 id="root-causes-5-compounding-bugs">Root Causes (5 compounding
+bugs)</h2>
+<h3 id="bug-1-jetstream-store_dir-in-tmp-critical">Bug 1: JetStream
+store_dir in /tmp/ (CRITICAL)</h3>
+<pre><code># nats-server.conf (BEFORE)
+jetstream {
+  store_dir: /tmp/muscovite-nats-agent   # tmpfs — wiped on reboot/crash
+}</code></pre>
+<p><code>/tmp/</code> on most Linux distributions (including openSUSE
+Tumbleweed) is either a tmpfs mount (RAM-backed) or cleaned by
+<code>systemd-tmpfiles-clean.timer</code>. A VM crash instantly
+destroyed all JetStream state: streams, KV buckets, consumer
+offsets.</p>
+<p>The <code>storage: file</code> setting on streams and KV buckets was
+meaningless because the "files" lived on volatile storage.</p>
+<h3 id="bug-2-ftr-claims-kv-bucket-ttl-of-4-hours">Bug 2: ftr-claims KV
+bucket TTL of 4 hours</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setup-streams.sh (BEFORE)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">create_or_update_kv</span> <span class="st">&quot;ftr-claims&quot;</span> <span class="st">&quot;4h&quot;</span> <span class="st">&quot;...&quot;</span></span></code></pre></div>
+<p>Even if the store had survived, any FTR claim older than 4 hours
+would have expired silently. Long-running FTRs (like FTR-350, a Go
+extractor taking multiple hours) would lose their claims. The heartbeat
+mechanism was supposed to refresh TTL, but heartbeats don't survive
+process crashes.</p>
+<h3 id="bug-3-events-published-via-ncpublish-not-jspublish">Bug 3:
+Events published via nc.publish(), not js.publish()</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coordinator.py _flush_events() (BEFORE)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">await</span> <span class="va">self</span>._nc.publish(subject, payload)  <span class="co"># fire-and-forget, NOT persisted</span></span></code></pre></div>
+<p>Events were published using regular NATS publish (fire-and-forget)
+instead of JetStream publish (persisted to stream). This meant the
+AGENT-EVENTS stream never captured any events — crash recovery replay
+had nothing to replay.</p>
+<h3 id="bug-4-stream-subject-mismatch">Bug 4: Stream subject
+mismatch</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setup-streams.sh (BEFORE)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">create_or_update_stream</span> <span class="st">&quot;AGENT-EVENTS&quot;</span> <span class="st">&quot;muscovite.agent.&gt;&quot;</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coordinator.py (actual subject used)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>subject <span class="op">=</span> <span class="ss">f&quot;coord.event.</span><span class="sc">{</span>event[<span class="st">&#39;type&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>  <span class="co"># e.g., coord.event.ftr.assigned</span></span></code></pre></div>
+<p>The AGENT-EVENTS stream listened on <code>muscovite.agent.&gt;</code>
+but events were published to <code>coord.event.*</code>. Even if
+<code>js.publish()</code> had been used, the stream would not have
+captured the events due to subject mismatch.</p>
+<h3 id="bug-5-no-replay-logic-in-coordinator-startup">Bug 5: No replay
+logic in coordinator startup</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coordinator.py start() (BEFORE)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>._state <span class="op">=</span> IterationState(dg)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ... immediately starts serving with empty state</span></span></code></pre></div>
+<p>The <code>apply_event()</code> replay method existed (FTR-372) but
+was never called during <code>start()</code>. The coordinator always
+started with a fresh <code>IterationState</code>, losing all worker
+registrations, FTR assignments, and progress history.</p>
+<h2 id="compounding-effect">Compounding Effect</h2>
+<p>These five bugs created a cascade where each one would have
+independently prevented crash recovery, but together they made the
+failure completely silent:</p>
+<ol type="1">
+<li>Store wiped (Bug 1) → no data to recover</li>
+<li>Even if store survived, claims would expire (Bug 2)</li>
+<li>Even if claims survived, no events were persisted (Bug 3)</li>
+<li>Even if js.publish was used, wrong subject (Bug 4)</li>
+<li>Even if events existed, replay was never called (Bug 5)</li>
+</ol>
+<h2
+id="additional-operational-issue-system-service-vs-user-service">Additional
+Operational Issue: System Service vs User Service</h2>
+<p>The NATS server runs as a <strong>system</strong> service
+(<code>nats-muscovite-agent.service</code>) under the <code>nats</code>
+user, with config at <code>/etc/nats/muscovite-agent.conf</code>. The
+repo config at <code>agents/nats/nats-server.conf</code> must be
+manually copied via <code>sudo cp</code> after changes. This was not
+documented and caused multiple failed restart attempts:</p>
+<ul>
+<li>Relative <code>store_dir</code> paths don't work (service CWD is not
+the repo)</li>
+<li>The <code>nats</code> user cannot traverse <code>/home/jolo/</code>
+(mode 700)</li>
+<li><code>/var/lib/nats/muscovite-agent</code> requires
+<code>nats:nats</code> ownership</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<h3 id="fixes-applied-commit-4e836b89">Fixes Applied (commit
+4e836b89)</h3>
+<ol type="1">
+<li><strong>store_dir</strong> →
+<code>/var/lib/nats/muscovite-agent</code> (persistent, nats-owned)</li>
+<li><strong>ftr-claims TTL</strong> → <code>0</code> (no expiry,
+explicit release only)</li>
+<li><strong>Event publishing</strong> → <code>js.publish()</code> with
+fallback to <code>nc.publish()</code></li>
+<li><strong>Stream subject</strong> → <code>coord.event.&gt;</code>
+(matches actual event subjects)</li>
+<li><strong>Crash recovery</strong> →
+<code>_replay_events_from_jetstream()</code> called in
+<code>start()</code></li>
+</ol>
+<h3 id="operational-documentation-required">Operational Documentation
+Required</h3>
+<ul>
+<li>AGENTS.md: System service management, config copy workflow</li>
+<li>doc/COORDINATOR.md: Crash recovery section, durability
+guarantees</li>
+<li>Config sync:
+<code>sudo cp agents/nats/nats-server.conf /etc/nats/muscovite-agent.conf</code></li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Coordinator survives VM crashes and restarts with full state
+recovery</li>
+<li>FTR claims persist indefinitely until explicitly released</li>
+<li>All coordinator events are persisted in JetStream for audit
+trail</li>
+<li>Replay reconstructs workers, assignments, progress, resource
+locks</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Requires manual <code>sudo cp</code> to deploy config changes (no
+auto-sync)</li>
+<li><code>/var/lib/nats/</code> is outside project root (operational
+dependency)</li>
+</ul>
+<h3 id="risks">Risks</h3>
+<ul>
+<li>If NATS data directory fills up (1GB max_file), oldest events are
+discarded</li>
+<li>Replay of very long event streams may slow startup (mitigated by
+30-day retention)</li>
+</ul>
+<h2 id="lessons-learned">Lessons Learned</h2>
+<ol type="1">
+<li><strong>Never use /tmp/ for anything that must survive a
+reboot</strong> — this is Infrastructure 101 but was missed because the
+initial setup was "just for local dev"</li>
+<li><strong>Test crash recovery by actually crashing</strong> — the
+replay code existed but was never exercised because no integration test
+simulated a crash</li>
+<li><strong>Verify the full persistence chain end-to-end</strong> —
+having a stream, having events, and having replay are three independent
+things that must all work together</li>
+<li><strong>Document operational topology</strong> — system service vs
+user service vs manual start creates confusion when things break at 9
+PM</li>
+<li><strong>TTL on ownership claims is dangerous</strong> —
+heartbeat-refreshed TTLs assume the refresher survives, which is exactly
+what fails during a crash</li>
+</ol>
+<h2 id="addendum-leader-worktree-isolation-failure-2026-03-12">Addendum:
+Leader Worktree Isolation Failure (2026-03-12)</h2>
+<h3 id="what-happened">What Happened</h3>
+<p>During the crash recovery described above, the leader session
+committed 5 fixes directly to <code>develop</code> from the main
+checkout (<code>/home/jolo/muscovite</code>), bypassing the required
+branch → PR → merge workflow:</p>
+<table>
+<thead>
+<tr>
+<th>Commit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>4e836b89</code></td>
+<td>NATS durability fixes</td>
+</tr>
+<tr>
+<td><code>6582d055</code></td>
+<td>Postmortem documentation</td>
+</tr>
+<tr>
+<td><code>d43deae0</code></td>
+<td>FTR-383 plan</td>
+</tr>
+<tr>
+<td><code>85580335</code></td>
+<td>Amend-state implementation</td>
+</tr>
+<tr>
+<td><code>f18a8522</code></td>
+<td>ITERATION.md corruption fix + FTR-384 spec</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-it-happened">Why It Happened</h3>
+<ol type="1">
+<li><strong>No <code>leader</code> role in session roles table</strong>
+— AGENTS.md only defined <code>planner</code>, <code>impl</code>,
+<code>hotfix</code></li>
+<li><strong>"Emergency" mindset</strong> — the leader rationalized
+direct commits as urgent fixes</li>
+<li><strong>Ambiguous rules</strong> — "Planning sessions MAY work
+directly on <code>develop</code>" was misinterpreted to also cover
+emergency governance work</li>
+<li><strong>No pre-commit hook</strong> — nothing prevents
+<code>git commit</code> on <code>develop</code> in the main
+checkout</li>
+</ol>
+<h3 id="impact">Impact</h3>
+<ul>
+<li>5 commits pushed directly to <code>develop</code> without PR review
+(cannot be undone — force-push forbidden)</li>
+<li>Dirty working tree in main checkout caused <code>git pull</code>
+failures</li>
+<li>Worker file leaks (<code>FTR-383-*.md</code> junk files) appeared in
+main checkout because leader and workers shared it</li>
+</ul>
+<h3 id="corrective-actions">Corrective Actions</h3>
+<ol type="1">
+<li>✅ <strong>Added <code>leader</code> role to session roles
+table</strong> — <code>agents/leader/worktree/</code> on
+<code>leader/governance</code></li>
+<li>✅ <strong>IRON RULE documented</strong>: ALL writing roles MUST use
+worktrees, including leader</li>
+<li>✅ <strong>Main checkout is read-only</strong> — only used for
+<code>git log</code>, <code>gh pr view</code>, coordinator CLI</li>
+<li><strong>TODO (FTR-384)</strong>: Pre-commit hook in main checkout
+that rejects commits on <code>develop</code></li>
+<li><strong>TODO (FTR-384)</strong>: <code>agent-pr.sh</code> validates
+worktree isolation before creating PR</li>
+</ol>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

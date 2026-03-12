@@ -117,7 +117,7 @@
 <p><strong>Version</strong>: v1.5.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 299</p>
+| <strong>Rules</strong>: 300</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -558,7 +558,8 @@ ExtendsClause        &lt;- &#39;EXTENDS&#39; IDENTIFIER
 EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / SourceAnnotation / DocClause / SynonymsClause</code></pre>
 <h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
 <pre class="peg"><code>FieldList            &lt;- &#39;(&#39; ( Field ( &#39;,&#39; Field )* )? &#39;)&#39;
-Field                &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation*
+Field                &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation* FieldDocClause?
+FieldDocClause       &lt;- &#39;DOC&#39; STRING
 FieldName            &lt;- IDENTIFIER / ContextualKeyword
 DefaultClause        &lt;- &#39;DEFAULT&#39; DefaultValue
 DefaultValue         &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39; / &#39;NOW&#39; &#39;(&#39; &#39;)&#39; / IDENTIFIER &#39;(&#39; &#39;)&#39;  # function call default
@@ -745,7 +746,7 @@ HasClause            &lt;- &#39;HAS&#39; IDENTIFIER QualifiedIdentifier ArraySuf
 <h3 id="23-lookup-table">23. Lookup Table</h3>
 <pre class="peg"><code>LookupTable          &lt;- &#39;LOOKUP_TABLE&#39; IDENTIFIER UuidAnnotation
 ExtraFieldList       &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
-ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation*
+ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation* FieldDocClause?
 ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39;</code></pre>
 <h3 id="24-import-seed-data-file">24. IMPORT (Seed Data File)</h3>
 <pre class="peg"><code>Import               &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>

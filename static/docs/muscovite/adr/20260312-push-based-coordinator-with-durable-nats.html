@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Push-Based Coordinator with Durable NATS
+Transport — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Push-Based Coordinator with Durable NATS Transport</span>
+</nav>
+
+<h1>ADR: Push-Based Coordinator with Durable NATS Transport</h1>
+
+
+<h1 id="adr-push-based-coordinator-with-durable-nats-transport">ADR:
+Push-Based Coordinator with Durable NATS Transport</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-12</li>
+<li><strong>Status</strong>: Accepted</li>
+<li><strong>Supersedes</strong>: Partial supersession of
+20260309-nats-jetstream-agent-coordination (polling model)</li>
+<li><strong>Related</strong>:
+20260311-nats-jetstream-crash-recovery-postmortem</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The current coordinator uses a <strong>request/reply polling
+model</strong>: workers call <code>worker poll</code> to pull the next
+FTR assignment, and the leader calls <code>leader status</code> to
+discover state changes. NATS is used as an RPC transport, not as a
+message bus.</p>
+<p>During the v1.63.0 crash recovery incident (see ADR 20260311
+postmortem), this architecture caused cascading failures:</p>
+<ol type="1">
+<li><p><strong>Stale assignments</strong>: After crash, workers polled
+and received already-completed FTRs because <code>assign_next()</code>
+walks the dependency graph sequentially — there is no way to skip past
+completed work without walking each FTR through the state
+machine.</p></li>
+<li><p><strong>State corruption</strong>: The leader walked 13
+unimplemented FTRs through <code>progress → pr-ready → approve</code> to
+skip past them, corrupting ITERATION.md and coordinator state. This
+required an emergency <code>amend-state</code> command.</p></li>
+<li><p><strong>Lost events</strong>: The fallback from
+<code>js.publish()</code> to <code>nc.publish()</code> (line 1498) means
+events can silently vanish from the durable log.</p></li>
+<li><p><strong>Unused infrastructure</strong>: KV bucket constants
+(<code>ftr-state</code>, <code>iteration-state</code>,
+<code>worker-registry</code>) are declared and provisioned but never
+used in Python code. State exists only in memory, reconstructed from
+event replay.</p></li>
+</ol>
+<p>With 4 workers planned for v1.64.0, these problems would compound
+quadratically.</p>
+<h2 id="decision">Decision</h2>
+<p>Refactor the coordinator to a <strong>push-based
+architecture</strong> using NATS JetStream durable consumers and KV
+buckets for state persistence.</p>
+<h3 id="core-changes">Core Changes</h3>
+<h4 id="1-push-based-assignment-no-polling">1. Push-Based Assignment (No
+Polling)</h4>
+<p>Workers subscribe to a per-worker durable JetStream consumer on
+subject <code>coord.assign.&lt;worker-name&gt;</code>. When the
+coordinator decides to assign an FTR, it publishes to that subject. The
+worker ACKs after accepting.</p>
+<pre><code>Before: Worker → poll → Coordinator → reply {ftr} → Worker starts
+After:  Coordinator → push coord.assign.worker-1 → Worker receives → ACK</code></pre>
+<p>If a worker crashes without ACK, JetStream redelivers after
+<code>ack_wait</code> timeout. The coordinator can then reassign to
+another worker.</p>
+<h4 id="2-push-based-leader-notifications">2. Push-Based Leader
+Notifications</h4>
+<p>The leader subscribes to a durable consumer on
+<code>coord.notify.leader.&gt;</code>:</p>
+<ul>
+<li><code>coord.notify.leader.pr-ready</code> — worker has a PR for
+review</li>
+<li><code>coord.notify.leader.gate-failed</code> — quality gate
+failed</li>
+<li><code>coord.notify.leader.sync-needed</code> — infra-impactful merge
+requires sync broadcast</li>
+</ul>
+<p>No more polling <code>leader status</code> — events arrive as they
+happen.</p>
+<h4 id="3-kv-backed-state-snapshots">3. KV-Backed State Snapshots</h4>
+<p>FTR state and worker state are written to KV buckets on every
+mutation:</p>
+<ul>
+<li><code>ftr-state</code> KV: key <code>FTR-NNN</code> → JSON
+<code>{state, worker, pr, updated}</code></li>
+<li><code>worker-registry</code> KV: key <code>worker-1</code> → JSON
+<code>{current_ftr, registered_at}</code></li>
+<li><code>iteration-state</code> KV: key <code>current</code> → full
+serialized <code>IterationState</code></li>
+</ul>
+<p>Crash recovery becomes: read KV snapshot (instant), then replay only
+events <em>after</em> the snapshot timestamp. No full event log replay
+needed.</p>
+<h4 id="4-eliminate-core-nats-fallback">4. Eliminate Core NATS
+Fallback</h4>
+<p><strong>All publishes go through JetStream. No exceptions.</strong>
+The <code>nc.publish()</code> fallback at line 1498 is removed. If
+JetStream is unavailable, the operation fails loudly.</p>
+<h4 id="5-durable-storage-everywhere">5. Durable Storage Everywhere</h4>
+<p>Every NATS resource uses <code>--storage file</code> with the
+persistent store at <code>/var/lib/nats/muscovite-agent</code>. No
+in-memory streams, no TTL-based expiry for critical state.
+Specifically:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Storage</th>
+<th>TTL</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AGENT-EVENTS stream</td>
+<td>file</td>
+<td>720h</td>
+<td>Event log for audit + replay</td>
+</tr>
+<tr>
+<td>ftr-state KV</td>
+<td>file</td>
+<td>0</td>
+<td>FTR state survives crashes</td>
+</tr>
+<tr>
+<td>worker-registry KV</td>
+<td>file</td>
+<td>0</td>
+<td>Worker state survives crashes</td>
+</tr>
+<tr>
+<td>iteration-state KV</td>
+<td>file</td>
+<td>0</td>
+<td>Full snapshot for fast recovery</td>
+</tr>
+<tr>
+<td>agent-sessions KV</td>
+<td>file</td>
+<td>5m</td>
+<td>Heartbeat watchdog (TTL intentional)</td>
+</tr>
+<tr>
+<td>ftr-claims KV</td>
+<td>file</td>
+<td>0</td>
+<td>Ownership claims (explicit release)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-does-not-change">What Does NOT Change</h3>
+<ul>
+<li><strong>Domain layer</strong>: <code>IterationState</code>,
+<code>FtrState</code>, <code>FtrRecord</code>, <code>WorkerRecord</code>
+structs are unchanged. The state machine is sound — only the transport
+was broken.</li>
+<li><strong>CLI interface</strong>: <code>worker register</code>,
+<code>worker progress</code>, <code>worker pr-ready</code>,
+<code>leader review</code>, <code>leader status</code> — all commands
+remain. Implementation changes.</li>
+<li><strong>Event sourcing</strong>: Events are still published to
+JetStream for audit and observer. KV snapshots supplement but do not
+replace the event log.</li>
+<li><strong>Dependency graph</strong>: <code>DEPENDENCIES.toml</code>
+parsing and <code>assign_next()</code> logic unchanged.</li>
+</ul>
+<h3 id="worker-lifecycle-new">Worker Lifecycle (New)</h3>
+<pre><code>1. worker register → coordinator creates durable consumer coord.assign.&lt;name&gt;
+2. coordinator calls assign_next() → publishes to coord.assign.&lt;name&gt;
+3. worker receives assignment → ACK → starts work
+4. worker publishes progress to coord.event.worker.progress (JetStream)
+5. worker publishes pr-ready to coord.event.worker.pr-ready (JetStream)
+6. leader receives notification → reviews → approves/rejects
+7. coordinator publishes result to coord.result.&lt;name&gt; (JetStream)
+8. worker ACKs result → ready for next assignment
+9. coordinator repeats from step 2 if more FTRs available</code></pre>
+<h3 id="crash-recovery-new">Crash Recovery (New)</h3>
+<pre><code>1. Read iteration-state KV → instant state restoration
+2. Read worker-registry KV → know which workers were active
+3. Check unACKed messages on coord.assign.&lt;name&gt; consumers → detect in-flight assignments
+4. Resume: re-publish assignments for unACKed FTRs, push new work to idle workers</code></pre>
+<p>No event replay needed for state recovery. Event log is retained for
+audit only.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Zero polling</strong>: Workers and leader receive
+notifications instantly</li>
+<li><strong>Crash-resilient</strong>: KV state survives crashes, no full
+replay needed</li>
+<li><strong>4-worker safe</strong>: No sequential polling races, no
+assignment contention</li>
+<li><strong>No more amend-state hacks</strong>: State lives in KV, can
+be corrected with a KV put</li>
+<li><strong>Simpler worker code</strong>: Subscribe once, receive work —
+no poll/sleep loop</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>More NATS infrastructure</strong>: Per-worker durable
+consumers must be managed</li>
+<li><strong>Migration effort</strong>: ~400 lines of coordinator.py
+transport layer rewrite</li>
+<li><strong>Worker CLI changes</strong>: Workers need a long-running
+subscriber mode, not one-shot poll</li>
+</ul>
+<h3 id="risks">Risks</h3>
+<ul>
+<li>Per-worker consumers create cleanup obligation (unregister must
+delete consumer)</li>
+<li>JetStream ACK semantics require careful timeout tuning
+(<code>ack_wait</code>)</li>
+<li>KV snapshot + event log dual-write must be atomic (or at least
+ordered)</li>
+</ul>
+<h2 id="compliance">Compliance</h2>
+<ul>
+<li>Rule 7 (Grammar-First): N/A — no DSL changes</li>
+<li>Rule 10 (TDD): New transport layer tests required</li>
+<li>Rule 14 (Documentation): COORDINATOR.md, AGENTS.md updated in same
+commit</li>
+<li>Rule 26 (Multi-Agent): This ADR improves the coordination protocol
+itself</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

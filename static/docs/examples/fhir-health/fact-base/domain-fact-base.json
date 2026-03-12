@@ -68,6 +68,7 @@
           "name": "AdministrativeGender",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -153,6 +154,7 @@
           "name": "MaritalStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -238,6 +240,7 @@
           "name": "ConditionClinicalStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -323,6 +326,7 @@
           "name": "ConditionVerificationStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -408,6 +412,7 @@
           "name": "ConditionCategory",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -493,6 +498,7 @@
           "name": "ConditionSeverity",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -578,6 +584,7 @@
           "name": "ObservationStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -663,6 +670,7 @@
           "name": "ObservationCategory",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -748,6 +756,7 @@
           "name": "CodingSystem",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -873,6 +882,7 @@
           "name": "CountryCode",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -978,6 +988,7 @@
           "name": "LanguageCode",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1073,6 +1084,7 @@
           "name": "IdentifierUse",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1158,6 +1170,7 @@
           "name": "NameUse",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1243,6 +1256,7 @@
           "name": "AddressUse",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1328,6 +1342,7 @@
           "name": "AddressType",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1413,6 +1428,7 @@
           "name": "ContactPointSystem",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1498,6 +1514,7 @@
           "name": "ContactPointUse",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1583,6 +1600,7 @@
           "name": "EncounterStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1668,6 +1686,7 @@
           "name": "EncounterClass",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1753,6 +1772,7 @@
           "name": "LocationStatus",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1838,6 +1858,7 @@
           "name": "IdentifierType",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -1923,6 +1944,7 @@
           "name": "EmergencyContactRelationship",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -2008,6 +2030,7 @@
           "name": "CodingCode",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -2111,6 +2134,7 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [
         {
@@ -2341,6 +2365,7 @@
           "uuid": "a2b3c4d5-e6f7-8901-5678-555566667777"
         }
       ],
+      "mappings": [],
       "name": "Basedata",
       "projections": [],
       "relationships": [
@@ -2699,6 +2724,7 @@
           "name": "ConditionIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -2827,6 +2853,7 @@
           "name": "ConditionNote",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -2936,6 +2963,7 @@
           "name": "ConditionStage",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3064,6 +3092,7 @@
           "name": "Condition",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3365,8 +3394,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Condition",
       "projections": [],
       "relationships": [
@@ -3510,6 +3541,7 @@
           "name": "EncounterIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3631,6 +3663,7 @@
           "name": "EncounterParticipant",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3732,6 +3765,7 @@
           "name": "EncounterDiagnosis",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3851,6 +3885,7 @@
           "name": "EncounterLocation",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -3962,6 +3997,7 @@
           "name": "Encounter",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -4219,8 +4255,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Encounter",
       "projections": [],
       "relationships": [
@@ -4397,6 +4435,7 @@
           "name": "LocationIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -4518,6 +4557,7 @@
           "name": "LocationAddress",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -4721,6 +4761,7 @@
           "name": "LocationContactPoint",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -4853,6 +4894,7 @@
           "name": "LocationHoursOfOperation",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -4961,6 +5003,7 @@
           "name": "Location",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -5163,8 +5206,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Location",
       "projections": [],
       "relationships": [
@@ -5330,6 +5375,7 @@
           "name": "Observation",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -5576,6 +5622,7 @@
           "name": "ObservationComponent",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -5720,6 +5767,7 @@
           "name": "ObservationReferenceRange",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -5836,8 +5884,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Observation",
       "projections": [],
       "relationships": [
@@ -5926,6 +5976,7 @@
           "name": "OrganizationIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6065,6 +6116,7 @@
           "name": "OrganizationAddress",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6286,6 +6338,7 @@
           "name": "OrganizationContactPoint",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6436,6 +6489,7 @@
           "name": "Organization",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6560,8 +6614,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Organization",
       "projections": [],
       "relationships": [
@@ -6694,6 +6750,7 @@
           "name": "PatientName",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6825,6 +6882,7 @@
           "name": "PatientIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -6957,6 +7015,7 @@
           "name": "EmergencyContact",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -7086,6 +7145,7 @@
           "name": "Address",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -7277,6 +7337,7 @@
           "name": "Communication",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -7376,6 +7437,29 @@
           "name": "Patient",
           "root": {
             "bitemporal": null,
+            "commands": [
+              {
+                "decide": null,
+                "emits": [
+                  "PatientDeactivated"
+                ],
+                "ensures": [],
+                "name": "DeactivatePatient",
+                "parameters": [
+                  {
+                    "doc": null,
+                    "dsl_type": "String",
+                    "field_constraints": [],
+                    "name": "reason",
+                    "nullable": true,
+                    "searchable": false,
+                    "unique": false,
+                    "uuid": "11111111-aaaa-bbbb-cccc-000000000001"
+                  }
+                ],
+                "preconditions": []
+              }
+            ],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -7535,6 +7619,7 @@
           "name": "ContactPoint",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -7673,6 +7758,7 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": {
         "dialect": "clinical",
         "domain": "Clinical healthcare — patient demographics and identity (FHIR R4)",
@@ -7685,6 +7771,7 @@
         "precision_level": "professional"
       },
       "lookup_tables": [],
+      "mappings": [],
       "name": "Patient",
       "projections": [
         {
@@ -8094,6 +8181,7 @@
           "name": "PractitionerIdentifier",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8215,6 +8303,7 @@
           "name": "PractitionerName",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8346,6 +8435,7 @@
           "name": "PractitionerQualification",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8476,6 +8566,7 @@
           "name": "PractitionerAddress",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8667,6 +8758,7 @@
           "name": "PractitionerContactPoint",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8809,6 +8901,7 @@
           "name": "Practitioner",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [
@@ -8903,8 +8996,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "Practitioner",
       "projections": [],
       "relationships": [
@@ -9070,6 +9165,7 @@
           "name": "Principal",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9228,6 +9324,7 @@
           "name": "PrincipalGroup",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9316,6 +9413,7 @@
           "name": "Privilege",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9412,6 +9510,7 @@
           "name": "GroupMembership",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9531,6 +9630,7 @@
           "name": "GroupPrivilege",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9640,6 +9740,7 @@
           "name": "AuthSession",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9781,6 +9882,7 @@
           "name": "TokenBlacklist",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -9878,6 +9980,7 @@
           "name": "SecurityAuditLog",
           "root": {
             "bitemporal": null,
+            "commands": [],
             "concurrency": null,
             "ddd_concept": "Aggregate Root",
             "display_formats": [],
@@ -10027,8 +10130,10 @@
       "doc": null,
       "entities": [],
       "events": [],
+      "foreign_contexts": [],
       "grounding": null,
       "lookup_tables": [],
+      "mappings": [],
       "name": "security",
       "projections": [],
       "relationships": [
@@ -10629,13 +10734,16 @@
   ],
   "metadata": {
     "context_count": 9,
-    "generated_at": "2026-03-11T16:01:45Z",
+    "generated_at": "2026-03-12T17:04:10Z",
     "generator_version": "1.20.1",
     "project_name": "FhirHealth",
     "total_aggregates": 65,
+    "total_commands": 1,
     "total_entities": 65,
     "total_events": 0,
+    "total_foreign_contexts": 0,
     "total_lookup_tables": 22,
+    "total_mappings": 0,
     "total_projections": 1,
     "total_sagas": 0,
     "total_specifications": 0,

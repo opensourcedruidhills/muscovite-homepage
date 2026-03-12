@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.62.2 | <strong>Generated</strong>:
-2026-03-11 | <strong>Commit</strong>: 7fb0e8c4 |
+<p><strong>Version</strong>: 1.63.0 | <strong>Generated</strong>:
+2026-03-12 | <strong>Commit</strong>: 69e8894c |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -131,12 +131,14 @@ systems.</p>
 <ul>
 <li><strong>cmake</strong> (5 modules, 2005 lines)</li>
 <li><strong>cpp</strong> (80 modules, 22624 lines)</li>
-<li><strong>docs</strong> (13 modules, 4776 lines)</li>
+<li><strong>docs</strong> (13 modules, 5002 lines)</li>
 <li><strong>grpc</strong> (31 modules, 8071 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
 <li><strong>postgres</strong> (30 modules, 8001 lines)</li>
 <li><strong>qt</strong> (60 modules, 16805 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
+<li><strong>standalone-infra</strong> (3 modules, 698 lines)</li>
+<li><strong>tlaplus</strong> (4 modules, 776 lines)</li>
 </ul>
 <p><strong>Dual-licensed</strong>: AGPL-3.0 + Commercial. Copyright ©
 2025-2026 Johannes Lochmann.</p>
@@ -189,7 +191,7 @@ edited.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>299</td>
+<td>300</td>
 </tr>
 <tr>
 <td>Known types (type-registry.rkt)</td>
@@ -213,12 +215,12 @@ edited.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>202</td>
+<td>205</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-134143-lines">Layer 0 — Racket (134143
+<h3 id="layer-0--racket-136484-lines">Layer 0 — Racket (136484
 lines)</h3>
 <table>
 <thead>
@@ -234,7 +236,7 @@ lines)</h3>
 </tr>
 <tr>
 <td>Parser</td>
-<td>6182</td>
+<td>6186</td>
 </tr>
 <tr>
 <td>Generator: postgres</td>
@@ -258,11 +260,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: docs</td>
-<td>4776</td>
+<td>5002</td>
 </tr>
 <tr>
 <td>Tests</td>
-<td>33758</td>
+<td>34365</td>
 </tr>
 </tbody>
 </table>
@@ -334,8 +336,137 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1622----2026-03-11">[1.62.2] -- 2026-03-11</h2>
+<h2 id="1630----2026-03-12">[1.63.0] -- 2026-03-12</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li>(FTR-396): Phase 2 — slim auto-attached files 117KB→47KB, delete
+CONTEXT.md</li>
+<li>(FTR-396): Phase 1 — delete 23 dead files, fix PEG symlink, repair
+refs</li>
+<li>Merge pull request #148 from
+opensourcedruidhills/feature/ftr-365-366-fact-base-completeness</li>
+<li>(FTR-365,FTR-366): export commands, DECIDE, mappings, foreign
+contexts to fact-base</li>
+<li>(FTR-357): generate standalone AGENTS.md for example projects
+(#145)</li>
+<li>(governance): FTR-384 coordinator governance enforcement (#143)</li>
+<li>(coordinator): FTR-383 leader amend-state — TLA+, tests, docs
+(#142)</li>
+<li>(tlaplus): FTR-363 CMake integration + FTR-364 counterexample
+reporter (#139)</li>
+<li>(FTR-362): TLA+ saga specification generator</li>
+<li>(FTR-362): TLA+ saga specification generator</li>
+<li>Merge pull request #132 from
+opensourcedruidhills/feature/ftr-350-go-extractor</li>
+<li>(go-extractor): complete multi-pass extraction pipeline</li>
+<li>(go-extractor): FTR-350 generic Go multi-source extractor</li>
+<li>(FTR-356): generated copilot-instructions.md for standalone projects
+(#137)</li>
+<li>(FTR-345): FHIR R4 StructureDefinition extraction tool (#134)</li>
+<li>(dsl): field-level DOC syntax in grammar and parser (FTR-344)
+(#133)</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>mark all v1.63.0 FTRs complete with Version fields</li>
+<li>correct ITERATION.md corruption from state walk incident, add
+FTR-384</li>
+<li>(coordinator): add leader amend-state command (FTR-383
+emergency)</li>
+<li>NATS JetStream durability and coordinator crash recovery</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>add v1.63.0 changelog — headline 60% context budget reduction</li>
+<li>(FTR-396): expand scope to .github, root, marketing, tools
+audit</li>
+<li>update homepage submodule to v1.62.2 docs</li>
+</ul>
+<h3 id="tests">Tests</h3>
+<ul>
+<li>feat(FTR-396): Phase 2 — slim auto-attached files 117KB→47KB, delete
+CONTEXT.md</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>(FTR-396): mark complete</li>
+<li>mark FTR-365, FTR-366 complete in iteration tracking</li>
+<li>Merge pull request #135 from
+opensourcedruidhills/feature/backlog-cleanup-completed-ideas</li>
+<li>integrate FTR-345 with v1.62.2 back-merge</li>
+<li>back-merge v1.62.2 release to develop</li>
+<li>archive 46 implemented/superseded ideas to completed-ideas</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>plan(FTR-396): concrete spec — 90% doc reduction, 4-phase
+consolidation</li>
+<li>plan(v1.65.0): all FTRs promoted to must — all in or not in</li>
+<li>plan(v1.65.0): add FTR-398/399/400 + IDEA-056/057 from Copilot CLI
+v1.0.4</li>
+<li>Merge pull request #147 from
+opensourcedruidhills/leader/governance</li>
+<li>Merge pull request #148 from
+opensourcedruidhills/feature/ftr-365-366-fact-base-completeness</li>
+<li>plan: v1.64.0 expand to 13 FTRs — operational hardening + AI
+context</li>
+<li>plan: v1.64.0 iteration — coordinator hardening (6 FTRs) (#146)</li>
+<li>doc: Agent role governance — AGENTROLES.md + ADR (#144)</li>
+<li>adr: push-based coordinator with durable NATS transport (#141)</li>
+<li>doc: enforce leader worktree isolation + postmortem addendum
+(#140)</li>
+<li>plan: FTR-383 leader amend-state coordinator command</li>
+<li>doc: NATS crash recovery postmortem, operational docs, lessons
+learned</li>
+<li>Merge pull request #132 from
+opensourcedruidhills/feature/ftr-350-go-extractor</li>
+<li>Merge pull request #136 from
+opensourcedruidhills/feature/v165-planning</li>
+<li>plan: v1.65.0 — 5 FTRs for code quality, build hygiene, and dev
+tooling</li>
+<li>Merge branch 'develop' of github.com:opensourcedruidhills/muscovite
+into develop</li>
+<li>Merge pull request #135 from
+opensourcedruidhills/feature/backlog-cleanup-completed-ideas</li>
+<li>Merge pull request #131 from
+opensourcedruidhills/feature/idea-054-055-coordinator-monitor</li>
+<li>Merge pull request #130 from
+opensourcedruidhills/feature/idea-054-coordinator-monitor</li>
+<li>idea: IDEA-055 — leader command panel in coordinator monitor</li>
+<li>idea: IDEA-054 — standalone Qt/QML coordinator monitor</li>
+</ul>
+<h3 id="highlights">Highlights</h3>
+<ul>
+<li><strong>AI context budget cut 60%</strong>: auto-injected
+instructions reduced from 117KB/2,570 lines to 47KB/1,034 lines
+(FTR-396). Agents now see the same rules in less than half the
+tokens.</li>
+</ul>
+<h3 id="added-1">Added</h3>
+<ul>
+<li>(FTR-396): consolidate AI instruction set — delete CONTEXT.md,
+compress copilot-instructions.md (-77%), GROUND-TRUTH.md (-41%),
+AGENTS.md (-35%)</li>
+<li>(FTR-396): delete 25 dead files / 2.3MB (obsolete docs, third-party
+AI configs, VS Code artifacts, marketing drafts)</li>
+<li>(FTR-365/366): fact-base generators for domain model completeness
+analysis</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><code>doc/CONTEXT.md</code> and
+<code>tools/generate-context.sh</code> — 100% duplicate content,
+replaced by pointers in remaining files</li>
+<li><code>doc/testing.md</code> (1.9MB), <code>.cursorrules</code>,
+<code>.windsurfrules</code>, <code>.aider.conf.yml</code>,
+<code>.codeiumrc</code>, <code>.context.json</code></li>
+<li><code>.github/settings.json</code>,
+<code>.github/launch.json</code>, <code>.github/extensions.json</code>,
+<code>.github/tasks.json</code></li>
+<li><code>marketing/blog-draft-*.md</code></li>
+</ul>
+<h2 id="1622----2026-03-11">[1.62.2] -- 2026-03-11</h2>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>(coordinator): TLA+ formal verification of state machine
 (FTR-377)</li>
@@ -344,28 +475,28 @@ opensourcedruidhills/feature/v1.62.2-coordinator-hardening</li>
 <li>(coordinator): implement FTR-371–376 coordinator hardening
 (v1.62.2)</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>(coordinator): address protocol review feedback (B-D)</li>
 <li>BFX-006 + BFX-007 — eliminate duplicate test runs and subtree push
 O(n)</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 <ul>
 <li>add coordinator reference and update multi-agent instructions</li>
 </ul>
-<h3 id="maintenance">Maintenance</h3>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>add .copilot/ and <strong>pycache</strong>/ to gitignore</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>governance: mark FTR-377 complete with all acceptance criteria</li>
 <li>Merge pull request #129 from
 opensourcedruidhills/feature/v1.62.2-coordinator-hardening</li>
 <li>governance: plan v1.62.2 — coordinator hardening (FTR-371–376)</li>
 </ul>
-<h3 id="added-1">Added</h3>
+<h3 id="added-3">Added</h3>
 <ul>
 <li>FTR-377: TLA+ formal verification of coordinator state machine — 8
 safety invariants, 417K states, 0 violations (ADR 20260311)</li>
@@ -374,7 +505,7 @@ cleanup on worker death (C), merge failure recovery with re-enqueue
 (D)</li>
 </ul>
 <h2 id="1621----2026-03-11">[1.62.1] -- 2026-03-11</h2>
-<h3 id="added-2">Added</h3>
+<h3 id="added-4">Added</h3>
 <ul>
 <li>v1.62.1 — Python coordinator daemon (FTR-367/368/369/370, 119
 tests)</li>
@@ -384,11 +515,11 @@ tests)</li>
 (#120)</li>
 <li>feature/ftr-lifecycle-automation (#119)</li>
 </ul>
-<h3 id="documentation-1">Documentation</h3>
+<h3 id="documentation-2">Documentation</h3>
 <ul>
 <li>rebrand as 'business intent to software system compiler' (#121)</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>governance: tick FTR acceptance criteria for v1.62.1</li>
 <li>Merge #124: restore enrichment FTRs (346-348) to v1.63.0 as Pillar
@@ -404,154 +535,8 @@ FTRs)</li>
 <li>plan: v1.63.0 — standalone development infrastructure for example
 repos</li>
 </ul>
-<h2 id="1620----2026-03-11">[1.62.0] -- 2026-03-11</h2>
-<h3 id="added-3">Added</h3>
-<ul>
-<li>(framework): FTR-320 — zero clang-tidy warnings on framework code
-(#118)</li>
-<li>(tests): FTR-352 generator output mutation testing (#117)</li>
-<li>(FTR-354): agent pre-flight lint integration (#116)</li>
-<li>(FTR-355): Layout-to-model cross-DSL linker validation (#114)</li>
-<li>(FTR-304): Add DECIDE branch coverage analyzer (#113)</li>
-<li>(FTR-353): lint-only mode and semantic validation gap closure
-(#112)</li>
-<li>(FTR-301): property-based test generator for DECIDE postconditions
-(#111)</li>
-<li>(FTR-300): booking price calculation integration test (#110)</li>
-<li>(FTR-299): aggregation built-ins — SUM/COUNT/MIN/MAX/AVG over
-collections</li>
-<li>(FTR-298): list comprehension emitters — C++23 ranges and SQL
-generation</li>
-<li>(FTR-297): list comprehension expression nodes
-(MAP/FILTER/REDUCE/lambda)</li>
-<li>(FTR-302, FTR-303): DECIDE Mermaid diagrams + Business Logic chapter
-(#107)</li>
-<li>automate README metrics update in release ceremony</li>
-</ul>
-<h3 id="fixed-1">Fixed</h3>
-<ul>
-<li>exclude compiled/ and shared/ from generator target counts</li>
-<li>(docs): generate index.html for fact-base directories</li>
-<li>(metrics): use count_lines() for per-project line counts in
-SYSTEM-BRIEF</li>
-<li>(docs): support submodule .git file in publish-docs.sh</li>
-<li>(release): auto-detect homepage submodule for docs deployment</li>
-</ul>
-<h3 id="documentation-2">Documentation</h3>
-<ul>
-<li>tick all acceptance criteria checkboxes for v1.62.0 FTRs</li>
-<li>mark all v1.62.0 FTRs complete — iteration ready for release</li>
-<li>mark FTR-320 complete</li>
-<li>(FTR-298): update GROUND-TRUTH compilation targets for C++23 ranges
-and SQL aggregate</li>
-<li>(FTR-297): update GROUND-TRUTH §18 and DSL.md for Tier 3 list
-comprehensions</li>
-<li>refresh README and VISION metrics to v1.61.0</li>
-<li>template DSL quick-reference, anti-pattern catalog, gold standard
-guide (#102)</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>FTR-351: Negative grammar and parser test suite (151 rejection
-tests) (#115)</li>
-<li>plan(v1.62.0): FTR-353 layout linker, poison tests, expression
-depth</li>
-<li>plan(v1.62.0): add FTR-353 lint-only mode + FTR-354 agent lint
-integration</li>
-<li>plan(v1.62.0): add FTR-351 negative grammar tests and FTR-352
-mutation testing</li>
-<li>plan(v1.62.0): add FTR-320 clang-tidy zero warnings to iteration
-scope</li>
-<li>plan: collapse v1.62.0 + v1.63.0 into single release</li>
-<li>plan: multi-source extraction architecture, direct .ddd output, Go
-patterns</li>
-<li>plan: refine FTR-350 — complete XORM tag catalog, enum extraction,
-repo URL</li>
-<li>plan: brownfield extraction architecture — generic go-extractor +
-neutral IR</li>
-<li>plan: add FTR-349 Gitea full brownfield extraction to v1.64.0</li>
-<li>plan: v1.64.0 — Sample Project Enrichment (5 FTRs)</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
-<h1 id="iteration-v1622">Iteration: v1.62.2</h1>
-<p><strong>Goal</strong>: Harden NATS coordinator with gate NACK, crash
-recovery, infra locking, sync broadcast, concurrency governor, and merge
-queue. <strong>Start</strong>: 2026-03-11 <strong>Target</strong>:
-2026-03-11 <strong>Status</strong>: active</p>
-<h2 id="theme">Theme</h2>
-<p>Six hardening features for the multi-agent coordinator: gate failure
-NACK with rework loop (FTR-371), event-sourced crash recovery with
-idempotent commands (FTR-372), infrastructure-impactful FTR locking
-(FTR-373), develop-sync broadcast for worktree coherence (FTR-374),
-concurrency governor for compute-bound operations (FTR-375), and
-automated merge queue (FTR-376).</p>
-<h2 id="scope">Scope</h2>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Feature</th>
-<th>Priority</th>
-<th>Status</th>
-<th>Branch</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>FTR-371</td>
-<td>Gate failure NACK + rework loop</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-372</td>
-<td>Event-sourced crash recovery</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-373</td>
-<td>Infrastructure-impactful FTR locking</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-374</td>
-<td>Develop-sync broadcast</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-375</td>
-<td>Concurrency governor</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-376</td>
-<td>Automated merge queue</td>
-<td>must</td>
-<td>complete</td>
-<td>feature/v1.62.2-coordinator-hardening</td>
-</tr>
-<tr>
-<td>FTR-377</td>
-<td>TLA+ coordinator state machine verification</td>
-<td>must</td>
-<td>complete</td>
-<td>develop</td>
-</tr>
-</tbody>
-</table>
-<h2 id="dependencies">Dependencies</h2>
-<p>Machine-readable dependency graph: <code>DEPENDENCIES.toml</code>
-(same directory). Parsed by <code>agents/depgraph.py</code> for
-coordinator scheduling and Graphviz visualization.</p>
+<p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
 <table>
 <thead>
@@ -566,10 +551,14 @@ coordinator scheduling and Graphviz visualization.</p>
 <td>Bootstrap example repositories with standalone AI agent
 infrastructure, build the</td>
 </tr>
+<tr>
+<td>v1.65.0</td>
+<td>Harden generated code quality and add developer tooling</td>
+</tr>
 </tbody>
 </table>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
-<p>46 ideas in backlog.</p>
+<p>9 ideas in backlog.</p>
 <table>
 <thead>
 <tr>
@@ -579,166 +568,14 @@ infrastructure, build the</td>
 </thead>
 <tbody>
 <tr>
-<td>IDEA-001</td>
-<td>Idea: Geosciences Phase 3 spatial: GeologicMapFeature entity + seed
-data</td>
-</tr>
-<tr>
-<td>IDEA-003</td>
-<td>Idea: State Machine DSL Construct — Grammar, IR, and Parser</td>
-</tr>
-<tr>
-<td>IDEA-004</td>
-<td>Idea: State Machine Code Generation — PostgreSQL, C++, gRPC, Qt</td>
-</tr>
-<tr>
-<td>IDEA-005</td>
-<td>Idea: Bitemporal Data DSL Construct — Grammar, IR, and Parser</td>
-</tr>
-<tr>
-<td>IDEA-006</td>
-<td>Idea: Bitemporal Code Generation — PostgreSQL, C++, gRPC, Qt</td>
-</tr>
-<tr>
-<td>IDEA-008</td>
-<td>Idea: Template DSL formal reference documentation</td>
-</tr>
-<tr>
-<td>IDEA-009</td>
-<td>Idea: OpenSearch full-text search capability — ADR and
-architecture</td>
-</tr>
-<tr>
-<td>IDEA-010</td>
-<td>Idea: @searchable annotation — PEG grammar, parser, IR</td>
-</tr>
-<tr>
-<td>IDEA-011</td>
-<td>Idea: SEARCH capability — project DSL grammar and parser</td>
-</tr>
-<tr>
-<td>IDEA-012</td>
-<td>Idea: OpenSearch framework module — libcurl REST client</td>
-</tr>
-<tr>
-<td>IDEA-013</td>
-<td>Idea: Search indexer — NATS event consumer for OpenSearch</td>
-</tr>
-<tr>
-<td>IDEA-014</td>
-<td>Idea: Search query builder and result types — framework</td>
-</tr>
-<tr>
-<td>IDEA-015</td>
-<td>Idea: Search index schema generator — Racket</td>
-</tr>
-<tr>
-<td>IDEA-016</td>
-<td>Idea: Search document mapper generator — C++</td>
-</tr>
-<tr>
-<td>IDEA-017</td>
-<td>Idea: gRPC GlobalSearchService generator</td>
-</tr>
-<tr>
-<td>IDEA-018</td>
-<td>Idea: Qt Widgets GlobalSearchWidget generator</td>
-</tr>
-<tr>
-<td>IDEA-019</td>
-<td>Idea: Qt QML SearchBar component generator</td>
-</tr>
-<tr>
-<td>IDEA-020</td>
-<td>Idea: OpenSearch Docker infrastructure and CMake targets</td>
-</tr>
-<tr>
-<td>IDEA-021</td>
-<td>Idea: Search reindexer — bulk PostgreSQL to OpenSearch</td>
-</tr>
-<tr>
-<td>IDEA-022</td>
-<td>Idea: Replace gen_random_uuid with uuidv7 in all infrastructure
-generators</td>
-</tr>
-<tr>
-<td>IDEA-023</td>
-<td>Idea: Explicit named FK constraints replacing inline REFERENCES</td>
-</tr>
-<tr>
-<td>IDEA-024</td>
-<td>Idea: Automatic btree indexes on all FK columns</td>
-</tr>
-<tr>
-<td>IDEA-025</td>
-<td>Idea: Column-level COMMENT ON propagation from field-doc</td>
-</tr>
-<tr>
-<td>IDEA-026</td>
-<td>Idea: Seed data best practices: multi-row VALUES, standard quotes,
-ON CONFLICT</td>
-</tr>
-<tr>
 <td>IDEA-027</td>
 <td>Idea: Deep verify scripts checking columns, types, constraints,
 indexes, triggers</td>
 </tr>
 <tr>
-<td>IDEA-028</td>
-<td>Idea: Consistent SQL naming conventions: trg_ prefix, idx_ prefix,
-fk_ prefix</td>
-</tr>
-<tr>
-<td>IDEA-029</td>
-<td>Idea: PostgreSQL pattern enforcement test:
-test-postgres-patterns.rkt</td>
-</tr>
-<tr>
-<td>IDEA-030</td>
-<td>Idea: Unify DbErrorCode and DbError enums across Layer 1 and Layer
-2</td>
-</tr>
-<tr>
-<td>IDEA-031</td>
-<td>Idea: Add missing pqxx exception catches in generated map_error</td>
-</tr>
-<tr>
-<td>IDEA-032</td>
-<td>Idea: Fix SerializationFailure gRPC mapping from INTERNAL to
-ABORTED</td>
-</tr>
-<tr>
-<td>IDEA-033</td>
-<td>Idea: Add DeadlineExceeded to DbError enum and gRPC error
-mapping</td>
-</tr>
-<tr>
-<td>IDEA-034</td>
-<td>Idea: Transactor deadline overload with statement_timeout
-propagation</td>
-</tr>
-<tr>
-<td>IDEA-035</td>
-<td>Idea: Add max_statement_timeout to ServerConfig</td>
-</tr>
-<tr>
 <td>IDEA-036</td>
 <td>Idea: Migrate generated services from raw UnitOfWork to framework
 transactor</td>
-</tr>
-<tr>
-<td>IDEA-037</td>
-<td>Idea: Remove maybe_unused from ServerContext in generated gRPC
-handlers</td>
-</tr>
-<tr>
-<td>IDEA-038</td>
-<td>Idea: Generate DEADLINE_EXCEEDED handling in e2e gRPC test client
-stubs</td>
-</tr>
-<tr>
-<td>IDEA-039</td>
-<td>Idea: Doctest tests for transactor deadline-aware behavior</td>
 </tr>
 <tr>
 <td>IDEA-045</td>
@@ -749,34 +586,26 @@ stubs</td>
 <td>Idea: OpenTelemetry integration for generated gRPC services</td>
 </tr>
 <tr>
-<td>IDEA-047</td>
-<td>Idea: Correlation ID propagation across gRPC service layers</td>
-</tr>
-<tr>
-<td>IDEA-048</td>
-<td>Idea: DDD model version exposure in generated gRPC services</td>
-</tr>
-<tr>
-<td>IDEA-049</td>
-<td>IDEA-049: TLA+ Saga Specification Generator</td>
-</tr>
-<tr>
-<td>IDEA-050</td>
-<td>IDEA-050: TLA+ CMake Integration and Release Gate</td>
-</tr>
-<tr>
-<td>IDEA-051</td>
-<td>IDEA-051: TLA+ Counterexample Trace Reporter</td>
-</tr>
-<tr>
 <td>IDEA-052</td>
-<td>-- SPDX-License-Identifier: AGPL-3.0-or-later OR
-LicenseRef-Muscovite-Commercial</td>
+<td>Idea: DBA layer protobuf link and nlohmann_json cleanup</td>
 </tr>
 <tr>
-<td>IDEA-053</td>
-<td>-- SPDX-License-Identifier: AGPL-3.0-or-later OR
-LicenseRef-Muscovite-Commercial</td>
+<td>IDEA-054</td>
+<td>Idea: Standalone Qt/QML coordinator monitor — real-time NATS
+WebSocket dashboard for FTR state, workers, and event stream</td>
+</tr>
+<tr>
+<td>IDEA-055</td>
+<td>Idea: Leader command panel in coordinator monitor — approve, reject,
+and release from the QML dashboard</td>
+</tr>
+<tr>
+<td>IDEA-056</td>
+<td>Idea: Programmatic agent session control via shell RPC</td>
+</tr>
+<tr>
+<td>IDEA-057</td>
+<td>Idea: Role-specific Copilot CLI agent plugins</td>
 </tr>
 </tbody>
 </table>
@@ -797,18 +626,18 @@ LicenseRef-Muscovite-Commercial</td>
 <tbody>
 <tr>
 <td>Bytecode files (<code>.zo</code>)</td>
-<td>261</td>
+<td>268</td>
 </tr>
 <tr>
 <td>Cache size</td>
-<td>7.9M</td>
+<td>8.1M</td>
 </tr>
 </tbody>
 </table>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>7fb0e8c4</code> (project:
+<p>Last measured at commit <code>69e8894c</code> (project:
 fhir-health):</p>
 <table>
 <thead>
@@ -821,17 +650,17 @@ fhir-health):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1033.9s</td>
+<td>6739.0s</td>
 <td>283 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
-<td>1.2s</td>
+<td>8.0s</td>
 <td>All generator targets</td>
 </tr>
 </tbody>
 </table>
-<p>Build history: 6 recorded runs.</p>
+<p>Build history: 7 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -851,24 +680,24 @@ fhir-health):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>384.7s</td>
+<td>296.4s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
-<td>28 tests</td>
-<td>27</td>
+<td>32 tests</td>
+<td>31</td>
 <td>1</td>
-<td>96%</td>
-<td>11.1s</td>
+<td>97%</td>
+<td>25.0s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (99.9s)</li>
-<li><strong>slow</strong>: 54/54 passed (260.4s)</li>
-<li><strong>integration</strong>: 12/12 passed (24.3s)</li>
+<li><strong>fast</strong>: 29/29 passed (84.2s)</li>
+<li><strong>slow</strong>: 54/54 passed (168.1s)</li>
+<li><strong>integration</strong>: 12/12 passed (44.0s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -885,6 +714,14 @@ fhir-health):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.63.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.62.2</td>
 <td>8</td>
@@ -951,114 +788,10 @@ fhir-health):</p>
 </tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.62.2).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.63.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
-<h1 id="user-profile-jolo">User Profile: Jolo</h1>
-<blockquote>
-<p>AI agents: Read this to understand communication style and working
-patterns.</p>
-</blockquote>
-<h2 id="summary">Summary</h2>
-<p><strong>Role</strong>: Staff Engineer / Technical Lead / Former
-Department Head <strong>Experience</strong>: 10+ years systems
-architecture, DDD, multi-language stacks (C++, C#, Python, Racket, SQL,
-QML) <strong>Key Trait</strong>: Pragmatic — values <strong>working code
-over theory</strong>, <strong>documentation over talk</strong>,
-<strong>tests over intuition</strong></p>
-<h2 id="communication-style">Communication Style</h2>
-<p><strong>Preferred format</strong>: <code>## Status: [Feature]</code>
-→ <strong>Completed</strong> ✅ / <strong>Blocking</strong> (file:line)
-/ <strong>Next Action</strong> (test command).</p>
-<p><strong>Do</strong>: Bullet points, tables, code snippets. File:line
-references. Test output as proof. Executable next steps.</p>
-<p><strong>Don't</strong>: ❌ "This might work..." | ❌ "Usually this
-should..." | ❌ Long explanations without actions | ❌ Workarounds
-instead of root-cause fixes.</p>
-<h2 id="what-frustrates">What Frustrates</h2>
-<table>
-<thead>
-<tr>
-<th>Anti-Pattern</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>"Let's add X because it's cool"</td>
-<td>No domain justification</td>
-</tr>
-<tr>
-<td>"Quick fix now, proper later"</td>
-<td>Technical debt</td>
-</tr>
-<tr>
-<td>"Just edit the generated code"</td>
-<td>Violates DSL-first</td>
-</tr>
-<tr>
-<td>Suggesting manual SQL</td>
-<td>Bypasses migration pipeline</td>
-</tr>
-</tbody>
-</table>
-<h2 id="what-builds-trust">What Builds Trust</h2>
-<table>
-<thead>
-<tr>
-<th>Pattern</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>"Here's a failing test proving the bug"</td>
-<td>Test-driven</td>
-</tr>
-<tr>
-<td>"This affects files X, Y, Z"</td>
-<td>Holistic awareness</td>
-</tr>
-<tr>
-<td>"Per ADR 20260120, use domain services"</td>
-<td>Respects decisions</td>
-</tr>
-<tr>
-<td>Direct line references</td>
-<td>Precise, actionable</td>
-</tr>
-</tbody>
-</table>
-<h2 id="technical-philosophy">Technical Philosophy</h2>
-<ul>
-<li><strong>Generator-first</strong>: Repeating code → Racket
-template</li>
-<li><strong>Fail fast</strong>: Catch errors at generation, not
-runtime</li>
-<li><strong>Single source of truth</strong>: DSL drives everything</li>
-<li><strong>Automation over discipline</strong>: Tools enforce
-conventions</li>
-<li><strong>Integration over unit tests</strong>: Meaningful &gt;
-numerous</li>
-<li><strong>Vertical feature completeness</strong>: Full stack or
-nothing — no partial implementations</li>
-<li><strong>Production-grade or nothing</strong>: Rejects
-toy/lightweight tools for core infrastructure</li>
-</ul>
-<h2 id="how-agents-should-adapt">How Agents Should Adapt</h2>
-<ol type="1">
-<li>Lead with executable actions, not explanations</li>
-<li>Cite specific files/lines</li>
-<li>Show test output to validate</li>
-<li>Use tables/bullets for decisions</li>
-<li>Never suggest editing generated code</li>
-<li>Reference ADRs for architectural changes</li>
-<li>Identify the correct layer (parser? generator? framework?) —
-wrong-layer suggestions erode trust immediately</li>
-<li>Think about downstream impact across all 8 generator targets</li>
-<li>Check license compatibility against AGPL-3.0 + Commercial dual
-licensing</li>
-<li>Suggest production-grade solutions sized to the domain</li>
-</ol>
+<p>Staff Engineer (10+ years), DDD/CQRS expert. See
+.github/copilot-instructions.md §User Profile.</p>
 <h2 id="13-agent-sessions">13. Agent Sessions</h2>
 <table>
 <thead>
