@@ -304,13 +304,17 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#c
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QThread::msleep</span><span class="op">(</span><span class="dv">500</span><span class="op">);</span>  <span class="co">// BLOCKS UI FOR 500ms — login_dialog.cpp:L183</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    checkLoginResult<span class="op">();</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade F — every generated gRPC call is
-synchronous. QThread::msleep(500) in login dialog. <strong>Generator
-files</strong>: ALL <code>dslgen/generators/qt/</code> files (~57 files)
-that emit gRPC calls. <strong>Framework needed</strong>:
-<code>GrpcTaskAdapter</code> class in <code>framework/qt/</code> built
-on Qt TaskTree (vendored from qt-creator solutions/tasking/ until Qt
-6.11 ships <code>Qt::Tasking</code>).</p>
+<p><strong>Audit</strong>: Grade A — ✅ All generated gRPC calls are
+async via <code>GrpcCallTask</code> (735 files) and
+<code>QtConcurrent</code> (212 files). Zero synchronous
+<code>stub_-&gt;</code> calls remain. Zero <code>QThread::msleep</code>
+calls. <code>async-grpc-emitter.rkt</code> +
+<code>grpc_task_adapter.hpp</code> in place. (Updated 2026-03-13)
+<strong>Generator files</strong>:
+<code>dslgen/generators/qt/async-grpc-emitter.rkt</code> (shared async
+emission) <strong>Framework</strong>:
+<code>framework/qt/include/muscovite/qt/grpc_task_adapter.hpp</code>
+(GrpcTaskAdapter via TaskTree)</p>
 <hr />
 <h2 id="2-grpc-stub-ownership-p0--thread-safety">2. gRPC Stub Ownership
 (P0 — Thread Safety)</h2>
@@ -339,9 +343,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#c
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade F — all QML ViewModels use static
-stubs. <strong>Generator files</strong>:
-<code>qt/qml-viewmodel.rkt</code>, <code>qt/widgets-main.rkt</code></p>
+<p><strong>Audit</strong>: Grade A — ✅ Zero static stubs in generated
+code. All QML ViewModels use instance member stubs. (Updated 2026-03-13)
+<strong>Generator files</strong>: <code>qt/qml-viewmodel.rkt</code>,
+<code>qt/widgets-main.rkt</code></p>
 <hr />
 <h2 id="3-theming-and-colors-p1--maintainability">3. Theming and Colors
 (P1 — Maintainability)</h2>
@@ -375,13 +380,14 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#c
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;  border-radius: 4px;&quot;</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;}&quot;</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade D — 25+ setStyleSheet calls with
-hardcoded CSS in framework, more in generated output. MuscoviteTheme.qml
-exists for QML but unused. No Qt Widgets theme singleton.
+<p><strong>Audit</strong>: Grade C+ — <code>theme.hpp</code> exists (172
+lines). Generated code largely clean (4 <code>setStyleSheet</code> calls
+remaining). Framework still has 24 hardcoded <code>setStyleSheet</code>
+calls across 7 source files. → FTR-419 (v1.66.0). (Updated 2026-03-13)
 <strong>Generator files</strong>: <code>qt/widgets-main.rkt</code>,
 <code>qt/widgets-detail-view.rkt</code> <strong>Framework
-files</strong>: <code>framework/qt/include/muscovite/qt/</code> — most
-widget classes</p>
+files</strong>: <code>framework/qt/include/muscovite/qt/theme.hpp</code>
+(exists, underused)</p>
 <hr />
 <h2 id="4-qml-property-naming-p1--convention-violation">4. QML Property
 Naming (P1 — Convention Violation)</h2>
@@ -402,8 +408,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#c
 add <code>(string-replace str "_" "-")</code> before splitting.
 <strong>Breaking change</strong>: Safe — both ViewModel and QML are
 generated, so coordinated regeneration maintains consistency.</p>
-<p><strong>Audit</strong>: Grade F — every generated QML property from a
-snake_case DSL field is wrong. <strong>Generator files</strong>:
+<p><strong>Audit</strong>: Grade B- — 37 snake_case Q_PROPERTY remain
+out of 844 total (~96% camelCase). All violations are FK/lookup item
+model properties (e.g., <code>address_useItemModel</code>). → FTR-417
+(v1.66.0). (Updated 2026-03-13) <strong>Generator files</strong>:
 <code>qt/common.rkt</code> (<code>symbol-&gt;qml-property</code>), all
 QML ViewModel generators</p>
 <hr />
@@ -446,11 +454,12 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span><span class="op">*</span> genderEdit <span class="op">=</span> findChild<span class="op">&lt;</span><span class="ex">QLineEdit</span><span class="op">*&gt;(</span><span class="st">&quot;gender_edit&quot;</span><span class="op">);</span> <span class="co">// WRONG: combobox</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// → Validators are effectively dead code for non-text fields</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade D+ — validators are generated but
-non-functional for non-text fields. <strong>Generator files</strong>:
-<code>qt/validator-generator.rkt</code> (L119), needs type-dispatched
-widget accessors. Must use <code>type-registry.rkt</code> Qt widget
-mappings to emit correct widget type per field.</p>
+<p><strong>Audit</strong>: Grade B+ — ✅ Validators use
+<code>entity_validator.hpp</code> framework (423 files). Zero
+<code>qobject_cast&lt;QLineEdit*&gt;</code> hacks for non-text fields.
+(Updated 2026-03-13) <strong>Generator files</strong>:
+<code>qt/validator-generator.rkt</code>,
+<code>qt/validator-rules.rkt</code></p>
 <hr />
 <h2 id="6-memory-management-qt-patterns">6. Memory Management (Qt
 Patterns)</h2>
@@ -507,11 +516,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — lambda capturing this without safety</span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">connect</span><span class="op">(</span>widget<span class="op">,</span> <span class="op">&amp;</span>Widget<span class="op">::</span>destroyed<span class="op">,</span> <span class="op">[</span><span class="kw">this</span><span class="op">]()</span> <span class="op">{</span> doSomething<span class="op">();</span> <span class="op">});</span></span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Safe version: capture weak reference or use QPointer</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade A- for signal/slot style. But
-<code>QOverload::of()</code> used 10+ times instead of
-<code>qOverload&lt;&gt;()</code>. <strong>Framework files</strong>:
-Various <code>framework/qt/</code> sources — migrate
-<code>QOverload::of</code> to <code>qOverload&lt;&gt;</code></p>
+<p><strong>Audit</strong>: Grade A — ✅ Zero
+<code>QOverload::of()</code> usages. All signal connections use modern
+<code>qOverload&lt;&gt;()</code> or PMF syntax. (Updated 2026-03-13)
+<strong>Framework files</strong>: Clean.</p>
 <hr />
 <h2 id="8-internationalization-i18n">8. Internationalization (i18n)</h2>
 <p><strong>CANONICAL</strong>: ALL user-facing strings MUST use
@@ -531,11 +539,16 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span><span class="op">*</span> label <span class="op">=</span> <span class="kw">new</span> <span class="ex">QLabel</span><span class="op">(</span><span class="st">&quot;Family Name:&quot;</span><span class="op">);</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>setWindowTitle<span class="op">(</span><span class="st">&quot;Edit Patient&quot;</span><span class="op">);</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">QMessageBox::critical</span><span class="op">(</span><span class="kw">this</span><span class="op">,</span> <span class="st">&quot;Error&quot;</span><span class="op">,</span> <span class="st">&quot;Failed to load patient&quot;</span><span class="op">);</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade A- in framework (mostly good).
-Generated output inconsistent — some strings use <code>tr()</code>,
-others don't. <strong>Generator files</strong>:
-<code>qt/widgets-main.rkt</code>,
-<code>qt/widgets-detail-view.rkt</code> (i18n coverage varies)</p>
+<p><strong>Audit</strong>: Grade B- — Framework has good
+<code>tr()</code> coverage. Generated Qt Widgets output has 6,128
+<code>tr()</code> calls but QML ViewModels have ~1,462 user-facing
+strings missing <code>tr()</code> (error messages, status text).
+<code>spdlog</code> and <code>qDebug</code> strings are acceptable
+exceptions. → FTR-418 (v1.66.0). (Updated 2026-03-13) <strong>Generator
+files</strong>: <code>qt/widgets-main.rkt</code>,
+<code>qt/widgets-detail-view.rkt</code> (good);
+<code>qt/qml-viewmodel.rkt</code>,
+<code>qt/qml-viewmodel-grpc.rkt</code> (need work)</p>
 <hr />
 <h2 id="9-threading-and-blocking">9. Threading and Blocking</h2>
 <p><strong>CANONICAL</strong>: NEVER block the main thread. Use
@@ -565,9 +578,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — blocking event processing</span></span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">QApplication::processEvents</span><span class="op">();</span>  <span class="co">// Reentrant — causes subtle bugs</span></span></code></pre></div>
-<p><strong>Audit</strong>: <code>QThread::msleep(500)</code> in
-<code>login_dialog.cpp:L178/L183</code> — P1 blocker. <strong>Framework
-files</strong>: <code>framework/qt/src/login_dialog.cpp</code></p>
+<p><strong>Audit</strong>: Grade A — ✅ Zero
+<code>QThread::msleep</code> or <code>QThread::sleep</code> calls in
+framework or generated code. (Updated 2026-03-13) <strong>Framework
+files</strong>: Clean.</p>
 <hr />
 <h2 id="10-layout-management">10. Layout Management</h2>
 <p><strong>CANONICAL</strong>: Use layout classes exclusively. Never use
@@ -643,8 +657,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">mrn_</span> <span class="op">=</span> value<span class="op">;</span></span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">emit</span> mrnChanged<span class="op">();</span>  <span class="co">// Emits even if value didn&#39;t change</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade C — Q_PROPERTY declarations exist but
-some miss NOTIFY. Naming is snake_case (see §4). <strong>Generator
+<p><strong>Audit</strong>: Grade B — Q_PROPERTY declarations present
+with NOTIFY signals. 262 CONSTANT properties (FK models) lack NOTIFY —
+acceptable since they are read-only model pointers. snake_case naming
+issue tracked in §4. (Updated 2026-03-13) <strong>Generator
 files</strong>: <code>qt/qml-viewmodel.rkt</code></p>
 <hr />
 <h2 id="12-forward-declarations-in-qt-headers">12. Forward Declarations
@@ -682,11 +698,13 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb25-1"><a href="#
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QDateEdit&gt;</span></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QPushButton&gt;</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;QVBoxLayout&gt;</span></span></code></pre></div>
-<p><strong>Audit</strong>: Grade D+ — barely used in framework.
-Generated code includes everything in headers. <strong>Framework
-files</strong>: <code>framework/qt/include/muscovite/qt/*.hpp</code>
-<strong>Generator files</strong>: <code>qt/widgets-main.rkt</code>
-(header generation)</p>
+<p><strong>Audit</strong>: Grade B — Generated code now uses forward
+declarations in headers (e.g., <code>class QTabWidget;</code>,
+<code>class QLineEdit;</code>). Framework headers still include more
+than necessary. (Updated 2026-03-13) <strong>Framework files</strong>:
+<code>framework/qt/include/muscovite/qt/*.hpp</code> <strong>Generator
+files</strong>: <code>qt/widgets-main.rkt</code> (header generation) —
+improved</p>
 <hr />
 <h2 id="13-headersource-split-for-qt-classes">13. Header/Source Split
 for Qt Classes</h2>
@@ -721,13 +739,16 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb27-1"><a href="#
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 <p><strong>Worst offenders</strong> (framework, requiring manual
 retrofit): | File | Inline Lines | Should Be |
-|------|-------------|-----------| | <code>entity_validator.hpp</code> |
-526 | &lt; 50 | | <code>entity_dialog_state_machine.hpp</code> | 469 |
-&lt; 50 | | <code>validation_result.hpp</code> | 337 | &lt; 30 | |
-<code>field_metadata.hpp</code> | 378 | &lt; 40 |</p>
-<p><strong>Audit</strong>: Grade D+ — ~3,200 lines of implementation in
-headers. <strong>Framework files</strong>:
-<code>framework/qt/include/muscovite/qt/</code></p>
+|------|-------------|-----------| | <code>spatial_widgets.hpp</code> |
+443 | &lt; 60 | | <code>entity_edit_dialog.hpp</code> | 270 | &lt; 50 |
+| <code>validation_display_widget.hpp</code> | 266 | &lt; 50 | |
+<code>auth_manager.hpp</code> | 257 | &lt; 40 | |
+<code>async_uniqueness_checker.hpp</code> | 244 | &lt; 40 |</p>
+<p><strong>Audit</strong>: Grade C+ — 19 framework Qt headers exceed 100
+lines (total ~3,500 lines of implementation in headers). Improved from
+original audit (some headers now have <code>.cpp</code> counterparts). →
+FTR-420 (v1.66.0). (Updated 2026-03-13) <strong>Framework
+files</strong>: <code>framework/qt/include/muscovite/qt/</code></p>
 <hr />
 <h2 id="14-qregularexpression-efficiency">14. QRegularExpression
 Efficiency</h2>
@@ -755,10 +776,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb29-1"><a href="#
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">QRegularExpression</span> underscores<span class="op">(</span><span class="st">&quot;_+&quot;</span><span class="op">);</span> <span class="co">// Compiled every call</span></span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> name<span class="op">.</span>replace<span class="op">(</span>spaces<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">).</span>replace<span class="op">(</span>dashes<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">).</span>replace<span class="op">(</span>underscores<span class="op">,</span> <span class="st">&quot;_&quot;</span><span class="op">);</span></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p><strong>Audit</strong>: <code>normalizeRoleName</code> creates 3
-regex objects per call — hot path in metadata extraction.
-<strong>Framework files</strong>: <code>framework/qt/src/</code> — gRPC
-metadata utilities</p>
+<p><strong>Audit</strong>: Grade A — ✅ Zero per-call
+<code>QRegularExpression</code> construction found in framework.
+(Updated 2026-03-13) <strong>Framework files</strong>: Clean.</p>
 <hr />
 <h2 id="15-member-initialization">15. Member Initialization</h2>
 <p><strong>CANONICAL</strong>: Default-initialize pointer members
@@ -951,32 +971,34 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href=
 <tbody>
 <tr>
 <td>Async gRPC</td>
-<td>ALL qt/ generators (~57 files)</td>
-<td><code>framework/qt/</code> (planned GrpcTaskAdapter via
-TaskTree)</td>
+<td><code>qt/async-grpc-emitter.rkt</code> (shared)</td>
+<td><code>framework/qt/include/muscovite/qt/grpc_task_adapter.hpp</code>
+✅</td>
 </tr>
 <tr>
 <td>Static stub</td>
 <td><code>qt/qml-viewmodel.rkt</code></td>
-<td>—</td>
+<td>— (resolved ✅)</td>
 </tr>
 <tr>
 <td>Theming</td>
 <td><code>qt/widgets-main.rkt</code>,
 <code>qt/widgets-detail-view.rkt</code></td>
-<td><code>framework/qt/include/muscovite/qt/theme.hpp</code>
-(planned)</td>
+<td><code>framework/qt/include/muscovite/qt/theme.hpp</code> (exists,
+FTR-419)</td>
 </tr>
 <tr>
 <td>QML naming</td>
 <td><code>qt/common.rkt</code>
 (<code>symbol-&gt;qml-property</code>)</td>
-<td>—</td>
+<td>— (FTR-417)</td>
 </tr>
 <tr>
 <td>Validators</td>
-<td><code>qt/validator-generator.rkt</code></td>
-<td><code>framework/qt/include/muscovite/qt/entity_validator.hpp</code></td>
+<td><code>qt/validator-generator.rkt</code>,
+<code>qt/validator-rules.rkt</code></td>
+<td><code>framework/qt/include/muscovite/qt/validation/entity_validator.hpp</code>
+✅</td>
 </tr>
 <tr>
 <td>Q_PROPERTY</td>
@@ -991,17 +1013,17 @@ TaskTree)</td>
 <tr>
 <td>Header/source</td>
 <td>— (framework only)</td>
-<td><code>framework/qt/include/muscovite/qt/*.hpp</code></td>
+<td><code>framework/qt/include/muscovite/qt/*.hpp</code> (FTR-420)</td>
 </tr>
 <tr>
 <td>QOverload</td>
 <td>— (framework only)</td>
-<td><code>framework/qt/src/*.cpp</code></td>
+<td>— (resolved ✅)</td>
 </tr>
 <tr>
 <td>QRegularExpression</td>
 <td>— (framework only)</td>
-<td><code>framework/qt/src/*.cpp</code></td>
+<td>— (resolved ✅)</td>
 </tr>
 </tbody>
 </table>
@@ -1013,29 +1035,29 @@ TaskTree)</td>
 <tr>
 <th>Priority</th>
 <th>Patterns</th>
-<th>Impact</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>P0</strong></td>
 <td>§1 (async gRPC), §2 (stub ownership)</td>
-<td><strong>Production blockers</strong> — UI freezes, data races</td>
+<td>✅ <strong>Resolved</strong> — zero violations</td>
 </tr>
 <tr>
 <td><strong>P1</strong></td>
 <td>§3 (theming), §4 (QML naming), §5 (validators), §9 (threading)</td>
-<td>Functional defects, convention violations</td>
+<td>⚠️ §3 → FTR-419, §4 → FTR-417; §5 ✅ resolved; §9 ✅ resolved</td>
 </tr>
 <tr>
 <td><strong>P2</strong></td>
 <td>§12 (forward decl), §13 (header/source split), §14 (regex)</td>
-<td>Build time, maintenance</td>
+<td>⚠️ §12 improved; §13 → FTR-420; §14 ✅ resolved</td>
 </tr>
 <tr>
 <td><strong>P3</strong></td>
 <td>§7 (qOverload), §8 (i18n), §10 (layout margins)</td>
-<td>Polish, consistency</td>
+<td>⚠️ §7 ✅ resolved; §8 → FTR-418; §10 unchanged</td>
 </tr>
 <tr>
 <td><strong>P4</strong></td>
@@ -1044,6 +1066,8 @@ TaskTree)</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Remaining FTRs</strong> (v1.66.0): FTR-417 (QML naming),
+FTR-418 (i18n), FTR-419 (theming), FTR-420 (header split).</p>
 <hr />
 <h2 id="related-documents">Related Documents</h2>
 <ul>
