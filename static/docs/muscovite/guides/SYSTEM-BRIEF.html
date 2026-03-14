@@ -114,9 +114,9 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.65.2 | <strong>Generated</strong>:
-2026-03-14 | <strong>Commit</strong>: eb3ddb12 |
-<strong>Branch</strong>: develop All content derived from live project
+<p><strong>Version</strong>: 1.65.3 | <strong>Generated</strong>:
+2026-03-14 | <strong>Commit</strong>: 464e7d65 |
+<strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
 </blockquote>
@@ -131,11 +131,11 @@ systems.</p>
 <ul>
 <li><strong>cmake</strong> (5 modules, 2005 lines)</li>
 <li><strong>cpp</strong> (80 modules, 22561 lines)</li>
-<li><strong>docs</strong> (13 modules, 5002 lines)</li>
-<li><strong>grpc</strong> (31 modules, 8071 lines)</li>
+<li><strong>docs</strong> (13 modules, 5003 lines)</li>
+<li><strong>grpc</strong> (31 modules, 8094 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
-<li><strong>postgres</strong> (30 modules, 8129 lines)</li>
-<li><strong>qt</strong> (60 modules, 16805 lines)</li>
+<li><strong>postgres</strong> (30 modules, 8138 lines)</li>
+<li><strong>qt</strong> (60 modules, 16844 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 698 lines)</li>
 <li><strong>tlaplus</strong> (4 modules, 776 lines)</li>
@@ -191,7 +191,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>300</td>
+<td>322</td>
 </tr>
 <tr>
 <td>Known types (type-registry.rkt)</td>
@@ -203,7 +203,7 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>Generated output</td>
-<td>1127151 lines</td>
+<td>1126360 lines</td>
 </tr>
 <tr>
 <td><strong>DSL amplification</strong></td>
@@ -215,12 +215,12 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>209</td>
+<td>212</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-136564-lines">Layer 0 — Racket (136564
+<h3 id="layer-0--racket-136679-lines">Layer 0 — Racket (136679
 lines)</h3>
 <table>
 <thead>
@@ -232,15 +232,15 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Model (IR structs)</td>
-<td>4670</td>
+<td>4702</td>
 </tr>
 <tr>
 <td>Parser</td>
-<td>6186</td>
+<td>6243</td>
 </tr>
 <tr>
 <td>Generator: postgres</td>
-<td>8129</td>
+<td>8138</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
@@ -248,11 +248,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: grpc</td>
-<td>8071</td>
+<td>8094</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>16805</td>
+<td>16844</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
@@ -260,11 +260,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: docs</td>
-<td>5002</td>
+<td>5003</td>
 </tr>
 <tr>
 <td>Tests</td>
-<td>34380</td>
+<td>34334</td>
 </tr>
 </tbody>
 </table>
@@ -314,21 +314,21 @@ Output</h2>
 </tr>
 <tr>
 <td>fhir-health</td>
-<td>284062</td>
+<td>281982</td>
 <td>17568</td>
 <td>12935</td>
 <td>35502</td>
 </tr>
 <tr>
 <td>geosciences</td>
-<td>619053</td>
-<td>54609</td>
+<td>614179</td>
+<td>61189</td>
 <td>39541</td>
 <td>0</td>
 </tr>
 <tr>
 <td>hello-world</td>
-<td>55288</td>
+<td>54871</td>
 <td>3721</td>
 <td>2808</td>
 <td>5566</td>
@@ -336,8 +336,31 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1652----2026-03-14">[1.65.2] -- 2026-03-14</h2>
+<h2 id="1653----2026-03-14">[1.65.3] -- 2026-03-14</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>FTR-412, FTR-431, FTR-432 — grammar consolidation + brownfield types
++ VIEW_ENTITY</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>(release): push main and tag separately to prevent orphaned
+tags</li>
+</ul>
 <h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>add gate timing data from v1.65.3 quality gates</li>
+<li>update governance artifacts for v1.65.3 release</li>
+<li>(v1.65.3): add BFX-009 — orphaned tag fix (already on develop)</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>plan: promote all v1.66.0 FTRs to must priority</li>
+<li>plan: ADR brownfield type mapping + FTR-427–434 extraction
+pipeline</li>
+</ul>
+<h2 id="1652----2026-03-14">[1.65.2] -- 2026-03-14</h2>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>update golden files for v1.65.1 generators + gate timing data
 lake</li>
@@ -348,7 +371,7 @@ lake</li>
 multi-agent coordinator. TLA+ formal verification passed:
 <strong>242,662,977 states, 8 safety invariants, zero
 violations</strong>.</p>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>(FTR-398): OpenTelemetry agent session observability
 <ul>
@@ -397,16 +420,10 @@ slow</li>
 workaround</li>
 <li>DEPENDENCIES.toml <code>[graph]</code> format undocumented</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>fix: correct DEPENDENCIES.toml format for coordinator
 compatibility</li>
-</ul>
-<h2 id="1641----2026-03-13">[1.64.1] -- 2026-03-13</h2>
-<h3 id="other-1">Other</h3>
-<ul>
-<li>governance: v1.64.1 hotfix — release process version consistency
-sweep</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -496,7 +513,7 @@ and release from the QML dashboard</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>eb3ddb12</code> (project:
+<p>Last measured at commit <code>464e7d65</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -509,7 +526,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1956.6s</td>
+<td>1432.2s</td>
 <td>283 compilation steps</td>
 </tr>
 <tr>
@@ -519,7 +536,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 11 recorded runs.</p>
+<p>Build history: 12 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -539,7 +556,7 @@ muscovite):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>317.2s</td>
+<td>129.3s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -547,16 +564,16 @@ muscovite):</p>
 <td>31</td>
 <td>1</td>
 <td>97%</td>
-<td>14.9s</td>
+<td>13.1s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (92.5s)</li>
-<li><strong>slow</strong>: 54/54 passed (195.7s)</li>
-<li><strong>integration</strong>: 12/12 passed (29.0s)</li>
+<li><strong>fast</strong>: 29/29 passed (33.2s)</li>
+<li><strong>slow</strong>: 54/54 passed (73.9s)</li>
+<li><strong>integration</strong>: 12/12 passed (22.2s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -573,6 +590,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.65.3</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.65.2</td>
 <td>8</td>
@@ -645,17 +670,9 @@ muscovite):</p>
 <td>94/94</td>
 <td>27/28</td>
 </tr>
-<tr>
-<td>v1.60.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>93/93</td>
-<td>27/28</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.65.2).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.65.3).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -693,7 +710,7 @@ muscovite):</p>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (209)</td>
+<td>Architecture decision records (212)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -716,15 +733,15 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.65.2</td>
+<td>1.65.3</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1509 (since 2025-11-17)</td>
+<td>1517 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>136564 lines</td>
+<td>136679 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
@@ -736,11 +753,11 @@ muscovite):</p>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>209</td>
+<td>212</td>
 </tr>
 <tr>
 <td>Racket tests</td>
-<td>34380 lines</td>
+<td>34334 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

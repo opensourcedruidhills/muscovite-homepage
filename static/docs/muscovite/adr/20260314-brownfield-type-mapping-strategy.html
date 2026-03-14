@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Brownfield Type Mapping Strategy — Grammar Types vs
+Extractor Aliases — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Brownfield Type Mapping Strategy — Grammar Types vs
+Extractor Aliases</span>
+</nav>
+
+<h1>ADR: Brownfield Type Mapping Strategy — Grammar Types vs Extractor
+Aliases</h1>
+
+
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+
+<h1
+id="adr-brownfield-type-mapping-strategy--grammar-types-vs-extractor-aliases">ADR:
+Brownfield Type Mapping Strategy — Grammar Types vs Extractor
+Aliases</h1>
+<p><strong>Date</strong>: 2026-03-14 <strong>Status</strong>: accepted
+<strong>Deciders</strong>: Johannes Lochmann</p>
+<h2 id="context">Context</h2>
+<p>Real-world brownfield extraction encounters 23+ data types from
+legacy database systems (SQL Server, Oracle, MySQL) that must be
+represented in Muscovite <code>.ddd</code> files. The DSL type system
+(PEG grammar <code>BaseType</code> rule) already covers 15 core types
+plus geospatial. The question is: which legacy types should become
+first-class grammar types, and which should be normalized by the
+extractor to existing types?</p>
+<p>This decision has compounding effects — every grammar type must be
+mapped across all 8 generator targets (PostgreSQL, C++ entity, C++ DBA,
+gRPC Proto, Qt Widgets, QML, fact base, documentation). Adding a type
+that's semantically identical to an existing one creates maintenance
+burden without semantic value.</p>
+<h3 id="types-encountered">Types Encountered</h3>
+<p>From extraction of 757 entities across 36 legacy SQL Server
+models:</p>
+<ul>
+<li>8 types that already exist in the grammar (false alarms from agents
+using wrong DSL names)</li>
+<li>5 types that are semantically distinct and have direct PostgreSQL
+equivalents</li>
+<li>6 types that are vendor-specific aliases for existing DSL types</li>
+<li>4 types that need structural constructs beyond simple type
+additions</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<h3
+id="principle-grammar-types-must-be-semantically-distinct">Principle:
+Grammar Types Must Be Semantically Distinct</h3>
+<p>A type enters the grammar <strong>only if</strong> it represents a
+semantic distinction that PostgreSQL (our primary target) treats
+differently. Vendor-specific spellings of the same semantic type are
+normalized by the extractor.</p>
+<p><strong>Decision framework for any future type</strong>:</p>
+<ol type="1">
+<li>Does PostgreSQL have a distinct native type for it? → Grammar
+candidate</li>
+<li>Does it generate different DDL than any existing grammar type? →
+Grammar candidate</li>
+<li>Is it just a spelling variant of an existing type? → Extractor
+alias</li>
+<li>Is it vendor-specific with no PG equivalent? → Extractor maps to
+closest PG type</li>
+</ol>
+<h3 id="grammar-additions-5-types">Grammar Additions (5 types)</h3>
+<table>
+<thead>
+<tr>
+<th>DSL Type</th>
+<th>PG Type</th>
+<th>C++ Type</th>
+<th>Why grammar-level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMALLINT</code></td>
+<td><code>SMALLINT</code></td>
+<td><code>int16_t</code></td>
+<td>Distinct storage size; PG treats differently from INTEGER</td>
+</tr>
+<tr>
+<td><code>FLOAT</code></td>
+<td><code>DOUBLE PRECISION</code></td>
+<td><code>double</code></td>
+<td>IEEE 754 double; semantically different from DECIMAL</td>
+</tr>
+<tr>
+<td><code>BYTEA</code></td>
+<td><code>BYTEA</code></td>
+<td><code>std::vector&lt;uint8_t&gt;</code></td>
+<td>Binary data; no existing grammar type covers this</td>
+</tr>
+<tr>
+<td><code>TIME</code></td>
+<td><code>TIME</code></td>
+<td><code>std::chrono::hh_mm_ss</code></td>
+<td>Time-of-day without date; distinct from DATETIME/TIMESTAMPTZ</td>
+</tr>
+<tr>
+<td><code>XML</code></td>
+<td><code>XML</code></td>
+<td><code>std::string</code></td>
+<td>PG has native XML type with XPath support</td>
+</tr>
+</tbody>
+</table>
+<h3 id="extractor-aliases-normalized-not-in-grammar">Extractor Aliases
+(normalized, not in grammar)</h3>
+<table>
+<thead>
+<tr>
+<th>Source Type</th>
+<th>Emits As</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TINYINT</code></td>
+<td><code>SMALLINT</code></td>
+<td>No PG TINYINT; SMALLINT is the floor</td>
+</tr>
+<tr>
+<td><code>REAL</code></td>
+<td><code>FLOAT</code></td>
+<td>Single-precision → double (safe widening)</td>
+</tr>
+<tr>
+<td><code>MONEY</code> / <code>SMALLMONEY</code></td>
+<td><code>DECIMAL(19,4)</code></td>
+<td>PG MONEY is locale-dependent — avoid</td>
+</tr>
+<tr>
+<td><code>CHAR(n)</code> / <code>NCHAR(n)</code></td>
+<td><code>TEXT</code></td>
+<td>Per ADR 20251223 (TEXT for all strings)</td>
+</tr>
+<tr>
+<td><code>NVARCHAR(n)</code> / <code>NTEXT</code></td>
+<td><code>TEXT</code></td>
+<td>Unicode is PG default; no distinction</td>
+</tr>
+<tr>
+<td><code>DATETIME2</code> / <code>DATETIME</code></td>
+<td><code>TIMESTAMPTZ</code></td>
+<td>Normalized to timezone-aware per ADR 20251223</td>
+</tr>
+<tr>
+<td><code>VARCHAR(n)</code></td>
+<td><code>TEXT</code></td>
+<td>Per ADR 20251223</td>
+</tr>
+<tr>
+<td><code>VARCHAR(MAX)</code> / <code>NVARCHAR(MAX)</code></td>
+<td><code>TEXT</code></td>
+<td>Large text → TEXT</td>
+</tr>
+<tr>
+<td><code>IMAGE</code></td>
+<td><code>BYTEA</code></td>
+<td>Deprecated LOB → BYTEA</td>
+</tr>
+<tr>
+<td><code>VARBINARY(MAX)</code></td>
+<td><code>BYTEA</code></td>
+<td>Binary LOB → BYTEA</td>
+</tr>
+<tr>
+<td><code>BIT</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Direct semantic equivalent</td>
+</tr>
+<tr>
+<td><code>UNIQUEIDENTIFIER</code></td>
+<td><code>UUID</code></td>
+<td>Direct semantic equivalent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="traceability-requirement">Traceability Requirement</h3>
+<p>Every extractor-normalized type <strong>must</strong> preserve the
+original via <code>@source</code>:</p>
+<pre class="ddd"><code>amount DECIMAL(19,4) @source &quot;money&quot; @uuid &quot;...&quot;,</code></pre>
+<p>This ensures modernization agents can trace back to the legacy
+schema.</p>
+<h3 id="view_entity-keyword">VIEW_ENTITY Keyword</h3>
+<p>Entities extracted from database views use the
+<code>VIEW_ENTITY</code> keyword instead of <code>ENTITY</code>. This
+signals to generators:</p>
+<ul>
+<li>Always generate surrogate <code>id UUID</code> PK (drop synthetic
+composite PKs)</li>
+<li>Generate read-only operations only (no INSERT/UPDATE/DELETE)</li>
+<li>Tag as view-sourced in fact base and documentation</li>
+</ul>
+<h3 id="fk-inference">FK Inference</h3>
+<p>Per ADR 20260106 (explicit relationships only), the grammar never
+infers FKs. The extractor runs a post-extraction heuristic pass that
+generates candidate RELATIONSHIPS blocks with confidence scores.
+HIGH/MEDIUM are emitted active; LOW are emitted as comments for human
+review.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Grammar stays clean: 20 core types (15 existing + 5 new), not 35+
+vendor spellings</li>
+<li>Extractors for different source databases (SQL Server, Oracle,
+MySQL, PostgreSQL) share the same target type system</li>
+<li><code>@source</code> annotation provides full traceability without
+grammar pollution</li>
+<li>Decision framework scales to future vendor types without
+case-by-case debate</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Extraction agents must consult the mapping table — extracting raw
+DDL types produces invalid <code>.ddd</code> files</li>
+<li>Lossy mappings exist: MONEY→DECIMAL loses the "this is currency"
+semantic; REAL→FLOAT widens precision. Both are documented via
+<code>@source</code>.</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>Grammar version bump required (coordinate with FTR-412 grammar
+merge)</li>
+<li>All 8 generator targets must handle 5 new types — mechanical but
+wide impact</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<ul>
+<li><strong>v1.65.3</strong>: FTR-431 (grammar types), FTR-432
+(VIEW_ENTITY)</li>
+<li><strong>v1.67.0</strong>: FTR-433 (extractor type mapping table),
+FTR-434 (FK inference)</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20251223: TEXT for all PostgreSQL strings, TIMESTAMPTZ for all
+datetime</li>
+<li>ADR 20260106: Explicit relationships only (no FK inference from
+naming)</li>
+<li>ADR 20260211: Grammar-first language evolution</li>
+<li>ADR 20260310: Brownfield extraction architecture</li>
+<li>ADR 20260313: Legacy view and stored procedure extraction</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -142,7 +142,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "0c5adc7c-4310-43a9-92a7-46b9000c8e47"
+            "uuid": "0c5adc7c-4310-43a9-92a7-46b9000c8e47",
+            "view_entity": false
           },
           "uuid": "0c5adc7c-4310-43a9-92a7-46b9000c8e47-agg"
         },
@@ -228,7 +229,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "7d4e8c2f-1a3b-5c6d-9e0f-2b4c6d8e0a1b"
+            "uuid": "7d4e8c2f-1a3b-5c6d-9e0f-2b4c6d8e0a1b",
+            "view_entity": false
           },
           "uuid": "7d4e8c2f-1a3b-5c6d-9e0f-2b4c6d8e0a1b-agg"
         },
@@ -314,7 +316,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+            "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "view_entity": false
           },
           "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890-agg"
         },
@@ -400,7 +403,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "c9d0e1f2-a3b4-5678-2345-789012345678"
+            "uuid": "c9d0e1f2-a3b4-5678-2345-789012345678",
+            "view_entity": false
           },
           "uuid": "c9d0e1f2-a3b4-5678-2345-789012345678-agg"
         },
@@ -486,7 +490,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "e7f8a9b0-c1d2-3456-0123-567890123456"
+            "uuid": "e7f8a9b0-c1d2-3456-0123-567890123456",
+            "view_entity": false
           },
           "uuid": "e7f8a9b0-c1d2-3456-0123-567890123456-agg"
         },
@@ -572,7 +577,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "a5b6c7d8-e9f0-1234-8901-345678901234"
+            "uuid": "a5b6c7d8-e9f0-1234-8901-345678901234",
+            "view_entity": false
           },
           "uuid": "a5b6c7d8-e9f0-1234-8901-345678901234-agg"
         },
@@ -658,7 +664,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "b7c8d9e0-f1a2-3456-cdef-890123456789"
+            "uuid": "b7c8d9e0-f1a2-3456-cdef-890123456789",
+            "view_entity": false
           },
           "uuid": "b7c8d9e0-f1a2-3456-cdef-890123456789-agg"
         },
@@ -744,7 +751,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "c8d9e0f1-a2b3-4567-def0-901234567890"
+            "uuid": "c8d9e0f1-a2b3-4567-def0-901234567890",
+            "view_entity": false
           },
           "uuid": "c8d9e0f1-a2b3-4567-def0-901234567890-agg"
         },
@@ -870,7 +878,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "d1e2f3a4-b5c6-7890-abcd-111122223333"
+            "uuid": "d1e2f3a4-b5c6-7890-abcd-111122223333",
+            "view_entity": false
           },
           "uuid": "d1e2f3a4-b5c6-7890-abcd-111122223333-agg"
         },
@@ -976,7 +985,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "f3a4b5c6-d7e8-9012-cdef-333344445555"
+            "uuid": "f3a4b5c6-d7e8-9012-cdef-333344445555",
+            "view_entity": false
           },
           "uuid": "f3a4b5c6-d7e8-9012-cdef-333344445555-agg"
         },
@@ -1072,7 +1082,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "a4b5c6d7-e8f9-0123-defa-444455556666"
+            "uuid": "a4b5c6d7-e8f9-0123-defa-444455556666",
+            "view_entity": false
           },
           "uuid": "a4b5c6d7-e8f9-0123-defa-444455556666-agg"
         },
@@ -1158,7 +1169,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "c2d3e4f5-a6b7-8901-5678-bbbbccccdddd"
+            "uuid": "c2d3e4f5-a6b7-8901-5678-bbbbccccdddd",
+            "view_entity": false
           },
           "uuid": "c2d3e4f5-a6b7-8901-5678-bbbbccccdddd-agg"
         },
@@ -1244,7 +1256,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "d3e4f5a6-b7c8-9012-6789-ccccddddeeee"
+            "uuid": "d3e4f5a6-b7c8-9012-6789-ccccddddeeee",
+            "view_entity": false
           },
           "uuid": "d3e4f5a6-b7c8-9012-6789-ccccddddeeee-agg"
         },
@@ -1330,7 +1343,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "e4f5a6b7-c8d9-0123-7890-ddddeeeeefff"
+            "uuid": "e4f5a6b7-c8d9-0123-7890-ddddeeeeefff",
+            "view_entity": false
           },
           "uuid": "e4f5a6b7-c8d9-0123-7890-ddddeeeeefff-agg"
         },
@@ -1416,7 +1430,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "f5a6b7c8-d9e0-1234-8901-eeefffff0000"
+            "uuid": "f5a6b7c8-d9e0-1234-8901-eeefffff0000",
+            "view_entity": false
           },
           "uuid": "f5a6b7c8-d9e0-1234-8901-eeefffff0000-agg"
         },
@@ -1502,7 +1517,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "a6b7c8d9-e0f1-2345-9012-ffff00001111"
+            "uuid": "a6b7c8d9-e0f1-2345-9012-ffff00001111",
+            "view_entity": false
           },
           "uuid": "a6b7c8d9-e0f1-2345-9012-ffff00001111-agg"
         },
@@ -1588,7 +1604,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "b7c8d9e0-f1a2-3456-0123-000011112222"
+            "uuid": "b7c8d9e0-f1a2-3456-0123-000011112222",
+            "view_entity": false
           },
           "uuid": "b7c8d9e0-f1a2-3456-0123-000011112222-agg"
         },
@@ -1674,7 +1691,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "c8d9e0f1-a2b3-4567-1234-111122223333"
+            "uuid": "c8d9e0f1-a2b3-4567-1234-111122223333",
+            "view_entity": false
           },
           "uuid": "c8d9e0f1-a2b3-4567-1234-111122223333-agg"
         },
@@ -1760,7 +1778,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "d9e0f1a2-b3c4-5678-2345-222233334444"
+            "uuid": "d9e0f1a2-b3c4-5678-2345-222233334444",
+            "view_entity": false
           },
           "uuid": "d9e0f1a2-b3c4-5678-2345-222233334444-agg"
         },
@@ -1846,7 +1865,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "e0f1a2b3-c4d5-6789-3456-333344445555"
+            "uuid": "e0f1a2b3-c4d5-6789-3456-333344445555",
+            "view_entity": false
           },
           "uuid": "e0f1a2b3-c4d5-6789-3456-333344445555-agg"
         },
@@ -1932,7 +1952,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "f1a2b3c4-d5e6-7890-4567-444455556666"
+            "uuid": "f1a2b3c4-d5e6-7890-4567-444455556666",
+            "view_entity": false
           },
           "uuid": "f1a2b3c4-d5e6-7890-4567-444455556666-agg"
         },
@@ -2018,7 +2039,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "a2b3c4d5-e6f7-8901-5678-555566667777"
+            "uuid": "a2b3c4d5-e6f7-8901-5678-555566667777",
+            "view_entity": false
           },
           "uuid": "a2b3c4d5-e6f7-8901-5678-555566667777-agg"
         },
@@ -2126,7 +2148,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "e2f3a4b5-c6d7-8901-bcde-222233334444"
+            "uuid": "e2f3a4b5-c6d7-8901-bcde-222233334444",
+            "view_entity": false
           },
           "uuid": "e2f3a4b5-c6d7-8901-bcde-22223333444d"
         }
@@ -2841,7 +2864,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "d1e2f3a4-b5c6-d7e8-f9a0-1b2c3d4e5f60"
+            "uuid": "d1e2f3a4-b5c6-d7e8-f9a0-1b2c3d4e5f60",
+            "view_entity": false
           },
           "uuid": "b1c2d3e4-f560-7182-9304-15263748596a"
         },
@@ -2951,7 +2975,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "c2d3e4f5-6071-8293-0415-26374859607b"
+            "uuid": "c2d3e4f5-6071-8293-0415-26374859607b",
+            "view_entity": false
           },
           "uuid": "04152637-4859-6071-8293-15365363f53f"
         },
@@ -3080,7 +3105,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "15263748-5960-7182-9304-264746740640"
+            "uuid": "15263748-5960-7182-9304-264746740640",
+            "view_entity": false
           },
           "uuid": "15263748-5960-7182-9304-2647467406ea"
         },
@@ -3386,7 +3412,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "26374859-6071-8293-0415-3758578517fb"
+            "uuid": "26374859-6071-8293-0415-3758578517fb",
+            "view_entity": false
           },
           "uuid": "04152637-4859-6071-8293-1536bdbd7b7b"
         }
@@ -3651,7 +3678,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "1d2e3f4a-0003-0004-0005-000600070008"
+            "uuid": "1d2e3f4a-0003-0004-0005-000600070008",
+            "view_entity": false
           },
           "uuid": "1d2e3f4a-0003-0004-0005-000600070012"
         },
@@ -3753,7 +3781,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "2d3e4f5a-0003-0004-0005-000600070013"
+            "uuid": "2d3e4f5a-0003-0004-0005-000600070013",
+            "view_entity": false
           },
           "uuid": "1d2e3f4a-0003-0004-0005-00060007001c"
         },
@@ -3873,7 +3902,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "2d3e4f5a-0003-0004-0005-00060007001d"
+            "uuid": "2d3e4f5a-0003-0004-0005-00060007001d",
+            "view_entity": false
           },
           "uuid": "0d1e2f3a-0003-0004-0005-000600070025"
         },
@@ -3985,7 +4015,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "1d2e3f4a-0003-0004-0005-000600070026"
+            "uuid": "1d2e3f4a-0003-0004-0005-000600070026",
+            "view_entity": false
           },
           "uuid": "1d2e3f4a-0003-0004-0005-000600070030"
         },
@@ -4247,7 +4278,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "2d3e4f5a-0003-0004-0005-000600070031"
+            "uuid": "2d3e4f5a-0003-0004-0005-000600070031",
+            "view_entity": false
           },
           "uuid": "5d6e7f8a-0003-0004-0005-000600070048"
         }
@@ -4545,7 +4577,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "1c2d3e4f-0002-0003-0004-000500060007"
+            "uuid": "1c2d3e4f-0002-0003-0004-000500060007",
+            "view_entity": false
           },
           "uuid": "1c2d3e4f-0002-0003-0004-000500060011"
         },
@@ -4749,7 +4782,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "2c3d4e5f-0002-0003-0004-000500060012"
+            "uuid": "2c3d4e5f-0002-0003-0004-000500060012",
+            "view_entity": false
           },
           "uuid": "8c9d0e1f-0002-0003-0004-000500060022"
         },
@@ -4882,7 +4916,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "9c0d1e2f-0002-0003-0004-000500060023"
+            "uuid": "9c0d1e2f-0002-0003-0004-000500060023",
+            "view_entity": false
           },
           "uuid": "9c0d1e2f-0002-0003-0004-00050006002d"
         },
@@ -4991,7 +5026,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "0c1d2e3f-0002-0003-0004-00050006002e"
+            "uuid": "0c1d2e3f-0002-0003-0004-00050006002e",
+            "view_entity": false
           },
           "uuid": "8c9d0e1f-0002-0003-0004-000500060036"
         },
@@ -5198,7 +5234,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "9c0d1e2f-0002-0003-0004-000500060037"
+            "uuid": "9c0d1e2f-0002-0003-0004-000500060037",
+            "view_entity": false
           },
           "uuid": "8c9d0e1f-0002-0003-0004-00050006004a"
         }
@@ -5610,7 +5647,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e"
+            "uuid": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e",
+            "view_entity": false
           },
           "uuid": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c"
         },
@@ -5755,7 +5793,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2e"
+            "uuid": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2e",
+            "view_entity": false
           },
           "uuid": "2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f17"
         },
@@ -5876,7 +5915,8 @@
             "uses_value_objects": [
               "Range"
             ],
-            "uuid": "3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a18"
+            "uuid": "3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a18",
+            "view_entity": false
           },
           "uuid": "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b25"
         }
@@ -6104,7 +6144,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "1a2b3c4d-0001-0002-0003-000400050006"
+            "uuid": "1a2b3c4d-0001-0002-0003-000400050006",
+            "view_entity": false
           },
           "uuid": "1b2c3d4e-0001-0002-0003-000400050010"
         },
@@ -6326,7 +6367,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "2b3c4d5e-0001-0002-0003-000400050011"
+            "uuid": "2b3c4d5e-0001-0002-0003-000400050011",
+            "view_entity": false
           },
           "uuid": "8b9c0d1e-0001-0002-0003-000400050021"
         },
@@ -6477,7 +6519,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "9b0c1d2e-0001-0002-0003-000400050022"
+            "uuid": "9b0c1d2e-0001-0002-0003-000400050022",
+            "view_entity": false
           },
           "uuid": "9b0c1d2e-0001-0002-0003-00040005002c"
         },
@@ -6606,7 +6649,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "0b1c2d3e-0001-0002-0003-00040005002d"
+            "uuid": "0b1c2d3e-0001-0002-0003-00040005002d",
+            "view_entity": false
           },
           "uuid": "0b1c2d3e-0001-0002-0003-000400050037"
         }
@@ -6870,7 +6914,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "a1b2c3d4-1111-2222-3333-444455556666"
+            "uuid": "a1b2c3d4-1111-2222-3333-444455556666",
+            "view_entity": false
           },
           "uuid": "f2a3b4c5-1111-2222-3333-444455556671"
         },
@@ -7003,7 +7048,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "a1b2c3d4-2222-3333-4444-555566667777"
+            "uuid": "a1b2c3d4-2222-3333-4444-555566667777",
+            "view_entity": false
           },
           "uuid": "e1f2a3b4-2222-3333-4444-555566667781"
         },
@@ -7133,7 +7179,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "e57b3f2a-9c41-4d8e-b3f7-2a5c89d1e4b6"
+            "uuid": "e57b3f2a-9c41-4d8e-b3f7-2a5c89d1e4b6",
+            "view_entity": false
           },
           "uuid": "b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e"
         },
@@ -7325,7 +7372,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "823da70e-ed5f-462b-9733-fe735e86ef8c"
+            "uuid": "823da70e-ed5f-462b-9733-fe735e86ef8c",
+            "view_entity": false
           },
           "uuid": "e3dd7fc5-90c5-4c8e-9e2e-15f3cc7c8e3b"
         },
@@ -7425,7 +7473,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "2ce37f05-f261-486e-a848-c72ca34d267b"
+            "uuid": "2ce37f05-f261-486e-a848-c72ca34d267b",
+            "view_entity": false
           },
           "uuid": "a329a265-d549-4902-83bc-4bf6914299e0"
         },
@@ -7607,7 +7656,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "31aa252d-f1d3-40eb-8383-55f24f4a5a48"
+            "uuid": "31aa252d-f1d3-40eb-8383-55f24f4a5a48",
+            "view_entity": false
           },
           "uuid": "3b34b62b-4c7d-4ceb-b87f-5ea803e89964"
         },
@@ -7750,7 +7800,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "49c3fff7-401f-4aa2-8fcf-a7dde3fec490"
+            "uuid": "49c3fff7-401f-4aa2-8fcf-a7dde3fec490",
+            "view_entity": false
           },
           "uuid": "dc93569b-dc36-468c-9ac6-aad7ea20ce46"
         }
@@ -8291,7 +8342,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5001"
+            "uuid": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5001",
+            "view_entity": false
           },
           "uuid": "1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c500b"
         },
@@ -8423,7 +8475,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c5010"
+            "uuid": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c5010",
+            "view_entity": false
           },
           "uuid": "3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c501b"
         },
@@ -8554,7 +8607,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c5020"
+            "uuid": "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c5020",
+            "view_entity": false
           },
           "uuid": "6b7c8d9e-0f1a-2b3c-4d5e-6f7a8b9c502c"
         },
@@ -8746,7 +8800,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c5030"
+            "uuid": "7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c5030",
+            "view_entity": false
           },
           "uuid": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c503d"
         },
@@ -8889,7 +8944,8 @@
             "uses_value_objects": [
               "Period"
             ],
-            "uuid": "1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5040"
+            "uuid": "1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5040",
+            "view_entity": false
           },
           "uuid": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c504b"
         },
@@ -8988,7 +9044,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c5050"
+            "uuid": "3b4c5d6e-7f8a-9b0c-1d2e-3f4a5b6c5050",
+            "view_entity": false
           },
           "uuid": "9b0c1d2e-3f4a-5b6c-7d8e-9f0a1b2c5056"
         }
@@ -9312,7 +9369,8 @@
               "login"
             ],
             "uses_value_objects": [],
-            "uuid": "5ec00002-0002-4002-8002-000000000001"
+            "uuid": "5ec00002-0002-4002-8002-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10001-1001-4001-8001-000000000001"
         },
@@ -9401,7 +9459,8 @@
               "user_group"
             ],
             "uses_value_objects": [],
-            "uuid": "5ec00003-0003-4003-8003-000000000001"
+            "uuid": "5ec00003-0003-4003-8003-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10002-1002-4002-8002-000000000001"
         },
@@ -9498,7 +9557,8 @@
               "capability"
             ],
             "uses_value_objects": [],
-            "uuid": "5ec00004-0004-4004-8004-000000000001"
+            "uuid": "5ec00004-0004-4004-8004-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10003-1003-4003-8003-000000000001"
         },
@@ -9618,7 +9678,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "5ec00005-0005-4005-8005-000000000001"
+            "uuid": "5ec00005-0005-4005-8005-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10004-1004-4004-8004-000000000001"
         },
@@ -9728,7 +9789,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "5ec00006-0006-4006-8006-000000000001"
+            "uuid": "5ec00006-0006-4006-8006-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10005-1005-4005-8005-000000000001"
         },
@@ -9870,7 +9932,8 @@
               "auth_token"
             ],
             "uses_value_objects": [],
-            "uuid": "5ec00007-0007-4007-8007-000000000001"
+            "uuid": "5ec00007-0007-4007-8007-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10006-1006-4006-8006-000000000001"
         },
@@ -9968,7 +10031,8 @@
             "source": null,
             "synonyms": [],
             "uses_value_objects": [],
-            "uuid": "5ec00008-0008-4008-8008-000000000001"
+            "uuid": "5ec00008-0008-4008-8008-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10007-1007-4007-8007-000000000001"
         },
@@ -10122,7 +10186,8 @@
               "security_log"
             ],
             "uses_value_objects": [],
-            "uuid": "5ec00009-0009-4009-8009-000000000001"
+            "uuid": "5ec00009-0009-4009-8009-000000000001",
+            "view_entity": false
           },
           "uuid": "5ec10008-1008-4008-8008-000000000001"
         }
@@ -10734,7 +10799,7 @@
   ],
   "metadata": {
     "context_count": 9,
-    "generated_at": "2026-03-14T06:17:04Z",
+    "generated_at": "2026-03-14T11:04:42Z",
     "generator_version": "1.20.1",
     "project_name": "FhirHealth",
     "total_aggregates": 65,

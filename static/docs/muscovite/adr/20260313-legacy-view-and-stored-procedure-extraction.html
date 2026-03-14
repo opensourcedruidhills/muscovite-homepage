@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Legacy View and Stored Procedure Extraction for Brownfield
+Migration — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Legacy View and Stored Procedure Extraction for Brownfield
+Migration</span>
+</nav>
+
+<h1>ADR: Legacy View and Stored Procedure Extraction for Brownfield
+Migration</h1>
+
+
+<h1
+id="adr-legacy-view-and-stored-procedure-extraction-for-brownfield-migration">ADR:
+Legacy View and Stored Procedure Extraction for Brownfield
+Migration</h1>
+<p><strong>Date</strong>: 2026-03-13 <strong>Status</strong>: accepted
+<strong>Supersedes</strong>: — <strong>Extends</strong>: ADR
+20260310-brownfield-extraction-architecture, ADR
+20260217-mapping-dsl-block-brownfield-migration</p>
+<h2 id="context">Context</h2>
+<p>The brownfield extraction pipeline (ADR 20260310) captures entities,
+relationships, commands, events, sagas, and field-level transformations
+from legacy systems. Two critical categories of legacy database
+artifacts are not captured:</p>
+<ol type="1">
+<li><p><strong>Database views</strong> — named queries that represent
+derived/computed read models. In legacy PostgreSQL systems, views
+frequently encode business logic: reporting aggregations, denormalized
+read models, access-control filtered projections, and cross-context
+joins. Materialized views add caching semantics.</p></li>
+<li><p><strong>Stored procedures and functions</strong> — imperative SQL
+logic encapsulated in the database. These range from simple utility
+functions to complex business rule engines. In systems like Gitea (229
+tables, 0 FK constraints), much of the integrity and workflow logic
+lives in application code rather than stored procedures. But in
+enterprise PostgreSQL systems (ERP, EHR, financial), stored procedures
+are the primary location of business logic.</p></li>
+</ol>
+<p>The gap matters because:</p>
+<ul>
+<li><strong>Views reveal read models</strong>: A legacy view joining 5
+tables across 3 schemas exposes an integration concern that entity
+extraction alone cannot detect.</li>
+<li><strong>Procedures reveal commands</strong>: A stored procedure that
+mutates multiple tables in a transaction is a candidate COMMAND or SAGA
+step.</li>
+<li><strong>Cross-dependencies exist</strong>: Views can call stored
+functions (<code>SELECT calculate_risk(id) FROM patient</code>).
+Procedures can reference views. This dependency chain must be captured
+for correct bounded context assignment.</li>
+<li><strong>Human curation requires the body</strong>: Without seeing
+the SQL, a domain expert cannot decide whether a legacy view maps to a
+PROJECTION, a SPECIFICATION, or an entirely new aggregate.</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<h3 id="1-two-new-dsl-constructs-legacy_view-and-legacy_procedure">1.
+Two New DSL Constructs: <code>LEGACY_VIEW</code> and
+<code>LEGACY_PROCEDURE</code></h3>
+<p>Both are <strong>extraction-phase artifacts</strong>, not generation
+targets. They capture legacy database objects as-is, preserving metadata
+and body text for human curation. The <code>LEGACY_</code> prefix
+explicitly marks them as pre-curation artifacts — greppable for "how
+much legacy remains to be modeled?"</p>
+<h4 id="legacy_view">LEGACY_VIEW</h4>
+<p>Captures the shape (columns + types), source tables, materialization,
+and SQL body:</p>
+<pre class="ddd"><code>LEGACY_VIEW MonthlyRevenueSummary @uuid &quot;...&quot; (
+    customer_id   UUID        NOT_NULL,
+    customer_name TEXT        NOT_NULL,
+    month         DATE        NOT_NULL,
+    total_revenue DECIMAL     NOT_NULL,
+    order_count   INTEGER     NOT_NULL
+)
+SOURCE_TABLES [customer, &quot;order&quot;, order_line]
+CALLS [calculate_loyalty_tier]
+MATERIALIZED false
+DOC &quot;Aggregates monthly revenue per customer with order count&quot;
+BODY &quot;&quot;&quot;
+    SELECT c.id, c.name, date_trunc(&#39;month&#39;, o.created_at),
+           SUM(ol.price * ol.quantity), COUNT(DISTINCT o.id)
+    FROM customer c
+    JOIN &quot;order&quot; o ON o.customer_id = c.id
+    JOIN order_line ol ON ol.order_id = o.id
+    GROUP BY 1, 2, 3
+&quot;&quot;&quot;;</code></pre>
+<p><strong>Subclauses</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Clause</th>
+<th>Required</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Column list</td>
+<td>yes</td>
+<td><code>(name TYPE [NOT_NULL])</code></td>
+<td>View output shape — the contract</td>
+</tr>
+<tr>
+<td><code>SOURCE_TABLES</code></td>
+<td>yes</td>
+<td><code>[table, ...]</code></td>
+<td>Tables referenced — for context assignment</td>
+</tr>
+<tr>
+<td><code>CALLS</code></td>
+<td>no</td>
+<td><code>[function, ...]</code></td>
+<td>Stored functions invoked — dependency chain</td>
+</tr>
+<tr>
+<td><code>MATERIALIZED</code></td>
+<td>no</td>
+<td><code>true/false</code></td>
+<td>Default false. Affects refresh strategy</td>
+</tr>
+<tr>
+<td><code>DOC</code></td>
+<td>no</td>
+<td>string</td>
+<td>Human description of purpose</td>
+</tr>
+<tr>
+<td><code>BODY</code></td>
+<td>no</td>
+<td>triple-quoted string</td>
+<td>Original SQL definition for reference</td>
+</tr>
+</tbody>
+</table>
+<h4 id="legacy_procedure">LEGACY_PROCEDURE</h4>
+<p>Captures the signature, referenced objects, classification hint, and
+SQL body:</p>
+<pre class="ddd"><code>LEGACY_PROCEDURE ApplyTieredDiscount @uuid &quot;...&quot;
+    PARAMS (order_id UUID IN, discount_pct DECIMAL OUT)
+    RETURNS VOID
+    REFERENCES [order, order_line, customer_loyalty]
+    CLASSIFICATION COMMAND
+    DOC &quot;Tiered discount: 5% over $100, 10% over $500, 15% over $1000&quot;
+    BODY &quot;&quot;&quot;
+        DECLARE total DECIMAL;
+        BEGIN
+            SELECT SUM(price * quantity) INTO total
+            FROM order_line WHERE order_id = $1;
+            discount_pct := CASE
+                WHEN total &gt; 1000 THEN 0.15
+                WHEN total &gt; 500  THEN 0.10
+                WHEN total &gt; 100  THEN 0.05
+                ELSE 0.0
+            END;
+        END;
+    &quot;&quot;&quot;;</code></pre>
+<p><strong>Subclauses</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Clause</th>
+<th>Required</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PARAMS</code></td>
+<td>yes</td>
+<td><code>(name TYPE direction)</code></td>
+<td>Parameters with IN/OUT/INOUT direction</td>
+</tr>
+<tr>
+<td><code>RETURNS</code></td>
+<td>yes</td>
+<td>type or <code>VOID</code> or <code>SETOF type</code></td>
+<td>Return type</td>
+</tr>
+<tr>
+<td><code>REFERENCES</code></td>
+<td>no</td>
+<td><code>[table, ...]</code></td>
+<td>Tables read/written — for context assignment</td>
+</tr>
+<tr>
+<td><code>CALLS</code></td>
+<td>no</td>
+<td><code>[function, ...]</code></td>
+<td>Other procedures/functions called</td>
+</tr>
+<tr>
+<td><code>CLASSIFICATION</code></td>
+<td>no</td>
+<td><code>COMMAND/QUERY/TRIGGER/MIGRATION/UTILITY</code></td>
+<td>Extractor's best guess — human overrides</td>
+</tr>
+<tr>
+<td><code>DOC</code></td>
+<td>no</td>
+<td>string</td>
+<td>Human description</td>
+</tr>
+<tr>
+<td><code>BODY</code></td>
+<td>no</td>
+<td>triple-quoted string</td>
+<td>Original PL/pgSQL or SQL body</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-triple-quoted-string-for-body">2. Triple-Quoted String for
+BODY</h3>
+<p>The SQL body is preserved as a <strong>triple-quoted string</strong>
+(<code>"""..."""</code>), not as DSL comments. Rationale:</p>
+<ul>
+<li><strong>Parseable</strong>: The body is structured content. Future
+tooling can analyze it (extract table references, detect mutation
+patterns, identify join complexity).</li>
+<li><strong>Round-trippable</strong>: Comments are lossy — they don't
+survive regeneration. Triple-quoted strings are first-class grammar
+elements.</li>
+<li><strong>Precedent</strong>: Python, Kotlin, and Scala use
+triple-quotes for multi-line strings. The Muscovite grammar already
+supports quoted strings; extending to triple-quote is a minimal grammar
+change.</li>
+</ul>
+<p>The body is <strong>not</strong> validated as SQL — it is opaque
+content. The grammar accepts any text between the triple-quote
+delimiters.</p>
+<h3 id="3-legacy_-prefix-semantics">3. LEGACY_ Prefix Semantics</h3>
+<p>The <code>LEGACY_</code> prefix is not decorative — it carries
+semantic weight:</p>
+<ul>
+<li><strong>No code generation</strong>: Generators MUST skip
+<code>LEGACY_VIEW</code> and <code>LEGACY_PROCEDURE</code> constructs.
+They produce no SQL, no C++, no gRPC, no QML.</li>
+<li><strong>Curation workflow</strong>: Human curation replaces
+<code>LEGACY_VIEW</code> → <code>PROJECTION</code> or
+<code>SPECIFICATION</code>, and <code>LEGACY_PROCEDURE</code> →
+<code>COMMAND</code>, <code>SAGA</code> step, or custom
+<code>DOMAIN_SERVICE</code> logic. The LEGACY_ construct is then
+deleted.</li>
+<li><strong>Progress metric</strong>: <code>grep -c LEGACY_ *.ddd</code>
+measures remaining extraction debt.</li>
+<li><strong>Lint rule</strong>: <code>--lint-only</code> can warn on
+LEGACY_ constructs in non-brownfield projects (they should only appear
+in migration contexts).</li>
+</ul>
+<h3 id="4-cross-dependency-tracking">4. Cross-Dependency Tracking</h3>
+<p>Both constructs support <code>CALLS [...]</code> and
+<code>SOURCE_TABLES [...]</code> / <code>REFERENCES [...]</code>
+clauses. These enable a dependency graph:</p>
+<pre><code>LEGACY_VIEW A → CALLS → LEGACY_PROCEDURE F
+LEGACY_VIEW A → SOURCE_TABLES → ENTITY Customer, ENTITY Order
+LEGACY_PROCEDURE F → REFERENCES → ENTITY Order, ENTITY OrderLine
+LEGACY_VIEW B → SOURCE_TABLES → LEGACY_VIEW A  (view-on-view)</code></pre>
+<p>The extractor resolves these from the PostgreSQL catalog:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- View → table dependencies</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> d.refobjid:<span class="ch">:regclass</span> <span class="kw">AS</span> referenced</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> pg_depend d</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> pg_rewrite r <span class="kw">ON</span> d.objid <span class="op">=</span> r.<span class="kw">oid</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> r.ev_class <span class="op">=</span> <span class="st">&#39;view_name&#39;</span>:<span class="ch">:regclass</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> d.refobjid <span class="op">!=</span> r.ev_class;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- Function → table dependencies</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> dep.refobjid:<span class="ch">:regclass</span> <span class="kw">AS</span> referenced</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> pg_depend dep</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> dep.objid <span class="op">=</span> <span class="st">&#39;function_name&#39;</span>:<span class="ch">:regproc</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> dep.deptype <span class="op">=</span> <span class="st">&#39;n&#39;</span>;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- View → function dependencies</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> p.proname</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> pg_depend d</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> pg_proc p <span class="kw">ON</span> d.refobjid <span class="op">=</span> p.<span class="kw">oid</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> pg_rewrite r <span class="kw">ON</span> d.objid <span class="op">=</span> r.<span class="kw">oid</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> r.ev_class <span class="op">=</span> <span class="st">&#39;view_name&#39;</span>:<span class="ch">:regclass</span>;</span></code></pre></div>
+<h3 id="5-classification-taxonomy">5. Classification Taxonomy</h3>
+<p>The <code>CLASSIFICATION</code> clause uses a fixed vocabulary. The
+extractor assigns based on heuristics; humans override during
+curation.</p>
+<table>
+<thead>
+<tr>
+<th>Classification</th>
+<th>Heuristic</th>
+<th>Maps To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMMAND</code></td>
+<td>Contains INSERT/UPDATE/DELETE, takes entity PK as input</td>
+<td>COMMAND in target model</td>
+</tr>
+<tr>
+<td><code>QUERY</code></td>
+<td>SELECT only, returns SETOF or TABLE</td>
+<td>SPECIFICATION or PROJECTION</td>
+</tr>
+<tr>
+<td><code>TRIGGER</code></td>
+<td>Referenced by pg_trigger, called on row events</td>
+<td>EVENT handler or POLICY</td>
+</tr>
+<tr>
+<td><code>MIGRATION</code></td>
+<td>Contains DDL (ALTER, CREATE), typically one-shot</td>
+<td>MAPPING or discard</td>
+</tr>
+<tr>
+<td><code>UTILITY</code></td>
+<td>Type coercion, formatting, no table references</td>
+<td>Helper — may not need modeling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-extraction-source-postgresql-catalog">6. Extraction Source:
+PostgreSQL Catalog</h3>
+<p>The extractor queries the PostgreSQL system catalog. No
+<code>pg_dump</code> parsing — direct catalog access provides structured
+metadata.</p>
+<table>
+<thead>
+<tr>
+<th>Catalog Source</th>
+<th>Provides</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pg_views</code></td>
+<td>View name, schema, SQL definition</td>
+</tr>
+<tr>
+<td><code>pg_matviews</code></td>
+<td>Materialized view name, schema, SQL definition</td>
+</tr>
+<tr>
+<td><code>information_schema.columns</code></td>
+<td>View column names and types</td>
+</tr>
+<tr>
+<td><code>pg_proc</code> + <code>pg_namespace</code></td>
+<td>Procedure/function name, args, return type, body, kind</td>
+</tr>
+<tr>
+<td><code>pg_depend</code> + <code>pg_rewrite</code></td>
+<td>View→table, view→function, function→table dependencies</td>
+</tr>
+<tr>
+<td><code>pg_trigger</code></td>
+<td>Trigger→function associations (for CLASSIFICATION)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-no-generation--extraction-only">7. No Generation — Extraction
+Only</h3>
+<p>These constructs are input artifacts for the curation workflow. They
+MUST NOT produce generated output in any target:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PostgreSQL/Sqitch</td>
+<td>Skip — do not emit CREATE VIEW or CREATE FUNCTION</td>
+</tr>
+<tr>
+<td>C++ DBA</td>
+<td>Skip — no entity struct, no repository</td>
+</tr>
+<tr>
+<td>gRPC/Proto</td>
+<td>Skip — no service method</td>
+</tr>
+<tr>
+<td>Qt Widgets/QML</td>
+<td>Skip — no UI form</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td><strong>Include</strong> — list in system manual as "legacy
+artifacts pending curation"</td>
+</tr>
+<tr>
+<td>Fact Base JSON</td>
+<td><strong>Include</strong> — with <code>"legacy": true</code> flag for
+analysis tooling</td>
+</tr>
+</tbody>
+</table>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li>Brownfield extraction captures the complete database surface:
+tables, views, and procedures — not just entities.</li>
+<li>Human curators see the actual SQL body alongside the extracted
+metadata, enabling informed decisions about DDD classification.</li>
+<li>Cross-dependency tracking enables automated context boundary
+suggestions.</li>
+<li>The <code>LEGACY_</code> prefix creates a measurable curation
+backlog.</li>
+<li>No impact on existing generation — generators skip these
+constructs.</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li>Grammar grows by ~2 constructs and ~8 keywords. Parser complexity
+increases.</li>
+<li>Triple-quoted strings are a new lexer feature (currently only
+single-quoted and double-quoted strings exist).</li>
+<li>The <code>BODY</code> clause may contain large SQL blocks (100+
+lines), inflating .ddd file sizes during extraction. Acceptable for
+brownfield — not for target models.</li>
+<li><code>CLASSIFICATION</code> heuristics will have false positives.
+The taxonomy may need extension as more legacy systems are
+extracted.</li>
+</ul>
+<h3 id="neutral">Neutral</h3>
+<ul>
+<li>No existing .ddd files are affected — these are new constructs.</li>
+<li>No migration needed — purely additive grammar change.</li>
+<li>The <code>LEGACY_</code> prefix convention can be applied
+retroactively to other extraction artifacts if needed (e.g.,
+<code>LEGACY_TRIGGER</code>).</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>ADR 20260310-brownfield-extraction-architecture (parent: extraction
+pipeline)</li>
+<li>ADR 20260217-mapping-dsl-block-brownfield-migration (MAPPING
+construct)</li>
+<li>ADR 20260217-brownfield-migration-factory-architecture (migration
+factory)</li>
+<li>ADR 20260211-grammar-first-language-evolution (grammar-first
+mandate)</li>
+<li>FTR-349: Gitea full brownfield extraction (107 tables, 0 views, 0
+procedures)</li>
+<li>FTR-345: FHIR R4 StructureDefinition extraction</li>
+<li>FTR-350: Generic Go ORM extractor repository</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

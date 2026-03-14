@@ -114,10 +114,10 @@
 
 <h1 id="muscovite-dsl-reference">Muscovite DSL Reference</h1>
 <blockquote>
-<p><strong>Version</strong>: v1.5.0 | <strong>Formal Grammar</strong>:
+<p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 300</p>
+| <strong>Rules</strong>: 322</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -551,9 +551,12 @@ ProjectBlock         &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody 
 <pre class="peg"><code>Context              &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
 BuiltinAnnotation    &lt;- &#39;@&#39; &#39;BUILTIN&#39;
 ContextBody          &lt;- ContextItem*
-ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / Entity / Import / MappingBlock / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
+ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
 <h3 id="3-entity">3. Entity</h3>
+<p>VIEW_ENTITY: read-only view-sourced entity (FTR-432). Identical to
+ENTITY for field declarations but generates read-only code.</p>
 <pre class="peg"><code>Entity               &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation
+ViewEntity           &lt;- &#39;VIEW_ENTITY&#39; IDENTIFIER UuidAnnotation
 ExtendsClause        &lt;- &#39;EXTENDS&#39; IDENTIFIER
 EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / SourceAnnotation / DocClause / SynonymsClause</code></pre>
 <h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
@@ -570,7 +573,7 @@ SourceAnnotation     &lt;- &#39;@&#39; &#39;SOURCE&#39; STRING</code></pre>
 <h3 id="5-type-specification">5. Type Specification</h3>
 <pre class="peg"><code>TypeSpec             &lt;- ForbiddenType / BaseType ArraySuffix? OptionalMarker? NullClause?
 ForbiddenType        &lt;- &#39;JSONB&#39; / &#39;JSON&#39;
-BaseType             &lt;- &#39;UUID&#39; / &#39;STRING&#39; / &#39;VARCHAR&#39; ( &#39;(&#39; NUMBER &#39;)&#39; )? / &#39;TEXT&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / ( &#39;DECIMAL&#39; / &#39;NUMERIC&#39; ) DecimalPrecision? / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;INTERVAL&#39; / &#39;POSITIVE_INTEGER&#39; / &#39;POSITIVE_INT&#39; / GeospatialType / QualifiedIdentifier  # length ignored, maps to TEXT
+BaseType             &lt;- &#39;UUID&#39; / &#39;STRING&#39; / &#39;VARCHAR&#39; ( &#39;(&#39; NUMBER &#39;)&#39; )? / &#39;TEXT&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / &#39;SMALLINT&#39; / ( &#39;DECIMAL&#39; / &#39;NUMERIC&#39; ) DecimalPrecision? / &#39;FLOAT&#39; / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;TIME&#39; / &#39;INTERVAL&#39; / &#39;BYTEA&#39; / &#39;XML&#39; / &#39;POSITIVE_INTEGER&#39; / &#39;POSITIVE_INT&#39; / GeospatialType / QualifiedIdentifier  # length ignored, maps to TEXT
 DecimalPrecision     &lt;- &#39;(&#39; NUMBER ( &#39;,&#39; NUMBER )? &#39;)&#39;
 GeospatialType       &lt;- GeospatialTypeName SridClause?
 GeospatialTypeName   &lt;- &#39;POINT&#39; / &#39;POINTZ&#39; / &#39;LINESTRING&#39; / &#39;LINESTRINGZ&#39; / &#39;POLYGON&#39; / &#39;POLYGONZ&#39; / &#39;MULTIPOINT&#39; / &#39;MULTILINESTRING&#39; / &#39;MULTIPOLYGON&#39; / &#39;GEOMETRYCOLLECTION&#39; / &#39;GEOMETRY&#39; / &#39;GEOGRAPHY&#39;
@@ -595,29 +598,41 @@ StrongTypeBase       &lt;- &#39;TEXT&#39; / &#39;VARCHAR&#39; / &#39;INTEGER&#39
 StrongTypeCheck      &lt;- &#39;CHECK&#39; IDENTIFIER &#39;:&#39; CheckExpression
 CheckExpression      &lt;- ( !( &#39;CHECK&#39; / &#39;DEFAULT&#39; / &#39;DOC&#39; / &#39;;&#39; / EOF ) . )+</code></pre>
 <h3 id="9-aggregate">9. Aggregate</h3>
-<p>Layout directives now live exclusively in .lay profile files. See
-dslgen/grammar/muscovite-lay.peg for the layout grammar. The parser
-rejects LAYOUT in .ddd with a helpful error message. ADR:
-20260223-separate-layout-into-lay-dsl.md Former rules (preserved as
-comments for reference): LayoutBlock &lt;- 'LAYOUT' FormFactorQualifier?
-'{' LayoutDirective+ '}' FormFactorQualifier &lt;- 'desktop' / 'tablet'
-/ 'mobile' / 'watch' / 'embedded' LayoutDirective &lt;- MasterDirective
-/ DetailDirective MasterDirective &lt;- 'MASTER' '{' MasterClause+ '}'
-MasterClause &lt;- 'TABLE' ':' FieldRefList ';' DetailDirective &lt;-
-'DETAIL' '{' DetailClause+ '}' DetailClause &lt;- StyleClause /
-GroupingClause / ActionsClause / ChildrenClause ChildrenClause &lt;-
-'CHILDREN' ':' '[' ChildTabSpec (',' ChildTabSpec)* ']' ';' ChildTabSpec
-&lt;- IDENTIFIER ('as' QuotedString)? QuotedString &lt;- '"' (!'"' .)*
-'"' StyleClause &lt;- 'STYLE' ':' LayoutStyle ';' LayoutStyle &lt;-
-'FORM' / 'SIDEBAR' / 'CARD' / 'WIZARD' GroupingClause &lt;- 'GROUPING'
-':' GroupingMode ';' GroupingMode &lt;- 'TABS' / 'SECTIONS' /
-'ACCORDION' / 'FLAT' ActionsClause &lt;- 'ACTIONS' ':' FieldRefList ';'
-FieldRefList &lt;- '[' IDENTIFIER ( ',' IDENTIFIER )* ']'</p>
+<p>9b. Layout Profile Grammar (FTR-412 — merged from muscovite-lay.peg)
+Layout rules for <code>.lay</code> profile files. Merged into the
+canonical grammar to eliminate duplication drift risk (12 rules were
+duplicated between muscovite.peg and the former muscovite-lay.peg). The
+<code>.lay</code> file type, parser (lay-parser.rkt), and IR
+(lay-types.rkt) remain separate. ADR: 20260314-grammar-reunification.md
+(partially supersedes ADR 20260223) NOTE: LAYOUT blocks remain rejected
+in .ddd files by the parser (FTR-134). These rules are valid only in
+.lay files parsed by lay-parser.rkt.</p>
 <pre class="peg"><code>Aggregate            &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
 ContainsClause       &lt;- &#39;(&#39; &#39;CONTAINS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39;
 EmbedsClause         &lt;- &#39;EMBEDS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
 EventSourcedClause   &lt;- &#39;EVENT_SOURCED&#39;
-GrpcDeadlineClause   &lt;- &#39;GRPC_DEADLINE&#39; STRING</code></pre>
+GrpcDeadlineClause   &lt;- &#39;GRPC_DEADLINE&#39; STRING
+LayProgram           &lt;- Spacing LayoutProfile EOF
+LayoutProfile        &lt;- &#39;LAYOUT_PROFILE&#39; ProfileName? FormFactorDefault? &#39;{&#39; LayoutEntry* &#39;}&#39;
+ProfileName          &lt;- STRING
+FormFactorDefault    &lt;- &#39;FORM_FACTOR&#39; FormFactorValue
+FormFactorValue      &lt;- &#39;desktop&#39; / &#39;tablet&#39; / &#39;mobile&#39; / &#39;watch&#39; / &#39;embedded&#39;
+LayoutEntry          &lt;- &#39;LAYOUT&#39; FormFactorQualifier? QualifiedAggName &#39;{&#39; LayoutDirective+ &#39;}&#39;
+FormFactorQualifier  &lt;- FormFactorValue
+QualifiedAggName     &lt;- IDENTIFIER &#39;.&#39; IDENTIFIER
+LayoutDirective      &lt;- MasterDirective / DetailDirective
+MasterDirective      &lt;- &#39;MASTER&#39; &#39;{&#39; MasterClause+ &#39;}&#39;
+MasterClause         &lt;- &#39;TABLE&#39; &#39;:&#39; FieldRefList &#39;;&#39;
+DetailDirective      &lt;- &#39;DETAIL&#39; &#39;{&#39; DetailClause+ &#39;}&#39;
+DetailClause         &lt;- StyleClause / GroupingClause / ActionsClause / ChildrenClause
+ChildrenClause       &lt;- &#39;CHILDREN&#39; &#39;:&#39; &#39;[&#39; ChildTabSpec ( &#39;,&#39; ChildTabSpec )* &#39;]&#39; &#39;;&#39;
+ChildTabSpec         &lt;- IDENTIFIER ( &#39;as&#39; STRING )?
+StyleClause          &lt;- &#39;STYLE&#39; &#39;:&#39; LayoutStyle &#39;;&#39;
+LayoutStyle          &lt;- &#39;FORM&#39; / &#39;SIDEBAR&#39; / &#39;CARD&#39; / &#39;WIZARD&#39;
+GroupingClause       &lt;- &#39;GROUPING&#39; &#39;:&#39; GroupingMode &#39;;&#39;
+GroupingMode         &lt;- &#39;TABS&#39; / &#39;SECTIONS&#39; / &#39;ACCORDION&#39; / &#39;FLAT&#39;
+ActionsClause        &lt;- &#39;ACTIONS&#39; &#39;:&#39; FieldRefList &#39;;&#39;
+FieldRefList         &lt;- &#39;[&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;]&#39;</code></pre>
 <h3 id="10-domain-event">10. Domain Event</h3>
 <pre class="peg"><code>DomainEvent          &lt;- &#39;EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
 <h3 id="11-sourced-event-event-sourcing--adr-20260204">11. Sourced Event
