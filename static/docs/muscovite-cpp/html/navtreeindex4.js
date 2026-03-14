@@ -177,6 +177,7 @@ var NAVTREEINDEX4 =
 "conceptmuscovite_1_1dba_1_1RowDeserializable.html":[2,0,0,3],
 "conceptmuscovite_1_1dba_1_1RowMappable.html":[2,0,0,4],
 "conceptmuscovite_1_1dba_1_1TransactorCallable.html":[2,0,0,5],
+"conceptmuscovite_1_1dba_1_1UnitOfWorkCallable.html":[2,0,0,6],
 "conceptmuscovite_1_1geo_1_1PointLike.html":[2,0,1,0],
 "conceptmuscovite_1_1geo_1_1SridTag.html":[2,0,1,1],
 "concepts.html":[2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "dir_6ec6d1dfd049f6e3bb4cb54c6aeee250.html":[4,0,0,9,0],
 "dir_7010a7df24890fba18fc25a97a860206.html":[4,0,0,4,0,0,0,6],
 "dir_70d5783b3cba003cbcc4be468bf21ea3.html":[4,0,0,0,0,0,0],
-"dir_71169b5e99c8d012bfad40b2b6f635e1.html":[4,0,0,4,1],
-"dir_717fbe0e8b9335ad5cec2962440b954c.html":[4,0,0,4,0,0,0,8]
+"dir_71169b5e99c8d012bfad40b2b6f635e1.html":[4,0,0,4,1]
 };

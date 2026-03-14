@@ -114,9 +114,9 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.65.0 | <strong>Generated</strong>:
-2026-03-13 | <strong>Commit</strong>: 6c7062df |
-<strong>Branch</strong>: main All content derived from live project
+<p><strong>Version</strong>: 1.65.2 | <strong>Generated</strong>:
+2026-03-14 | <strong>Commit</strong>: eb3ddb12 |
+<strong>Branch</strong>: develop All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
 </blockquote>
@@ -130,11 +130,11 @@ systems.</p>
 <code>dslgen/generators/</code>):</p>
 <ul>
 <li><strong>cmake</strong> (5 modules, 2005 lines)</li>
-<li><strong>cpp</strong> (80 modules, 22624 lines)</li>
+<li><strong>cpp</strong> (80 modules, 22561 lines)</li>
 <li><strong>docs</strong> (13 modules, 5002 lines)</li>
 <li><strong>grpc</strong> (31 modules, 8071 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
-<li><strong>postgres</strong> (30 modules, 8001 lines)</li>
+<li><strong>postgres</strong> (30 modules, 8129 lines)</li>
 <li><strong>qt</strong> (60 modules, 16805 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 698 lines)</li>
@@ -156,19 +156,19 @@ Governance</h2>
 <tbody>
 <tr>
 <td><strong>Layer 0 — Brain</strong></td>
-<td><code>dslgen/</code> (Racket)</td>
+<td>`dslgen/` (Racket)</td>
 <td>DSL parser, IR model, all generators</td>
 </tr>
 <tr>
 <td><strong>Layer 1 — Framework</strong></td>
-<td><code>framework/</code> (C++)</td>
+<td>`framework/` (C++)</td>
 <td>Reusable base classes (Repository, UnitOfWork, errors)</td>
 </tr>
 <tr>
 <td><strong>Layer 2 — Generated</strong></td>
-<td><code>examples/{project}/</code></td>
-<td>100% generated from <code>.ddd</code> models. Never manually
-edited.</td>
+<td>Consumer repos via `muscovite-cpp`</td>
+<td>Generated from `.ddd` models. Consumer repos own their
+lifecycle.</td>
 </tr>
 </tbody>
 </table>
@@ -203,7 +203,7 @@ edited.</td>
 </tr>
 <tr>
 <td>Generated output</td>
-<td>1125331 lines</td>
+<td>1127151 lines</td>
 </tr>
 <tr>
 <td><strong>DSL amplification</strong></td>
@@ -215,12 +215,12 @@ edited.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>205</td>
+<td>209</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-136484-lines">Layer 0 — Racket (136484
+<h3 id="layer-0--racket-136564-lines">Layer 0 — Racket (136564
 lines)</h3>
 <table>
 <thead>
@@ -240,11 +240,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: postgres</td>
-<td>8001</td>
+<td>8129</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
-<td>22624</td>
+<td>22561</td>
 </tr>
 <tr>
 <td>Generator: grpc</td>
@@ -264,11 +264,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Tests</td>
-<td>34365</td>
+<td>34380</td>
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1--c-framework-41894-lines">Layer 1 — C++ Framework (41894
+<h3 id="layer-1--c-framework-42070-lines">Layer 1 — C++ Framework (42070
 lines)</h3>
 <table>
 <thead>
@@ -280,7 +280,7 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Headers (.hpp)</td>
-<td>17799</td>
+<td>17975</td>
 </tr>
 <tr>
 <td>Sources (.cpp)</td>
@@ -315,7 +315,7 @@ Output</h2>
 <tr>
 <td>fhir-health</td>
 <td>284062</td>
-<td>16022</td>
+<td>17568</td>
 <td>12935</td>
 <td>35502</td>
 </tr>
@@ -329,13 +329,19 @@ Output</h2>
 <tr>
 <td>hello-world</td>
 <td>55288</td>
-<td>3447</td>
+<td>3721</td>
 <td>2808</td>
 <td>5566</td>
 </tr>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="1652----2026-03-14">[1.65.2] -- 2026-03-14</h2>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>update golden files for v1.65.1 generators + gate timing data
+lake</li>
+</ul>
 <h2 id="1650----2026-03-13">[1.65.0] -- 2026-03-13</h2>
 <h3 id="theme-close-the-coordinator">Theme: Close the Coordinator</h3>
 <p>First iteration executed end-to-end through the NATS-based
@@ -402,41 +408,12 @@ compatibility</li>
 <li>governance: v1.64.1 hotfix — release process version consistency
 sweep</li>
 </ul>
-<h2 id="1640----2026-03-12">[1.64.0] -- 2026-03-12</h2>
-<h3 id="added-1">Added</h3>
-<ul>
-<li>(governance): git pre-commit hook enforcing worktree-only commits
-(FTR-392)</li>
-<li>(coordinator): hot-reload DEPENDENCIES.toml without restart
-(FTR-391)</li>
-</ul>
-<h3 id="maintenance">Maintenance</h3>
-<ul>
-<li>mark all v1.64.0 FTRs complete, add RELEASE-CHECKLIST.md</li>
-<li>update homepage submodule to v1.63.0 docs</li>
-<li>update sample submodule pointers for v1.63.0</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>v1.64.0: Coordinator hardening — 12 FTRs (391-397, 385-390,
-394-395)</li>
-<li>FTR-395: Worker self-push via agent-pr.sh</li>
-<li>FTR-394: Remove file-based coordination — NATS-only</li>
-<li>FTR-397: Role-specific context generation (worker briefs)</li>
-<li>FTR-393: Worktree lifecycle automation</li>
-<li>FTR-390: KV-backed crash recovery for instant state restore</li>
-<li>FTR-387: NATS credential-based subject isolation</li>
-<li>FTR-389: Push-based JetStream assignment delivery</li>
-<li>FTR-388: Dual sign-off release gate in release.sh</li>
-<li>FTR-386: Role identity verification in coordinator</li>
-<li>FTR-385: QA role in coordinator</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
 <p>No planned iterations.</p>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
-<p>9 ideas in backlog.</p>
+<p>10 ideas in backlog.</p>
 <table>
 <thead>
 <tr>
@@ -485,6 +462,10 @@ and release from the QML dashboard</td>
 <td>IDEA-057</td>
 <td>Idea: Role-specific Copilot CLI agent plugins</td>
 </tr>
+<tr>
+<td>IDEA-058</td>
+<td>Idea: Work order assignment model in coordinator</td>
+</tr>
 </tbody>
 </table>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
@@ -515,8 +496,8 @@ and release from the QML dashboard</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>6c7062df</code> (project:
-fhir-health):</p>
+<p>Last measured at commit <code>eb3ddb12</code> (project:
+muscovite):</p>
 <table>
 <thead>
 <tr>
@@ -528,17 +509,17 @@ fhir-health):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1805.2s</td>
+<td>1956.6s</td>
 <td>283 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
-<td>2.2s</td>
+<td>0.0s</td>
 <td>All generator targets</td>
 </tr>
 </tbody>
 </table>
-<p>Build history: 10 recorded runs.</p>
+<p>Build history: 11 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -558,7 +539,7 @@ fhir-health):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>194.5s</td>
+<td>317.2s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -566,16 +547,16 @@ fhir-health):</p>
 <td>31</td>
 <td>1</td>
 <td>97%</td>
-<td>16.2s</td>
+<td>14.9s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (49.8s)</li>
-<li><strong>slow</strong>: 54/54 passed (115.0s)</li>
-<li><strong>integration</strong>: 12/12 passed (29.6s)</li>
+<li><strong>fast</strong>: 29/29 passed (92.5s)</li>
+<li><strong>slow</strong>: 54/54 passed (195.7s)</li>
+<li><strong>integration</strong>: 12/12 passed (29.0s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -592,6 +573,14 @@ fhir-health):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.65.2</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.65.0</td>
 <td>8</td>
@@ -664,17 +653,9 @@ fhir-health):</p>
 <td>93/93</td>
 <td>27/28</td>
 </tr>
-<tr>
-<td>v1.59.1</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>93/93</td>
-<td>27/28</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.65.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.65.2).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -712,7 +693,7 @@ fhir-health):</p>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (205)</td>
+<td>Architecture decision records (209)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -735,19 +716,19 @@ fhir-health):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.65.0</td>
+<td>1.65.2</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1489 (since 2025-11-17)</td>
+<td>1509 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>136484 lines</td>
+<td>136564 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>41894 lines</td>
+<td>42070 lines</td>
 </tr>
 <tr>
 <td>Generator targets</td>
@@ -755,11 +736,11 @@ fhir-health):</p>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>205</td>
+<td>209</td>
 </tr>
 <tr>
 <td>Racket tests</td>
-<td>34365 lines</td>
+<td>34380 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

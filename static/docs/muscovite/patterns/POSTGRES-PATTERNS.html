@@ -293,27 +293,125 @@ sequential scans.</p>
 but does not systematically cover all FK columns.</p>
 <p><strong>FTR</strong>: FTR-161</p>
 <hr />
-<h2 id="4-column-documentation-comment-on-column">4. Column
-Documentation (COMMENT ON COLUMN)</h2>
-<p><strong>CANONICAL</strong>: Every column with <code>field-doc</code>
-gets a <code>COMMENT ON COLUMN</code>.</p>
+<h2 id="4-column-and-object-documentation-comment-on">4. Column and
+Object Documentation (COMMENT ON)</h2>
+<p><strong>CANONICAL</strong>: Every database object gets a
+<code>COMMENT ON</code> when the description is derivable.</p>
+<p><strong>Current coverage</strong> (✅ = fully generated, ❌ =
+gap):</p>
+<table>
+<thead>
+<tr>
+<th>Object Type</th>
+<th>Status</th>
+<th>Generator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TABLE</td>
+<td>✅</td>
+<td>entity, saga, projection, state-machine</td>
+</tr>
+<tr>
+<td>COLUMN</td>
+<td>✅</td>
+<td><code>sqitch-entity-columns.rkt:490-525</code></td>
+</tr>
+<tr>
+<td>CONSTRAINT (FK)</td>
+<td>✅</td>
+<td><code>sqitch-entity-columns.rkt:526-543</code></td>
+</tr>
+<tr>
+<td>CONSTRAINT (CHECK)</td>
+<td>✅</td>
+<td><code>sqitch-entity-columns.rkt:545-557</code></td>
+</tr>
+<tr>
+<td>TRIGGER</td>
+<td>✅</td>
+<td>audit triggers</td>
+</tr>
+<tr>
+<td>VIEW / MATERIALIZED VIEW</td>
+<td>✅</td>
+<td><code>sqitch-projections.rkt:149-150</code></td>
+</tr>
+<tr>
+<td>DOMAIN</td>
+<td>✅</td>
+<td><code>sqitch-entity-domains.rkt:78-79</code></td>
+</tr>
+<tr>
+<td>FUNCTION</td>
+<td>✅</td>
+<td>system functions</td>
+</tr>
+<tr>
+<td>INDEX</td>
+<td>❌</td>
+<td>FTR-422</td>
+</tr>
+<tr>
+<td>CONSTRAINT (UNIQUE)</td>
+<td>❌</td>
+<td>FTR-422</td>
+</tr>
+<tr>
+<td>CONSTRAINT (EXCLUDE)</td>
+<td>❌</td>
+<td>FTR-422</td>
+</tr>
+<tr>
+<td>CONSTRAINT (Arc FK)</td>
+<td>❌</td>
+<td>FTR-422</td>
+</tr>
+<tr>
+<td>CONSTRAINT (Arc CHECK)</td>
+<td>❌</td>
+<td>FTR-422</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: column comment from DSL field-level DOC</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">COLUMN</span> patient.patient.family_name</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;The patient</span><span class="ch">&#39;&#39;</span><span class="st">s legal family name as recorded in official documents&#39;</span>;</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: table-level comment (already implemented)</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.patient</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;A person receiving healthcare services&#39;</span>;</span></code></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: auto-derived fallback when no explicit DOC</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">COLUMN</span> patient.patient.given_name</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;Given name of patient&#39;</span>;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: audit column comments (always generated)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">COLUMN</span> patient.patient.created_at <span class="kw">IS</span> <span class="st">&#39;Row creation timestamp&#39;</span>;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">COLUMN</span> patient.patient.updated_at <span class="kw">IS</span> <span class="st">&#39;Last modification timestamp&#39;</span>;</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: table-level comment</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.patient</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;A person receiving healthcare services&#39;</span>;</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: FK constraint comment</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">CONSTRAINT</span> fk_encounter_patient_id <span class="kw">ON</span> encounter.encounter</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;FK patient -&gt; patient.patient (to-one, required)&#39;</span>;</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: CHECK constraint comment</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">CONSTRAINT</span> chk_patient_birth_date <span class="kw">ON</span> patient.patient</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;Birth date must not be in the future&#39;</span>;</span></code></pre></div>
+<p><strong>Implementation</strong>: The <code>sql-comment-on</code>
+helper in <code>sqitch-common.rkt:279-288</code> handles all object
+types uniformly. It accepts an optional <code>#:source</code> keyword
+for provenance tracking. Column comments use field-level DOC from the
+DSL (grammar: <code>FieldDocClause</code>, parser:
+<code>parse-doc</code>, IR: <code>field.doc</code>) when present, with
+auto-derivation from field names as fallback.</p>
 <p><strong>Rationale</strong>: Per ADR 20260217, all database objects
 that support <code>COMMENT ON</code> must have generated comments.
-Column comments appear in <code>\d+</code> output, pg_admin, and BI tool
+Comments appear in <code>\d+</code> output, pgAdmin, and BI tool
 metadata discovery.</p>
-<p><strong>Current state</strong>:
-<code>sqitch-entity-columns.rkt</code> generates
-<code>COMMENT ON TABLE</code> (L313-422) but not
-<code>COMMENT ON COLUMN</code>.</p>
-<p><strong>FTR</strong>: FTR-162</p>
+<p><strong>FTR</strong>: FTR-162 (initial), FTR-344 (field-level DOC),
+FTR-422 (INDEX/UNIQUE/EXCLUDE gap)</p>
 <hr />
 <h2 id="5-string-quoting-in-seeds">5. String Quoting in Seeds</h2>
 <p><strong>CANONICAL</strong>: Standard SQL single quotes with doubled
@@ -393,6 +491,12 @@ objects.</p>
 <td><code>idx_encounter_patient_id</code></td>
 </tr>
 <tr>
+<td>GiST index</td>
+<td><code>idx_</code></td>
+<td><code>idx_{table}_{column}</code></td>
+<td><code>idx_observation_location</code></td>
+</tr>
+<tr>
 <td>Trigger</td>
 <td><code>trg_</code></td>
 <td><code>trg_{table}_{purpose}</code></td>
@@ -411,10 +515,10 @@ objects.</p>
 <td><code>uq_patient_mrn</code></td>
 </tr>
 <tr>
-<td>Exclusion</td>
+<td>Exclusion (GIST)</td>
 <td><code>excl_</code></td>
 <td><code>excl_{table}_{purpose}</code></td>
-<td><code>excl_patient_valid_time</code></td>
+<td><code>excl_patient_valid_period</code></td>
 </tr>
 <tr>
 <td>Primary key</td>
@@ -507,7 +611,8 @@ Infrastructure tables (<code>domain_events</code>,
 defined by generators and serialize typed C++ structs to JSON for
 messaging. They are never queried by payload field.</p>
 <p><strong>Exempt tables</strong>: <code>{schema}.domain_events</code>,
-<code>event_store.*</code>, <code>{schema}.saga_*</code></p>
+<code>{schema}.domain_events_dlq</code>, <code>event_store.*</code>,
+<code>{schema}.saga_*</code>, <code>{schema}.outbox</code></p>
 <hr />
 <h2 id="10-schema-qualification">10. Schema Qualification</h2>
 <p><strong>CANONICAL</strong>: All table references in generated SQL are
@@ -559,6 +664,183 @@ regress. This is the PostgreSQL equivalent of
 <code>test-grammar-conformance.rkt</code> for DSL syntax.</p>
 <p><strong>FTR</strong>: FTR-166</p>
 <hr />
+<h2 id="13-outbox-table-infrastructure">13. Outbox Table
+Infrastructure</h2>
+<p><strong>CANONICAL</strong>: Per-context outbox table with partial
+index on unprocessed rows.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: outbox table (one per bounded context)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.outbox (</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>            UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> uuidv7(),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    effect_type   TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    payload       JSONB <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    aggregate_id  UUID <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    created_at    TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    processed_at  TIMESTAMPTZ,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    retry_count   <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="dv">0</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: partial index for polling unprocessed entries</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_outbox_unprocessed</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> patient.outbox (created_at)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> processed_at <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code></pre></div>
+<p><strong>Rationale</strong>: The transactional outbox pattern (ADR
+20260307) writes domain effects to the outbox table within the same
+transaction as the aggregate mutation. A background poller reads
+unprocessed rows using the partial index
+(<code>WHERE processed_at IS NULL</code>), publishes them, and marks
+them processed. The partial index ensures the poller only scans the
+working set.</p>
+<p><code>JSONB</code> is permitted here because the outbox serializes
+typed C++ effect structs — it is infrastructure, not domain data (see
+§9).</p>
+<p><strong>Generator</strong>: <code>sqitch-outbox.rkt:34-56</code></p>
+<hr />
+<h2 id="14-cqrs-projection-views">14. CQRS Projection Views</h2>
+<p><strong>CANONICAL</strong>: Projections generate as
+<code>MATERIALIZED VIEW</code> with a <code>UNIQUE INDEX</code> on
+<code>id</code>.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: materialized view projection</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">MATERIALIZED</span> <span class="kw">VIEW</span> patient.patient_summary <span class="kw">AS</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> p.<span class="kw">id</span>, p.family_name, p.given_name, s.display <span class="kw">AS</span> status</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> patient.patient p</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> basedata.status s <span class="kw">ON</span> p.status_id <span class="op">=</span> s.<span class="kw">id</span>;</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">MATERIALIZED</span> <span class="kw">VIEW</span> patient.patient_summary</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;Read-optimized view of patient with resolved status&#39;</span>;</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: unique index required for REFRESH CONCURRENTLY</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">UNIQUE</span> <span class="kw">INDEX</span> idx_patient_summary_id</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> patient.patient_summary (<span class="kw">id</span>);</span></code></pre></div>
+<p><strong>Rationale</strong>:
+<code>REFRESH MATERIALIZED VIEW CONCURRENTLY</code> requires a unique
+index to perform an incremental refresh without locking readers. Without
+it, PostgreSQL forces an exclusive lock during refresh, blocking all
+read queries.</p>
+<p>ON_EVENT projections generate as regular tables with explicit
+<code>COMMENT ON TABLE</code>.</p>
+<p><strong>Generator</strong>:
+<code>sqitch-projections.rkt:146-198</code></p>
+<hr />
+<h2 id="15-bitemporal-data--gist-indexes">15. Bitemporal Data &amp; GiST
+Indexes</h2>
+<p><strong>CANONICAL</strong>: Bitemporal entities use
+<code>EXCLUDE USING GIST</code> to prevent overlapping valid-time
+periods and <code>btree_gist</code> extension for mixed-type
+exclusion.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: btree_gist required for EXCLUDE with non-range columns</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> EXTENSION <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> btree_gist;</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: system-time columns (SYSTEM_TIME AUTO)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.patient (</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>          UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> uuidv7(),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ... domain fields ...</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    valid_from  TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    valid_to    TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;infinity&#39;</span>:<span class="ch">:TIMESTAMPTZ</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    system_from TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> NOW(),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    system_to   TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;infinity&#39;</span>:<span class="ch">:TIMESTAMPTZ</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ✅ CANONICAL: EXCLUDE prevents overlapping periods per entity</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> excl_patient_valid_period</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        EXCLUDE <span class="kw">USING</span> GIST (</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">id</span> <span class="kw">WITH</span> <span class="op">=</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>            tstzrange(valid_from, valid_to, <span class="st">&#39;[)&#39;</span>) <span class="kw">WITH</span> &amp;&amp;</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: system-time trigger for automatic timestamping</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TRIGGER</span> trg_patient_system_time</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">BEFORE</span> <span class="kw">INSERT</span> <span class="kw">OR</span> <span class="kw">UPDATE</span> <span class="kw">ON</span> patient.patient</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">FOR</span> <span class="kw">EACH</span> <span class="kw">ROW</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">EXECUTE</span> <span class="kw">FUNCTION</span> _system.set_system_time_columns();</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: GiST index for spatial/geometry columns</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_observation_location</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> observation.observation <span class="kw">USING</span> GIST(location);</span></code></pre></div>
+<p><strong>Rationale</strong>: The <code>EXCLUDE USING GIST</code>
+constraint enforces the temporal invariant at the database level: no two
+rows for the same entity (<code>id WITH =</code>) may have overlapping
+valid-time ranges (<code>tstzrange(...) WITH &amp;&amp;</code>). The
+<code>[)</code> range semantics (closed-open) ensures contiguous periods
+are allowed. <code>btree_gist</code> is required because <code>id</code>
+is UUID (B-tree type) but GIST indexes natively support range types
+only.</p>
+<p>GiST indexes for geometry columns enable efficient spatial queries
+(<code>ST_Contains</code>, <code>ST_Intersects</code>, etc.) on PostGIS
+types.</p>
+<p><strong>Generator</strong>:
+<code>sqitch-entity-columns.rkt:388-426</code> (bitemporal),
+<code>sqitch-entity-columns.rkt:470-476</code> (spatial GiST)</p>
+<p><strong>ADR</strong>: 20260221 (bitemporal design), FTR-107/108</p>
+<hr />
+<h2 id="16-postgresql-domain-strong-types">16. PostgreSQL DOMAIN Strong
+Types</h2>
+<p><strong>CANONICAL</strong>: Value objects with constraints generate
+as PostgreSQL <code>DOMAIN</code> types.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: domain with CHECK constraint</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> patient.email_address <span class="kw">AS</span> TEXT</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> chk_email_address <span class="kw">CHECK</span> (<span class="fu">VALUE</span> ~ <span class="st">&#39;^[^@]+@[^@]+\.[^@]+$&#39;</span>);</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">DOMAIN</span> patient.email_address <span class="kw">IS</span> <span class="st">&#39;RFC-compliant email address&#39;</span>;</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: domain with default</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> patient.priority_level <span class="kw">AS</span> <span class="dt">INTEGER</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">DEFAULT</span> <span class="dv">0</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CONSTRAINT</span> chk_priority_level <span class="kw">CHECK</span> (<span class="fu">VALUE</span> <span class="op">&gt;=</span> <span class="dv">0</span> <span class="kw">AND</span> <span class="fu">VALUE</span> <span class="op">&lt;=</span> <span class="dv">10</span>);</span></code></pre></div>
+<p><strong>Rationale</strong>: <code>DOMAIN</code> types push validation
+to the database layer, ensuring constraints are enforced even for raw
+SQL inserts outside the application. They appear in
+<code>information_schema.domains</code> and provide self-documenting
+column types in <code>\d+</code> output.</p>
+<p><strong>Generator</strong>:
+<code>sqitch-entity-domains.rkt:31-79</code></p>
+<p><strong>ADR</strong>: 20260119</p>
+<hr />
+<h2 id="17-uuidv5-seeded-lookup-tables">17. UUIDv5-Seeded Lookup
+Tables</h2>
+<p><strong>CANONICAL</strong>: Framework and saga lookup tables use
+deterministic UUIDv5 identifiers seeded from a namespace UUID and the
+code string.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: lookup table with deterministic IDs</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> patient.saga_status (</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>       UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    code     TEXT <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    display  TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    doc      TEXT</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">TABLE</span> patient.saga_status <span class="kw">IS</span> <span class="st">&#39;Saga status (framework lookup)&#39;</span>;</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL: UUIDv5-seeded inserts (deterministic across environments)</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> patient.saga_status (<span class="kw">id</span>, code, display, doc) <span class="kw">VALUES</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;not_started&#39;</span>,  <span class="st">&#39;Not Started&#39;</span>,  <span class="st">&#39;Saga created but not yet started&#39;</span>),</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;in_progress&#39;</span>,  <span class="st">&#39;In Progress&#39;</span>,  <span class="st">&#39;Saga is actively executing steps&#39;</span>),</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;compensating&#39;</span>, <span class="st">&#39;Compensating&#39;</span>, <span class="st">&#39;Saga is rolling back completed steps&#39;</span>),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;completed&#39;</span>,    <span class="st">&#39;Completed&#39;</span>,    <span class="st">&#39;Saga completed successfully&#39;</span>),</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;failed&#39;</span>,       <span class="st">&#39;Failed&#39;</span>,       <span class="st">&#39;Saga failed after compensation or error&#39;</span>),</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;...uuid5...&#39;</span>, <span class="st">&#39;cancelled&#39;</span>,    <span class="st">&#39;Cancelled&#39;</span>,    <span class="st">&#39;Saga was cancelled before completion&#39;</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> CONFLICT (<span class="kw">id</span>) DO <span class="kw">UPDATE</span> <span class="kw">SET</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    code <span class="op">=</span> EXCLUDED.code, display <span class="op">=</span> EXCLUDED.display, doc <span class="op">=</span> EXCLUDED.doc;</span></code></pre></div>
+<p><strong>Rationale</strong>: UUIDv5 ensures identical IDs across
+dev/staging/prod environments — no environment-specific seed data. The
+C++ framework generates <code>constexpr</code> headers with these IDs
+(ADR 20260212), enabling compile-time lookup:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Generated — never SELECT at runtime for framework constants</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> lookup<span class="op">::</span>saga_status <span class="op">{</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inline</span> <span class="kw">constexpr</span> <span class="kw">auto</span> completed <span class="op">=</span> <span class="st">&quot;...uuid5...&quot;</span><span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Framework lookup codes</strong>: <code>saga_status</code> (6
+codes), <code>saga_step_result</code> (3 codes), plus per-saga
+<code>{saga_name}_step</code> tables with one entry per named step.</p>
+<p><strong>Generator</strong>: <code>saga-lookup-tables.rkt:48-75</code>
+(codes), <code>saga-lookup-tables.rkt:200-240</code> (SQL)</p>
+<p><strong>ADR</strong>: 20260212 (compile-time lookup constants)</p>
+<hr />
 <h2 id="quick-reference-file--patterns">Quick Reference: File →
 Patterns</h2>
 <table>
@@ -571,7 +853,8 @@ Patterns</h2>
 <tbody>
 <tr>
 <td><code>sqitch-common.rkt</code></td>
-<td>§1 (uuid-default-fn source of truth)</td>
+<td>§1 (uuid-default-fn), §4 (sql-comment-on helper), §7 (naming
+functions)</td>
 </tr>
 <tr>
 <td><code>sqitch-entity.rkt</code></td>
@@ -579,7 +862,12 @@ Patterns</h2>
 </tr>
 <tr>
 <td><code>sqitch-entity-columns.rkt</code></td>
-<td>§2 (inline REFERENCES), §4 (COMMENT ON COLUMN), §7 (naming)</td>
+<td>§2 (FK), §3 (FK indexes), §4 (COMMENT ON COLUMN/CONSTRAINT), §7
+(naming), §15 (bitemporal EXCLUDE)</td>
+</tr>
+<tr>
+<td><code>sqitch-entity-domains.rkt</code></td>
+<td>§16 (CREATE DOMAIN), §4 (COMMENT ON DOMAIN)</td>
 </tr>
 <tr>
 <td><code>sqitch-unified-seeds.rkt</code></td>
@@ -594,12 +882,24 @@ Patterns</h2>
 <td>§1 (gen_random_uuid), §2 (inline REFERENCES), §9 (JSONB)</td>
 </tr>
 <tr>
-<td><code>sqitch-saga.rkt</code></td>
-<td>§1 (gen_random_uuid), §7 (naming)</td>
-</tr>
-<tr>
 <td><code>sqitch-events.rkt</code></td>
 <td>§1 (gen_random_uuid), §9 (JSONB)</td>
+</tr>
+<tr>
+<td><code>sqitch-saga.rkt</code></td>
+<td>§1 (gen_random_uuid), §7 (naming), §17 (UUIDv5 lookups)</td>
+</tr>
+<tr>
+<td><code>sqitch-outbox.rkt</code></td>
+<td>§9 (JSONB exception), §13 (outbox infrastructure)</td>
+</tr>
+<tr>
+<td><code>sqitch-projections.rkt</code></td>
+<td>§14 (CQRS projections), §4 (COMMENT ON MATERIALIZED VIEW)</td>
+</tr>
+<tr>
+<td><code>saga-lookup-tables.rkt</code></td>
+<td>§17 (UUIDv5 lookups), §6 (ON CONFLICT seeds)</td>
 </tr>
 <tr>
 <td><code>migration-sql-deploy.rkt</code></td>
@@ -611,7 +911,7 @@ Patterns</h2>
 </tr>
 <tr>
 <td><code>sqitch-bitemporal.rkt</code></td>
-<td>§1 (gen_random_uuid)</td>
+<td>§1 (gen_random_uuid), §15 (btree_gist)</td>
 </tr>
 <tr>
 <td>All verify generators</td>

@@ -543,6 +543,14 @@ on AGGREGATE (Domain DSL — <code>.ddd</code>)</h3>
 <code>context-&gt;deadline()</code>.</p>
 <h3 id="43-retry-policy-c--compile-time-configuration">4.3 Retry Policy
 (C++ — compile-time configuration)</h3>
+<blockquote>
+<p><strong>Planned</strong>: FTR-413 (v1.66.0) will add
+<code>DATABASE { RETRY { ... } }</code> and <code>TIMEOUT { ... }</code>
+blocks to the project DSL, allowing retry/timeout policies to be
+declared in <code>.mus</code> files and generated into C++ as
+<code>constexpr RetryPolicy</code> defaults. Until then, policies are
+configured in C++ code.</p>
+</blockquote>
 <p>The <code>RetryPolicy</code> struct is configured in C++ application
 code:</p>
 <div class="sourceCode" id="cb9"><pre

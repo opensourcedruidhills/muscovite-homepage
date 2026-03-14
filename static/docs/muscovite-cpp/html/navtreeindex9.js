@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"structstd_1_1hash_3_01Derived_01_4.html":[3,0,3,1],
 "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedDecimal_3_01Min_00_01Max_01_4_01_4.html":[1,0,1,2],
 "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedDecimal_3_01Min_00_01Max_01_4_01_4.html":[3,0,3,2],
 "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html":[1,0,1,3],

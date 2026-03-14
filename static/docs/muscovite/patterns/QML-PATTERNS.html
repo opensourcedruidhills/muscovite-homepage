@@ -238,13 +238,9 @@ Translatable" (Best Practices)</p>
 is invisible to Qt Linguist and lupdate. Generated apps cannot be
 localized. This blocks internationalization for all downstream
 users.</p>
-<p><strong>Affected files</strong> (current violations):</p>
-<ul>
-<li><code>qml-dialog.rkt</code> — 6 label occurrences (L81, L85, L90,
-L95, L112, L134), title (L186), placeholderText (L85, L90, L134),
-ToolTip.text (L85, L90)</li>
-<li><code>qml-dialog-children.rkt</code> — section headers</li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented — all generated QML now wraps
+user-facing strings in <code>qsTr()</code>. Dialog labels, titles,
+placeholders, tooltips, and child section headers all comply.</p>
 <p><strong>Exception</strong>: <code>qsTr()</code> is NOT needed
 for:</p>
 <ul>
@@ -273,17 +269,10 @@ type system. The QML engine cannot validate property access at compile
 time, IDE completion stops working, and AOT compilation cannot optimize
 the binding. Using the actual ViewModel type enables static analysis by
 qmllint and the QML compiler.</p>
-<p><strong>Affected files</strong> (current violations):</p>
-<ul>
-<li><code>qml-dialog.rkt</code> — L184:
-<code>required property var viewModel</code></li>
-<li><code>qml-list.rkt</code> — L80:
-<code>required property var viewModel</code></li>
-<li><code>qml-dialog-children.rkt</code> — child sections</li>
-</ul>
-<p><strong>Reference implementation</strong>: <code>qml-saga.rkt</code>
-L212 correctly emits
-<code>required property {Type}ViewModel viewModel</code>.</p>
+<p><strong>Status</strong>: ✅ Implemented — all generators now emit
+typed <code>required property {Type}ViewModel viewModel</code> (e.g.,
+<code>qml-dialog.rkt</code> L165). No <code>property var</code> remains
+in QML generators.</p>
 <hr />
 <h2 id="3-versionless-qt-6-imports">3. Versionless Qt 6 Imports</h2>
 <p><strong>CANONICAL</strong>: All QML import statements MUST use
@@ -305,19 +294,11 @@ requirements.</p>
 semantics. Qt 6's <code>qt_add_qml_module</code> and QML AOT compiler
 work with versionless imports. Versioned imports prevent access to Qt
 6-only features and types.</p>
-<p><strong>Affected files</strong> (all 8 QML-emitting generators):</p>
-<ul>
-<li><code>qml-dialog.rkt</code> (L189)</li>
-<li><code>qml-list.rkt</code> (L75)</li>
-<li><code>qml-saga.rkt</code> (L204)</li>
-<li><code>qml-state-machine.rkt</code> (L210)</li>
-<li><code>qml-search.rkt</code> (L285)</li>
-<li><code>qml-app.rkt</code> (L35, L106)</li>
-<li><code>e2e-qml-test.rkt</code> (L84)</li>
-</ul>
-<p><strong>Fix location</strong>: Update <code>common.rkt</code> to
-provide a <code>(qml-imports)</code> function returning versionless
-import block, then replace all inline import strings.</p>
+<p><strong>Status</strong>: ✅ Implemented — <code>common.rkt</code>
+(L208-210) provides centralized versionless <code>import QtQuick</code>
+/ <code>import QtQuick.Controls</code> /
+<code>import QtQuick.Layouts</code> block used by all QML
+generators.</p>
 <hr />
 <h2 id="4-qabstractlistmodel-for-listview-data">4. QAbstractListModel
 for ListView Data</h2>
@@ -432,11 +413,10 @@ asynchronous: true to defer creation costs" (Performance)</p>
 synchronous — it blocks the UI thread while parsing and compiling the
 QML file. <code>Loader</code> with <code>asynchronous: true</code>
 defers compilation to a background thread.</p>
-<p><strong>Affected files</strong>:</p>
-<ul>
-<li><code>qml-list.rkt</code> — L83-92 (<code>openEditDialog</code>
-function)</li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented (FTR-171) —
+<code>qml-dialog-children.rkt</code> uses Loader with
+<code>asynchronous: true</code> for all child dialog instantiation. No
+<code>Qt.createComponent()</code> remains in QML generators.</p>
 <hr />
 <h2 id="6-spinbox-onvaluemodified-vs-onvaluechanged">6. SpinBox:
 onValueModified vs onValueChanged</h2>
@@ -460,10 +440,12 @@ over value-changed signals" (Best Practices)</p>
 the ViewModel sets the SpinBox value programmatically (e.g., loading an
 entity). This causes a feedback loop: load → set value →
 <code>onValueChanged</code> fires → dirty flag set.</p>
-<p><strong>Affected files</strong>:</p>
+<p><strong>Remaining violations</strong>:</p>
 <ul>
-<li><code>qml-dialog.rkt</code> — L95 (Integer/SpinBox case)</li>
-<li><code>view.rkt</code> — L114 (legacy path SpinBox)</li>
+<li><del><code>qml-dialog.rkt</code></del> — ✅ Fixed: now uses
+<code>onValueModified</code> (L66)</li>
+<li><code>view.rkt</code> — L113: still uses <code>onValueChanged</code>
+(legacy Widgets path)</li>
 </ul>
 <hr />
 <h2 id="7-listview-clipping">7. ListView Clipping</h2>
@@ -491,9 +473,14 @@ rectangle.</p>
 <p><strong>Note</strong>: <code>clip: true</code> on
 <code>ScrollView</code> is acceptable — it is designed to clip viewport
 content.</p>
-<p><strong>Affected files</strong>:</p>
+<p><strong>Remaining violations</strong> (6 occurrences across 5
+files):</p>
 <ul>
-<li><code>qml-list.rkt</code> — L136</li>
+<li><code>qml-saga.rkt</code> — L246, L277 (two ListView instances)</li>
+<li><code>qml-search.rkt</code> — L328</li>
+<li><code>view.rkt</code> — L191</li>
+<li><code>qml-app.rkt</code> — L171</li>
+<li><code>qml-dialog.rkt</code> — L215</li>
 </ul>
 <hr />
 <h2 id="8-theme-constants-no-magic-numbers">8. Theme Constants (No Magic
@@ -509,13 +496,11 @@ class="sourceCode qml"><code class="sourceCode qml"><span id="cb11-1"><a href="#
 <p><strong>Qt Reference</strong>: "Scalable UIs — avoid explicit pixel
 sizes; use anchors, layouts, and scalable measurements" (Best
 Practices)</p>
-<p><strong>Affected files</strong>:</p>
-<ul>
-<li><code>qml-dialog.rkt</code> — 6 occurrences of
-<code>Layout.preferredWidth: 140</code></li>
-<li><code>qml-app.rkt</code> — theme file generation (needs new
-properties)</li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented — generators use
+<code>MuscoviteTheme.formLabelWidth</code> and other theme constants
+(<code>sidebarColor</code>, <code>textOnPrimaryColor</code>,
+<code>borderRadius</code>, <code>errorBackgroundColor</code>, etc.).
+Theme file generated by <code>qml-app.rkt</code>.</p>
 <hr />
 <h2 id="9-qml-property-ordering">9. QML Property Ordering</h2>
 <p><strong>CANONICAL</strong>: Properties MUST follow Qt convention
@@ -542,11 +527,11 @@ class="sourceCode qml"><code class="sourceCode qml"><span id="cb12-1"><a href="#
 <p><strong>Qt Reference</strong>: "id → property declarations → signal
 declarations → JavaScript functions → object properties → child objects"
 (Coding Conventions)</p>
-<p><strong>Affected files</strong>:</p>
-<ul>
-<li><code>qml-dialog.rkt</code> — entire
-<code>generate-qml-edit-dialog</code> function</li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented — <code>qml-dialog.rkt</code>
+emits properties in correct order: <code>required property</code> (L165)
+→ <code>property string</code> (L166) → <code>property bool</code>
+(L168) → <code>title:</code> (L170) → <code>width:</code> (L171) →
+<code>modal:</code> (L173) → child objects.</p>
 <hr />
 <h2 id="10-grouped-anchor-notation">10. Grouped Anchor Notation</h2>
 <p><strong>CANONICAL</strong>: When setting 3+ properties from the same
@@ -568,10 +553,8 @@ class="sourceCode qml"><code class="sourceCode qml"><span id="cb13-1"><a href="#
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>anchors<span class="op">.</span><span class="at">rightMargin</span><span class="op">:</span> <span class="dv">8</span></span></code></pre></div>
 <p><strong>Qt Reference</strong>: "Use group notation when setting
 several properties from one group" (Coding Conventions)</p>
-<p><strong>Affected files</strong>:</p>
-<ul>
-<li><code>qml-list.rkt</code> — delegate RowLayout anchors</li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented — delegate layouts use
+grouped notation where 3+ properties apply.</p>
 <hr />
 <h2 id="11-type-dispatch-consolidation">11. Type Dispatch
 Consolidation</h2>
@@ -592,13 +575,9 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb14-1"><a h
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">;; display-helper-codegen.rkt:  (case type-sym [(UUID) ...] [(Date) ...] ...)</span></span></code></pre></div>
 <p><strong>Rationale</strong>: Four separate type-dispatch blocks drift
 independently. Adding a new type requires updating all four.</p>
-<p><strong>Affected files</strong>:</p>
-<ul>
-<li><code>qml-viewmodel-mapping.rkt</code></li>
-<li><code>qml-viewmodel-grpc.rkt</code></li>
-<li><code>qml-child-viewmodel.rkt</code></li>
-<li><code>display-helper-codegen.rkt</code></li>
-</ul>
+<p><strong>Status</strong>: ✅ Implemented (FTR-174) — type dispatch
+centralized in <code>common.rkt</code>. Individual generator files
+delegate to shared functions.</p>
 <hr />
 <h2 id="12-module-import-pattern-except-in-resolution">12. Module Import
 Pattern (except-in Resolution)</h2>
@@ -622,12 +601,15 @@ complete list)</p>
 <code>define-template</code> per ADR 20260226.</p>
 <p>See <code>doc/RACKET-PATTERNS.md</code> Section 9 and
 <code>doc/TEMPLATE-DSL.md</code> for authoring patterns.</p>
-<p><strong>Current status</strong>: Zero compliance — 0 out of 17 QML
-generator files use <code>define-template</code>.</p>
-<p><strong>Note</strong>: Template DSL migration is tracked as part of
-the v1.35.0/v1.36.0 wave (ADR 20260226). QML generators are in Wave 2b
-(v1.36.0 — higher-risk migration). The patterns in this document (1–12)
-can be fixed independently of the template DSL migration.</p>
+<p><strong>Current status</strong>: 3 out of 16 QML generator files use
+<code>define-template</code> (<code>qml-validators.rkt</code>,
+<code>plugins/qt-circuit-breaker.rkt</code>,
+<code>plugins/qt-remote-objects.rkt</code>). The remaining 13 files
+still use <code>format</code>/<code>string-append</code> chains.</p>
+<p><strong>Note</strong>: Template DSL migration is tracked per ADR
+20260226. QML generators are in Wave 2b (higher-risk migration). The
+patterns in this document (1–12) can be fixed independently of the
+template DSL migration.</p>
 <hr />
 <h2 id="summary-quick-reference">Summary: Quick Reference</h2>
 <table>
@@ -636,7 +618,7 @@ can be fixed independently of the template DSL migration.</p>
 <th>#</th>
 <th>Pattern</th>
 <th>Rating</th>
-<th>Effort</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
@@ -644,79 +626,79 @@ can be fixed independently of the template DSL migration.</p>
 <td>1</td>
 <td><code>qsTr()</code> all user strings</td>
 <td>CANONICAL</td>
-<td>Small — string wrapping</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Typed <code>required property</code></td>
 <td>CANONICAL</td>
-<td>Small — format string change</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Versionless imports</td>
 <td>CANONICAL</td>
-<td>Small — search-replace in 8 files</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>4</td>
 <td>QAbstractListModel</td>
 <td>CANONICAL</td>
-<td>Medium — new framework class + generator</td>
+<td>✅ Implemented (FTR-170)</td>
 </tr>
 <tr>
 <td>5</td>
 <td>Loader pattern</td>
 <td>CANONICAL</td>
-<td>Medium — restructure dialog loading</td>
+<td>✅ Implemented (FTR-171)</td>
 </tr>
 <tr>
 <td>6</td>
 <td>onValueModified</td>
 <td>CANONICAL</td>
-<td>Small — 2-line fix</td>
+<td>⚠️ Partial — <code>view.rkt</code> still uses onValueChanged</td>
 </tr>
 <tr>
 <td>7</td>
 <td>No clip on ListView</td>
 <td>CANONICAL</td>
-<td>Small — remove 1 line</td>
+<td>❌ Open — 6 violations across 5 files</td>
 </tr>
 <tr>
 <td>8</td>
 <td>Theme constants</td>
 <td>CANONICAL</td>
-<td>Small — extract to theme</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>9</td>
 <td>Property ordering</td>
 <td>CANONICAL</td>
-<td>Medium — reorder emitted QML</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>10</td>
 <td>Grouped anchors</td>
 <td>CANONICAL</td>
-<td>Small — format change</td>
+<td>✅ Implemented</td>
 </tr>
 <tr>
 <td>11</td>
 <td>Centralized type dispatch</td>
 <td>CANONICAL</td>
-<td>Medium — refactor 4 files</td>
+<td>✅ Implemented (FTR-174)</td>
 </tr>
 <tr>
 <td>12</td>
 <td>Clean module imports</td>
 <td>CANONICAL</td>
-<td>Medium — refactor 21 files</td>
+<td>Open — 21 files</td>
 </tr>
 <tr>
 <td>13</td>
 <td>Template DSL</td>
 <td>CANONICAL</td>
-<td>Large — separate iteration (v1.36.0)</td>
+<td>⚠️ 3/16 files (19%)</td>
 </tr>
 </tbody>
 </table>

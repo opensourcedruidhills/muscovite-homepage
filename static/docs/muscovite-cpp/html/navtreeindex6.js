@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"jsonb__converters_8hpp.html":[4,0,0,0,0,0,0,8],
 "jsonb__converters_8hpp_source.html":[4,0,0,0,0,0,0,8],
 "jwt_8cpp_source.html":[4,0,0,2,2,1,1],
 "jwt_8hpp.html":[4,0,0,2,1,0,0,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "search__indexer_8hpp.html#a78d38c4c0544f8248acf04254337458cad9c8f187972e6320a34e9c40b4cba605":[4,0,0,5,0,0,0,5,1,3],
 "search__indexer_8hpp_source.html":[4,0,0,5,0,0,0,5],
 "search__query_8cpp.html":[4,0,0,5,1,2],
-"search__query_8cpp_source.html":[4,0,0,5,1,2],
-"search__query_8hpp.html":[4,0,0,5,0,0,0,6]
+"search__query_8cpp_source.html":[4,0,0,5,1,2]
 };

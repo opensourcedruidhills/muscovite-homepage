@@ -281,11 +281,13 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a hr
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN — struct accessor returns list, needs in-list</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>for/list <span class="op">([</span>m <span class="op">(</span>ddd:repository-methods repo<span class="op">)])</span> ...<span class="op">)</span></span></code></pre></div>
-<p><strong>Found in codebase</strong>:
-<code>dslgen/generators/qt/saga-widgets.rkt</code>,
-<code>dslgen/viewer.rkt</code>,
-<code>dslgen/generators/qt/state-machine-widgets.rkt</code>,
-<code>dslgen/generators/search/document-mapper.rkt</code></p>
+<p><strong>Found in codebase</strong>: 140 out of 253 generator files
+(55%) are missing <code>in-list</code> annotations. Concentrated in
+<code>dslgen/generators/qt/</code>,
+<code>dslgen/generators/postgres/</code>, and
+<code>dslgen/generators/cpp/</code>. Run
+<code>grep -rL "in-list" dslgen/generators/ --include="*.rkt" | wc -l</code>
+to track progress.</p>
 <h3 id="x-anti-pattern-forlist-where-map-suffices">❌ ANTI-PATTERN:
 <code>for/list</code> where <code>map</code> suffices</h3>
 <div class="sourceCode" id="cb5"><pre
@@ -376,9 +378,9 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb10-1"><a h
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      issues</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">(</span><span class="kw">cons</span> <span class="op">(</span>validation-issue &#39;error &#39;reference ...<span class="op">)</span> issues<span class="op">)))</span></span></code></pre></div>
 <p><strong>Found in codebase</strong>: <code>dslgen/validator.rkt</code>
-(12 instances), <code>dslgen/verification/verify-types.rkt</code> (4
-instances), <code>dslgen/verification/verify-schema.rkt</code> (3
-instances)</p>
+(18 instances), <code>dslgen/verification/verify-schema.rkt</code> (8
+instances), <code>dslgen/verification/verify-types.rkt</code> (4
+instances). Total <code>set!</code> in generators: 56 occurrences.</p>
 <h3 id="x-anti-pattern-set-counter">❌ ANTI-PATTERN: <code>set!</code>
 counter</h3>
 <div class="sourceCode" id="cb11"><pre
@@ -616,7 +618,10 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb22-1"><a h
 <code>dslgen/generators/grpc/service.rkt</code> (55+ line
 string-append),
 <code>dslgen/generators/qt/state-machine-widgets.rkt</code> (75-line
-string-append)</p>
+string-append). Template DSL adoption: 22 out of 253 generator files
+(9%) use <code>define-template</code>. Remaining: 6,451
+<code>format</code>/<code>string-append</code> calls across
+generators.</p>
 <h3 id="x-anti-pattern-if-cond-format---for-conditionals">❌
 ANTI-PATTERN: <code>(if cond (format ...) "")</code> for
 conditionals</h3>
@@ -678,9 +683,13 @@ documents the public API.</p>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode racket"><code class="sourceCode racket"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; FORBIDDEN in new files — exports everything, no API boundary</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">provide</span> <span class="op">(</span>all-defined-out<span class="op">))</span></span></code></pre></div>
-<p><strong>Found in codebase</strong>:
-<code>dslgen/model/ddd-types.rkt</code>, most generator files. Convert
-when touching these files.</p>
+<p><strong>Codebase status</strong> (as of v1.65): Only 1 file uses
+<code>all-defined-out</code>
+(<code>dslgen/tests/test-racket-style.rkt</code> — a test file). No
+generator or model file uses it. However, <code>contract-out</code>
+adoption is also minimal: only 2 files. The vast majority use explicit
+<code>provide</code> lists without contracts — which is ACCEPTABLE
+during the migration period but not the target state.</p>
 <hr />
 <h2 id="7-error-handling-patterns">7. Error Handling Patterns</h2>
 <h3
@@ -1249,6 +1258,58 @@ structures.</p>
 Configuration Pattern</h2>
 <h3 id="white_check_mark-canonical-config-struct-from-command-line">✅
 CANONICAL: Config struct from <code>command-line</code></h3>
+<p>The generator CLI (<code>generate.rkt</code>) uses
+<code>command-line</code> to build an immutable config struct, then
+resolves flag dependencies via a pure function. As of v1.65, the CLI
+provides ~25 flags:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Required</strong></td>
+<td><code>--project &lt;path&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Generation targets</strong></td>
+<td><code>--cpp-dba</code>, <code>--cpp-dba-test</code>,
+<code>--grpc</code>, <code>--grpc-test</code>,
+<code>--qt-frontend &lt;widgets|qml|both&gt;</code>,
+<code>--qt-test</code>, <code>--doc</code>, <code>--fact-base</code>,
+<code>--messaging</code>, <code>--tlaplus</code></td>
+</tr>
+<tr>
+<td><strong>Lifecycle</strong></td>
+<td><code>--full</code> (force regen), <code>--fresh</code> (delete
+output first), <code>--force-fresh</code> (fresh + ignore Sqitch),
+<code>--force-regen-stubs</code> (write <code>.new</code> sidecar
+files)</td>
+</tr>
+<tr>
+<td><strong>Validation</strong></td>
+<td><code>--lint-only</code> (parse + validate, no codegen),
+<code>--format &lt;text|json&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Debug</strong></td>
+<td><code>--emit-ir</code> (write IR to <code>debug-ir.sexp</code>),
+<code>--dry-run</code> (preview without writing)</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td><code>-o &lt;dir&gt;</code>, <code>--output &lt;dir&gt;</code>
+(override output directory)</td>
+</tr>
+<tr>
+<td><strong>Deprecated</strong></td>
+<td><code>--qt</code> (use <code>--qt-frontend widgets</code>)</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb44"><pre
 class="sourceCode racket"><code class="sourceCode racket"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; Define an immutable config struct</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> gen-config</span>
@@ -1275,6 +1336,10 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb44-1"><a h
 <span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>                     <span class="op">(</span>struct-copy gen-config config <span class="op">[</span>cpp-dba? <span class="dv">#t</span><span class="op">])</span></span>
 <span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>                     config<span class="op">)])</span></span>
 <span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>    config<span class="op">))</span></span></code></pre></div>
+<p><strong>Dependency chain</strong>: <code>--qt-frontend</code> →
+implies <code>--grpc</code> → implies <code>--cpp-dba</code>. The
+<code>resolve-dependencies</code> function handles this
+transitively.</p>
 <p><strong>Note</strong>: <code>set!</code> inside
 <code>command-line</code> flag handlers is acceptable — Racket's
 <code>command-line</code> macro specifically uses this pattern. The key
@@ -1398,8 +1463,6 @@ href="adr/20260218-generator-modularization-and-dependency-hygiene.html">ADR
 20260218: Generator Modularization</a></li>
 <li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Canonical IR
 structs, type mappings, naming conventions</li>
-<li><a href="CONTEXT.html">CONTEXT.md</a> — Project architecture and DSL
-reference</li>
 </ul>
 <hr />
 <p><em>This document is a constraint document, not a tutorial. For

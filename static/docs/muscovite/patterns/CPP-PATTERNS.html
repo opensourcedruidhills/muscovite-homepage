@@ -350,8 +350,11 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#c
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> p <span class="op">:</span> patients<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>p<span class="op">.</span>is_active<span class="op">())</span> active<span class="op">.</span>push_back<span class="op">(</span>p<span class="op">);</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p><strong>Audit</strong>: Current grade F — zero std::ranges usage in
-entire codebase. ~30 reserve+push_back loops. <strong>Generator
+<p><strong>Audit</strong>: Generated code: grade A — 2,426
+<code>std::ranges</code>/<code>std::views</code> uses across examples.
+Framework: grade C — 28 uses (auth, validation, search, geo). Generated
+code still emits 1,231 <code>reserve</code> + <code>push_back</code>
+patterns alongside ranges for certain code paths. <strong>Generator
 files</strong>: <code>dba/unified.rkt</code> (query result mapping),
 <code>grpc/cpp-service-v2.rkt</code> (response building)</p>
 <hr />
@@ -415,8 +418,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — SFINAE instead of concepts</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">,</span> <span class="kw">typename</span> <span class="op">=</span> <span class="bu">std::</span>enable_if_t<span class="op">&lt;...&gt;&gt;</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> process<span class="op">(</span><span class="at">const</span> T<span class="op">&amp;</span> value<span class="op">);</span></span></code></pre></div>
-<p><strong>Audit</strong>: Current grade F — zero concepts defined.
-<code>to_param&lt;T&gt;</code> is unconstrained. <strong>Generator
+<p><strong>Audit</strong>: Current grade B+ — 12 concepts defined in
+framework (auth, validation, search, DBA).
+<code>to_param&lt;T&gt;</code> still unconstrained. <strong>Generator
 files</strong>: <code>dba/unified.rkt</code>, framework
 <code>dba/repository.hpp</code></p>
 <hr />
@@ -474,7 +478,7 @@ extraction. <strong>Generator files</strong>:
 <h3 id="7b-stdformat-over-fmtformat">7b. <code>std::format</code> over
 <code>fmt::format</code></h3>
 <p><strong>CANONICAL</strong>: Use <code>std::format</code> (C++20) for
-string formatting. Already graded A- — maintain.</p>
+string formatting.</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> msg <span class="op">=</span> <span class="bu">std::</span>format<span class="op">(</span><span class="st">&quot;Patient </span><span class="sc">{}</span><span class="st"> not found&quot;</span><span class="op">,</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">));</span></span>
@@ -484,6 +488,11 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — string concatenation</span></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> msg <span class="op">=</span> <span class="st">&quot;Patient &quot;</span> <span class="op">+</span> <span class="ex">boost::</span>uuids::to_string<span class="op">(</span>id<span class="op">)</span> <span class="op">+</span> <span class="st">&quot; not found&quot;</span><span class="op">;</span></span></code></pre></div>
+<p><strong>Audit</strong>: Current grade B — 218
+<code>std::format</code> uses alongside 79 remaining
+<code>fmt::format</code> calls (73% migrated). The
+<code>fmt::format</code> calls are concentrated in framework code
+(server, DBA, search modules).</p>
 <hr />
 <h2 id="8-const-correctness">8. Const Correctness</h2>
 <p><strong>CANONICAL</strong>: All query methods, getters, and
@@ -572,14 +581,17 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// ... 200 lines of validation logic ...</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p><strong>Audit</strong>: Framework grades D+ — ~3,200 lines of
-implementation in headers. Worst offenders:
-<code>entity_validator.hpp</code> (526 lines),
-<code>entity_dialog_state_machine.hpp</code> (469 lines),
-<code>validation_result.hpp</code> (337 lines),
-<code>field_metadata.hpp</code> (378 lines). <strong>Generator
+<p><strong>Audit</strong>: Framework grade D+ — 6,640 lines of
+implementation in headers across 23 files &gt;200 lines. Worst
+offenders: <code>geography.hpp</code> (781 lines),
+<code>proto_type_converters.hpp</code> (535 lines),
+<code>spatial_widgets.hpp</code> (443 lines),
+<code>transactor.hpp</code> (390 lines),
+<code>infrastructure_state_machine.hpp</code> (294 lines),
+<code>entity_edit_dialog.hpp</code> (270 lines). <strong>Generator
 files</strong>: <code>dba/unified.rkt</code> (generates proper split),
-framework <code>qt/</code> needs manual retrofit.</p>
+framework <code>qt/</code> and <code>dba/</code> need manual
+retrofit.</p>
 <hr />
 <h2 id="11-namespace-structure">11. Namespace Structure</h2>
 <p><strong>CANONICAL</strong>: Use nested namespaces (C++17). Follow
@@ -757,8 +769,19 @@ clang-format):</p>
 (Framework)</h2>
 <p><strong>CANONICAL</strong>: RAII wrappers for NATS resources.
 <code>std::expected</code> for messaging errors.</p>
+<p><strong>Status</strong>: ✅ Implemented (FTR-208) — all 3 NATS
+framework files use RAII:</p>
+<ul>
+<li><code>nats_library_guard.hpp</code> — RAII guard for
+<code>nats_CloseAndWait()</code> lifecycle (BFX-001)</li>
+<li><code>nats_event_consumer.hpp</code> — destructor cleans up NATS
+handles (L48)</li>
+<li><code>nats_message_broker.hpp</code> — destructor +
+<code>shared_ptr&lt;CallbackState&gt;</code> for safe callback
+management (L119, L222)</li>
+</ul>
 <div class="sourceCode" id="cb36"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — RAII wrapper for NATS connection</span></span>
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — RAII wrapper for NATS connection (implemented)</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NatsConnection <span class="op">{</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">explicit</span> NatsConnection<span class="op">(</span><span class="at">const</span> NatsConfig<span class="op">&amp;</span> config<span class="op">);</span></span>
@@ -778,8 +801,10 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb37-1"><a href="#
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>natsConnection_ConnectTo<span class="op">(&amp;</span>conn<span class="op">,</span> url<span class="op">);</span></span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ... use ...</span></span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>natsConnection_Destroy<span class="op">(</span>conn<span class="op">);</span>  <span class="co">// Leaked if exception thrown before this line</span></span></code></pre></div>
-<p><strong>Audit</strong>: Framework NATS code uses raw handles — needs
-RAII retrofit. <strong>Framework files</strong>:
+<p><strong>Audit</strong>: Grade A — RAII fully implemented (FTR-208).
+<code>NatsLibraryGuard</code> ensures clean shutdown,
+<code>NatsEventConsumer</code> and <code>NatsMessageBroker</code> have
+proper destructors. <strong>Framework files</strong>:
 <code>framework/dba/include/muscovite/dba/nats_*.hpp</code></p>
 <hr />
 <h2 id="18-constexpr-where-possible">18. constexpr Where Possible</h2>
@@ -920,7 +945,7 @@ files</strong>: <code>dba/unified.rkt</code></p>
 <tr>
 <td>Formatting</td>
 <td><code>std::format(...)</code></td>
-<td><code>fmt::format</code>, string concat</td>
+<td><code>fmt::format</code> (79 remaining), string concat</td>
 </tr>
 <tr>
 <td>SQL strings</td>
@@ -970,7 +995,7 @@ files</strong>: <code>dba/unified.rkt</code></p>
 </tr>
 <tr>
 <td>NATS</td>
-<td>RAII wrappers</td>
+<td>RAII wrappers (✅ implemented)</td>
 <td>Raw C handles</td>
 </tr>
 </tbody>
@@ -1095,26 +1120,50 @@ document):</p>
 <tr>
 <th>Priority</th>
 <th>Patterns</th>
-<th>Impact</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>P0</strong></td>
-<td>§3 (ranges), §20 (pqxx)</td>
-<td>~30 loop sites, thread safety</td>
+<td>§3 (ranges)</td>
+<td>✅ Generated: A (2,426 uses), Framework: C (28 uses)</td>
+</tr>
+<tr>
+<td><strong>P0</strong></td>
+<td>§20 (pqxx)</td>
+<td>✅ Done — 0 <code>exec_params</code> remaining, 59
+<code>pqxx::params</code> uses</td>
 </tr>
 <tr>
 <td><strong>P1</strong></td>
-<td>§2b (noexcept), §9 (forward decl), §10 (header/source), §13 (C
-legacy)</td>
-<td>Build times, correctness</td>
+<td>§7b (std::format)</td>
+<td>⚠️ Grade B — 79 <code>fmt::format</code> remain (73% migrated)</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>§10 (header/source)</td>
+<td>⚠️ Grade D+ — 6,640 lines in headers (23 files &gt;200 lines)</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>§13 (C legacy)</td>
+<td>Pending audit</td>
 </tr>
 <tr>
 <td><strong>P2</strong></td>
-<td>§7a (string_view), §5 (concepts), §14 (SQL extraction), §15
-(dedup)</td>
-<td>API quality</td>
+<td>§5 (concepts)</td>
+<td>⬆️ Grade B+ — 12 concepts defined (was F)</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>§14 (SQL extraction)</td>
+<td>Grade B- unchanged</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>§15 (dedup)</td>
+<td>Pending audit</td>
 </tr>
 <tr>
 <td><strong>P3</strong></td>
@@ -1123,8 +1172,8 @@ legacy)</td>
 </tr>
 <tr>
 <td><strong>P4</strong></td>
-<td>§16 (include order), §17 (NATS RAII)</td>
-<td>Polish</td>
+<td>§17 (NATS RAII)</td>
+<td>✅ Done — full RAII (FTR-208)</td>
 </tr>
 </tbody>
 </table>

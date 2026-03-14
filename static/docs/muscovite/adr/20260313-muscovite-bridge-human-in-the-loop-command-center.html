@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: Muscovite Bridge — Human-in-the-Loop Command
+Center — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: Muscovite Bridge — Human-in-the-Loop Command Center</span>
+</nav>
+
+<h1>ADR: Muscovite Bridge — Human-in-the-Loop Command Center</h1>
+
+
+<h1 id="adr-muscovite-bridge--human-in-the-loop-command-center">ADR:
+Muscovite Bridge — Human-in-the-Loop Command Center</h1>
+<ul>
+<li><strong>Date</strong>: 2026-03-13</li>
+<li><strong>Status</strong>: Proposed</li>
+<li><strong>Related</strong>: ADR
+20260312-agent-role-governance-and-separation-of-duties, ADR
+20260312-push-based-coordinator-with-durable-nats, ADR
+20260309-nats-jetstream-agent-coordination</li>
+</ul>
+<h2 id="context">Context</h2>
+<h3 id="the-closed-circuit-problem">The closed-circuit problem</h3>
+<p>The Muscovite multi-agent coordinator (v1.63.0–v1.64.0) manages an
+iteration's lifecycle through structured NATS commands: workers
+register, receive assignments, report progress, signal PR readiness, and
+get released. The coordinator is a deterministic state machine —
+crash-recoverable via JetStream event replay, formally verified via TLA+
+model checking.</p>
+<p>However, <strong>the circuit is not closed.</strong> Four seams
+require human intervention with no protocol support:</p>
+<table>
+<thead>
+<tr>
+<th>Seam</th>
+<th>Current state</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Worker spawn</td>
+<td>Manual <code>copilot-cli</code> launch</td>
+<td>Auto-spawn or trigger</td>
+</tr>
+<tr>
+<td>QA review</td>
+<td>No automated QA agent</td>
+<td>Gates-pass = auto-approve</td>
+</tr>
+<tr>
+<td>PR merge execution</td>
+<td><code>qa.approve</code> updates state but nobody runs
+<code>gh pr merge</code></td>
+<td>Merge agent or inline merge</td>
+</tr>
+<tr>
+<td>Release trigger</td>
+<td>Human runs <code>release.sh</code></td>
+<td>Coordinator-initiated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-steering-problem">The steering problem</h3>
+<p>When the circuit eventually closes (all four seams automated), the
+human principal loses visibility and control. Today, the only
+intervention mechanisms are:</p>
+<ul>
+<li><strong>CLI commands</strong>
+(<code>coordinator.py leader amend-state</code>) — out-of-band, no
+context</li>
+<li><strong>Raw NATS requests</strong>
+(<code>nats req coord.cmd...</code>) — requires protocol knowledge</li>
+<li><strong>Event subscription</strong>
+(<code>nats sub coord.event.&gt;</code>) — firehose, no filtering, no
+response path</li>
+</ul>
+<p>None of these allow an agent to <strong>ask the human a question and
+wait for an answer.</strong></p>
+<h3 id="the-missing-role">The missing role</h3>
+<p>The coordinator protocol defines five roles (ADR 20260312): Planner,
+Leader, QA, Worker, Observer. The human principal is not a role — they
+operate through the Leader or QA CLI, which conflates "human who makes
+decisions" with "agent that executes protocol commands."</p>
+<p>This matters because:</p>
+<ol type="1">
+<li><p><strong>Workers get stuck.</strong> A worker implementing FTR-418
+might face an ambiguous acceptance criterion: "should
+<code>qDebug</code> strings be wrapped in <code>tr()</code>?" Today, the
+worker either guesses or stops. There is no way to ask the human and
+block until answered.</p></li>
+<li><p><strong>The human can't address specific agents.</strong> If
+worker-3 takes a wrong approach, the human has no way to say "use
+approach X instead" without manually amending FTR state and hoping the
+worker re-reads its brief.</p></li>
+<li><p><strong>Natural language has no channel.</strong> The structured
+protocol correctly uses typed JSON for state machine transitions. But
+human↔︎agent communication is inherently natural language. There is no
+NATS subject for it.</p></li>
+</ol>
+<h3 id="the-reasoning-chain">The reasoning chain</h3>
+<p>This ADR emerged from a systematic assessment of the Qt Widgets
+pattern catalog (QT-WIDGETS-PATTERNS.md, 2026-03-13). While deriving
+FTRs 417–420 for v1.66.0, the question arose: "Can agents execute these
+FTRs without human intervention?" The analysis revealed:</p>
+<ol type="1">
+<li>The NATS protocol handles agent↔︎coordinator state transitions
+well.</li>
+<li>The PR lifecycle has a gap: <code>qa.approve</code> changes
+coordinator state but doesn't execute <code>gh pr merge</code>. No merge
+agent exists.</li>
+<li>The QA review step is unnecessary for mechanical FTRs — if
+acceptance criteria are measurable and gates pass, merge should be
+automatic.</li>
+<li>If the circuit closes (auto-approve + merge agent), the human needs
+a way back in — but only on demand, when an agent escalates.</li>
+<li>The human must be able to address <strong>any</strong> agent
+(worker, QA, leader), not just the coordinator. And any agent must be
+able to address the human.</li>
+<li>This communication is natural language — the one place where NL
+belongs in the system. Agent↔︎agent communication stays structured JSON.
+Human↔︎agent communication is NL routed through the coordinator.</li>
+</ol>
+<p><strong>Conclusion</strong>: The protocol needs a sixth role
+(<code>human</code>) and a bidirectional NL channel. The QML dashboard
+(deferred FTR-381/382) becomes the UI for this channel — transforming
+from a read-only monitor into an interactive command center.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-introduce-muscovite-bridge-as-the-human-command-center">1.
+Introduce <code>muscovite-bridge</code> as the human command center</h3>
+<p><strong>Name</strong>: <code>muscovite-bridge</code> — the bridge
+between human principal and autonomous agents, analogous to a ship's
+bridge where the captain observes and commands.</p>
+<p><strong>Technology</strong>: QML application communicating via gRPC
+bidirectional streams (see ADR
+20260313-grpc-gateway-for-agent-coordination-protocol). The bridge never
+connects to NATS directly — it talks to the gRPC gateway, which handles
+NATS internally. Built on the existing <code>framework/qt/</code> stack
+with <code>grpc_task_adapter</code> for async I/O.</p>
+<p><strong>Not a dashboard.</strong> A dashboard is passive (Observer
+role). The bridge is interactive: it observes, but also sends commands,
+responds to escalations, and communicates decisions in natural
+language.</p>
+<h3 id="2-add-human-as-the-sixth-protocol-role">2. Add
+<code>human</code> as the sixth protocol role</h3>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>NATS Prefix</th>
+<th>Direction</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human</td>
+<td><code>coord.cmd.human.*</code></td>
+<td>Human → Agent</td>
+<td>Decisions, steering, overrides</td>
+</tr>
+<tr>
+<td>Human</td>
+<td><code>coord.escalate.*</code></td>
+<td>Agent → Human</td>
+<td>Questions, blockers, confirmations</td>
+</tr>
+</tbody>
+</table>
+<p>The human role is <strong>singular</strong> (like QA) — exactly one
+bridge session per iteration.</p>
+<p><strong>Registration</strong>: <code>coord.cmd.human.attach</code>
+(returns session token, like leader/QA).</p>
+<p><strong>Privileges</strong>:</p>
+<ul>
+<li>Respond to any escalation</li>
+<li>Send directed message to any agent (worker, QA, leader)</li>
+<li>All Leader privileges (status, amend-state, reload, release)</li>
+<li>All QA privileges (approve, reject, gate-failed)</li>
+<li>Override any agent decision</li>
+</ul>
+<p>The human role is a <strong>superset</strong> of all other roles.
+This is intentional — the human principal is the ultimate authority.</p>
+<h3 id="3-escalation-protocol">3. Escalation protocol</h3>
+<h4 id="agent--human-escalation">Agent → Human (escalation)</h4>
+<p>Any role can escalate:</p>
+<pre><code>Subject: coord.escalate.&lt;role&gt;.&lt;agent-name&gt;
+Payload: {
+  &quot;ftr&quot;: &quot;FTR-418&quot;,
+  &quot;question&quot;: &quot;The audit command catches qDebug strings too. Should I exclude
+               qDebug from tr() wrapping or wrap them?&quot;,
+  &quot;options&quot;: [&quot;Exclude qDebug (recommended)&quot;, &quot;Wrap all strings&quot;],
+  &quot;context&quot;: { &quot;file&quot;: &quot;dslgen/generators/qt/qml-viewmodel.rkt&quot;, &quot;line&quot;: 142 },
+  &quot;blocking&quot;: true
+}</code></pre>
+<p>When <code>blocking: true</code>:</p>
+<ul>
+<li>FTR transitions to <code>BLOCKED_HUMAN</code> (new state in state
+machine)</li>
+<li>Worker suspends work on this FTR</li>
+<li>Bridge UI highlights the escalation prominently</li>
+<li>Coordinator will not reassign the FTR</li>
+</ul>
+<p>When <code>blocking: false</code>:</p>
+<ul>
+<li>Advisory notification only</li>
+<li>Agent continues working</li>
+<li>Human may respond or ignore</li>
+</ul>
+<h4 id="human--agent-response">Human → Agent (response)</h4>
+<pre><code>Subject: coord.cmd.human.respond
+Payload: {
+  &quot;escalation_id&quot;: &quot;&lt;uuid&gt;&quot;,
+  &quot;decision&quot;: &quot;Exclude qDebug — they are developer-facing, not user-facing&quot;,
+  &quot;ftr&quot;: &quot;FTR-418&quot;
+}</code></pre>
+<p>On response:</p>
+<ul>
+<li>FTR transitions from <code>BLOCKED_HUMAN</code> back to
+<code>PROGRESSING</code></li>
+<li>Decision is delivered to the agent via its push subscription</li>
+<li>Decision is persisted in JetStream for audit trail</li>
+</ul>
+<h4 id="human--agent-directed-message-unsolicited">Human → Agent
+(directed message, unsolicited)</h4>
+<pre><code>Subject: coord.cmd.human.direct.&lt;role&gt;.&lt;agent-name&gt;
+Payload: {
+  &quot;ftr&quot;: &quot;FTR-420&quot;,
+  &quot;message&quot;: &quot;Start with spatial_widgets.hpp — it&#39;s the worst offender at 443 lines.
+              Leave validation_codes.hpp alone, it&#39;s pure enums.&quot;
+}</code></pre>
+<p>Delivered to the agent's push subscription. Not blocking — advisory
+steering.</p>
+<h3 id="4-ftr-state-machine-extension">4. FTR state machine
+extension</h3>
+<p>Add <code>BLOCKED_HUMAN</code> state:</p>
+<pre><code>PENDING → ASSIGNED → PROGRESSING → PR_READY → REVIEWING → MERGED
+              ↑            │  ↑                      │
+              │            ▼  │                      │
+              │     BLOCKED_HUMAN                    │
+              │            │                         │
+              └────────────┴─────────────────────────┘
+                  (gate fail / rejection)</code></pre>
+<p>Transitions:</p>
+<ul>
+<li><code>PROGRESSING → BLOCKED_HUMAN</code>: Agent escalates with
+<code>blocking: true</code></li>
+<li><code>BLOCKED_HUMAN → PROGRESSING</code>: Human responds via
+<code>coord.cmd.human.respond</code></li>
+<li><code>BLOCKED_HUMAN → PENDING</code>: Human cancels and reassigns
+(<code>amend-state</code>)</li>
+</ul>
+<h3 id="5-bridge-ui-architecture">5. Bridge UI architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────┐
+│  muscovite-bridge (QML)                         │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  ┌─── Iteration Overview ────────────────────┐  │
+│  │ v1.66.0: 5/8 FTRs merged  ████████░░░ 62% │  │
+│  └───────────────────────────────────────────┘  │
+│                                                 │
+│  ┌─── Escalations (1 pending) ──────────────┐  │
+│  │ 🔴 FTR-418 (worker-3): &quot;Should I exclude │  │
+│  │    qDebug from tr() wrapping?&quot;            │  │
+│  │    [Exclude qDebug] [Wrap all] [Reply...] │  │
+│  └───────────────────────────────────────────┘  │
+│                                                 │
+│  ┌─── Agent Activity ───────────────────────┐  │
+│  │ worker-1: FTR-413 building    ████░ 80%   │  │
+│  │ worker-2: FTR-414 testing     ██░░░ 40%   │  │
+│  │ worker-3: FTR-418 BLOCKED     ⏸ waiting   │  │
+│  │ worker-4: FTR-420 progressing ███░░ 60%   │  │
+│  │ QA:       idle                             │  │
+│  └───────────────────────────────────────────┘  │
+│                                                 │
+│  ┌─── Message ──────────────────────────────┐  │
+│  │ To: [worker-3 ▼]  Re: [FTR-418 ▼]       │  │
+│  │ ┌──────────────────────────────────────┐ │  │
+│  │ │                                      │ │  │
+│  │ └──────────────────────────────────────┘ │  │
+│  │                            [Send]        │  │
+│  └───────────────────────────────────────────┘  │
+│                                                 │
+│  ┌─── Event Log ────────────────────────────┐  │
+│  │ 12:01:03 ftr.progress FTR-413 &quot;building&quot; │  │
+│  │ 12:01:15 ftr.escalated FTR-418 worker-3  │  │
+│  │ 12:01:20 resource.granted FTR-414 ctest   │  │
+│  └───────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────┘</code></pre>
+<h3 id="6-closing-the-remaining-circuit-seams">6. Closing the remaining
+circuit seams</h3>
+<p>With the bridge in place, the remaining open seams close:</p>
+<table>
+<thead>
+<tr>
+<th>Seam</th>
+<th>Solution</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PR merge</td>
+<td>Merge agent (new)</td>
+<td>Polls <code>merge.next</code>, runs <code>gh pr merge</code>, calls
+<code>merge.complete</code></td>
+</tr>
+<tr>
+<td>QA review</td>
+<td>Auto-approve policy</td>
+<td>If all gates pass and FTR has <code>auto_approve: true</code> in
+DEPENDENCIES.toml, QA auto-approves</td>
+</tr>
+<tr>
+<td>Release trigger</td>
+<td>Bridge button</td>
+<td>Human clicks "Release" in bridge →
+<code>coord.cmd.leader.release</code></td>
+</tr>
+<tr>
+<td>Worker spawn</td>
+<td>Out of scope</td>
+<td>Workers run on customer infra with customer AI credentials (ADR
+20260313-grpc-gateway). Spawn is environment-dependent (local CLI, CI
+pipeline, cloud container)</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>auto_approve</code> policy per FTR enables lights-out
+operation for mechanical FTRs (refactoring, code generation fixes) while
+preserving human review for architectural changes (grammar
+modifications, new DSL constructs).</p>
+<h3 id="7-nl-belongs-here-nowhere-else">7. NL belongs here, nowhere
+else</h3>
+<p><strong>Human ↔︎ Agent</strong>: Natural language via
+<code>coord.escalate.*</code> and <code>coord.cmd.human.*</code>.
+Messages are free-form text with optional structured metadata (FTR,
+file, line, options).</p>
+<p><strong>Agent ↔︎ Agent</strong>: Structured JSON via
+<code>coord.cmd.*</code> and <code>coord.event.*</code>. No change. The
+coordinator remains a deterministic state machine with typed, validated
+inputs.</p>
+<p><strong>Agent ↔︎ Coordinator</strong>: Structured JSON. No change.
+State transitions, resource locks, merge queue — all remain typed and
+TLA+-verifiable.</p>
+<p>Natural language enters the system at exactly one boundary: the
+human↔︎agent interface. This preserves the formal properties of the
+coordinator protocol while giving the human principal the communication
+medium they need.</p>
+<h2 id="consequences">Consequences</h2>
+<h3 id="positive">Positive</h3>
+<ul>
+<li><strong>Closed circuit</strong>: The iteration lifecycle can run
+without human intervention when all gates pass and
+<code>auto_approve</code> is set.</li>
+<li><strong>On-demand steering</strong>: Human can intervene at any
+point without disrupting the protocol.</li>
+<li><strong>Audit trail</strong>: All escalations and decisions are
+persisted in JetStream — every human decision is traceable.</li>
+<li><strong>Single pane of glass</strong>: One UI for observation,
+escalation response, directed messaging, and release control.</li>
+<li><strong>Graceful degradation</strong>: If the bridge is
+disconnected, agents continue autonomously (non-blocking escalations are
+advisory; blocking escalations pause the FTR until the human
+reconnects).</li>
+</ul>
+<h3 id="negative">Negative</h3>
+<ul>
+<li><strong>New state</strong>: <code>BLOCKED_HUMAN</code> adds
+complexity to the state machine. TLA+ model must be updated.</li>
+<li><strong>Single point</strong>: One human bridge per iteration. No
+delegation to multiple humans (acceptable for current team size; revisit
+if team grows).</li>
+<li><strong>QML dependency</strong>: Bridge requires Qt 6.11+ and the
+full QML stack. No web fallback (acceptable — Muscovite already requires
+Qt for generated frontends).</li>
+</ul>
+<h3 id="implementation-scope">Implementation scope</h3>
+<h4 id="saas-deployment-model">SaaS deployment model</h4>
+<p>In a SaaS deployment (see ADR
+20260313-grpc-gateway-for-agent-coordination-protocol), the bridge runs
+on the <strong>customer's desktop</strong> and connects to the hosted
+gRPC gateway. Key implications for the bridge:</p>
+<ul>
+<li><strong>Agent execution is customer-side.</strong> The bridge
+observes agent state via the gateway but never spawns or hosts agents.
+Workers run on customer infrastructure with customer AI
+credentials.</li>
+<li><strong>The bridge sees event metadata only.</strong> FTR states,
+worker names, timings, escalation text — but never source code, AI
+prompts, or credentials. Escalation messages are natural language
+authored by agents and humans; they may reference code by file:line but
+do not transmit file contents through the gateway.</li>
+<li><strong>Offline-capable observation.</strong> The bridge can cache
+the last-known iteration state locally. If the gateway connection drops,
+the UI shows stale data with a "disconnected" indicator. Agents continue
+autonomously (non-blocking escalations proceed; blocking ones pause
+until the human reconnects).</li>
+<li><strong>Multi-tenant readiness.</strong> A single bridge instance
+connects to one gateway endpoint (one iteration). Multiple bridge
+windows can run simultaneously against different gateway endpoints
+(different projects or tenants).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Where it runs</th>
+<th>What it sees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gRPC Gateway + NATS</td>
+<td>SaaS cloud</td>
+<td>Event metadata, FTR state, role transitions</td>
+</tr>
+<tr>
+<td>Agents (workers, QA)</td>
+<td>Customer infra</td>
+<td>Customer code, AI keys, repo credentials</td>
+</tr>
+<tr>
+<td>QML Bridge</td>
+<td>Customer desktop</td>
+<td>Event metadata via gRPC stream — no code, no AI keys</td>
+</tr>
+<tr>
+<td>Human principal</td>
+<td>Customer desktop</td>
+<td>Escalation text, iteration progress, agent activity</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Effort</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coordinator: <code>BLOCKED_HUMAN</code> state</td>
+<td>Small</td>
+<td>New state + 3 transitions</td>
+</tr>
+<tr>
+<td>Coordinator: <code>human</code> role + auth</td>
+<td>Small</td>
+<td>Registration, token, privilege superset</td>
+</tr>
+<tr>
+<td>Coordinator: escalation handlers</td>
+<td>Medium</td>
+<td><code>coord.escalate.*</code> subjects, delivery to bridge</td>
+</tr>
+<tr>
+<td>Coordinator: <code>human.respond</code> /
+<code>human.direct</code></td>
+<td>Medium</td>
+<td>Response routing, FTR unblock</td>
+</tr>
+<tr>
+<td>Bridge: QML application shell</td>
+<td>Medium</td>
+<td>NATS client, event subscription, basic layout</td>
+</tr>
+<tr>
+<td>Bridge: escalation UI</td>
+<td>Medium</td>
+<td>Question display, option buttons, free-text reply</td>
+</tr>
+<tr>
+<td>Bridge: directed messaging</td>
+<td>Small</td>
+<td>To/Re dropdowns, send button</td>
+</tr>
+<tr>
+<td>Bridge: iteration overview</td>
+<td>Small</td>
+<td>Progress bars, FTR state grid</td>
+</tr>
+<tr>
+<td>Bridge: event log</td>
+<td>Small</td>
+<td>Filtered <code>coord.event.&gt;</code> stream</td>
+</tr>
+<tr>
+<td>Merge agent</td>
+<td>Small</td>
+<td>Poll <code>merge.next</code>, <code>gh pr merge</code>,
+<code>merge.complete</code></td>
+</tr>
+<tr>
+<td>TLA+ model update</td>
+<td>Small</td>
+<td>Add <code>BLOCKED_HUMAN</code> state and transitions</td>
+</tr>
+<tr>
+<td>Auto-approve policy</td>
+<td>Small</td>
+<td><code>auto_approve</code> flag in DEPENDENCIES.toml</td>
+</tr>
+</tbody>
+</table>
+<h2 id="alternatives-considered">Alternatives Considered</h2>
+<h3 id="a-web-based-dashboard-rejected">A. Web-based dashboard
+(rejected)</h3>
+<p>A browser-based UI (React/Vue) would avoid the Qt dependency but
+would require:</p>
+<ul>
+<li>A WebSocket bridge to NATS (additional infrastructure)</li>
+<li>A separate tech stack outside Muscovite's Qt ecosystem</li>
+<li>No reuse of existing <code>framework/qt/</code> components</li>
+</ul>
+<p>Muscovite already generates Qt frontends. Building the bridge in QML
+is consistent and reuses existing async gRPC patterns, theme system, and
+validation framework.</p>
+<h3 id="b-cli-only-interaction-rejected">B. CLI-only interaction
+(rejected)</h3>
+<p>Extending the existing <code>coordinator.py</code> CLI with
+<code>escalate</code> and <code>respond</code> subcommands. This works
+mechanically but fails on the UX:</p>
+<ul>
+<li>No real-time event stream (must poll)</li>
+<li>No visual overview of iteration state</li>
+<li>No notification of pending escalations</li>
+<li>Context-switching between terminal windows</li>
+</ul>
+<p>The CLI remains available as a fallback and for scripted automation,
+but the primary human interface should be the bridge.</p>
+<h3 id="c-slackdiscord-integration-rejected">C. Slack/Discord
+integration (rejected)</h3>
+<p>Routing escalations to a chat platform provides notifications
+but:</p>
+<ul>
+<li>Adds external service dependency</li>
+<li>Messages are not part of the NATS audit trail</li>
+<li>Response routing back to the coordinator requires a bot</li>
+<li>Violates the project boundary rule (Rule 13 — no external service
+dependencies for core workflow)</li>
+</ul>
+<h3 id="d-keep-human-out-of-protocol-use-github-only-rejected">D. Keep
+human out of protocol, use GitHub only (rejected)</h3>
+<p>Using GitHub Issues or PR comments for all human↔︎agent communication.
+This is where review feedback naturally lives, but:</p>
+<ul>
+<li>No real-time notification (GitHub webhooks require
+infrastructure)</li>
+<li>Cannot block an agent pending human response</li>
+<li>No iteration-level overview</li>
+<li>Mixes project management with code review</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"search__query_8hpp.html":[4,0,0,5,0,0,0,6],
 "search__query_8hpp.html#a88b1e49a4289ff7b11438be414347eb3a5fc8b9a31666e95fddf7fdc19ba6070c":[4,0,0,5,0,0,0,6,3,1],
 "search__query_8hpp.html#a88b1e49a4289ff7b11438be414347eb3ae8338cca05b6a68b1b516f4f0d6b0a0f":[4,0,0,5,0,0,0,6,3,0],
 "search__query_8hpp_source.html":[4,0,0,5,0,0,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "structmuscovite_1_1qt_1_1AuthConfig.html#a92d9c782b7633e7ae68d7dfb7c5e24b2":[3,0,1,4,8,2],
 "structmuscovite_1_1qt_1_1AuthConfig.html#ab20d34489f7f107dc1b5d80144fac64d":[3,0,1,4,8,1],
 "structmuscovite_1_1qt_1_1AuthConfig.html#af840cdc1d847767a7ac6ca162b03289f":[3,0,1,4,8,3],
-"structmuscovite_1_1qt_1_1AuthConfig.html#afbe9ff095e5263d71cfeeacce9af02d2":[3,0,1,4,8,0],
-"structmuscovite_1_1qt_1_1OAuth2QtConfig.html":[3,0,1,4,13]
+"structmuscovite_1_1qt_1_1AuthConfig.html#afbe9ff095e5263d71cfeeacce9af02d2":[3,0,1,4,8,0]
 };

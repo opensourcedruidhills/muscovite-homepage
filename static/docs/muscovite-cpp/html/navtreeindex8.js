@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"structmuscovite_1_1qt_1_1OAuth2QtConfig.html":[3,0,1,4,13],
 "structmuscovite_1_1qt_1_1OAuth2Session.html":[3,0,1,4,14],
 "structmuscovite_1_1qt_1_1Session.html":[3,0,1,4,26],
 "structmuscovite_1_1qt_1_1StoredTokens.html":[3,0,1,4,27],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html#a72174463ee9eb7c597de7de8df2a08f3":[3,0,2,2,2],
 "structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html":[1,0,1,0],
 "structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html":[3,0,3,0],
-"structstd_1_1hash_3_01Derived_01_4.html":[1,0,1,1],
-"structstd_1_1hash_3_01Derived_01_4.html":[3,0,3,1]
+"structstd_1_1hash_3_01Derived_01_4.html":[1,0,1,1]
 };
