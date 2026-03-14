@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.65.3</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -93,7 +93,7 @@ $(function(){initNavTree('structmuscovite_1_1server_1_1DatabaseConfig.html','','
 </div><!--header-->
 <div class="contents">
 
-<p>Database configuration.  
+<p>Database configuration (FTR-413: resiliency directives).  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="config_8hpp_source.html">config.hpp</a>&gt;</code></p>
@@ -103,9 +103,20 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:afd9cfe86f547f02cce2bdfb5f898602b" id="r_afd9cfe86f547f02cce2bdfb5f898602b"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#afd9cfe86f547f02cce2bdfb5f898602b">connection_string</a></td></tr>
 <tr class="memitem:a263852e6c082c2961fd9565ab4a639e3" id="r_a263852e6c082c2961fd9565ab4a639e3"><td class="memItemLeft">std::size_t&#160;</td><td class="memItemRight"><a class="el" href="#a263852e6c082c2961fd9565ab4a639e3">pool_max</a> {10}</td></tr>
 <tr class="memitem:a5c066cf904a23d29f319326c2ff32532" id="r_a5c066cf904a23d29f319326c2ff32532"><td class="memItemLeft">std::size_t&#160;</td><td class="memItemRight"><a class="el" href="#a5c066cf904a23d29f319326c2ff32532">pool_min</a> {2}</td></tr>
+<tr id="pub-attribs-0" class="groupHeader"><td colspan="2"><div class="groupHeader">Transaction retry policy (FTR-413)</div></td></tr>
+<tr><td colspan="2" class="ititle"><div class="groupText"><p>Populated from [database] retry_* fields in server.ini. These values construct a <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html" title="Retry policy for transient errors.">dba::RetryPolicy</a> for the Transactor. </p>
+</div></td></tr>
+<tr class="memitem:a6573e2a21a59b0096cdb2614906e3428" id="r_a6573e2a21a59b0096cdb2614906e3428"><td class="memItemLeft">std::size_t&#160;</td><td class="memItemRight"><a class="el" href="#a6573e2a21a59b0096cdb2614906e3428">retry_max_retries</a> {3}</td></tr>
+<tr class="memitem:a6ca0f6153ae1520adb652367bcfcffe3" id="r_a6ca0f6153ae1520adb652367bcfcffe3"><td class="memItemLeft">std::chrono::milliseconds&#160;</td><td class="memItemRight"><a class="el" href="#a6ca0f6153ae1520adb652367bcfcffe3">retry_initial_delay</a> {100}</td></tr>
+<tr class="memitem:af002ecd27fc49227dd874469a694f3d8" id="r_af002ecd27fc49227dd874469a694f3d8"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#af002ecd27fc49227dd874469a694f3d8">retry_backoff_multiplier</a> {2.0}</td></tr>
+<tr class="memitem:aaef8ebd9609ad14edd13099232476e47" id="r_aaef8ebd9609ad14edd13099232476e47"><td class="memItemLeft">std::chrono::milliseconds&#160;</td><td class="memItemRight"><a class="el" href="#aaef8ebd9609ad14edd13099232476e47">retry_max_delay</a> {5000}</td></tr>
+<tr class="memitem:a2a87c38df6418828e45892dd38eb4474" id="r_a2a87c38df6418828e45892dd38eb4474"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a2a87c38df6418828e45892dd38eb4474">retry_on_connection_error</a> {false}</td></tr>
+<tr class="memitem:afd9f308ba640108150b2d27feae1a1ac" id="r_afd9f308ba640108150b2d27feae1a1ac"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#afd9f308ba640108150b2d27feae1a1ac">retry_on_serialization_failure</a> {true}</td></tr>
+<tr class="memitem:a3b61ec8034ad7b5899bd299f14964a6e" id="r_a3b61ec8034ad7b5899bd299f14964a6e"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a3b61ec8034ad7b5899bd299f14964a6e">retry_on_deadlock</a> {true}</td></tr>
+<tr class="memitem:a08da1d35a9f7d69e88baf396f1d56dcf" id="r_a08da1d35a9f7d69e88baf396f1d56dcf"><td class="memItemLeft">std::chrono::milliseconds&#160;</td><td class="memItemRight"><a class="el" href="#a08da1d35a9f7d69e88baf396f1d56dcf">retry_min_remaining</a> {200}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Database configuration. </p>
+<div class="textblock"><p>Database configuration (FTR-413: resiliency directives). </p>
 
 <p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00067">67</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
@@ -154,6 +165,134 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00069">69</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af002ecd27fc49227dd874469a694f3d8" name="af002ecd27fc49227dd874469a694f3d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af002ecd27fc49227dd874469a694f3d8">&#9670;&#160;</a></span>retry_backoff_multiplier</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double muscovite::server::DatabaseConfig::retry_backoff_multiplier {2.0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00078">78</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6ca0f6153ae1520adb652367bcfcffe3" name="a6ca0f6153ae1520adb652367bcfcffe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ca0f6153ae1520adb652367bcfcffe3">&#9670;&#160;</a></span>retry_initial_delay</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::chrono::milliseconds muscovite::server::DatabaseConfig::retry_initial_delay {100}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00077">77</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aaef8ebd9609ad14edd13099232476e47" name="aaef8ebd9609ad14edd13099232476e47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaef8ebd9609ad14edd13099232476e47">&#9670;&#160;</a></span>retry_max_delay</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::chrono::milliseconds muscovite::server::DatabaseConfig::retry_max_delay {5000}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00079">79</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6573e2a21a59b0096cdb2614906e3428" name="a6573e2a21a59b0096cdb2614906e3428"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6573e2a21a59b0096cdb2614906e3428">&#9670;&#160;</a></span>retry_max_retries</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t muscovite::server::DatabaseConfig::retry_max_retries {3}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00076">76</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a08da1d35a9f7d69e88baf396f1d56dcf" name="a08da1d35a9f7d69e88baf396f1d56dcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08da1d35a9f7d69e88baf396f1d56dcf">&#9670;&#160;</a></span>retry_min_remaining</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::chrono::milliseconds muscovite::server::DatabaseConfig::retry_min_remaining {200}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00083">83</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2a87c38df6418828e45892dd38eb4474" name="a2a87c38df6418828e45892dd38eb4474"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a87c38df6418828e45892dd38eb4474">&#9670;&#160;</a></span>retry_on_connection_error</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool muscovite::server::DatabaseConfig::retry_on_connection_error {false}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00080">80</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3b61ec8034ad7b5899bd299f14964a6e" name="a3b61ec8034ad7b5899bd299f14964a6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b61ec8034ad7b5899bd299f14964a6e">&#9670;&#160;</a></span>retry_on_deadlock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool muscovite::server::DatabaseConfig::retry_on_deadlock {true}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00082">82</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afd9f308ba640108150b2d27feae1a1ac" name="afd9f308ba640108150b2d27feae1a1ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd9f308ba640108150b2d27feae1a1ac">&#9670;&#160;</a></span>retry_on_serialization_failure</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool muscovite::server::DatabaseConfig::retry_on_serialization_failure {true}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.html#l00081">81</a> of file <a class="el" href="config_8hpp_source.html">config.hpp</a>.</p>
 
 </div>
 </div>
