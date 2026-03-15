@@ -65,15 +65,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
-"classmuscovite_1_1geo_1_1Point.html#ad63508111f08136c4208d7ccfb680bf8",
-"classmuscovite_1_1qt_1_1AuthManager.html",
-"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#abf23d0a1f517a610e1343cd3d7a21cff",
-"classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html",
-"dir_717fbe0e8b9335ad5cec2962440b954c.html",
-"jsonb__converters_8hpp.html",
-"search__query_8hpp.html",
-"structmuscovite_1_1qt_1_1OAuth2QtConfig.html",
-"structstd_1_1hash_3_01Derived_01_4.html"
+"classmuscovite_1_1geo_1_1Point.html#ab685381c3414f725a3ff7e4935d7bd55",
+"classmuscovite_1_1qt_1_1AuthCallCredentials.html#adf1d19aa12b595d610e26f8d65c5db4d",
+"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#a235beee0f9083f3e92c8ea7032b6b744",
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#af95094ef85f719ba2f0acc573679a1a1",
+"dir_4bb54f527d3e6d07f25f83fffcb35e1c.html",
+"include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html",
+"search__indexer_8cpp_source.html",
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#a9003903981cfd18e05a28121711489d7",
+"structmuscovite_1_1validation_1_1ValidationResult.html#ac675cfd40e436bbd609b043371085d45"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

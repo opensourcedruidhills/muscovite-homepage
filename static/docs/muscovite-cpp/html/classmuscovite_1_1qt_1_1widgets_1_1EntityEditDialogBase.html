@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -155,12 +155,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac8ac984f914a7fece18d32ce680bc0b8" id="r_ac8ac984f914a7fece18d32ce680bc0b8"><td class="memTemplParams" colspan="2">template&lt;typename Response&gt; </td></tr>
 <tr class="memitem:ac8ac984f914a7fece18d32ce680bc0b8 template"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ac8ac984f914a7fece18d32ce680bc0b8">handleGrpcResult</a> (const <a class="el" href="structmuscovite_1_1qt_1_1grpc_1_1GrpcResult.html">grpc::GrpcResult</a>&lt; Response &gt; &amp;result)</td></tr>
 <tr class="memdesc:ac8ac984f914a7fece18d32ce680bc0b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle a gRPC result that may contain validation errors.  <br /></td></tr>
-<tr class="memitem:a80d555a26e881b157d4274ddb2d3681b" id="r_a80d555a26e881b157d4274ddb2d3681b"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a80d555a26e881b157d4274ddb2d3681b">handleValidationError</a> (const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</td></tr>
-<tr class="memdesc:a80d555a26e881b157d4274ddb2d3681b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle validation errors from a synchronous gRPC call.  <br /></td></tr>
+<tr class="memitem:a66a0c1e427ee39a35885786a35f7da18" id="r_a66a0c1e427ee39a35885786a35f7da18"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a66a0c1e427ee39a35885786a35f7da18">handleValidationError</a> (const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</td></tr>
+<tr class="memdesc:a66a0c1e427ee39a35885786a35f7da18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle validation errors from a synchronous gRPC call.  <br /></td></tr>
 <tr class="memitem:a3eca02ab0a8a07b0bb10cd47e6d4cd61" id="r_a3eca02ab0a8a07b0bb10cd47e6d4cd61"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a3eca02ab0a8a07b0bb10cd47e6d4cd61">isLoading</a> () const</td></tr>
 <tr class="memitem:a38aeb10c8f59947edb3253b1eff7debb" id="r_a38aeb10c8f59947edb3253b1eff7debb"><td class="memItemLeft">std::unique_ptr&lt;::grpc::ClientContext &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a38aeb10c8f59947edb3253b1eff7debb">makeContext</a> (std::chrono::milliseconds deadline=std::chrono::seconds{10}) const</td></tr>
 <tr class="memitem:a3c14f1b86aeb178ace48ad921eeac942" id="r_a3c14f1b86aeb178ace48ad921eeac942"><td class="memItemLeft">std::shared_ptr&lt;::grpc::ClientContext &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a3c14f1b86aeb178ace48ad921eeac942">makeSharedContext</a> (std::chrono::milliseconds deadline=std::chrono::seconds{10}) const</td></tr>
-<tr class="memdesc:a3c14f1b86aeb178ace48ad921eeac942"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared gRPC context for async calls (<a class="el" href="classmuscovite_1_1qt_1_1GrpcCallTask.html" title="A QObject task that runs a blocking gRPC unary call on a worker thread.">GrpcCallTask</a> pattern). The shared_ptr lifetime spans both the call lambda and done handler, allowing <a class="el" href="#a80d555a26e881b157d4274ddb2d3681b" title="Handle validation errors from a synchronous gRPC call.">handleValidationError()</a> to read trailing metadata after the call.  <br /></td></tr>
+<tr class="memdesc:a3c14f1b86aeb178ace48ad921eeac942"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared gRPC context for async calls (<a class="el" href="classmuscovite_1_1qt_1_1GrpcCallTask.html" title="A QObject task that runs a blocking gRPC unary call on a worker thread.">GrpcCallTask</a> pattern). The shared_ptr lifetime spans both the call lambda and done handler, allowing <a class="el" href="#a66a0c1e427ee39a35885786a35f7da18" title="Handle validation errors from a synchronous gRPC call.">handleValidationError()</a> to read trailing metadata after the call.  <br /></td></tr>
 <tr class="memitem:ae9a271353e1f8f9cab9fe0ad1e025cc7" id="r_ae9a271353e1f8f9cab9fe0ad1e025cc7"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae9a271353e1f8f9cab9fe0ad1e025cc7">markRequired</a> (QWidget *field, const QString &amp;displayLabel={})</td></tr>
 <tr class="memitem:a266a0da73fd7c8374933365eaa23d50e" id="r_a266a0da73fd7c8374933365eaa23d50e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a266a0da73fd7c8374933365eaa23d50e">onCancelClicked</a> ()</td></tr>
 <tr class="memitem:aaedea94acb2e8ff3d6ac185d9d6fe6c4" id="r_aaedea94acb2e8ff3d6ac185d9d6fe6c4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aaedea94acb2e8ff3d6ac185d9d6fe6c4">onSaveClicked</a> ()</td></tr>
@@ -248,7 +248,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00021">21</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00022">22</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -280,7 +280,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00173">173</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00171">171</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -316,7 +316,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00215">215</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00213">213</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -352,7 +352,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00180">180</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00178">178</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -388,7 +388,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00192">192</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00190">190</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -439,7 +439,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00161">161</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00159">159</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -475,7 +475,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00140">140</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00138">138</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -506,7 +506,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00319">319</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00317">317</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -537,7 +537,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00236">236</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00234">234</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +568,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00264">264</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00262">262</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -599,7 +599,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00292">292</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00290">290</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -645,7 +645,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00150">150</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00148">148</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -681,7 +681,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00225">225</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00223">223</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -717,7 +717,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00204">204</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00202">202</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -825,7 +825,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00422">422</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00420">420</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -852,7 +852,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00525">525</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00523">523</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -879,7 +879,7 @@ virtual void&#160;</td><td class="memItemRight"><b>setupFields</b> ()=0</td></tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00410">410</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00408">408</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1065,8 +1065,8 @@ template&lt;typename Response&gt; </div>
 
 </div>
 </div>
-<a id="a80d555a26e881b157d4274ddb2d3681b" name="a80d555a26e881b157d4274ddb2d3681b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80d555a26e881b157d4274ddb2d3681b">&#9670;&#160;</a></span>handleValidationError()</h2>
+<a id="a66a0c1e427ee39a35885786a35f7da18" name="a66a0c1e427ee39a35885786a35f7da18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66a0c1e427ee39a35885786a35f7da18">&#9670;&#160;</a></span>handleValidationError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1075,7 +1075,7 @@ template&lt;typename Response&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool muscovite::qt::widgets::EntityEditDialogBase::handleValidationError </td>
+          <td class="memname">auto muscovite::qt::widgets::EntityEditDialogBase::handleValidationError </td>
           <td>(</td>
           <td class="paramtype">const ::grpc::ClientContext &amp;</td>          <td class="paramname"><span class="paramname"><em>ctx</em></span>, </td>
         </tr>
@@ -1087,7 +1087,7 @@ template&lt;typename Response&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel protected">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1103,10 +1103,14 @@ template&lt;typename Response&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if no validation error (call succeeded or failed without validation), false if a validation error was extracted and shown</dd></dl>
 <p>Example usage in generated code: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> status = stub-&gt;CreateEntity(ctx.get(), request, &amp;response);</div>
-<div class="line"><span class="keywordflow">if</span> (!<a class="code hl_function" href="#a80d555a26e881b157d4274ddb2d3681b">handleValidationError</a>(*ctx, status)) <span class="keywordflow">return</span>;  <span class="comment">// Validation error shown</span></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a80d555a26e881b157d4274ddb2d3681b"><div class="ttname"><a href="#a80d555a26e881b157d4274ddb2d3681b">muscovite::qt::widgets::EntityEditDialogBase::handleValidationError</a></div><div class="ttdeci">bool handleValidationError(const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</div><div class="ttdoc">Handle validation errors from a synchronous gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="framework_2qt_2include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html#l00218">entity_edit_dialog.hpp:218</a></div></div>
+<div class="line"><span class="keywordflow">if</span> (!<a class="code hl_function" href="#a66a0c1e427ee39a35885786a35f7da18">handleValidationError</a>(*ctx, status)) <span class="keywordflow">return</span>;  <span class="comment">// Validation error shown</span></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a66a0c1e427ee39a35885786a35f7da18"><div class="ttname"><a href="#a66a0c1e427ee39a35885786a35f7da18">muscovite::qt::widgets::EntityEditDialogBase::handleValidationError</a></div><div class="ttdeci">bool handleValidationError(const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</div><div class="ttdoc">Handle validation errors from a synchronous gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="entity__edit__dialog_8cpp_source.html#l00616">entity_edit_dialog.cpp:616</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="framework_2qt_2include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html#l00218">218</a> of file <a class="el" href="framework_2qt_2include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html">entity_edit_dialog.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00616">616</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="entity__edit__dialog_8cpp_source.html#l00616">handleValidationError()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="entity__edit__dialog_8cpp_source.html#l00616">handleValidationError()</a>.</p>
 
 </div>
 </div>
@@ -1160,7 +1164,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00529">529</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00527">527</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1187,14 +1191,14 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Create a shared gRPC context for async calls (<a class="el" href="classmuscovite_1_1qt_1_1GrpcCallTask.html" title="A QObject task that runs a blocking gRPC unary call on a worker thread.">GrpcCallTask</a> pattern). The shared_ptr lifetime spans both the call lambda and done handler, allowing <a class="el" href="#a80d555a26e881b157d4274ddb2d3681b" title="Handle validation errors from a synchronous gRPC call.">handleValidationError()</a> to read trailing metadata after the call. </p>
+<p>Create a shared gRPC context for async calls (<a class="el" href="classmuscovite_1_1qt_1_1GrpcCallTask.html" title="A QObject task that runs a blocking gRPC unary call on a worker thread.">GrpcCallTask</a> pattern). The shared_ptr lifetime spans both the call lambda and done handler, allowing <a class="el" href="#a66a0c1e427ee39a35885786a35f7da18" title="Handle validation errors from a synchronous gRPC call.">handleValidationError()</a> to read trailing metadata after the call. </p>
 <dl class="section see"><dt>See also</dt><dd>ADR 20260303-tasktree-adoption, FTR-194 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00542">542</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00540">540</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="entity__edit__dialog_8cpp_source.html#l00542">makeSharedContext()</a>.</p>
+<p class="reference">References <a class="el" href="entity__edit__dialog_8cpp_source.html#l00540">makeSharedContext()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="entity__edit__dialog_8cpp_source.html#l00542">makeSharedContext()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="entity__edit__dialog_8cpp_source.html#l00540">makeSharedContext()</a>.</p>
 
 </div>
 </div>
@@ -1225,7 +1229,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00343">343</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00341">341</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1279,7 +1283,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00564">564</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00562">562</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1306,7 +1310,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00555">555</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00553">553</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1333,7 +1337,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00590">590</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00588">588</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1414,7 +1418,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00372">372</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00370">370</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1433,7 +1437,7 @@ template&lt;typename Response&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00117">117</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00115">115</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1452,7 +1456,7 @@ template&lt;typename Response&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00124">124</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00122">122</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1479,7 +1483,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00516">516</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00514">514</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1510,7 +1514,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00386">386</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00384">384</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1537,7 +1541,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00504">504</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00502">502</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1564,7 +1568,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00579">579</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00577">577</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>
@@ -1645,7 +1649,7 @@ template&lt;typename Response&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00432">432</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="entity__edit__dialog_8cpp_source.html#l00430">430</a> of file <a class="el" href="entity__edit__dialog_8cpp_source.html">entity_edit_dialog.cpp</a>.</p>
 
 </div>
 </div>

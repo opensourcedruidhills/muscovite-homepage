@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classmuscovite_1_1geo_1_1Point.html#ab685381c3414f725a3ff7e4935d7bd55":[3,0,1,1,5,8],
 "classmuscovite_1_1geo_1_1Point.html#ad63508111f08136c4208d7ccfb680bf8":[3,0,1,1,5,6],
 "classmuscovite_1_1geo_1_1Point.html#ad7c2340ec85ce4cc2a4ab257d8cb0772":[3,0,1,1,5,0],
 "classmuscovite_1_1geo_1_1Point.html#ae14b445f2be21f1241c2e1a6c41bef71":[3,0,1,1,5,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classmuscovite_1_1qt_1_1AuthCallCredentials.html":[3,0,1,4,7],
 "classmuscovite_1_1qt_1_1AuthCallCredentials.html#a0781f4367b93b604616faabc4d024a04":[3,0,1,4,7,0],
 "classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89":[3,0,1,4,7,2],
-"classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae":[3,0,1,4,7,3],
-"classmuscovite_1_1qt_1_1AuthCallCredentials.html#adf1d19aa12b595d610e26f8d65c5db4d":[3,0,1,4,7,1]
+"classmuscovite_1_1qt_1_1AuthCallCredentials.html#adc729a825f8e776800af82a3cd2d84ae":[3,0,1,4,7,3]
 };

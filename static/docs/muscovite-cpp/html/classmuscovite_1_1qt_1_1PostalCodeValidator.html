@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -107,12 +107,12 @@ Inheritance diagram for muscovite::qt::PostalCodeValidator:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac3335b87f1435990052be9de7b7fa701" id="r_ac3335b87f1435990052be9de7b7fa701"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac3335b87f1435990052be9de7b7fa701">PostalCodeValidator</a> (QObject *parent=nullptr)</td></tr>
-<tr class="memitem:a181f1f972f46e362b2545b805af0ab4c" id="r_a181f1f972f46e362b2545b805af0ab4c"><td class="memItemLeft">State&#160;</td><td class="memItemRight"><a class="el" href="#a181f1f972f46e362b2545b805af0ab4c">validate</a> (QString &amp;input, int &amp;) const override</td></tr>
+<tr class="memitem:aa511bbaf1b38d4d3a25f8d1e13adb954" id="r_aa511bbaf1b38d4d3a25f8d1e13adb954"><td class="memItemLeft">State&#160;</td><td class="memItemRight"><a class="el" href="#aa511bbaf1b38d4d3a25f8d1e13adb954">validate</a> (QString &amp;input, int &amp;pos) const override</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>QValidator for Postal codes. </p>
 
-<p class="definition">Definition at line <a class="el" href="qt__validators_8hpp_source.html#l00089">89</a> of file <a class="el" href="qt__validators_8hpp_source.html">qt_validators.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="qt__validators_8hpp_source.html#l00045">45</a> of file <a class="el" href="qt__validators_8hpp_source.html">qt_validators.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac3335b87f1435990052be9de7b7fa701" name="ac3335b87f1435990052be9de7b7fa701"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac3335b87f1435990052be9de7b7fa701">&#9670;&#160;</a></span>PostalCodeValidator()</h2>
@@ -132,18 +132,18 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel explicit">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="qt__validators_8hpp_source.html#l00092">92</a> of file <a class="el" href="qt__validators_8hpp_source.html">qt_validators.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="qt__validators_8cpp_source.html#l00080">80</a> of file <a class="el" href="qt__validators_8cpp_source.html">qt_validators.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a181f1f972f46e362b2545b805af0ab4c" name="a181f1f972f46e362b2545b805af0ab4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a181f1f972f46e362b2545b805af0ab4c">&#9670;&#160;</a></span>validate()</h2>
+<a id="aa511bbaf1b38d4d3a25f8d1e13adb954" name="aa511bbaf1b38d4d3a25f8d1e13adb954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa511bbaf1b38d4d3a25f8d1e13adb954">&#9670;&#160;</a></span>validate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,29 +152,30 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">State muscovite::qt::PostalCodeValidator::validate </td>
+          <td class="memname">QValidator::State muscovite::qt::PostalCodeValidator::validate </td>
           <td>(</td>
           <td class="paramtype">QString &amp;</td>          <td class="paramname"><span class="paramname"><em>input</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;) const</td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="qt__validators_8hpp_source.html#l00094">94</a> of file <a class="el" href="qt__validators_8hpp_source.html">qt_validators.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="qt__validators_8cpp_source.html#l00085">85</a> of file <a class="el" href="qt__validators_8cpp_source.html">qt_validators.cpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>framework/qt/include/muscovite/qt/types/<a class="el" href="qt__validators_8hpp_source.html">qt_validators.hpp</a></li>
+<li>framework/qt/src/types/<a class="el" href="qt__validators_8cpp_source.html">qt_validators.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

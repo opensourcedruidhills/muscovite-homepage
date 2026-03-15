@@ -21,6 +21,7 @@ var NAVTREEINDEX0 =
 "application_8cpp_source.html":[4,0,0,4,1,1,0],
 "application_8hpp.html":[4,0,0,4,0,0,0,1,0],
 "application_8hpp_source.html":[4,0,0,4,0,0,0,1,0],
+"async__uniqueness__checker_8cpp_source.html":[4,0,0,4,1,7,0],
 "async__uniqueness__checker_8hpp.html":[4,0,0,4,0,0,0,7,0],
 "async__uniqueness__checker_8hpp_source.html":[4,0,0,4,0,0,0,7,0],
 "auth__manager_8cpp_source.html":[4,0,0,4,1,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classmuscovite_1_1geo_1_1Point.html#a66509c3253e3e1a490cbe945f66a8ed3":[3,0,1,1,5,10],
 "classmuscovite_1_1geo_1_1Point.html#a71ef3aa129b094a35a1ccc338d34d2a6":[3,0,1,1,5,3],
 "classmuscovite_1_1geo_1_1Point.html#a8e821e8aeac1c8de0c1824e761f60a1e":[3,0,1,1,5,9],
-"classmuscovite_1_1geo_1_1Point.html#aaab05fd19ffd2dc05b2bbaeb69366349":[3,0,1,1,5,4],
-"classmuscovite_1_1geo_1_1Point.html#ab685381c3414f725a3ff7e4935d7bd55":[3,0,1,1,5,8]
+"classmuscovite_1_1geo_1_1Point.html#aaab05fd19ffd2dc05b2bbaeb69366349":[3,0,1,1,5,4]
 };

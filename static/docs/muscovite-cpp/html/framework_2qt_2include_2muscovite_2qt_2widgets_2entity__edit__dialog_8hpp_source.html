@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -257,68 +257,51 @@ $(function(){initNavTree('framework_2qt_2include_2muscovite_2qt_2widgets_2entity
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    }</div>
 </div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span></div>
-<div class="foldopen" id="foldopen00218" data-start="{" data-end="}">
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a80d555a26e881b157d4274ddb2d3681b">  218</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a80d555a26e881b157d4274ddb2d3681b">handleValidationError</a>(const ::grpc::ClientContext&amp; ctx, const ::grpc::Status&amp; status) {</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        <span class="keywordflow">if</span> (status.ok()) {</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;  <span class="comment">// Success, no errors</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        }</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        </div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keyword">auto</span> validationError = <a class="code hl_function" href="validation__error__converter_8hpp.html#a484d6bc7b61ba9486cf147d72dbd6e03">grpc::extractValidationErrorFromContext</a>(ctx);</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <span class="keywordflow">if</span> (validationError) {</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keyword">auto</span> result = <a class="code hl_function" href="validation__error__converter_8hpp.html#a51151ad99f2bf3a0b7d3c5597c8d863a">grpc::fromBackendError</a>(*validationError);</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            showValidationResult(result);</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            onValidationChanged(result);</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            setLoading(<span class="keyword">false</span>);</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;  <span class="comment">// Validation error shown</span></div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        }</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;  <span class="comment">// Error, but not a validation error - let caller handle</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    }</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a66a0c1e427ee39a35885786a35f7da18">handleValidationError</a>(const ::grpc::ClientContext&amp; ctx, const ::grpc::Status&amp; status);</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keywordtype">void</span> onSaveClicked();</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">void</span> onCancelClicked();</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="keywordtype">void</span> onValidationChanged(<span class="keyword">const</span> <a class="code hl_class" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a>&amp; result);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <span class="keywordtype">void</span> setupUi();</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="keywordtype">void</span> updateTitle();</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keywordtype">void</span> setupStateMachine();</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keywordtype">void</span> updateButtonStates();</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="comment">// UI components</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    QVBoxLayout* mainLayout_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    QScrollArea* scrollArea_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    QWidget* formWidget_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    QFormLayout* formLayout_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    QDialogButtonBox* buttonBox_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    QPushButton* copyButton_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    QLabel* errorLabel_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    validation::ValidationDisplayWidget* validationDisplay_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="comment">// State machine</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    validation::EntityDialogStateMachine* stateMachine_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="comment">// State</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    Mode mode_{Mode::Create};</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    QString entityId_;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="keywordtype">bool</span> loading_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    std::shared_ptr&lt;::grpc::Channel&gt; channel_;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    muscovite::qt::AuthManager* authMgr_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <span class="comment">// Track required fields for validation (widget -&gt; display label)</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    QMap&lt;QWidget*, QString&gt; requiredFields_;</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    QMap&lt;QWidget*, QLabel*&gt; fieldErrorLabels_;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>};</div>
 </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="keywordtype">void</span> onSaveClicked();</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keywordtype">void</span> onCancelClicked();</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="keywordtype">void</span> onValidationChanged(<span class="keyword">const</span> <a class="code hl_class" href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">validation::ValidationResult</a>&amp; result);</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keywordtype">void</span> setupUi();</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="keywordtype">void</span> updateTitle();</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keywordtype">void</span> setupStateMachine();</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordtype">void</span> updateButtonStates();</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="comment">// UI components</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    QVBoxLayout* mainLayout_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    QScrollArea* scrollArea_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    QWidget* formWidget_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    QFormLayout* formLayout_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    QDialogButtonBox* buttonBox_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    QPushButton* copyButton_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    QLabel* errorLabel_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    validation::ValidationDisplayWidget* validationDisplay_{<span class="keyword">nullptr</span>};</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="comment">// State machine</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    validation::EntityDialogStateMachine* stateMachine_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="comment">// State</span></div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    Mode mode_{Mode::Create};</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    QString entityId_;</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    <span class="keywordtype">bool</span> loading_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    std::shared_ptr&lt;::grpc::Channel&gt; channel_;</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    muscovite::qt::AuthManager* authMgr_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="comment">// Track required fields for validation (widget -&gt; display label)</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    QMap&lt;QWidget*, QString&gt; requiredFields_;</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    QMap&lt;QWidget*, QLabel*&gt; fieldErrorLabels_;</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>};</div>
-</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>} <span class="comment">// namespace muscovite::qt::widgets</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>} <span class="comment">// namespace muscovite::qt::widgets</span></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1AuthManager_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1AuthManager.html">muscovite::qt::AuthManager</a></div><div class="ttdoc">Authentication manager for built-in username/password authentication.</div><div class="ttdef"><b>Definition</b> <a href="auth__manager_8hpp_source.html#l00075">auth_manager.hpp:75</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1validation_1_1EntityDialogStateMachine_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1validation_1_1EntityDialogStateMachine.html">muscovite::qt::validation::EntityDialogStateMachine</a></div><div class="ttdoc">State machine for entity edit dialog workflow. Manages dialog lifecycle with bindable properties (can...</div><div class="ttdef"><b>Definition</b> <a href="entity__dialog__state__machine_8hpp_source.html#l00022">entity_dialog_state_machine.hpp:22</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1validation_1_1ValidationDisplayWidget_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1validation_1_1ValidationDisplayWidget.html">muscovite::qt::validation::ValidationDisplayWidget</a></div><div class="ttdoc">Widget for displaying validation messages.</div><div class="ttdef"><b>Definition</b> <a href="validation__display__widget_8hpp_source.html#l00051">validation_display_widget.hpp:51</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1validation_1_1ValidationDisplayWidget_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1validation_1_1ValidationDisplayWidget.html">muscovite::qt::validation::ValidationDisplayWidget</a></div><div class="ttdoc">Widget for displaying validation messages.</div><div class="ttdef"><b>Definition</b> <a href="validation__display__widget_8hpp_source.html#l00052">validation_display_widget.hpp:52</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1validation_1_1ValidationResult_html"><div class="ttname"><a href="classmuscovite_1_1qt_1_1validation_1_1ValidationResult.html">muscovite::qt::validation::ValidationResult</a></div><div class="ttdoc">Collection of validation messages with status query methods.</div><div class="ttdef"><b>Definition</b> <a href="qt_2include_2muscovite_2qt_2validation_2validation__result_8hpp_source.html#l00048">validation_result.hpp:48</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a3c14f1b86aeb178ace48ad921eeac942"><div class="ttname"><a href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a3c14f1b86aeb178ace48ad921eeac942">muscovite::qt::widgets::EntityEditDialogBase::makeSharedContext</a></div><div class="ttdeci">std::shared_ptr&lt;::grpc::ClientContext &gt; makeSharedContext(std::chrono::milliseconds deadline=std::chrono::seconds{10}) const</div><div class="ttdoc">Create a shared gRPC context for async calls (GrpcCallTask pattern). The shared_ptr lifetime spans bo...</div><div class="ttdef"><b>Definition</b> <a href="entity__edit__dialog_8cpp_source.html#l00542">entity_edit_dialog.cpp:542</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a80d555a26e881b157d4274ddb2d3681b"><div class="ttname"><a href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a80d555a26e881b157d4274ddb2d3681b">muscovite::qt::widgets::EntityEditDialogBase::handleValidationError</a></div><div class="ttdeci">bool handleValidationError(const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</div><div class="ttdoc">Handle validation errors from a synchronous gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="#l00218">entity_edit_dialog.hpp:218</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a3c14f1b86aeb178ace48ad921eeac942"><div class="ttname"><a href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a3c14f1b86aeb178ace48ad921eeac942">muscovite::qt::widgets::EntityEditDialogBase::makeSharedContext</a></div><div class="ttdeci">std::shared_ptr&lt;::grpc::ClientContext &gt; makeSharedContext(std::chrono::milliseconds deadline=std::chrono::seconds{10}) const</div><div class="ttdoc">Create a shared gRPC context for async calls (GrpcCallTask pattern). The shared_ptr lifetime spans bo...</div><div class="ttdef"><b>Definition</b> <a href="entity__edit__dialog_8cpp_source.html#l00540">entity_edit_dialog.cpp:540</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_a66a0c1e427ee39a35885786a35f7da18"><div class="ttname"><a href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#a66a0c1e427ee39a35885786a35f7da18">muscovite::qt::widgets::EntityEditDialogBase::handleValidationError</a></div><div class="ttdeci">bool handleValidationError(const ::grpc::ClientContext &amp;ctx, const ::grpc::Status &amp;status)</div><div class="ttdoc">Handle validation errors from a synchronous gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="entity__edit__dialog_8cpp_source.html#l00616">entity_edit_dialog.cpp:616</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase_html_ac8ac984f914a7fece18d32ce680bc0b8"><div class="ttname"><a href="classmuscovite_1_1qt_1_1widgets_1_1EntityEditDialogBase.html#ac8ac984f914a7fece18d32ce680bc0b8">muscovite::qt::widgets::EntityEditDialogBase::handleGrpcResult</a></div><div class="ttdeci">bool handleGrpcResult(const grpc::GrpcResult&lt; Response &gt; &amp;result)</div><div class="ttdoc">Handle a gRPC result that may contain validation errors.</div><div class="ttdef"><b>Definition</b> <a href="#l00187">entity_edit_dialog.hpp:187</a></div></div>
 <div class="ttc" id="aentity__dialog__state__machine_8hpp_html"><div class="ttname"><a href="entity__dialog__state__machine_8hpp.html">entity_dialog_state_machine.hpp</a></div><div class="ttdoc">QStateMachine-based state management for entity edit dialogs.</div></div>
 <div class="ttc" id="aqt_2include_2muscovite_2qt_2validation_2validation__result_8hpp_html"><div class="ttname"><a href="qt_2include_2muscovite_2qt_2validation_2validation__result_8hpp.html">validation_result.hpp</a></div><div class="ttdoc">Validation result types for Qt dialog validation.</div></div>
@@ -326,9 +309,7 @@ $(function(){initNavTree('framework_2qt_2include_2muscovite_2qt_2widgets_2entity
 <div class="ttc" id="astructmuscovite_1_1qt_1_1grpc_1_1GrpcResult_html_ac99cb0f60309724a409e331557769a95"><div class="ttname"><a href="structmuscovite_1_1qt_1_1grpc_1_1GrpcResult.html#ac99cb0f60309724a409e331557769a95">muscovite::qt::grpc::GrpcResult::hasValidationError</a></div><div class="ttdeci">bool hasValidationError() const</div><div class="ttdoc">Check if this is a validation error with structured details.</div><div class="ttdef"><b>Definition</b> <a href="service__client__base_8hpp_source.html#l00065">service_client_base.hpp:65</a></div></div>
 <div class="ttc" id="avalidation__display__widget_8hpp_html"><div class="ttname"><a href="validation__display__widget_8hpp.html">validation_display_widget.hpp</a></div><div class="ttdoc">Widget for displaying validation errors and warnings.</div></div>
 <div class="ttc" id="avalidation__error__converter_8hpp_html"><div class="ttname"><a href="validation__error__converter_8hpp.html">validation_error_converter.hpp</a></div><div class="ttdoc">Convert gRPC ValidationError to Qt ValidationMessage.</div></div>
-<div class="ttc" id="avalidation__error__converter_8hpp_html_a484d6bc7b61ba9486cf147d72dbd6e03"><div class="ttname"><a href="validation__error__converter_8hpp.html#a484d6bc7b61ba9486cf147d72dbd6e03">muscovite::qt::grpc::extractValidationErrorFromContext</a></div><div class="ttdeci">std::optional&lt; ValidationError &gt; extractValidationErrorFromContext(const ::grpc::ClientContext &amp;ctx)</div><div class="ttdoc">Extract a ValidationError from a gRPC ClientContext&#39;s trailing metadata.</div><div class="ttdef"><b>Definition</b> <a href="validation__error__converter_8hpp_source.html#l00157">validation_error_converter.hpp:157</a></div></div>
-<div class="ttc" id="avalidation__error__converter_8hpp_html_a51151ad99f2bf3a0b7d3c5597c8d863a"><div class="ttname"><a href="validation__error__converter_8hpp.html#a51151ad99f2bf3a0b7d3c5597c8d863a">muscovite::qt::grpc::fromBackendError</a></div><div class="ttdeci">validation::ValidationResult fromBackendError(const ValidationError &amp;error)</div><div class="ttdoc">Create a ValidationResult from a gRPC ValidationError.</div><div class="ttdef"><b>Definition</b> <a href="validation__error__converter_8hpp_source.html#l00123">validation_error_converter.hpp:123</a></div></div>
-<div class="ttc" id="avalidation__error__converter_8hpp_html_a761d17aed290e9031c2b8e164e9324f0"><div class="ttname"><a href="validation__error__converter_8hpp.html#a761d17aed290e9031c2b8e164e9324f0">muscovite::qt::grpc::extractValidationResult</a></div><div class="ttdeci">validation::ValidationResult extractValidationResult(const GrpcResult&lt; Response &gt; &amp;grpcResult)</div><div class="ttdoc">Extract ValidationResult from a GrpcResult if it has a validation error.</div><div class="ttdef"><b>Definition</b> <a href="validation__error__converter_8hpp_source.html#l00137">validation_error_converter.hpp:137</a></div></div>
+<div class="ttc" id="avalidation__error__converter_8hpp_html_a761d17aed290e9031c2b8e164e9324f0"><div class="ttname"><a href="validation__error__converter_8hpp.html#a761d17aed290e9031c2b8e164e9324f0">muscovite::qt::grpc::extractValidationResult</a></div><div class="ttdeci">validation::ValidationResult extractValidationResult(const GrpcResult&lt; Response &gt; &amp;grpcResult)</div><div class="ttdoc">Extract ValidationResult from a GrpcResult if it has a validation error.</div><div class="ttdef"><b>Definition</b> <a href="validation__error__converter_8hpp_source.html#l00062">validation_error_converter.hpp:62</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

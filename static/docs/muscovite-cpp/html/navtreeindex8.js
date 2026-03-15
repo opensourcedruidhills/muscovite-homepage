@@ -1,5 +1,15 @@
 var NAVTREEINDEX8 =
 {
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#a9003903981cfd18e05a28121711489d7":[3,0,1,3,10,6],
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#aaa8d4233ae5bafc1a043c2e3dc57745a":[3,0,1,3,10,0],
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#abe950c2a03f31b1bbe3e4c427e52361b":[3,0,1,3,10,1],
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#af758c272055ad0b88d51c69f57a49c4c":[3,0,1,3,10,4],
+"structmuscovite_1_1qt_1_1AuthConfig.html":[3,0,1,4,8],
+"structmuscovite_1_1qt_1_1AuthConfig.html#a1c18fc10688452fbefc8b76474ea3db3":[3,0,1,4,8,4],
+"structmuscovite_1_1qt_1_1AuthConfig.html#a92d9c782b7633e7ae68d7dfb7c5e24b2":[3,0,1,4,8,2],
+"structmuscovite_1_1qt_1_1AuthConfig.html#ab20d34489f7f107dc1b5d80144fac64d":[3,0,1,4,8,1],
+"structmuscovite_1_1qt_1_1AuthConfig.html#af840cdc1d847767a7ac6ca162b03289f":[3,0,1,4,8,3],
+"structmuscovite_1_1qt_1_1AuthConfig.html#afbe9ff095e5263d71cfeeacce9af02d2":[3,0,1,4,8,0],
 "structmuscovite_1_1qt_1_1OAuth2QtConfig.html":[3,0,1,4,13],
 "structmuscovite_1_1qt_1_1OAuth2Session.html":[3,0,1,4,14],
 "structmuscovite_1_1qt_1_1Session.html":[3,0,1,4,26],
@@ -239,15 +249,5 @@ var NAVTREEINDEX8 =
 "structmuscovite_1_1validation_1_1ValidationError.html#a9577b0a827b85da38f4bac1fe0c6e42d":[3,0,1,9,0,1],
 "structmuscovite_1_1validation_1_1ValidationResult.html":[3,0,1,9,2],
 "structmuscovite_1_1validation_1_1ValidationResult.html#a3ac4595e6f71763c4a814898b832387e":[3,0,1,9,2,0],
-"structmuscovite_1_1validation_1_1ValidationResult.html#aa72e9e943a73cab45a40bf2f2b9edf99":[3,0,1,9,2,1],
-"structmuscovite_1_1validation_1_1ValidationResult.html#ac675cfd40e436bbd609b043371085d45":[3,0,1,9,2,2],
-"structpqxx_1_1nullness_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html":[3,0,2,1],
-"structpqxx_1_1nullness_3_01muscovite_1_1dba_1_1Decimal_01_4.html":[3,0,2,0],
-"structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html":[3,0,2,2],
-"structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html#a5ac2f706d013e0e3a0444f4c93ad2d0d":[3,0,2,2,0],
-"structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html#a70dca8090ddad98ab7657a2e755534b1":[3,0,2,2,1],
-"structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html#a72174463ee9eb7c597de7de8df2a08f3":[3,0,2,2,2],
-"structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html":[1,0,1,0],
-"structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html":[3,0,3,0],
-"structstd_1_1hash_3_01Derived_01_4.html":[1,0,1,1]
+"structmuscovite_1_1validation_1_1ValidationResult.html#aa72e9e943a73cab45a40bf2f2b9edf99":[3,0,1,9,2,1]
 };

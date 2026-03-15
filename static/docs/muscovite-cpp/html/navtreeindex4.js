@@ -1,5 +1,15 @@
 var NAVTREEINDEX4 =
 {
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#af95094ef85f719ba2f0acc573679a1a1":[3,0,1,6,0,0,1,8],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#afb47e787c458c4726bd1e64bee862db3":[3,0,1,6,0,0,1,0],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html":[3,0,1,6,0,0,2],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#a270d42d6669cb092e72aee6a7b2b8310":[3,0,1,6,0,0,2,4],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#a53ac838c095e62a135fedce24446bd92":[3,0,1,6,0,0,2,0],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#a5d701c34a9297a92c35845e43f03459d":[3,0,1,6,0,0,2,1],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#a86e421b3dbe8c3486f671d21b57ff96d":[3,0,1,6,0,0,2,2],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#aac1c1ecc6d5cc48615f4089eb9f606b3":[3,0,1,6,0,0,2,6],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#ad8346d87c4a6dbea90760f69392740e0":[3,0,1,6,0,0,2,5],
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#af96722aa01ab90d87eb49ea28eb5c63c":[3,0,1,6,0,0,2,3],
 "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html":[3,0,1,6,0,0,3],
 "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a0e5d839fb8a78652464ce7cd05e14d9c":[3,0,1,6,0,0,3,1],
 "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a1f0ce297910737e71b471c52c893b1a0":[3,0,1,6,0,0,3,8],
@@ -239,15 +249,5 @@ var NAVTREEINDEX4 =
 "dir_434d401eaf8e8b509e0d81f89b152ea4.html":[4,0,0,4,0,0,0,3],
 "dir_44012fc62adf26786b323a28ccc5a528.html":[4,0,0,1],
 "dir_45adcbcc8f87accdc8e6b004030d10d3.html":[4,0,0,3,0,0],
-"dir_4b86a554a6d54d445c46ac2e5e2f2190.html":[4,0,0,2,1,0,0,0],
-"dir_4bb54f527d3e6d07f25f83fffcb35e1c.html":[4,0,0,0,0,0],
-"dir_5180c361a499daceb826c57bc18a54e4.html":[4,0,0,0],
-"dir_5ea55b550d4f336181a063291499f219.html":[4,0,0,4,0,0,0],
-"dir_605b733318c7b3eb88824a96158f837e.html":[4,0,1,0],
-"dir_618fe439c69c1731a08d9b7da811ab49.html":[4,0,0,6,1,0,0],
-"dir_644e041c3a6521da7b27eba0e4eb2b95.html":[4,0,0],
-"dir_6ec6d1dfd049f6e3bb4cb54c6aeee250.html":[4,0,0,9,0],
-"dir_7010a7df24890fba18fc25a97a860206.html":[4,0,0,4,0,0,0,6],
-"dir_70d5783b3cba003cbcc4be468bf21ea3.html":[4,0,0,0,0,0,0],
-"dir_71169b5e99c8d012bfad40b2b6f635e1.html":[4,0,0,4,1]
+"dir_4b86a554a6d54d445c46ac2e5e2f2190.html":[4,0,0,2,1,0,0,0]
 };
