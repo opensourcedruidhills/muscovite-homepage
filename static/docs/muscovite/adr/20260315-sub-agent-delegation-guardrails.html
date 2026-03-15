@@ -357,12 +357,182 @@ id="option-3-pre-flight-audit-scripts-chosen-combined-with-option-2">Option
 <li>Bad, because scripts are FTR-type-specific (one-time cost per
 pattern)</li>
 </ul>
+<h2
+id="addendum-v1663-evidence--constrained-delegation-pipeline-2026-03-15">Addendum:
+v1.66.3 Evidence — Constrained Delegation Pipeline (2026-03-15)</h2>
+<p>v1.66.3 delivered 4 FTRs using the guardrails from this ADR plus
+Python migration scripts. Results provide quantitative evidence for a
+<strong>4-stage constrained delegation pipeline</strong> that combines
+input-space restriction (prevent wrong roads) with output verification
+(catch remaining errors).</p>
+<h3 id="quantitative-evidence">Quantitative Evidence</h3>
+<table>
+<thead>
+<tr>
+<th>FTR</th>
+<th>Method</th>
+<th>Coverage</th>
+<th>Rework</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FTR-424 (fmt→std::format, 76 sites)</td>
+<td>Python script</td>
+<td>100%</td>
+<td>0</td>
+</tr>
+<tr>
+<td>FTR-425 (in-list, 900 sites)</td>
+<td>Python script</td>
+<td>100%</td>
+<td>9 false positives in <code>let</code> bindings</td>
+</tr>
+<tr>
+<td>FTR-422 (COMMENT ON, 182 indexes)</td>
+<td>sonnet-4.5 agent</td>
+<td>8% (15/182)</td>
+<td>92% manual completion</td>
+</tr>
+<tr>
+<td>FTR-435 (context prompts, ≤4096 bytes)</td>
+<td>gpt-4.1 agent</td>
+<td>6261 bytes (over budget)</td>
+<td>Full rewrite by coordinator</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key findings:</strong></p>
+<ol type="1">
+<li><strong>Python scripts for &gt;50-site mechanical
+transforms</strong> — zero agent compute, 100% accurate for
+straightforward patterns (FTR-424/425). Cost: ~0 vs ~3h agent
+compute.</li>
+<li><strong>Scripts still have edge cases</strong> — FTR-425 script
+incorrectly wrapped 9 <code>let</code>/<code>let*</code> bindings with
+<code>in-list</code>. Caught by runtime contract violation, not
+grep.</li>
+<li><strong>Agent coverage without quantitative targets is
+unreliable</strong> — FTR-422 agent self-reported done at 8% actual
+coverage. Without the Python counter script, this would have
+shipped.</li>
+<li><strong>Size/budget constraints must be numeric</strong> — FTR-435
+specified "≤4096 bytes"; agent produced 6261 bytes. Numeric constraints
+enable automated pre-flight rejection.</li>
+</ol>
+<h3 id="4-stage-constrained-delegation-pipeline">4-Stage Constrained
+Delegation Pipeline</h3>
+<p>The guardrails in this ADR address Stage 1 and parts of Stage 3. This
+addendum formalizes the complete pipeline:</p>
+<h4 id="stage-1-constraint-specification-prevent-wrong-roads">Stage 1:
+Constraint Specification (prevent wrong roads)</h4>
+<p>Already in this ADR: Architectural Context Block, Skip-List,
+Pre-Computed Change Sites.</p>
+<p><strong>New constraint categories from v1.66.3:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Constraint Type</th>
+<th>Example</th>
+<th>Failure It Prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quantitative target</td>
+<td>"181/181 indexes must have COMMENT ON"</td>
+<td>FTR-422: agent stops at 8%</td>
+</tr>
+<tr>
+<td>Size budget</td>
+<td>"≤4096 bytes total"</td>
+<td>FTR-435: agent produces 153% of budget</td>
+</tr>
+<tr>
+<td>Scope boundary</td>
+<td>"only <code>for</code> clauses, NOT
+<code>let</code>/<code>let*</code> bindings"</td>
+<td>FTR-425: false in-list insertion</td>
+</tr>
+<tr>
+<td>Tool selection</td>
+<td>"&gt;50 sites → Python script, not agent"</td>
+<td>FTR-424/425: eliminates agent compute</td>
+</tr>
+<tr>
+<td>Negative examples</td>
+<td>"WRONG: <code>(let ([x (in-list xs)]) ...)</code>"</td>
+<td>FTR-425: pattern misapplication</td>
+</tr>
+</tbody>
+</table>
+<h4 id="stage-2-pre-flight-validation-reject-before-execution">Stage 2:
+Pre-Flight Validation (reject before execution)</h4>
+<p>Run automated checks BEFORE dispatching work to an agent:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify chunk size</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span> <span class="st">&#39;.change_sites | length&#39;</span> tmp/ftr-NNN-sites.json  <span class="co"># must be ≤25</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify no skip-list files in change set</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">comm</span> <span class="at">-12</span> <span class="op">&lt;(</span><span class="ex">jq</span> <span class="at">-r</span> <span class="st">&#39;.skip_list[]&#39;</span> wo.json <span class="kw">|</span> <span class="fu">sort</span><span class="op">)</span> <span class="op">&lt;(</span><span class="ex">jq</span> <span class="at">-r</span> <span class="st">&#39;.change_sites[].file&#39;</span> wo.json <span class="kw">|</span> <span class="fu">sort</span><span class="op">)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># must be empty</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify tool selection rule</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="va">SITE_COUNT</span><span class="op">=</span><span class="va">$(</span><span class="ex">jq</span> <span class="st">&#39;.change_sites | length&#39;</span> tmp/ftr-NNN-sites.json<span class="va">)</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="st">&quot;</span><span class="va">$SITE_COUNT</span><span class="st">&quot;</span> <span class="ot">-gt</span> 50 <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;REJECT: use Python script, not agent&quot;</span></span></code></pre></div>
+<h4 id="stage-3-embedded-verification-agent-self-checks">Stage 3:
+Embedded Verification (agent self-checks)</h4>
+<p>Work orders include verification commands the agent MUST run before
+reporting done:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification (run before reporting done)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`grep -rn &#39;fmt::format&#39; framework/ | wc -l`</span> → must be 0</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`python3 tools/audit/count-comment-on.py | tail -1`</span> → must show &quot;182/182&quot;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="in">`wc -c .github/copilot-instructions.md`</span> → must be ≤4096</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span><span class="in">`racket tests/test-generators.rkt`</span> → exit 0</span></code></pre></div>
+<h4 id="stage-4-coordinator-spot-check-catch-remaining-errors">Stage 4:
+Coordinator Spot-Check (catch remaining errors)</h4>
+<p>Coordinator runs independent quantitative checks after agent reports
+done:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coverage check (independent of agent&#39;s self-report)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> tools/audit/count-comment-on.py  <span class="co"># compare against target</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-c</span> .github/copilot-instructions.md    <span class="co"># compare against budget</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Runtime verification (catches edge cases scripts/agents miss)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> tests/run-all-tests.rkt           <span class="co"># contract violations surface here</span></span></code></pre></div>
+<h3 id="tool-selection-decision-tree">Tool Selection Decision Tree</h3>
+<pre><code>Is the transform mechanical (pattern → replacement)?
+├─ YES: How many sites?
+│  ├─ &gt;50 sites → Python script (NEVER agent)
+│  ├─ 10-50 sites → Agent with pre-computed change list
+│  └─ &lt;10 sites → Agent with architectural context
+└─ NO: Does it require cross-layer knowledge?
+   ├─ YES: Opus-tier agent, max 5 files per WO
+   └─ NO: Sonnet-tier agent, max 25 files per WO</code></pre>
+<h3 id="updated-work-order-template-additions">Updated Work Order
+Template Additions</h3>
+<p>Work orders SHOULD include (in addition to existing mandatory
+sections):</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quantitative Targets</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> {metric}: {current} → {target} (command: <span class="in">`{verification command}`</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tool Selection</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Method: {python-script | agent-mechanical | agent-cross-layer}</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Justification: {site count | complexity reason}</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Negative Examples (DO NOT produce)</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>WRONG: <span class="in">`{anti-pattern with explanation}`</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>WRONG: <span class="in">`{anti-pattern with explanation}`</span></span></code></pre></div>
 <h2 id="links">Links</h2>
 <ul>
 <li>Refines <a
 href="20260313-work-orders-as-coordinator-dispatch-artifacts.html">ADR
 20260313: Work Orders</a></li>
 <li>Informed by v1.66.1 retrospective in
+<code>doc/AGENT_COORDINATION_LEARNINGS.md</code></li>
+<li>Informed by v1.66.3 retrospective in
 <code>doc/AGENT_COORDINATION_LEARNINGS.md</code></li>
 <li>Related: <a
 href="20260314-per-directory-agent-context-scoping.html">ADR 20260314:
