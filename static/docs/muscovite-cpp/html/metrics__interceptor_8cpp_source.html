@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.3</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -154,13 +154,13 @@ $(function(){initNavTree('metrics__interceptor_8cpp_source.html','',''); });
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">const</span> std::scoped_lock lock{m_mutex};</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        </div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        std::string result = <span class="stringliteral">&quot;gRPC Metrics Summary:\n&quot;</span>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        result += fmt::format(<span class="stringliteral">&quot;  Total requests: {}\n&quot;</span>, m_total_requests.load());</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        result += fmt::format(<span class="stringliteral">&quot;  Total success: {}\n&quot;</span>, m_total_success.load());</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        result += fmt::format(<span class="stringliteral">&quot;  Total errors: {}\n&quot;</span>, m_total_errors.load());</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        result += std::format(<span class="stringliteral">&quot;  Total requests: {}\n&quot;</span>, m_total_requests.load());</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        result += std::format(<span class="stringliteral">&quot;  Total success: {}\n&quot;</span>, m_total_success.load());</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        result += std::format(<span class="stringliteral">&quot;  Total errors: {}\n&quot;</span>, m_total_errors.load());</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        </div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">if</span> (m_total_duration_count &gt; 0) {</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            <span class="keyword">auto</span> avg = m_total_duration_sum.load() / m_total_duration_count.load();</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            result += fmt::format(<span class="stringliteral">&quot;  Average latency: {}µs\n&quot;</span>, avg);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            result += std::format(<span class="stringliteral">&quot;  Average latency: {}µs\n&quot;</span>, avg);</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        }</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        </div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keywordflow">return</span> result;</div>

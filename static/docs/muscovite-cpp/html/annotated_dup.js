@@ -1,8 +1,5 @@
 var annotated_dup =
 [
-    [ "fmt", null, [
-      [ "formatter&lt; Derived &gt;", "structfmt_1_1formatter_3_01Derived_01_4.html", null ]
-    ] ],
     [ "muscovite", null, [
       [ "dba", null, [
         [ "advisory_lock_timeout_exception", "classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html", "classmuscovite_1_1dba_1_1advisory__lock__timeout__exception" ],
@@ -273,6 +270,7 @@ var annotated_dup =
       [ "string_traits&lt; muscovite::dba::DecimalParam &gt;", "structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html", "structpqxx_1_1string__traits_3_01muscovite_1_1dba_1_1DecimalParam_01_4" ]
     ] ],
     [ "std", "namespacestd.html", [
+      [ "formatter&lt; Derived &gt;", "structstd_1_1formatter_3_01Derived_01_4.html", null ],
       [ "formatter&lt; muscovite::types::BoundedInteger&lt; Min, Max &gt; &gt;", "structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html", null ],
       [ "hash&lt; Derived &gt;", "structstd_1_1hash_3_01Derived_01_4.html", null ],
       [ "hash&lt; muscovite::types::BoundedDecimal&lt; Min, Max &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedDecimal_3_01Min_00_01Max_01_4_01_4.html", null ],

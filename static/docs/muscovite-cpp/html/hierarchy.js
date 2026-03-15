@@ -74,10 +74,8 @@ var hierarchy =
     [ "muscovite::search::FacetBucket", "structmuscovite_1_1search_1_1FacetBucket.html", null ],
     [ "muscovite::qt::validation::FieldValidationRule", "structmuscovite_1_1qt_1_1validation_1_1FieldValidationRule.html", null ],
     [ "muscovite::dba::FixedBackoffPolicy&lt; IntervalMsV &gt;", "classmuscovite_1_1dba_1_1FixedBackoffPolicy.html", null ],
-    [ "fmt::formatter", null, [
-      [ "fmt::formatter< Derived >", "structfmt_1_1formatter_3_01Derived_01_4.html", null ]
-    ] ],
     [ "std::formatter", null, [
+      [ "std::formatter< Derived >", "structstd_1_1formatter_3_01Derived_01_4.html", null ],
       [ "std::formatter< muscovite::types::BoundedInteger< Min, Max > >", "structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html", null ]
     ] ],
     [ "muscovite::types::Future", "structmuscovite_1_1types_1_1Future.html", null ],

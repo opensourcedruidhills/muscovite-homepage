@@ -36,7 +36,7 @@ var searchData=
   ['force_5fdisconnect_33',['force_disconnect',['../classmuscovite_1_1messaging_1_1InMemoryPublisher.html#a15c73a7b3bccf09c6d6bbbc163f539b2',1,'muscovite::messaging::InMemoryPublisher']]],
   ['foreignkeyviolation_34',['ForeignKeyViolation',['../error_8hpp.html#a3e21732aeebe322205b86f444d93419ca8ddc68a0303404e48f34d9659e263dbe',1,'muscovite::dba']]],
   ['forkeycloak_35',['forKeycloak',['../classmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Config.html#a60aca9209cdf03546ace88fb4bd75e88',1,'muscovite::grpc::oauth2::OAuth2Config']]],
-  ['formatter_3c_20derived_20_3e_36',['formatter&lt; Derived &gt;',['../structfmt_1_1formatter_3_01Derived_01_4.html',1,'fmt']]],
+  ['formatter_3c_20derived_20_3e_36',['formatter&lt; Derived &gt;',['../structstd_1_1formatter_3_01Derived_01_4.html',1,'std']]],
   ['formatter_3c_20muscovite_3a_3atypes_3a_3aboundedinteger_3c_20min_2c_20max_20_3e_20_3e_37',['formatter&lt; muscovite::types::BoundedInteger&lt; Min, Max &gt; &gt;',['../structstd_1_1formatter_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html',1,'std']]],
   ['formatwkt_38',['formatWkt',['../classmuscovite_1_1qt_1_1widgets_1_1WktTextEdit.html#ac046d5a405528f96b002f774f4954421',1,'muscovite::qt::widgets::WktTextEdit']]],
   ['from_5fdate_39',['from_date',['../type__converters_8hpp.html#a8cbd274cb843df5b1c5d33cbe2408605',1,'muscovite::dba']]],

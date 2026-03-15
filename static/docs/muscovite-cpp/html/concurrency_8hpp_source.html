@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.3</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -102,7 +102,7 @@ $(function(){initNavTree('concurrency_8hpp_source.html','',''); });
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;fmt/core.h&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
@@ -121,7 +121,7 @@ $(function(){initNavTree('concurrency_8hpp_source.html','',''); });
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                          <span class="keyword">const</span> boost::uuids::uuid&amp; <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a915bff25cbc5417a062958bd00af1189">entity_id</a>,</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                          std::string_view reason)</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        : std::runtime_error(</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>              fmt::format(<span class="stringliteral">&quot;Concurrency conflict on {} [{}]: {}&quot;</span>,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>              std::format(<span class="stringliteral">&quot;Concurrency conflict on {} [{}]: {}&quot;</span>,</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                          <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a98befbcf7115a6395c27956ac1da5db3">entity_type</a>,</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                          boost::uuids::to_string(<a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a915bff25cbc5417a062958bd00af1189">entity_id</a>),</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                          reason)),</div>
@@ -154,7 +154,7 @@ $(function(){initNavTree('concurrency_8hpp_source.html','',''); });
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                              std::int32_t <a class="code hl_function" href="classmuscovite_1_1dba_1_1optimistic__lock__exception.html#a0b8edf4456ac692cd5a564d4c10f98e8">stale_version</a>)</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        : concurrency_exception(</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>              <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a98befbcf7115a6395c27956ac1da5db3">entity_type</a>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a915bff25cbc5417a062958bd00af1189">entity_id</a>,</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>              fmt::format(<span class="stringliteral">&quot;optimistic lock failed (stale version {})&quot;</span>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1optimistic__lock__exception.html#a0b8edf4456ac692cd5a564d4c10f98e8">stale_version</a>)),</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>              std::format(<span class="stringliteral">&quot;optimistic lock failed (stale version {})&quot;</span>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1optimistic__lock__exception.html#a0b8edf4456ac692cd5a564d4c10f98e8">stale_version</a>)),</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>          stale_version_{<a class="code hl_function" href="classmuscovite_1_1dba_1_1optimistic__lock__exception.html#a0b8edf4456ac692cd5a564d4c10f98e8">stale_version</a>} {}</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span></div>
 <div class="foldopen" id="foldopen00080" data-start="{" data-end="}">
@@ -176,7 +176,7 @@ $(function(){initNavTree('concurrency_8hpp_source.html','',''); });
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                                     std::string_view <a class="code hl_function" href="classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html#a5f81400a1f6e28bb7fe57d15e7a0d33d">timeout</a>)</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        : concurrency_exception(</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>              <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a98befbcf7115a6395c27956ac1da5db3">entity_type</a>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1concurrency__exception.html#a915bff25cbc5417a062958bd00af1189">entity_id</a>,</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>              fmt::format(<span class="stringliteral">&quot;advisory lock timed out after {}&quot;</span>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html#a5f81400a1f6e28bb7fe57d15e7a0d33d">timeout</a>)),</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>              std::format(<span class="stringliteral">&quot;advisory lock timed out after {}&quot;</span>, <a class="code hl_function" href="classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html#a5f81400a1f6e28bb7fe57d15e7a0d33d">timeout</a>)),</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>          timeout_{<a class="code hl_function" href="classmuscovite_1_1dba_1_1advisory__lock__timeout__exception.html#a5f81400a1f6e28bb7fe57d15e7a0d33d">timeout</a>} {}</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span></div>
 <div class="foldopen" id="foldopen00106" data-start="{" data-end="}">

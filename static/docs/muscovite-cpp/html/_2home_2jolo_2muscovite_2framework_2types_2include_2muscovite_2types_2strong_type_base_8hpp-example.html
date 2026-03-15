@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.3</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -114,7 +114,7 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line"><span class="preprocessor">#pragma once</span></div>
 <div class="line"></div>
 <div class="line"> </div>
-<div class="line"><span class="preprocessor">#include &lt;fmt/core.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;compare&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;functional&gt;</span></div>
@@ -128,11 +128,11 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line"><span class="keyword">public</span>:</div>
 <div class="line">    invalid_value_error(std::string_view type_name, std::string_view value)</div>
 <div class="line">        : std::invalid_argument(</div>
-<div class="line">              fmt::format(<span class="stringliteral">&quot;Invalid {} value: &#39;{}&#39;&quot;</span>, type_name, value)) {}</div>
+<div class="line">              std::format(<span class="stringliteral">&quot;Invalid {} value: &#39;{}&#39;&quot;</span>, type_name, value)) {}</div>
 <div class="line"> </div>
 <div class="line">    invalid_value_error(std::string_view type_name, std::string_view value,</div>
 <div class="line">                        std::string_view pattern)</div>
-<div class="line">        : std::invalid_argument(fmt::format(</div>
+<div class="line">        : std::invalid_argument(std::format(</div>
 <div class="line">              <span class="stringliteral">&quot;Invalid {} value: &#39;{}&#39; (must match: {})&quot;</span>, type_name, value, pattern)) {}</div>
 <div class="line">};</div>
 <div class="line"></div>
@@ -200,14 +200,14 @@ $(function(){initNavTree('_2home_2jolo_2muscovite_2framework_2types_2include_2mu
 <div class="line">}  <span class="comment">// namespace std</span></div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// =============================================================================</span></div>
-<div class="line"><span class="comment">// fmt formatting support</span></div>
+<div class="line"><span class="comment">// std::format formatting support</span></div>
 <div class="line"><span class="comment">// =============================================================================</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Derived&gt;</div>
 <div class="line">    <span class="keyword">requires</span> std::derived_from&lt;Derived, muscovite::types::strong_type_base&lt;Derived&gt;&gt;</div>
-<div class="line"><span class="keyword">struct </span>fmt::formatter&lt;Derived&gt; : fmt::formatter&lt;std::string_view&gt; {</div>
+<div class="line"><span class="keyword">struct </span>std::formatter&lt;Derived&gt; : std::formatter&lt;std::string_view&gt; {</div>
 <div class="line">    <span class="keyword">auto</span> format(<span class="keyword">const</span> Derived&amp; v, format_context&amp; ctx)<span class="keyword"> const </span>{</div>
-<div class="line">        <span class="keywordflow">return</span> fmt::formatter&lt;std::string_view&gt;::format(v.value(), ctx);</div>
+<div class="line">        <span class="keywordflow">return</span> std::formatter&lt;std::string_view&gt;::format(v.value(), ctx);</div>
 <div class="line">    }</div>
 <div class="line">};</div>
 <div class="ttc" id="aclassmuscovite_1_1types_1_1strong__type__base_html_a2456f1948f87cd87dfa61f9343a197e8"><div class="ttname"><a href="classmuscovite_1_1types_1_1strong__type__base.html#a2456f1948f87cd87dfa61f9343a197e8">muscovite::types::strong_type_base::operator==</a></div><div class="ttdeci">auto operator==(const strong_type_base &amp;other) const noexcept -&gt; bool=default</div><div class="ttdoc">Equality comparison.</div></div>

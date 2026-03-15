@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.3</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -101,7 +101,7 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="test__fixture_8hpp.html">muscovite/dba/test_fixture.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;fmt/format.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span>muscovite::dba {</div>
@@ -111,7 +111,7 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">auto</span> conn_result = pool.<a class="code hl_function" href="classmuscovite_1_1dba_1_1ConnectionPool.html#a67752cd9055e93fc36f3f684ce1c54d6">acquire</a>();</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">if</span> (!conn_result) {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">throw</span> std::runtime_error(fmt::format(</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">throw</span> std::runtime_error(std::format(</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="stringliteral">&quot;Failed to acquire connection for test fixture: {}&quot;</span>, </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            conn_result.error().message));</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    }</div>
@@ -163,19 +163,19 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a973eefb0a60ec922a9e8612337a047f6">   58</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a973eefb0a60ec922a9e8612337a047f6">TestTransactionFixture::savepoint</a>(std::string_view name) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    m_txn-&gt;exec(fmt::format(<span class="stringliteral">&quot;SAVEPOINT {}&quot;</span>, name));</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    m_txn-&gt;exec(std::format(<span class="stringliteral">&quot;SAVEPOINT {}&quot;</span>, name));</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}</div>
 </div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
 <div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a24050a5c938e4a65f2f3f8ba2f4a9b84">   62</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a24050a5c938e4a65f2f3f8ba2f4a9b84">TestTransactionFixture::rollback_to</a>(std::string_view name) {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    m_txn-&gt;exec(fmt::format(<span class="stringliteral">&quot;ROLLBACK TO SAVEPOINT {}&quot;</span>, name));</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    m_txn-&gt;exec(std::format(<span class="stringliteral">&quot;ROLLBACK TO SAVEPOINT {}&quot;</span>, name));</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}</div>
 </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a5ada486b175df95fd6e47af109188cab">   66</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a5ada486b175df95fd6e47af109188cab">TestTransactionFixture::release_savepoint</a>(std::string_view name) {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    m_txn-&gt;exec(fmt::format(<span class="stringliteral">&quot;RELEASE SAVEPOINT {}&quot;</span>, name));</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    m_txn-&gt;exec(std::format(<span class="stringliteral">&quot;RELEASE SAVEPOINT {}&quot;</span>, name));</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>}</div>
 </div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>

@@ -72,8 +72,8 @@ var NAVTREEINDEX =
 "dir_4bb54f527d3e6d07f25f83fffcb35e1c.html",
 "include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html",
 "search__indexer_8cpp_source.html",
-"structmuscovite_1_1messaging_1_1SubscriberConfig.html#a9003903981cfd18e05a28121711489d7",
-"structmuscovite_1_1validation_1_1ValidationResult.html#ac675cfd40e436bbd609b043371085d45"
+"structmuscovite_1_1messaging_1_1SubscriberConfig.html#aaa8d4233ae5bafc1a043c2e3dc57745a",
+"structpqxx_1_1nullness_3_01muscovite_1_1dba_1_1DecimalParam_01_4.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

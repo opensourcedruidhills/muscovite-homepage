@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.66.3</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -105,7 +105,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;openssl/buffer.h&gt;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;curl/curl.h&gt;</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;nlohmann/json.hpp&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;fmt/format.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;format&gt;</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemuscovite_1_1grpc_1_1oauth2.html">muscovite::grpc::oauth2</a> {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
@@ -171,7 +171,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    }</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a3ac29606fe0d0c5547fa8321759aa6ed">code_verifier</a>.length() &lt; 43 || <a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a3ac29606fe0d0c5547fa8321759aa6ed">code_verifier</a>.length() &gt; 128) {</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordflow">throw</span> std::invalid_argument(</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            fmt::format(<span class="stringliteral">&quot;PKCE: code_verifier must be 43-128 characters, got {}&quot;</span>,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            std::format(<span class="stringliteral">&quot;PKCE: code_verifier must be 43-128 characters, got {}&quot;</span>,</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                        <a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a3ac29606fe0d0c5547fa8321759aa6ed">code_verifier</a>.length())</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        );</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
@@ -180,7 +180,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a5ceeec0831d9cf81d3480de0191a6696">challenge_method</a> != <span class="stringliteral">&quot;S256&quot;</span> &amp;&amp; <a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a5ceeec0831d9cf81d3480de0191a6696">challenge_method</a> != <span class="stringliteral">&quot;plain&quot;</span>) {</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordflow">throw</span> std::invalid_argument(</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            fmt::format(<span class="stringliteral">&quot;PKCE: challenge_method must be S256 or plain, got {}&quot;</span>,</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            std::format(<span class="stringliteral">&quot;PKCE: challenge_method must be S256 or plain, got {}&quot;</span>,</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                        <a class="code hl_variable" href="classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html#a5ceeec0831d9cf81d3480de0191a6696">challenge_method</a>)</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        );</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    }</div>
@@ -321,7 +321,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        CURLcode res = curl_easy_perform(curl);</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">if</span> (res != CURLE_OK) {</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                fmt::format(<span class="stringliteral">&quot;Token revocation failed: {}&quot;</span>, curl_easy_strerror(res))</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                std::format(<span class="stringliteral">&quot;Token revocation failed: {}&quot;</span>, curl_easy_strerror(res))</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            );</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        }</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    } <span class="keywordflow">catch</span> (...) {</div>
@@ -357,7 +357,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        CURLcode res = curl_easy_perform(curl);</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        <span class="keywordflow">if</span> (res != CURLE_OK) {</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                fmt::format(<span class="stringliteral">&quot;Token request failed: {}&quot;</span>, curl_easy_strerror(res))</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                std::format(<span class="stringliteral">&quot;Token request failed: {}&quot;</span>, curl_easy_strerror(res))</div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            );</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        }</div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
@@ -375,7 +375,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        <span class="keywordflow">if</span> (resp.contains(<span class="stringliteral">&quot;error&quot;</span>)) {</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                fmt::format(<span class="stringliteral">&quot;Token endpoint error: {} - {}&quot;</span>,</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                std::format(<span class="stringliteral">&quot;Token endpoint error: {} - {}&quot;</span>,</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                            resp.value(<span class="stringliteral">&quot;error&quot;</span>, <span class="stringliteral">&quot;unknown&quot;</span>),</div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                            resp.value(<span class="stringliteral">&quot;error_description&quot;</span>, <span class="stringliteral">&quot;&quot;</span>))</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>            );</div>
@@ -404,7 +404,7 @@ $(function(){initNavTree('authorization__code__flow_8cpp_source.html','',''); })
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        <span class="keywordflow">return</span> token;</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    } <span class="keywordflow">catch</span> (<span class="keyword">const</span> json::exception&amp; e) {</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            fmt::format(<span class="stringliteral">&quot;Failed to parse token response: {}&quot;</span>, e.what())</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            std::format(<span class="stringliteral">&quot;Failed to parse token response: {}&quot;</span>, e.what())</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        );</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    }</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>}</div>
