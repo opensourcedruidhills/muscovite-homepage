@@ -129,9 +129,9 @@
 <!-- Source: live codebase metrics + estimation model -->
 
 <h1 id="effort-estimation">Effort Estimation</h1>
-<p><strong>Generated</strong>: 2026-03-15 <strong>Version</strong>:
-v1.66.4 <strong>Project start</strong>: 2025-11-17 (118 days ago)
-<strong>Releases</strong>: 89</p>
+<p><strong>Generated</strong>: 2026-03-16 <strong>Version</strong>:
+v1.67.0 <strong>Project start</strong>: 2025-11-17 (119 days ago)
+<strong>Releases</strong>: 90</p>
 <p>This document estimates the effort required to produce the Muscovite
 platform and the projects built with it, across three scenarios:</p>
 <ul>
@@ -161,7 +161,7 @@ fixed cost that enables all downstream projects. This cost exists in
 <tbody>
 <tr>
 <td>Racket generators/parser/model</td>
-<td style="text-align: right;">137239</td>
+<td style="text-align: right;">137676</td>
 <td>DSL parser, IR model, 8 generator targets</td>
 </tr>
 <tr>
@@ -172,7 +172,7 @@ types</td>
 </tr>
 <tr>
 <td>PEG grammar</td>
-<td style="text-align: right;">1710</td>
+<td style="text-align: right;">1814</td>
 <td>Formal language specification</td>
 </tr>
 <tr>
@@ -182,7 +182,7 @@ types</td>
 </tr>
 <tr>
 <td><strong>Platform total</strong></td>
-<td style="text-align: right;"><strong>~170174</strong></td>
+<td style="text-align: right;"><strong>~170715</strong></td>
 <td></td>
 </tr>
 </tbody>
@@ -419,11 +419,11 @@ Estimation</h2>
 </tr>
 <tr>
 <td>Generated output</td>
-<td style="text-align: right;">8269 lines</td>
+<td style="text-align: right;">3645 lines</td>
 </tr>
 <tr>
 <td>Amplification</td>
-<td style="text-align: right;">135×</td>
+<td style="text-align: right;">59×</td>
 </tr>
 </tbody>
 </table>
@@ -441,8 +441,8 @@ Estimation</h2>
 <tr>
 <td>A (manual)</td>
 <td>—</td>
-<td>8269 lines by hand</td>
-<td><strong>32–49 person-days</strong></td>
+<td>3645 lines by hand</td>
+<td><strong>14–21 person-days</strong></td>
 <td>1–2 developers</td>
 </tr>
 <tr>
@@ -479,11 +479,11 @@ Estimation</h2>
 </tr>
 <tr>
 <td>Total generated output</td>
-<td style="text-align: right;">1303851 lines</td>
+<td style="text-align: right;">1299227 lines</td>
 </tr>
 <tr>
 <td>Overall amplification</td>
-<td style="text-align: right;"><strong>110×</strong></td>
+<td style="text-align: right;"><strong>109×</strong></td>
 </tr>
 </tbody>
 </table>
@@ -504,8 +504,8 @@ scenarios</h3>
 <td>A (manual)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">236–355 person-months</td>
-<td style="text-align: right;"><strong>236–355
+<td style="text-align: right;">236–354 person-months</td>
+<td style="text-align: right;"><strong>236–354
 person-months</strong></td>
 </tr>
 <tr>
@@ -545,7 +545,7 @@ Domain Modeling is the Bottleneck</h2>
 <p>In Scenario B, the dominant cost is <strong>domain modeling</strong>
 — understanding the business domain well enough to express it as
 <code>.ddd</code> declarations. The generator then amplifies this
-understanding by 110× into production code.</p>
+understanding by 109× into production code.</p>
 <p>The largest project (geosciences, 9607 lines of <code>.ddd</code>)
 produces 882423 lines of output. The domain expertise required to write
 those 9607 lines is the real investment — not programming skill.</p>

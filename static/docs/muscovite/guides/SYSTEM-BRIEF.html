@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.66.4 | <strong>Generated</strong>:
-2026-03-15 | <strong>Commit</strong>: 6daffbe4 |
+<p><strong>Version</strong>: 1.67.0 | <strong>Generated</strong>:
+2026-03-16 | <strong>Commit</strong>: ede9f59e |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -191,7 +191,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>342</td>
+<td>362</td>
 </tr>
 <tr>
 <td>Known types (type-registry.rkt)</td>
@@ -203,11 +203,11 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>Generated output</td>
-<td>1303851 lines</td>
+<td>1299227 lines</td>
 </tr>
 <tr>
 <td><strong>DSL amplification</strong></td>
-<td><strong>112× (.ddd → generated)</strong></td>
+<td><strong>111× (.ddd → generated)</strong></td>
 </tr>
 <tr>
 <td>Project files (.mus)</td>
@@ -220,7 +220,7 @@ lifecycle.</td>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-137239-lines">Layer 0 — Racket (137239
+<h3 id="layer-0--racket-137676-lines">Layer 0 — Racket (137676
 lines)</h3>
 <table>
 <thead>
@@ -232,11 +232,11 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Model (IR structs)</td>
-<td>4702</td>
+<td>4781</td>
 </tr>
 <tr>
 <td>Parser</td>
-<td>6455</td>
+<td>6668</td>
 </tr>
 <tr>
 <td>Generator: postgres</td>
@@ -264,7 +264,7 @@ lines)</h3>
 </tr>
 <tr>
 <td>Tests</td>
-<td>34329</td>
+<td>34474</td>
 </tr>
 </tbody>
 </table>
@@ -307,10 +307,10 @@ Output</h2>
 <tbody>
 <tr>
 <td>brownfield-gitea-test</td>
-<td>6172</td>
+<td>2673</td>
 <td>847</td>
-<td>357</td>
-<td>670</td>
+<td>0</td>
+<td>0</td>
 </tr>
 <tr>
 <td>fhir-health</td>
@@ -336,6 +336,28 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="1670----2026-03-16">[1.67.0] -- 2026-03-16</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>make brownfield clause keywords contextual to avoid domain
+identifier collisions</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>honest v1.66.4 retrospective with actual timings and failures</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>v1.67.0 governance: retrospective, release checklist, FTR status
+updates</li>
+<li>FTR-427, FTR-428, FTR-433: Brownfield grammar, IR, parser, and type
+mapping</li>
+<li>FTR-436: Fold Go extractor into monorepo extractors directory</li>
+<li>FTR-442: Work-order validation gate in agent-pr.sh</li>
+<li>FTR-444, FTR-443: Release script improvements</li>
+<li>plan: add missing FTR-442 to v1.67.0 scope</li>
+<li>plan: assign FTR-443 and FTR-444 to v1.67.0</li>
+</ul>
 <h2 id="1664----2026-03-15">[1.66.4] -- 2026-03-15</h2>
 <h3 id="added">Added</h3>
 <ul>
@@ -343,7 +365,7 @@ Output</h2>
 <li>(v1.66.4): delegation guardrails tooling — FTR-437–441 + skill
 prompt + feedback loop</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 <ul>
 <li>(ADR-20260315): v1.66.3 addendum — 4-stage constrained delegation
 pipeline</li>
@@ -366,7 +388,7 @@ generators</li>
 <li>(FTR-425): enforce in-list/in-hash in Racket for-loops</li>
 <li>(FTR-424): migrate fmt::format to std::format (C++23)</li>
 </ul>
-<h3 id="documentation-1">Documentation</h3>
+<h3 id="documentation-2">Documentation</h3>
 <ul>
 <li>add Coordinator Playbook + post-release governance learnings</li>
 </ul>
@@ -374,46 +396,6 @@ generators</li>
 <ul>
 <li>(v1.66.3): governance artifacts — FTRs complete, retrospective,
 checklist</li>
-</ul>
-<h2 id="1662----2026-03-15">[1.66.2] -- 2026-03-15</h2>
-<h3 id="added-2">Added</h3>
-<ul>
-<li>Merge pull request #161 from
-opensourcedruidhills/feature/ftr-380-dba-protobuf-cleanup</li>
-<li>Merge pull request #160 from
-opensourcedruidhills/feature/bfx-008-leader-merge</li>
-<li>(FTR-380): make protobuf linking conditional on event-sourced
-aggregates</li>
-<li>(BFX-008): add leader.merge command for PR merging via gh</li>
-</ul>
-<h3 id="fixed">Fixed</h3>
-<ul>
-<li>(v1.66.2): tick remaining AC boxes (validate-release --fix)</li>
-<li>(v1.66.2): align scope table with validate-release.sh format</li>
-</ul>
-<h3 id="documentation-2">Documentation</h3>
-<ul>
-<li>(v1.66.2): add release retrospective (Rule 29)</li>
-</ul>
-<h3 id="maintenance-2">Maintenance</h3>
-<ul>
-<li>(v1.66.2): prepare governance artifacts for release</li>
-<li>Merge pull request #162 from
-opensourcedruidhills/feature/v1662-iteration-status</li>
-<li>(v1.66.2): update iteration status — all FTRs done</li>
-</ul>
-<h3 id="other">Other</h3>
-<ul>
-<li>Merge pull request #162 from
-opensourcedruidhills/feature/v1662-iteration-status</li>
-<li>Merge pull request #161 from
-opensourcedruidhills/feature/ftr-380-dba-protobuf-cleanup</li>
-<li>Merge pull request #160 from
-opensourcedruidhills/feature/bfx-008-leader-merge</li>
-<li>plan(v1.66.3): add delegation strategy per ADR 20260315</li>
-<li>Merge remote-tracking branch 'origin/main' into develop</li>
-<li>plan: rescue orphaned v1.65.1 coordinator FTRs into v1.66.2
-(#159)</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -503,7 +485,7 @@ and release from the QML dashboard</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>6daffbe4</code> (project:
+<p>Last measured at commit <code>ede9f59e</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -516,7 +498,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1023.9s</td>
+<td>25.5s</td>
 <td>285 compilation steps</td>
 </tr>
 <tr>
@@ -526,7 +508,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 17 recorded runs.</p>
+<p>Build history: 18 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -546,7 +528,7 @@ muscovite):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>129.9s</td>
+<td>1103.0s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -554,16 +536,16 @@ muscovite):</p>
 <td>31</td>
 <td>1</td>
 <td>97%</td>
-<td>12.0s</td>
+<td>13.4s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (35.4s)</li>
-<li><strong>slow</strong>: 54/54 passed (72.5s)</li>
-<li><strong>integration</strong>: 12/12 passed (21.9s)</li>
+<li><strong>fast</strong>: 29/29 passed (224.3s)</li>
+<li><strong>slow</strong>: 54/54 passed (747.2s)</li>
+<li><strong>integration</strong>: 12/12 passed (131.4s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -580,6 +562,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.67.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.66.4</td>
 <td>8</td>
@@ -652,17 +642,9 @@ muscovite):</p>
 <td>95/95</td>
 <td>31/32</td>
 </tr>
-<tr>
-<td>v1.64.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.66.4).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.67.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -723,15 +705,15 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.66.4</td>
+<td>1.67.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1553 (since 2025-11-17)</td>
+<td>1563 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>137239 lines</td>
+<td>137676 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
@@ -747,7 +729,7 @@ muscovite):</p>
 </tr>
 <tr>
 <td>Racket tests</td>
-<td>34329 lines</td>
+<td>34474 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

@@ -117,7 +117,7 @@
 <p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 342</p>
+| <strong>Rules</strong>: 362</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -551,7 +551,7 @@ ProjectBlock         &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody 
 <pre class="peg"><code>Context              &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
 BuiltinAnnotation    &lt;- &#39;@&#39; &#39;BUILTIN&#39;
 ContextBody          &lt;- ContextItem*
-ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
+ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / LegacyView / LegacyProcedure / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
 <h3 id="3-entity">3. Entity</h3>
 <p>VIEW_ENTITY: read-only view-sourced entity (FTR-432). Identical to
 ENTITY for field declarations but generates read-only code.</p>
@@ -819,7 +819,27 @@ COPY_UUID; FIELD fname -&gt; given_name @required COPY; FIELD lname
 @unique VALIDATE_EMAIL; FIELD birth_dt -&gt; birth_date COERCE_DATE
 format="MM/dd/yyyy"; FIELD is_active -&gt; active DEFAULT true
 COPY_BOOL; FIELD created_ts -&gt; created_at COERCE_TIMESTAMP; DOC "Maps
-legacy customer table to Patient entity"; } 35b. FOREIGN CONTEXT
+legacy customer table to Patient entity"; } 35b. LEGACY_VIEW (Brownfield
+Extraction — FTR-427, ADR 20260313) LEGACY_VIEW captures the definition
+of a database view discovered during brownfield extraction. The BODY
+clause holds the raw SQL definition as a triple-quoted string.
+SOURCE_TABLES lists the tables the view reads from. CALLS lists stored
+procedures or functions the view references. Example: LEGACY_VIEW
+ActivePatients @uuid "..." { SOURCE_TABLES patients, appointments;
+MATERIALIZED false; DOC "Patients with appointments in the last 30
+days"; BODY """ SELECT p.* FROM patients p JOIN appointments a ON
+a.patient_id = p.id WHERE a.date &gt; NOW() - INTERVAL '30 days' """; }
+35c. LEGACY_PROCEDURE (Brownfield Extraction — FTR-427, ADR 20260313)
+LEGACY_PROCEDURE captures the definition of a stored procedure or
+function discovered during brownfield extraction. PARAMS declares typed
+parameters with direction (IN/OUT/INOUT). CLASSIFICATION categorizes the
+procedure for migration planning (e.g., 'data_access', 'business_logic',
+'utility'). Example: LEGACY_PROCEDURE CalculateBalance @uuid "..." {
+PARAMS ( account_id INTEGER IN, balance DECIMAL(19,4) OUT ); RETURNS
+DECIMAL(19,4); REFERENCES accounts, transactions; CALLS AuditLog;
+CLASSIFICATION "business_logic"; DOC "Calculate current balance from
+transaction history"; BODY """ SELECT SUM(amount) INTO balance FROM
+transactions WHERE account_id = $1 """; } 35d. FOREIGN CONTEXT
 (Anti-Corruption Layer — FTR-144, ADR 20260223) Typed ACL constructs for
 interfacing with external systems. FOREIGN_TYPE declares the shape of
 external data structures. TRANSLATE rules define declarative field-level
@@ -846,6 +866,25 @@ MappingAnnotation    &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNI
 FieldTransform       &lt;- &#39;COPY&#39; / &#39;COPY_UUID&#39; / &#39;COPY_BOOL&#39; / &#39;VALIDATE_EMAIL&#39; / &#39;VALIDATE_PHONE&#39; / &#39;VALIDATE_POSTAL_CODE&#39; / &#39;COERCE_DATE&#39; CoerceOptions? / &#39;COERCE_TIMESTAMP&#39; CoerceOptions? / &#39;COERCE_DECIMAL&#39; CoerceOptions? / &#39;DEFAULT&#39; DefaultValue CoerceOptions? / &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; CoerceOptions?
 CoerceOptions        &lt;- IDENTIFIER &#39;=&#39; STRING
 MappingClause        &lt;- DocClause / SynonymsClause
+LegacyView           &lt;- &#39;LEGACY_VIEW&#39; IDENTIFIER UuidAnnotation
+LegacyViewBody       &lt;- LegacyViewClause*
+LegacyViewClause     &lt;- LegacyViewSourceTables / LegacyViewCalls / LegacyViewMaterialized / LegacyViewBody_ / FieldDecl / DocClause
+LegacyViewSourceTables &lt;- &#39;SOURCE_TABLES&#39; IdentifierList &#39;;&#39;
+LegacyViewCalls      &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
+LegacyViewMaterialized &lt;- &#39;MATERIALIZED&#39; BooleanLiteral &#39;;&#39;
+LegacyViewBody_      &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;
+IdentifierList       &lt;- IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
+LegacyProcedure      &lt;- &#39;LEGACY_PROCEDURE&#39; IDENTIFIER UuidAnnotation
+LegacyProcBody       &lt;- LegacyProcClause*
+LegacyProcClause     &lt;- LegacyProcParams / LegacyProcReturns / LegacyProcReferences / LegacyProcCalls / LegacyProcClassification / LegacyProcBody_ / DocClause
+LegacyProcParams     &lt;- &#39;PARAMS&#39; &#39;(&#39; ProcParam ( &#39;,&#39; ProcParam )* &#39;)&#39; &#39;;&#39;
+ProcParam            &lt;- IDENTIFIER TypeSpec ParamDirection
+ParamDirection       &lt;- &#39;IN&#39; / &#39;OUT&#39; / &#39;INOUT&#39;
+LegacyProcReturns    &lt;- &#39;RETURNS&#39; TypeSpec &#39;;&#39;
+LegacyProcReferences &lt;- &#39;REFERENCES&#39; IdentifierList &#39;;&#39;
+LegacyProcCalls      &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
+LegacyProcClassification &lt;- &#39;CLASSIFICATION&#39; STRING &#39;;&#39;
+LegacyProcBody_      &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;
 ForeignContext       &lt;- &#39;FOREIGN&#39; &#39;CONTEXT&#39; IDENTIFIER UuidAnnotation
 ForeignContextItem   &lt;- ForeignType / TranslateRule / DocClause
 ForeignType          &lt;- &#39;FOREIGN_TYPE&#39; IDENTIFIER UuidAnnotation
