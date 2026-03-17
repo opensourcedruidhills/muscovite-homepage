@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Example Submodule Decoupling — Internal Test
+Harnesses — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Complete Example Submodule Decoupling — Internal Test
+Harnesses</span>
+</nav>
+
+<h1>Complete Example Submodule Decoupling — Internal Test Harnesses</h1>
+
+
+<h1
+id="complete-example-submodule-decoupling--internal-test-harnesses">Complete
+Example Submodule Decoupling — Internal Test Harnesses</h1>
+<ul>
+<li>Status: accepted (supersedes initial version merged in PR #167)</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-16</li>
+<li>Tags: testing, architecture, submodules, cmake, documentation</li>
+<li>Related: <a
+href="20260312-example-repos-as-independent-consumers.html">ADR 20260312 —
+Example Repos as Independent Consumers</a></li>
+</ul>
+<p>Technical Story: Complete the decoupling started in v1.65.2
+(FTR-407). Example submodules are independent consumer repos, but
+<strong>101 references</strong> across the monorepo still depend on
+their content — Racket tests, CMake build targets, documentation
+publishing, workflow scripts, and shell tools.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>ADR 20260312 (v1.65.2) freed example projects from the release
+ceremony — they no longer get generated, committed, or tagged by
+<code>release.sh</code>. However, the decoupling was incomplete. A full
+audit reveals <strong>101 references</strong> to <code>examples/</code>
+across <strong>~40 files</strong> in the monorepo:</p>
+<h3 id="coupling-by-category">Coupling by Category</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Files</th>
+<th>References</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket tests</td>
+<td>12</td>
+<td>17</td>
+<td>Tests fail without submodule init</td>
+</tr>
+<tr>
+<td>CMake build system</td>
+<td>5</td>
+<td>17</td>
+<td>DB deploy, NATS setup, doc build, L2 verification all reference
+examples/</td>
+</tr>
+<tr>
+<td>Shell tools</td>
+<td>8</td>
+<td>22</td>
+<td>Doc publishing, metrics, linting iterate over examples/</td>
+</tr>
+<tr>
+<td>Racket tools</td>
+<td>5</td>
+<td>9</td>
+<td>DSL reference generators read hello-world; diagram/validator/viewer
+default to examples/</td>
+</tr>
+<tr>
+<td>Workflow scripts</td>
+<td>4</td>
+<td>7</td>
+<td>agent-pr.sh, effort estimation, system brief reference
+examples/</td>
+</tr>
+<tr>
+<td>Coordinator</td>
+<td>1</td>
+<td>1</td>
+<td>Hardcoded fhir-health generation command</td>
+</tr>
+<tr>
+<td>Generator comments</td>
+<td>~8</td>
+<td>~8</td>
+<td>Non-functional but misleading</td>
+</tr>
+<tr>
+<td>Config/tmp</td>
+<td>2</td>
+<td>3</td>
+<td>IDE config, throwaway scripts</td>
+</tr>
+</tbody>
+</table>
+<h3 id="specific-high-cost-coupling">Specific High-Cost Coupling</h3>
+<ol type="1">
+<li><strong>Database CMake targets</strong>
+(<code>database/CMakeLists.txt</code>): Registers <code>fhir</code> and
+<code>geosciences</code> as database projects. Every
+<code>cmake --preset debug</code> configures Sqitch targets, NATS setup,
+and CTest fixtures for these example databases.</li>
+<li><strong>Release gate <code>db-fresh-fhir</code></strong>
+(<code>release.sh</code>): Drops, creates, and deploys the entire
+fhir-health schema on every release. Requires Docker + PostgreSQL.</li>
+<li><strong>Documentation publishing</strong>
+(<code>tools/publish-docs.sh</code>,
+<code>cmake/Documentation.cmake</code>): Generates system manuals, fact
+bases, and audience reports from example project .mus files. Deploys to
+homepage.</li>
+<li><strong>Layer 2 verification</strong>
+(<code>cmake/Layer2Verification.cmake</code>): Checks sidecar file
+integrity against hello-world, fhir-health, and geosciences generated
+output.</li>
+<li><strong>DSL reference generators</strong>
+(<code>dslgen/tools/generate-dsl-reference.rkt</code>,
+<code>generate-project-dsl-reference.rkt</code>): Read hello-world to
+produce DSL.md and PROJECT-DSL.md.</li>
+</ol>
+<h3 id="cost-per-iteration">Cost per Iteration</h3>
+<ul>
+<li><code>git submodule update --init --force</code>: ~85 MB download,
+~30s</li>
+<li>Database deploy gate (fhir-health): Docker + Sqitch, ~2–5 min</li>
+<li>Documentation generation from examples: ~3–5 min</li>
+<li>Example-dependent Racket tests: adds submodule fragility to every
+test run</li>
+<li>Total per release ceremony: <strong>~10–15 min of example-dependent
+overhead</strong></li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Complete decoupling</strong>: Every reference to
+<code>examples/</code> in the framework must be eliminated or replaced
+with internal harness paths.</li>
+<li><strong>Test isolation</strong>: Tests must depend only on files
+within the muscovite repo.</li>
+<li><strong>Coverage preservation</strong>: Every DSL construct
+currently exercised by example projects must remain covered by internal
+harnesses.</li>
+<li><strong>Wall-clock savings</strong>: Eliminating submodule init,
+example DB deploy, and example doc generation saves ~10–15 min per
+release.</li>
+<li><strong>Token/compute savings</strong>: No example code generation,
+compilation, or deployment during framework iterations.</li>
+<li><strong>Documentation sovereignty</strong>: Example projects publish
+their own docs independently; the framework publishes framework docs
+only.</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-a-kitchen-sink-test-project">Option A: Kitchen-Sink Test
+Project</h3>
+<p>A single large <code>.mus</code> + multiple <code>.ddd</code> files
+exercising every construct.</p>
+<ul>
+<li>Good, because single target to maintain.</li>
+<li>Bad, because grows unwieldy — one failure blocks all tests.</li>
+</ul>
+<h3 id="option-b-multiple-focused-test-harnesses">Option B: Multiple
+Focused Test Harnesses</h3>
+<p>Several small <code>.mus</code> + <code>.ddd</code> sets under
+<code>dslgen/tests/harness/</code>, each targeting one concern. All
+framework references point to harnesses instead of submodules.</p>
+<ul>
+<li>Good, because each harness is small and purposeful.</li>
+<li>Good, because failure in one harness isolates the broken
+construct.</li>
+<li>Good, because harnesses are versioned with the generator code.</li>
+</ul>
+<h3 id="option-c-grammar-derived-fuzz-testing">Option C: Grammar-Derived
+Fuzz Testing</h3>
+<p>A Racket script synthesizes valid <code>.ddd</code> from the PEG
+grammar.</p>
+<ul>
+<li>Good, because maximum coverage.</li>
+<li>Bad, because complex to build and doesn't replace functional
+references.</li>
+</ul>
+<h3 id="option-d-hybrid-b-now-add-c-later">Option D: Hybrid (B now, add
+C later)</h3>
+<p>Deploy focused harnesses immediately. Add grammar-derived fuzzing as
+a future FTR.</p>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option D (Hybrid)</strong>, because it
+delivers immediate, complete decoupling (Option B) while preserving a
+clear path to grammar-derived fuzz testing (Option C) as a future
+enhancement.</p>
+<h3 id="harness-structure">Harness Structure</h3>
+<pre><code>dslgen/tests/harness/
+├── minimal/              ← smallest valid project (smoke test, DSL reference examples)
+│   ├── project.mus
+│   └── contexts/
+│       └── core.ddd
+├── full-stack/           ← all 8 generation targets enabled (DB deploy gate, SPDX, lint)
+│   ├── project.mus
+│   └── contexts/
+│       ├── patients.ddd
+│       └── scheduling.ddd
+├── capabilities/         ← security + spatial + discovery
+│   ├── project.mus
+│   └── contexts/
+│       └── app.ddd
+├── cross-context/        ← multi-context + context maps + foreign refs
+│   ├── project.mus
+│   ├── context-map.ddd
+│   └── contexts/
+│       ├── orders.ddd
+│       └── inventory.ddd
+├── scale/                ← 15+ entities, stress test
+│   ├── project.mus
+│   └── contexts/
+│       ├── domain-a.ddd
+│       ├── domain-b.ddd
+│       └── domain-c.ddd
+└── migration/            ← two schema versions for Sqitch diff
+    ├── project.mus
+    └── contexts/
+        └── versioned.ddd</code></pre>
+<h3 id="coverage-mapping--tests">Coverage Mapping — Tests</h3>
+<table>
+<thead>
+<tr>
+<th>Harness</th>
+<th>Replaces</th>
+<th>Test Files Repointed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>minimal</td>
+<td>hello-world</td>
+<td>test-build-acceleration, test-project-parser (partial),
+test-adr1-canonical-ir</td>
+</tr>
+<tr>
+<td>full-stack</td>
+<td>fhir-health (entity parsing, generation, SPDX, lint)</td>
+<td>test-parser, test-dsl-integration, test-spdx-headers,
+test-lint-validation</td>
+</tr>
+<tr>
+<td>capabilities</td>
+<td>builtin capability contexts</td>
+<td>test-grammar-conformance (partial)</td>
+</tr>
+<tr>
+<td>cross-context</td>
+<td>geosciences (context maps, multi-context)</td>
+<td>test-context-mapping, test-project-parser (partial)</td>
+</tr>
+<tr>
+<td>scale</td>
+<td>geosciences (volume) + grammar conformance</td>
+<td>test-grammar-conformance (bulk)</td>
+</tr>
+<tr>
+<td>migration</td>
+<td>fhir-health (schema evolution)</td>
+<td>test-fhir-migration, test-fhir-db-migration,
+test-git-version-bridge</td>
+</tr>
+</tbody>
+</table>
+<h3 id="coverage-mapping--cmake-tools-workflow">Coverage Mapping —
+CMake, Tools, Workflow</h3>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Current Reference</th>
+<th>Replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>database/CMakeLists.txt</code></td>
+<td>fhir + geosciences DB projects</td>
+<td>full-stack harness as sole DB deploy target</td>
+</tr>
+<tr>
+<td><code>cmake/Documentation.cmake</code></td>
+<td>example project docs</td>
+<td><strong>Remove</strong> — example projects publish their own
+docs</td>
+</tr>
+<tr>
+<td><code>cmake/DockerNats.cmake</code></td>
+<td>fhir + geosciences NATS</td>
+<td>full-stack harness NATS target (if needed) or remove</td>
+</tr>
+<tr>
+<td><code>cmake/Layer2Verification.cmake</code></td>
+<td>hello-world, fhir, geosciences L2</td>
+<td>full-stack harness L2 verification</td>
+</tr>
+<tr>
+<td><code>tools/publish-docs.sh</code></td>
+<td>example doc staging + deploy</td>
+<td><strong>Remove</strong> example sections entirely</td>
+</tr>
+<tr>
+<td><code>tools/collect-docs-metrics.sh</code></td>
+<td>example doc metrics</td>
+<td><strong>Remove</strong> example metrics</td>
+</tr>
+<tr>
+<td><code>tools/generate-audience-reports.sh</code></td>
+<td>example audience reports</td>
+<td><strong>Remove</strong> — consumer repos generate their own</td>
+</tr>
+<tr>
+<td><code>tools/update-readme-metrics.sh</code></td>
+<td>iterates examples/</td>
+<td>Iterate harness/ or remove example loop</td>
+</tr>
+<tr>
+<td><code>tools/lint-ddd.sh --all</code></td>
+<td>scans examples/</td>
+<td>Scan harness/</td>
+</tr>
+<tr>
+<td><code>tools/build-example.sh</code></td>
+<td>builds example generated code</td>
+<td>Keep as consumer utility; remove monorepo references</td>
+</tr>
+<tr>
+<td><code>workflow/scripts/agent-pr.sh</code></td>
+<td>lints examples/</td>
+<td>Lint harness/</td>
+</tr>
+<tr>
+<td><code>workflow/scripts/generate-effort-estimation.sh</code></td>
+<td>counts example lines</td>
+<td>Remove example metrics or use harness</td>
+</tr>
+<tr>
+<td><code>workflow/scripts/generate-system-brief.sh</code></td>
+<td>example stats</td>
+<td>Remove example stats</td>
+</tr>
+<tr>
+<td><code>dslgen/tools/generate-dsl-reference.rkt</code></td>
+<td>reads hello-world</td>
+<td>Use harness/minimal</td>
+</tr>
+<tr>
+<td><code>dslgen/tools/generate-project-dsl-reference.rkt</code></td>
+<td>reads hello-world</td>
+<td>Use harness/minimal</td>
+</tr>
+<tr>
+<td><code>dslgen/diagram.rkt</code></td>
+<td>default: geosciences/chemistry.ddd</td>
+<td>Default: harness/full-stack context</td>
+</tr>
+<tr>
+<td><code>dslgen/validator.rkt</code></td>
+<td>default: geosciences/chemistry.ddd</td>
+<td>Default: harness/full-stack context</td>
+</tr>
+<tr>
+<td><code>dslgen/viewer.rkt</code></td>
+<td>default: geosciences/chemistry.ddd</td>
+<td>Default: harness/full-stack context</td>
+</tr>
+<tr>
+<td><code>agents/coordinator.py</code></td>
+<td>hardcoded fhir-health generation</td>
+<td>Update to harness/full-stack</td>
+</tr>
+<tr>
+<td><code>release.sh</code> gate 7</td>
+<td><code>db-fresh-fhir</code></td>
+<td><code>db-fresh-harness</code> (full-stack harness)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-harnesses-are-not">What Harnesses Are NOT</h3>
+<ul>
+<li>Not example projects — they have no independent lifecycle, no repo,
+no release.</li>
+<li>Not consumer-facing — they are internal test fixtures, not
+documentation.</li>
+<li>Not domain models — they use synthetic domains designed to exercise
+DSL edges.</li>
+<li>The test runner owns them. They exist to break when the generator
+regresses.</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li><strong>Zero submodule coupling</strong>: Tests, builds, docs, and
+releases depend only on files within the muscovite repo.</li>
+<li><strong>~10–15 min saved per release</strong>: No example DB deploy,
+no example doc generation, no submodule fetch.</li>
+<li><strong>Reduced CI fragility</strong>: No submodule auth failures,
+no stale submodule refs.</li>
+<li><strong>Clean documentation boundary</strong>: Framework publishes
+framework docs; consumer repos publish their own docs.</li>
+<li><strong>Accurate metrics</strong>: Test and build metrics reflect
+the framework only.</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Harness <code>.ddd</code> files must be authored — one-time
+migration effort (~40 files modified, ~16 files created).</li>
+<li>Harnesses lack real-world domain richness (acceptable — that's what
+consumer repos demonstrate).</li>
+<li>Example submodule removal is a one-way door — re-adding is possible
+but noisy.</li>
+<li>DSL reference documentation (DSL.md, PROJECT-DSL.md) will use
+synthetic examples from harness/minimal instead of hello-world's real
+domain.</li>
+</ul>
+<h2 id="migration-sequence">Migration Sequence</h2>
+<ol type="1">
+<li><strong>Create harnesses</strong> under
+<code>dslgen/tests/harness/</code> (6 directories).</li>
+<li><strong>Repoint Racket tests</strong> — change
+<code>define-runtime-path</code> from <code>../../examples/</code> to
+<code>harness/</code> paths. Include migration test files in
+<code>dslgen/migration/</code>.</li>
+<li><strong>Decouple CMake</strong> — update
+<code>database/CMakeLists.txt</code> (replace example DB projects with
+harness), remove example targets from <code>Documentation.cmake</code>,
+<code>DockerNats.cmake</code>,
+<code>Layer2Verification.cmake</code>.</li>
+<li><strong>Decouple tools</strong> — update
+<code>publish-docs.sh</code> (remove example sections),
+<code>lint-ddd.sh</code> (scan harness/),
+<code>generate-dsl-reference.rkt</code> and
+<code>generate-project-dsl-reference.rkt</code> (use harness/minimal),
+update default paths in <code>diagram.rkt</code>,
+<code>validator.rkt</code>, <code>viewer.rkt</code>.</li>
+<li><strong>Decouple workflow scripts</strong> — update
+<code>agent-pr.sh</code>, <code>generate-effort- estimation.sh</code>,
+<code>generate-system-brief.sh</code>, <code>release.sh</code> DB
+gate.</li>
+<li><strong>Move <code>tpt-inheritance-test.ddd</code></strong> from
+<code>examples/</code> root into
+<code>dslgen/tests/fixtures/</code>.</li>
+<li><strong>Remove example submodules</strong> from
+<code>.gitmodules</code> and clean up with
+<code>git rm --cached examples/*</code>.</li>
+<li><strong>Update documentation</strong> — <code>AGENTS.md</code>,
+<code>README.md</code> metrics section.</li>
+<li><strong>Future FTR</strong>: Grammar-derived fuzz testing (Option C
+/ path to D).</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes test coupling from <a
+href="20260312-example-repos-as-independent-consumers.html">ADR 20260312 —
+Example Repos as Independent Consumers</a></li>
+<li>Related: <a
+href="20260316-opportunity-solution-tree-discovery-capability.html">ADR
+20260316 — OST Discovery Capability</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding a new DSL construct: add coverage to the appropriate
+harness.</li>
+<li>When writing or modifying Racket tests: reference
+<code>harness/</code> paths, never <code>examples/</code>.</li>
+<li>When modifying CMake targets: do not add example project
+dependencies.</li>
+<li>When modifying documentation tools: do not reference example
+projects.</li>
+<li>When modifying CI/workflow scripts: do not iterate over
+<code>examples/</code>.</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Consumer repos (fhir-health, geosciences, etc.) manage their own
+build, test, documentation, and release strategies independently.</li>
+<li><code>tools/build-example.sh</code> may be kept as a consumer
+utility shipped with the framework, but should not be invoked from
+monorepo build/CI.</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li><code>test-grammar-conformance.rkt</code> scans
+<code>harness/</code> instead of <code>examples/</code>. Any
+<code>define-runtime-path</code> pointing to
+<code>../../examples/</code> is a conformance violation.</li>
+<li>CI does not run <code>git submodule update --init</code> for example
+submodules.</li>
+<li><code>release.sh</code> DB gate targets
+<code>db-fresh-harness</code>, not <code>db-fresh-fhir</code>.</li>
+<li>PR review should reject new references to <code>examples/</code> in
+framework code.</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/tests/harness/</code> — all test harness
+<code>.mus</code> and <code>.ddd</code> files</li>
+<li><code>dslgen/tests/fixtures/</code> — existing single-file test
+fixtures (unchanged)</li>
+<li><code>database/CMakeLists.txt</code> — DB project registrations
+(harness replaces examples)</li>
+<li><code>cmake/Documentation.cmake</code> — example doc targets
+removed</li>
+<li><code>tools/publish-docs.sh</code> — example doc publishing
+removed</li>
+<li><code>workflow/scripts/release.sh</code> — DB gate uses harness</li>
+<li><code>.gitmodules</code> — example submodules removed after
+migration</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

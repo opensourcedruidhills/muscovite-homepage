@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release: Skip Unchanged Layers by
+Default — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Release: Skip Unchanged Layers by Default</span>
+</nav>
+
+<h1>Release: Skip Unchanged Layers by Default</h1>
+
+
+<h1 id="release-skip-unchanged-layers-by-default">Release: Skip
+Unchanged Layers by Default</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-16</li>
+<li>Tags: release, ci, quality-gates</li>
+</ul>
+<p>Technical Story: v1.67.0 release attempt 3 failed on clang-tidy due
+to a pre-existing boost <code>&lt;chrono&gt;</code> header issue,
+despite zero C++ changes in the iteration. FTR-443
+<code>--skip-unchanged-layers</code> saved the release but had to be
+manually specified.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>release.sh runs all quality gates unconditionally by default. When an
+iteration contains no C++ changes, the C++ build, ctest, and clang-tidy
+gates still run. This creates two problems:</p>
+<ol type="1">
+<li><strong>Environment fragility</strong>: Pre-existing toolchain
+issues (missing headers, compiler version mismatches) can block releases
+that have nothing to do with C++.</li>
+<li><strong>Wasted compute</strong>: Full C++ build + clang-tidy takes
+~25 min on the CI machine. For DSL-only iterations, this is pure
+overhead.</li>
+</ol>
+<p>In v1.67.0 (7 FTRs, all in grammar/IR/parser/scripts), the clang-tidy
+gate failed due to a missing boost <code>&lt;chrono&gt;</code> header —
+a pre-existing environment issue unrelated to the iteration's changes.
+This cost one wasted release attempt (~25 min + ~30K tokens).</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Release ceremony wall time should be proportional to change
+scope</li>
+<li>Environment issues in unchanged layers should not block
+releases</li>
+<li>Safety: changed layers MUST still run all gates</li>
+<li>The <code>--skip-unchanged-layers</code> mechanism (FTR-443) already
+exists and is proven</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Auto-detect unchanged layers</strong> — release.sh always
+detects unchanged layers and skips their gates. No flag needed.</li>
+<li><strong>Mandatory flag for non-C++ iterations</strong> — Require
+<code>--skip-unchanged-layers</code> as a process rule when no C++
+changes exist.</li>
+<li><strong>Status quo</strong> — Run all gates unconditionally, use
+<code>--skip-unchanged-layers</code> as an optional escape hatch.</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Auto-detect unchanged layers", because it eliminates
+both human error (forgetting the flag) and wasted compute. The detection
+mechanism is already implemented in FTR-443
+(<code>git diff --name-only</code> against last tag).</p>
+<h3 id="implementation">Implementation</h3>
+<p>release.sh MUST auto-detect unchanged layers using
+<code>git diff --name-only LAST_TAG..HEAD</code>. Layer detection
+rules:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>File patterns</th>
+<th>Gates skipped when unchanged</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C++</td>
+<td><code>*.cpp</code>, <code>*.hpp</code>, <code>*.h</code>,
+<code>CMakeLists.txt</code>, <code>cmake/**</code></td>
+<td>C++ build, ctest, clang-tidy</td>
+</tr>
+<tr>
+<td>Racket</td>
+<td><code>dslgen/**/*.rkt</code>, <code>dslgen/grammar/**</code></td>
+<td>Racket test suite</td>
+</tr>
+<tr>
+<td>Database</td>
+<td><code>**/*.sql</code>, <code>database/**</code></td>
+<td>DB deploy, DB integration</td>
+</tr>
+<tr>
+<td>Proto</td>
+<td><code>proto/**/*.proto</code></td>
+<td>gRPC generation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Override</strong>: <code>--force-all-gates</code> runs all
+gates regardless of detection. Use for release candidates or when
+environment validation is needed.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Eliminates environment-fragility release blockers for unchanged
+layers</li>
+<li>Reduces DSL-only release ceremony from ~50 min to ~15 min</li>
+<li>No human judgment needed (auto-detection vs. remembering a
+flag)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Risk of skipping a gate when a change is missed by the file pattern
+detection (mitigated: patterns are conservative and match broadly)</li>
+<li>Must maintain the file pattern list as new layers are added</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Implements FTR-443 (v1.67.0)</li>
+<li>Context: v1.67.0 post-release retrospective in
+<code>doc/AGENT_COORDINATION_LEARNINGS.md</code></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When running <code>workflow/scripts/release.sh</code> for any
+release</li>
+<li>When reviewing or modifying release gate logic in release.sh</li>
+<li>When adding new quality gates to the release process</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>agent-pr.sh (PR-level gates have their own skip logic)</li>
+<li>Manual test runs (<code>ctest</code>, <code>racket tests/...</code>)
+outside the release process</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Implemented in <code>workflow/scripts/release.sh</code> (layer
+detection at lines ~193-230)</li>
+<li><code>--force-all-gates</code> override documented in
+<code>release.sh --help</code></li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>workflow/scripts/release.sh</code> — layer detection and gate
+skip logic</li>
+<li><code>AGENTS.md</code> — release documentation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

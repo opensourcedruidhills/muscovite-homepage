@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Solution Tree as Built-in Discovery
+Capability — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Opportunity Solution Tree as Built-in Discovery
+Capability</span>
+</nav>
+
+<h1>Opportunity Solution Tree as Built-in Discovery Capability</h1>
+
+
+<h1
+id="opportunity-solution-tree-as-built-in-discovery-capability">Opportunity
+Solution Tree as Built-in Discovery Capability</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-16</li>
+<li>Tags: capability, discovery, ost, product-discovery,
+opportunity-solution-tree</li>
+</ul>
+<p>Technical Story: Teresa Torres's <em>Continuous Discovery Habits</em>
+(2021) provides a structured reasoning framework connecting measurable
+business outcomes to user needs to candidate solutions to validation
+experiments. Muscovite should offer this as a reusable capability so any
+consumer product can opt into discovery tracking without reinventing the
+domain model.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's capability system (<code>CAPABILITIES {}</code> in
+<code>project.mus</code>) ships reusable infrastructure domains:
+<code>security</code> provides auth/authz entities, <code>spatial</code>
+provides PostGIS reference data. These capabilities auto-load
+framework-provided <code>.ddd</code> contexts so consumers get generated
+code across all 8 targets with zero modeling effort.</p>
+<p>Product teams using Muscovite currently model <strong>what to
+build</strong> (entities, aggregates, services) and <strong>how it
+behaves</strong> (state machines, events, policies), but have no
+structured way to model <strong>why</strong> — the discovery chain from
+business outcomes through user needs to candidate solutions. Without
+this:</p>
+<ol type="1">
+<li>Features lack traceability to validated user needs.</li>
+<li>Multiple solution candidates for the same problem cannot be
+compared.</li>
+<li>Production telemetry anomalies have no structured path back to
+discovery.</li>
+<li>Teams make solution-first decisions instead of need-first
+decisions.</li>
+</ol>
+<p>The Opportunity Solution Tree (OST) model provides this missing
+layer. The question is how to deliver it in the Muscovite framework.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li><strong>Reusability</strong>: Multiple consumer products
+(muscovite-agent-coordination, fhir-health, geosciences) would benefit
+from a shared discovery model.</li>
+<li><strong>Opt-in</strong>: Discovery tracking is not universally
+needed. Products that don't need it should pay zero cost.</li>
+<li><strong>Existing mechanism</strong>: The capability registry
+(<code>dslgen/builtin/registry.rkt</code>) already handles
+framework-provided contexts. No new infrastructure needed.</li>
+<li><strong>Generator coverage</strong>: Standard ENTITY + STATE_MACHINE
+constructs get full 8-target generation without generator changes.</li>
+<li><strong>Precedent</strong>: The <code>security</code> capability
+proves the pattern works.</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-a-no-framework-support--consumers-model-it-themselves">Option
+A: No framework support — consumers model it themselves</h3>
+<p>Consumers write their own Outcome/Opportunity entities in their
+<code>.ddd</code> files.</p>
+<ul>
+<li>Good, because zero framework work.</li>
+<li>Bad, because every consumer reinvents the same model.</li>
+<li>Bad, because no consistency across products.</li>
+<li>Bad, because no framework-level documentation or best
+practices.</li>
+</ul>
+<h3
+id="option-b-new-dsl-keywords--outcome-opportunity-as-grammar-level-constructs">Option
+B: New DSL keywords — OUTCOME, OPPORTUNITY as grammar-level
+constructs</h3>
+<p>Add first-class grammar rules, IR structs, parser support, and
+specialized generator output (tree views, flow metric dashboards).</p>
+<ul>
+<li>Good, because full semantic awareness at the DSL level.</li>
+<li>Good, because generators can produce specialized output (OST tree
+queries).</li>
+<li>Bad, because grammar changes are a strong commitment (Rule 7:
+grammar-first).</li>
+<li>Bad, because multi-iteration effort (grammar + IR + parser + 8
+generators).</li>
+<li>Bad, because the OST model is opinionated — baking it into grammar
+couples the framework to one discovery methodology.</li>
+</ul>
+<h3
+id="option-c-built-in-capability-with-framework-provided-ddd-context">Option
+C: Built-in capability with framework-provided <code>.ddd</code>
+context</h3>
+<p>Register <code>discovery</code> as a capability. Ship
+<code>dslgen/builtin/discovery/discovery.ddd</code> containing Outcome
+and Opportunity entities with state machines, events, and policies.
+Consumers opt in via <code>CAPABILITIES { discovery }</code>.</p>
+<ul>
+<li>Good, because uses existing capability infrastructure — proven
+pattern.</li>
+<li>Good, because full 8-target generation with zero generator
+changes.</li>
+<li>Good, because opt-in: one word in <code>project.mus</code>.</li>
+<li>Good, because the <code>.ddd</code> file can evolve independently of
+the grammar.</li>
+<li>Good, because promotion path to Option B exists if adoption proves
+the model.</li>
+<li>Bad, because generators have no semantic awareness of OST (no
+specialized tree views or flow metric dashboards — those require
+consumer-side work).</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>Option C — Built-in discovery
+capability</strong>, because it delivers the OST domain model to all
+consumers via the proven capability mechanism with minimal framework
+changes and a clear promotion path.</p>
+<h3 id="the-four-layer-ost-model">The Four-Layer OST Model</h3>
+<pre><code>Outcome (OTC) — measurable, time-bound business goal
+  └── Opportunity (OPP) — user need, pain point, or desire
+      └── Solution (FTR) — candidate feature (consumer&#39;s work items)
+      └── Assumption Test (SPK) — cheapest validation experiment</code></pre>
+<h3 id="what-the-capability-provides">What the Capability Provides</h3>
+<p>The <code>discovery</code> capability auto-loads a
+<code>Discovery</code> bounded context containing:</p>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Purpose</th>
+<th>State Machine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Outcome</strong></td>
+<td>Measurable business goal (metric + target + date)</td>
+<td>Draft → Active → Achieved / Abandoned</td>
+</tr>
+<tr>
+<td><strong>Opportunity</strong></td>
+<td>User need discovered from research/telemetry/retrospectives</td>
+<td>Identified → Validating → Validated → Addressed / Parked</td>
+</tr>
+</tbody>
+</table>
+<p>Plus:</p>
+<ul>
+<li><code>AnomalyDetected</code> domain event (telemetry → discovery
+feedback loop)</li>
+<li><code>AutoCreateOpportunity</code> policy (anomaly auto-creates
+opportunity for human review)</li>
+<li>CHECK constraints for controlled vocabularies (source, impact,
+confidence)</li>
+</ul>
+<h3 id="what-consumers-must-provide">What Consumers Must Provide</h3>
+<ul>
+<li>Cross-context relationships from Opportunity to their work items
+(FTR, EPC, SPK) via FOREIGN CONTEXT declarations in their own
+<code>.ddd</code> files.</li>
+<li>The telemetry pipeline that fires <code>AnomalyDetected</code>
+events (product-specific).</li>
+<li>UI for OST tree visualization (the data model supports it; the
+layout is product-specific, potentially a <code>.lay</code>
+concern).</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>File</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add <code>'DISCOVERY'</code> to grammar</td>
+<td><code>dslgen/grammar/muscovite.peg</code> line 1567</td>
+<td>1 line</td>
+</tr>
+<tr>
+<td>Create <code>discovery.ddd</code></td>
+<td><code>dslgen/builtin/discovery/discovery.ddd</code></td>
+<td>~100 lines</td>
+</tr>
+<tr>
+<td>Register capability</td>
+<td><code>dslgen/builtin/registry.rkt</code></td>
+<td>~10 lines</td>
+</tr>
+<tr>
+<td>Grammar conformance test</td>
+<td><code>dslgen/tests/test-grammar-conformance.rkt</code></td>
+<td>Update</td>
+</tr>
+<tr>
+<td>Parser + integration tests</td>
+<td><code>dslgen/tests/</code></td>
+<td>New test cases</td>
+</tr>
+</tbody>
+</table>
+<h3 id="consumer-opt-in">Consumer Opt-In</h3>
+<pre><code>PROJECT MyProduct {
+    CAPABILITIES {
+        security
+        discovery    -- Outcome + Opportunity entities, state machines, events
+    }
+    CONTEXTS {
+        include &quot;contexts/my-domain.ddd&quot;
+    }
+}</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Any Muscovite consumer gets a validated OST domain model with one
+keyword.</li>
+<li>All 8 generator targets produce output: PostgreSQL tables, gRPC
+service, C++ repositories, Qt views, Sqitch migrations, CMake
+integration, documentation.</li>
+<li>The model is battle-tested across consumers before any grammar
+promotion.</li>
+<li>Closes the telemetry → discovery feedback loop when combined with
+the <code>telemetry</code> capability (ADR 20260302).</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Generators produce generic CRUD for Outcome/Opportunity — no
+OST-specific tree queries or flow metric dashboards without additional
+generator work.</li>
+<li>The <code>discovery.ddd</code> model embeds Teresa Torres's
+methodology. Products using different discovery frameworks would need to
+ignore or extend it.</li>
+<li>Cross-context relationship wiring remains consumer
+responsibility.</li>
+</ul>
+<h2 id="future-promotion-to-grammar-level-option-b">Future: Promotion to
+Grammar-Level (Option B)</h2>
+<p>If multiple consumers adopt the <code>discovery</code> capability and
+demand specialized generator output (e.g., OST tree queries in
+PostgreSQL, tree visualization in QML, flow metric dashboards), the
+model can be promoted to grammar-level constructs in a future
+iteration:</p>
+<ul>
+<li><code>OUTCOME</code> and <code>OPPORTUNITY</code> as first-class
+keywords</li>
+<li>Specialized IR structs with semantic meaning</li>
+<li>Generator-produced tree queries, dashboards, and documentation
+sections</li>
+</ul>
+<p>This promotion would follow the grammar-first mandate (ADR 20260211)
+and require its own ADR. The capability <code>.ddd</code> would then
+become the reference implementation.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li>Inspired by: Teresa Torres, <em>Continuous Discovery Habits</em>
+(Product Talk LLC, 2021)</li>
+<li>Related: <a href="../../dslgen/builtin/registry.rkt">Built-in
+capability registry</a></li>
+<li>Related: <a
+href="20260212-capability-gated-subsystems.html">Capability-gated
+subsystems</a></li>
+<li>Related: <a
+href="20260302-opentelemetry-observability-architecture.html">OpenTelemetry
+observability</a> — telemetry feeds the anomaly → Opportunity
+pipeline</li>
+<li>Related: <a
+href="20260310-sample-project-enrichment-strategy.html">Sample project
+enrichment</a> — example projects can adopt this capability</li>
+<li>Related: <a
+href="20260312-example-repos-as-independent-consumers.html">Example repos
+as independent consumers</a> — consumers opt into capabilities
+independently</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When a consumer product needs structured product discovery tracking
+(Outcomes, Opportunities, assumption testing).</li>
+<li>When adding the <code>discovery</code> capability to a
+<code>project.mus</code> file.</li>
+<li>When modeling cross-context relationships between Opportunity and
+consumer work items (Feature, Epic, Spike).</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>When modeling domain-specific entities unrelated to product
+discovery.</li>
+<li>When the consumer uses a different discovery methodology and prefers
+to model their own entities from scratch (Option A remains valid).</li>
+<li>When discussing grammar-level OUTCOME/OPPORTUNITY keywords (that's a
+future decision, not this one).</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Capability registration enforced by
+<code>dslgen/builtin/registry.rkt</code>.</li>
+<li>Grammar rule enforced by PEG grammar <code>CapabilityName</code>
+production.</li>
+<li>Model correctness enforced by parser and integration tests.</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/builtin/registry.rkt</code> — capability
+registration</li>
+<li><code>dslgen/builtin/discovery/discovery.ddd</code> — the discovery
+context model</li>
+<li><code>dslgen/grammar/muscovite.peg</code> —
+<code>CapabilityName</code> rule (line ~1567)</li>
+<li><code>dslgen/generate.rkt</code> — capability loading logic (lines
+370–395)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

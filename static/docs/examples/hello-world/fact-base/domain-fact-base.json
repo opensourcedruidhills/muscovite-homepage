@@ -229,6 +229,8 @@
       "events": [],
       "foreign_contexts": [],
       "grounding": null,
+      "legacy_procedures": [],
+      "legacy_views": [],
       "lookup_tables": [
         {
           "doc": "Priority levels for tasks",
@@ -1242,6 +1244,8 @@
       "events": [],
       "foreign_contexts": [],
       "grounding": null,
+      "legacy_procedures": [],
+      "legacy_views": [],
       "lookup_tables": [],
       "mappings": [],
       "name": "security",
@@ -1718,6 +1722,8 @@
       ],
       "foreign_contexts": [],
       "grounding": null,
+      "legacy_procedures": [],
+      "legacy_views": [],
       "lookup_tables": [],
       "mappings": [],
       "name": "Todo",
@@ -2112,8 +2118,14 @@
   ],
   "metadata": {
     "context_count": 3,
-    "generated_at": "2026-03-16T14:32:00Z",
+    "generated_at": "2026-03-17T06:54:13Z",
     "generator_version": "1.0.0",
+    "legacy_summary": {
+      "cross_context_count": 0,
+      "orphan_count": 0,
+      "total_procedures": 0,
+      "total_views": 0
+    },
     "project_name": "HelloWorld",
     "total_aggregates": 12,
     "total_commands": 0,
