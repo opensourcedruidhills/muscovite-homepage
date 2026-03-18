@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.67.2 | <strong>Generated</strong>:
-2026-03-17 | <strong>Commit</strong>: bf179d3c |
+<p><strong>Version</strong>: 1.67.3 | <strong>Generated</strong>:
+2026-03-18 | <strong>Commit</strong>: d0cafb95 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -268,7 +268,7 @@ lines)</h3>
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1--c-framework-42313-lines">Layer 1 — C++ Framework (42313
+<h3 id="layer-1--c-framework-42314-lines">Layer 1 — C++ Framework (42314
 lines)</h3>
 <table>
 <thead>
@@ -284,7 +284,7 @@ lines)</h3>
 </tr>
 <tr>
 <td>Sources (.cpp)</td>
-<td>24725</td>
+<td>24726</td>
 </tr>
 <tr>
 <td>C++ Tests</td>
@@ -336,8 +336,18 @@ Output</h2>
 </tbody>
 </table>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1672----2026-03-17">[1.67.2] -- 2026-03-17</h2>
+<h2 id="1673----2026-03-18">[1.67.3] -- 2026-03-18</h2>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>conclude iteration v1.67.3 (stand-alone mode)</li>
+</ul>
 <h3 id="other">Other</h3>
+<ul>
+<li>Renumber iterations: decoupling v1.67.1 → v1.67.3, remove stale
+v1.68.0</li>
+</ul>
+<h2 id="1672----2026-03-17">[1.67.2] -- 2026-03-17</h2>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>v1.67.2: governance fixes — checklist, AC ticks, version fields</li>
 <li>v1.67.2: Brownfield extraction + DB gate removal</li>
@@ -360,11 +370,11 @@ dependencies (#167)</li>
 <li>make brownfield clause keywords contextual to avoid domain
 identifier collisions</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
+<h3 id="documentation-1">Documentation</h3>
 <ul>
 <li>honest v1.66.4 retrospective with actual timings and failures</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>v1.67.0 governance: retrospective, release checklist, FTR status
 updates</li>
@@ -375,24 +385,6 @@ mapping</li>
 <li>FTR-444, FTR-443: Release script improvements</li>
 <li>plan: add missing FTR-442 to v1.67.0 scope</li>
 <li>plan: assign FTR-443 and FTR-444 to v1.67.0</li>
-</ul>
-<h2 id="1664----2026-03-15">[1.66.4] -- 2026-03-15</h2>
-<h3 id="added">Added</h3>
-<ul>
-<li>implement v1.66.4 delegation guardrails tooling</li>
-<li>(v1.66.4): delegation guardrails tooling — FTR-437–441 + skill
-prompt + feedback loop</li>
-</ul>
-<h3 id="documentation-1">Documentation</h3>
-<ul>
-<li>(ADR-20260315): v1.66.3 addendum — 4-stage constrained delegation
-pipeline</li>
-</ul>
-<h3 id="maintenance">Maintenance</h3>
-<ul>
-<li>refine v1.67.x FTR specs — scope boundaries and missing decisions
-(#165)</li>
-<li>split v1.67.0 into v1.67.0 (foundation) + v1.67.1 (extraction)</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -482,7 +474,7 @@ and release from the QML dashboard</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>bf179d3c</code> (project:
+<p>Last measured at commit <code>d0cafb95</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -495,7 +487,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>25.5s</td>
+<td>84.5s</td>
 <td>285 compilation steps</td>
 </tr>
 <tr>
@@ -505,7 +497,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 19 recorded runs.</p>
+<p>Build history: 20 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -525,7 +517,7 @@ muscovite):</p>
 <td>95</td>
 <td>0</td>
 <td>100%</td>
-<td>87.3s</td>
+<td>308.3s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -533,16 +525,16 @@ muscovite):</p>
 <td>31</td>
 <td>1</td>
 <td>97%</td>
-<td>13.4s</td>
+<td>13.5s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 29/29 passed (23.0s)</li>
-<li><strong>slow</strong>: 54/54 passed (50.2s)</li>
-<li><strong>integration</strong>: 12/12 passed (14.1s)</li>
+<li><strong>fast</strong>: 29/29 passed (96.6s)</li>
+<li><strong>slow</strong>: 54/54 passed (180.2s)</li>
+<li><strong>integration</strong>: 12/12 passed (31.3s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -559,6 +551,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.67.3</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>95/95</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.67.2</td>
 <td>8</td>
@@ -631,17 +631,9 @@ muscovite):</p>
 <td>95/95</td>
 <td>31/32</td>
 </tr>
-<tr>
-<td>v1.65.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.67.2).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.67.3).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -702,11 +694,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.67.2</td>
+<td>1.67.3</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1573 (since 2025-11-17)</td>
+<td>1576 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
@@ -714,7 +706,7 @@ muscovite):</p>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>42313 lines</td>
+<td>42314 lines</td>
 </tr>
 <tr>
 <td>Generator targets</td>
