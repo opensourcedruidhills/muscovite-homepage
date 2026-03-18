@@ -117,7 +117,7 @@
 <p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 362</p>
+| <strong>Rules</strong>: 364</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -760,6 +760,8 @@ Clauses (Value Object References)</h3>
 HasClause            &lt;- &#39;HAS&#39; IDENTIFIER QualifiedIdentifier ArraySuffix?</code></pre>
 <h3 id="23-lookup-table">23. Lookup Table</h3>
 <pre class="peg"><code>LookupTable          &lt;- &#39;LOOKUP_TABLE&#39; IDENTIFIER UuidAnnotation
+SeedValueRow         &lt;- &#39;(&#39; SeedValueLiteral ( &#39;,&#39; SeedValueLiteral )* &#39;)&#39;
+SeedValueLiteral     &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;
 ExtraFieldList       &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
 ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation* FieldDocClause?
 ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39;</code></pre>
@@ -904,52 +906,14 @@ TranslateNull        &lt;- QualifiedIdentifier &#39;??&#39; ( STRING / NUMBER )<
 href="../examples/hello-world/">hello-world</a> project — a minimal
 working Muscovite project.</p>
 <h3 id="entity-with-relationships">Entity with Relationships</h3>
-<pre class="ddd"><code>ENTITY TodoItem @uuid &quot;b0000001-0004-4000-8000-000000000001&quot; IDENTIFIED_BY id (
-        id          UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000010&quot;,
-        title       TEXT        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000011&quot;,
-        description TEXT                 @uuid &quot;b0000001-0004-4000-8000-000000000012&quot;,
-        priority_id UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000013&quot;,
-        status_id   UUID        NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000014&quot;,
-        due_date    DATE                 @uuid &quot;b0000001-0004-4000-8000-000000000015&quot;,
-        is_done     BOOLEAN     NOT_NULL DEFAULT false
-                                         @uuid &quot;b0000001-0004-4000-8000-000000000016&quot;,
-        created_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000017&quot;,
-        updated_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0004-4000-8000-000000000018&quot;
-    )
-    RELATIONSHIPS {
-        priority -&gt; Basedata.Priority REQUIRED ONE
-            @uuid &quot;b0000001-0004-4000-8000-000000000020&quot;;
-        status -&gt; Basedata.Status REQUIRED ONE
-            @uuid &quot;b0000001-0004-4000-8000-000000000021&quot;;
-    }</code></pre>
 <h3 id="aggregate-with-embedded-children">Aggregate with Embedded
 Children</h3>
-<pre class="ddd"><code>AGGREGATE TodoItem @uuid &quot;b0000001-0004-4000-8000-000000000030&quot; ROOT TodoItem (
-        CONTAINS TodoComment
-    )
-    DOC &quot;Todo aggregate with comments&quot;;</code></pre>
 <h3 id="lookup-table">Lookup Table</h3>
-<pre class="ddd"><code>LOOKUP_TABLE Priority @uuid &quot;a0000001-0002-4000-8000-000000000001&quot;
-        SEED_JSON &quot;seeds/basedata/priority.json&quot;
-        DOC &quot;Priority levels for tasks&quot;;</code></pre>
+<pre class="ddd"><code>LOOKUP_TABLE Priority @uuid &quot;...&quot;
+    SEED_JSON &quot;seeds/basedata/priority.json&quot;
+    DOC &quot;Priority levels for tasks&quot;;</code></pre>
 <h3 id="domain-event">Domain Event</h3>
-<pre class="ddd"><code>EVENT TodoCreated @uuid &quot;b0000001-0005-4000-8000-000000000001&quot; (
-        todo_id     UUID    NOT_NULL @uuid &quot;b0000001-0005-4000-8000-000000000010&quot;,
-        title       TEXT    NOT_NULL @uuid &quot;b0000001-0005-4000-8000-000000000011&quot;
-    )
-    DOC &quot;A new todo item was created&quot;;</code></pre>
 <h3 id="embedded-child-entity">Embedded Child Entity</h3>
-<pre class="ddd"><code>ENTITY TodoComment @uuid &quot;b0000001-0003-4000-8000-000000000001&quot; IDENTIFIED_BY id (
-        id          UUID        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000010&quot;,
-        todo_id     UUID        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000011&quot;,
-        body        TEXT        NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000012&quot;,
-        author      TEXT                 @uuid &quot;b0000001-0003-4000-8000-000000000013&quot;,
-        created_at  TIMESTAMPTZ NOT_NULL @uuid &quot;b0000001-0003-4000-8000-000000000014&quot;
-    )
-    RELATIONSHIPS {
-        todo -&gt; TodoItem REQUIRED ONE @embedded
-            @uuid &quot;b0000001-0003-4000-8000-000000000020&quot;;
-    }</code></pre>
 <hr />
 <h2 id="forbidden-patterns">Forbidden Patterns</h2>
 <table>

@@ -130,8 +130,8 @@
 
 <h1 id="effort-estimation">Effort Estimation</h1>
 <p><strong>Generated</strong>: 2026-03-18 <strong>Version</strong>:
-v1.67.3 <strong>Project start</strong>: 2025-11-17 (121 days ago)
-<strong>Releases</strong>: 92</p>
+v1.67.4 <strong>Project start</strong>: 2025-11-17 (121 days ago)
+<strong>Releases</strong>: 93</p>
 <p>This document estimates the effort required to produce the Muscovite
 platform and the projects built with it, across three scenarios:</p>
 <ul>
@@ -161,18 +161,18 @@ fixed cost that enables all downstream projects. This cost exists in
 <tbody>
 <tr>
 <td>Racket generators/parser/model</td>
-<td style="text-align: right;">138598</td>
+<td style="text-align: right;">138703</td>
 <td>DSL parser, IR model, 8 generator targets</td>
 </tr>
 <tr>
 <td>C++ framework (<code>framework/</code> + <code>include/</code>)</td>
-<td style="text-align: right;">24726</td>
+<td style="text-align: right;">24854</td>
 <td>pqxx repositories, gRPC services, Qt/QML infrastructure, strong
 types</td>
 </tr>
 <tr>
 <td>PEG grammar</td>
-<td style="text-align: right;">1814</td>
+<td style="text-align: right;">1817</td>
 <td>Formal language specification</td>
 </tr>
 <tr>
@@ -182,7 +182,7 @@ types</td>
 </tr>
 <tr>
 <td><strong>Platform total</strong></td>
-<td style="text-align: right;"><strong>~171638</strong></td>
+<td style="text-align: right;"><strong>~171874</strong></td>
 <td></td>
 </tr>
 </tbody>
@@ -217,314 +217,16 @@ effective</td>
 <hr />
 <h2 id="2-per-project-effort-estimation">2. Per-Project Effort
 Estimation</h2>
-<h3 id="fhir-health">fhir-health</h3>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th style="text-align: right;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DSL input (<code>.ddd</code>)</td>
-<td style="text-align: right;">1692 lines</td>
-</tr>
-<tr>
-<td>DSL input (<code>.mus</code>)</td>
-<td style="text-align: right;">111 lines</td>
-</tr>
-<tr>
-<td>Generated output</td>
-<td style="text-align: right;">345489 lines</td>
-</tr>
-<tr>
-<td>Amplification</td>
-<td style="text-align: right;">191×</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>DSL effort</th>
-<th>Generated effort</th>
-<th>Total</th>
-<th>Roles</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A (manual)</td>
-<td>—</td>
-<td>345489 lines by hand</td>
-<td><strong>1381–2072 person-days</strong></td>
-<td>3–5 senior developers (C++, SQL, Proto, Qt, CMake)</td>
-</tr>
-<tr>
-<td>B (modeled)</td>
-<td>1–2 weeks (domain analyst)</td>
-<td>0 (generated)</td>
-<td><strong>1–2 weeks</strong></td>
-<td>1 domain analyst / architect</td>
-</tr>
-<tr>
-<td>C (actual)</td>
-<td>~2 days</td>
-<td>0 (generated)</td>
-<td><strong>~2 days</strong></td>
-<td>1 developer (copy from FHIR spec, adapt to DSL)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="geosciences">geosciences</h3>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th style="text-align: right;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DSL input (<code>.ddd</code>)</td>
-<td style="text-align: right;">9607 lines</td>
-</tr>
-<tr>
-<td>DSL input (<code>.mus</code>)</td>
-<td style="text-align: right;">148 lines</td>
-</tr>
-<tr>
-<td>Generated output</td>
-<td style="text-align: right;">882423 lines</td>
-</tr>
-<tr>
-<td>Amplification</td>
-<td style="text-align: right;">90×</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>DSL effort</th>
-<th>Generated effort</th>
-<th>Total</th>
-<th>Roles</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A (manual)</td>
-<td>—</td>
-<td>882423 lines by hand</td>
-<td><strong>3529–5294 person-days</strong></td>
-<td>6–10 senior developers</td>
-</tr>
-<tr>
-<td>B (modeled)</td>
-<td>4–8 weeks (domain analyst + geoscience SME)</td>
-<td>0 (generated)</td>
-<td><strong>4–8 weeks</strong></td>
-<td>1 domain analyst + 1 subject-matter expert</td>
-</tr>
-<tr>
-<td>C (actual)</td>
-<td>~2 weeks</td>
-<td>0 (generated)</td>
-<td><strong>~2 weeks</strong></td>
-<td>1 developer (researched GeoSciML/IGSN standards)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="hello-world">hello-world</h3>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th style="text-align: right;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DSL input (<code>.ddd</code>)</td>
-<td style="text-align: right;">145 lines</td>
-</tr>
-<tr>
-<td>DSL input (<code>.mus</code>)</td>
-<td style="text-align: right;">78 lines</td>
-</tr>
-<tr>
-<td>Generated output</td>
-<td style="text-align: right;">67080 lines</td>
-</tr>
-<tr>
-<td>Amplification</td>
-<td style="text-align: right;">300×</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>DSL effort</th>
-<th>Generated effort</th>
-<th>Total</th>
-<th>Roles</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A (manual)</td>
-<td>—</td>
-<td>67080 lines by hand</td>
-<td><strong>268–402 person-days</strong></td>
-<td>2–3 developers</td>
-</tr>
-<tr>
-<td>B (modeled)</td>
-<td>1–2 days (any developer)</td>
-<td>0 (generated)</td>
-<td><strong>1–2 days</strong></td>
-<td>1 developer</td>
-</tr>
-<tr>
-<td>C (actual)</td>
-<td>~2 hours</td>
-<td>0 (generated)</td>
-<td><strong>~2 hours</strong></td>
-<td>1 developer</td>
-</tr>
-</tbody>
-</table>
-<h3 id="brownfield-gitea-test">brownfield-gitea-test</h3>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th style="text-align: right;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DSL input (<code>.ddd</code>)</td>
-<td style="text-align: right;">39 lines</td>
-</tr>
-<tr>
-<td>DSL input (<code>.mus</code>)</td>
-<td style="text-align: right;">22 lines</td>
-</tr>
-<tr>
-<td>Generated output</td>
-<td style="text-align: right;">3645 lines</td>
-</tr>
-<tr>
-<td>Amplification</td>
-<td style="text-align: right;">59×</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>DSL effort</th>
-<th>Generated effort</th>
-<th>Total</th>
-<th>Roles</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A (manual)</td>
-<td>—</td>
-<td>3645 lines by hand</td>
-<td><strong>14–21 person-days</strong></td>
-<td>1–2 developers</td>
-</tr>
-<tr>
-<td>B (modeled)</td>
-<td>1–2 days (migration analyst)</td>
-<td>0 (generated)</td>
-<td><strong>1–2 days</strong></td>
-<td>1 developer + legacy DB access</td>
-</tr>
-<tr>
-<td>C (actual)</td>
-<td>~2 hours</td>
-<td>0 (generated)</td>
-<td><strong>~2 hours</strong></td>
-<td>1 developer (pg_catalog introspection + MAPPING DSL)</td>
-</tr>
-</tbody>
-</table>
+<p>Consumer repos (fhir-health, geosciences, hello-world, etc.) are
+independent projects that manage their own lifecycle. Each consumer
+tracks its own DSL input and generated output. Refer to the individual
+consumer repo's metrics for project-specific estimates.</p>
 <hr />
 <h2 id="3-aggregate-effort-summary">3. Aggregate Effort Summary</h2>
-<h3 id="all-projects-combined">All projects combined</h3>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th style="text-align: right;">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Total DSL input</td>
-<td style="text-align: right;">11842 lines (<code>.ddd</code> +
-<code>.mus</code>)</td>
-</tr>
-<tr>
-<td>Total generated output</td>
-<td style="text-align: right;">1298637 lines</td>
-</tr>
-<tr>
-<td>Overall amplification</td>
-<td style="text-align: right;"><strong>109×</strong></td>
-</tr>
-</tbody>
-</table>
-<h3 id="effort-comparison-across-scenarios">Effort comparison across
-scenarios</h3>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th style="text-align: right;">Platform cost</th>
-<th style="text-align: right;">Project modeling</th>
-<th style="text-align: right;">Generated code effort</th>
-<th style="text-align: right;"><strong>Total</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A (manual)</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">236–354 person-months</td>
-<td style="text-align: right;"><strong>236–354
-person-months</strong></td>
-</tr>
-<tr>
-<td>B (modeled)</td>
-<td style="text-align: right;">6–9 person-months</td>
-<td style="text-align: right;">6–12 weeks</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;"><strong>7.5–12
-person-months</strong></td>
-</tr>
-<tr>
-<td>C (actual)</td>
-<td style="text-align: right;">~3–4 person-months</td>
-<td style="text-align: right;">~3 weeks</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;"><strong>~4 person-months</strong></td>
-</tr>
-</tbody>
-</table>
+<p>Per-project generated output metrics are no longer collected in this
+report (FTR-449). Consumer repos publish their own metrics. The platform
+investment (Section 1) remains the primary effort metric tracked
+here.</p>
 <hr />
 <h2 id="4-per-line-productivity-context">4. Per-Line Productivity
 Context</h2>
@@ -545,12 +247,11 @@ Domain Modeling is the Bottleneck</h2>
 <p>In Scenario B, the dominant cost is <strong>domain modeling</strong>
 — understanding the business domain well enough to express it as
 <code>.ddd</code> declarations. The generator then amplifies this
-understanding by 109× into production code.</p>
-<p>The largest project (geosciences, 9607 lines of <code>.ddd</code>)
-produces 882423 lines of output. The domain expertise required to write
-those 9607 lines is the real investment — not programming skill.</p>
-<p>This is the value proposition: <strong>domain expertise, not
-programming labor, drives the output</strong>.</p>
+understanding into production code.</p>
+<p>The generator amplification rate depends on the complexity of the
+domain model. Consumer repos track their own amplification metrics. The
+value proposition: <strong>domain expertise, not programming labor,
+drives the output</strong>.</p>
 <hr />
 <h2 id="6-methodology">6. Methodology</h2>
 <p>This document is auto-generated during the release ceremony by

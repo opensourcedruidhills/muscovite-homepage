@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR: NATS Multi-Agent Coordination
+Abandoned — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>ADR: NATS Multi-Agent Coordination Abandoned</span>
+</nav>
+
+<h1>ADR: NATS Multi-Agent Coordination Abandoned</h1>
+
+
+<h1 id="adr-nats-multi-agent-coordination-abandoned">ADR: NATS
+Multi-Agent Coordination Abandoned</h1>
+<ul>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Date</strong>: 2026-03-18</li>
+<li><strong>Deciders</strong>: Johannes Lochmann</li>
+<li><strong>Supersedes</strong>:
+<ul>
+<li>20260306-multi-agent-session-protocol.md</li>
+<li>20260309-nats-jetstream-agent-coordination.md</li>
+<li>20260311-leader-worker-agent-coordination.md</li>
+<li>20260311-nats-jetstream-crash-recovery-postmortem.md</li>
+<li>20260311-tlaplus-coordinator-state-machine-verification.md</li>
+<li>20260312-agent-role-governance-and-separation-of-duties.md</li>
+<li>20260312-push-based-coordinator-with-durable-nats.md</li>
+<li>20260313-grpc-gateway-for-agent-coordination-protocol.md</li>
+<li>20260313-work-orders-as-coordinator-dispatch-artifacts.md</li>
+<li>20260314-per-directory-agent-context-scoping.md</li>
+<li>20260315-sub-agent-delegation-guardrails.md</li>
+<li>20260223-nats-migration-topology-documentation.md</li>
+</ul></li>
+</ul>
+<h2 id="context">Context</h2>
+<p>From February through March 2026 (v1.63.0–v1.67.2), Muscovite built a
+NATS JetStream-based multi-agent coordination system
+(<code>agents/coordinator.py</code>, ~3700 LOC) intended to orchestrate
+parallel sub-agent workers during releases and feature iterations. The
+system included:</p>
+<ul>
+<li>A Python coordinator with FTR state machines, work orders, and
+durable queues</li>
+<li>A NATS JetStream server (<code>nats-muscovite-agent</code> systemd
+service, port 4223)</li>
+<li>Leader/worker agent roles with NATS-enforced separation of
+duties</li>
+<li>Hook-based safety gates
+(<code>.copilot/hooks/safety-gates.js</code>) intercepting risky tool
+calls</li>
+<li>TLA+ formal verification of the coordinator state machine</li>
+<li>A 30-minute blocking QA sign-off gate in <code>release.sh</code> via
+request/reply polling</li>
+<li>~12 supporting ADRs and 2500+ lines of coordination
+documentation</li>
+</ul>
+<h2 id="decision">Decision</h2>
+<p><strong>Abandon the entire NATS-based coordination
+infrastructure.</strong> Remove all coordinator code, documentation, and
+governance artifacts. Write off the investment as learning.</p>
+<h2 id="rationale">Rationale</h2>
+<p>The coordination system failed in practice for several compounding
+reasons:</p>
+<ol type="1">
+<li><p><strong>Infrastructure dependency brittleness</strong>: Every
+release required a running NATS server. When the server was unreachable,
+the release was blocked entirely (FTR-394 made it mandatory with no
+fallback). This added an environmental prerequisite that exceeded the
+value delivered.</p></li>
+<li><p><strong>Overhead exceeded benefit</strong>: The coordinator.py
+codebase (~3700 LOC Python) grew larger than the value it provided.
+Setting up a release required: start NATS, register workers, assign
+FTRs, wait for QA sign-off via polling. Human-in-the-loop with a single
+Copilot CLI session achieved the same outcomes faster and with less
+failure surface.</p></li>
+<li><p><strong>The right tool already existed</strong>: The Copilot CLI
+<code>task</code> tool natively supports dispatching work to sub-agents
+with the correct model for each capability level (haiku for exploration,
+sonnet for bounded changes, opus for architecture). This is exactly what
+the coordinator was trying to provide — without any
+infrastructure.</p></li>
+<li><p><strong>Parallelism without the machinery</strong>: Independent
+explore agents can be launched in parallel within a single CLI session.
+The main session (premium model) acts as coordinator natively. No state
+machine, no NATS, no Python daemon needed.</p></li>
+<li><p><strong>Work order ceremony</strong>: The work order format (ADR
+20260313, ADR 20260315) became a bureaucratic overhead. A simple
+delegation model (see ADR 20260318-delegate-via-task-tool) captures the
+same guardrails without the ceremony.</p></li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><code>agents/</code> directory (coordinator.py, depgraph.py, TLA+,
+NATS config, worker worktrees)</li>
+<li><code>doc/COORDINATOR.md</code>, <code>doc/AGENTROLES.md</code></li>
+<li><code>.copilot/hooks/safety-gates.js</code></li>
+<li><code>products/muscovite-agent-coordination</code> submodule</li>
+<li>NATS telemetry from <code>release.sh</code> (90+ lines); replaced
+with gate timing only</li>
+<li>Blocking QA sign-off gate in <code>release.sh</code>; replaced with
+interactive y/N prompt</li>
+<li>Coordinator handshake and work-order validation from
+<code>agent-pr.sh</code></li>
+<li><code>skill-create-work-order</code> prompt</li>
+</ul>
+<h3 id="preserved">Preserved</h3>
+<ul>
+<li><code>cmake/DockerNats.cmake</code> — NATS for product domain events
+(port 4222) is unaffected</li>
+<li>ADR 20260305 — event-hub NATS for product is unaffected</li>
+<li>All quality gates in <code>release.sh</code> and
+<code>agent-pr.sh</code> — the gates themselves were sound</li>
+<li>Gate timing data lake (FTR-426) — <code>_record_gate</code> wrapper
+keeps <code>emit_gate_timing</code> calls</li>
+<li><code>doc/AGENT_COORDINATION_LEARNINGS.md</code> — failure record
+preserved as institutional memory</li>
+</ul>
+<h3 id="replaced">Replaced</h3>
+<ul>
+<li>Rule 28 (mandatory <code>skill-create-work-order</code>) →
+<code>skill-delegate-work</code> (lightweight delegation model using
+Copilot CLI's native <code>task</code> tool with model dispatch
+matrix)</li>
+<li>Multi-agent protocol documentation → simple delegation section in
+AGENTS.md</li>
+</ul>
+<h3 id="not-changed">Not Changed</h3>
+<ul>
+<li>Retrospective practice (Rule 29) — still valuable,
+NATS-independent</li>
+<li>Improvement FTR loop (Rule 30) — still valuable</li>
+<li>All DSL, C++, generator, and database features — completely
+unaffected</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
