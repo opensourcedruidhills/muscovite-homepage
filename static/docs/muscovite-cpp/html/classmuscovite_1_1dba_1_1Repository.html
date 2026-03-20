@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -127,6 +127,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a41ae08d4a54e7bf851c9563cae17ab19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find entity by primary key.  <br /></td></tr>
 <tr class="memitem:a175422e8c5a84ff854834a5084ec0458" id="r_a175422e8c5a84ff854834a5084ec0458"><td class="memItemLeft">virtual auto&#160;</td><td class="memItemRight"><a class="el" href="#a175422e8c5a84ff854834a5084ec0458">insert</a> (const Entity &amp;entity) -&gt; std::expected&lt; Entity, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;=0</td></tr>
 <tr class="memdesc:a175422e8c5a84ff854834a5084ec0458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert new entity, returning the inserted entity with generated ID.  <br /></td></tr>
+<tr class="memitem:a8a91795b03b83a937acd9a016f5453ed" id="r_a8a91795b03b83a937acd9a016f5453ed"><td class="memItemLeft">virtual auto&#160;</td><td class="memItemRight"><a class="el" href="#a8a91795b03b83a937acd9a016f5453ed">insert_batch</a> (std::span&lt; const Entity &gt; entities) -&gt; std::expected&lt; std::vector&lt; Entity &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;=0</td></tr>
 <tr class="memitem:a7be72104af4c5db0fceb0dd3853f8b0f" id="r_a7be72104af4c5db0fceb0dd3853f8b0f"><td class="memItemLeft"><a id="a7be72104af4c5db0fceb0dd3853f8b0f" name="a7be72104af4c5db0fceb0dd3853f8b0f"></a>
 <a class="el" href="#a5e1be56b42a8152e9a9347b9499581a7">Repository</a> &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const <a class="el" href="#a5e1be56b42a8152e9a9347b9499581a7">Repository</a> &amp;)=delete</td></tr>
 <tr class="memitem:aacd572d2bfec52429d959d58e2fdd0ad" id="r_aacd572d2bfec52429d959d58e2fdd0ad"><td class="memItemLeft"><a id="aacd572d2bfec52429d959d58e2fdd0ad" name="aacd572d2bfec52429d959d58e2fdd0ad"></a>
@@ -265,7 +266,7 @@ template&lt;typename Result, typename... Args&gt; </div>
 
 <p>Execute a read operation using stored procedure. </p>
 
-<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00194">194</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00216">216</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
 
 </div>
 </div>
@@ -302,7 +303,7 @@ template&lt;typename Result, typename... Args&gt; </div>
 
 <p>Execute a write operation using stored procedure. </p>
 
-<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00215">215</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00237">237</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
 
 </div>
 </div>
@@ -465,6 +466,42 @@ template&lt;typename Entity, typename IdType = typename Entity::pk_type&gt; </di
 
 </div>
 </div>
+<a id="a8a91795b03b83a937acd9a016f5453ed" name="a8a91795b03b83a937acd9a016f5453ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a91795b03b83a937acd9a016f5453ed">&#9670;&#160;</a></span>insert_batch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Entity, typename IdType = typename Entity::pk_type&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual auto <a class="el" href="classmuscovite_1_1dba_1_1Repository.html">muscovite::dba::Repository</a>&lt; Entity, IdType &gt;::insert_batch </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const Entity &gt;</td>          <td class="paramname"><span class="paramname"><em>entities</em></span></td><td>)</td>
+          <td> -&gt;  std::expected&lt; std::vector&lt; Entity &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel pure-virtual">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Insert multiple entities in a single transaction (batch insert) </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entities</td><td>Span of entities to insert </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of inserted entities with generated IDs, or error </dd></dl>
+
+<p>Implemented in <a class="el" href="classmuscovite_1_1dba_1_1RepositoryBase.html#ab966d5e145952a02a75b51325f82a11f">muscovite::dba::RepositoryBase&lt; Derived, Entity &gt;</a>.</p>
+
+</div>
+</div>
 <a id="a811b25a1b73d7bde58713cb83fd8cd08" name="a811b25a1b73d7bde58713cb83fd8cd08"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a811b25a1b73d7bde58713cb83fd8cd08">&#9670;&#160;</a></span>remove()</h2>
 
@@ -550,7 +587,7 @@ template&lt;typename Entity, typename IdType = typename Entity::pk_type&gt; </di
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00092">92</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="repository_8hpp_source.html#l00098">98</a> of file <a class="el" href="repository_8hpp_source.html">repository.hpp</a>.</p>
 
 </div>
 </div>

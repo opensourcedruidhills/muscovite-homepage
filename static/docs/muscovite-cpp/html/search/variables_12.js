@@ -8,13 +8,14 @@ var searchData=
   ['secret_5fkey_5',['secret_key',['../structmuscovite_1_1server_1_1security_1_1JwtService_1_1Config.html#a97d61ca379a4f35da97a95496ed36060',1,'muscovite::server::security::JwtService::Config']]],
   ['sequence_6',['sequence',['../structmuscovite_1_1dba_1_1EventContext.html#a31c102b744186ff316c97b3043de7322',1,'muscovite::dba::EventContext::sequence'],['../structmuscovite_1_1dba_1_1JetStreamPublishAck.html#a72fca97189cf5f407ba28a029ac888e4',1,'muscovite::dba::JetStreamPublishAck::sequence'],['../structmuscovite_1_1messaging_1_1PublishAck.html#a830041780161943144e23fa41d6d9caf',1,'muscovite::messaging::PublishAck::sequence']]],
   ['serveraddress_7',['serverAddress',['../structmuscovite_1_1qt_1_1AuthConfig.html#af840cdc1d847767a7ac6ca162b03289f',1,'muscovite::qt::AuthConfig']]],
-  ['size_8',['size',['../structmuscovite_1_1dba_1_1PageRequest.html#aae2e6691811093cbf1bb1d9e905788ca',1,'muscovite::dba::PageRequest']]],
-  ['source_9',['source',['../structmuscovite_1_1search_1_1SearchHit.html#a30e3302b6e308835e86dc9319557dc77',1,'muscovite::search::SearchHit']]],
-  ['sql_5fstate_10',['sql_state',['../structmuscovite_1_1dba_1_1Error.html#a34586b7786ee1dd717d73e2305d49eb3',1,'muscovite::dba::Error']]],
-  ['stream_11',['stream',['../structmuscovite_1_1dba_1_1JetStreamPublishAck.html#ae8ff7b2680fb497f03ea4a6075a698ff',1,'muscovite::dba::JetStreamPublishAck::stream'],['../structmuscovite_1_1messaging_1_1PublishAck.html#a887ad610850a6ba6bd61a9b391d9ef05',1,'muscovite::messaging::PublishAck::stream']]],
-  ['sub_12',['sub',['../structmuscovite_1_1server_1_1security_1_1JwtClaims.html#ae43061b612cf16b2aca6cc48781cad19',1,'muscovite::server::security::JwtClaims']]],
-  ['subject_13',['subject',['../structmuscovite_1_1dba_1_1EventContext.html#a863f37afe0a1bea66fd44135a5979238',1,'muscovite::dba::EventContext::subject'],['../structmuscovite_1_1messaging_1_1MessageEnvelope.html#aac1b2c6a07dc681905c24e4a130ac8ba',1,'muscovite::messaging::MessageEnvelope::subject']]],
-  ['subjects_14',['subjects',['../structmuscovite_1_1dba_1_1EventConsumerConfig.html#aec46b98f09175699fa39e2c59e8c2402',1,'muscovite::dba::EventConsumerConfig']]],
-  ['success_15',['success',['../structmuscovite_1_1search_1_1ReindexEntityResult.html#a7ce25c50a4ab036b185a7e59c7e27480',1,'muscovite::search::ReindexEntityResult']]],
-  ['success_5fcount_16',['success_count',['../structmuscovite_1_1search_1_1BulkResponse.html#aba3fa50c3336e2c5b607ffddb3f0b640',1,'muscovite::search::BulkResponse']]]
+  ['service_5fname_8',['service_name',['../structmuscovite_1_1telemetry_1_1TelemetryConfig.html#adf55b28f42bd3452070203f0c5cc33cb',1,'muscovite::telemetry::TelemetryConfig']]],
+  ['size_9',['size',['../structmuscovite_1_1dba_1_1PageRequest.html#aae2e6691811093cbf1bb1d9e905788ca',1,'muscovite::dba::PageRequest']]],
+  ['source_10',['source',['../structmuscovite_1_1search_1_1SearchHit.html#a30e3302b6e308835e86dc9319557dc77',1,'muscovite::search::SearchHit']]],
+  ['sql_5fstate_11',['sql_state',['../structmuscovite_1_1dba_1_1Error.html#a34586b7786ee1dd717d73e2305d49eb3',1,'muscovite::dba::Error']]],
+  ['stream_12',['stream',['../structmuscovite_1_1dba_1_1JetStreamPublishAck.html#ae8ff7b2680fb497f03ea4a6075a698ff',1,'muscovite::dba::JetStreamPublishAck::stream'],['../structmuscovite_1_1messaging_1_1PublishAck.html#a887ad610850a6ba6bd61a9b391d9ef05',1,'muscovite::messaging::PublishAck::stream']]],
+  ['sub_13',['sub',['../structmuscovite_1_1server_1_1security_1_1JwtClaims.html#ae43061b612cf16b2aca6cc48781cad19',1,'muscovite::server::security::JwtClaims']]],
+  ['subject_14',['subject',['../structmuscovite_1_1dba_1_1EventContext.html#a863f37afe0a1bea66fd44135a5979238',1,'muscovite::dba::EventContext::subject'],['../structmuscovite_1_1messaging_1_1MessageEnvelope.html#aac1b2c6a07dc681905c24e4a130ac8ba',1,'muscovite::messaging::MessageEnvelope::subject']]],
+  ['subjects_15',['subjects',['../structmuscovite_1_1dba_1_1EventConsumerConfig.html#aec46b98f09175699fa39e2c59e8c2402',1,'muscovite::dba::EventConsumerConfig']]],
+  ['success_16',['success',['../structmuscovite_1_1search_1_1ReindexEntityResult.html#a7ce25c50a4ab036b185a7e59c7e27480',1,'muscovite::search::ReindexEntityResult']]],
+  ['success_5fcount_17',['success_count',['../structmuscovite_1_1search_1_1BulkResponse.html#aba3fa50c3336e2c5b607ffddb3f0b640',1,'muscovite::search::BulkResponse']]]
 ];

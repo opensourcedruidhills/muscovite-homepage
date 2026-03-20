@@ -46,7 +46,7 @@ var searchData=
   ['health_5fstatus_43',['health_status',['../classmuscovite_1_1dba_1_1OutboxMetrics.html#ac0b849c4572d69a090328d9f8e159407',1,'muscovite::dba::OutboxMetrics']]],
   ['height_44',['height',['../structmuscovite_1_1qt_1_1widgets_1_1BoundsInput_1_1Bounds.html#ae8e90ee63b69c498a103308deca573ea',1,'muscovite::qt::widgets::BoundsInput::Bounds']]],
   ['help_5ftext_45',['help_text',['../structmuscovite_1_1server_1_1Config.html#ae26e9723f1f7bd1aaeca16b80269c4f1',1,'muscovite::server::Config']]],
-  ['helprequested_46',['HelpRequested',['../config_8hpp.html#af61141971051f7671d58690e59886fcead428967e359164ab69b6f7c1d891afea',1,'muscovite::server']]],
+  ['helprequested_46',['HelpRequested',['../server_2include_2muscovite_2server_2config_8hpp.html#af61141971051f7671d58690e59886fcead428967e359164ab69b6f7c1d891afea',1,'muscovite::server']]],
   ['highlight_47',['highlight',['../classmuscovite_1_1search_1_1SearchQuery.html#aecdbdcc64e34a388dab2cc407633d19f',1,'muscovite::search::SearchQuery']]],
   ['highlights_48',['highlights',['../structmuscovite_1_1search_1_1SearchHit.html#a10758948e528adbd699207d227bbafc2',1,'muscovite::search::SearchHit']]],
   ['hits_49',['hits',['../structmuscovite_1_1search_1_1SearchResult.html#a42c6ef1672ab7481283bb8da069eb263',1,'muscovite::search::SearchResult::hits'],['../structmuscovite_1_1search_1_1PagedSearchResult.html#a68be642feb20e310584005d2862ad712',1,'muscovite::search::PagedSearchResult::hits']]],

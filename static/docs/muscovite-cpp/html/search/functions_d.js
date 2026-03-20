@@ -39,6 +39,7 @@ var searchData=
   ['optional_5ftime_5fto_5fstring_36',['optional_time_to_string',['../namespacemuscovite_1_1grpc.html#a32ce171a321680b3a503532ff51ae6ad',1,'muscovite::grpc']]],
   ['optional_5ftimestamp_5fto_5fstring_37',['optional_timestamp_to_string',['../namespacemuscovite_1_1grpc.html#a0ad48bb2682692899f7f235f0551cdca',1,'muscovite::grpc']]],
   ['optional_5fuuid_5fto_5fstring_38',['optional_uuid_to_string',['../namespacemuscovite_1_1grpc.html#a6a872782ab4aace00f7a3dc1ba1795af',1,'muscovite::grpc']]],
-  ['outboxpublisher_39',['OutboxPublisher',['../classmuscovite_1_1dba_1_1OutboxPublisher.html#aa9fe87112a139f570675d0a211af8463',1,'muscovite::dba::OutboxPublisher']]],
-  ['outer_5fsize_40',['outer_size',['../classmuscovite_1_1geo_1_1Polygon.html#afdef68cbb909bf8dd5c67cb1069f3cb0',1,'muscovite::geo::Polygon']]]
+  ['otelserverinterceptorfactory_39',['OtelServerInterceptorFactory',['../classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory.html#ac1ee20e36cea496119c7190ba203506f',1,'muscovite::telemetry::OtelServerInterceptorFactory']]],
+  ['outboxpublisher_40',['OutboxPublisher',['../classmuscovite_1_1dba_1_1OutboxPublisher.html#aa9fe87112a139f570675d0a211af8463',1,'muscovite::dba::OutboxPublisher']]],
+  ['outer_5fsize_41',['outer_size',['../classmuscovite_1_1geo_1_1Polygon.html#afdef68cbb909bf8dd5c67cb1069f3cb0',1,'muscovite::geo::Polygon']]]
 ];

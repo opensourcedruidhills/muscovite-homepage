@@ -45,10 +45,11 @@ var searchData=
   ['createprivilege_42',['CreatePrivilege',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1PrivilegeServiceImpl.html#a5d701c34a9297a92c35845e43f03459d',1,'muscovite::server::security::grpc::PrivilegeServiceImpl']]],
   ['createsample_43',['createSample',['../classmuscovite_1_1qt_1_1services_1_1GeosciencesServiceClient.html#a4c504eecdef447e07e4800aee104840e',1,'muscovite::qt::services::GeosciencesServiceClient']]],
   ['createsecurechannelwithoauth2_44',['createSecureChannelWithOAuth2',['../namespacemuscovite_1_1grpc_1_1oauth2.html#a689e9f823773030addba523a8f106019',1,'muscovite::grpc::oauth2']]],
-  ['createuser_45',['CreateUser',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a38a48b83e512b7fcf7a6e8d47c9c51e2',1,'muscovite::server::security::grpc::UserServiceImpl']]],
-  ['createvalidator_46',['createValidator',['../qt__validators_8hpp.html#a00b15c7f2dbf30f6cb1e8eee79d402d8',1,'muscovite::qt']]],
-  ['current_47',['current',['../classmuscovite_1_1grpc_1_1CorrelationContext.html#a65d48e9b0fbcc5ae91ba05caf8b74052',1,'muscovite::grpc::CorrelationContext']]],
-  ['current_5flag_48',['current_lag',['../classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8',1,'muscovite::dba::OutboxMetrics']]],
-  ['currentresult_49',['currentResult',['../classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#a071ed1028516278b16fa17c5d5fa5326',1,'muscovite::qt::validation::EntityValidator']]],
-  ['custom_50',['custom',['../classmuscovite_1_1qt_1_1validation_1_1ValidationMessage.html#ab91cd014ecc6368400c5426f14b045d1',1,'muscovite::qt::validation::ValidationMessage']]]
+  ['createserverinterceptor_45',['CreateServerInterceptor',['../classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory.html#a3fe4bdd5ab70f7d9c24b531c535578b6',1,'muscovite::telemetry::OtelServerInterceptorFactory']]],
+  ['createuser_46',['CreateUser',['../classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html#a38a48b83e512b7fcf7a6e8d47c9c51e2',1,'muscovite::server::security::grpc::UserServiceImpl']]],
+  ['createvalidator_47',['createValidator',['../qt__validators_8hpp.html#a00b15c7f2dbf30f6cb1e8eee79d402d8',1,'muscovite::qt']]],
+  ['current_48',['current',['../classmuscovite_1_1grpc_1_1CorrelationContext.html#a65d48e9b0fbcc5ae91ba05caf8b74052',1,'muscovite::grpc::CorrelationContext']]],
+  ['current_5flag_49',['current_lag',['../classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8',1,'muscovite::dba::OutboxMetrics']]],
+  ['currentresult_50',['currentResult',['../classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#a071ed1028516278b16fa17c5d5fa5326',1,'muscovite::qt::validation::EntityValidator']]],
+  ['custom_51',['custom',['../classmuscovite_1_1qt_1_1validation_1_1ValidationMessage.html#ab91cd014ecc6368400c5426f14b045d1',1,'muscovite::qt::validation::ValidationMessage']]]
 ];

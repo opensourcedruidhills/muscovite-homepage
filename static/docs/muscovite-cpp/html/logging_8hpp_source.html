@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -108,7 +108,7 @@ $(function(){initNavTree('logging_8hpp_source.html','',''); });
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="config_8hpp.html">config.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="server_2include_2muscovite_2server_2config_8hpp.html">config.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">namespace </span>muscovite::server {</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span></div>
@@ -144,12 +144,12 @@ $(function(){initNavTree('logging_8hpp_source.html','',''); });
 <div class="ttc" id="aclassmuscovite_1_1server_1_1Logging_html_a69818184a3aa64e6aee7b6d6496df0bf"><div class="ttname"><a href="classmuscovite_1_1server_1_1Logging.html#a69818184a3aa64e6aee7b6d6496df0bf">muscovite::server::Logging::get</a></div><div class="ttdeci">static auto get() -&gt; std::shared_ptr&lt; spdlog::logger &gt;</div><div class="ttdoc">Get the default logger.</div><div class="ttdef"><b>Definition</b> <a href="logging_8cpp_source.html#l00089">logging.cpp:89</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1Logging_html_a6b9a7422a174eb4c9bc53979940f77db"><div class="ttname"><a href="classmuscovite_1_1server_1_1Logging.html#a6b9a7422a174eb4c9bc53979940f77db">muscovite::server::Logging::init</a></div><div class="ttdeci">static auto init(const LogConfig &amp;config) -&gt; std::expected&lt; void, Error&lt; LogError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="logging_8cpp_source.html#l00027">logging.cpp:27</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1server_1_1Logging_html_aee873ac05ab9729a4c3cc19c6f4fc746"><div class="ttname"><a href="classmuscovite_1_1server_1_1Logging.html#aee873ac05ab9729a4c3cc19c6f4fc746">muscovite::server::Logging::is_initialized</a></div><div class="ttdeci">static auto is_initialized() noexcept -&gt; bool</div><div class="ttdoc">Check if logging has been initialized.</div><div class="ttdef"><b>Definition</b> <a href="logging_8cpp_source.html#l00112">logging.cpp:112</a></div></div>
-<div class="ttc" id="aconfig_8hpp_html"><div class="ttname"><a href="config_8hpp.html">config.hpp</a></div><div class="ttdoc">Configuration loading from CLI, environment, and INI files.</div></div>
 <div class="ttc" id="alogging_8hpp_html_a79b45b4a15467381c9e4eb48594a921a"><div class="ttname"><a href="logging_8hpp.html#a79b45b4a15467381c9e4eb48594a921a">muscovite::server::LogError</a></div><div class="ttdeci">LogError</div><div class="ttdoc">Logging error codes.</div><div class="ttdef"><b>Definition</b> <a href="#l00024">logging.hpp:24</a></div></div>
 <div class="ttc" id="alogging_8hpp_html_a79b45b4a15467381c9e4eb48594a921aaac5706c6b4c156062a2be0889a9e7946"><div class="ttname"><a href="logging_8hpp.html#a79b45b4a15467381c9e4eb48594a921aaac5706c6b4c156062a2be0889a9e7946">muscovite::server::LogError::AlreadyInitialized</a></div><div class="ttdeci">@ AlreadyInitialized</div><div class="ttdoc">Logging already initialized.</div><div class="ttdef"><b>Definition</b> <a href="#l00025">logging.hpp:25</a></div></div>
 <div class="ttc" id="alogging_8hpp_html_a79b45b4a15467381c9e4eb48594a921aad1ce9254e48e9dabe6d8c52029b52839"><div class="ttname"><a href="logging_8hpp.html#a79b45b4a15467381c9e4eb48594a921aad1ce9254e48e9dabe6d8c52029b52839">muscovite::server::LogError::InvalidPattern</a></div><div class="ttdeci">@ InvalidPattern</div><div class="ttdoc">Invalid log pattern.</div><div class="ttdef"><b>Definition</b> <a href="#l00027">logging.hpp:27</a></div></div>
 <div class="ttc" id="alogging_8hpp_html_a79b45b4a15467381c9e4eb48594a921aadc54f9b709ee06d4c6d984d41f99fe9e"><div class="ttname"><a href="logging_8hpp.html#a79b45b4a15467381c9e4eb48594a921aadc54f9b709ee06d4c6d984d41f99fe9e">muscovite::server::LogError::FileCreationFailed</a></div><div class="ttdeci">@ FileCreationFailed</div><div class="ttdoc">Could not create log file.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">logging.hpp:26</a></div></div>
-<div class="ttc" id="astructmuscovite_1_1server_1_1LogConfig_html"><div class="ttname"><a href="structmuscovite_1_1server_1_1LogConfig.html">muscovite::server::LogConfig</a></div><div class="ttdoc">Logging configuration.</div><div class="ttdef"><b>Definition</b> <a href="config_8hpp_source.html#l00056">config.hpp:56</a></div></div>
+<div class="ttc" id="aserver_2include_2muscovite_2server_2config_8hpp_html"><div class="ttname"><a href="server_2include_2muscovite_2server_2config_8hpp.html">config.hpp</a></div><div class="ttdoc">Configuration loading from CLI, environment, and INI files.</div></div>
+<div class="ttc" id="astructmuscovite_1_1server_1_1LogConfig_html"><div class="ttname"><a href="structmuscovite_1_1server_1_1LogConfig.html">muscovite::server::LogConfig</a></div><div class="ttdoc">Logging configuration.</div><div class="ttdef"><b>Definition</b> <a href="server_2include_2muscovite_2server_2config_8hpp_source.html#l00056">config.hpp:56</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

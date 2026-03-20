@@ -8,10 +8,12 @@ var searchData=
   ['oauth2token_5',['OAuth2Token',['../structmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Token.html',1,'muscovite::grpc::oauth2']]],
   ['opensearchclient_6',['OpenSearchClient',['../classmuscovite_1_1search_1_1OpenSearchClient.html',1,'muscovite::search']]],
   ['optimistic_5flock_5fexception_7',['optimistic_lock_exception',['../classmuscovite_1_1dba_1_1optimistic__lock__exception.html',1,'muscovite::dba']]],
-  ['outboxconfig_8',['OutboxConfig',['../structmuscovite_1_1server_1_1OutboxConfig.html',1,'muscovite::server']]],
-  ['outboxevent_9',['OutboxEvent',['../structmuscovite_1_1dba_1_1OutboxEvent.html',1,'muscovite::dba']]],
-  ['outboxhealthstatus_10',['OutboxHealthStatus',['../structmuscovite_1_1dba_1_1OutboxHealthStatus.html',1,'muscovite::dba']]],
-  ['outboxmetrics_11',['OutboxMetrics',['../classmuscovite_1_1dba_1_1OutboxMetrics.html',1,'muscovite::dba']]],
-  ['outboxpublisher_12',['OutboxPublisher',['../classmuscovite_1_1dba_1_1OutboxPublisher.html',1,'muscovite::dba']]],
-  ['outboxpublisherconfig_13',['OutboxPublisherConfig',['../structmuscovite_1_1dba_1_1OutboxPublisherConfig.html',1,'muscovite::dba']]]
+  ['otellogsink_8',['OtelLogSink',['../classmuscovite_1_1telemetry_1_1OtelLogSink.html',1,'muscovite::telemetry']]],
+  ['otelserverinterceptorfactory_9',['OtelServerInterceptorFactory',['../classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory.html',1,'muscovite::telemetry']]],
+  ['outboxconfig_10',['OutboxConfig',['../structmuscovite_1_1server_1_1OutboxConfig.html',1,'muscovite::server']]],
+  ['outboxevent_11',['OutboxEvent',['../structmuscovite_1_1dba_1_1OutboxEvent.html',1,'muscovite::dba']]],
+  ['outboxhealthstatus_12',['OutboxHealthStatus',['../structmuscovite_1_1dba_1_1OutboxHealthStatus.html',1,'muscovite::dba']]],
+  ['outboxmetrics_13',['OutboxMetrics',['../classmuscovite_1_1dba_1_1OutboxMetrics.html',1,'muscovite::dba']]],
+  ['outboxpublisher_14',['OutboxPublisher',['../classmuscovite_1_1dba_1_1OutboxPublisher.html',1,'muscovite::dba']]],
+  ['outboxpublisherconfig_15',['OutboxPublisherConfig',['../structmuscovite_1_1dba_1_1OutboxPublisherConfig.html',1,'muscovite::dba']]]
 ];

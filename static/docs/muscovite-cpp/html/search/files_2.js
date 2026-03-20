@@ -5,7 +5,7 @@ var searchData=
   ['concepts_2ehpp_2',['concepts.hpp',['../concepts_8hpp.html',1,'']]],
   ['concurrency_2ehpp_3',['concurrency.hpp',['../concurrency_8hpp.html',1,'']]],
   ['config_2ecpp_4',['config.cpp',['../config_8cpp.html',1,'']]],
-  ['config_2ehpp_5',['config.hpp',['../config_8hpp.html',1,'']]],
+  ['config_2ehpp_5',['config.hpp',['../server_2include_2muscovite_2server_2config_8hpp.html',1,'(Global Namespace)'],['../telemetry_2include_2muscovite_2telemetry_2config_8hpp.html',1,'(Global Namespace)']]],
   ['connection_5fpool_2ecpp_6',['connection_pool.cpp',['../connection__pool_8cpp.html',1,'']]],
   ['connection_5fpool_2ehpp_7',['connection_pool.hpp',['../connection__pool_8hpp.html',1,'']]],
   ['constrained_5fdate_2ehpp_8',['constrained_date.hpp',['../constrained__date_8hpp.html',1,'']]],

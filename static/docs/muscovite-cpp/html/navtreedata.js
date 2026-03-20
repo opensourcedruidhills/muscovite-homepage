@@ -65,15 +65,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
-"classmuscovite_1_1geo_1_1Point.html#a8e821e8aeac1c8de0c1824e761f60a1e",
-"classmuscovite_1_1qt_1_1AuthCallCredentials.html#ad6a846172ab9aa6e08e97c53adb2bc89",
-"classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html",
-"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#ae52bb3b3d9970c2d7ddb08a70b7a3f5f",
+"classmuscovite_1_1geo_1_1Point.html#a66509c3253e3e1a490cbe945f66a8ed3",
+"classmuscovite_1_1qt_1_1AuthCallCredentials.html",
+"classmuscovite_1_1qt_1_1validation_1_1AsyncUniquenessChecker.html#a482a7dcd347816e73f0e4c6de10d8085",
+"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#abfa5361fd06dc2b9a915bc49ecb51889",
 "dir_45adcbcc8f87accdc8e6b004030d10d3.html",
-"in__memory__subscriber_8hpp.html",
-"search__event_8hpp.html",
-"structmuscovite_1_1messaging_1_1NatsPublisherConfig.html#a520927e3e264da2887d9f0ddecece18a",
-"structmuscovite_1_1types_1_1Future.html"
+"grpc__wiring_8cpp_source.html",
+"repository_8cpp.html",
+"structmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Token.html#a369da23dda2a448257bf3b21c98912d8",
+"structmuscovite_1_1server_1_1security_1_1Session.html#a3df516c55bfb5e7fff2d72bc731ea08d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

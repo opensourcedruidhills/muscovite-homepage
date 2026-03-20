@@ -238,6 +238,11 @@ var annotated_dup =
         [ "Point", "classmuscovite_1_1spatial_1_1Point.html", "classmuscovite_1_1spatial_1_1Point" ],
         [ "Polygon", "classmuscovite_1_1spatial_1_1Polygon.html", "classmuscovite_1_1spatial_1_1Polygon" ]
       ] ],
+      [ "telemetry", null, [
+        [ "OtelLogSink", "classmuscovite_1_1telemetry_1_1OtelLogSink.html", null ],
+        [ "OtelServerInterceptorFactory", "classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory.html", "classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory" ],
+        [ "TelemetryConfig", "structmuscovite_1_1telemetry_1_1TelemetryConfig.html", "structmuscovite_1_1telemetry_1_1TelemetryConfig" ]
+      ] ],
       [ "types", null, [
         [ "BoundedDecimal", "classmuscovite_1_1types_1_1BoundedDecimal.html", "classmuscovite_1_1types_1_1BoundedDecimal" ],
         [ "BoundedInteger", "classmuscovite_1_1types_1_1BoundedInteger.html", "classmuscovite_1_1types_1_1BoundedInteger" ],

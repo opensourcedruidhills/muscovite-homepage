@@ -13,6 +13,9 @@ var hierarchy =
     [ "muscovite::grpc::oauth2::AuthorizationCodeFlow", "classmuscovite_1_1grpc_1_1oauth2_1_1AuthorizationCodeFlow.html", null ],
     [ "muscovite::server::security::AuthorizationService", "classmuscovite_1_1server_1_1security_1_1AuthorizationService.html", null ],
     [ "muscovite::server::security::AuthResult", "structmuscovite_1_1server_1_1security_1_1AuthResult.html", null ],
+    [ "spdlog::sinks::base_sink", null, [
+      [ "muscovite::telemetry::OtelLogSink", "classmuscovite_1_1telemetry_1_1OtelLogSink.html", null ]
+    ] ],
     [ "muscovite::types::BoundedDecimal&lt; Min, Max &gt;", "classmuscovite_1_1types_1_1BoundedDecimal.html", null ],
     [ "muscovite::types::BoundedInteger&lt; Min, Max &gt;", "classmuscovite_1_1types_1_1BoundedInteger.html", null ],
     [ "muscovite::types::BoundedString&lt; MinLen, MaxLen &gt;", "classmuscovite_1_1types_1_1BoundedString.html", null ],
@@ -249,7 +252,8 @@ var hierarchy =
       [ "muscovite::grpc::interceptors::ErrorInterceptorFactory", "classmuscovite_1_1grpc_1_1interceptors_1_1ErrorInterceptorFactory.html", null ],
       [ "muscovite::grpc::interceptors::LoggingInterceptorFactory", "classmuscovite_1_1grpc_1_1interceptors_1_1LoggingInterceptorFactory.html", null ],
       [ "muscovite::grpc::interceptors::MetricsInterceptorFactory", "classmuscovite_1_1grpc_1_1interceptors_1_1MetricsInterceptorFactory.html", null ],
-      [ "muscovite::server::security::AuthInterceptorFactory", "classmuscovite_1_1server_1_1security_1_1AuthInterceptorFactory.html", null ]
+      [ "muscovite::server::security::AuthInterceptorFactory", "classmuscovite_1_1server_1_1security_1_1AuthInterceptorFactory.html", null ],
+      [ "muscovite::telemetry::OtelServerInterceptorFactory", "classmuscovite_1_1telemetry_1_1OtelServerInterceptorFactory.html", null ]
     ] ],
     [ "muscovite::security::v1::AuthService::Service", null, [
       [ "muscovite::server::security::grpc::AuthServiceImpl", "classmuscovite_1_1server_1_1security_1_1grpc_1_1AuthServiceImpl.html", null ]
@@ -307,6 +311,7 @@ var hierarchy =
     [ "muscovite::messaging::Subscription", "classmuscovite_1_1messaging_1_1Subscription.html", [
       [ "muscovite::messaging::InMemorySubscription", "classmuscovite_1_1messaging_1_1InMemorySubscription.html", null ]
     ] ],
+    [ "muscovite::telemetry::TelemetryConfig", "structmuscovite_1_1telemetry_1_1TelemetryConfig.html", null ],
     [ "muscovite::dba::TestTransactionFixture", "classmuscovite_1_1dba_1_1TestTransactionFixture.html", null ],
     [ "muscovite::qt::Theme", "classmuscovite_1_1qt_1_1Theme.html", null ],
     [ "muscovite::qt::ThemeConfig", "structmuscovite_1_1qt_1_1ThemeConfig.html", null ],
