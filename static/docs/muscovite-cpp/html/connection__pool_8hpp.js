@@ -3,6 +3,8 @@ var connection__pool_8hpp =
     [ "muscovite::dba::ConnectionPool", "classmuscovite_1_1dba_1_1ConnectionPool.html", "classmuscovite_1_1dba_1_1ConnectionPool" ],
     [ "muscovite::dba::PoolConfig", "structmuscovite_1_1dba_1_1PoolConfig.html", "structmuscovite_1_1dba_1_1PoolConfig" ],
     [ "muscovite::dba::PooledConnection", "classmuscovite_1_1dba_1_1PooledConnection.html", "classmuscovite_1_1dba_1_1PooledConnection" ],
+    [ "muscovite::dba::PoolMetrics", "structmuscovite_1_1dba_1_1PoolMetrics.html", "structmuscovite_1_1dba_1_1PoolMetrics" ],
+    [ "muscovite::dba::PoolStatus", "structmuscovite_1_1dba_1_1PoolStatus.html", "structmuscovite_1_1dba_1_1PoolStatus" ],
     [ "muscovite::dba::PoolError", "connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cd", [
       [ "ConnectionFailed", "connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdaaf98071f760be899f4fcf1d53a29ba17", null ],
       [ "PoolExhausted", "connection__pool_8hpp.html#ac0c077d3779c9129c836827bcb3d47cdadbe062a5b8eda05485982828234ef21a", null ],

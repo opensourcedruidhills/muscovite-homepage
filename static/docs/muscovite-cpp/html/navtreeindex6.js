@@ -1,5 +1,8 @@
 var NAVTREEINDEX6 =
 {
+"in__memory__subscriber_8hpp.html":[4,0,0,3,0,0,0,2],
+"in__memory__subscriber_8hpp_source.html":[4,0,0,3,0,0,0,2],
+"include_2muscovite_2qt_2models_2grpc__item__model_8hpp_source.html":[4,0,1,0,0,0,0],
 "include_2muscovite_2qt_2widgets_2entity__edit__dialog_8hpp_source.html":[4,0,1,0,0,1,0],
 "include_2muscovite_2qt_2widgets_2entity__list__widget_8hpp_source.html":[4,0,1,0,0,1,1],
 "index.html":[],
@@ -246,8 +249,5 @@ var NAVTREEINDEX6 =
 "search__config_8hpp.html":[4,0,0,5,0,0,0,2],
 "search__config_8hpp_source.html":[4,0,0,5,0,0,0,2],
 "search__error_8hpp.html":[4,0,0,5,0,0,0,3],
-"search__error_8hpp_source.html":[4,0,0,5,0,0,0,3],
-"search__event_8hpp.html":[4,0,0,5,0,0,0,4],
-"search__event_8hpp_source.html":[4,0,0,5,0,0,0,4],
-"search__indexer_8cpp.html":[4,0,0,5,1,1]
+"search__error_8hpp_source.html":[4,0,0,5,0,0,0,3]
 };

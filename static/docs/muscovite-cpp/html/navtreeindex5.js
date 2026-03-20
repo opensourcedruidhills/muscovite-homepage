@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"dir_45adcbcc8f87accdc8e6b004030d10d3.html":[4,0,0,3,0,0],
+"dir_4b86a554a6d54d445c46ac2e5e2f2190.html":[4,0,0,2,1,0,0,0],
 "dir_4bb54f527d3e6d07f25f83fffcb35e1c.html":[4,0,0,0,0,0],
 "dir_5180c361a499daceb826c57bc18a54e4.html":[4,0,0,0],
 "dir_5ea55b550d4f336181a063291499f219.html":[4,0,0,4,0,0,0],
@@ -203,6 +205,7 @@ var NAVTREEINDEX5 =
 "functions_vars_t.html":[3,3,2,19],
 "functions_vars_u.html":[3,3,2,20],
 "functions_vars_v.html":[3,3,2,21],
+"functions_vars_w.html":[3,3,2,22],
 "functions_w.html":[3,3,0,22],
 "functions_x.html":[3,3,0,23],
 "functions_y.html":[3,3,0,24],
@@ -246,8 +249,5 @@ var NAVTREEINDEX5 =
 "in__memory__publisher_8cpp_source.html":[4,0,0,3,1,0],
 "in__memory__publisher_8hpp.html":[4,0,0,3,0,0,0,1],
 "in__memory__publisher_8hpp_source.html":[4,0,0,3,0,0,0,1],
-"in__memory__subscriber_8cpp_source.html":[4,0,0,3,1,1],
-"in__memory__subscriber_8hpp.html":[4,0,0,3,0,0,0,2],
-"in__memory__subscriber_8hpp_source.html":[4,0,0,3,0,0,0,2],
-"include_2muscovite_2qt_2models_2grpc__item__model_8hpp_source.html":[4,0,1,0,0,0,0]
+"in__memory__subscriber_8cpp_source.html":[4,0,0,3,1,1]
 };

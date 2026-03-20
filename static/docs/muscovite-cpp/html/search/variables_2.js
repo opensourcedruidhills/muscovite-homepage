@@ -23,5 +23,6 @@ var searchData=
   ['content_20',['content',['../structmuscovite_1_1dba_1_1Page.html#a41b982661f7ac35dac32b906884ea1c8',1,'muscovite::dba::Page']]],
   ['content_5ftype_21',['content_type',['../structmuscovite_1_1messaging_1_1MessageEnvelope.html#a89034c0bb8b88f5a2e2f887a88ed676e',1,'muscovite::messaging::MessageEnvelope']]],
   ['correlation_5fid_22',['correlation_id',['../structmuscovite_1_1dba_1_1DomainEvent.html#a482c26a96f3f84b8ccba59096068a4bf',1,'muscovite::dba::DomainEvent::correlation_id'],['../structmuscovite_1_1messaging_1_1MessageEnvelope.html#a721927ca56131a7445ac9d8fb4141dee',1,'muscovite::messaging::MessageEnvelope::correlation_id']]],
-  ['created_5fat_23',['created_at',['../structmuscovite_1_1server_1_1security_1_1Principal.html#a81416b5a634d4507a1c5d94dc38e5519',1,'muscovite::server::security::Principal::created_at'],['../structmuscovite_1_1server_1_1security_1_1Session.html#ab6ca69ae6a90f73d73d0dd3b4a723c97',1,'muscovite::server::security::Session::created_at']]]
+  ['created_5fat_23',['created_at',['../structmuscovite_1_1server_1_1security_1_1Principal.html#a81416b5a634d4507a1c5d94dc38e5519',1,'muscovite::server::security::Principal::created_at'],['../structmuscovite_1_1server_1_1security_1_1Session.html#ab6ca69ae6a90f73d73d0dd3b4a723c97',1,'muscovite::server::security::Session::created_at']]],
+  ['current_5fsize_24',['current_size',['../structmuscovite_1_1dba_1_1PoolStatus.html#a5b198d5e005b82706f99944cf64de0df',1,'muscovite::dba::PoolStatus']]]
 ];

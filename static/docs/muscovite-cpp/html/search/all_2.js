@@ -109,6 +109,7 @@ var searchData=
   ['createvalidator_106',['createValidator',['../qt__validators_8hpp.html#a00b15c7f2dbf30f6cb1e8eee79d402d8',1,'muscovite::qt']]],
   ['current_107',['current',['../classmuscovite_1_1grpc_1_1CorrelationContext.html#a65d48e9b0fbcc5ae91ba05caf8b74052',1,'muscovite::grpc::CorrelationContext']]],
   ['current_5flag_108',['current_lag',['../classmuscovite_1_1dba_1_1OutboxMetrics.html#a0e4297212e357544e90d14ec13c7a0f8',1,'muscovite::dba::OutboxMetrics']]],
-  ['currentresult_109',['currentResult',['../classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#a071ed1028516278b16fa17c5d5fa5326',1,'muscovite::qt::validation::EntityValidator']]],
-  ['custom_110',['custom',['../classmuscovite_1_1qt_1_1validation_1_1ValidationMessage.html#ab91cd014ecc6368400c5426f14b045d1',1,'muscovite::qt::validation::ValidationMessage']]]
+  ['current_5fsize_109',['current_size',['../structmuscovite_1_1dba_1_1PoolStatus.html#a5b198d5e005b82706f99944cf64de0df',1,'muscovite::dba::PoolStatus']]],
+  ['currentresult_110',['currentResult',['../classmuscovite_1_1qt_1_1validation_1_1EntityValidator.html#a071ed1028516278b16fa17c5d5fa5326',1,'muscovite::qt::validation::EntityValidator']]],
+  ['custom_111',['custom',['../classmuscovite_1_1qt_1_1validation_1_1ValidationMessage.html#ab91cd014ecc6368400c5426f14b045d1',1,'muscovite::qt::validation::ValidationMessage']]]
 ];

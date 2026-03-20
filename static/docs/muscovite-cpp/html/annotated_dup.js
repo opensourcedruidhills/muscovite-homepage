@@ -38,6 +38,8 @@ var annotated_dup =
         [ "PageRequest", "structmuscovite_1_1dba_1_1PageRequest.html", "structmuscovite_1_1dba_1_1PageRequest" ],
         [ "PoolConfig", "structmuscovite_1_1dba_1_1PoolConfig.html", "structmuscovite_1_1dba_1_1PoolConfig" ],
         [ "PooledConnection", "classmuscovite_1_1dba_1_1PooledConnection.html", "classmuscovite_1_1dba_1_1PooledConnection" ],
+        [ "PoolMetrics", "structmuscovite_1_1dba_1_1PoolMetrics.html", "structmuscovite_1_1dba_1_1PoolMetrics" ],
+        [ "PoolStatus", "structmuscovite_1_1dba_1_1PoolStatus.html", "structmuscovite_1_1dba_1_1PoolStatus" ],
         [ "PostconditionFailed", "classmuscovite_1_1dba_1_1PostconditionFailed.html", "classmuscovite_1_1dba_1_1PostconditionFailed" ],
         [ "PreconditionFailed", "classmuscovite_1_1dba_1_1PreconditionFailed.html", "classmuscovite_1_1dba_1_1PreconditionFailed" ],
         [ "ReadReplicaConfig", "structmuscovite_1_1dba_1_1ReadReplicaConfig.html", "structmuscovite_1_1dba_1_1ReadReplicaConfig" ],

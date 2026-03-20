@@ -146,6 +146,8 @@ var hierarchy =
     [ "muscovite::spatial::Polygon", "classmuscovite_1_1spatial_1_1Polygon.html", null ],
     [ "muscovite::dba::PoolConfig", "structmuscovite_1_1dba_1_1PoolConfig.html", null ],
     [ "muscovite::dba::PooledConnection", "classmuscovite_1_1dba_1_1PooledConnection.html", null ],
+    [ "muscovite::dba::PoolMetrics", "structmuscovite_1_1dba_1_1PoolMetrics.html", null ],
+    [ "muscovite::dba::PoolStatus", "structmuscovite_1_1dba_1_1PoolStatus.html", null ],
     [ "muscovite::server::security::Principal", "structmuscovite_1_1server_1_1security_1_1Principal.html", null ],
     [ "muscovite::messaging::PublishAck", "structmuscovite_1_1messaging_1_1PublishAck.html", null ],
     [ "muscovite::messaging::Publisher", "classmuscovite_1_1messaging_1_1Publisher.html", [
