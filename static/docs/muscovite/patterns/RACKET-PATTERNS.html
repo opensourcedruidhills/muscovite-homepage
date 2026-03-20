@@ -1346,6 +1346,50 @@ transitively.</p>
 is to capture the result into an immutable struct immediately and
 resolve dependencies via a pure function.</p>
 <hr />
+<h2 id="11-new-module-checklist">11. New Module Checklist</h2>
+<p>Run these steps <strong>every time</strong> you create a new
+<code>.rkt</code> module. Missing items from <code>provide</code> cause
+silent runtime failures ("unbound identifier") that are only caught
+during integration testing. This was learned from FTR-472.</p>
+<h3 id="step-1--load-test">Step 1 — Load test</h3>
+<p>Verify the module loads without error:</p>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> <span class="at">-e</span> <span class="st">&#39;(require &quot;dslgen/path/to/new-file.rkt&quot;)&#39;</span></span></code></pre></div>
+<p>A clean exit (no output, exit 0) means the file parses and all its
+dependencies resolve.</p>
+<h3 id="step-2--symbol-spot-check">Step 2 — Symbol spot-check</h3>
+<p>Verify every exported accessor is actually reachable:</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> <span class="at">-e</span> <span class="st">&#39;(require &quot;dslgen/path/to/new-file.rkt&quot;) (display (list accessor1 accessor2 accessor3))&#39;</span></span></code></pre></div>
+<p>If any name is missing from <code>provide</code>, this crashes with
+<code>unbound identifier</code> — catching the bug before integration
+tests.</p>
+<h3 id="step-3--provide-completeness-check">Step 3 — Provide
+completeness check</h3>
+<p>Diff your <code>(provide ...)</code> list against all
+<code>define</code>d public symbols:</p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List what you&#39;re providing</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-A50</span> <span class="st">&#39;(provide&#39;</span> dslgen/path/to/new-file.rkt <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^;&#39;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List all top-level defines (public API candidates)</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^(define &#39;</span> dslgen/path/to/new-file.rkt</span></code></pre></div>
+<p>Every <code>define</code>d function/struct that callers will need
+<strong>must</strong> appear in <code>provide</code>. Struct accessor
+functions (e.g. <code>my-struct-field</code>) are generated
+automatically but must be explicitly listed in <code>provide</code> —
+they are NOT exported by default.</p>
+<h3 id="step-4--byte-compile">Step 4 — Byte-compile</h3>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen <span class="kw">&amp;&amp;</span> <span class="ex">raco</span> make path/to/new-file.rkt</span></code></pre></div>
+<p>This catches syntax errors and unresolved requires that
+<code>racket -e</code> may not surface.</p>
+<h3 id="white_check_mark-checklist-summary">✅ Checklist Summary</h3>
+<pre><code>[ ] racket -e &#39;(require &quot;...&quot;)&#39;                        — loads without error
+[ ] racket -e &#39;(require &quot;...&quot;) (display (list ...))&#39;   — all accessors reachable
+[ ] provide list matches all public defines/accessors  — no omissions
+[ ] raco make path/to/new-file.rkt                     — byte-compiles cleanly</code></pre>
+<hr />
 <h2 id="quick-reference-card">Quick Reference Card</h2>
 <table>
 <thead>
@@ -1427,27 +1471,27 @@ resolve dependencies via a pure function.</p>
 <hr />
 <h2 id="audit-commands">Audit Commands</h2>
 <p>Track migration progress with these commands:</p>
-<div class="sourceCode" id="cb45"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count remaining set! in generators</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Files missing in-list</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Files without contracts</span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files still using all-defined-out</span></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;all-defined-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Template DSL adoption (files using define-template)</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw format/string-append in generators (should trend toward zero)</span></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Files using #lang racket instead of racket/base</span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;^#lang racket$&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count remaining set! in generators</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;set!&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print &quot;set! count:&quot;, s}&#39;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Files missing in-list</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;in-list&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Files without contracts</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rL</span> <span class="st">&quot;contract-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Files still using all-defined-out</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;all-defined-out&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Template DSL adoption (files using define-template)</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;define-template&quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw format/string-append in generators (should trend toward zero)</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rc</span> <span class="st">&quot;string-append\|format &quot;</span> dslgen/generators/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F:</span> <span class="st">&#39;{s+=$2} END {print s}&#39;</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Files using #lang racket instead of racket/base</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rl</span> <span class="st">&quot;^#lang racket$&quot;</span> dslgen/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.rkt&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div>
 <hr />
 <h2 id="related-documents">Related Documents</h2>
 <ul>
