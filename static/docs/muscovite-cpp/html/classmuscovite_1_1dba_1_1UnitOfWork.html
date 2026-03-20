@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -124,8 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a927cba93dbf4edb9e0abd0d65e89b112" id="r_a927cba93dbf4edb9e0abd0d65e89b112"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a927cba93dbf4edb9e0abd0d65e89b112">plan_effect</a> (<a class="el" href="structmuscovite_1_1dba_1_1EffectIntent.html">EffectIntent</a> effect)</td></tr>
 <tr class="memitem:ab90062b8011175c80b27809de82dfed4" id="r_ab90062b8011175c80b27809de82dfed4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab90062b8011175c80b27809de82dfed4">rollback</a> () noexcept</td></tr>
 <tr class="memdesc:ab90062b8011175c80b27809de82dfed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rollback the transaction and discard all pending events.  <br /></td></tr>
-<tr class="memitem:afc90543643f7019c722dcb6e1a8f0b4f" id="r_afc90543643f7019c722dcb6e1a8f0b4f"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#afc90543643f7019c722dcb6e1a8f0b4f">transaction</a> () -&gt; pqxx::work &amp;</td></tr>
-<tr class="memdesc:afc90543643f7019c722dcb6e1a8f0b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the active transaction for repository operations.  <br /></td></tr>
+<tr class="memitem:a712514dcd008072ea363063dd2368e7a" id="r_a712514dcd008072ea363063dd2368e7a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a712514dcd008072ea363063dd2368e7a">transaction</a> () -&gt; pqxx::transaction&lt;&gt; &amp;</td></tr>
+<tr class="memdesc:a712514dcd008072ea363063dd2368e7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the active transaction for repository operations.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unit of Work pattern implementation.</p>
@@ -198,6 +198,8 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00033">33</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
 
+<p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00092">transaction()</a>.</p>
+
 </div>
 </div>
 <a id="af4b0c3e3f1fb9fb9febb0fa7e66486e2" name="af4b0c3e3f1fb9fb9febb0fa7e66486e2"></a>
@@ -227,6 +229,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00041">41</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00092">transaction()</a>.</p>
 
 </div>
 </div>
@@ -357,7 +361,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00188">commit()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00452">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00453">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>
@@ -584,8 +588,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afc90543643f7019c722dcb6e1a8f0b4f" name="afc90543643f7019c722dcb6e1a8f0b4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc90543643f7019c722dcb6e1a8f0b4f">&#9670;&#160;</a></span>transaction()</h2>
+<a id="a712514dcd008072ea363063dd2368e7a" name="a712514dcd008072ea363063dd2368e7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a712514dcd008072ea363063dd2368e7a">&#9670;&#160;</a></span>transaction()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -597,7 +601,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">auto muscovite::dba::UnitOfWork::transaction </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> -&gt; pqxx::work &amp;</td>
+          <td> -&gt; pqxx::transaction&lt;&gt; &amp;</td>
         </tr>
       </table>
   </td>
@@ -610,6 +614,8 @@ Public Member Functions</h2></td></tr>
 <p>Get the active transaction for repository operations. </p>
 
 <p class="definition">Definition at line <a class="el" href="unit__of__work_8cpp_source.html#l00092">92</a> of file <a class="el" href="unit__of__work_8cpp_source.html">unit_of_work.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="unit__of__work_8cpp_source.html#l00041">UnitOfWork()</a>, and <a class="el" href="unit__of__work_8cpp_source.html#l00033">UnitOfWork()</a>.</p>
 
 </div>
 </div>

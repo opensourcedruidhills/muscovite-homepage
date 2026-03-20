@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -135,75 +135,76 @@ $(function(){initNavTree('transactor_8cpp_source.html','',''); });
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cac2aa2c2692cf5844be51ffce5d6acd10">DbError::NotNullViolation</a>, .message = e.what(), .detail = {}, .sql_state = {}, .arc = std::nullopt};</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    }</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordflow">if</span> (<span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>pqxx::broken_connection*<span class="keyword">&gt;</span>(&amp;e) != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caaf98071f760be899f4fcf1d53a29ba17">DbError::ConnectionFailed</a>, .message = e.what(), .detail = {}, .sql_state = {}, .arc = std::nullopt};</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    }</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="comment">// FTR-224: Check SQLSTATE 57014 (query_canceled / statement_timeout) before generic sql_error</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* sql_err = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>pqxx::sql_error*<span class="keyword">&gt;</span>(&amp;e); sql_err != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">if</span> (sql_err-&gt;sqlstate() == <span class="stringliteral">&quot;57014&quot;</span>) {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                .code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cabfe21264466e240bec5a8f8e6c4e2487">DbError::DeadlineExceeded</a>, .message = e.what(), .detail = {}, .sql_state = <span class="stringliteral">&quot;57014&quot;</span>, .arc = std::nullopt};</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cad14f393e86cbe5976f0457ae2a0fcc49">DbError::QueryFailed</a>, .message = e.what(), .detail = {}, .sql_state = sql_err-&gt;sqlstate(), .arc = std::nullopt};</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="comment">// Generic error</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca88183b946cc5f0e8c96b2e66e1c74a7e">DbError::Unknown</a>, .message = e.what(), .detail = {}, .sql_state = {}, .arc = std::nullopt};</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="comment">// libpqxx 8: use poisons_connection() instead of dynamic_cast&lt;pqxx::broken_connection*&gt;</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* fe = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>pqxx::failure*<span class="keyword">&gt;</span>(&amp;e); fe != <span class="keyword">nullptr</span> &amp;&amp; fe-&gt;poisons_connection()) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caaf98071f760be899f4fcf1d53a29ba17">DbError::ConnectionFailed</a>, .message = e.what(), .detail = {}, .sql_state = {}, .arc = std::nullopt};</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">// FTR-224: Check SQLSTATE 57014 (query_canceled / statement_timeout) before generic sql_error</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* sql_err = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>pqxx::sql_error*<span class="keyword">&gt;</span>(&amp;e); sql_err != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">if</span> (sql_err-&gt;sqlstate() == <span class="stringliteral">&quot;57014&quot;</span>) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                .code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cabfe21264466e240bec5a8f8e6c4e2487">DbError::DeadlineExceeded</a>, .message = e.what(), .detail = {}, .sql_state = <span class="stringliteral">&quot;57014&quot;</span>, .arc = std::nullopt};</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        }</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419cad14f393e86cbe5976f0457ae2a0fcc49">DbError::QueryFailed</a>, .message = e.what(), .detail = {}, .sql_state = std::string{sql_err-&gt;sqlstate()}, .arc = std::nullopt};</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    }</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="comment">// Generic error</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">return</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1Error.html">Error&lt;DbError&gt;</a>{.code = <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca88183b946cc5f0e8c96b2e66e1c74a7e">DbError::Unknown</a>, .message = e.what(), .detail = {}, .sql_state = {}, .arc = std::nullopt};</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>}</div>
 </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">   62</a></span><span class="keyword">auto</span> <a class="code hl_function" href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">should_retry</a>(<a class="code hl_enumeration" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> code, <span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a>&amp; policy) -&gt; <span class="keywordtype">bool</span> {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">switch</span> (code) {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a">DbError::SerializationFailure</a>:</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">return</span> policy.retry_on_serialization_failure;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caf7009b311390593848d8d1f0dbee5748">DbError::DeadlockDetected</a>:</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">return</span> policy.retry_on_deadlock;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caaf98071f760be899f4fcf1d53a29ba17">DbError::ConnectionFailed</a>:</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordflow">return</span> policy.retry_on_connection_error;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordflow">default</span>:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    }</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="foldopen" id="foldopen00063" data-start="{" data-end="}">
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">   63</a></span><span class="keyword">auto</span> <a class="code hl_function" href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">should_retry</a>(<a class="code hl_enumeration" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> code, <span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a>&amp; policy) -&gt; <span class="keywordtype">bool</span> {</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordflow">switch</span> (code) {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a">DbError::SerializationFailure</a>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">return</span> policy.retry_on_serialization_failure;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caf7009b311390593848d8d1f0dbee5748">DbError::DeadlockDetected</a>:</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">return</span> policy.retry_on_deadlock;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419caaf98071f760be899f4fcf1d53a29ba17">DbError::ConnectionFailed</a>:</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">return</span> policy.retry_on_connection_error;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
 </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="foldopen" id="foldopen00075" data-start="{" data-end="}">
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">   75</a></span><span class="keyword">auto</span> <a class="code hl_function" href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">next_delay</a>(std::size_t attempt, <span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a>&amp; policy) -&gt; std::chrono::milliseconds {</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">using namespace </span>std::chrono;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordflow">if</span> (attempt == 0) {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="keywordflow">return</span> policy.initial_delay;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="comment">// Calculate exponential backoff</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordtype">double</span> multiplier = 1.0;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; attempt; ++i) {</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        multiplier *= policy.backoff_multiplier;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    }</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keyword">auto</span> delay = duration_cast&lt;milliseconds&gt;(</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        duration&lt;double, std::milli&gt;(<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(policy.initial_delay.count()) * multiplier));</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="comment">// Cap at max_delay</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordflow">if</span> (delay &gt; policy.max_delay) {</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        delay = policy.max_delay;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    }</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="comment">// FTR-235: Cap backoff at remaining_time / 2 when deadline is set</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordflow">if</span> (policy.deadline != system_clock::time_point::max()) {</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keyword">auto</span> remaining = duration_cast&lt;milliseconds&gt;(policy.deadline - system_clock::now());</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keyword">auto</span> half_remaining = remaining / 2;</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keywordflow">if</span> (half_remaining &gt; milliseconds{0} &amp;&amp; delay &gt; half_remaining) {</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            delay = half_remaining;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        }</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">return</span> delay;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>}</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">   76</a></span><span class="keyword">auto</span> <a class="code hl_function" href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">next_delay</a>(std::size_t attempt, <span class="keyword">const</span> <a class="code hl_struct" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a>&amp; policy) -&gt; std::chrono::milliseconds {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">using namespace </span>std::chrono;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordflow">if</span> (attempt == 0) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">return</span> policy.initial_delay;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="comment">// Calculate exponential backoff</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordtype">double</span> multiplier = 1.0;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; attempt; ++i) {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        multiplier *= policy.backoff_multiplier;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">auto</span> delay = duration_cast&lt;milliseconds&gt;(</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        duration&lt;double, std::milli&gt;(<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(policy.initial_delay.count()) * multiplier));</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="comment">// Cap at max_delay</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keywordflow">if</span> (delay &gt; policy.max_delay) {</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        delay = policy.max_delay;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    }</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="comment">// FTR-235: Cap backoff at remaining_time / 2 when deadline is set</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordflow">if</span> (policy.deadline != system_clock::time_point::max()) {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keyword">auto</span> remaining = duration_cast&lt;milliseconds&gt;(policy.deadline - system_clock::now());</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keyword">auto</span> half_remaining = remaining / 2;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">if</span> (half_remaining &gt; milliseconds{0} &amp;&amp; delay &gt; half_remaining) {</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            delay = half_remaining;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        }</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    }</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordflow">return</span> delay;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>}</div>
 </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>} <span class="comment">// namespace muscovite::dba::detail</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>} <span class="comment">// namespace muscovite::dba::detail</span></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419c"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">muscovite::dba::DbError</a></div><div class="ttdeci">DbError</div><div class="ttdoc">Database error codes.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00021">error.hpp:21</a></div></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca0826d3a634bb58be439d16fa442bf00e">muscovite::dba::DbError::UniqueViolation</a></div><div class="ttdeci">@ UniqueViolation</div><div class="ttdoc">Unique constraint violated.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00028">error.hpp:28</a></div></div>
 <div class="ttc" id="aerror_8hpp_html_a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a"><div class="ttname"><a href="error_8hpp.html#a3e21732aeebe322205b86f444d93419ca4224a85f46bd8125a342f1a2deee114a">muscovite::dba::DbError::SerializationFailure</a></div><div class="ttdeci">@ SerializationFailure</div><div class="ttdoc">Serializable transaction conflict (retry).</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00032">error.hpp:32</a></div></div>
@@ -218,9 +219,9 @@ $(function(){initNavTree('transactor_8cpp_source.html','',''); });
 <div class="ttc" id="astructmuscovite_1_1dba_1_1Error_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1Error.html">muscovite::dba::Error</a></div><div class="ttdoc">Error information with code and message.</div><div class="ttdef"><b>Definition</b> <a href="error_8hpp_source.html#l00056">error.hpp:56</a></div></div>
 <div class="ttc" id="astructmuscovite_1_1dba_1_1RetryPolicy_html"><div class="ttname"><a href="structmuscovite_1_1dba_1_1RetryPolicy.html">muscovite::dba::RetryPolicy</a></div><div class="ttdoc">Retry policy for transient errors.</div><div class="ttdef"><b>Definition</b> <a href="transactor_8hpp_source.html#l00033">transactor.hpp:33</a></div></div>
 <div class="ttc" id="atransactor_8hpp_html"><div class="ttname"><a href="transactor_8hpp.html">transactor.hpp</a></div><div class="ttdoc">libpqxx transactor pattern with retry support</div></div>
-<div class="ttc" id="atransactor_8hpp_html_a5b82c4778c4ec850bffc594875d7509d"><div class="ttname"><a href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">muscovite::dba::detail::should_retry</a></div><div class="ttdeci">auto should_retry(DbError code, const RetryPolicy &amp;policy) -&gt; bool</div><div class="ttdoc">Check if error should be retried.</div><div class="ttdef"><b>Definition</b> <a href="#l00062">transactor.cpp:62</a></div></div>
+<div class="ttc" id="atransactor_8hpp_html_a5b82c4778c4ec850bffc594875d7509d"><div class="ttname"><a href="transactor_8hpp.html#a5b82c4778c4ec850bffc594875d7509d">muscovite::dba::detail::should_retry</a></div><div class="ttdeci">auto should_retry(DbError code, const RetryPolicy &amp;policy) -&gt; bool</div><div class="ttdoc">Check if error should be retried.</div><div class="ttdef"><b>Definition</b> <a href="#l00063">transactor.cpp:63</a></div></div>
 <div class="ttc" id="atransactor_8hpp_html_a8209e2560b26f27e78d20cc78066ee49"><div class="ttname"><a href="transactor_8hpp.html#a8209e2560b26f27e78d20cc78066ee49">muscovite::dba::detail::map_pqxx_error</a></div><div class="ttdeci">auto map_pqxx_error(const std::exception &amp;e) -&gt; Error&lt; DbError &gt;</div><div class="ttdoc">Map pqxx exception to DbError.</div><div class="ttdef"><b>Definition</b> <a href="#l00017">transactor.cpp:17</a></div></div>
-<div class="ttc" id="atransactor_8hpp_html_aa519e1115d393d1890689aa5d6f52b2d"><div class="ttname"><a href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">muscovite::dba::detail::next_delay</a></div><div class="ttdeci">auto next_delay(std::size_t attempt, const RetryPolicy &amp;policy) -&gt; std::chrono::milliseconds</div><div class="ttdef"><b>Definition</b> <a href="#l00075">transactor.cpp:75</a></div></div>
+<div class="ttc" id="atransactor_8hpp_html_aa519e1115d393d1890689aa5d6f52b2d"><div class="ttname"><a href="transactor_8hpp.html#aa519e1115d393d1890689aa5d6f52b2d">muscovite::dba::detail::next_delay</a></div><div class="ttdeci">auto next_delay(std::size_t attempt, const RetryPolicy &amp;policy) -&gt; std::chrono::milliseconds</div><div class="ttdef"><b>Definition</b> <a href="#l00076">transactor.cpp:76</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

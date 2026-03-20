@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -117,14 +117,14 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    }</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    m_owned_connection = std::move(*conn_result);</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    m_connection = &amp;m_owned_connection-&gt;get();</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    m_txn = std::make_unique&lt;pqxx::work&gt;(*m_connection);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    m_txn = std::make_unique&lt;pqxx::transaction&lt;&gt;&gt;(*m_connection);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
 </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="foldopen" id="foldopen00028" data-start="{" data-end="}">
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#af2350cff83c6c2fec98126cda745c848">   28</a></span><a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a321a5a6cc6f2f2fbdd0c956c48915070">TestTransactionFixture::TestTransactionFixture</a>(pqxx::connection&amp; <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a3ad13e6c4a740ed3185a35c93244d186">connection</a>)</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    : m_connection{&amp;<a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a3ad13e6c4a740ed3185a35c93244d186">connection</a>}</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    , m_txn{<a class="code hl_namespace" href="namespacestd.html">std</a>::make_unique&lt;pqxx::work&gt;(<a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a3ad13e6c4a740ed3185a35c93244d186">connection</a>)}</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    , m_txn{<a class="code hl_namespace" href="namespacestd.html">std</a>::make_unique&lt;pqxx::<a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">transaction</a>&lt;&gt;&gt;(<a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a3ad13e6c4a740ed3185a35c93244d186">connection</a>)}</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>{</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}</div>
 </div>
@@ -144,13 +144,13 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
 <div class="foldopen" id="foldopen00046" data-start="{" data-end="}">
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#ac3a4253e8451debde2c3d5fd314882ce">   46</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#ac3a4253e8451debde2c3d5fd314882ce">TestTransactionFixture::transaction</a>() -&gt; pqxx::work&amp; {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">   46</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">TestTransactionFixture::transaction</a>() -&gt; pqxx::transaction&lt;&gt;&amp; {</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> *m_txn;</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
 </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
 <div class="foldopen" id="foldopen00050" data-start="{" data-end="}">
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a75b3b89ad3fd43130a06453000d9aec8">   50</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#ac3a4253e8451debde2c3d5fd314882ce">TestTransactionFixture::transaction</a>() const -&gt; const pqxx::work&amp; {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#ade5a68d3d83785fd1dec7963423a1704">   50</a></span><span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">TestTransactionFixture::transaction</a>() const -&gt; const pqxx::<a class="code hl_function" href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">transaction</a>&lt;&gt;&amp; {</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">return</span> *m_txn;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
 </div>
@@ -181,14 +181,14 @@ $(function(){initNavTree('test__fixture_8cpp_source.html','',''); });
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>} <span class="comment">// namespace muscovite::dba</span></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html">muscovite::dba::ConnectionPool</a></div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8hpp_source.html#l00115">connection_pool.hpp:115</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a67752cd9055e93fc36f3f684ce1c54d6"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html#a67752cd9055e93fc36f3f684ce1c54d6">muscovite::dba::ConnectionPool::acquire</a></div><div class="ttdeci">auto acquire() -&gt; std::expected&lt; PooledConnection, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00436">connection_pool.cpp:436</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a67752cd9055e93fc36f3f684ce1c54d6"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html#a67752cd9055e93fc36f3f684ce1c54d6">muscovite::dba::ConnectionPool::acquire</a></div><div class="ttdeci">auto acquire() -&gt; std::expected&lt; PooledConnection, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00437">connection_pool.cpp:437</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a24050a5c938e4a65f2f3f8ba2f4a9b84"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a24050a5c938e4a65f2f3f8ba2f4a9b84">muscovite::dba::TestTransactionFixture::rollback_to</a></div><div class="ttdeci">void rollback_to(std::string_view name)</div><div class="ttdef"><b>Definition</b> <a href="#l00062">test_fixture.cpp:62</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a321a5a6cc6f2f2fbdd0c956c48915070"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a321a5a6cc6f2f2fbdd0c956c48915070">muscovite::dba::TestTransactionFixture::TestTransactionFixture</a></div><div class="ttdeci">TestTransactionFixture(ConnectionPool &amp;pool)</div><div class="ttdef"><b>Definition</b> <a href="#l00015">test_fixture.cpp:15</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a3ad13e6c4a740ed3185a35c93244d186"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a3ad13e6c4a740ed3185a35c93244d186">muscovite::dba::TestTransactionFixture::connection</a></div><div class="ttdeci">auto connection() -&gt; pqxx::connection &amp;</div><div class="ttdef"><b>Definition</b> <a href="#l00054">test_fixture.cpp:54</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a5ada486b175df95fd6e47af109188cab"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a5ada486b175df95fd6e47af109188cab">muscovite::dba::TestTransactionFixture::release_savepoint</a></div><div class="ttdeci">void release_savepoint(std::string_view name)</div><div class="ttdef"><b>Definition</b> <a href="#l00066">test_fixture.cpp:66</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a94d79e4479b85a8df3a6321483289ddf"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a94d79e4479b85a8df3a6321483289ddf">muscovite::dba::TestTransactionFixture::~TestTransactionFixture</a></div><div class="ttdeci">~TestTransactionFixture()</div><div class="ttdef"><b>Definition</b> <a href="#l00034">test_fixture.cpp:34</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_a973eefb0a60ec922a9e8612337a047f6"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#a973eefb0a60ec922a9e8612337a047f6">muscovite::dba::TestTransactionFixture::savepoint</a></div><div class="ttdeci">void savepoint(std::string_view name)</div><div class="ttdef"><b>Definition</b> <a href="#l00058">test_fixture.cpp:58</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_ac3a4253e8451debde2c3d5fd314882ce"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#ac3a4253e8451debde2c3d5fd314882ce">muscovite::dba::TestTransactionFixture::transaction</a></div><div class="ttdeci">auto transaction() -&gt; pqxx::work &amp;</div><div class="ttdef"><b>Definition</b> <a href="#l00046">test_fixture.cpp:46</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1TestTransactionFixture_html_adee46714b009eab28972975a2efaa519"><div class="ttname"><a href="classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519">muscovite::dba::TestTransactionFixture::transaction</a></div><div class="ttdeci">auto transaction() -&gt; pqxx::transaction&lt;&gt; &amp;</div><div class="ttdef"><b>Definition</b> <a href="#l00046">test_fixture.cpp:46</a></div></div>
 <div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
 <div class="ttc" id="atest__fixture_8hpp_html"><div class="ttname"><a href="test__fixture_8hpp.html">test_fixture.hpp</a></div><div class="ttdoc">Test fixture for database tests with automatic transaction rollback.</div></div>
 </div><!-- fragment --></div><!-- contents -->

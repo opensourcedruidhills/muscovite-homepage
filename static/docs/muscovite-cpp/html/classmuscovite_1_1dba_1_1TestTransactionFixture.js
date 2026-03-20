@@ -7,6 +7,6 @@ var classmuscovite_1_1dba_1_1TestTransactionFixture =
     [ "release_savepoint", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#a5ada486b175df95fd6e47af109188cab", null ],
     [ "rollback_to", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#a24050a5c938e4a65f2f3f8ba2f4a9b84", null ],
     [ "savepoint", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#a973eefb0a60ec922a9e8612337a047f6", null ],
-    [ "transaction", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#ac3a4253e8451debde2c3d5fd314882ce", null ],
-    [ "transaction", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#a75b3b89ad3fd43130a06453000d9aec8", null ]
+    [ "transaction", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#adee46714b009eab28972975a2efaa519", null ],
+    [ "transaction", "classmuscovite_1_1dba_1_1TestTransactionFixture.html#ade5a68d3d83785fd1dec7963423a1704", null ]
 ];

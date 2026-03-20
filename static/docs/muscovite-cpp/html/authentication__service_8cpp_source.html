@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -254,7 +254,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            <span class="keyword">auto</span> conn_opt = acquire();</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>            pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>            pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            <span class="comment">// Call stored proc via SQL (pqxx doesn&#39;t handle NULL in params well, use empty strings)</span></div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            txn.exec(</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>                <span class="stringliteral">&quot;SELECT security_api.securityauditlog_insert($1, $2, $3, $4, $5, $6, $7)&quot;</span>,</div>
@@ -278,7 +278,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            <span class="keyword">auto</span> conn_opt = acquire();</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>            <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                <span class="stringliteral">&quot;SELECT id, username, display_name, password_hash, is_active, &quot;</span></div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                <span class="stringliteral">&quot;last_login_at, failed_login_attempts, locked_until &quot;</span></div>
@@ -318,7 +318,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            <span class="keyword">auto</span> conn_opt = acquire();</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> groups;</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                <span class="stringliteral">&quot;SELECT g.name FROM security.principalgroup g &quot;</span></div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>                <span class="stringliteral">&quot;JOIN security.groupmembership m ON g.id = m.group_id &quot;</span></div>
@@ -340,7 +340,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            <span class="keyword">auto</span> conn_opt = acquire();</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> privileges;</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>                <span class="stringliteral">&quot;SELECT DISTINCT p.name FROM security.privilege p &quot;</span></div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                <span class="stringliteral">&quot;JOIN security.groupprivilege gp ON p.id = gp.privilege_id &quot;</span></div>
@@ -397,7 +397,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>            <span class="keyword">auto</span> conn_opt = acquire();</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>            <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> session;</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>            <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>            pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>            pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>            </div>
 <div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>            <span class="comment">// Hash refresh token before storing</span></div>
 <div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>            <span class="keyword">const</span> std::string refresh_hash = jwt_service-&gt;hash_refresh_token(session.refresh_token);</div>
@@ -500,7 +500,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>            auto conn_opt = impl_-&gt;acquire();</div>
 <div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>            if (conn_opt) {</div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>                auto conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>                pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>                pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>                txn.exec(</div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>                    <span class="stringliteral">&quot;UPDATE security.principal SET failed_login_attempts = &quot;</span></div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>                    <span class="stringliteral">&quot;COALESCE(failed_login_attempts, 0) + 1 WHERE id = $1&quot;</span>,</div>
@@ -522,7 +522,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>            if (conn_opt) {</div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>                const std::string new_hash = impl_-&gt;password_service-&gt;hash_password(password);</div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>                auto conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>                txn.exec(</div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>                    <span class="stringliteral">&quot;UPDATE security.principal SET password_hash = $1 WHERE id = $2&quot;</span>,</div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>                    pqxx::params{new_hash, principal.id}</div>
@@ -559,7 +559,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>    <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span> </div>
 <div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>        <span class="comment">// Get session info for logging</span></div>
 <div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>        <span class="keyword">auto</span> result = txn.exec(</div>
@@ -596,7 +596,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>    <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>            <span class="stringliteral">&quot;DELETE FROM security.authsession WHERE principal_id = $1&quot;</span>,</div>
 <div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span>            pqxx::params{principal_id}</div>
@@ -628,7 +628,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>    }</div>
 <div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span> </div>
 <div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span>        <span class="comment">// Hash the provided refresh token</span></div>
 <div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>        <span class="keyword">const</span> std::string token_hash = impl_-&gt;jwt_service-&gt;hash_refresh_token(refresh_token);</div>
@@ -723,7 +723,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>    <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span> </div>
 <div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>        <span class="comment">// Get current password hash</span></div>
 <div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>        <span class="keyword">auto</span> result = txn.exec(</div>
@@ -783,7 +783,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>    <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span> </div>
 <div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>        <span class="keyword">auto</span> exp_time = std::chrono::system_clock::to_time_t(expires_at);</div>
 <div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>        std::tm tm_buf{};</div>
@@ -813,7 +813,7 @@ $(function(){initNavTree('authentication__service_8cpp_source.html','',''); });
 <div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    <span class="keywordflow">if</span> (!conn_opt) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>    <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>        <span class="keyword">auto</span> conn = std::move(*conn_opt);</div>
-<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>        pqxx::work txn(conn.get());</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>        pqxx::transaction&lt;&gt; txn(conn.get());</div>
 <div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>            <span class="stringliteral">&quot;SELECT 1 FROM security.tokenblacklist WHERE token_jti = $1 AND expires_at &gt; NOW()&quot;</span>,</div>
 <div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>            pqxx::params{jti}</div>

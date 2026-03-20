@@ -114,9 +114,9 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.71.0 | <strong>Generated</strong>:
-2026-03-20 | <strong>Commit</strong>: 170fcc7f |
-<strong>Branch</strong>: develop All content derived from live project
+<p><strong>Version</strong>: 1.74.0 | <strong>Generated</strong>:
+2026-03-20 | <strong>Commit</strong>: 51f85f36 |
+<strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
 </blockquote>
@@ -130,12 +130,12 @@ systems.</p>
 <code>dslgen/generators/</code>):</p>
 <ul>
 <li><strong>cmake</strong> (5 modules, 2002 lines)</li>
-<li><strong>cpp</strong> (80 modules, 22558 lines)</li>
+<li><strong>cpp</strong> (80 modules, 22585 lines)</li>
 <li><strong>docs</strong> (13 modules, 5047 lines)</li>
-<li><strong>grpc</strong> (31 modules, 8204 lines)</li>
+<li><strong>grpc</strong> (31 modules, 8205 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
 <li><strong>postgres</strong> (30 modules, 8358 lines)</li>
-<li><strong>qt</strong> (60 modules, 16841 lines)</li>
+<li><strong>qt</strong> (60 modules, 16757 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 700 lines)</li>
 <li><strong>tlaplus</strong> (4 modules, 776 lines)</li>
@@ -199,28 +199,28 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>DSL model files (.ddd)</td>
-<td>39 (11483 lines)</td>
+<td>0 (0 lines)</td>
 </tr>
 <tr>
 <td>Generated output</td>
-<td>1125301 lines</td>
+<td>0 lines</td>
 </tr>
 <tr>
 <td><strong>DSL amplification</strong></td>
-<td><strong>97× (.ddd → generated)</strong></td>
+<td><strong>N/A× (.ddd → generated)</strong></td>
 </tr>
 <tr>
 <td>Project files (.mus)</td>
-<td>4</td>
+<td>0</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>219</td>
+<td>220</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-139405-lines">Layer 0 — Racket (139405
+<h3 id="layer-0--racket-139525-lines">Layer 0 — Racket (139525
 lines)</h3>
 <table>
 <thead>
@@ -236,7 +236,7 @@ lines)</h3>
 </tr>
 <tr>
 <td>Parser</td>
-<td>6778</td>
+<td>6779</td>
 </tr>
 <tr>
 <td>Generator: postgres</td>
@@ -244,15 +244,15 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: cpp</td>
-<td>22558</td>
+<td>22585</td>
 </tr>
 <tr>
 <td>Generator: grpc</td>
-<td>8204</td>
+<td>8205</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>16841</td>
+<td>16757</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
@@ -264,11 +264,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Tests</td>
-<td>35307</td>
+<td>35308</td>
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1--c-framework-42438-lines">Layer 1 — C++ Framework (42438
+<h3 id="layer-1--c-framework-43257-lines">Layer 1 — C++ Framework (43257
 lines)</h3>
 <table>
 <thead>
@@ -280,11 +280,11 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Headers (.hpp)</td>
-<td>17588</td>
+<td>17789</td>
 </tr>
 <tr>
 <td>Sources (.cpp)</td>
-<td>24850</td>
+<td>25468</td>
 </tr>
 <tr>
 <td>C++ Tests</td>
@@ -299,82 +299,89 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1710----2026-03-20">[1.71.0] -- 2026-03-20</h2>
+<h2 id="1740----2026-03-20">[1.74.0] -- 2026-03-20</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>generate-system-brief.sh fails silently when examples/ absent</li>
+</ul>
 <h3 id="maintenance">Maintenance</h3>
 <ul>
-<li>back-merge release v1.70.0 to develop</li>
+<li>update gate timings from release dry-run</li>
 </ul>
 <h3 id="other">Other</h3>
 <ul>
-<li>v1.71.0: add RELEASE-CHECKLIST.md and Quality Gateway section</li>
-<li>v1.71.0 governance: ITERATION complete, retrospective, remove stale
-v1.67.3</li>
-<li>FTR-473: string builder pattern in template DSL</li>
-<li>FTR-472: code generation metrics env-var gating</li>
-<li>FTR-471: shared C++ type mapping registry</li>
+<li>governance: v1.74.0 release prep + retrospective</li>
+<li>Merge pull request #178 from
+opensourcedruidhills/feature/ftr-489-libpqxx-conan-8</li>
+<li>FTR-489: libpqxx 8.0 via Conan + idiomatic API migration</li>
+<li>Merge pull request #177 from
+opensourcedruidhills/feature/ftr-490-conan-spdlog-fmt-boost</li>
+<li>FTR-490: spdlog/fmt/boost via Conan (drop system packages)</li>
+<li>FTR-488: Conan-managed gRPC + Protobuf, drop system packages
+(#176)</li>
 </ul>
-<h2 id="1700----2026-03-20">[1.70.0] -- 2026-03-20</h2>
+<h2 id="1732----2026-03-20">[1.73.2] -- 2026-03-20</h2>
 <h3 id="added">Added</h3>
 <ul>
-<li>(release): add --auto-approve flag for non-interactive release</li>
-<li>(parser): add parse-result struct and parse/collect-errors
-(FTR-470)</li>
-<li>(generators): eliminate set! from generators (FTR-468)</li>
-<li>(parser): eliminate literal set! from parser.rkt (FTR-467)</li>
-<li>(validation): rule-based framework Phase 1 (FTR-469)</li>
+<li>add authoritative ID sequence system (claim-id.sh,
+validate-ids.sh)</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="changed">Changed</h3>
 <ul>
-<li>(release): --auto-approve must skip read, not override after it</li>
+<li>(ftr-484): extend type-registry to Qt and gRPC type mappings</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>add v1.73.2 retrospective to AGENT_COORDINATION_LEARNINGS.md</li>
+<li>(ftr-483): add New Module Checklist to RACKET-PATTERNS.md</li>
+<li>document worktrees/ convention in AGENTS.md Sub-Agent
+Delegation</li>
+<li>(ftr-485,ftr-486): add crash recovery and new build preset runbooks
+to AGENTS.md</li>
 </ul>
 <h3 id="maintenance-1">Maintenance</h3>
 <ul>
-<li>v1.70.0 governance — mark FTRs complete, add retrospective</li>
-<li>post-release addendum 2 — clang-tidy job pool OOM fix
-(IDEA-072)</li>
+<li>add worktrees/ directory to .gitignore</li>
 </ul>
 <h3 id="other-1">Other</h3>
 <ul>
-<li>Merge feature/ftr-470-parser-error-accumulation</li>
-<li>Merge feature/ftr-468-eliminate-set-generators</li>
-<li>Merge feature/ftr-467-functional-parser-state</li>
-<li>Merge feature/ftr-469-validation-modularization</li>
+<li>governance(v1.73.2): mark all FTRs complete, tick AC boxes, add
+release checklist</li>
+<li>Merge branch 'feature/ftr-487-qt-shlib-dep-audit' into develop</li>
+<li>audit(ftr-487): verify Qt shared library dependency
+declarations</li>
+<li>Merge branch 'feature/ftr-484-type-registry-phase2' into
+develop</li>
+<li>Merge branch 'feature/ftr-483-racket-provide-completeness' into
+develop</li>
+<li>Merge branch 'feature/ftr-485-486-agents-md-runbooks' into
+develop</li>
 </ul>
-<h2 id="1690----2026-03-19">[1.69.0] -- 2026-03-19</h2>
+<h2 id="1731----2026-03-20">[1.73.1] -- 2026-03-20</h2>
 <h3 id="added-1">Added</h3>
 <ul>
-<li>add raco make recompilation step to release.sh (FTR-464)</li>
-<li>add NOW/NULL/TRUE/FALSE as contextual keywords (FTR-466)</li>
-</ul>
-<h3 id="fixed-1">Fixed</h3>
-<ul>
-<li>(cmake): cap clang-tidy custom targets to compile_pool
-(nproc-2)</li>
-<li>(clang-tidy): auto-detect GCC installation and fix
-nats_event_consumer branch clone</li>
-<li>suppress false-positive clang-tidy warnings in dba layer
-(FTR-465)</li>
-<li>always restore debug preset after clang-tidy gate (FTR-463)</li>
-<li>always restore debug preset after clang-tidy gate (FTR-463)</li>
+<li>(telemetry): FTR-482 — OtelLogSink for trace/log correlation
+(#175)</li>
+<li>(telemetry): FTR-481 — OtelServerInterceptorFactory for gRPC tracing
+(#174)</li>
+<li>(telemetry): FTR-480 — OpenTelemetry SDK + TELEMETRY capability gate
+(#173)</li>
+<li>(dba): FTR-479 — add insert_batch to Repository and
+CommandRepository (#172)</li>
 </ul>
 <h3 id="maintenance-2">Maintenance</h3>
 <ul>
-<li>post-release addendum — clang-tidy GCC detection environment
-fix</li>
-<li>update gate timings from pre-release quality gate run</li>
-<li>v1.69.0 governance — iteration complete, retrospective added</li>
-<li>move promoted IDEAs 046,054-071 to completed-ideas</li>
-<li>add IDEA-065..067 backlog items</li>
+<li>clean up workflow/accepted — remove 43 completed FTRs, renumber
+conan FTRs to 488-490</li>
 </ul>
 <h3 id="other-2">Other</h3>
 <ul>
-<li>Merge feature/ftr-465-nats-branch-clone-fix</li>
-<li>Merge feature/ftr-465-fix-clang-tidy-dba-warnings</li>
-<li>Merge feature/ftr-464-raco-make-release-step</li>
-<li>Merge feature/ftr-463-clang-tidy-contamination-fix</li>
-<li>Merge feature/ftr-466-contextual-keywords-now-null-true-false</li>
-<li>plan: v1.70.0..v1.73.0 FTRs and iteration plans (FTR-467..482)</li>
-<li>plan: v1.69.0 release tooling hardening and parser ergonomics</li>
+<li>governance(v1.73.1): add OTel FTR files, tick AC boxes</li>
+<li>governance(v1.73.1): OTel FTRs complete, rename conan FTRs
+483-485→488-490, v1.73.2 DX iteration</li>
+<li>plan: create v1.74.0 and v1.75.0 iteration plans</li>
+<li>plan(v1.74.0): ADR + FTR-483/484/485 full conan dependency
+migration</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -388,33 +395,14 @@ fix</li>
 </thead>
 <tbody>
 <tr>
-<td>v1.72.0</td>
-<td>Establish robust C++ build hygiene: comprehensive compiler warning
-enforcement,</td>
-</tr>
-<tr>
-<td>v1.73.0</td>
-<td>Deliver end-to-end distributed tracing and metrics export via
-OpenTelemetry,</td>
+<td>v1.75.0</td>
+<td>Generated Output Quality — deep SQL verification and idempotent
+write RPCs</td>
 </tr>
 </tbody>
 </table>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
-<p>1 ideas in backlog.</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Title</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>IDEA-072</td>
-<td>Idea: Cap clang-tidy custom targets to compile_pool (nproc-2)</td>
-</tr>
-</tbody>
-</table>
+<p>0 ideas in backlog.</p>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
 <h3 id="racket-byte-compilation">Racket Byte Compilation</h3>
 <p>The <code>compiled/</code> directories throughout
@@ -432,19 +420,41 @@ OpenTelemetry,</td>
 <tbody>
 <tr>
 <td>Bytecode files (<code>.zo</code>)</td>
-<td>265</td>
+<td>271</td>
 </tr>
 <tr>
 <td>Cache size</td>
-<td>8.1M</td>
+<td>8.0M</td>
 </tr>
 </tbody>
 </table>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Build metrics not available (install <code>jq</code> or run build
-profiling).</p>
+<p>Last measured at commit <code>51f85f36</code> (project:
+muscovite):</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Duration</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1: Framework build</td>
+<td>1102.7s</td>
+<td>260 compilation steps</td>
+</tr>
+<tr>
+<td>S2: DSL generation</td>
+<td>0.0s</td>
+<td>All generator targets</td>
+</tr>
+</tbody>
+</table>
+<p>Build history: 30 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -460,28 +470,28 @@ profiling).</p>
 <tbody>
 <tr>
 <td>Racket (Layer 0)</td>
-<td>64 suites</td>
-<td>64</td>
+<td>96 suites</td>
+<td>96</td>
 <td>0</td>
 <td>100%</td>
-<td>1124.6s</td>
+<td>125.0s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
-<td>28 tests</td>
-<td>27</td>
-<td>1</td>
-<td>96%</td>
-<td>52.5s</td>
+<td>19 tests</td>
+<td>19</td>
+<td>0</td>
+<td>100%</td>
+<td>5.9s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 18/18 passed (220.7s)</li>
-<li><strong>slow</strong>: 36/36 passed (734.4s)</li>
-<li><strong>integration</strong>: 10/10 passed (169.2s)</li>
+<li><strong>fast</strong>: 30/30 passed (36.3s)</li>
+<li><strong>slow</strong>: 54/54 passed (68.5s)</li>
+<li><strong>integration</strong>: 12/12 passed (20.2s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -498,6 +508,54 @@ profiling).</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.74.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>19/19</td>
+</tr>
+<tr>
+<td>v1.73.2</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>33/34</td>
+</tr>
+<tr>
+<td>v1.73.1</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>33/34</td>
+</tr>
+<tr>
+<td>v1.73.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>31/32</td>
+</tr>
+<tr>
+<td>v1.72.1</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>31/32</td>
+</tr>
+<tr>
+<td>v1.72.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>31/32</td>
+</tr>
 <tr>
 <td>v1.71.0</td>
 <td>8</td>
@@ -530,57 +588,9 @@ profiling).</p>
 <td>95/95</td>
 <td>31/32</td>
 </tr>
-<tr>
-<td>v1.67.3</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
-<tr>
-<td>v1.67.2</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
-<tr>
-<td>v1.67.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
-<tr>
-<td>v1.66.4</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
-<tr>
-<td>v1.66.3</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
-<tr>
-<td>v1.66.2</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.71.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.74.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -618,7 +628,7 @@ profiling).</p>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (219)</td>
+<td>Architecture decision records (220)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -641,19 +651,19 @@ profiling).</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.71.0</td>
+<td>1.74.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1645 (since 2025-11-17)</td>
+<td>1697 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>139405 lines</td>
+<td>139525 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>42438 lines</td>
+<td>43257 lines</td>
 </tr>
 <tr>
 <td>Generator targets</td>
@@ -661,11 +671,11 @@ profiling).</p>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>219</td>
+<td>220</td>
 </tr>
 <tr>
 <td>Racket tests</td>
-<td>35307 lines</td>
+<td>35308 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -117,26 +117,26 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-concepts" class="groupheader"><a id="concepts" name="concepts"></a>
 Concepts</h2></td></tr>
 <tr class="memitem:muscovite_3A_3Adba_3A_3ATransactorCallable" id="r_muscovite_3A_3Adba_3A_3ATransactorCallable"><td class="memItemLeft">concept &#160;</td><td class="memItemRight"><a class="el" href="conceptmuscovite_1_1dba_1_1TransactorCallable.html">muscovite::dba::TransactorCallable</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concept for callable that takes pqxx::work&amp; and returns a result. <br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concept for callable that takes pqxx::transaction&lt;&gt;&amp; and returns a result. <br /></td></tr>
 <tr class="memitem:muscovite_3A_3Adba_3A_3AUnitOfWorkCallable" id="r_muscovite_3A_3Adba_3A_3AUnitOfWorkCallable"><td class="memItemLeft">concept &#160;</td><td class="memItemRight"><a class="el" href="conceptmuscovite_1_1dba_1_1UnitOfWorkCallable.html">muscovite::dba::UnitOfWorkCallable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concept for callable that takes UnitOfWork&amp; and returns a result. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1391747458e4d9bc18fdd3d17b604b84" id="r_a1391747458e4d9bc18fdd3d17b604b84"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
-<tr class="memitem:a1391747458e4d9bc18fdd3d17b604b84 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a1391747458e4d9bc18fdd3d17b604b84">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, F &amp;&amp;fn, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
+<tr class="memitem:a31c99ffbf75f25d60f543d95b69595ea" id="r_a31c99ffbf75f25d60f543d95b69595ea"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
+<tr class="memitem:a31c99ffbf75f25d60f543d95b69595ea template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a31c99ffbf75f25d60f543d95b69595ea">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, F &amp;&amp;fn, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
 <tr class="memitem:a4caa775df364ed30a41fedf7016db22d" id="r_a4caa775df364ed30a41fedf7016db22d"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
 <tr class="memitem:a4caa775df364ed30a41fedf7016db22d template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a4caa775df364ed30a41fedf7016db22d">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, F &amp;&amp;fn, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; void, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
-<tr class="memitem:a3aadd919dd4b52157675f1be794ac151" id="r_a3aadd919dd4b52157675f1be794ac151"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
-<tr class="memitem:a3aadd919dd4b52157675f1be794ac151 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a3aadd919dd4b52157675f1be794ac151">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, std::chrono::system_clock::time_point deadline, F &amp;&amp;fn, std::chrono::milliseconds max_statement_timeout=std::chrono::milliseconds{30000}, std::chrono::milliseconds deadline_buffer=std::chrono::milliseconds{100}, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
+<tr class="memitem:a30e0b89090995d345f711c6c41987c00" id="r_a30e0b89090995d345f711c6c41987c00"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
+<tr class="memitem:a30e0b89090995d345f711c6c41987c00 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a30e0b89090995d345f711c6c41987c00">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, std::chrono::system_clock::time_point deadline, F &amp;&amp;fn, std::chrono::milliseconds max_statement_timeout=std::chrono::milliseconds{30000}, std::chrono::milliseconds deadline_buffer=std::chrono::milliseconds{100}, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
 <tr class="memitem:a6534c81cce3cdea5ffc9ca0614c0ef72" id="r_a6534c81cce3cdea5ffc9ca0614c0ef72"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
 <tr class="memitem:a6534c81cce3cdea5ffc9ca0614c0ef72 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a6534c81cce3cdea5ffc9ca0614c0ef72">muscovite::dba::execute</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, std::chrono::system_clock::time_point deadline, F &amp;&amp;fn, std::chrono::milliseconds max_statement_timeout=std::chrono::milliseconds{30000}, std::chrono::milliseconds deadline_buffer=std::chrono::milliseconds{100}, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; void, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
 <tr class="memdesc:a6534c81cce3cdea5ffc9ca0614c0ef72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a deadline-aware void-returning database operation.  <br /></td></tr>
-<tr class="memitem:acf42479088d1dbfde64f50caa70809b5" id="r_acf42479088d1dbfde64f50caa70809b5"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
-<tr class="memitem:acf42479088d1dbfde64f50caa70809b5 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#acf42479088d1dbfde64f50caa70809b5">muscovite::dba::execute</a> (pqxx::work &amp;tx, F &amp;&amp;fn) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
-<tr class="memitem:aea4ac2591c2cc7f849d6b6a735a114c2" id="r_aea4ac2591c2cc7f849d6b6a735a114c2"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
-<tr class="memitem:aea4ac2591c2cc7f849d6b6a735a114c2 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#aea4ac2591c2cc7f849d6b6a735a114c2">muscovite::dba::execute</a> (pqxx::work &amp;tx, F &amp;&amp;fn) -&gt; std::expected&lt; void, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
-<tr class="memdesc:aea4ac2591c2cc7f849d6b6a735a114c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a void-returning operation using an existing transaction.  <br /></td></tr>
+<tr class="memitem:ab7255f51dfcfe36fc965fa0a5fcbb3b7" id="r_ab7255f51dfcfe36fc965fa0a5fcbb3b7"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
+<tr class="memitem:ab7255f51dfcfe36fc965fa0a5fcbb3b7 template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ab7255f51dfcfe36fc965fa0a5fcbb3b7">muscovite::dba::execute</a> (pqxx::transaction&lt;&gt; &amp;tx, F &amp;&amp;fn) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
+<tr class="memitem:a7c2ad174679baf537ec7f9a33101d60a" id="r_a7c2ad174679baf537ec7f9a33101d60a"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
+<tr class="memitem:a7c2ad174679baf537ec7f9a33101d60a template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a7c2ad174679baf537ec7f9a33101d60a">muscovite::dba::execute</a> (pqxx::transaction&lt;&gt; &amp;tx, F &amp;&amp;fn) -&gt; std::expected&lt; void, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
+<tr class="memdesc:a7c2ad174679baf537ec7f9a33101d60a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a void-returning operation using an existing transaction.  <br /></td></tr>
 <tr class="memitem:a337c07732125dc15cb79b7a8eb1ae11e" id="r_a337c07732125dc15cb79b7a8eb1ae11e"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
 <tr class="memitem:a337c07732125dc15cb79b7a8eb1ae11e template"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a337c07732125dc15cb79b7a8eb1ae11e">muscovite::dba::execute_uow</a> (<a class="el" href="classmuscovite_1_1dba_1_1ConnectionPool.html">ConnectionPool</a> &amp;pool, std::string_view schema, F &amp;&amp;fn, <a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a> policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, <a class="el" href="classmuscovite_1_1dba_1_1UnitOfWork.html">UnitOfWork</a> &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td></tr>
 <tr class="memitem:a31438b8ec45d5629026561c4c2941e21" id="r_a31438b8ec45d5629026561c4c2941e21"><td class="memTemplParams" colspan="2">template&lt;typename F&gt; </td></tr>
@@ -159,8 +159,8 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a1391747458e4d9bc18fdd3d17b604b84" name="a1391747458e4d9bc18fdd3d17b604b84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1391747458e4d9bc18fdd3d17b604b84">&#9670;&#160;</a></span>execute() <span class="overload">[1/6]</span></h2>
+<a id="a31c99ffbf75f25d60f543d95b69595ea" name="a31c99ffbf75f25d60f543d95b69595ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31c99ffbf75f25d60f543d95b69595ea">&#9670;&#160;</a></span>execute() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +183,7 @@ template&lt;typename F&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a></td>          <td class="paramname"><span class="paramname"><em>policy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
+          <td class="paramtype"><a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a></td>          <td class="paramname"><span class="paramname"><em>policy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
         </tr>
       </table>
   </td>
@@ -193,7 +193,7 @@ template&lt;typename F&gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Execute a database operation with optional retry support.</p>
-<p>The callable is invoked with a fresh pqxx::work transaction. If the callable completes without throwing, the transaction is committed. If an exception is thrown, the transaction is rolled back.</p>
+<p>The callable is invoked with a fresh pqxx::transaction&lt;&gt; transaction. If the callable completes without throwing, the transaction is committed. If an exception is thrown, the transaction is rolled back.</p>
 <p>With a RetryPolicy, transient errors (serialization failures, deadlocks) cause automatic retry with exponential backoff.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -205,13 +205,13 @@ template&lt;typename F&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pool</td><td>Connection pool to use </td></tr>
-    <tr><td class="paramname">fn</td><td>Callable taking pqxx::work&amp; and returning R </td></tr>
+    <tr><td class="paramname">fn</td><td>Callable taking pqxx::transaction&lt;&gt;&amp; and returning R </td></tr>
     <tr><td class="paramname">policy</td><td>Optional retry policy </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Result on success, Error on failure</dd></dl>
-<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> result = execute(pool, [&amp;](pqxx::work&amp; tx) {</div>
+<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> result = execute(pool, [&amp;](pqxx::transaction&lt;&gt;&amp; tx) {</div>
 <div class="line">    <span class="keyword">auto</span> [id] = tx.query1&lt;<span class="keywordtype">int</span>&gt;(</div>
 <div class="line">        <span class="stringliteral">&quot;INSERT INTO users (name) VALUES ($1) RETURNING id&quot;</span>,</div>
 <div class="line">        pqxx::params{name}</div>
@@ -221,7 +221,7 @@ template&lt;typename F&gt; </div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00261">261</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00436">muscovite::dba::ConnectionPool::acquire()</a>, <a class="el" href="transactor_8hpp_source.html#l00034">muscovite::dba::RetryPolicy::max_retries</a>, <a class="el" href="transactor_8hpp_source.html#l00041">muscovite::dba::RetryPolicy::retry_on_connection_error</a>, <a class="el" href="transactor_8hpp_source.html#l00040">muscovite::dba::RetryPolicy::retry_on_deadlock</a>, and <a class="el" href="transactor_8hpp_source.html#l00039">muscovite::dba::RetryPolicy::retry_on_serialization_failure</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00437">muscovite::dba::ConnectionPool::acquire()</a>, <a class="el" href="transactor_8hpp_source.html#l00034">muscovite::dba::RetryPolicy::max_retries</a>, <a class="el" href="transactor_8hpp_source.html#l00041">muscovite::dba::RetryPolicy::retry_on_connection_error</a>, <a class="el" href="transactor_8hpp_source.html#l00040">muscovite::dba::RetryPolicy::retry_on_deadlock</a>, and <a class="el" href="transactor_8hpp_source.html#l00039">muscovite::dba::RetryPolicy::retry_on_serialization_failure</a>.</p>
 
 </div>
 </div>
@@ -260,12 +260,12 @@ template&lt;typename F&gt; </div>
 </div><div class="memdoc">
 <p>Execute a void-returning database operation. Specialization for operations that don't return a value. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00320">320</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00321">321</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3aadd919dd4b52157675f1be794ac151" name="a3aadd919dd4b52157675f1be794ac151"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3aadd919dd4b52157675f1be794ac151">&#9670;&#160;</a></span>execute() <span class="overload">[3/6]</span></h2>
+<a id="a30e0b89090995d345f711c6c41987c00" name="a30e0b89090995d345f711c6c41987c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30e0b89090995d345f711c6c41987c00">&#9670;&#160;</a></span>execute() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +303,7 @@ template&lt;typename F&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a></td>          <td class="paramname"><span class="paramname"><em>policy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
+          <td class="paramtype"><a class="el" href="structmuscovite_1_1dba_1_1RetryPolicy.html">RetryPolicy</a></td>          <td class="paramname"><span class="paramname"><em>policy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
         </tr>
       </table>
   </td>
@@ -324,7 +324,7 @@ template&lt;typename F&gt; </div>
   <table class="params">
     <tr><td class="paramname">pool</td><td>Connection pool to use </td></tr>
     <tr><td class="paramname">deadline</td><td>Time point from gRPC context-&gt;deadline() </td></tr>
-    <tr><td class="paramname">fn</td><td>Callable taking pqxx::work&amp; and returning R </td></tr>
+    <tr><td class="paramname">fn</td><td>Callable taking pqxx::transaction&lt;&gt;&amp; and returning R </td></tr>
     <tr><td class="paramname">max_statement_timeout</td><td>Upper bound on statement_timeout </td></tr>
     <tr><td class="paramname">deadline_buffer</td><td>Time subtracted from remaining deadline </td></tr>
     <tr><td class="paramname">policy</td><td>Optional retry policy </td></tr>
@@ -334,7 +334,7 @@ template&lt;typename F&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>Result on success, Error on failure </dd></dl>
 <dl class="section see"><dt>See also</dt><dd>ADR 20260228 — gRPC deadline-to-statement_timeout propagation </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00340">340</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00341">341</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="transactor_8hpp_source.html#l00047">muscovite::dba::RetryPolicy::deadline</a>.</p>
 
@@ -391,12 +391,12 @@ template&lt;typename F&gt; </div>
 
 <p>Execute a deadline-aware void-returning database operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00395">395</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00396">396</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="acf42479088d1dbfde64f50caa70809b5" name="acf42479088d1dbfde64f50caa70809b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf42479088d1dbfde64f50caa70809b5">&#9670;&#160;</a></span>execute() <span class="overload">[5/6]</span></h2>
+<a id="ab7255f51dfcfe36fc965fa0a5fcbb3b7" name="ab7255f51dfcfe36fc965fa0a5fcbb3b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7255f51dfcfe36fc965fa0a5fcbb3b7">&#9670;&#160;</a></span>execute() <span class="overload">[5/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,12 +409,12 @@ template&lt;typename F&gt; </div>
         <tr>
           <td class="memname">auto muscovite::dba::execute </td>
           <td>(</td>
-          <td class="paramtype">pqxx::work &amp;</td>          <td class="paramname"><span class="paramname"><em>tx</em></span>, </td>
+          <td class="paramtype">pqxx::transaction&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>tx</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>fn</em></span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
+          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>fn</em></span>&#160;) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, <a class="el" href="structmuscovite_1_1dba_1_1Error.html">Error</a>&lt; <a class="el" href="error_8hpp.html#a3e21732aeebe322205b86f444d93419c">DbError</a> &gt; &gt;</td>
         </tr>
       </table>
   </td>
@@ -435,7 +435,7 @@ template&lt;typename F&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tx</td><td>Existing transaction reference (caller manages commit/rollback) </td></tr>
-    <tr><td class="paramname">fn</td><td>Callable taking pqxx::work&amp; and returning R </td></tr>
+    <tr><td class="paramname">fn</td><td>Callable taking pqxx::transaction&lt;&gt;&amp; and returning R </td></tr>
   </table>
   </dd>
 </dl>
@@ -443,19 +443,19 @@ template&lt;typename F&gt; </div>
 <p>Example (test isolation): </p><div class="fragment"><div class="line">TEST_CASE(<span class="stringliteral">&quot;Repository test with isolation&quot;</span>, <span class="stringliteral">&quot;[db]&quot;</span>) {</div>
 <div class="line">    TestTransactionFixture fixture(pool);  <span class="comment">// Auto-rollback at end</span></div>
 <div class="line">    </div>
-<div class="line">    <span class="keyword">auto</span> result = execute(fixture.transaction(), [&amp;](pqxx::work&amp; tx) {</div>
+<div class="line">    <span class="keyword">auto</span> result = execute(fixture.transaction(), [&amp;](pqxx::transaction&lt;&gt;&amp; tx) {</div>
 <div class="line">        return tx.query_value&lt;int&gt;(<span class="stringliteral">&quot;SELECT 1&quot;</span>);</div>
 <div class="line">    });</div>
 <div class="line">    REQUIRE(result.has_value());</div>
 <div class="line">    <span class="comment">// Transaction rolled back by fixture destructor - no data persisted</span></div>
 <div class="line">}</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00417">417</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00418">418</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aea4ac2591c2cc7f849d6b6a735a114c2" name="aea4ac2591c2cc7f849d6b6a735a114c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea4ac2591c2cc7f849d6b6a735a114c2">&#9670;&#160;</a></span>execute() <span class="overload">[6/6]</span></h2>
+<a id="a7c2ad174679baf537ec7f9a33101d60a" name="a7c2ad174679baf537ec7f9a33101d60a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c2ad174679baf537ec7f9a33101d60a">&#9670;&#160;</a></span>execute() <span class="overload">[6/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -468,7 +468,7 @@ template&lt;typename F&gt; </div>
         <tr>
           <td class="memname">auto muscovite::dba::execute </td>
           <td>(</td>
-          <td class="paramtype">pqxx::work &amp;</td>          <td class="paramname"><span class="paramname"><em>tx</em></span>, </td>
+          <td class="paramtype">pqxx::transaction&lt;&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>tx</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -485,7 +485,7 @@ template&lt;typename F&gt; </div>
 
 <p>Execute a void-returning operation using an existing transaction. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00432">432</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00433">433</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -546,7 +546,7 @@ template&lt;typename F&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Result on success, Error on failure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00452">452</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00453">453</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="unit__of__work_8cpp_source.html#l00274">muscovite::dba::UnitOfWork::commit_or_throw()</a>, <a class="el" href="transactor_8hpp_source.html#l00034">muscovite::dba::RetryPolicy::max_retries</a>, <a class="el" href="transactor_8hpp_source.html#l00041">muscovite::dba::RetryPolicy::retry_on_connection_error</a>, <a class="el" href="transactor_8hpp_source.html#l00040">muscovite::dba::RetryPolicy::retry_on_deadlock</a>, and <a class="el" href="transactor_8hpp_source.html#l00039">muscovite::dba::RetryPolicy::retry_on_serialization_failure</a>.</p>
 
@@ -593,7 +593,7 @@ template&lt;typename F&gt; </div>
 
 <p>Execute a void-returning UnitOfWork operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00505">505</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00507">507</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -653,7 +653,7 @@ template&lt;typename F&gt; </div>
 
 <p>Execute a deadline-aware UnitOfWork operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00525">525</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00527">527</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="transactor_8hpp_source.html#l00047">muscovite::dba::RetryPolicy::deadline</a>.</p>
 
@@ -744,7 +744,7 @@ template&lt;typename F&gt; </div>
 </div><div class="memdoc">
 <p>Calculate next retry delay with exponential backoff FTR-235: If policy has a deadline, caps delay at remaining_time / 2 </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8cpp_source.html#l00075">75</a> of file <a class="el" href="transactor_8cpp_source.html">transactor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8cpp_source.html#l00076">76</a> of file <a class="el" href="transactor_8cpp_source.html">transactor.cpp</a>.</p>
 
 </div>
 </div>
@@ -777,7 +777,7 @@ template&lt;typename F&gt; </div>
 
 <p>Check if error should be retried. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8cpp_source.html#l00062">62</a> of file <a class="el" href="transactor_8cpp_source.html">transactor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8cpp_source.html#l00063">63</a> of file <a class="el" href="transactor_8cpp_source.html">transactor.cpp</a>.</p>
 
 </div>
 </div>

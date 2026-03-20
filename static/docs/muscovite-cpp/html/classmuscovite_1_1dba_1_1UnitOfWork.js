@@ -13,5 +13,5 @@ var classmuscovite_1_1dba_1_1UnitOfWork =
     [ "pending_events", "classmuscovite_1_1dba_1_1UnitOfWork.html#a1a527f90a4e7509264295a8cdda0908c", null ],
     [ "plan_effect", "classmuscovite_1_1dba_1_1UnitOfWork.html#a927cba93dbf4edb9e0abd0d65e89b112", null ],
     [ "rollback", "classmuscovite_1_1dba_1_1UnitOfWork.html#ab90062b8011175c80b27809de82dfed4", null ],
-    [ "transaction", "classmuscovite_1_1dba_1_1UnitOfWork.html#afc90543643f7019c722dcb6e1a8f0b4f", null ]
+    [ "transaction", "classmuscovite_1_1dba_1_1UnitOfWork.html#a712514dcd008072ea363063dd2368e7a", null ]
 ];

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -253,7 +253,7 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            <span class="keywordflow">return</span> std::nullopt;</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        }</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        pqxx::work tx{conn_result-&gt;get()};</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        pqxx::transaction&lt;&gt; tx{conn_result-&gt;get()};</div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        </div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <span class="comment">// This query gets the replay lag on a streaming replica</span></div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        <span class="keyword">auto</span> result = tx.exec(</div>
@@ -291,7 +291,7 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        }</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        pqxx::work tx{conn-&gt;get()};</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        pqxx::transaction&lt;&gt; tx{conn-&gt;get()};</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        tx.exec(<span class="stringliteral">&quot;SELECT 1&quot;</span>);</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        tx.commit();</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        </div>
@@ -313,7 +313,7 @@ $(function(){initNavTree('read__replica__router_8cpp_source.html','',''); });
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>} <span class="comment">// namespace muscovite::dba</span></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html">muscovite::dba::ConnectionPool</a></div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8hpp_source.html#l00115">connection_pool.hpp:115</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a59d531e170122790a92da06de507041d"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html#a59d531e170122790a92da06de507041d">muscovite::dba::ConnectionPool::create</a></div><div class="ttdeci">static auto create(PoolConfig config) -&gt; std::expected&lt; ConnectionPool, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00399">connection_pool.cpp:399</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a59d531e170122790a92da06de507041d"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ConnectionPool.html#a59d531e170122790a92da06de507041d">muscovite::dba::ConnectionPool::create</a></div><div class="ttdeci">static auto create(PoolConfig config) -&gt; std::expected&lt; ConnectionPool, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00400">connection_pool.cpp:400</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1PooledConnection_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1PooledConnection.html">muscovite::dba::PooledConnection</a></div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8hpp_source.html#l00074">connection_pool.hpp:74</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1ReadReplicaRouter_html"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ReadReplicaRouter.html">muscovite::dba::ReadReplicaRouter</a></div><div class="ttdef"><b>Definition</b> <a href="read__replica__router_8hpp_source.html#l00081">read_replica_router.hpp:81</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1dba_1_1ReadReplicaRouter_html_a06b596eb07e8ab3a63422c9997427e46"><div class="ttname"><a href="classmuscovite_1_1dba_1_1ReadReplicaRouter.html#a06b596eb07e8ab3a63422c9997427e46">muscovite::dba::ReadReplicaRouter::replica_pool</a></div><div class="ttdeci">auto replica_pool() const noexcept -&gt; std::shared_ptr&lt; ConnectionPool &gt;</div><div class="ttdoc">Get the replica connection pool (nullptr if not configured).</div><div class="ttdef"><b>Definition</b> <a href="#l00131">read_replica_router.cpp:131</a></div></div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -93,18 +93,18 @@ $(function(){initNavTree('conceptmuscovite_1_1dba_1_1TransactorCallable.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Concept for callable that takes pqxx::work&amp; and returns a result.  
+<p>Concept for callable that takes pqxx::transaction&lt;&gt;&amp; and returns a result.  
 <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>&gt;</code></p>
 <h2 id="header-conceptdef" class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> F, <span class="keyword">typename</span> R&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmuscovite_1_1dba_1_1TransactorCallable.html">TransactorCallable</a> = <span class="keyword">requires</span>(F f, pqxx::work&amp; tx) {</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmuscovite_1_1dba_1_1TransactorCallable.html">TransactorCallable</a> = <span class="keyword">requires</span>(F f, pqxx::transaction&lt;&gt;&amp; tx) {</div>
 <div class="line">    { f(tx) } -&gt; std::convertible_to&lt;R&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconceptmuscovite_1_1dba_1_1TransactorCallable_html"><div class="ttname"><a href="conceptmuscovite_1_1dba_1_1TransactorCallable.html">muscovite::dba::TransactorCallable</a></div><div class="ttdoc">Concept for callable that takes pqxx::work&amp; and returns a result.</div><div class="ttdef"><b>Definition</b> <a href="transactor_8hpp_source.html#l00058">transactor.hpp:58</a></div></div>
+<div class="ttc" id="aconceptmuscovite_1_1dba_1_1TransactorCallable_html"><div class="ttname"><a href="conceptmuscovite_1_1dba_1_1TransactorCallable.html">muscovite::dba::TransactorCallable</a></div><div class="ttdoc">Concept for callable that takes pqxx::transaction&lt;&gt;&amp; and returns a result.</div><div class="ttdef"><b>Definition</b> <a href="transactor_8hpp_source.html#l00058">transactor.hpp:58</a></div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Concept for callable that takes pqxx::work&amp; and returns a result. </p>
+<div class="textblock"><p>Concept for callable that takes pqxx::transaction&lt;&gt;&amp; and returns a result. </p>
 
 <p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00058">58</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 </div></div><!-- contents -->

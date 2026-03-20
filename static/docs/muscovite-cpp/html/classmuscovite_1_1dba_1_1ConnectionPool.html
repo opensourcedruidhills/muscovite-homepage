@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -134,11 +134,11 @@ Friends</h2></td></tr>
 <p>Usage: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> pool = <a class="code hl_function" href="#a59d531e170122790a92da06de507041d">ConnectionPool::create</a>(config).value();</div>
 <div class="line">{</div>
 <div class="line">    <span class="keyword">auto</span> conn = pool.acquire().value();</div>
-<div class="line">    pqxx::work tx{conn.get()};</div>
+<div class="line">    pqxx::transaction&lt;&gt; tx{conn.get()};</div>
 <div class="line">    tx.exec(<span class="stringliteral">&quot;SELECT 1&quot;</span>);</div>
 <div class="line">    tx.commit();</div>
 <div class="line">} <span class="comment">// Connection returns to pool</span></div>
-<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a59d531e170122790a92da06de507041d"><div class="ttname"><a href="#a59d531e170122790a92da06de507041d">muscovite::dba::ConnectionPool::create</a></div><div class="ttdeci">static auto create(PoolConfig config) -&gt; std::expected&lt; ConnectionPool, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00399">connection_pool.cpp:399</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1dba_1_1ConnectionPool_html_a59d531e170122790a92da06de507041d"><div class="ttname"><a href="#a59d531e170122790a92da06de507041d">muscovite::dba::ConnectionPool::create</a></div><div class="ttdeci">static auto create(PoolConfig config) -&gt; std::expected&lt; ConnectionPool, Error&lt; PoolError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="connection__pool_8cpp_source.html#l00400">connection_pool.cpp:400</a></div></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="connection__pool_8hpp_source.html#l00115">115</a> of file <a class="el" href="connection__pool_8hpp_source.html">connection_pool.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
@@ -166,11 +166,11 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Acquire a connection from the pool. Blocks until a connection is available. </p><dl class="section return"><dt>Returns</dt><dd>Connection on success, <a class="el" href="structmuscovite_1_1dba_1_1Error.html" title="Error information with code and message.">Error</a> on failure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00436">436</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00437">437</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00436">acquire()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00437">acquire()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__fixture_8cpp_source.html#l00015">muscovite::dba::TestTransactionFixture::TestTransactionFixture()</a>, <a class="el" href="connection__pool_8cpp_source.html#l00436">acquire()</a>, <a class="el" href="connection__pool_8cpp_source.html#l00444">acquire()</a>, and <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__fixture_8cpp_source.html#l00015">muscovite::dba::TestTransactionFixture::TestTransactionFixture()</a>, <a class="el" href="connection__pool_8cpp_source.html#l00437">acquire()</a>, <a class="el" href="connection__pool_8cpp_source.html#l00445">acquire()</a>, and <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>.</p>
 
 </div>
 </div>
@@ -204,9 +204,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Connection on success, <a class="el" href="structmuscovite_1_1dba_1_1Error.html" title="Error information with code and message.">Error</a> on failure/timeout </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00444">444</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00445">445</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00436">acquire()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00437">acquire()</a>.</p>
 
 </div>
 </div>
@@ -235,11 +235,11 @@ Friends</h2></td></tr>
 
 <p>Get number of active (checked out) connections. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00460">460</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00461">461</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00460">active_connections()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00461">active_connections()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00460">active_connections()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00461">active_connections()</a>.</p>
 
 </div>
 </div>
@@ -268,11 +268,11 @@ Friends</h2></td></tr>
 
 <p>Get number of available (idle) connections. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00464">464</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00465">465</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00464">available_connections()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00465">available_connections()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00464">available_connections()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00465">available_connections()</a>.</p>
 
 </div>
 </div>
@@ -306,11 +306,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pool on success, <a class="el" href="structmuscovite_1_1dba_1_1Error.html" title="Error information with code and message.">Error</a> on failure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00399">399</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00400">400</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00399">create()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00400">create()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00399">create()</a>, and <a class="el" href="read__replica__router_8cpp_source.html#l00043">muscovite::dba::ReadReplicaRouter::create()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00400">create()</a>, and <a class="el" href="read__replica__router_8cpp_source.html#l00043">muscovite::dba::ReadReplicaRouter::create()</a>.</p>
 
 </div>
 </div>
@@ -339,11 +339,11 @@ Friends</h2></td></tr>
 
 <p>Returns a copy of the lifetime metrics snapshot. Thread-safe. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00476">476</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00477">477</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00476">get_metrics()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00477">get_metrics()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00476">get_metrics()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00477">get_metrics()</a>.</p>
 
 </div>
 </div>
@@ -372,11 +372,11 @@ Friends</h2></td></tr>
 
 <p>Returns current pool slot utilization. Thread-safe. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00480">480</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00481">481</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00480">get_pool_status()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00481">get_pool_status()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00480">get_pool_status()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00481">get_pool_status()</a>.</p>
 
 </div>
 </div>
@@ -405,11 +405,11 @@ Friends</h2></td></tr>
 
 <p>Get maximum pool size. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00468">468</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00469">469</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00468">max_connections()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00469">max_connections()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00468">max_connections()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00469">max_connections()</a>.</p>
 
 </div>
 </div>
@@ -430,11 +430,11 @@ Friends</h2></td></tr>
 
 <p>Shutdown the pool, closing all connections. </p>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00472">472</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00473">473</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00472">shutdown()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00473">shutdown()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00472">shutdown()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00473">shutdown()</a>.</p>
 
 </div>
 </div>
@@ -462,11 +462,11 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Try to acquire a connection without blocking. </p><dl class="section return"><dt>Returns</dt><dd>Connection if immediately available, nullopt otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00452">452</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="connection__pool_8cpp_source.html#l00453">453</a> of file <a class="el" href="connection__pool_8cpp_source.html">connection_pool.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00452">try_acquire()</a>.</p>
+<p class="reference">References <a class="el" href="connection__pool_8cpp_source.html#l00453">try_acquire()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00452">try_acquire()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="connection__pool_8cpp_source.html#l00453">try_acquire()</a>.</p>
 
 </div>
 </div>

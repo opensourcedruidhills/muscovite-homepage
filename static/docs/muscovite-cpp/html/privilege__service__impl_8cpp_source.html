@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -144,7 +144,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    ::muscovite::security::v1::Privilege* response) {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="stringliteral">&quot;SELECT * FROM security_api.privilege_insert($1, $2, $3)&quot;</span>,</div>
@@ -179,7 +179,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    ::muscovite::security::v1::Privilege* response) {</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    </div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <span class="stringliteral">&quot;SELECT * FROM security_api.privilege_select_by_id($1)&quot;</span>,</div>
@@ -205,7 +205,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    ::muscovite::security::v1::Privilege* response) {</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    </div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        </div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            <span class="stringliteral">&quot;SELECT id, name, description, created_at &quot;</span></div>
@@ -232,7 +232,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    ::muscovite::security::v1::ListPrivilegesResponse* response) {</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    </div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <span class="keywordtype">int</span> <span class="keyword">const</span> page_size = request-&gt;page_size() &gt; 0 ? request-&gt;page_size() : 50;</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        <span class="keywordtype">int</span> offset = 0;</div>
@@ -279,7 +279,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    ::muscovite::security::v1::Privilege* response) {</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    </div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        </div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <span class="keyword">auto</span> result = txn.exec(</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <span class="stringliteral">&quot;UPDATE security.privilege SET &quot;</span></div>
@@ -315,7 +315,7 @@ $(function(){initNavTree('privilege__service__impl_8cpp_source.html','',''); });
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    [[maybe_unused]] ::google::protobuf::Empty* response) {</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    </div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        pqxx::work txn(*impl_-&gt;db);</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        pqxx::transaction&lt;&gt; txn(*impl_-&gt;db);</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        </div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <span class="comment">// Check for usage before deleting</span></div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="keyword">auto</span> usage_check = txn.exec(</div>

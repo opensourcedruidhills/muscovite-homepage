@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.73.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.74.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -125,7 +125,7 @@ $(function(){initNavTree('service__base_8hpp_source.html','',''); });
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> F&gt;</div>
 <div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classmuscovite_1_1grpc_1_1ServiceBase.html#abc77d67a2c462f308af626eccca653e7">   64</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1grpc_1_1ServiceBase.html#abc77d67a2c462f308af626eccca653e7">execute_read</a>(F&amp;&amp; fn) -&gt; ::grpc::Status {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a1391747458e4d9bc18fdd3d17b604b84">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a31c99ffbf75f25d60f543d95b69595ea">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">if</span> (result) {</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            return ::grpc::Status::OK;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
@@ -136,7 +136,7 @@ $(function(){initNavTree('service__base_8hpp_source.html','',''); });
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> F&gt;</div>
 <div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classmuscovite_1_1grpc_1_1ServiceBase.html#a8ecf1a37d49e114ce7bd6ced846c3851">   79</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1grpc_1_1ServiceBase.html#a8ecf1a37d49e114ce7bd6ced846c3851">execute_read</a>(F&amp;&amp; fn, R&amp; out) -&gt; ::grpc::Status {</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a1391747458e4d9bc18fdd3d17b604b84">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a31c99ffbf75f25d60f543d95b69595ea">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordflow">if</span> (result) {</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            out = std::move(*result);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            return ::grpc::Status::OK;</div>
@@ -148,7 +148,7 @@ $(function(){initNavTree('service__base_8hpp_source.html','',''); });
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> F&gt;</div>
 <div class="foldopen" id="foldopen00093" data-start="{" data-end="}">
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="classmuscovite_1_1grpc_1_1ServiceBase.html#ae3863a020041eb6a4558eec1a2120567">   93</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1grpc_1_1ServiceBase.html#ae3863a020041eb6a4558eec1a2120567">execute_write</a>(F&amp;&amp; fn) -&gt; ::grpc::Status {</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a1391747458e4d9bc18fdd3d17b604b84">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a31c99ffbf75f25d60f543d95b69595ea">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">if</span> (result) {</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            return ::grpc::Status::OK;</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        }</div>
@@ -159,7 +159,7 @@ $(function(){initNavTree('service__base_8hpp_source.html','',''); });
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> F&gt;</div>
 <div class="foldopen" id="foldopen00103" data-start="{" data-end="}">
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classmuscovite_1_1grpc_1_1ServiceBase.html#acf6146d1c55c33378747ff9c1e7339cb">  103</a></span>    [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="classmuscovite_1_1grpc_1_1ServiceBase.html#acf6146d1c55c33378747ff9c1e7339cb">execute_write</a>(F&amp;&amp; fn, R&amp; out) -&gt; ::grpc::Status {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a1391747458e4d9bc18fdd3d17b604b84">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keyword">auto</span> result = <a class="code hl_function" href="transactor_8hpp.html#a31c99ffbf75f25d60f543d95b69595ea">dba::execute</a>(m_pool, std::forward&lt;F&gt;(fn));</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keywordflow">if</span> (result) {</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            out = std::move(*result);</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            return ::grpc::Status::OK;</div>
@@ -191,7 +191,7 @@ $(function(){initNavTree('service__base_8hpp_source.html','',''); });
 <div class="ttc" id="anamespacemuscovite_1_1grpc_html"><div class="ttname"><a href="namespacemuscovite_1_1grpc.html">muscovite::grpc</a></div><div class="ttdoc">gRPC service infrastructure for muscovite</div></div>
 <div class="ttc" id="anamespacemuscovite_1_1grpc_html_af58c3dc6f912820370519d2000d19858"><div class="ttname"><a href="namespacemuscovite_1_1grpc.html#af58c3dc6f912820370519d2000d19858">muscovite::grpc::map_db_error</a></div><div class="ttdeci">auto map_db_error(const dba::Error&lt; dba::DbError &gt; &amp;error) -&gt; ::grpc::Status</div><div class="ttdef"><b>Definition</b> <a href="error__mapping_8cpp_source.html#l00017">error_mapping.cpp:17</a></div></div>
 <div class="ttc" id="atransactor_8hpp_html"><div class="ttname"><a href="transactor_8hpp.html">transactor.hpp</a></div><div class="ttdoc">libpqxx transactor pattern with retry support</div></div>
-<div class="ttc" id="atransactor_8hpp_html_a1391747458e4d9bc18fdd3d17b604b84"><div class="ttname"><a href="transactor_8hpp.html#a1391747458e4d9bc18fdd3d17b604b84">muscovite::dba::execute</a></div><div class="ttdeci">auto execute(ConnectionPool &amp;pool, F &amp;&amp;fn, RetryPolicy policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::work &amp; &gt;, Error&lt; DbError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="transactor_8hpp_source.html#l00261">transactor.hpp:261</a></div></div>
+<div class="ttc" id="atransactor_8hpp_html_a31c99ffbf75f25d60f543d95b69595ea"><div class="ttname"><a href="transactor_8hpp.html#a31c99ffbf75f25d60f543d95b69595ea">muscovite::dba::execute</a></div><div class="ttdeci">auto execute(ConnectionPool &amp;pool, F &amp;&amp;fn, RetryPolicy policy={}) -&gt; std::expected&lt; std::invoke_result_t&lt; F, pqxx::transaction&lt;&gt; &amp; &gt;, Error&lt; DbError &gt; &gt;</div><div class="ttdef"><b>Definition</b> <a href="transactor_8hpp_source.html#l00261">transactor.hpp:261</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
