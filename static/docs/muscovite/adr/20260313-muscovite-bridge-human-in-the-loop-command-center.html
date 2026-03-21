@@ -338,13 +338,18 @@ steering.</p>
 <h3 id="4-ftr-state-machine-extension">4. FTR state machine
 extension</h3>
 <p>Add <code>BLOCKED_HUMAN</code> state:</p>
-<pre><code>PENDING → ASSIGNED → PROGRESSING → PR_READY → REVIEWING → MERGED
-              ↑            │  ↑                      │
-              │            ▼  │                      │
-              │     BLOCKED_HUMAN                    │
-              │            │                         │
-              └────────────┴─────────────────────────┘
-                  (gate fail / rejection)</code></pre>
+<pre class="mermaid"><code>stateDiagram-v2
+    PENDING --&gt; ASSIGNED
+    ASSIGNED --&gt; PROGRESSING
+    PROGRESSING --&gt; PR_READY
+    PR_READY --&gt; REVIEWING
+    REVIEWING --&gt; MERGED
+
+    PROGRESSING --&gt; BLOCKED_HUMAN
+    BLOCKED_HUMAN --&gt; PROGRESSING
+
+    REVIEWING --&gt; ASSIGNED: gate fail / rejection
+    BLOCKED_HUMAN --&gt; ASSIGNED: gate fail / rejection</code></pre>
 <p>Transitions:</p>
 <ul>
 <li><code>PROGRESSING → BLOCKED_HUMAN</code>: Agent escalates with

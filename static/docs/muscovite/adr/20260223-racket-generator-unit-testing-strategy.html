@@ -387,18 +387,12 @@ change to the generator.</p>
 <h3 id="integration-tests-remain-mandatory">Integration Tests Remain
 Mandatory</h3>
 <p>Unit tests replace nothing. The three-tier test pyramid is:</p>
-<pre><code>                    ┌───────────────┐
-                    │  Integration  │  test-dsl-integration.rkt
-                    │  (parse→all)  │  slow, full-stack
-                    └───────┬───────┘
-                    ┌───────┴───────┐
-                    │   Structural  │  test-generator-coverage.rkt (existing)
-                    │   (presence)  │  medium speed
-                    └───────┬───────┘
-                    ┌───────┴───────┐
-                    │     Unit      │  test-{construct}-generator.rkt (NEW mandatory)
-                    │  (IR→output)  │  fast, per-generator
-                    └───────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart BT
+    UNIT[&quot;Unit · test-construct-generator.rkt (NEW mandatory)\nIR→output · fast, per-generator&quot;]
+    STRUCT[&quot;Structural · test-generator-coverage.rkt (existing)\npresence checks · medium speed&quot;]
+    INTEG[&quot;Integration · test-dsl-integration.rkt\nparse→all · slow, full-stack&quot;]
+
+    UNIT --&gt; STRUCT --&gt; INTEG</code></pre>
 <h3 id="positive-consequences">Positive Consequences</h3>
 <ul>
 <li>Generator bugs caught in O(milliseconds) rather than end-to-end

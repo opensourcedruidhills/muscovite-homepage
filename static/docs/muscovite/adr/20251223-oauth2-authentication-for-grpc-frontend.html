@@ -323,24 +323,18 @@ storage)</li>
 expiry</li>
 </ul>
 <h3 id="login-flow">Login Flow</h3>
-<pre><code>┌──────────┐       ┌──────────────┐       ┌────────────────┐
-│ Qt App   │       │ AuthManager  │       │ Identity       │
-│          │       │              │       │ Provider       │
-└────┬─────┘       └──────┬───────┘       └───────┬────────┘
-     │ login()            │                       │
-     │───────────────────&gt;│                       │
-     │                    │ Open browser with     │
-     │                    │ auth URL + PKCE       │
-     │                    │──────────────────────&gt;│
-     │                    │                       │ User authenticates
-     │                    │       Redirect with   │
-     │                    │&lt;──────code────────────│
-     │                    │ Exchange code for     │
-     │                    │ tokens                │
-     │                    │──────────────────────&gt;│
-     │                    │&lt;─────tokens───────────│
-     │ authStateChanged() │                       │
-     │&lt;───────────────────│                       │</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant QtApp as Qt App
+    participant Auth as AuthManager
+    participant IdP as Identity Provider
+
+    QtApp-&gt;&gt;Auth: login()
+    Auth-&gt;&gt;IdP: Open browser with auth URL + PKCE
+    Note over IdP: User authenticates
+    IdP--&gt;&gt;Auth: Redirect with code
+    Auth-&gt;&gt;IdP: Exchange code for tokens
+    IdP--&gt;&gt;Auth: tokens
+    Auth--&gt;&gt;QtApp: authStateChanged()</code></pre>
 <h2 id="configuration">Configuration</h2>
 <p>OAuth2 settings in application config:</p>
 <div class="sourceCode" id="cb4"><pre

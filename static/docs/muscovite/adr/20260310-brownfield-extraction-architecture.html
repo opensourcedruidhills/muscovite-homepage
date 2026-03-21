@@ -281,23 +281,16 @@ generators) consumes .ddd as input.</li>
 <h2 id="decision">Decision</h2>
 <h3 id="direct-ddd-output-with-multi-source-triangulation">Direct .ddd
 Output with Multi-Source Triangulation</h3>
-<pre><code>┌─────────────┐     ┌─────────────────┐     ┌──────────────────┐
-│  Database    │     │   Source Code    │     │   User Interface │
-│  (schema)   │     │ (AST + types)    │     │ (templates + API)│
-│             │     │                  │     │                  │
-│ • columns   │     │ • service funcs  │     │ • form fields    │
-│ • types     │     │ • event types    │     │ • buttons/actions│
-│ • indexes   │     │ • interfaces     │     │ • dropdowns      │
-│ • sequences │     │ • state consts   │     │ • navigation     │
-└──────┬──────┘     └────────┬─────────┘     └────────┬─────────┘
-       │                     │                         │
-       └─────────────────────┼─────────────────────────┘
-                             ▼
-                    Confidence scoring
-                             ▼
-                    .ddd files (direct)
-                             ▼
-                    Human curation</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    DB[&quot;Database (schema)\ncolumns, types, indexes, sequences&quot;]
+    SC[&quot;Source Code (AST + types)\nservice funcs, event types\ninterfaces, state consts&quot;]
+    UI[&quot;User Interface (templates + API)\nform fields, buttons/actions\ndropdowns, navigation&quot;]
+
+    DB --&gt; CS[&quot;Confidence scoring&quot;]
+    SC --&gt; CS
+    UI --&gt; CS
+    CS --&gt; DDD[&quot;.ddd files (direct)&quot;]
+    DDD --&gt; HC[&quot;Human curation&quot;]</code></pre>
 <h3
 id="language-specific-extractors-each-its-own-repository">Language-Specific
 Extractors (each its own repository)</h3>

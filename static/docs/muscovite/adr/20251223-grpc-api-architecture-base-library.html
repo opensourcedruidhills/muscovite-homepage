@@ -158,45 +158,34 @@ muscoviteserver)</li>
 provides maximum code reuse, clean separation of concerns, and a clear
 extension point for authorization interceptors.</p>
 <h3 id="architecture-overview">Architecture Overview</h3>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                     Generated Project                            │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │  Generated gRPC Services (from DDD)                         ││
-│  │  - GeosciencesService.cpp                                   ││
-│  │  - MineralogyService.cpp                                    ││
-│  │  - Uses base library types and utilities                    ││
-│  └─────────────────────────────────────────────────────────────┘│
-│                              │                                   │
-│                              ▼                                   │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │  Generated Proto Files                                      ││
-│  │  - geosciences.proto                                        ││
-│  │  - mineralogy.proto                                         ││
-│  └─────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              muscovitegrpc (Base Library)                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │ GrpcServer   │  │ Interceptors │  │ ServiceBase            │ │
-│  │ - lifecycle  │  │ - logging    │  │ - error mapping        │ │
-│  │ - config     │  │ - metrics    │  │ - transaction scope    │ │
-│  │ - shutdown   │  │ - (auth*)    │  │ - connection handling  │ │
-│  └──────────────┘  └──────────────┘  └────────────────────────┘ │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │ TypeMapping  │  │ ErrorCodes   │  │ ProtoConverters        │ │
-│  │ - UUID       │  │ - DbError→   │  │ - Timestamp            │ │
-│  │ - Decimal    │  │   grpc::Stat │  │ - Optional&lt;T&gt;          │ │
-│  │ - Timestamp  │  │ - PoolError  │  │ - Repeated&lt;T&gt;          │ │
-│  └──────────────┘  └──────────────┘  └────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              muscovitedba (Database Access)                      │
-│  ConnectionPool, Transactor, Repository, TypeConverters          │
-└─────────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    subgraph GP[&quot;Generated Project&quot;]
+        subgraph GS[&quot;Generated gRPC Services (from DDD)&quot;]
+            S1[&quot;GeosciencesService.cpp&quot;]
+            S2[&quot;MineralogyService.cpp&quot;]
+        end
+        subgraph PF[&quot;Generated Proto Files&quot;]
+            P1[&quot;geosciences.proto&quot;]
+            P2[&quot;mineralogy.proto&quot;]
+        end
+    end
+
+    GP --&gt; BL
+
+    subgraph BL[&quot;muscovitegrpc (Base Library)&quot;]
+        GrpcServer[&quot;GrpcServer\nlifecycle, config, shutdown&quot;]
+        Interceptors[&quot;Interceptors\nlogging, metrics, auth*&quot;]
+        ServiceBase[&quot;ServiceBase\nerror mapping, txn scope&quot;]
+        TypeMapping[&quot;TypeMapping\nUUID, Decimal, Timestamp&quot;]
+        ErrorCodes[&quot;ErrorCodes\nDbError→grpc::Status&quot;]
+        ProtoConverters[&quot;ProtoConverters\nTimestamp, Optional, Repeated&quot;]
+    end
+
+    BL --&gt; DB
+
+    subgraph DB[&quot;muscovitedba (Database Access)&quot;]
+        DBA[&quot;ConnectionPool, Transactor\nRepository, TypeConverters&quot;]
+    end</code></pre>
 <h3 id="phase-1-no-authorization-current">Phase 1: No Authorization
 (Current)</h3>
 <ul>

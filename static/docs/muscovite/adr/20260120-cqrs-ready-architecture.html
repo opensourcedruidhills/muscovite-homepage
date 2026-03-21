@@ -223,115 +223,89 @@ provides architectural separation without the complexity of event
 sourcing. The same PostgreSQL database serves both command and query
 paths now, but the architecture allows future separation.</p>
 <h3 id="architecture-layers">Architecture Layers</h3>
-<pre><code>                    ┌─────────────────────────────────────┐
-                    │           gRPC Service              │
-                    └───────────────┬─────────────────────┘
-                                    │
-            ┌───────────────────────┴───────────────────────┐
-            │                                               │
-    ┌───────▼───────┐                           ┌───────────▼───────────┐
-    │ Write Path    │                           │     Read Path         │
-    │ (Commands)    │                           │     (Queries)         │
-    └───────┬───────┘                           └───────────┬───────────┘
-            │                                               │
-    ┌───────▼───────┐                           ┌───────────▼───────────┐
-    │CommandService │                           │   QueryService        │
-    │ - create()    │                           │  - find_by_id()       │
-    │ - update()    │                           │  - find_all()         │
-    │ - delete()    │                           │  - find_by_spec()     │
-    │ + emit event  │                           │  - find_by_criteria() │
-    └───────┬───────┘                           └───────────┬───────────┘
-            │                                               │
-    ┌───────▼───────┐                           ┌───────────▼───────────┐
-    │CommandRepo    │                           │   QueryRepo           │
-    │pqxx::work     │                           │   pqxx::nontransaction│
-    └───────┬───────┘                           └───────────┬───────────┘
-            │                                               │
-            │         ┌─────────────────────┐               │
-            └────────►│    PostgreSQL       │◄──────────────┘
-                      │  (Same Database)    │
-                      │                     │
-                      │  ┌───────────────┐  │
-                      │  │domain_events  │  │  ← Events stored inline
-                      │  └───────────────┘  │
-                      └─────────────────────┘
+<pre class="mermaid"><code>flowchart TD
+    GS[&quot;gRPC Service&quot;] --&gt; WP[&quot;Write Path\n(Commands)&quot;]
+    GS --&gt; RP[&quot;Read Path\n(Queries)&quot;]
 
-                    FUTURE EVOLUTION
-                    ════════════════
-                              │
-            ┌─────────────────┴─────────────────┐
-            ▼                                   ▼
-    ┌───────────────┐                   ┌───────────────┐
-    │ Write DB      │ ──── Events ────► │  Read DB      │
-    │ (Primary)     │     (Outbox)      │  (Replica)    │
-    └───────────────┘                   └───────────────┘</code></pre>
+    WP --&gt; CS[&quot;CommandService\ncreate, update, delete\n+ emit event&quot;]
+    RP --&gt; QS[&quot;QueryService\nfind_by_id, find_all\nfind_by_spec, find_by_criteria&quot;]
+
+    CS --&gt; CR[&quot;CommandRepo\npqxx::transaction&lt;&gt;&quot;]
+    QS --&gt; QR[&quot;QueryRepo\npqxx::nontransaction&quot;]
+
+    CR --&gt; PG[&quot;PostgreSQL\n(Same Database)&quot;]
+    QR --&gt; PG
+    PG --- DE[&quot;domain_events table\nEvents stored inline&quot;]</code></pre>
+<p><strong>Future Evolution:</strong></p>
+<pre class="mermaid"><code>flowchart LR
+    WDB[&quot;Write DB\n(Primary)&quot;] --&gt;|&quot;Events (Outbox)&quot;| RDB[&quot;Read DB\n(Replica)&quot;]</code></pre>
 <h3 id="event-emission-strategy">Event Emission Strategy</h3>
 <p><strong>Current (Phase 1)</strong>: Inline event storage within
 command transaction</p>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Patient PatientCommandService<span class="op">::</span>create<span class="op">(</span><span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> execute<span class="op">([&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 1. Insert entity</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> patient <span class="op">=</span> <span class="va">patient_repo_</span><span class="op">.</span>insert<span class="op">(</span>txn<span class="op">,</span> req<span class="op">);</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 2. Emit event (same transaction)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">event_repo_</span><span class="op">.</span><span class="ex">emit</span><span class="op">(</span>txn<span class="op">,</span> DomainEvent<span class="op">{</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="dt">event_type</span> <span class="op">=</span> <span class="st">&quot;PatientCreated&quot;</span><span class="op">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="dt">aggregate_type</span> <span class="op">=</span> <span class="st">&quot;Patient&quot;</span><span class="op">,</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>aggregate_id <span class="op">=</span> patient<span class="op">.</span>id<span class="op">,</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>payload <span class="op">=</span> serialize<span class="op">(</span>patient<span class="op">)</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> patient<span class="op">;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Patient PatientCommandService<span class="op">::</span>create<span class="op">(</span><span class="at">const</span> CreatePatientRequest<span class="op">&amp;</span> req<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> execute<span class="op">([&amp;](</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 1. Insert entity</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> patient <span class="op">=</span> <span class="va">patient_repo_</span><span class="op">.</span>insert<span class="op">(</span>txn<span class="op">,</span> req<span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 2. Emit event (same transaction)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">event_repo_</span><span class="op">.</span><span class="ex">emit</span><span class="op">(</span>txn<span class="op">,</span> DomainEvent<span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="dt">event_type</span> <span class="op">=</span> <span class="st">&quot;PatientCreated&quot;</span><span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="dt">aggregate_type</span> <span class="op">=</span> <span class="st">&quot;Patient&quot;</span><span class="op">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>aggregate_id <span class="op">=</span> patient<span class="op">.</span>id<span class="op">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>payload <span class="op">=</span> serialize<span class="op">(</span>patient<span class="op">)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">});</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> patient<span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">});</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p><strong>Future (Phase 2)</strong>: Outbox pattern for reliable event
 publishing</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Same transaction writes to outbox table</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Background publisher reads outbox and publishes to message broker</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Consumers update read models / projections</span></span></code></pre></div>
-<p><strong>Future (Phase 3)</strong>: Full CQRS with read replicas</p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// CommandService → Write DB (primary)</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// QueryService → Read DB (replica) or materialized views</span></span></code></pre></div>
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Same transaction writes to outbox table</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Background publisher reads outbox and publishes to message broker</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Consumers update read models / projections</span></span></code></pre></div>
+<p><strong>Future (Phase 3)</strong>: Full CQRS with read replicas</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// CommandService → Write DB (primary)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// QueryService → Read DB (replica) or materialized views</span></span></code></pre></div>
 <h3 id="implementation-details">Implementation Details</h3>
 <p><strong>Transaction Types</strong>: | Path | Transaction | Reason |
 |------|-------------|--------| | Command | <code>pqxx::work</code> |
 Full ACID for writes | | Query | <code>pqxx::nontransaction</code> | No
 locks, read-only |</p>
 <p><strong>Repository Separation</strong>:</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// CommandRepository: write operations only</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandRepository <span class="op">{</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    Patient insert<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> Patient<span class="op">&amp;</span> entity<span class="op">);</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    Patient update<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> Patient<span class="op">&amp;</span> entity<span class="op">);</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> remove<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">// QueryRepository: read operations only</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryRepository <span class="op">{</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">,</span> </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_all<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">,</span> </span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">const</span> PageRequest<span class="op">&amp;</span> page<span class="op">);</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_active<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">);</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
-<p><strong>gRPC Routing</strong>:</p>
 <div class="sourceCode" id="cb6"><pre
-class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Write RPCs → CommandService</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status Create<span class="op">(</span>ctx<span class="op">,</span> req<span class="op">,</span> resp<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> <span class="va">command_service_</span><span class="op">.</span>create<span class="op">(</span>req<span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Read RPCs → QueryService (or direct QueryRepository)</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status Get<span class="op">(</span>ctx<span class="op">,</span> req<span class="op">,</span> resp<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> <span class="va">query_service_</span><span class="op">.</span>find_by_id<span class="op">(</span>req<span class="op">.</span>id<span class="op">());</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// CommandRepository: write operations only</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientCommandRepository <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    Patient insert<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> Patient<span class="op">&amp;</span> entity<span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    Patient update<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> Patient<span class="op">&amp;</span> entity<span class="op">);</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> remove<span class="op">(</span>pqxx<span class="op">::</span>work<span class="op">&amp;</span> txn<span class="op">,</span> <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">// QueryRepository: read operations only</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PatientQueryRepository <span class="op">{</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">,</span> </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">);</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_all<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">,</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">const</span> PageRequest<span class="op">&amp;</span> page<span class="op">);</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_active<span class="op">(</span>pqxx<span class="op">::</span>connection<span class="op">&amp;</span> conn<span class="op">);</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p><strong>gRPC Routing</strong>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Write RPCs → CommandService</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status Create<span class="op">(</span>ctx<span class="op">,</span> req<span class="op">,</span> resp<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> <span class="va">command_service_</span><span class="op">.</span>create<span class="op">(</span>req<span class="op">);</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Read RPCs → QueryService (or direct QueryRepository)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>grpc<span class="op">::</span>Status Get<span class="op">(</span>ctx<span class="op">,</span> req<span class="op">,</span> resp<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> result <span class="op">=</span> <span class="va">query_service_</span><span class="op">.</span>find_by_id<span class="op">(</span>req<span class="op">.</span>id<span class="op">());</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h3 id="positive-consequences">Positive Consequences</h3>
 <ul>
 <li>Clear separation of concerns (commands vs queries)</li>

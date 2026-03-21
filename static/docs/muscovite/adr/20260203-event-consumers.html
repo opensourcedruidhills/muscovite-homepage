@@ -248,28 +248,13 @@ redelivery)</li>
 </ul>
 <h2 id="architecture">Architecture</h2>
 <h3 id="components">Components</h3>
-<pre><code>NATS JetStream
-      │
-      │ Push subscription
-      ▼
-┌─────────────────────────────────────┐
-│ NatsEventConsumer                   │
-│                                     │
-│  ┌───────────────────────────────┐  │
-│  │ Handler Registry              │  │
-│  │  - PatientCreated → handler1  │  │
-│  │  - PatientUpdated → handler2  │  │
-│  │  - *              → default   │  │
-│  └───────────────────────────────┘  │
-│                                     │
-│  ┌───────────────────────────────┐  │
-│  │ Message Router                │  │
-│  │  - Parse JSON payload         │  │
-│  │  - Look up handler            │  │
-│  │  - Invoke with context        │  │
-│  │  - Ack/Nak based on result    │  │
-│  └───────────────────────────────┘  │
-└─────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    NATS[&quot;NATS JetStream&quot;] --&gt;|&quot;Push subscription&quot;| NEC
+
+    subgraph NEC[&quot;NatsEventConsumer&quot;]
+        HR[&quot;Handler Registry\nPatientCreated → handler1\nPatientUpdated → handler2\n* → default&quot;]
+        MR[&quot;Message Router\nParse JSON → Lookup handler\nInvoke with context → Ack/Nak&quot;]
+    end</code></pre>
 <h3 id="handler-signature">Handler Signature</h3>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> EventHandler <span class="op">=</span> <span class="bu">std::</span>function<span class="op">&lt;</span>HandlerResult<span class="op">(</span><span class="at">const</span> EventContext<span class="op">&amp;</span> ctx<span class="op">)&gt;;</span></span>

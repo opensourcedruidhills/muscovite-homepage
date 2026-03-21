@@ -153,26 +153,21 @@ Keycloak/Auth0</li>
 provides stateless API authentication while maintaining server-side
 session control for revocation and security.</p>
 <h3 id="authentication-architecture">Authentication Architecture</h3>
-<pre><code>Client                    Server                      Database
-  │                         │                            │
-  │ Login(username,password)│                            │
-  │────────────────────────&gt;│                            │
-  │                         │ Verify password hash       │
-  │                         │───────────────────────────&gt;│
-  │                         │&lt;───────────────────────────│
-  │                         │ Create session             │
-  │                         │───────────────────────────&gt;│
-  │ {access_token,          │                            │
-  │  refresh_token}         │                            │
-  │&lt;────────────────────────│                            │
-  │                         │                            │
-  │ API Call                │                            │
-  │ +Authorization: Bearer  │                            │
-  │────────────────────────&gt;│                            │
-  │                         │ Validate JWT (stateless)   │
-  │                         │ Check blacklist            │
-  │                         │───────────────────────────&gt;│
-  │&lt;────────────────────────│                            │</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant Server
+    participant Database
+
+    Client-&gt;&gt;Server: Login(username, password)
+    Server-&gt;&gt;Database: Verify password hash
+    Database--&gt;&gt;Server: Result
+    Server-&gt;&gt;Database: Create session
+    Server--&gt;&gt;Client: {access_token, refresh_token}
+
+    Client-&gt;&gt;Server: API Call + Authorization: Bearer
+    Server-&gt;&gt;Server: Validate JWT (stateless)
+    Server-&gt;&gt;Database: Check blacklist
+    Server--&gt;&gt;Client: Response</code></pre>
 <h3 id="positive-consequences">Positive Consequences</h3>
 <ul>
 <li>Stateless API validation (scalable)</li>

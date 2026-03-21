@@ -234,15 +234,14 @@ the UI needs sub-second feedback)</li>
 <h3
 id="architecture-shared-dbagrpc--multiple-presentation-layers">Architecture:
 Shared DBA/gRPC + Multiple Presentation Layers</h3>
-<pre><code>Domain Model (.ddd)
-  ↓
-Racket Generators
-  ├─→ PostgreSQL + Sqitch (deploy/)
-  ├─→ C++ DBA Layer (generated-{project}/dba/)          ← SHARED
-  ├─→ gRPC API (generated-{project}/grpc/)              ← SHARED
-  └─→ Presentation Layer (multiple choices)
-      ├─→ Qt Widgets (generated-{project}/qt-widgets/)
-      └─→ Qt Quick/QML (generated-{project}/qt-quick/)</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    DDD[&quot;Domain Model (.ddd)&quot;] --&gt; GEN[&quot;Racket Generators&quot;]
+    GEN --&gt; PG[&quot;PostgreSQL + Sqitch (deploy/)&quot;]
+    GEN --&gt; DBA[&quot;C++ DBA Layer ← SHARED\n(generated-project/dba/)&quot;]
+    GEN --&gt; GRPC[&quot;gRPC API ← SHARED\n(generated-project/grpc/)&quot;]
+    GEN --&gt; PRES[&quot;Presentation Layer&quot;]
+    PRES --&gt; QTW[&quot;Qt Widgets\n(generated-project/qt-widgets/)&quot;]
+    PRES --&gt; QTQ[&quot;Qt Quick/QML\n(generated-project/qt-quick/)&quot;]</code></pre>
 <h3 id="constraint-no-separate-client-libraries">Constraint: No Separate
 Client Libraries</h3>
 <ul>
@@ -324,22 +323,14 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate both (SoC validation mode)</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> generate.rkt <span class="at">--project</span> ../examples/geosciences/project.ddd <span class="at">--qt-frontend</span> both</span></code></pre></div>
 <p><strong>Output</strong> (when <code>--qt-frontend both</code>):</p>
-<pre><code>examples/geosciences/generated/
-├── dba/                    ← Shared (both frontends link here)
-├── grpc/                   ← Shared (both frontends link here)
-├── qt-widgets/             ← Widgets frontend only
-│   ├── main-widgets.cpp
-│   ├── CMakeLists.txt
-│   └── ...existing widget generation...
-└── qt-quick/               ← QML frontend only
-    ├── main-qml.cpp
-    ├── CMakeLists.txt
-    ├── qml/
-    │   ├── main.qml
-    │   ├── theme/MuscoviteTheme.qml
-    │   └── dialogs/
-    └── src/
-        └── viewmodels/     ← C++ ViewModel classes</code></pre>
+<pre class="mermaid"><code>flowchart LR
+    ROOT[&quot;generated/&quot;] --&gt; DBA[&quot;dba/ ← Shared&quot;]
+    ROOT --&gt; GRPC[&quot;grpc/ ← Shared&quot;]
+    ROOT --&gt; QTW[&quot;qt-widgets/\nmain-widgets.cpp\nCMakeLists.txt&quot;]
+    ROOT --&gt; QTQ[&quot;qt-quick/&quot;]
+    QTQ --&gt; QTQ1[&quot;main-qml.cpp\nCMakeLists.txt&quot;]
+    QTQ --&gt; QTQ2[&quot;qml/\nmain.qml, theme/, dialogs/&quot;]
+    QTQ --&gt; QTQ3[&quot;src/\nviewmodels/&quot;]</code></pre>
 <h2 id="consequences">Consequences</h2>
 <h3 id="positive">Positive</h3>
 <ol type="1">

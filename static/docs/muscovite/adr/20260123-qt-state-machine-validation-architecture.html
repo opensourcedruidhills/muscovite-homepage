@@ -236,69 +236,35 @@ composition"</strong>, because:</p>
 <li>Framework can be extended for custom application rules</li>
 </ul>
 <h3 id="architecture-overview">Architecture Overview</h3>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                    EntityEditDialogBase                          │
-├─────────────────────────────────────────────────────────────────┤
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │              EntityDialogStateMachine                      │  │
-│  │  States: Pristine→Dirty→Validating→Valid/Invalid→Saving   │  │
-│  │  Properties: canSave, isDirty, isValidating, hasErrors    │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │              EntityValidator (generated)                   │  │
-│  │  - validateRequiredFields()                                │  │
-│  │  - validateStrongTypes()                                   │  │
-│  │  - validateArcConstraints()                                │  │
-│  │  - addCustomValidations() ← virtual hook                   │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │              ValidationDisplayWidget                       │  │
-│  │  - QTextBrowser for copyable errors                        │  │
-│  │  - Grouped by field, color-coded severity                  │  │
-│  └───────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Dialog[&quot;EntityEditDialogBase&quot;]
+        SM[&quot;EntityDialogStateMachine\nStates: Pristine→Dirty→Validating→Valid/Invalid→Saving\nProperties: canSave, isDirty, isValidating, hasErrors&quot;]
+        EV[&quot;EntityValidator (generated)\nvalidateRequiredFields · validateStrongTypes\nvalidateArcConstraints · addCustomValidations ← virtual hook&quot;]
+        VDW[&quot;ValidationDisplayWidget\nQTextBrowser for copyable errors\nGrouped by field, color-coded severity&quot;]
+
+        SM --&gt; EV --&gt; VDW
+    end</code></pre>
 <h3 id="state-machine-states">State Machine States</h3>
-<pre><code>                    ┌─────────────┐
-                    │   Pristine   │ (initial state, no changes)
-                    └──────┬──────┘
-                           │ fieldChanged()
-                           ▼
-                    ┌─────────────┐
-            ┌───────│    Dirty    │◄──────────────────┐
-            │       └──────┬──────┘                    │
-            │              │ validate()                │
-            │              ▼                           │
-            │       ┌─────────────┐                    │
-            │       │ Validating  │                    │
-            │       └──────┬──────┘                    │
-            │              │                           │
-            │    ┌─────────┼─────────┐                 │
-            │    ▼         ▼         ▼                 │
-            │ ┌─────┐  ┌───────┐  ┌────────────┐      │
-            │ │Valid│  │Invalid│  │HasWarnings │      │
-            │ └──┬──┘  └───────┘  └─────┬──────┘      │
-            │    │                      │ confirmSave()
-            │    │ save()               │              │
-            │    ▼                      ▼              │
-            │ ┌─────────────────────────────┐          │
-            │ │           Saving            │          │
-            │ └─────────────┬───────────────┘          │
-            │               │                          │
-            │    ┌──────────┼──────────┐               │
-            │    ▼                     ▼               │
-            │ ┌─────┐              ┌───────┐           │
-            │ │Saved│              │SaveError│─────────┘
-            │ └──┬──┘              └────────┘
-            │    │ close dialog
-            │    ▼
-            │ [Dialog Closed]
-            │
-            │ reset()
-            └─────────────────────────────────────────►[Pristine]</code></pre>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; Pristine
+    Pristine --&gt; Dirty: fieldChanged()
+
+    Dirty --&gt; Validating: validate()
+    Dirty --&gt; Pristine: reset()
+
+    Validating --&gt; Valid
+    Validating --&gt; Invalid
+    Validating --&gt; HasWarnings
+
+    Valid --&gt; Saving: save()
+    HasWarnings --&gt; Saving: confirmSave()
+
+    Saving --&gt; Saved
+    Saving --&gt; SaveError
+
+    SaveError --&gt; Dirty
+
+    Saved --&gt; [*]: close dialog</code></pre>
 <h3 id="validation-timing">Validation Timing</h3>
 <table>
 <thead>

@@ -245,37 +245,18 @@ services)</li>
 <li>Enables future features: caching, validation, event emission</li>
 </ul>
 <h3 id="architecture">Architecture</h3>
-<pre><code>┌─────────────────────────────────────────────────────────────────┐
-│                        gRPC Service                              │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-        ┌───────────────────┴───────────────────┐
-        │ Write Operations      │ Read Operations│
-        ▼                       ▼                
-┌───────────────────┐   ┌───────────────────┐   
-│  CommandService   │   │   QueryService    │   
-│  - create()       │   │  - find_by_id()   │   
-│  - update()       │   │  - find_all()     │   
-│  - delete()       │   │  - find_by_spec() │   
-│  - add_child()    │   └─────────┬─────────┘   
-│  - remove_child() │             │             
-└─────────┬─────────┘             │             
-          │                       │             
-          │ pqxx::work            │ pqxx::nontransaction
-          ▼                       ▼             
-┌───────────────────┐   ┌───────────────────┐   
-│ CommandRepository │   │  QueryRepository  │   
-│ (direct SQL)      │   │  (direct SQL)     │   
-└─────────┬─────────┘   └─────────┬─────────┘   
-          │                       │             
-          └───────────┬───────────┘             
-                      ▼                         
-┌─────────────────────────────────────────────────────────────────┐
-│                         PostgreSQL                               │
-│  - FK constraints enforced here                                  │
-│  - CHECK constraints enforced here                               │
-│  - Domain type validation here                                   │
-└─────────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    GS[&quot;gRPC Service&quot;] --&gt; WO[&quot;Write Operations&quot;]
+    GS --&gt; RO[&quot;Read Operations&quot;]
+
+    WO --&gt; CS[&quot;CommandService\ncreate, update, delete\nadd_child, remove_child&quot;]
+    RO --&gt; QS[&quot;QueryService\nfind_by_id, find_all, find_by_spec&quot;]
+
+    CS --&gt;|&quot;pqxx::work&quot;| CR[&quot;CommandRepository\n(direct SQL)&quot;]
+    QS --&gt;|&quot;pqxx::nontransaction&quot;| QR[&quot;QueryRepository\n(direct SQL)&quot;]
+
+    CR --&gt; PG[&quot;PostgreSQL\nFK constraints · CHECK constraints · Domain type validation&quot;]
+    QR --&gt; PG</code></pre>
 <h3 id="implementation">Implementation</h3>
 <p><strong>CommandService</strong> (generated for each aggregate):</p>
 <div class="sourceCode" id="cb3"><pre

@@ -228,10 +228,11 @@ independently</li>
 <li><strong>Uniqueness</strong>: Random bits prevent collisions</li>
 </ul>
 <h3 id="uuidv7-structure">UUIDv7 Structure</h3>
-<pre><code>┌──────────────────────────────────────────────────────────────┐
-│ 48 bits: Unix timestamp (ms) │ 4 bits: version (7)          │
-│ 12 bits: random              │ 2 bits: variant │ 62 bits: rand│
-└──────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart LR
+    TS[&quot;48 bits:\nUnix timestamp (ms)&quot;] --&gt; VER[&quot;4 bits:\nversion (7)&quot;]
+    VER --&gt; R1[&quot;12 bits:\nrandom&quot;]
+    R1 --&gt; VAR[&quot;2 bits:\nvariant&quot;]
+    VAR --&gt; R2[&quot;62 bits:\nrandom&quot;]</code></pre>
 <h2 id="proposed-architecture">Proposed Architecture</h2>
 <h3 id="schema-design">Schema Design</h3>
 <div class="sourceCode" id="cb2"><pre

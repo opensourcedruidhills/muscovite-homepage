@@ -185,6 +185,9 @@ Reference</h1>
 <p><strong>Purpose</strong>: Canonical reference for AI agents to
 prevent hallucinations. Documents the three-layer architecture, exact
 Racket structures, naming conventions, and type mappings.</p>
+<p>For the principles and red lines behind these conventions, see
+<code>ARCHITECTURAL-PHILOSOPHY.md</code>. For trade-off guidance when
+facing ambiguous choices, see <code>DECISION-HEURISTICS.md</code>.</p>
 </blockquote>
 <hr />
 <h2 id="0-three-layer-architecture-non-negotiable">0. Three-Layer
@@ -1281,6 +1284,20 @@ C++-specific or SQL-specific logic in DSL).</p>
 <code>tools/generate-context.sh</code>)</td>
 </tr>
 <tr>
+<td><code>doc/ARCHITECTURAL-PHILOSOPHY.md</code></td>
+<td>Core principles, red lines, technology choices (why behind the
+rules)</td>
+</tr>
+<tr>
+<td><code>doc/DECISION-HEURISTICS.md</code></td>
+<td>Trade-off heuristics for DSL, generators, database, governance</td>
+</tr>
+<tr>
+<td><code>doc/er/</code></td>
+<td>Experiment Records — hypotheses tested, observations,
+conclusions</td>
+</tr>
+<tr>
 <td><code>AGENTS.md</code></td>
 <td>AI agent rules + workflow reference</td>
 </tr>
@@ -1418,6 +1435,10 @@ lines</td>
 <td>ADR</td>
 <td>Architecture Decision Record —
 <code>doc/adr/YYYYMMDD-*.md</code></td>
+</tr>
+<tr>
+<td>ER</td>
+<td>Experiment Record — <code>doc/er/ER-NNN-*.md</code></td>
 </tr>
 </tbody>
 </table>

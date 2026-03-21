@@ -205,15 +205,13 @@ Sandwich</h2>
 <p>The <strong>Resilience Sandwich</strong> is a layered timeout and
 retry architecture that propagates client deadlines through every system
 boundary: gRPC → business logic → PostgreSQL.</p>
-<pre><code>┌─────────────────────────────────────────┐
-│  Client Deadline (gRPC metadata)        │  ← outermost boundary
-├─────────────────────────────────────────┤
-│  Server Deadline (per-aggregate clamp)  │  ← GRPC_DEADLINE &quot;Ns&quot;
-├─────────────────────────────────────────┤
-│  Transactor Retry Budget                │  ← RetryPolicy.deadline
-├─────────────────────────────────────────┤
-│  PostgreSQL statement_timeout           │  ← innermost boundary
-└─────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    L1[&quot;Client Deadline · gRPC metadata\n← outermost boundary&quot;]
+    L2[&quot;Server Deadline · per-aggregate clamp\n← GRPC_DEADLINE&quot;]
+    L3[&quot;Transactor Retry Budget\n← RetryPolicy.deadline&quot;]
+    L4[&quot;PostgreSQL statement_timeout\n← innermost boundary&quot;]
+
+    L1 --&gt; L2 --&gt; L3 --&gt; L4</code></pre>
 <p><strong>Invariant</strong> (must always hold):</p>
 <pre><code>statement_timeout &lt; remaining - buffer &lt; server_deadline ≤ client_deadline</code></pre>
 <p>Each layer's timeout is strictly shorter than its parent's,

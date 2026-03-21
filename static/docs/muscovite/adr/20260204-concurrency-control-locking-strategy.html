@@ -351,27 +351,15 @@ mechanism</li>
 <h3 id="option-4-hybrid-optimistic--advisory--event-bus">Option 4:
 Hybrid (Optimistic + Advisory + Event Bus)</h3>
 <p>Combine approaches for different scenarios:</p>
-<pre><code>┌─────────────────────────────────────────────────────────────────────┐
-│                         WRITE PATH                                   │
-├─────────────────────────────────────────────────────────────────────┤
-│ 1. User opens edit dialog                                           │
-│    → TRY pg_advisory_lock(entity_type_hash, entity_uuid_hash)       │
-│    → If locked: Show &quot;Being edited by [user]&quot; message               │
-│    → If acquired: Publish lock.acquired event to NATS               │
-│                                                                      │
-│ 2. User edits and saves                                              │
-│    → UPDATE ... WHERE id = $1 AND version = $2                      │
-│    → If version mismatch: Optimistic lock conflict                  │
-│    → If success: Release advisory lock, publish lock.released       │
-│                                                                      │
-│ 3. User cancels or closes dialog                                     │
-│    → Release advisory lock                                           │
-│    → Publish lock.released event                                     │
-│                                                                      │
-│ 4. Session ends (crash, disconnect, timeout)                         │
-│    → PostgreSQL auto-releases advisory lock                          │
-│    → Heartbeat timeout triggers lock.released event (via service)    │
-└─────────────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    A[&quot;1. User opens edit dialog\nTRY pg_advisory_lock(entity_type_hash, entity_uuid_hash)\nIf locked: Show &#39;Being edited by [user]&#39;\nIf acquired: Publish lock.acquired event to NATS&quot;]
+    B[&quot;2. User edits and saves\nUPDATE ... WHERE id = $1 AND version = $2\nIf version mismatch: Optimistic lock conflict\nIf success: Release advisory lock, publish lock.released&quot;]
+    C[&quot;3. User cancels or closes dialog\nRelease advisory lock\nPublish lock.released event&quot;]
+    D[&quot;4. Session ends (crash, disconnect, timeout)\nPostgreSQL auto-releases advisory lock\nHeartbeat timeout triggers lock.released (via service)&quot;]
+
+    A --&gt; B
+    A --&gt; C
+    A --&gt; D</code></pre>
 <p><strong>Pros:</strong></p>
 <ul>
 <li>Best of both worlds: OCC for data integrity, advisory for UI

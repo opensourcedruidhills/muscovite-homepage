@@ -281,24 +281,14 @@ automated verification stage that:</p>
 <li>Checks Qt models against gRPC</li>
 </ol>
 <h3 id="verification-layers">Verification Layers</h3>
-<pre><code>                     ┌─────────────────────────────────────────┐
-                     │         Canonical Semantic IR           │
-                     │         (Source of Truth)               │
-                     └────────────────┬────────────────────────┘
-                                      │
-          ┌───────────────┬───────────┼───────────┬───────────────┐
-          ▼               ▼           ▼           ▼               ▼
-    ┌──────────┐   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
-    │PostgreSQL│   │PL/pgSQL  │ │   C++    │ │  gRPC    │ │    Qt    │
-    │  Schema  │◄──│   API    │◄│   DBA    │◄│ Proto    │◄│  Client  │
-    └──────────┘   └──────────┘ └──────────┘ └──────────┘ └──────────┘
-         │               │           │           │               │
-         └───────────────┴───────────┴───────────┴───────────────┘
-                                      │
-                              ┌───────▼───────┐
-                              │  Verification │
-                              │    Reports    │
-                              └───────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    IR[&quot;Canonical Semantic IR\n(Source of Truth)&quot;]
+    IR --&gt; PG[&quot;PostgreSQL\nSchema&quot;]
+    IR --&gt; PLSQL[&quot;PL/pgSQL\nAPI&quot;]
+    IR --&gt; CPP[&quot;C++\nDBA&quot;]
+    IR --&gt; GRPC[&quot;gRPC\nProto&quot;]
+    IR --&gt; QT[&quot;Qt\nClient&quot;]
+    PG &amp; PLSQL &amp; CPP &amp; GRPC &amp; QT --&gt; VR[&quot;Verification\nReports&quot;]</code></pre>
 <h3 id="positive-consequences">Positive Consequences</h3>
 <ul>
 <li>Early detection of inconsistencies (before runtime)</li>

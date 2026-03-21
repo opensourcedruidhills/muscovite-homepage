@@ -690,45 +690,17 @@ Boundary Architecture (Implementation Decision)</h2>
 <strong>application-layer validation</strong> that sits between the
 transport layer (gRPC) and the database layer (DBA). Here's how types
 flow:</p>
-<pre><code>┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Qt Client Layer                                   │
-│   QLineEdit → EmailValidator::validate() → gRPC call with string           │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼ proto: string
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         gRPC Transport Layer                                │
-│   Proto uses simple string type for cross-language compatibility            │
-│   No proto wrapper messages - validation happens elsewhere                  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼ std::string (from proto)
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      C++ gRPC Service Layer                                 │
-│   Option A: Validate here using muscovite::types::Email::is_valid()         │
-│   Option B: Pass through to DBA, let PostgreSQL DOMAIN reject invalid       │
-│                                                                             │
-│   Current: Option B (DB-level validation only)                              │
-│   Future: Add Option A for early rejection with better error messages       │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼ std::string
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          DBA Layer (Repository)                             │
-│   Entity structs use std::string for strong type fields                     │
-│   Required: pqxx::params only accepts string-like types                     │
-│   row[n].as&lt;std::string&gt;() → entity.email                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼ std::string via pqxx
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        PostgreSQL Layer                                     │
-│   Column type: basedata.email (DOMAIN with CHECK constraint)                │
-│   INSERT/UPDATE → CHECK (VALUE ~ &#39;^[^@]+@[^@]+\.[^@]+$&#39;)                    │
-│   Constraint violation → 23514 error → DBA layer throws                     │
-│                                                                             │
-│   This is the AUTHORITATIVE validation layer                                │
-└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    A[&quot;Qt Client Layer\nQLineEdit → EmailValidator::validate → gRPC call with string&quot;]
+    B[&quot;gRPC Transport Layer\nProto uses simple string type for cross-language compatibility\nNo proto wrapper messages — validation happens elsewhere&quot;]
+    C[&quot;C++ gRPC Service Layer\nOption A: Validate here using muscovite::types::Email::is_valid\nOption B: Pass through to DBA, let PostgreSQL DOMAIN reject\nCurrent: Option B · Future: Add Option A for early rejection&quot;]
+    D[&quot;DBA Layer (Repository)\nEntity structs use std::string for strong type fields\npqxx::params only accepts string-like types&quot;]
+    E[&quot;PostgreSQL Layer\nColumn type: basedata.email (DOMAIN with CHECK constraint)\nINSERT/UPDATE → CHECK → constraint violation → DBA layer throws\nThis is the AUTHORITATIVE validation layer&quot;]
+
+    A --&gt;|&quot;proto: string&quot;| B
+    B --&gt;|&quot;std::string (from proto)&quot;| C
+    C --&gt;|&quot;std::string&quot;| D
+    D --&gt;|&quot;std::string via pqxx&quot;| E</code></pre>
 <h3 id="why-primitives-in-dba-layer">Why Primitives in DBA Layer?</h3>
 <ol type="1">
 <li><strong>pqxx Compatibility</strong>: <code>pqxx::params</code>

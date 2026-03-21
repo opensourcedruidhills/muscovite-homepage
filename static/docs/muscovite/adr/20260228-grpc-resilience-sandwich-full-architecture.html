@@ -226,21 +226,12 @@ Sandwich" mental model (gRPC deadline / business logic / pqxx retry)
 needs a pattern catalog entry for developers and AI agents.</li>
 </ol>
 <h3 id="the-resilience-sandwich">The Resilience Sandwich</h3>
-<pre><code>┌─────────────────────────────────────────────────┐
-│  TOP SOURDOUGH: gRPC set_deadline()             │
-│  Circuit breaker behavior — client gives up      │
-│  after N seconds. Prevents cascade starvation.   │
-├─────────────────────────────────────────────────┤
-│  THE FILLING: Business Logic                     │
-│  Idempotent operations. Transactional writes.    │
-│  Domain services as aggregate boundary.          │
-│  Single UoW per command — commit or rollback.    │
-├─────────────────────────────────────────────────┤
-│  BOTTOM SOURDOUGH: libpqxx Transactor            │
-│  Exponential backoff retry for transient errors. │
-│  statement_timeout from remaining gRPC deadline. │
-│  Retry budget = remaining_deadline - buffer.     │
-└─────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    TOP[&quot;TOP SOURDOUGH: gRPC set_deadline\nCircuit breaker — client gives up after N seconds\nPrevents cascade starvation&quot;]
+    MID[&quot;THE FILLING: Business Logic\nIdempotent operations · Transactional writes\nDomain services as aggregate boundary\nSingle UoW per command — commit or rollback&quot;]
+    BOT[&quot;BOTTOM SOURDOUGH: libpqxx Transactor\nExponential backoff retry for transient errors\nstatement_timeout from remaining gRPC deadline\nRetry budget = remaining_deadline − buffer&quot;]
+
+    TOP --&gt; MID --&gt; BOT</code></pre>
 <p><strong>Key insight</strong>: The two "breads" operate on
 <strong>different failure modes</strong>:</p>
 <ul>

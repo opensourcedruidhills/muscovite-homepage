@@ -266,11 +266,9 @@ push-based assignment. This has standalone value as a product —
 <h2 id="decision">Decision</h2>
 <h3 id="introduce-a-grpc-gateway-as-the-public-api-surface">Introduce a
 gRPC gateway as the public API surface</h3>
-<pre><code>                                    ┌─────────────────────────┐
-Agents / QML Cockpit ◄──gRPC──►    │  muscovite-agent-gateway │    ◄──NATS──►  JetStream
-  (C++, Python, Go)     mTLS+JWT   │  (C++ binary)            │    localhost    (internal)
-                        HTTP/2      └─────────────────────────┘    only
-                        port 443</code></pre>
+<pre class="mermaid"><code>flowchart LR
+    CLIENTS[&quot;Agents / QML Cockpit\n(C++, Python, Go)&quot;] &lt;--&gt;|&quot;gRPC\nmTLS+JWT\nHTTP/2 port 443&quot;| GW[&quot;muscovite-agent-gateway\n(C++ binary)&quot;]
+    GW &lt;--&gt;|&quot;NATS\nlocalhost only&quot;| JS[&quot;JetStream&quot;]</code></pre>
 <p>NATS becomes an <strong>implementation detail</strong> — never
 exposed to clients.</p>
 <h3 id="protocol-design">Protocol design</h3>
@@ -452,35 +450,24 @@ topology — orchestration, not execution</h3>
 <p>A critical architectural constraint: <strong>the gateway orchestrates
 agents but does not execute them.</strong> Agents run on customer
 infrastructure with customer-owned AI credentials.</p>
-<pre><code>┌─── Customer Infrastructure ──────────────────────────┐
-│                                                      │
-│  ┌─── Agent Host(s) ──────────────────────────────┐  │
-│  │  worker-1 ◄── customer AI key (OpenAI/Claude)  │  │
-│  │  worker-2 ◄── customer AI key                  │  │
-│  │  qa-agent ◄── customer AI key                  │  │
-│  │  ↕ gRPC (mTLS)                                 │  │
-│  └────────────────────────────────────────────────┘  │
-│                                                      │
-│  ┌─── QML Cockpit (desktop) ─────────────────────┐  │
-│  │  human principal ◄── gRPC stream               │  │
-│  └────────────────────────────────────────────────┘  │
-│                                                      │
-│  ┌─── Customer Repos ────────────────────────────┐  │
-│  │  GitHub/GitLab access, DB credentials, etc.    │  │
-│  └────────────────────────────────────────────────┘  │
-│                                                      │
-└───────────────────────┬──────────────────────────────┘
-                        │ gRPC (mTLS, port 443)
-┌───────────────────────▼──────────────────────────────┐
-│  Muscovite SaaS (Basic/Pro)                          │
-│  ┌─── gRPC Gateway (C++) ────────────────────────┐  │
-│  │  Auth, routing, event fan-out                  │  │
-│  │  ↕ NATS (localhost only)                       │  │
-│  ├─── JetStream ─────────────────────────────────┤  │
-│  │  Event persistence, crash recovery             │  │
-│  │  State machine, assignment queue               │  │
-│  └────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────┘</code></pre>
+<pre class="mermaid"><code>flowchart TD
+    subgraph CUST[&quot;Customer Infrastructure&quot;]
+        subgraph AGENTS[&quot;Agent Host(s)&quot;]
+            W1[&quot;worker-1 ← customer AI key (OpenAI/Claude)&quot;]
+            W2[&quot;worker-2 ← customer AI key&quot;]
+            QA[&quot;qa-agent ← customer AI key&quot;]
+        end
+        COCKPIT[&quot;QML Cockpit (desktop)\nhuman principal ← gRPC stream&quot;]
+        REPOS[&quot;Customer Repos\nGitHub/GitLab access, DB credentials&quot;]
+    end
+
+    CUST --&gt;|&quot;gRPC (mTLS, port 443)&quot;| SAAS
+
+    subgraph SAAS[&quot;Muscovite SaaS (Basic/Pro)&quot;]
+        GW[&quot;gRPC Gateway (C++)\nAuth, routing, event fan-out&quot;]
+        JS[&quot;JetStream\nEvent persistence, crash recovery\nState machine, assignment queue&quot;]
+        GW &lt;--&gt; JS
+    end</code></pre>
 <table>
 <thead>
 <tr>

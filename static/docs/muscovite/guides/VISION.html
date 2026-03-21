@@ -1651,6 +1651,85 @@ second backend stack (e.g., TypeScript/Express, Kotlin/Spring) would
 concretely demonstrate target independence with ~500–1,000 lines of
 Racket.</p>
 <hr />
+<h2 id="architects-intent--why-this-order-what-id-cut">Architect's
+Intent — Why This Order, What I'd Cut</h2>
+<p><em>Added March 2026, extracted from structured architect
+interview.</em></p>
+<h3 id="the-projects-nature">The project's nature</h3>
+<p>Muscovite is a labbook — documenting experiments, observations,
+conclusions, successes, and failures. It is not a product roadmap driven
+by market demand. Features are chosen for their learning value: does
+this experiment stress-test whether the abstraction holds?</p>
+<p>Commercialization is not in focus. "Depends on who pays me
+first."</p>
+<h3 id="spike-exit-criteria">Spike exit criteria</h3>
+<p>Two concrete, testable milestones define when the spike has
+succeeded:</p>
+<ol type="1">
+<li><p><strong>Complex domain front-to-back with TLA+-verified
+states</strong> — proving the DSL can express full behavioral
+sovereignty with formal verification of state machines and decision
+logic.</p></li>
+<li><p><strong>Brownfield reversal of a Gitea-scale project</strong> —
+proving the extraction pipeline can analyze a real-world legacy system
+(≥107 tables, 12 contexts), generate <code>.ddd</code> models, and
+produce a working replacement stack. Sidecar implementations may be left
+as an exercise to the reader.</p></li>
+</ol>
+<p>When both are achieved, productization can begin.</p>
+<h3 id="roadmap-ordering-rationale">Roadmap ordering rationale</h3>
+<p>The roadmap follows a dependency chain, not a priority list:</p>
+<pre><code>Foundation (types, constraints, relationships)                    → DONE
+Domain services (aggregate boundaries, CQRS)                      → DONE
+Behavioral sovereignty (DECIDE/ENSURES, collection predicates)    → Tiers 1-2 DONE
+List comprehensions + property-based testing                      → PLANNED (Tier 3-4)
+Brownfield extraction (legacy modernization)                      → IN PROGRESS
+Second backend target (retargetability proof)                     → NOT STARTED
+Productization                                                    → NOT STARTED</code></pre>
+<p>Each layer depends on the one below. You can't extract brownfield
+business rules without a DSL expressive enough to represent them. You
+can't prove retargetability without a mature IR. You can't productize
+without proving the abstraction works at scale.</p>
+<h3 id="second-backend-sequence">Second backend sequence</h3>
+<p>If building additional backend targets: Rust → Go → Java → C#. In
+this sequence. The order reflects philosophical alignment (performance,
+type safety, longevity) over market size. TypeScript is notably absent —
+the performance thesis doesn't accommodate managed runtimes as primary
+targets.</p>
+<h3 id="what-id-cut">What I'd cut</h3>
+<p>Features are cut when they don't stress-test the abstraction, not
+when they don't generate revenue. Four cut patterns:</p>
+<ol type="1">
+<li><strong>Time constraint</strong> — Moved via
+<code>move-feature.sh</code> to next iteration.</li>
+<li><strong>Dependency failure</strong> — Prerequisite not ready.
+Defer.</li>
+<li><strong>Indefinite deferral</strong> — Too complex or low-ROI for
+current phase.</li>
+<li><strong>Design direction failure</strong> — The approach doesn't
+work. Revert entirely. Design is fluid and adaptable. No attachment to
+failed approaches.</li>
+</ol>
+<p>What NEVER causes a cut: market pressure, competitive features, sunk
+cost.</p>
+<h3 id="velocity-target">Velocity target</h3>
+<p>The deceleration from 8-10 FTRs to 2-4 FTRs per release was
+involuntary — the price paid for the NATS coordinator experiment. 8-10
+FTRs per release is the recovery objective.</p>
+<h3 id="autonomous-agents">Autonomous agents</h3>
+<p>Still absolutely a goal. Blocked by tooling ecosystem maturity —
+wrapping Mistral SDK, GitHub Copilot SDK, or similar as autonomous
+agents is currently cumbersome. Will resume when better tools become
+available. The NATS failure was a rejection of the approach, not the
+goal.</p>
+<h3 id="operating-model">Operating model</h3>
+<p>Single architect amplified by AI agents. The architect's irreducible
+function is direction — which experiments to run, which results to keep,
+which to discard. AI agents handle execution. Documentation is
+sufficient for execution; direction requires human judgment.</p>
+<p>The biggest agent failure mode: optimizing for simplicity when the
+architect optimizes for correctness. "I want correct, not simple."</p>
+<hr />
 <h2 id="references">References</h2>
 <ul>
 <li><a href="adr/">Architecture Decision Records</a> - Design decisions
