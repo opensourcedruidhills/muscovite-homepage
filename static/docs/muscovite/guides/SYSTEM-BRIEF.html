@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.74.0 | <strong>Generated</strong>:
-2026-03-20 | <strong>Commit</strong>: 51f85f36 |
+<p><strong>Version</strong>: 1.75.0 | <strong>Generated</strong>:
+2026-03-21 | <strong>Commit</strong>: b14c19b3 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -132,10 +132,10 @@ systems.</p>
 <li><strong>cmake</strong> (5 modules, 2002 lines)</li>
 <li><strong>cpp</strong> (80 modules, 22585 lines)</li>
 <li><strong>docs</strong> (13 modules, 5047 lines)</li>
-<li><strong>grpc</strong> (31 modules, 8205 lines)</li>
+<li><strong>grpc</strong> (31 modules, 8294 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
-<li><strong>postgres</strong> (30 modules, 8358 lines)</li>
-<li><strong>qt</strong> (60 modules, 16757 lines)</li>
+<li><strong>postgres</strong> (30 modules, 8407 lines)</li>
+<li><strong>qt</strong> (60 modules, 16764 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 700 lines)</li>
 <li><strong>tlaplus</strong> (4 modules, 776 lines)</li>
@@ -191,7 +191,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>364</td>
+<td>365</td>
 </tr>
 <tr>
 <td>Known types (type-registry.rkt)</td>
@@ -220,7 +220,7 @@ lifecycle.</td>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-139525-lines">Layer 0 — Racket (139525
+<h3 id="layer-0--racket-139677-lines">Layer 0 — Racket (139677
 lines)</h3>
 <table>
 <thead>
@@ -236,11 +236,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Parser</td>
-<td>6779</td>
+<td>6786</td>
 </tr>
 <tr>
 <td>Generator: postgres</td>
-<td>8358</td>
+<td>8407</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
@@ -248,11 +248,11 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: grpc</td>
-<td>8205</td>
+<td>8294</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>16757</td>
+<td>16764</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
@@ -299,6 +299,77 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="1750----2026-03-22">[1.75.0] -- 2026-03-22</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><p><strong>FTR-491</strong>: Idempotency keys — proto fields and SQL
+schema</p>
+<ul>
+<li>Added <code>IDEMPOTENCY_TTL "&lt;duration&gt;"</code> DSL keyword to
+project.mus (default: 24h)</li>
+<li>Added <code>optional string idempotency_key</code> to all gRPC write
+request messages (Create/Update/Delete for aggregate roots;
+Add/Update/Remove for child entities)</li>
+<li>Generated <code>{schema}.{aggregate}_idempotency_log</code> table
+per aggregate root with deep-verify SQL (DO $$ ASSERT blocks) and TTL
+index on <code>created_at</code></li>
+</ul></li>
+<li><p><strong>FTR-492</strong>: Idempotency keys — C++ service
+implementation</p>
+<ul>
+<li>Generated gRPC service methods now check
+<code>{schema}.{aggregate}_idempotency_log</code> before performing
+write operations (create/update/delete and child entity ops)</li>
+<li>Duplicate key returns <code>ALREADY_EXISTS</code> status; successful
+operations register the key with <code>ON CONFLICT DO NOTHING</code> for
+race safety</li>
+</ul></li>
+<li><p><strong>FTR-493</strong>: Idempotency keys — Qt client stub UUID
+generation</p>
+<ul>
+<li>Qt gRPC client <code>.cpp</code> generator now emits
+<code>#include &lt;QUuid&gt;</code> and auto-generates a fresh
+<code>QUuid::createUuid()</code> idempotency key for every write RPC
+call</li>
+</ul></li>
+</ul>
+<h3 id="test-metrics">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket parser</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Racket generators</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Racket integration</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Racket golden output</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+</tbody>
+</table>
 <h2 id="1740----2026-03-20">[1.74.0] -- 2026-03-20</h2>
 <h3 id="fixed">Fixed</h3>
 <ul>
@@ -321,7 +392,7 @@ opensourcedruidhills/feature/ftr-490-conan-spdlog-fmt-boost</li>
 (#176)</li>
 </ul>
 <h2 id="1732----2026-03-20">[1.73.2] -- 2026-03-20</h2>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>add authoritative ID sequence system (claim-id.sh,
 validate-ids.sh)</li>
@@ -357,50 +428,10 @@ develop</li>
 <li>Merge branch 'feature/ftr-485-486-agents-md-runbooks' into
 develop</li>
 </ul>
-<h2 id="1731----2026-03-20">[1.73.1] -- 2026-03-20</h2>
-<h3 id="added-1">Added</h3>
-<ul>
-<li>(telemetry): FTR-482 — OtelLogSink for trace/log correlation
-(#175)</li>
-<li>(telemetry): FTR-481 — OtelServerInterceptorFactory for gRPC tracing
-(#174)</li>
-<li>(telemetry): FTR-480 — OpenTelemetry SDK + TELEMETRY capability gate
-(#173)</li>
-<li>(dba): FTR-479 — add insert_batch to Repository and
-CommandRepository (#172)</li>
-</ul>
-<h3 id="maintenance-2">Maintenance</h3>
-<ul>
-<li>clean up workflow/accepted — remove 43 completed FTRs, renumber
-conan FTRs to 488-490</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>governance(v1.73.1): add OTel FTR files, tick AC boxes</li>
-<li>governance(v1.73.1): OTel FTRs complete, rename conan FTRs
-483-485→488-490, v1.73.2 DX iteration</li>
-<li>plan: create v1.74.0 and v1.75.0 iteration plans</li>
-<li>plan(v1.74.0): ADR + FTR-483/484/485 full conan dependency
-migration</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
-<table>
-<thead>
-<tr>
-<th>Version</th>
-<th>Goal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v1.75.0</td>
-<td>Generated Output Quality — deep SQL verification and idempotent
-write RPCs</td>
-</tr>
-</tbody>
-</table>
+<p>No planned iterations.</p>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
 <p>0 ideas in backlog.</p>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
@@ -431,7 +462,7 @@ write RPCs</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>51f85f36</code> (project:
+<p>Last measured at commit <code>b14c19b3</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -444,8 +475,8 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1102.7s</td>
-<td>260 compilation steps</td>
+<td>1175.6s</td>
+<td>296 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
@@ -454,7 +485,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 30 recorded runs.</p>
+<p>Build history: 31 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -474,7 +505,7 @@ muscovite):</p>
 <td>96</td>
 <td>0</td>
 <td>100%</td>
-<td>125.0s</td>
+<td>123.5s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -482,16 +513,16 @@ muscovite):</p>
 <td>19</td>
 <td>0</td>
 <td>100%</td>
-<td>5.9s</td>
+<td>2.6s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (36.3s)</li>
-<li><strong>slow</strong>: 54/54 passed (68.5s)</li>
-<li><strong>integration</strong>: 12/12 passed (20.2s)</li>
+<li><strong>fast</strong>: 30/30 passed (33.5s)</li>
+<li><strong>slow</strong>: 54/54 passed (68.4s)</li>
+<li><strong>integration</strong>: 12/12 passed (21.5s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -508,6 +539,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.75.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v1.74.0</td>
 <td>8</td>
@@ -580,17 +619,9 @@ muscovite):</p>
 <td>95/95</td>
 <td>31/32</td>
 </tr>
-<tr>
-<td>v1.67.4</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>95/95</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.74.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.75.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -651,15 +682,15 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.74.0</td>
+<td>1.75.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1697 (since 2025-11-17)</td>
+<td>1702 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>139525 lines</td>
+<td>139677 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
