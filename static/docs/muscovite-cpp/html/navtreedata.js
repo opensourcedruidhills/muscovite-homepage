@@ -65,15 +65,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2jolo_2muscovite_2framework_2qt_2include_2muscovite_2qt_2types_2qt_email_8hpp-example.html",
-"classmuscovite_1_1geo_1_1Point.html#a66509c3253e3e1a490cbe945f66a8ed3",
-"classmuscovite_1_1qt_1_1AuthCallCredentials.html",
-"classmuscovite_1_1qt_1_1validation_1_1AsyncUniquenessChecker.html#a482a7dcd347816e73f0e4c6de10d8085",
-"classmuscovite_1_1server_1_1security_1_1grpc_1_1GroupServiceImpl.html#abfa5361fd06dc2b9a915bc49ecb51889",
-"dir_45adcbcc8f87accdc8e6b004030d10d3.html",
-"grpc__wiring_8cpp_source.html",
-"repository_8cpp.html",
-"structmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Token.html#a369da23dda2a448257bf3b21c98912d8",
-"structmuscovite_1_1server_1_1security_1_1Session.html#a3df516c55bfb5e7fff2d72bc731ea08d"
+"classmuscovite_1_1geo_1_1MultiPolygon.html#ab4982d6c54f0c4387192c836cb29eeed",
+"classmuscovite_1_1messaging_1_1Publisher.html#a031040dd4cf695260ccb6c460cf4f53a",
+"classmuscovite_1_1qt_1_1services_1_1GeosciencesServiceClient.html#adf4652be23dd9ece98b4da408aedc30a",
+"classmuscovite_1_1server_1_1security_1_1PasswordService.html#aa078c0e0b94622f08aba55f753289933",
+"dir_06d5cc1ad5e45ef0cdbf69a01c57a0b2.html",
+"group__service__impl_8cpp_source.html",
+"qt__phone_8hpp.html",
+"structmuscovite_1_1geo_1_1srid__4258.html",
+"structmuscovite_1_1server_1_1security_1_1Principal.html#a64bb32355c4db625eb223ac605bc8038"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

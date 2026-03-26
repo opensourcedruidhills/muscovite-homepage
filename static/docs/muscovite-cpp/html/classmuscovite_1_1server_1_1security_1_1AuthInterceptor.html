@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -102,8 +102,8 @@ $(function(){initNavTree('classmuscovite_1_1server_1_1security_1_1AuthIntercepto
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac8a06d9ec2465aa85fb6495cfc072e12" id="r_ac8a06d9ec2465aa85fb6495cfc072e12"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac8a06d9ec2465aa85fb6495cfc072e12">AuthInterceptor</a> (std::shared_ptr&lt; <a class="el" href="classmuscovite_1_1server_1_1security_1_1AuthenticationService.html">AuthenticationService</a> &gt; auth_service, std::shared_ptr&lt; <a class="el" href="classmuscovite_1_1server_1_1security_1_1AuthorizationService.html">AuthorizationService</a> &gt; authz_service, std::unordered_set&lt; std::string &gt; public_methods, std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; method_privileges)</td></tr>
 <tr class="memdesc:ac8a06d9ec2465aa85fb6495cfc072e12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct auth interceptor.  <br /></td></tr>
-<tr class="memitem:a5e1e482fd1156285d6f7882e218d14da" id="r_a5e1e482fd1156285d6f7882e218d14da"><td class="memItemLeft">grpc::experimental::Interceptor *&#160;</td><td class="memItemRight"><a class="el" href="#a5e1e482fd1156285d6f7882e218d14da">CreateServerInterceptor</a> (grpc::experimental::ServerRpcInfo *info)</td></tr>
-<tr class="memitem:ab563b8a0b7cc96e701964283abaa8295" id="r_ab563b8a0b7cc96e701964283abaa8295"><td class="memItemLeft"><a class="el" href="structmuscovite_1_1server_1_1security_1_1AuthDecision.html">AuthDecision</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab563b8a0b7cc96e701964283abaa8295">evaluate_request</a> (const std::string &amp;method, const std::multimap&lt; grpc::string_ref, grpc::string_ref &gt; &amp;metadata) const</td></tr>
+<tr class="memitem:a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1" id="r_a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1"><td class="memItemLeft">::grpc::experimental::Interceptor *&#160;</td><td class="memItemRight"><a class="el" href="#a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1">CreateServerInterceptor</a> (::grpc::experimental::ServerRpcInfo *info)</td></tr>
+<tr class="memitem:a4d08ff05ab86ef66a750f7d0480be140" id="r_a4d08ff05ab86ef66a750f7d0480be140"><td class="memItemLeft"><a class="el" href="structmuscovite_1_1server_1_1security_1_1AuthDecision.html">AuthDecision</a>&#160;</td><td class="memItemRight"><a class="el" href="#a4d08ff05ab86ef66a750f7d0480be140">evaluate_request</a> (const std::string &amp;method, const std::multimap&lt;::grpc::string_ref, ::grpc::string_ref &gt; &amp;metadata) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -113,7 +113,7 @@ Friends</h2></td></tr>
 <div class="textblock"><p>gRPC server interceptor builder. </p>
 <p>The actual interceptor implementation is <span class="tt">AuthServerInterceptor</span> (in the .cpp), which uses the shared Impl to validate JWTs and enforce privileges. This class simply wires shared services and configuration into new interceptor instances. </p>
 
-<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00040">40</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00042">42</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac8a06d9ec2465aa85fb6495cfc072e12" name="ac8a06d9ec2465aa85fb6495cfc072e12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8a06d9ec2465aa85fb6495cfc072e12">&#9670;&#160;</a></span>AuthInterceptor()</h2>
@@ -155,13 +155,13 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00113">113</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00137">137</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a5e1e482fd1156285d6f7882e218d14da" name="a5e1e482fd1156285d6f7882e218d14da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e1e482fd1156285d6f7882e218d14da">&#9670;&#160;</a></span>CreateServerInterceptor()</h2>
+<a id="a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1" name="a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d5b5fab1f74d5ba84ea1c1ea7a0d3f1">&#9670;&#160;</a></span>CreateServerInterceptor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,7 +172,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">grpc::experimental::Interceptor * muscovite::server::security::AuthInterceptor::CreateServerInterceptor </td>
           <td>(</td>
-          <td class="paramtype">grpc::experimental::ServerRpcInfo *</td>          <td class="paramname"><span class="paramname"><em>info</em></span></td><td>)</td>
+          <td class="paramtype">::grpc::experimental::ServerRpcInfo *</td>          <td class="paramname"><span class="paramname"><em>info</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -183,12 +183,12 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00186">186</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00211">211</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ab563b8a0b7cc96e701964283abaa8295" name="ab563b8a0b7cc96e701964283abaa8295"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab563b8a0b7cc96e701964283abaa8295">&#9670;&#160;</a></span>evaluate_request()</h2>
+<a id="a4d08ff05ab86ef66a750f7d0480be140" name="a4d08ff05ab86ef66a750f7d0480be140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d08ff05ab86ef66a750f7d0480be140">&#9670;&#160;</a></span>evaluate_request()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +204,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::multimap&lt; grpc::string_ref, grpc::string_ref &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>metadata</em></span>&#160;) const</td>
+          <td class="paramtype">const std::multimap&lt;::grpc::string_ref, ::grpc::string_ref &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>metadata</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -214,7 +214,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00127">127</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html#l00151">151</a> of file <a class="el" href="server_2src_2security_2auth__interceptor_8cpp_source.html">auth_interceptor.cpp</a>.</p>
 
 </div>
 </div>
@@ -239,7 +239,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00066">66</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00068">68</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
 
 </div>
 </div>

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -106,8 +106,8 @@ Inheritance diagram for muscovite::qt::GrpcCallTask:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ada46286c5c8b312b3d8747a6fb0b3566" id="r_ada46286c5c8b312b3d8747a6fb0b3566"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#ada46286c5c8b312b3d8747a6fb0b3566">CallFunction</a> = std::function&lt;::grpc::Status()&gt;</td></tr>
-<tr class="memdesc:ada46286c5c8b312b3d8747a6fb0b3566"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function type for the blocking gRPC call. Must capture the stub, request, and response pointer. Called on a worker thread — must be thread-safe.  <br /></td></tr>
+<tr class="memitem:ae057058cfb58a7671dd95b8b6ffe04ba" id="r_ae057058cfb58a7671dd95b8b6ffe04ba"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#ae057058cfb58a7671dd95b8b6ffe04ba">CallFunction</a> = std::move_only_function&lt;::grpc::Status()&gt;</td></tr>
+<tr class="memdesc:ae057058cfb58a7671dd95b8b6ffe04ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function type for the blocking gRPC call. Must capture the stub, request, and response pointer. Called on a worker thread — must be thread-safe.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-signals" class="groupheader"><a id="signals" name="signals"></a>
 Signals</h2></td></tr>
@@ -126,7 +126,7 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="#ac15273f26d76add5c0c3c1744ceee709">GrpcCallTask</a> &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const <a class="el" href="#ac15273f26d76add5c0c3c1744ceee709">GrpcCallTask</a> &amp;)=delete</td></tr>
 <tr class="memitem:a8ba6b3f9267b7aefb41dc38fb1462559" id="r_a8ba6b3f9267b7aefb41dc38fb1462559"><td class="memItemLeft"><a id="a8ba6b3f9267b7aefb41dc38fb1462559" name="a8ba6b3f9267b7aefb41dc38fb1462559"></a>
 <a class="el" href="#ac15273f26d76add5c0c3c1744ceee709">GrpcCallTask</a> &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (<a class="el" href="#ac15273f26d76add5c0c3c1744ceee709">GrpcCallTask</a> &amp;&amp;)=delete</td></tr>
-<tr class="memitem:a9f25e27d2b3f5f257c5d64dadda2aa47" id="r_a9f25e27d2b3f5f257c5d64dadda2aa47"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9f25e27d2b3f5f257c5d64dadda2aa47">setCallFunction</a> (<a class="el" href="#ada46286c5c8b312b3d8747a6fb0b3566">CallFunction</a> fn)</td></tr>
+<tr class="memitem:a9f25e27d2b3f5f257c5d64dadda2aa47" id="r_a9f25e27d2b3f5f257c5d64dadda2aa47"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9f25e27d2b3f5f257c5d64dadda2aa47">setCallFunction</a> (<a class="el" href="#ae057058cfb58a7671dd95b8b6ffe04ba">CallFunction</a> fn)</td></tr>
 <tr class="memdesc:a9f25e27d2b3f5f257c5d64dadda2aa47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the function that performs the blocking gRPC call.  <br /></td></tr>
 <tr class="memitem:aca244728421b89a45bbc7cb1e2dd43f8" id="r_aca244728421b89a45bbc7cb1e2dd43f8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aca244728421b89a45bbc7cb1e2dd43f8">start</a> ()</td></tr>
 <tr class="memdesc:aca244728421b89a45bbc7cb1e2dd43f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the async call. Called by the TaskTree adapter. Runs the call function on a background thread via QtConcurrent::run. Emits done(DoneResult::Success) on success, done(DoneResult::Error) on failure.  <br /></td></tr>
@@ -166,14 +166,14 @@ ADR 20260303-tasktree-adoption.md </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="grpc__task__adapter_8hpp_source.html#l00070">70</a> of file <a class="el" href="grpc__task__adapter_8hpp_source.html">grpc_task_adapter.hpp</a>.</p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="ada46286c5c8b312b3d8747a6fb0b3566" name="ada46286c5c8b312b3d8747a6fb0b3566"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada46286c5c8b312b3d8747a6fb0b3566">&#9670;&#160;</a></span>CallFunction</h2>
+<a id="ae057058cfb58a7671dd95b8b6ffe04ba" name="ae057058cfb58a7671dd95b8b6ffe04ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae057058cfb58a7671dd95b8b6ffe04ba">&#9670;&#160;</a></span>CallFunction</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ada46286c5c8b312b3d8747a6fb0b3566">muscovite::qt::GrpcCallTask::CallFunction</a> = std::function&lt;::grpc::Status()&gt;</td>
+          <td class="memname">using <a class="el" href="#ae057058cfb58a7671dd95b8b6ffe04ba">muscovite::qt::GrpcCallTask::CallFunction</a> = std::move_only_function&lt;::grpc::Status()&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -265,7 +265,7 @@ ADR 20260303-tasktree-adoption.md </dd></dl>
         <tr>
           <td class="memname">void muscovite::qt::GrpcCallTask::setCallFunction </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#ada46286c5c8b312b3d8747a6fb0b3566">CallFunction</a></td>          <td class="paramname"><span class="paramname"><em>fn</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#ae057058cfb58a7671dd95b8b6ffe04ba">CallFunction</a></td>          <td class="paramname"><span class="paramname"><em>fn</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>

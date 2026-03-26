@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -96,11 +96,13 @@ $(function(){initNavTree('structmuscovite_1_1server_1_1security_1_1AuthDecision.
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a9538aca0385273fd47f93433ead13792" id="r_a9538aca0385273fd47f93433ead13792"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a9538aca0385273fd47f93433ead13792">allowed</a> {false}</td></tr>
-<tr class="memitem:a101fa91c1dbdb476ce5c5d7a4b4e4e9c" id="r_a101fa91c1dbdb476ce5c5d7a4b4e4e9c"><td class="memItemLeft">grpc::Status&#160;</td><td class="memItemRight"><a class="el" href="#a101fa91c1dbdb476ce5c5d7a4b4e4e9c">status</a> {grpc::Status::OK}</td></tr>
+<tr class="memitem:ae70e5a0cfa60e925ff16c974efb0404c" id="r_ae70e5a0cfa60e925ff16c974efb0404c"><td class="memItemLeft">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae70e5a0cfa60e925ff16c974efb0404c">principal_id</a></td></tr>
+<tr class="memdesc:ae70e5a0cfa60e925ff16c974efb0404c"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTR-504: set when allowed=true and token is present.  <br /></td></tr>
+<tr class="memitem:a64deab322a21e12204b3940029699d8b" id="r_a64deab322a21e12204b3940029699d8b"><td class="memItemLeft">::grpc::Status&#160;</td><td class="memItemRight"><a class="el" href="#a64deab322a21e12204b3940029699d8b">status</a> {::grpc::Status::OK}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00028">28</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00029">29</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a9538aca0385273fd47f93433ead13792" name="a9538aca0385273fd47f93433ead13792"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9538aca0385273fd47f93433ead13792">&#9670;&#160;</a></span>allowed</h2>
@@ -114,23 +116,41 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00029">29</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00030">30</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a101fa91c1dbdb476ce5c5d7a4b4e4e9c" name="a101fa91c1dbdb476ce5c5d7a4b4e4e9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a101fa91c1dbdb476ce5c5d7a4b4e4e9c">&#9670;&#160;</a></span>status</h2>
+<a id="ae70e5a0cfa60e925ff16c974efb0404c" name="ae70e5a0cfa60e925ff16c974efb0404c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae70e5a0cfa60e925ff16c974efb0404c">&#9670;&#160;</a></span>principal_id</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">grpc::Status muscovite::server::security::AuthDecision::status {grpc::Status::OK}</td>
+          <td class="memname">std::optional&lt;std::string&gt; muscovite::server::security::AuthDecision::principal_id</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00030">30</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+<p>FTR-504: set when allowed=true and token is present. </p>
+
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00032">32</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a64deab322a21e12204b3940029699d8b" name="a64deab322a21e12204b3940029699d8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64deab322a21e12204b3940029699d8b">&#9670;&#160;</a></span>status</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">::grpc::Status muscovite::server::security::AuthDecision::status {::grpc::Status::OK}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html#l00031">31</a> of file <a class="el" href="server_2include_2muscovite_2server_2security_2auth__interceptor_8hpp_source.html">auth_interceptor.hpp</a>.</p>
 
 </div>
 </div>

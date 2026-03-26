@@ -17,6 +17,10 @@ var NAVTREEINDEX0 =
 "_2home_2jolo_2muscovite_2framework_2types_2include_2muscovite_2types_2string_literal_8hpp-example.html":[5,14],
 "_2home_2jolo_2muscovite_2framework_2types_2include_2muscovite_2types_2strong_type_base_8hpp-example.html":[5,15],
 "_2home_2jolo_2muscovite_2framework_2types_2include_2muscovite_2types_2url_8hpp-example.html":[5,16],
+"actor__context_8cpp.html":[4,0,0,2,2,2],
+"actor__context_8cpp_source.html":[4,0,0,2,2,2],
+"actor__context_8hpp.html":[4,0,0,2,1,0,0,1],
+"actor__context_8hpp_source.html":[4,0,0,2,1,0,0,1],
 "annotated.html":[3,0],
 "application_8cpp_source.html":[4,0,0,4,1,1,0],
 "application_8hpp.html":[4,0,0,4,0,0,0,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX0 =
 "classmuscovite_1_1geo_1_1MultiLineString.html#a892dffea83029bfb5ad9b16d54a21a48":[3,0,0,1,2,0],
 "classmuscovite_1_1geo_1_1MultiPoint.html":[3,0,0,1,3],
 "classmuscovite_1_1geo_1_1MultiPolygon.html":[3,0,0,1,4],
-"classmuscovite_1_1geo_1_1MultiPolygon.html#a53672b0dde8f9badfd4ef2a18bd2ae79":[3,0,0,1,4,1],
-"classmuscovite_1_1geo_1_1MultiPolygon.html#ab4982d6c54f0c4387192c836cb29eeed":[3,0,0,1,4,0],
-"classmuscovite_1_1geo_1_1Point.html":[3,0,0,1,5],
-"classmuscovite_1_1geo_1_1Point.html#a14a5b8b92d5200c331bc1f8eecd4e420":[3,0,0,1,5,2],
-"classmuscovite_1_1geo_1_1Point.html#a3a94a0f63dd04e89a25ea8a445001c3e":[3,0,0,1,5,5]
+"classmuscovite_1_1geo_1_1MultiPolygon.html#a53672b0dde8f9badfd4ef2a18bd2ae79":[3,0,0,1,4,1]
 };

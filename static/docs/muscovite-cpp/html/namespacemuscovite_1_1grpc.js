@@ -1,6 +1,7 @@
 var namespacemuscovite_1_1grpc =
 [
     [ "oauth2", "namespacemuscovite_1_1grpc_1_1oauth2.html", "namespacemuscovite_1_1grpc_1_1oauth2" ],
+    [ "ActorContext", "classmuscovite_1_1grpc_1_1ActorContext.html", "classmuscovite_1_1grpc_1_1ActorContext" ],
     [ "CorrelationContext", "classmuscovite_1_1grpc_1_1CorrelationContext.html", "classmuscovite_1_1grpc_1_1CorrelationContext" ],
     [ "CorrelationFlagFormatter", "classmuscovite_1_1grpc_1_1CorrelationFlagFormatter.html", null ],
     [ "GrpcServer", "classmuscovite_1_1grpc_1_1GrpcServer.html", "classmuscovite_1_1grpc_1_1GrpcServer" ],

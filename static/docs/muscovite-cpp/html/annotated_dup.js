@@ -79,6 +79,7 @@ var annotated_dup =
           [ "OAuth2Token", "structmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Token.html", "structmuscovite_1_1grpc_1_1oauth2_1_1OAuth2Token" ],
           [ "PKCE", "classmuscovite_1_1grpc_1_1oauth2_1_1PKCE.html", "classmuscovite_1_1grpc_1_1oauth2_1_1PKCE" ]
         ] ],
+        [ "ActorContext", "classmuscovite_1_1grpc_1_1ActorContext.html", "classmuscovite_1_1grpc_1_1ActorContext" ],
         [ "CorrelationContext", "classmuscovite_1_1grpc_1_1CorrelationContext.html", "classmuscovite_1_1grpc_1_1CorrelationContext" ],
         [ "CorrelationFlagFormatter", "classmuscovite_1_1grpc_1_1CorrelationFlagFormatter.html", null ],
         [ "GrpcServer", "classmuscovite_1_1grpc_1_1GrpcServer.html", "classmuscovite_1_1grpc_1_1GrpcServer" ],
@@ -209,7 +210,7 @@ var annotated_dup =
             [ "UserServiceImpl", "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl.html", "classmuscovite_1_1server_1_1security_1_1grpc_1_1UserServiceImpl" ]
           ] ],
           [ "AccessCheckResult", "structmuscovite_1_1server_1_1security_1_1AccessCheckResult.html", null ],
-          [ "AuthDecision", "structmuscovite_1_1server_1_1security_1_1AuthDecision.html", null ],
+          [ "AuthDecision", "structmuscovite_1_1server_1_1security_1_1AuthDecision.html", "structmuscovite_1_1server_1_1security_1_1AuthDecision" ],
           [ "AuthenticationService", "classmuscovite_1_1server_1_1security_1_1AuthenticationService.html", "classmuscovite_1_1server_1_1security_1_1AuthenticationService" ],
           [ "AuthInterceptor", "classmuscovite_1_1server_1_1security_1_1AuthInterceptor.html", "classmuscovite_1_1server_1_1security_1_1AuthInterceptor" ],
           [ "AuthInterceptorFactory", "classmuscovite_1_1server_1_1security_1_1AuthInterceptorFactory.html", "classmuscovite_1_1server_1_1security_1_1AuthInterceptorFactory" ],

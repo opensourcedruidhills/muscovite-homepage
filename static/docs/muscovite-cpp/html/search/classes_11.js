@@ -1,7 +1,7 @@
 var searchData=
 [
   ['sample_0',['Sample',['../structmuscovite_1_1qt_1_1services_1_1Sample.html',1,'muscovite::qt::services']]],
-  ['scope_1',['Scope',['../classmuscovite_1_1grpc_1_1CorrelationContext_1_1Scope.html',1,'muscovite::grpc::CorrelationContext']]],
+  ['scope_1',['Scope',['../classmuscovite_1_1grpc_1_1ActorContext_1_1Scope.html',1,'muscovite::grpc::ActorContext::Scope'],['../classmuscovite_1_1grpc_1_1CorrelationContext_1_1Scope.html',1,'muscovite::grpc::CorrelationContext::Scope']]],
   ['searchconfig_2',['SearchConfig',['../structmuscovite_1_1search_1_1SearchConfig.html',1,'muscovite::search']]],
   ['searchconnectionerror_3',['SearchConnectionError',['../classmuscovite_1_1search_1_1SearchConnectionError.html',1,'muscovite::search']]],
   ['searcherror_4',['SearchError',['../classmuscovite_1_1search_1_1SearchError.html',1,'muscovite::search']]],

@@ -82,7 +82,7 @@ var searchData=
   ['primary_5fpool_79',['primary_pool',['../classmuscovite_1_1dba_1_1ReadReplicaRouter.html#a0d879a6e60d73e7a050189f6c30940aa',1,'muscovite::dba::ReadReplicaRouter']]],
   ['primarycolor_80',['primaryColor',['../classmuscovite_1_1qt_1_1Theme.html#a795d72e15f6cb989f6b70bf9cb222519',1,'muscovite::qt::Theme']]],
   ['principal_81',['Principal',['../structmuscovite_1_1server_1_1security_1_1Principal.html',1,'muscovite::server::security']]],
-  ['principal_5fid_82',['principal_id',['../structmuscovite_1_1server_1_1security_1_1Session.html#a9d353919587580230dd00fcf618d7ccc',1,'muscovite::server::security::Session']]],
+  ['principal_5fid_82',['principal_id',['../structmuscovite_1_1server_1_1security_1_1AuthDecision.html#ae70e5a0cfa60e925ff16c974efb0404c',1,'muscovite::server::security::AuthDecision::principal_id'],['../structmuscovite_1_1server_1_1security_1_1Session.html#a9d353919587580230dd00fcf618d7ccc',1,'muscovite::server::security::Session::principal_id']]],
   ['privilege_5fchecker_2ehpp_83',['privilege_checker.hpp',['../privilege__checker_8hpp.html',1,'']]],
   ['privilege_5fservice_5fimpl_2ehpp_84',['privilege_service_impl.hpp',['../privilege__service__impl_8hpp.html',1,'']]],
   ['privilegechecker_85',['PrivilegeChecker',['../classmuscovite_1_1qt_1_1PrivilegeChecker.html',1,'muscovite::qt']]],

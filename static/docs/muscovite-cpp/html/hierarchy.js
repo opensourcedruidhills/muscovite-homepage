@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "muscovite::server::security::AccessCheckResult", "structmuscovite_1_1server_1_1security_1_1AccessCheckResult.html", null ],
+    [ "muscovite::grpc::ActorContext", "classmuscovite_1_1grpc_1_1ActorContext.html", null ],
     [ "muscovite::dba::ArcConstraintDetail", "structmuscovite_1_1dba_1_1ArcConstraintDetail.html", null ],
     [ "muscovite::qt::validation::AsyncUniquenessChecker", "classmuscovite_1_1qt_1_1validation_1_1AsyncUniquenessChecker.html", [
       [ "muscovite::qt::validation::GrpcUniquenessChecker", "classmuscovite_1_1qt_1_1validation_1_1GrpcUniquenessChecker.html", null ],
@@ -235,6 +236,7 @@ var hierarchy =
     ] ],
     [ "muscovite::dba::RetryPolicy", "structmuscovite_1_1dba_1_1RetryPolicy.html", null ],
     [ "muscovite::qt::services::Sample", "structmuscovite_1_1qt_1_1services_1_1Sample.html", null ],
+    [ "muscovite::grpc::ActorContext::Scope", "classmuscovite_1_1grpc_1_1ActorContext_1_1Scope.html", null ],
     [ "muscovite::grpc::CorrelationContext::Scope", "classmuscovite_1_1grpc_1_1CorrelationContext_1_1Scope.html", null ],
     [ "muscovite::search::SearchConfig", "structmuscovite_1_1search_1_1SearchConfig.html", null ],
     [ "muscovite::search::SearchEvent", "structmuscovite_1_1search_1_1SearchEvent.html", null ],

@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.0</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;1.76.1</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -117,7 +117,7 @@ $(function(){initNavTree('grpc__task__adapter_8cpp_source.html','',''); });
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>GrpcCallTask::~GrpcCallTask() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="foldopen" id="foldopen00026" data-start="{" data-end="}">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">   26</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">GrpcCallTask::setCallFunction</a>(<a class="code hl_typedef" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ada46286c5c8b312b3d8747a6fb0b3566">CallFunction</a> fn)</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">   26</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">GrpcCallTask::setCallFunction</a>(<a class="code hl_typedef" href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ae057058cfb58a7671dd95b8b6ffe04ba">CallFunction</a> fn)</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>{</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    call_fn_ = std::move(fn);</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
@@ -133,11 +133,11 @@ $(function(){initNavTree('grpc__task__adapter_8cpp_source.html','',''); });
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    }</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">// Capture call function by value — it owns the stub/request/response captures</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">auto</span> fn = call_fn_;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">// Move call function — move_only_function cannot be copied</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">auto</span> fn = std::move(call_fn_);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="comment">// Run the blocking gRPC call on a worker thread</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">auto</span> future = QtConcurrent::run([fn = std::move(fn)]() -&gt; ::grpc::Status {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">auto</span> future = QtConcurrent::run([fn = std::move(fn)]() <span class="keyword">mutable</span> -&gt; ::grpc::Status {</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">return</span> fn();</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    });</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
@@ -159,7 +159,7 @@ $(function(){initNavTree('grpc__task__adapter_8cpp_source.html','',''); });
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_a9f25e27d2b3f5f257c5d64dadda2aa47"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#a9f25e27d2b3f5f257c5d64dadda2aa47">muscovite::qt::GrpcCallTask::setCallFunction</a></div><div class="ttdeci">void setCallFunction(CallFunction fn)</div><div class="ttdoc">Set the function that performs the blocking gRPC call.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">grpc_task_adapter.cpp:26</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_ac15273f26d76add5c0c3c1744ceee709"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ac15273f26d76add5c0c3c1744ceee709">muscovite::qt::GrpcCallTask::GrpcCallTask</a></div><div class="ttdeci">GrpcCallTask(QObject *parent=nullptr)</div><div class="ttdoc">Construct a GrpcCallTask.</div><div class="ttdef"><b>Definition</b> <a href="#l00019">grpc_task_adapter.cpp:19</a></div></div>
 <div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_aca244728421b89a45bbc7cb1e2dd43f8"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#aca244728421b89a45bbc7cb1e2dd43f8">muscovite::qt::GrpcCallTask::start</a></div><div class="ttdeci">void start()</div><div class="ttdoc">Start the async call. Called by the TaskTree adapter. Runs the call function on a background thread v...</div><div class="ttdef"><b>Definition</b> <a href="#l00031">grpc_task_adapter.cpp:31</a></div></div>
-<div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_ada46286c5c8b312b3d8747a6fb0b3566"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ada46286c5c8b312b3d8747a6fb0b3566">muscovite::qt::GrpcCallTask::CallFunction</a></div><div class="ttdeci">std::function&lt;::grpc::Status()&gt; CallFunction</div><div class="ttdoc">Function type for the blocking gRPC call. Must capture the stub, request, and response pointer....</div><div class="ttdef"><b>Definition</b> <a href="grpc__task__adapter_8hpp_source.html#l00077">grpc_task_adapter.hpp:77</a></div></div>
+<div class="ttc" id="aclassmuscovite_1_1qt_1_1GrpcCallTask_html_ae057058cfb58a7671dd95b8b6ffe04ba"><div class="ttname"><a href="classmuscovite_1_1qt_1_1GrpcCallTask.html#ae057058cfb58a7671dd95b8b6ffe04ba">muscovite::qt::GrpcCallTask::CallFunction</a></div><div class="ttdeci">std::move_only_function&lt;::grpc::Status()&gt; CallFunction</div><div class="ttdoc">Function type for the blocking gRPC call. Must capture the stub, request, and response pointer....</div><div class="ttdef"><b>Definition</b> <a href="grpc__task__adapter_8hpp_source.html#l00077">grpc_task_adapter.hpp:77</a></div></div>
 <div class="ttc" id="agrpc__task__adapter_8hpp_html"><div class="ttname"><a href="grpc__task__adapter_8hpp.html">grpc_task_adapter.hpp</a></div><div class="ttdoc">TaskTree-compatible adapter for async gRPC unary calls.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

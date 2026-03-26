@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.76.0 | <strong>Generated</strong>:
-2026-03-22 | <strong>Commit</strong>: 5178e9d0 |
+<p><strong>Version</strong>: 1.76.1 | <strong>Generated</strong>:
+2026-03-26 | <strong>Commit</strong>: 2376cda4 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -130,12 +130,12 @@ systems.</p>
 <code>dslgen/generators/</code>):</p>
 <ul>
 <li><strong>cmake</strong> (5 modules, 2002 lines)</li>
-<li><strong>cpp</strong> (80 modules, 22585 lines)</li>
+<li><strong>cpp</strong> (80 modules, 22787 lines)</li>
 <li><strong>docs</strong> (13 modules, 5047 lines)</li>
-<li><strong>grpc</strong> (31 modules, 8294 lines)</li>
+<li><strong>grpc</strong> (31 modules, 8612 lines)</li>
 <li><strong>messaging</strong> (2 modules, 599 lines)</li>
 <li><strong>postgres</strong> (30 modules, 8442 lines)</li>
-<li><strong>qt</strong> (60 modules, 16785 lines)</li>
+<li><strong>qt</strong> (60 modules, 17161 lines)</li>
 <li><strong>search</strong> (4 modules, 993 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 700 lines)</li>
 <li><strong>tlaplus</strong> (4 modules, 776 lines)</li>
@@ -220,7 +220,7 @@ lifecycle.</td>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-139734-lines">Layer 0 — Racket (139734
+<h3 id="layer-0--racket-140630-lines">Layer 0 — Racket (140630
 lines)</h3>
 <table>
 <thead>
@@ -244,15 +244,15 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: cpp</td>
-<td>22585</td>
+<td>22787</td>
 </tr>
 <tr>
 <td>Generator: grpc</td>
-<td>8294</td>
+<td>8612</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>16785</td>
+<td>17161</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
@@ -268,7 +268,7 @@ lines)</h3>
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1--c-framework-43257-lines">Layer 1 — C++ Framework (43257
+<h3 id="layer-1--c-framework-43535-lines">Layer 1 — C++ Framework (43535
 lines)</h3>
 <table>
 <thead>
@@ -280,11 +280,11 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Headers (.hpp)</td>
-<td>17789</td>
+<td>17878</td>
 </tr>
 <tr>
 <td>Sources (.cpp)</td>
-<td>25468</td>
+<td>25657</td>
 </tr>
 <tr>
 <td>C++ Tests</td>
@@ -299,13 +299,89 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1760----2026-03-22">[1.76.0] -- 2026-03-22</h2>
+<h2 id="1761----2026-03-26">[1.76.1] -- 2026-03-26</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li><strong>FTR-501</strong>: muscovite as a Conan package —
+<code>conanfile.py</code> now has <code>build()</code>,
+<code>package()</code>, and <code>package_info()</code> methods;
+<code>conan export-pkg .</code> works; generated consumer
+<code>conanfile.py</code> uses
+<code>self.requires("muscovite/...")</code> and derives
+<code>MUSCOVITE_PROTO_DIR</code> from Conan package folder</li>
+<li><strong>FTR-502</strong>: Copyable error messages — gRPC error
+dialogs expose a "Copy" button; error text copied to clipboard in both
+Widgets and QML frontends</li>
+<li><strong>FTR-503</strong>: Copy row as JSON — list widget context
+menu and toolbar button copy selected row data as JSON to clipboard</li>
+<li><strong>FTR-504</strong>: Propagate authenticated actor to DBA audit
+fields — gRPC service layer passes authenticated user identity to
+<code>created_by</code> / <code>updated_by</code> audit columns</li>
+<li><strong>FTR-505</strong>: Resolve audit UUIDs to display names —
+audit UUID columns in Qt list widgets are resolved via
+<code>security.principal</code> JOIN and displayed as human-readable
+names</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>BFX-012</strong>: Audit timestamp mapping broken for
+entities without explicit <code>created_at</code> field</li>
+<li><strong>BFX-013</strong>: Qt Widgets FK combobox pre-selection used
+wrong proto accessor (empty string); lookup-table FKs now use
+<code>entity.rel_name().id().value()</code>, UUID FKs use
+<code>entity.fk_name().value()</code>, plain FKs use
+<code>entity.fk_name()</code></li>
+</ul>
+<h3 id="test-metrics">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket parser</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Racket generators</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Racket integration</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>C++ build</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>C++ unit tests</td>
+<td>✓</td>
+<td>0</td>
+<td>pass</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1760----2026-03-22">[1.76.0] -- 2026-03-22</h2>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>wire Qt gRPC client generator into widgets + QML pipeline (FTR-494)
 (#179)</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>(BFX-010): use root entity name in sqitch FK/dep/SM generators</li>
 </ul>
@@ -333,7 +409,7 @@ infrastructure</li>
 intent</li>
 </ul>
 <h2 id="1750----2026-03-22">[1.75.0] -- 2026-03-22</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li><p><strong>FTR-491</strong>: Idempotency keys — proto fields and SQL
 schema</p>
@@ -366,7 +442,7 @@ generation</p>
 call</li>
 </ul></li>
 </ul>
-<h3 id="test-metrics">Test Metrics</h3>
+<h3 id="test-metrics-1">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -403,27 +479,6 @@ call</li>
 </tr>
 </tbody>
 </table>
-<h2 id="1740----2026-03-20">[1.74.0] -- 2026-03-20</h2>
-<h3 id="fixed-1">Fixed</h3>
-<ul>
-<li>generate-system-brief.sh fails silently when examples/ absent</li>
-</ul>
-<h3 id="maintenance-1">Maintenance</h3>
-<ul>
-<li>update gate timings from release dry-run</li>
-</ul>
-<h3 id="other-1">Other</h3>
-<ul>
-<li>governance: v1.74.0 release prep + retrospective</li>
-<li>Merge pull request #178 from
-opensourcedruidhills/feature/ftr-489-libpqxx-conan-8</li>
-<li>FTR-489: libpqxx 8.0 via Conan + idiomatic API migration</li>
-<li>Merge pull request #177 from
-opensourcedruidhills/feature/ftr-490-conan-spdlog-fmt-boost</li>
-<li>FTR-490: spdlog/fmt/boost via Conan (drop system packages)</li>
-<li>FTR-488: Conan-managed gRPC + Protobuf, drop system packages
-(#176)</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
@@ -458,7 +513,7 @@ opensourcedruidhills/feature/ftr-490-conan-spdlog-fmt-boost</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>5178e9d0</code> (project:
+<p>Last measured at commit <code>2376cda4</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -471,8 +526,8 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1004.9s</td>
-<td>296 compilation steps</td>
+<td>1118.9s</td>
+<td>297 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
@@ -481,7 +536,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 32 recorded runs.</p>
+<p>Build history: 34 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -501,7 +556,7 @@ muscovite):</p>
 <td>96</td>
 <td>0</td>
 <td>100%</td>
-<td>107.0s</td>
+<td>163.0s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -509,16 +564,16 @@ muscovite):</p>
 <td>19</td>
 <td>0</td>
 <td>100%</td>
-<td>1.6s</td>
+<td>0.5s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (31.2s)</li>
-<li><strong>slow</strong>: 54/54 passed (58.8s)</li>
-<li><strong>integration</strong>: 12/12 passed (16.9s)</li>
+<li><strong>fast</strong>: 30/30 passed (49.8s)</li>
+<li><strong>slow</strong>: 54/54 passed (90.5s)</li>
+<li><strong>integration</strong>: 12/12 passed (22.6s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -535,6 +590,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.76.1</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>96/96</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v1.76.0</td>
 <td>8</td>
@@ -607,17 +670,9 @@ muscovite):</p>
 <td>96/96</td>
 <td>31/32</td>
 </tr>
-<tr>
-<td>v1.70.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>96/96</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.76.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.76.1).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -678,19 +733,19 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.76.0</td>
+<td>1.76.1</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>1716 (since 2025-11-17)</td>
+<td>1745 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>139734 lines</td>
+<td>140630 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>43257 lines</td>
+<td>43535 lines</td>
 </tr>
 <tr>
 <td>Generator targets</td>

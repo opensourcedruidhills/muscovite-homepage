@@ -87,6 +87,7 @@ var searchData=
   ['rowcount_84',['rowCount',['../classmuscovite_1_1qt_1_1models_1_1EntityListModel.html#a1eebe24c5f3fc57b6318a73eac96ae91',1,'muscovite::qt::models::EntityListModel']]],
   ['rowdeserializable_85',['RowDeserializable',['../conceptmuscovite_1_1dba_1_1RowDeserializable.html',1,'muscovite::dba']]],
   ['rowmappable_86',['RowMappable',['../conceptmuscovite_1_1dba_1_1RowMappable.html',1,'muscovite::dba']]],
-  ['rs256_87',['RS256',['../classmuscovite_1_1server_1_1security_1_1JwtService.html#a4b7123f5e46162f76acf0a6ba8e6bc22ab774c36caa844a2b0e94f9c04c3ccacc',1,'muscovite::server::security::JwtService']]],
-  ['run_88',['run',['../classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c',1,'muscovite::qt::example::MuscoviteApplication']]]
+  ['rowtojson_87',['rowToJson',['../classmuscovite_1_1qt_1_1models_1_1GrpcItemModel.html#ab1b3583b531cc582bf3cb42d5ceac6f1',1,'muscovite::qt::models::GrpcItemModel']]],
+  ['rs256_88',['RS256',['../classmuscovite_1_1server_1_1security_1_1JwtService.html#a4b7123f5e46162f76acf0a6ba8e6bc22ab774c36caa844a2b0e94f9c04c3ccacc',1,'muscovite::server::security::JwtService']]],
+  ['run_89',['run',['../classmuscovite_1_1qt_1_1example_1_1MuscoviteApplication.html#a87dea404737fe74de59916153608859c',1,'muscovite::qt::example::MuscoviteApplication']]]
 ];
