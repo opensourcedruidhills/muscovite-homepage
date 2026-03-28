@@ -117,7 +117,7 @@
 <p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 365</p>
+| <strong>Rules</strong>: 362</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -551,7 +551,7 @@ ProjectBlock         &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody 
 <pre class="peg"><code>Context              &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
 BuiltinAnnotation    &lt;- &#39;@&#39; &#39;BUILTIN&#39;
 ContextBody          &lt;- ContextItem*
-ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / LegacyView / LegacyProcedure / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext</code></pre>
+ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / LegacyView / LegacyProcedure / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext / Effect</code></pre>
 <h3 id="3-entity">3. Entity</h3>
 <p>VIEW_ENTITY: read-only view-sourced entity (FTR-432). Identical to
 ENTITY for field declarations but generates read-only code.</p>
@@ -606,7 +606,9 @@ duplicated between muscovite.peg and the former muscovite-lay.peg). The
 (lay-types.rkt) remain separate. ADR: 20260314-grammar-reunification.md
 (partially supersedes ADR 20260223) NOTE: LAYOUT blocks remain rejected
 in .ddd files by the parser (FTR-134). These rules are valid only in
-.lay files parsed by lay-parser.rkt.</p>
+.lay files parsed by lay-parser.rkt. NOTE: LayProgram is intentionally
+unreferenced from Program. It is a separate start rule used by
+lay-parser.rkt (cpp-peglib: parser.parse("LayProgram", ...)).</p>
 <pre class="peg"><code>Aggregate            &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
 ContainsClause       &lt;- &#39;(&#39; &#39;CONTAINS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39;
 EmbedsClause         &lt;- &#39;EMBEDS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
@@ -870,7 +872,7 @@ CoerceOptions        &lt;- IDENTIFIER &#39;=&#39; STRING
 MappingClause        &lt;- DocClause / SynonymsClause
 LegacyView           &lt;- &#39;LEGACY_VIEW&#39; IDENTIFIER UuidAnnotation
 LegacyViewBody       &lt;- LegacyViewClause*
-LegacyViewClause     &lt;- LegacyViewSourceTables / LegacyViewCalls / LegacyViewMaterialized / LegacyViewBody_ / FieldDecl / DocClause
+LegacyViewClause     &lt;- LegacyViewSourceTables / LegacyViewCalls / LegacyViewMaterialized / LegacyViewBody_ / Field / DocClause
 LegacyViewSourceTables &lt;- &#39;SOURCE_TABLES&#39; IdentifierList &#39;;&#39;
 LegacyViewCalls      &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
 LegacyViewMaterialized &lt;- &#39;MATERIALIZED&#39; BooleanLiteral &#39;;&#39;

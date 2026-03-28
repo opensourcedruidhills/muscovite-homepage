@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Translate Layer 0 from Racket to
+C++ — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Translate Layer 0 from Racket to C++</span>
+</nav>
+
+<h1>Translate Layer 0 from Racket to C++</h1>
+
+
+<h1 id="translate-layer-0-from-racket-to-c">Translate Layer 0 from
+Racket to C++</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-26</li>
+<li>Tags: architecture, layer0, toolchain, ai-accessibility</li>
+</ul>
+<p>Technical Story: IDEA-098, IDEA-099, deep-dive analysis session
+2026-03-26</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Layer 0 (the DSL parser, IR model, and all code generators) is
+implemented in Racket (~140K lines, 349 files, 254 generator modules).
+Muscovite is planned to grow from 10 generator targets to 14+ (adding
+C#, Java, React, Flutter backends and frontends). Each new target adds
+~50-80 generator modules (~15-20K lines).</p>
+<p>Frontier AI models (Claude Opus/Sonnet, GPT-4) are measurably less
+capable in Racket than in C++. This manifests as:</p>
+<ol type="1">
+<li><strong>Lower first-draft quality</strong> — more correction cycles
+per generator module</li>
+<li><strong>Weaker debugging</strong> — models lose track of parenthesis
+nesting, confuse <code>for/list</code> with <code>for/fold</code>, break
+<code>apply string-append</code> by returning wrong types</li>
+<li><strong>Slower refactoring</strong> — Racket-specific patterns
+(match expressions, s-expression templates, contract-out) have fewer
+training examples than C++ equivalents</li>
+<li><strong>Model dispatch workarounds</strong> — the decision
+heuristics recommend Mistral for Racket because Opus/Sonnet are weak in
+Lisp, fragmenting the model strategy</li>
+</ol>
+<p>This productivity tax is a <strong>variable cost on a growing
+codebase</strong>. As Layer 0 doubles with new targets, the cumulative
+friction compounds.</p>
+<p>Additionally, translating to C++ provides:</p>
+<ul>
+<li><strong>IP protection</strong>: distribute a compiled binary, not
+generator source</li>
+<li><strong>Zero-dependency distribution</strong>: no Racket runtime on
+target machines</li>
+<li><strong>Sub-second startup</strong>: no 71s cold start / 10s warm
+start</li>
+<li><strong>Dogfooding</strong>: Layer 0 uses the same language as Layer
+1 and Layer 2</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>AI agent productivity on Layer 0 (primary driver — 20-30% efficiency
+gain per session, compounding across all future generator targets)</li>
+<li>Distribution simplicity (single static binary vs Racket runtime
+dependency)</li>
+<li>IP protection for commercial licensing (compiled binary)</li>
+<li>Startup performance (&lt;1s vs 10-71s)</li>
+<li>Consistency with Layer 1 (C++ framework) and Layer 2 (generated
+C++)</li>
+<li>The Racket codebase is undergoing a final idiomatic refactoring wave
+(v1.77.0) that will bring all generators to consistent template-DSL
+style — the optimal translation source</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Translate Layer 0 to C++</strong> (chosen)</li>
+<li><strong>Translate Layer 0 to Python</strong></li>
+<li><strong>Translate Layer 0 to TypeScript</strong></li>
+<li><strong>Keep Racket, mitigate via documentation and style
+enforcement</strong></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Translate Layer 0 to C++"</strong>, because
+it maximizes AI agent productivity on the language where frontier models
+are strongest, provides IP protection and zero-dependency distribution,
+dogfoods the same stack as Layer 1/2, and eliminates the Racket runtime
+dependency.</p>
+<p>The translation is a <strong>parallel build</strong> — Racket remains
+the reference implementation until the C++ tool produces byte-identical
+golden output for all targets. Retirement is gradual, per-target, with a
+kill switch in <code>generate.rkt</code>.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Every new generator target (C#, Java, React, Flutter) written in C++
+from day one — no Racket tax on greenfield development</li>
+<li>Unified language across all three layers (C++ everywhere)</li>
+<li>Distributable as a single binary for commercial customers</li>
+<li>Sub-second cold start enables tighter edit-generate-test loops</li>
+<li>AI agents operate at peak capability on Layer 0 work</li>
+<li>The v1.77.0 style ratchet produces maximally idiomatic Racket — the
+cleanest possible translation source</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>6-7 week translation effort (heavily AI-assisted,
+parallelizable)</li>
+<li>Loss of Racket's REPL-driven development for generator
+prototyping</li>
+<li>C++ compile step for generator changes (mitigated by ccache +
+mold)</li>
+<li>Temporary maintenance of two implementations during transition</li>
+<li>The template DSL library requires design work (not mechanical
+translation)</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-translate-to-c">Option 1: Translate to C++</h3>
+<ul>
+<li>Good, because C++ is the highest-resource language for frontier AI
+models</li>
+<li>Good, because it dogfoods the same stack (Layer 0 = Layer 1 = Layer
+2)</li>
+<li>Good, because compiled binary protects IP and eliminates runtime
+dependency</li>
+<li>Good, because Boost (already a Conan dependency) provides Spirit.X3
+for PEG parsing</li>
+<li>Good, because CLI11 (already a Conan dependency) handles arg
+parsing</li>
+<li>Good, because nlohmann_json (already a Conan dependency) handles
+JSON seed data</li>
+<li>Bad, because C++ has a compile step (Racket runs directly)</li>
+<li>Bad, because 6-7 weeks of translation effort</li>
+</ul>
+<h3 id="option-2-translate-to-python">Option 2: Translate to Python</h3>
+<ul>
+<li>Good, because Python is well-modeled by AI and has a large developer
+pool</li>
+<li>Good, because no compile step (interpreted like Racket)</li>
+<li>Good, because rich ecosystem (Jinja2, lark, pydantic)</li>
+<li>Bad, because introduces a third language to the project</li>
+<li>Bad, because Python performance is significantly worse than C++ for
+large models</li>
+<li>Bad, because no IP protection (source distribution)</li>
+<li>Bad, because runtime dependency (Python 3.x)</li>
+</ul>
+<h3 id="option-3-translate-to-typescript">Option 3: Translate to
+TypeScript</h3>
+<ul>
+<li>Good, because TypeScript is well-modeled by AI</li>
+<li>Good, because Node.js has fast startup</li>
+<li>Bad, because introduces a third language and runtime (Node.js)</li>
+<li>Bad, because no IP protection (source distribution)</li>
+<li>Bad, because npm ecosystem is a maintenance burden</li>
+<li>Bad, because no Conan integration — separate build system</li>
+</ul>
+<h3 id="option-4-keep-racket-with-mitigations">Option 4: Keep Racket
+with mitigations</h3>
+<ul>
+<li>Good, because zero translation cost</li>
+<li>Good, because Racket is technically well-suited for DSL work</li>
+<li>Bad, because the AI productivity tax is permanent and growing</li>
+<li>Bad, because every new target (C#, Java, React, Flutter) pays the
+tax</li>
+<li>Bad, because model dispatch fragmentation (Mistral for Racket)
+persists</li>
+<li>Bad, because Racket runtime remains a distribution dependency</li>
+</ul>
+<h2 id="implementation-strategy">Implementation Strategy</h2>
+<h3 id="naming">Naming</h3>
+<p>The C++ tool is called <strong><code>muscomp</code></strong>
+(muscovite compiler). Located in <code>toolchain/muscomp/</code>.</p>
+<h3 id="peg-library">PEG Library</h3>
+<p>Use <a href="https://github.com/yhirose/cpp-peglib">cpp-peglib</a>
+(MIT license, header-only, C++17, Packrat parsing, available on Conan).
+The existing 365-rule PEG grammar
+(<code>dslgen/grammar/muscovite.peg</code>) is the spec — cpp-peglib
+reads PEG grammars directly, minimizing translation risk.</p>
+<p>Alternative: Boost.Spirit.X3 (BSL-1.0, already a dependency). More
+verbose but zero additional dependency. Decision deferred to
+implementation phase.</p>
+<h3 id="translation-phases">Translation Phases</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Scope</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Skeleton</td>
+<td>CLI, file I/O, IR structs, naming</td>
+<td>Mechanical translation</td>
+</tr>
+<tr>
+<td>2. Parser</td>
+<td>PEG grammar → cpp-peglib</td>
+<td>Grammar-driven, minimal translation</td>
+</tr>
+<tr>
+<td>3. Template DSL</td>
+<td>Block/Line/Indent builder</td>
+<td>Design required (~500 lines)</td>
+</tr>
+<tr>
+<td>4. Generators</td>
+<td>254 modules, target-by-target</td>
+<td>AI-assisted, golden test validated</td>
+</tr>
+<tr>
+<td>5. Validation</td>
+<td>Cross-reference, relationships</td>
+<td>Mechanical translation</td>
+</tr>
+<tr>
+<td>6. Migration</td>
+<td>Semantic diff engine</td>
+<td>Mechanical translation</td>
+</tr>
+<tr>
+<td>7. Integration</td>
+<td>Kill switch in generate.rkt</td>
+<td>Gradual per-target cutover</td>
+</tr>
+</tbody>
+</table>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<ul>
+<li>Byte-identical golden output for all 160 golden files</li>
+<li>All 96 Racket test suite scenarios reproducible as C++ integration
+tests</li>
+<li><code>muscomp --project examples/fhir-health/project.mus --full</code>
+produces identical output to
+<code>racket generate.rkt --project examples/fhir-health/project.mus --full</code></li>
+<li>Sub-second cold start (measured)</li>
+</ul>
+<h3 id="retirement-protocol">Retirement Protocol</h3>
+<ol type="1">
+<li>Each generator target has an independent <code>--use-muscomp</code>
+flag</li>
+<li>When a target passes all golden tests via muscomp, it graduates</li>
+<li>When all targets graduate, Racket generators move to
+<code>archive/dslgen-racket/</code></li>
+<li><code>generate.rkt</code> becomes a thin wrapper that calls
+<code>muscomp</code></li>
+<li>After one full release cycle with muscomp-only, remove Racket
+dependency</li>
+</ol>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes: <a
+href="20251223-use-racket-for-dsl-code-generation.html">20251223-use-racket-for-dsl-code-generation</a></li>
+<li>Related: <a
+href="20260211-grammar-first-dsl-evolution.html">20260211-grammar-first-dsl-evolution</a></li>
+<li>Related: <a
+href="20260307-strong-type-template-families.html">20260307-strong-type-template-families</a></li>
+<li>PEG library: <a
+href="https://github.com/yhirose/cpp-peglib">cpp-peglib</a> (MIT,
+header-only, Conan)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When writing NEW generator targets (C#, Java, React, Flutter) —
+write in C++ inside <code>toolchain/muscomp/</code>, not in Racket</li>
+<li>When translating existing Racket generators to C++</li>
+<li>When choosing where to implement new DSL features (parser,
+validation)</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>During the v1.77.0 Racket refactoring wave — complete the style
+ratchet in Racket first, then translate the clean result</li>
+<li>For bug fixes to existing Racket generators — fix in Racket until
+that target graduates to muscomp</li>
+<li>For the PEG grammar itself
+(<code>dslgen/grammar/muscovite.peg</code>) — this remains the single
+source of truth regardless of parser implementation</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>New generator targets MUST be implemented in
+<code>toolchain/muscomp/</code></li>
+<li>Golden test parity is the acceptance gate — byte-identical output
+required</li>
+<li><code>release.sh</code> runs both Racket and muscomp generators
+during transition, diff-checking output</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>toolchain/muscomp/</code> — C++ tool source (new)</li>
+<li><code>dslgen/grammar/muscovite.peg</code> — PEG grammar (shared,
+single source of truth)</li>
+<li><code>dslgen/tests/test-output-golden/</code> — golden files (shared
+acceptance criteria)</li>
+<li><code>dslgen/generate.rkt</code> — kill switch / dispatch to
+muscomp</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

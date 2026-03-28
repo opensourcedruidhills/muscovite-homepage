@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adopt-On-Touch Contract
+Policy — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Adopt-On-Touch Contract Policy</span>
+</nav>
+
+<h1>Adopt-On-Touch Contract Policy</h1>
+
+
+<h1 id="adopt-on-touch-contract-policy">Adopt-On-Touch Contract
+Policy</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-03-27</li>
+<li>Tags: racket, contracts, quality, refactoring</li>
+</ul>
+<p>Technical Story: FTR-513 — Contract-enforce parser, migration, and
+verification modules.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Racket's contract system provides runtime boundary checking between
+modules, catching type errors and invalid arguments at module
+boundaries. The contract system is opt-in: modules can use
+<code>provide</code> (untyped) or
+<code>(provide (contract-out ...))</code> (typed).</p>
+<p>The Muscovite DSL generator codebase (~50 modules) has inconsistent
+contract adoption. High-churn modules like
+<code>generators/cpp/main.rkt</code> and
+<code>generators/postgres/main.rkt</code> lack contracts, while isolated
+utility modules like <code>shared/naming.rkt</code> have them. Parser
+modules (<code>parser/lexer.rkt</code>, <code>parser/parser.rkt</code>),
+migration modules (<code>migration/*.rkt</code>), and verification
+modules (<code>verification/*.rkt</code>) lack contracts despite being
+imported by 10+ modules each.</p>
+<p>This creates two problems:</p>
+<ol type="1">
+<li>Type mismatches at module boundaries go undetected until deep in the
+call stack</li>
+<li>Refactoring is risky — changing a function signature in a
+widely-imported module requires manual inspection of all call sites</li>
+</ol>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Parser, migration, and verification modules are stable APIs (low
+churn)</li>
+<li>These modules are imported by 10+ call sites each</li>
+<li>Contract violations caught at boundaries improve debugging
+clarity</li>
+<li>Adding contracts to high-churn modules (generators) is low ROI
+(frequent rewrites)</li>
+<li>Full-codebase contract retrofit is &gt;200 function signatures (not
+viable in one PR)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Adopt-on-touch</strong> — Add contracts when modifying
+modules with 10+ importers</li>
+<li><strong>Full retrofit</strong> — Contract all modules in one
+pass</li>
+<li><strong>High-churn exemption</strong> — Contract all modules except
+generators</li>
+<li><strong>Status quo</strong> — Leave contracts opt-in with no
+policy</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Adopt-on-touch", because it balances incremental
+improvement with pragmatic scope control. FTR-513 demonstrates
+viability: 13 modules contracted in one PR, covering parser, migration,
+and verification boundaries.</p>
+<h3 id="policy">Policy</h3>
+<p>When modifying any module imported by <strong>10 or more other
+modules</strong>, add <code>contract-out</code> to its public exports in
+the same PR or commit. This includes:</p>
+<ul>
+<li>Parser modules (<code>parser/lexer.rkt</code>,
+<code>parser/parser.rkt</code>)</li>
+<li>Migration modules (<code>migration/migration-types.rkt</code>,
+<code>migration/diff-model.rkt</code>,
+<code>migration/policy.rkt</code>)</li>
+<li>Verification modules (<code>verification/verify-*.rkt</code>)</li>
+<li>Shared utilities (<code>shared/naming.rkt</code>,
+<code>shared/expression-emitter.rkt</code>)</li>
+</ul>
+<p><strong>Exemptions</strong>:</p>
+<ul>
+<li>Generator main modules (<code>generators/*/main.rkt</code>) — high
+churn, low stability</li>
+<li>Test modules — no external importers</li>
+<li>Modules with &lt;10 importers — opt-in contracts remain
+acceptable</li>
+</ul>
+<h3 id="contract-design-patterns">Contract Design Patterns</h3>
+<ol type="1">
+<li><strong>Structs</strong>: Use
+<code>[struct foo ([field1 type1] [field2 type2])]</code> for field
+contracts</li>
+<li><strong>Multi-value returns</strong>: Use <code>any</code> as return
+type (<code>values</code> contracts are complex)</li>
+<li><strong>Parameters</strong> (<code>make-parameter</code>): Keep as
+bare <code>provide</code> (cannot be contracted)</li>
+<li><strong>Macros</strong>: Keep as bare <code>provide</code> (macros
+expand at compile time, not runtime)</li>
+<li><strong>Re-exports</strong> (<code>all-from-out</code>): Keep as
+separate bare <code>provide</code> block</li>
+<li><strong>Complex nested types</strong>: Use <code>any/c</code> to
+avoid circular module dependencies</li>
+</ol>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Type mismatches caught at module boundaries, not deep in call
+stack</li>
+<li>Self-documenting API — contract signatures serve as inline type
+hints</li>
+<li>Incremental: no "big bang" retrofit required</li>
+<li>Low risk: only touches modules during actual changes</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Slight runtime overhead (negligible in code generation context)</li>
+<li>Parser code becomes more verbose (contract declarations are 2-3×
+function count)</li>
+<li>Requires discipline to remember the policy during refactoring</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-2-full-retrofit">Option 2: Full retrofit</h3>
+<ul>
+<li>Good, because uniform contract coverage</li>
+<li>Good, because frontloads all contract work</li>
+<li>Bad, because &gt;200 function signatures in one PR (high review
+burden)</li>
+<li>Bad, because touches stable modules unnecessarily (churn without
+value)</li>
+</ul>
+<h3 id="option-3-high-churn-exemption">Option 3: High-churn
+exemption</h3>
+<ul>
+<li>Good, because avoids contract churn in generators</li>
+<li>Good, because focuses on stable APIs</li>
+<li>Bad, because requires upfront decision of "high-churn"
+(subjective)</li>
+<li>Bad, because no clear threshold for when to contract
+(arbitrary)</li>
+</ul>
+<h3 id="option-4-status-quo">Option 4: Status quo</h3>
+<ul>
+<li>Good, because no process overhead</li>
+<li>Bad, because type errors remain undetected until runtime</li>
+<li>Bad, because FTR-513 demonstrates contracts catch real issues (e.g.,
+<code>bounded-context?</code> vs <code>any/c</code> mismatches)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Implemented in FTR-513: 13 modules contracted (parser, migration,
+verification)</li>
+<li>Pattern reference: <code>doc/RACKET-PATTERNS.md</code> §6
+(Contract-Out Pattern)</li>
+<li>Related: ADR 20260226 (Racket Idiomatic Style and Byte
+Compilation)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying any module with ≥10 importers (check with
+<code>grep -rl "require.*module-name"</code>)</li>
+<li>When adding a new widely-used utility module</li>
+<li>When refactoring parser, migration, or verification modules</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Generator main modules (<code>generators/*/main.rkt</code>) — exempt
+due to high churn</li>
+<li>Modules with &lt;10 importers — contracts remain opt-in</li>
+<li>Test modules — no external contract boundary needed</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Code review: changes to parser/migration/verification modules
+without contracts trigger review comment</li>
+<li>Grep check:
+<code>grep -rl "require.*&lt;module&gt;" dslgen | wc -l</code> to count
+importers</li>
+<li>FTR template: future FTRs touching contracted modules must update
+contracts</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/parser/lexer.rkt</code> — 13 exports, all contracted
+(FTR-513)</li>
+<li><code>dslgen/parser/parser.rkt</code> — 15 exports, all contracted
+(FTR-513)</li>
+<li><code>dslgen/migration/migration-types.rkt</code> — 25 struct
+contracts (FTR-513)</li>
+<li><code>dslgen/verification/verify-*.rkt</code> — 4 modules, all
+contracted (FTR-513)</li>
+</ul>
+<h3 id="importer-count-reference-as-of-ftr-513">Importer Count Reference
+(as of FTR-513)</h3>
+<ul>
+<li><code>parser/lexer.rkt</code> → 15 importers (parser, generators,
+tests)</li>
+<li><code>parser/parser.rkt</code> → 12 importers (generators,
+migration, tests)</li>
+<li><code>migration/migration-types.rkt</code> → 11 importers
+(migration, tests)</li>
+<li><code>verification/verify-all.rkt</code> → 3 importers (CLI,
+tests)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
