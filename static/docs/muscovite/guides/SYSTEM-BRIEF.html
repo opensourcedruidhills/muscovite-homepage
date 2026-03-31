@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.78.1 | <strong>Generated</strong>:
-2026-03-31 | <strong>Commit</strong>: 6af9c45b |
+<p><strong>Version</strong>: 1.78.2 | <strong>Generated</strong>:
+2026-03-31 | <strong>Commit</strong>: 359933c2 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -299,6 +299,39 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="1782----2026-03-31">[1.78.2] -- 2026-03-31</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>(muscomp): enable import resolver + storage_mode JSON tests
+(FTR-644)</li>
+<li>(muscomp): brownfield + ACL/OHS parsing with PEG choice pattern
+(FTR-643)</li>
+<li>(muscomp): keyword token extraction for PEG literals (FTR-642)</li>
+</ul>
+<h3 id="tests">Tests</h3>
+<ul>
+<li>fix(muscomp): keyword token extraction for PEG literals
+(FTR-642)</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>archive v1.78.1 — remove workflow/versions copy</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>gov(v1.78.2): move FTR-645 to ideas (not in iteration scope)</li>
+<li>gov(v1.78.2): governance artifacts — retrospective, FTR statuses,
+release checklist</li>
+<li>doc: 4 experiment records for Muscovite 2.0 architectural bets</li>
+<li>plan(FTR-639): add concrete proto staleness CI gate as acceptance
+criterion</li>
+<li>plan(v1.78.2): muscomp skipped test coverage hotfix — 3 FTRs, 35
+tests</li>
+<li>plan(2.0): renumber v1.79.0→v2.7.0, merge
+v1.80.0+v1.81.0→v2.8.0</li>
+<li>plan(2.0): 31 FTR files + 7 ITERATION.md for v2.0.0-v2.6.0
+modularization roadmap</li>
+</ul>
 <h2 id="1781----2026-03-31">[1.78.1] -- 2026-03-31</h2>
 <h3 id="added">Added</h3>
 <ul>
@@ -385,7 +418,7 @@ diagnostics, dependency resolution</li>
 <li>(muscomp): FTR-606 — manifest + artifact tracking system</li>
 <li>(muscomp): FTR-584 — validation framework + rule registry</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>(FTR-560): correct DSL syntax and assertions in parser test
 files</li>
@@ -411,19 +444,19 @@ test_cli_semantics.cpp</li>
 <ul>
 <li>rename IXxx to AbstractXxx in 2.0 ADRs — C++ idiom</li>
 </ul>
-<h3 id="tests">Tests</h3>
+<h3 id="tests-1">Tests</h3>
 <ul>
 <li>(muscomp): FTR-608 test harness expansion — grammar conformance +
 edge cases</li>
 <li>(muscomp): FTR-560 parser test expansion</li>
 </ul>
-<h3 id="maintenance">Maintenance</h3>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>remove accidentally committed build.log</li>
 <li>remove stale workflow/versions/ for released v1.77.0 and
 v1.78.0</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>governance: add RELEASE-CHECKLIST.md for v1.78.1</li>
 <li>governance: v1.78.1 — mark all 47 FTRs complete, add
@@ -504,86 +537,10 @@ v1.78.1</li>
 <li>plan: v1.78.1 hotfix — close muscomp quality assurance gaps</li>
 </ul>
 <h2 id="1780----2026-03-29">[1.78.0] -- 2026-03-29</h2>
-<h3 id="maintenance-1">Maintenance</h3>
+<h3 id="maintenance-2">Maintenance</h3>
 <ul>
 <li>update gate timings from v1.78.0-rc1</li>
 </ul>
-<h2 id="1761----2026-03-26">[1.76.1] -- 2026-03-26</h2>
-<h3 id="added-1">Added</h3>
-<ul>
-<li><strong>FTR-501</strong>: muscovite as a Conan package —
-<code>conanfile.py</code> now has <code>build()</code>,
-<code>package()</code>, and <code>package_info()</code> methods;
-<code>conan export-pkg .</code> works; generated consumer
-<code>conanfile.py</code> uses
-<code>self.requires("muscovite/...")</code> and derives
-<code>MUSCOVITE_PROTO_DIR</code> from Conan package folder</li>
-<li><strong>FTR-502</strong>: Copyable error messages — gRPC error
-dialogs expose a "Copy" button; error text copied to clipboard in both
-Widgets and QML frontends</li>
-<li><strong>FTR-503</strong>: Copy row as JSON — list widget context
-menu and toolbar button copy selected row data as JSON to clipboard</li>
-<li><strong>FTR-504</strong>: Propagate authenticated actor to DBA audit
-fields — gRPC service layer passes authenticated user identity to
-<code>created_by</code> / <code>updated_by</code> audit columns</li>
-<li><strong>FTR-505</strong>: Resolve audit UUIDs to display names —
-audit UUID columns in Qt list widgets are resolved via
-<code>security.principal</code> JOIN and displayed as human-readable
-names</li>
-</ul>
-<h3 id="fixed-1">Fixed</h3>
-<ul>
-<li><strong>BFX-012</strong>: Audit timestamp mapping broken for
-entities without explicit <code>created_at</code> field</li>
-<li><strong>BFX-013</strong>: Qt Widgets FK combobox pre-selection used
-wrong proto accessor (empty string); lookup-table FKs now use
-<code>entity.rel_name().id().value()</code>, UUID FKs use
-<code>entity.fk_name().value()</code>, plain FKs use
-<code>entity.fk_name()</code></li>
-</ul>
-<h3 id="test-metrics">Test Metrics</h3>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Passed</th>
-<th>Failed</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Racket parser</td>
-<td>✓</td>
-<td>0</td>
-<td>pass</td>
-</tr>
-<tr>
-<td>Racket generators</td>
-<td>✓</td>
-<td>0</td>
-<td>pass</td>
-</tr>
-<tr>
-<td>Racket integration</td>
-<td>✓</td>
-<td>0</td>
-<td>pass</td>
-</tr>
-<tr>
-<td>C++ build</td>
-<td>✓</td>
-<td>0</td>
-<td>pass</td>
-</tr>
-<tr>
-<td>C++ unit tests</td>
-<td>✓</td>
-<td>0</td>
-<td>pass</td>
-</tr>
-</tbody>
-</table>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
@@ -596,18 +553,8 @@ wrong proto accessor (empty string); lookup-table FKs now use
 </thead>
 <tbody>
 <tr>
-<td>v1.79.0</td>
+<td>v2.7.0</td>
 <td>Qt 6.11 QML modernization and C++ framework hardening</td>
-</tr>
-<tr>
-<td>v1.80.0</td>
-<td>Decouple Sqitch vocabulary — rename to tool-agnostic migration
-abstractions and extract pluggable deployer interface</td>
-</tr>
-<tr>
-<td>v1.81.0</td>
-<td>CMake modernization — policy compliance, CMake 4.2 idioms, consumer
-module, and build quality fixes</td>
 </tr>
 </tbody>
 </table>
@@ -641,7 +588,7 @@ module, and build quality fixes</td>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>6af9c45b</code> (project:
+<p>Last measured at commit <code>359933c2</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -654,7 +601,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1261.1s</td>
+<td>2576.4s</td>
 <td>297 compilation steps</td>
 </tr>
 <tr>
@@ -664,7 +611,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 36 recorded runs.</p>
+<p>Build history: 37 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -684,7 +631,7 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>185.5s</td>
+<td>314.8s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -692,16 +639,16 @@ muscovite):</p>
 <td>19</td>
 <td>0</td>
 <td>100%</td>
-<td>0.3s</td>
+<td>0.4s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (44.5s)</li>
-<li><strong>slow</strong>: 56/56 passed (111.9s)</li>
-<li><strong>integration</strong>: 12/12 passed (29.0s)</li>
+<li><strong>fast</strong>: 30/30 passed (81.8s)</li>
+<li><strong>slow</strong>: 56/56 passed (192.7s)</li>
+<li><strong>integration</strong>: 12/12 passed (40.2s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -718,6 +665,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.78.2</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v1.78.1</td>
 <td>8</td>
@@ -790,17 +745,9 @@ muscovite):</p>
 <td>96/96</td>
 <td>33/34</td>
 </tr>
-<tr>
-<td>v1.73.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>96/96</td>
-<td>31/32</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.78.1).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.78.2).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -861,11 +808,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.78.1</td>
+<td>1.78.2</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2058 (since 2025-11-17)</td>
+<td>2070 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
