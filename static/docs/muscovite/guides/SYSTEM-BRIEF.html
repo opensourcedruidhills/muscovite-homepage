@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.78.3 | <strong>Generated</strong>:
-2026-03-31 | <strong>Commit</strong>: 273e41ec |
+<p><strong>Version</strong>: 1.78.4 | <strong>Generated</strong>:
+2026-03-31 | <strong>Commit</strong>: 181b7df6 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -299,8 +299,49 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1783----2026-03-31">[1.78.3] -- 2026-03-31</h2>
+<h2 id="1784----2026-03-31">[1.78.4] -- 2026-03-31</h2>
 <h3 id="added">Added</h3>
+<ul>
+<li>(muscomp): --validate-output syntax validation for generated files —
+FTR-667</li>
+<li>(muscomp): entity-level incremental generation — FTR-666</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>(governance): header-aware column parsing in validate-release.sh —
+FTR-668</li>
+<li>(governance): set all v1.78.4 FTRs to must/ready/v1.78.4</li>
+</ul>
+<h3 id="documentation">Documentation</h3>
+<ul>
+<li>document cpp-peglib choice/AST patterns — FTR-645</li>
+</ul>
+<h3 id="tests">Tests</h3>
+<ul>
+<li>feat(muscomp): --validate-output syntax validation for generated
+files — FTR-667</li>
+<li>(muscomp): golden file coverage for all 12 generator layers —
+FTR-655..665</li>
+</ul>
+<h3 id="performance">Performance</h3>
+<ul>
+<li>(muscomp): cache compiled PEG parser across parse calls —
+FTR-653</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>(governance): mark all 16 FTRs complete, add retrospective —
+v1.78.4</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>plan: file improvement FTR-669 (unified FileWriter) from v1.78.4
+retrospective</li>
+<li>plan(v1.78.4): golden file coverage + tooling improvements</li>
+<li>plan: per-layer golden file FTRs (FTR-655..665)</li>
+</ul>
+<h2 id="1783----2026-03-31">[1.78.3] -- 2026-03-31</h2>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>(governance): experiment deadline enforcement</li>
 <li>(governance): add IR proto staleness CI gate stub (FTR-639)</li>
@@ -309,7 +350,7 @@ tracked</li>
 <li>(governance): pre-commit hook rejects sed on markdown and PL/pgSQL
 in generators</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>(governance): ((MISSING++)) exits with set -e when MISSING=0</li>
 <li>(muscomp): postgres generator correctness — BFX-015..023</li>
@@ -317,7 +358,7 @@ in generators</li>
 <li>(governance): remove MoSCoW prioritization — everything planned is
 must</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>governance: tick AC boxes via validate-release.sh --fix</li>
 <li>Phase 5: governance — retrospective, status updates, FTR-653
@@ -331,7 +372,7 @@ Racket vs muscomp comparison</li>
 <li>plan(v1.78.3): zero skipped tests hotfix — 3 FTRs, 11 tests</li>
 </ul>
 <h2 id="1782----2026-03-31">[1.78.2] -- 2026-03-31</h2>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul>
 <li>(muscomp): enable import resolver + storage_mode JSON tests
 (FTR-644)</li>
@@ -339,16 +380,16 @@ Racket vs muscomp comparison</li>
 (FTR-643)</li>
 <li>(muscomp): keyword token extraction for PEG literals (FTR-642)</li>
 </ul>
-<h3 id="tests">Tests</h3>
+<h3 id="tests-1">Tests</h3>
 <ul>
 <li>fix(muscomp): keyword token extraction for PEG literals
 (FTR-642)</li>
 </ul>
-<h3 id="maintenance">Maintenance</h3>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>archive v1.78.1 — remove workflow/versions copy</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>gov(v1.78.2): move FTR-645 to ideas (not in iteration scope)</li>
 <li>gov(v1.78.2): governance artifacts — retrospective, FTR statuses,
@@ -362,210 +403,6 @@ tests</li>
 v1.80.0+v1.81.0→v2.8.0</li>
 <li>plan(2.0): 31 FTR files + 7 ITERATION.md for v2.0.0-v2.6.0
 modularization roadmap</li>
-</ul>
-<h2 id="1781----2026-03-31">[1.78.1] -- 2026-03-31</h2>
-<h3 id="added-1">Added</h3>
-<ul>
-<li>(muscomp): FTR-605 builtin domain packages — oauth2, security,
-spatial with package registry</li>
-<li>(muscomp): FTR-604 sidecar infrastructure — sentinel lifecycle,
-interface hashing, plugin stubs</li>
-<li>(muscomp): FTR-596 incremental build system — content hashing, dirty
-detection, stale cleanup</li>
-<li>(muscomp): FTR-602 DSL reference generators — DSL.md,
-PROJECT-DSL.md, TEMPLATE-DSL.md</li>
-<li>(muscomp): FTR-603 maintenance tools — UUID injector, ADR gap map,
-test scaffolder, schema extractor</li>
-<li>(muscomp): FTR-598 analysis systems — legacy validator, dependency
-graph, Mermaid diagrams</li>
-<li>(muscomp): FTR-601 verification layer — API, gRPC, schema, types
-cross-layer checks</li>
-<li>(muscomp): FTR-595 migration system — change classifier,
-diff-to-plan, version tracker, git bridge</li>
-<li>(muscomp): FTR-609 C++ test tooling — coverage analyzer + property
-test generator enhancements</li>
-<li>(muscomp): FTR-597 test data generators — pattern-based seed data,
-FK integrity, deterministic PRNG</li>
-<li>(muscomp): FTR-594 docs+search generators — glossary, fact base,
-document mapper, search gRPC, search utils</li>
-<li>(muscomp): FTR-610 messaging generators — outbox relay, enhanced
-NATS subjects</li>
-<li>(muscomp): FTR-593 standalone infrastructure generators —
-copilot-instructions, agents.md</li>
-<li>(muscomp): FTR-588 Qt Widgets generators full parity — detail view,
-search, FK, main window, saga/state-machine</li>
-<li>(muscomp): FTR-589 Qt test generators — e2e, viewmodel, validators,
-uniqueness</li>
-<li>(muscomp): FTR-587 Qt QML generators full parity — app, list,
-navigation, saga, state-machine views</li>
-<li>(muscomp): FTR-591 gRPC advanced generators — version service, error
-mapping, event streaming, saga/state-machine services</li>
-<li>(muscomp): FTR-590 PostgreSQL advanced generators — state machine,
-saga, docker, change tracking</li>
-<li>(muscomp): FTR-592 TLA+ full generator — state machines, library,
-aggregate invariants</li>
-<li>(muscomp): FTR-586 validators batch 2 — behavioral-binding,
-foreign-context, layout, reserved-keywords</li>
-<li>(muscomp): FTR-585 validators batch 1 — capability, display-format,
-extension-point, plugin</li>
-<li>(muscomp): FTR-561 DecideBlock IR enrichment — command association +
-recursive branch counting</li>
-<li>(muscomp): FTR-559 golden diff validation infrastructure</li>
-<li>(muscomp): FTR-579 lifecycle hook body parsing</li>
-<li>(governance): FTR-562 auto-update ITERATION.md in release.sh</li>
-<li>(muscomp): FTR-572 saga orchestration parsing</li>
-<li>(muscomp): FTR-574 projection event handling parsing</li>
-<li>(muscomp): FTR-577 computed field extraction</li>
-<li>(muscomp): FTR-564 DECIDE block statement parsing</li>
-<li>(muscomp): FTR-573 policy condition wiring</li>
-<li>(muscomp): FTR-581 — storage mode annotation processing</li>
-<li>(muscomp): FTR-580 - arc constraint and relationship cardinality
-parsing</li>
-<li>(muscomp): FTR-575 — layout/presentation DSL parsing</li>
-<li>(muscomp): FTR-578 — immutable and natural key clause
-extraction</li>
-<li>(muscomp): FTR-576 — seed data parsing</li>
-<li>(muscomp): FTR-569 — extension point body parsing</li>
-<li>(muscomp): FTR-568 — ACL/Translator/OHS parsing</li>
-<li>(muscomp): FTR-570 — foreign context body parsing</li>
-<li>(muscomp): FTR-566 — brownfield migration parsing (MAPPING,
-LEGACY_VIEW, LEGACY_PROCEDURE)</li>
-<li>(muscomp): FTR-571 — bitemporal config parsing</li>
-<li>(muscomp): FTR-582 — project DSL (.mus) parser infrastructure</li>
-<li>(muscomp): FTR-567 — IMPORT statement resolution with circular
-detection</li>
-<li>(muscomp): FTR-565 — context-level configuration parsing (GROUNDING,
-CONCURRENCY, CONTEXT_DEFAULT, IMPORT)</li>
-<li>(muscomp): FTR-583 — layout DSL (.lay) full parser with all
-directives</li>
-<li>(muscomp): FTR-563 — expression AST builder for 22 expression
-types</li>
-<li>(muscomp): FTR-599 — advanced naming conventions with acronym
-handling</li>
-<li>(muscomp): FTR-600 — IR JSON round-trip deserialization + schema
-versioning</li>
-<li>(muscomp): FTR-607 — CLI semantics with exit codes, JSON
-diagnostics, dependency resolution</li>
-<li>(muscomp): FTR-606 — manifest + artifact tracking system</li>
-<li>(muscomp): FTR-584 — validation framework + rule registry</li>
-</ul>
-<h3 id="fixed-2">Fixed</h3>
-<ul>
-<li>(FTR-560): correct DSL syntax and assertions in parser test
-files</li>
-<li>(muscomp): extract saga event types from source text</li>
-<li>(muscomp): improve policy action parsing</li>
-<li>skip Phase 2c test failures (seed NULL/bool, arc MIN/MAX, storage
-JSON)</li>
-<li>skip FTR-566 brownfield + FTR-568 ACL parse tests (grammar
-conflicts), fix ir_builder.cpp merge brace</li>
-<li>adapt to FTR-582 ProjectConfig refactor, skip FTR-567 import
-resolver tests (grammar conflict)</li>
-<li>skip known-issue FTR-565 tests (GROUNDING AST traversal, DEFAULT
-literal extraction)</li>
-<li>normalize_path_name uses to_snake_case, split_words handles all
-non-alnum delimiters</li>
-<li>revert disruptive naming changes, add to_cpp_member_var as separate
-API</li>
-<li>remove duplicate DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN from
-test_cli_semantics.cpp</li>
-<li>register test_naming_advanced.cpp in CMakeLists.txt</li>
-</ul>
-<h3 id="documentation">Documentation</h3>
-<ul>
-<li>rename IXxx to AbstractXxx in 2.0 ADRs — C++ idiom</li>
-</ul>
-<h3 id="tests-1">Tests</h3>
-<ul>
-<li>(muscomp): FTR-608 test harness expansion — grammar conformance +
-edge cases</li>
-<li>(muscomp): FTR-560 parser test expansion</li>
-</ul>
-<h3 id="maintenance-1">Maintenance</h3>
-<ul>
-<li>remove accidentally committed build.log</li>
-<li>remove stale workflow/versions/ for released v1.77.0 and
-v1.78.0</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>governance: add RELEASE-CHECKLIST.md for v1.78.1</li>
-<li>governance: v1.78.1 — mark all 47 FTRs complete, add
-retrospective</li>
-<li>Merge branch 'feature/ftr-605-builtin-packages' into
-merge-batch16</li>
-<li>Merge branch 'feature/ftr-604-sidecar-infrastructure' into
-merge-batch15</li>
-<li>Merge branch 'feature/ftr-596-incremental-builds' into
-merge-batch15</li>
-<li>Merge branch 'feature/ftr-603-maintenance-tools' into
-merge-batch14</li>
-<li>Merge branch 'feature/ftr-602-dsl-reference-tools' into
-merge-batch14</li>
-<li>Merge branch 'feature/ftr-601-verification-layer' into
-merge-batch13</li>
-<li>Merge branch 'feature/ftr-598-analysis-systems' into
-merge-batch13</li>
-<li>ideas: IDEA-119 through IDEA-125 — Muscovite 2.0 modularization
-roadmap</li>
-<li>Merge branch 'feature/ftr-597-test-data-generators' into
-merge-batch11</li>
-<li>Merge branch 'feature/ftr-594-docs-search-generators' into
-merge-batch11</li>
-<li>doc: Muscovite 2.0 architecture — 3 ADRs + vision document</li>
-<li>Merge branch 'feature/ftr-589-qt-test-generators' into
-merge-batch9</li>
-<li>Merge branch 'feature/ftr-587-qt-qml-generators' into
-merge-batch8</li>
-<li>Merge branch 'feature/ftr-592-tlaplus-full' into merge-batch7</li>
-<li>merge: resolve CMakeLists.txt conflict (batch6: FTR-586 +
-FTR-608)</li>
-<li>doc: add brownfield extraction end-to-end workflow</li>
-<li>Add flowchart for Legacy Brownfield System</li>
-<li>Create brownfield.md</li>
-<li>Merge branch 'feature/ftr-559-golden-diff-validation' into
-merge-batch4</li>
-<li>Merge branch 'feature/ftr-560-parser-test-expansion' into
-merge-batch4</li>
-<li>Merge branch 'feature/ftr-562-governance-auto-update' into
-merge-batch3</li>
-<li>Merge branch 'feature/ftr-579-lifecycle-hook' into merge-batch3</li>
-<li>Merge branch 'feature/ftr-572-saga-orchestration-parsing' into
-merge-batch2</li>
-<li>Merge branch 'feature/ftr-574-parser' into merge-batch2</li>
-<li>Merge branch 'feature/ftr-573-parser' into merge-batch1</li>
-<li>Merge branch 'feature/ftr-577-parser' into merge-batch1</li>
-<li>Merge branch 'feature/ftr-581-parser' into develop</li>
-<li>Merge branch 'feature/ftr-580-parser' into develop</li>
-<li>Merge branch 'feature/ftr-575-parser' into develop</li>
-<li>Merge branch 'feature/ftr-578-parser' into develop</li>
-<li>Merge branch 'feature/ftr-569-parser' into develop</li>
-<li>Merge branch 'feature/ftr-568-parser' into develop</li>
-<li>Merge branch 'feature/ftr-566-parser' into develop</li>
-<li>Merge branch 'feature/ftr-570-parser' into develop</li>
-<li>Merge branch 'feature/ftr-582-parser-lifecycle-hooks' into
-develop</li>
-<li>Merge branch 'feature/ftr-567-parser-enum-scope' into develop</li>
-<li>Merge branch 'feature/ftr-565-parser-constraints' into develop</li>
-<li>Merge branch 'feature/ftr-583-parser-tlaplus-temporal' into
-develop</li>
-<li>Merge branch 'feature/ftr-600-ir-serialization' into develop</li>
-<li>Merge branch 'feature/ftr-606-manifest-tracking' into develop</li>
-<li>Merge branch 'feature/ftr-607-cli-semantics' into develop</li>
-<li>Merge branch 'feature/ftr-599-naming-conventions' into develop</li>
-<li>Merge branch 'feature/ftr-584-validation-framework' into
-develop</li>
-<li>plan: add final 2 gap FTRs (609-610) — messaging + test tooling</li>
-<li>plan: replace wave-based execution with phased rework-minimal
-plan</li>
-<li>plan: add verification/tools/sidecar/builtin/manifest/CLI/test FTRs
-(601-608) to v1.78.1</li>
-<li>plan: add generator/validation/system FTRs (584-600) to v1.78.1</li>
-<li>plan: add Project DSL and Layout DSL parser FTRs (582-583) to
-v1.78.1</li>
-<li>plan: add 14 muscomp parity gap FTRs (568-581) to v1.78.1</li>
-<li>plan: add muscomp parser gap FTRs (563-567) to v1.78.1</li>
-<li>plan: v1.78.1 hotfix — close muscomp quality assurance gaps</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -614,7 +451,7 @@ v1.78.1</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>273e41ec</code> (project:
+<p>Last measured at commit <code>181b7df6</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -627,7 +464,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1558.4s</td>
+<td>1048.5s</td>
 <td>297 compilation steps</td>
 </tr>
 <tr>
@@ -637,7 +474,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 38 recorded runs.</p>
+<p>Build history: 39 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -657,7 +494,7 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>208.1s</td>
+<td>187.2s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -672,9 +509,9 @@ muscovite):</p>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (50.8s)</li>
-<li><strong>slow</strong>: 56/56 passed (125.7s)</li>
-<li><strong>integration</strong>: 12/12 passed (31.6s)</li>
+<li><strong>fast</strong>: 30/30 passed (43.5s)</li>
+<li><strong>slow</strong>: 56/56 passed (113.8s)</li>
+<li><strong>integration</strong>: 12/12 passed (29.8s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -691,6 +528,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.78.4</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v1.78.3</td>
 <td>8</td>
@@ -763,17 +608,9 @@ muscovite):</p>
 <td>96/96</td>
 <td>19/19</td>
 </tr>
-<tr>
-<td>v1.73.2</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>96/96</td>
-<td>33/34</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.78.3).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.78.4).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -834,11 +671,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.78.3</td>
+<td>1.78.4</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2086 (since 2025-11-17)</td>
+<td>2098 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>

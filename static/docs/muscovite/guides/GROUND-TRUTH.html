@@ -1268,6 +1268,166 @@ C++-specific or SQL-specific logic in DSL).</p>
 <code>TEST_SUITE("module::component")</code>. Use
 <code>doctest_discover_tests()</code> in CMake.</p>
 <hr />
+<h2 id="xii-cpp-peglib-ast-patterns-muscomp">XII. cpp-peglib AST
+Patterns (muscomp)</h2>
+<p>muscomp uses <a
+href="https://github.com/yhirose/cpp-peglib">cpp-peglib</a> to parse PEG
+grammars. Understanding how the AST maps to PEG constructs is essential
+for writing correct <code>ir_builder.cpp</code> code.</p>
+<h3 id="key-ast-properties">Key AST Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>std::string</code></td>
+<td>Grammar rule name (e.g. <code>"BaseType"</code>,
+<code>"EntityClause"</code>)</td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td><code>std::string_view</code></td>
+<td>Matched text — <strong>empty for non-terminal nodes</strong>
+(<code>is_token == false</code>)</td>
+</tr>
+<tr>
+<td><code>nodes</code></td>
+<td><code>vector&lt;shared_ptr&lt;Ast&gt;&gt;</code></td>
+<td>Child AST nodes</td>
+</tr>
+<tr>
+<td><code>choice</code></td>
+<td><code>unsigned int</code></td>
+<td><strong>0-indexed</strong> index of the matched alternative in a PEG
+prioritized choice (<code>/</code>)</td>
+</tr>
+<tr>
+<td><code>is_token</code></td>
+<td><code>bool</code></td>
+<td><code>true</code> for terminal tokens, <code>false</code> for
+non-terminal rules</td>
+</tr>
+</tbody>
+</table>
+<h3 id="peg-literal-keywords-create-no-child-nodes">PEG Literal Keywords
+Create No Child Nodes</h3>
+<p>When a PEG rule matches a literal keyword (e.g.
+<code>'DOMAIN'</code>, <code>'UUID'</code>), cpp-peglib does
+<strong>not</strong> create a child AST node for it. The matched literal
+is consumed but invisible in the AST. This means you cannot check
+<code>child-&gt;name == "DOMAIN"</code> — there is no such child.</p>
+<h3
+id="pattern-1-prioritized-choice--astchoice-with-lookup-array">Pattern
+1: Prioritized Choice → <code>ast.choice</code> with Lookup Array</h3>
+<p>For PEG rules using the <code>/</code> (prioritized choice) operator,
+use <code>peg::Ast::choice</code> to determine which alternative
+matched. The idiomatic pattern is a <code>static constexpr array</code>
+indexed by the choice value:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// PEG grammar:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   BaseType &lt;- &#39;UUID&#39; / &#39;STRING&#39; / &#39;VARCHAR&#39; / &#39;TEXT&#39; / &#39;INTEGER&#39; / ...</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Each literal creates NO child node and NO token — only choice is set.</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="at">static</span> <span class="kw">constexpr</span> <span class="bu">std::</span>array<span class="op">&lt;</span><span class="at">const</span> <span class="dt">char</span><span class="op">*,</span> <span class="dv">22</span><span class="op">&gt;</span> base_type_names <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;UUID&quot;</span><span class="op">,</span> <span class="st">&quot;STRING&quot;</span><span class="op">,</span> <span class="st">&quot;VARCHAR&quot;</span><span class="op">,</span> <span class="st">&quot;TEXT&quot;</span><span class="op">,</span>          <span class="co">// choices 0–3</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INTEGER&quot;</span><span class="op">,</span> <span class="st">&quot;INT&quot;</span><span class="op">,</span> <span class="st">&quot;BIGINT&quot;</span><span class="op">,</span> <span class="st">&quot;SMALLINT&quot;</span><span class="op">,</span>       <span class="co">// choices 4–7</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;DECIMAL&quot;</span><span class="op">,</span> <span class="st">&quot;FLOAT&quot;</span><span class="op">,</span> <span class="st">&quot;BOOLEAN&quot;</span><span class="op">,</span> <span class="st">&quot;BOOL&quot;</span><span class="op">,</span>        <span class="co">// choices 8–11</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;DATE&quot;</span><span class="op">,</span> <span class="st">&quot;DATETIME&quot;</span><span class="op">,</span> <span class="st">&quot;TIMESTAMPTZ&quot;</span><span class="op">,</span> <span class="st">&quot;TIMESTAMP&quot;</span> <span class="co">// choices 12–15</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>node<span class="op">.</span>choice <span class="op">&lt;</span> base_type_names<span class="op">.</span>size<span class="op">())</span> <span class="op">{</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    ts<span class="op">.</span>name <span class="op">=</span> base_type_names<span class="op">[</span>node<span class="op">.</span>choice<span class="op">];</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>See: <code>ir_builder.cpp</code> — <code>build_type_spec()</code>
+(~line 700)</p>
+<h3 id="pattern-2-choice-with-switch-for-different-behavior">Pattern 2:
+Choice with <code>switch</code> for Different Behavior</h3>
+<p>When each alternative requires different handling, use
+<code>switch (ast.choice)</code>:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// PEG grammar:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   PolicyAction &lt;- &#39;EMIT&#39; IDENTIFIER ActionParams?      (choice 0)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">//                 / &#39;INVOKE&#39; IDENTIFIER ActionParams?     (choice 1)</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">//                 / &#39;NOTIFY&#39; IDENTIFIER ActionParams?     (choice 2)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">//                 / IDENTIFIER (&#39;.&#39; IDENTIFIER)? ActionParams?  (choice 3)</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>ast<span class="op">.</span>choice<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span> action<span class="op">.</span>type <span class="op">=</span> <span class="st">&quot;emit-event&quot;</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span> action<span class="op">.</span>type <span class="op">=</span> <span class="st">&quot;invoke-command&quot;</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span> action<span class="op">.</span>type <span class="op">=</span> <span class="st">&quot;notify&quot;</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> action<span class="op">.</span>type <span class="op">=</span> <span class="st">&quot;call-service&quot;</span><span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>See: <code>ir_builder.cpp</code> — <code>build_policy_action()</code>
+(~line 1572)</p>
+<h3 id="pattern-3-choice-with-keyword--payload">Pattern 3: Choice with
+Keyword + Payload</h3>
+<p>When each alternative starts with a literal keyword followed by a
+value, the keyword is invisible but the payload nodes remain as
+children:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// PEG grammar:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   GroundingField &lt;- &#39;DOMAIN&#39; STRING                  (choice 0)</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">//                   / &#39;KEY_CONCEPTS&#39; StringList         (choice 1)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">//                   / &#39;DIALECT&#39; IDENTIFIER              (choice 2)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">//                   / ...</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>field<span class="op">-&gt;</span>choice<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">0</span><span class="op">:</span> <span class="co">// DOMAIN STRING — keyword consumed, STRING child remains</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> child <span class="op">:</span> field<span class="op">-&gt;</span>nodes<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>child<span class="op">-&gt;</span>name <span class="op">==</span> <span class="st">&quot;STRING&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>            grounding<span class="op">.</span>domain <span class="op">=</span> strip_quotes<span class="op">(</span>sv<span class="op">(</span>child<span class="op">-&gt;</span>token<span class="op">));</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="dv">1</span><span class="op">:</span> <span class="co">// KEY_CONCEPTS StringList — keyword consumed, StringList child remains</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>See: <code>ir_builder.cpp</code> — <code>build_grounding()</code>
+(~line 2683)</p>
+<h3 id="pattern-4-sequences--positional-child-analysis">Pattern 4:
+Sequences → Positional Child Analysis</h3>
+<p>For PEG sequences (no <code>/</code> operator), children appear in
+order. Use <code>child-&gt;name</code> to match expected nodes
+positionally:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// PEG grammar:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">//   EntityClause &lt;- RelationshipsBlock / DocClause / PresentationBlock / ...</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> <span class="kw">auto</span><span class="op">&amp;</span> clause <span class="op">:</span> child<span class="op">-&gt;</span>nodes<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>clause<span class="op">-&gt;</span>name <span class="op">==</span> <span class="st">&quot;RelationshipsBlock&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        entity<span class="op">.</span>metadata<span class="op">.</span>relationships <span class="op">=</span> build_relationships_block<span class="op">(*</span>clause<span class="op">);</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>clause<span class="op">-&gt;</span>name <span class="op">==</span> <span class="st">&quot;DocClause&quot;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>        entity<span class="op">.</span>doc <span class="op">=</span> extract_doc<span class="op">(*</span>child<span class="op">);</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>See: <code>ir_builder.cpp</code> — <code>build_entity()</code> (~line
+470)</p>
+<h3 id="common-pitfalls">Common Pitfalls</h3>
+<ol type="1">
+<li><strong>Don't check <code>token</code> on non-terminals</strong> —
+it will be empty. Use <code>choice</code> or inspect
+<code>nodes</code>.</li>
+<li><strong>Array order must match PEG grammar order</strong> —
+<code>choice == 0</code> is the first alternative, etc. If the grammar
+is reordered, update the array.</li>
+<li><strong>PEG is greedy</strong> — the first matching alternative
+wins. Place longer/more-specific alternatives before shorter ones (e.g.
+<code>'TIMESTAMPTZ'</code> before <code>'TIMESTAMP'</code>).</li>
+<li><strong>Helpers</strong>: Use <code>find_first_identifier()</code>,
+<code>find_child()</code>, <code>find_children()</code>,
+<code>extract_string()</code> from <code>ir_builder.hpp</code> instead
+of raw positional indexing when possible.</li>
+</ol>
+<hr />
 <h2 id="xiii-quick-reference-file--purpose">XIII. Quick Reference: File
 → Purpose</h2>
 <table>
