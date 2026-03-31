@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>20260330-muscovite-2-protobuf-ir-contract-unix-pipeline — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>20260330-muscovite-2-protobuf-ir-contract-unix-pipeline</span>
+</nav>
+
+<h1>20260330-muscovite-2-protobuf-ir-contract-unix-pipeline</h1>
+
+
+<h1
+id="muscovite-20--protobuf-ir-contract--unix-pipeline-architecture">Muscovite
+2.0 — Protobuf IR Contract &amp; Unix Pipeline Architecture</h1>
+<ul>
+<li>Status: accepted</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-30</li>
+<li>Tags: architecture, muscomp, 2.0, IR, protobuf, pipeline</li>
+<li>Supersedes: Refines <a
+href="20260326-translate-layer0-from-racket-to-cpp.html">Translate Layer 0
+from Racket to C++</a></li>
+</ul>
+<p>Technical Story: Muscovite 2.0 architectural foundation — the
+transition from monolithic compiler to a Unix-philosophy pipeline of
+standalone executables communicating through a protobuf IR file
+contract.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>muscomp v1.78.0 successfully translated Layer 0 from Racket to C++.
+However, the translation preserved the monolithic architecture: a single
+<code>muscomp_lib</code> static library (195 files, 12K lines)
+containing the parser, validators, and all 10 generator targets. This
+creates several problems:</p>
+<ol type="1">
+<li><strong>Third-party generators are impossible</strong> — adding a C#
+or Java generator requires forking muscomp and linking into its build
+system</li>
+<li><strong>All generators must be C++</strong> — the monolith couples
+language choice to the compiler</li>
+<li><strong>Compilation is all-or-nothing</strong> — changing one
+generator rebuilds the entire library</li>
+<li><strong>The IR is an in-memory data structure</strong> — no stable,
+versioned contract between parser and generators</li>
+</ol>
+<p>ADR 20260326 explicitly identified future targets (C#, Java, React,
+Flutter) as a driver for the C++ transition. The current monolith
+prevents this.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Third-party generators must be possible without coupling to muscomp
+internals</li>
+<li>Generator authors should be free to use any programming
+language</li>
+<li>The IR contract must be stable, versioned, and independently
+evolvable</li>
+<li>Built-in generators should use the same integration path as
+third-party ones</li>
+<li>muscomp itself should exercise the full Muscovite feature set
+(dogfooding)</li>
+<li>Compilation time for the toolchain must improve, not regress</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>dlopen plugin architecture</strong> — shared libraries
+loaded at runtime via factory functions</li>
+<li><strong>Protobuf IR file contract</strong> — standalone executables
+communicating through a serialized IR file</li>
+<li><strong>Status quo</strong> — keep the monolith, add generators by
+expanding muscomp_lib</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: <strong>"Protobuf IR file contract"</strong>, because
+it achieves complete decoupling (any language, any build system, zero
+dependency on muscomp), provides a stable versioned contract via
+protobuf schema evolution rules, and reduces the compiler to a thin
+orchestrator following Unix philosophy.</p>
+<p>The dlopen approach (Option 1) was considered and partially adopted
+as the <strong>InProcessDynamic sidecar transport</strong> (see ADR
+20260330-inprocess-dynamic-transport) for performance-sensitive built-in
+generators. It complements rather than replaces the file-based
+contract.</p>
+<h3 id="architecture">Architecture</h3>
+<pre class="mermaid"><code>flowchart LR
+    subgraph PARSE[&quot;muscomp parse&quot;]
+        MUS[&quot;.mus + .ddd + .lay&quot;] --&gt; PEG[&quot;PEG Parser&quot;]
+        PEG --&gt; IR_MEM[&quot;In-Memory IR&quot;]
+        IR_MEM --&gt; VAL[&quot;Validators&quot;]
+        VAL --&gt; SER[&quot;Protobuf Serializer&quot;]
+    end
+
+    SER --&gt; IR_FILE[(&quot;model.ir\n(protobuf binary)&quot;)]
+
+    IR_FILE --&gt; GEN_PG[&quot;muscomp-gen-postgres&quot;]
+    IR_FILE --&gt; GEN_CPP[&quot;muscomp-gen-cpp-dba&quot;]
+    IR_FILE --&gt; GEN_GRPC[&quot;muscomp-gen-grpc&quot;]
+    IR_FILE --&gt; GEN_QT[&quot;muscomp-gen-qt&quot;]
+    IR_FILE --&gt; GEN_3P[&quot;any-third-party-tool&quot;]
+
+    GEN_PG --&gt; OUT[(&quot;output/&quot;)]
+    GEN_CPP --&gt; OUT
+    GEN_GRPC --&gt; OUT
+    GEN_QT --&gt; OUT
+    GEN_3P --&gt; OUT
+
+    style IR_FILE fill:#2a1a4a,stroke:#a855f7,color:#fff
+    style PARSE fill:#1a3a4a,stroke:#4ecdc4,color:#fff</code></pre>
+<h3 id="core-principles">Core Principles</h3>
+<ol type="1">
+<li><p><strong>The IR file is the product</strong> —
+<code>model.ir</code> (protobuf binary) is the universal contract
+between parsing and generation. The <code>.proto</code> schema is
+versioned independently from muscomp and is the most important artifact
+in the project.</p></li>
+<li><p><strong>Every stage is a standalone executable</strong> —
+<code>muscomp parse</code> produces the IR file. Each generator
+(<code>muscomp-gen-postgres</code>, <code>muscomp-gen-cpp-dba</code>,
+etc.) is a separate binary that reads the IR file and writes output
+files. No special distinction between built-in and third-party
+generators.</p></li>
+<li><p><strong>A third-party generator is a program that reads a
+file</strong> — no SDK, no framework, no plugin loading mechanism.
+Deserialize protobuf in any language, write output, done.</p></li>
+<li><p><strong>CLI split</strong> — <code>muscomp parse</code> (source →
+IR file) and <code>muscomp generate</code> (IR file → output) are
+separate subcommands. The legacy one-shot syntax
+(<code>muscomp --project X.mus --postgres --cpp-dba</code>) remains as
+sugar that runs both stages in-process without writing the IR file to
+disk.</p></li>
+<li><p><strong>Parallel generation</strong> — standalone executables can
+run simultaneously. The orchestrator spawns all requested generators in
+parallel, collects exit codes.</p></li>
+<li><p><strong>Open GENERATE block</strong> — the <code>.mus</code>
+project file's <code>GENERATE {}</code> block accepts arbitrary
+identifiers, not a closed keyword set. <code>muscomp parse</code>
+records the intent in the IR. The orchestrator resolves identifiers to
+executables at generation time.</p></li>
+</ol>
+<h3 id="cli-design">CLI Design</h3>
+<p><strong><code>muscomp parse</code></strong></p>
+<ul>
+<li>Input: <code>.mus</code> project file (references <code>.ddd</code>
+and <code>.lay</code> files)</li>
+<li>Output: <code>model.ir</code> (protobuf binary)</li>
+<li>Runs: PEG parse → AST → semantic validation → IR construction →
+serialization</li>
+<li>Optional: <code>--text-format</code> for human-readable protobuf,
+<code>--ir-version=N</code> for backward compatibility</li>
+</ul>
+<p><strong><code>muscomp generate</code></strong></p>
+<ul>
+<li>Input: <code>model.ir</code> + <code>--target=&lt;name&gt;</code>
+(repeatable)</li>
+<li>Output: generated files in <code>-o &lt;output-dir&gt;</code></li>
+<li>Resolves target name to executable
+(<code>muscomp-gen-&lt;name&gt;</code>), spawns in parallel</li>
+<li>Validates IR version compatibility before dispatch</li>
+</ul>
+<p><strong>Convenience subcommands</strong> (non-blocking):</p>
+<ul>
+<li><code>muscomp ir-diff old.ir new.ir</code> — semantic diff between
+IR versions</li>
+<li><code>muscomp ir-dump model.ir</code> — human-readable IR
+summary</li>
+</ul>
+<p><strong>Backward-compatible sugar</strong>:</p>
+<ul>
+<li><code>muscomp --project X.mus --postgres --cpp-dba</code> internally
+runs parse + generate in-process, never writes IR to disk</li>
+</ul>
+<h3 id="ir-schema-design">IR Schema Design</h3>
+<ul>
+<li>Protobuf3 with explicit field presence where needed</li>
+<li>Every IR node carries its UUID (for semantic diff tracking)</li>
+<li>Cross-references use UUIDs, not pointers — flat serializable
+graph</li>
+<li><code>oneof</code> for type variants</li>
+<li><code>ir_version</code> field in root message for compatibility
+negotiation</li>
+<li>Reserved field number ranges per major node type (100-199, 200-299,
+etc.)</li>
+<li>Schema follows proto3 evolution rules: additive fields, never
+remove, deprecate only</li>
+<li>Breaking changes (if ever): <code>muscovite.ir.v1</code> →
+<code>muscovite.ir.v2</code> with migration window</li>
+<li>Published in repo under <code>proto/muscovite/ir/</code></li>
+</ul>
+<h3 id="self-hosting-muscovite-irddd">Self-Hosting:
+muscovite-ir.ddd</h3>
+<p>The IR schema is defined as a Muscovite domain model
+(<code>muscovite-ir.ddd</code>), making muscomp a Muscovite application
+whose domain is "DSL compilation."</p>
+<ul>
+<li><strong>Structural IR types</strong> modeled as entities, value
+objects, aggregates</li>
+<li><strong>Behavioral contracts</strong> (parser, validators,
+generators) modeled as EXTENSION_POINTs with sidecar
+implementations</li>
+<li><strong>Generated artifacts</strong>: <code>.proto</code> files, C++
+types, documentation, validation stubs</li>
+<li><strong>Bootstrap protocol</strong>: generated <code>.proto</code>
+files are checked into <code>proto/muscovite/ir/</code> as bootstrap
+artifacts. muscomp compiles against the checked-in protos. When
+<code>muscovite-ir.ddd</code> changes, regenerate protos, update
+checked-in copy, rebuild muscomp. Same pattern as protoc's
+<code>descriptor.proto</code>.</li>
+<li><strong>CI rule</strong>: any commit modifying
+<code>muscovite-ir.ddd</code> must include regenerated protos. CI
+verifies they match.</li>
+</ul>
+<p>Self-hosting will likely require DSL additions (VARIANT/UNION types,
+MAP types) which benefit all users. This is a feature, not a cost —
+muscomp becomes the DSL's most demanding customer.</p>
+<h3 id="ir-caching-and-incremental-builds">IR Caching and Incremental
+Builds</h3>
+<p>Since the IR is a file:</p>
+<ul>
+<li><strong>Cache</strong>: skip parsing if
+<code>.ddd</code>/<code>.mus</code> inputs unchanged (content hash or
+mtime)</li>
+<li><strong>Diff</strong>: <code>muscomp ir-diff</code> shows domain
+model changes between versions</li>
+<li><strong>Inspect</strong>: <code>muscomp ir-dump</code> or
+<code>--text-format</code> for human review</li>
+<li><strong>CI artifact</strong>: <code>model.ir</code> can be stored as
+a build artifact for reproducibility</li>
+</ul>
+<h3 id="cmake-integration">CMake Integration</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">muscomp_generate</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    PROJECT <span class="dv">${CMAKE_SOURCE_DIR}</span>/model/project.mus</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    TARGETS postgres cpp-dba grpc qt-widgets cmake</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    OUTPUT_DIR <span class="dv">${CMAKE_BINARY_DIR}</span>/generated</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    IR_FILE <span class="dv">${CMAKE_BINARY_DIR}</span>/model.ir</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Creates <code>add_custom_command</code> rules with proper dependency
+tracking: <code>.ddd</code>/<code>.mus</code> → <code>model.ir</code> →
+generated files.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Third-party generators in any language with zero coupling to
+muscomp</li>
+<li>Built-in and third-party generators follow identical integration
+path</li>
+<li>Parallel generation — spawn all targets simultaneously</li>
+<li>IR schema versioned independently, stable contract for
+ecosystem</li>
+<li>Self-hosting exercises and improves the DSL</li>
+<li>Improved compile times via independent build targets</li>
+<li><code>model.ir</code> is inspectable, diffable, cacheable</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Serialization overhead for the two-stage path (~5ms for protobuf,
+negligible)</li>
+<li>Process spawn overhead for parallel generators (~10ms each,
+negligible)</li>
+<li>Bootstrap complexity for self-hosting (well-understood, protoc
+precedent)</li>
+<li>Iteration time for generator development includes a compile step
+(mitigated by per-target builds with mold+ccache)</li>
+<li>Proto schema must be maintained alongside DSL evolution</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-dlopen-plugin-architecture">Option 1: dlopen Plugin
+Architecture</h3>
+<ul>
+<li>Good, because zero serialization overhead (in-process)</li>
+<li>Good, because familiar pattern (plugin frameworks)</li>
+<li>Bad, because C++-only (or requires C FFI wrappers)</li>
+<li>Bad, because ABI stability burden across versions</li>
+<li>Bad, because requires plugin discovery mechanism, factory functions,
+API versioning</li>
+<li>Bad, because two different integration patterns (built-in vs
+third-party)</li>
+</ul>
+<p><em>Partially adopted as InProcessDynamic transport for
+performance-sensitive cases.</em></p>
+<h3 id="option-2-protobuf-ir-file-contract-chosen">Option 2: Protobuf IR
+File Contract (Chosen)</h3>
+<ul>
+<li>Good, because any language with protobuf bindings can write a
+generator</li>
+<li>Good, because zero coupling — a generator is a program that reads a
+file</li>
+<li>Good, because protobuf handles forward/backward compatibility
+natively</li>
+<li>Good, because no plugin framework, SDK, or discovery mechanism
+needed</li>
+<li>Good, because the IR file is inspectable, diffable, cacheable, and
+archivable</li>
+<li>Good, because parallel generation via independent processes</li>
+<li>Bad, because serialization/deserialization on the two-stage path
+(~5ms, negligible)</li>
+<li>Bad, because generator development requires a compile step
+(mitigated by targeted builds)</li>
+</ul>
+<h3 id="option-3-status-quo-monolith">Option 3: Status Quo
+(Monolith)</h3>
+<ul>
+<li>Good, because no migration effort</li>
+<li>Bad, because third-party generators require forking muscomp</li>
+<li>Bad, because all generators must be C++</li>
+<li>Bad, because no stable IR contract</li>
+<li>Bad, because compilation is all-or-nothing (195 files)</li>
+<li>Bad, because doesn't fulfill ADR 20260326's vision for new language
+targets</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Refines <a
+href="20260326-translate-layer0-from-racket-to-cpp.html">Translate Layer 0
+from Racket to C++</a></li>
+<li>Extended by <a
+href="20260330-inprocess-dynamic-sidecar-transport.html">InProcessDynamic
+Sidecar Transport</a></li>
+<li>Extended by <a
+href="20260330-library-extraction-migration-path.html">Library Extraction
+as Migration Path to 2.0</a></li>
+<li>Related to <a
+href="20260223-plugin-system-extension-points-and-layer2-sidecar.html">Plugin
+System Extension Points and Layer 2 Sidecar</a></li>
+<li>Related to <a href="20260223-plugin-transport-selection.html">Plugin
+Transport Selection</a></li>
+<li>Related to <a
+href="20260218-generator-modularization-and-dependency-hygiene.html">Generator
+Modularization and Dependency Hygiene</a></li>
+<li>Related to <a
+href="20260213-per-context-dba-libraries.html">Per-Context DBA
+Libraries</a></li>
+<li>Related to <a
+href="20260218-template-dsl-for-code-generation.html">Template DSL for
+Code Generation</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When designing or implementing any muscomp architectural change</li>
+<li>When adding a new generator target to muscomp</li>
+<li>When modifying the IR data structures</li>
+<li>When planning the transition from v1.x monolith to v2.0
+pipeline</li>
+<li>When a third party asks how to write a Muscovite generator</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>muscomp v1.78.x work (completing golden diff, parser coverage) —
+finish quality gates before architectural migration</li>
+<li>Layer 1 (C++ framework) or Layer 2 (generated application) changes —
+this ADR concerns Layer 0 only</li>
+<li>Racket dslgen maintenance during transition — Racket remains
+reference until muscomp produces byte-identical output</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>The IR <code>.proto</code> schema is the source of truth for the
+parser-generator contract</li>
+<li>CI verifies that checked-in proto files match what
+<code>muscovite-ir.ddd</code> generates (once self-hosting is
+active)</li>
+<li><code>muscomp generate</code> validates IR version compatibility
+before dispatching to generators</li>
+<li>The <code>GENERATE {}</code> block in <code>.mus</code> files
+accepts arbitrary identifiers (no closed keyword set in grammar)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>proto/muscovite/ir/</code> — IR protobuf schema (bootstrap
+artifacts)</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — current in-memory
+IR (to be replaced)</li>
+<li><code>toolchain/muscomp/src/main.cpp</code> — CLI entry point (to be
+split into subcommands)</li>
+<li><code>toolchain/muscomp/src/generators/generator_registry.cpp</code>
+— current dispatch hub (to be replaced by executable spawning)</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — Racket IR reference (98
+struct types to map to proto)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -117,7 +117,7 @@
 <p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
 <a
 href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 362</p>
+| <strong>Rules</strong>: 367</p>
 </blockquote>
 <p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
 for specifying domain models. The <a
@@ -555,10 +555,10 @@ ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextD
 <h3 id="3-entity">3. Entity</h3>
 <p>VIEW_ENTITY: read-only view-sourced entity (FTR-432). Identical to
 ENTITY for field declarations but generates read-only code.</p>
-<pre class="peg"><code>Entity               &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation
+<pre class="peg"><code>Entity               &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation StorageAnnotation?
 ViewEntity           &lt;- &#39;VIEW_ENTITY&#39; IDENTIFIER UuidAnnotation
 ExtendsClause        &lt;- &#39;EXTENDS&#39; IDENTIFIER
-EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / SourceAnnotation / DocClause / SynonymsClause</code></pre>
+EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / NaturalKeyClause / SourceAnnotation / DocClause / SynonymsClause / LifecycleHook</code></pre>
 <h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
 <pre class="peg"><code>FieldList            &lt;- &#39;(&#39; ( Field ( &#39;,&#39; Field )* )? &#39;)&#39;
 Field                &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation* FieldDocClause?
@@ -566,7 +566,7 @@ FieldDocClause       &lt;- &#39;DOC&#39; STRING
 FieldName            &lt;- IDENTIFIER / ContextualKeyword
 DefaultClause        &lt;- &#39;DEFAULT&#39; DefaultValue
 DefaultValue         &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39; / &#39;NOW&#39; &#39;(&#39; &#39;)&#39; / IDENTIFIER &#39;(&#39; &#39;)&#39;  # function call default
-FieldAnnotation      &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / &#39;@&#39; &#39;SPATIAL-QUERYABLE&#39; / &#39;@&#39; &#39;SEARCHABLE&#39; / FieldConstraint / SourceAnnotation / UuidAnnotation
+FieldAnnotation      &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / &#39;@&#39; &#39;SPATIAL-QUERYABLE&#39; / &#39;@&#39; &#39;SEARCHABLE&#39; / &#39;@&#39; &#39;IMMUTABLE&#39; / FieldConstraint / SourceAnnotation / UuidAnnotation
 FieldConstraint      &lt;- &#39;@&#39; &#39;MIN&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;MAX&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;NOT_EMPTY&#39; / &#39;@&#39; &#39;NOT_IN_FUTURE&#39; / &#39;@&#39; &#39;NOT_IN_PAST&#39; / &#39;@&#39; &#39;PATTERN&#39; &#39;(&#39; STRING &#39;)&#39; / CrossFieldConstraint
 CrossFieldConstraint &lt;- &#39;@&#39; &#39;AFTER&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;BEFORE&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;SAME_DAY&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;NOT_EQUAL&#39; &#39;(&#39; IDENTIFIER &#39;)&#39;
 SourceAnnotation     &lt;- &#39;@&#39; &#39;SOURCE&#39; STRING</code></pre>
@@ -585,7 +585,7 @@ NullClause           &lt;- &#39;NOT_NULL&#39;</code></pre>
 <pre class="peg"><code>UuidAnnotation       &lt;- &#39;@&#39; &#39;UUID&#39; STRING / !( &#39;@&#39; &#39;UUID&#39; )  # UUID string validated:</code></pre>
 <h3 id="7-value-object">7. Value Object</h3>
 <pre class="peg"><code>ValueObject          &lt;- &#39;VALUE_OBJECT&#39; IDENTIFIER UuidAnnotation StorageAnnotation?
-StorageAnnotation    &lt;- &#39;@&#39; &#39;INLINE&#39; / &#39;@&#39; &#39;OWNED&#39; / &#39;@&#39; &#39;SHARED&#39;  # fields flattened into parent (mixin)
+StorageAnnotation    &lt;- &#39;@&#39; &#39;storage&#39; ( &#39;table&#39; / &#39;TABLE&#39; / &#39;jsonb&#39; / &#39;JSONB&#39; / &#39;inline&#39; / &#39;INLINE&#39; / &#39;hybrid&#39; / &#39;HYBRID&#39; ) / &#39;@&#39; &#39;INLINE&#39; / &#39;@&#39; &#39;OWNED&#39; / &#39;@&#39; &#39;SHARED&#39;  # fields flattened into parent (mixin)
 ValueObjectClause    &lt;- ComputedClause / ImmutableClause / NaturalKeyClause / CheckConstraint / SourceAnnotation / DocClause / SynonymsClause
 ComputedClause       &lt;- &#39;COMPUTED&#39; IDENTIFIER &#39;ON&#39; ComputeTiming &#39;:&#39; SqlExpression &#39;;&#39;?
 ComputeTiming        &lt;- &#39;INSERT&#39; / &#39;UPDATE&#39; / &#39;INSERT_OR_UPDATE&#39;
@@ -767,8 +767,11 @@ SeedValueLiteral     &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / 
 ExtraFieldList       &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
 ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation* FieldDocClause?
 ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39;</code></pre>
-<h3 id="24-import-seed-data-file">24. IMPORT (Seed Data File)</h3>
-<pre class="peg"><code>Import               &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>
+<h3 id="24-import-seed-data-file-and-dsl-file-import">24. IMPORT (Seed
+Data File and DSL File Import)</h3>
+<pre class="peg"><code>Import               &lt;- ImportDslFile / ImportJson
+ImportDslFile        &lt;- &#39;IMPORT&#39; STRING &#39;;&#39;?
+ImportJson           &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>
 <h3 id="25-seed-block-inline-test-data">25. SEED Block (Inline Test
 Data)</h3>
 <pre class="peg"><code>SeedBlock            &lt;- &#39;SEED&#39; STRING &#39;{&#39; SeedRow* &#39;}&#39;
