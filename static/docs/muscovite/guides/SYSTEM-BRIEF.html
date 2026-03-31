@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 1.78.2 | <strong>Generated</strong>:
-2026-03-31 | <strong>Commit</strong>: 359933c2 |
+<p><strong>Version</strong>: 1.78.3 | <strong>Generated</strong>:
+2026-03-31 | <strong>Commit</strong>: 273e41ec |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -299,8 +299,39 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="1782----2026-03-31">[1.78.2] -- 2026-03-31</h2>
+<h2 id="1783----2026-03-31">[1.78.3] -- 2026-03-31</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>(governance): experiment deadline enforcement</li>
+<li>(governance): add IR proto staleness CI gate stub (FTR-639)</li>
+<li>(governance): validate-release checks retrospective FTRs are
+tracked</li>
+<li>(governance): pre-commit hook rejects sed on markdown and PL/pgSQL
+in generators</li>
+</ul>
 <h3 id="fixed">Fixed</h3>
+<ul>
+<li>(governance): ((MISSING++)) exits with set -e when MISSING=0</li>
+<li>(muscomp): postgres generator correctness — BFX-015..023</li>
+<li>(muscomp): zero skipped tests — FTR-646, FTR-647, FTR-648</li>
+<li>(governance): remove MoSCoW prioritization — everything planned is
+must</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>governance: tick AC boxes via validate-release.sh --fix</li>
+<li>Phase 5: governance — retrospective, status updates, FTR-653
+improvement</li>
+<li>Phase 4: FTR-650 golden file test infrastructure</li>
+<li>Phase 3: FTR-649 wire generator dispatch, FTR-651 fact base parity,
+FTR-652 error handling tests</li>
+<li>plan(v1.78.3): complete gap audit — BFX-019..023, FTR-651..652</li>
+<li>plan(v1.78.3): add generator bugs BFX-015..018, FTR-649..650 from
+Racket vs muscomp comparison</li>
+<li>plan(v1.78.3): zero skipped tests hotfix — 3 FTRs, 11 tests</li>
+</ul>
+<h2 id="1782----2026-03-31">[1.78.2] -- 2026-03-31</h2>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>(muscomp): enable import resolver + storage_mode JSON tests
 (FTR-644)</li>
@@ -317,7 +348,7 @@ QML line counts.</p>
 <ul>
 <li>archive v1.78.1 — remove workflow/versions copy</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>gov(v1.78.2): move FTR-645 to ideas (not in iteration scope)</li>
 <li>gov(v1.78.2): governance artifacts — retrospective, FTR statuses,
@@ -333,7 +364,7 @@ v1.80.0+v1.81.0→v2.8.0</li>
 modularization roadmap</li>
 </ul>
 <h2 id="1781----2026-03-31">[1.78.1] -- 2026-03-31</h2>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>(muscomp): FTR-605 builtin domain packages — oauth2, security,
 spatial with package registry</li>
@@ -418,7 +449,7 @@ diagnostics, dependency resolution</li>
 <li>(muscomp): FTR-606 — manifest + artifact tracking system</li>
 <li>(muscomp): FTR-584 — validation framework + rule registry</li>
 </ul>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul>
 <li>(FTR-560): correct DSL syntax and assertions in parser test
 files</li>
@@ -456,7 +487,7 @@ edge cases</li>
 <li>remove stale workflow/versions/ for released v1.77.0 and
 v1.78.0</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>governance: add RELEASE-CHECKLIST.md for v1.78.1</li>
 <li>governance: v1.78.1 — mark all 47 FTRs complete, add
@@ -536,11 +567,6 @@ v1.78.1</li>
 <li>plan: add muscomp parser gap FTRs (563-567) to v1.78.1</li>
 <li>plan: v1.78.1 hotfix — close muscomp quality assurance gaps</li>
 </ul>
-<h2 id="1780----2026-03-29">[1.78.0] -- 2026-03-29</h2>
-<h3 id="maintenance-2">Maintenance</h3>
-<ul>
-<li>update gate timings from v1.78.0-rc1</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
@@ -588,7 +614,7 @@ v1.78.1</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>359933c2</code> (project:
+<p>Last measured at commit <code>273e41ec</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -601,7 +627,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>2576.4s</td>
+<td>1558.4s</td>
 <td>297 compilation steps</td>
 </tr>
 <tr>
@@ -611,7 +637,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 37 recorded runs.</p>
+<p>Build history: 38 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -631,7 +657,7 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>314.8s</td>
+<td>208.1s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -639,16 +665,16 @@ muscovite):</p>
 <td>19</td>
 <td>0</td>
 <td>100%</td>
-<td>0.4s</td>
+<td>0.3s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (81.8s)</li>
-<li><strong>slow</strong>: 56/56 passed (192.7s)</li>
-<li><strong>integration</strong>: 12/12 passed (40.2s)</li>
+<li><strong>fast</strong>: 30/30 passed (50.8s)</li>
+<li><strong>slow</strong>: 56/56 passed (125.7s)</li>
+<li><strong>integration</strong>: 12/12 passed (31.6s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -665,6 +691,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.78.3</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v1.78.2</td>
 <td>8</td>
@@ -737,17 +771,9 @@ muscovite):</p>
 <td>96/96</td>
 <td>33/34</td>
 </tr>
-<tr>
-<td>v1.73.1</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>96/96</td>
-<td>33/34</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v1.78.2).</strong></p>
+<p><strong>✅ No regressions in latest release (v1.78.3).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -808,11 +834,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>1.78.2</td>
+<td>1.78.3</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2070 (since 2025-11-17)</td>
+<td>2086 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
