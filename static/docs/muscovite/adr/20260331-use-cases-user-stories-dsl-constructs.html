@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Use Cases and User Stories as DSL
+Constructs — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Use Cases and User Stories as DSL Constructs</span>
+</nav>
+
+<h1>Use Cases and User Stories as DSL Constructs</h1>
+
+
+<h1 id="use-cases-and-user-stories-as-dsl-constructs">Use Cases and User
+Stories as DSL Constructs</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, requirements, traceability, use-case, user-story,
+grammar, ir</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 5 — add USE_CASE and USER_STORY as
+first-class constructs for requirements traceability.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite models what the system <em>is</em> (entities, aggregates,
+events) but not what the system <em>does for users</em> (use cases, user
+stories). There is no formal link between user requirements and domain
+constructs. During brownfield extraction, AI agents discover entities
+and relationships from code/schema, but user-facing behavior is
+inferred, not declared.</p>
+<p>For consulting deliverables, traceability from "what the user wants"
+to "which aggregates serve that need" is essential — and currently
+maintained in external documents that drift.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Requirements traceability is a consulting deliverable</li>
+<li>Use cases reference domain constructs (entities, events) — must be
+validated</li>
+<li>Must be declared inside CONTEXT blocks (they belong to a bounded
+context)</li>
+<li>Actor modeling is organizational, not structural — free-text is
+sufficient</li>
+<li>Grammar-first mandate (ADR 20260211)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-use_case-and-user_story-as-dsl-constructs-chosen">Option 1:
+USE_CASE and USER_STORY as DSL constructs (chosen)</h3>
+<p>First-class constructs in <code>.ddd</code> files with entity/event
+references.</p>
+<ul>
+<li>Good, because traceability is validated by the parser (references
+must resolve)</li>
+<li>Good, because generators produce requirements traceability matrix
+automatically</li>
+<li>Good, because dual format (USE_CASE for formal, USER_STORY for agile
+teams)</li>
+<li>Bad, because adds DSL complexity for a non-technical concern</li>
+</ul>
+<h3 id="option-2-external-requirements-file-requirementsyaml">Option 2:
+External requirements file (.requirements.yaml)</h3>
+<p>Side-by-side YAML mapping requirements to entity UUIDs.</p>
+<ul>
+<li>Good, because no grammar changes</li>
+<li>Bad, because drifts from the model</li>
+<li>Bad, because references are not parser-validated</li>
+</ul>
+<h3 id="option-3-doc-annotations-with-structured-text">Option 3: DOC
+annotations with structured text</h3>
+<p><code>ENTITY Patient @uuid "..." DOC "USE_CASE: RegisterPatient (Admissions Clerk)"</code>
+— embed requirements in DOC strings.</p>
+<ul>
+<li>Good, because no grammar changes</li>
+<li>Bad, because unstructured — no validation, no reference
+resolution</li>
+<li>Bad, because DOC strings are documentation, not model
+constructs</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "USE_CASE and USER_STORY as DSL constructs", because
+formal constructs with validated entity/event references provide the
+traceability that consulting deliverables require.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>USE_CASE RegisterPatient @uuid &quot;...&quot; {
+    ACTOR &quot;Admissions Clerk&quot;
+    CREATES Patient
+    UPDATES Encounter
+    READS AdministrativeGender, InsuranceProvider
+    TRIGGERS PatientRegistered
+    BENEFIT &quot;New patient record created with insurance linkage&quot;
+    DOC &quot;Primary admission workflow — 80% of all patient registrations&quot;;
+}
+
+USER_STORY ManageAllergies @uuid &quot;...&quot; {
+    AS &quot;Nurse&quot;
+    I_WANT_TO UPDATE Allergy FOR Patient
+    SO_THAT &quot;Critical allergy information is available before medication administration&quot;
+}</code></pre>
+<h3 id="rules">Rules</h3>
+<ul>
+<li>Use cases and user stories are declared inside a
+<code>CONTEXT</code> block</li>
+<li>Entity references (<code>CREATES</code>, <code>UPDATES</code>,
+<code>READS</code>, <code>FOR</code>) must resolve to entities within
+the same context or imported contexts</li>
+<li><code>TRIGGERS</code> references domain events</li>
+<li><code>ACTOR</code> / <code>AS</code> are free-text strings</li>
+<li>Both carry <code>@uuid</code> for semantic diff tracking</li>
+<li>Both can carry <code>@compliance</code> and <code>@quality</code>
+annotations</li>
+</ul>
+<h3 id="peg-grammar">PEG Grammar</h3>
+<pre class="peg"><code>UseCase     &lt;- &#39;USE_CASE&#39; IDENTIFIER UuidAnnotation ComplianceAnnotation*
+               QualityAnnotation*
+               &#39;{&#39; UseCaseBody &#39;}&#39;
+UseCaseBody &lt;- (ActorClause / CreatesClause / UpdatesClause / ReadsClause /
+                TriggersClause / BenefitClause / DocClause)*
+
+UserStory   &lt;- &#39;USER_STORY&#39; IDENTIFIER UuidAnnotation ComplianceAnnotation*
+               QualityAnnotation*
+               &#39;{&#39; UserStoryBody &#39;}&#39;
+UserStoryBody &lt;- AsClause IWantToClause SoThatClause? DocClause?</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>New IR node types: <code>UseCase</code>, <code>UserStory</code> with
+entity/event references (UUIDs)</li>
+<li>Stored within the context they belong to</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: requirements traceability matrix —
+which use cases touch which entities, which events they trigger.
+Domain-expert docs show use cases in natural language. Developer docs
+show entity/event linkage.</li>
+<li><strong>Test generator</strong>: use case declarations feed
+generated acceptance test skeletons.</li>
+<li><strong>Extraction pipeline</strong>: AI agents emit use cases
+alongside entities when extracting from legacy systems.</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Requirements traceability formalized in the model</li>
+<li>Parser validates entity/event references — broken links caught at
+compile time</li>
+<li>Acceptance test skeletons generated from use case declarations</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>DSL becomes more verbose for teams that don't use formal use
+cases</li>
+<li>Actor modeling is limited to free-text (no organizational
+hierarchy)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 5</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding USE_CASE or USER_STORY constructs to a bounded
+context</li>
+<li>When generating requirements traceability documentation</li>
+<li>When extracting requirements from legacy systems</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Technical use cases that don't involve user-facing behavior</li>
+<li>Process flows (use FLOW construct instead — separate ADR)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for UseCase/UserStory</li>
+<li>Parser validation: entity/event references must resolve within
+context or imports</li>
+<li>Generators produce traceability matrix only when use cases are
+present</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — UseCase/UserStory
+grammar rules</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — UseCase, UserStory
+IR nodes</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — traceability
+matrix generator</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

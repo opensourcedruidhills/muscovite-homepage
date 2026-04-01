@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality Attribute Annotation
+Scheme — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Quality Attribute Annotation Scheme</span>
+</nav>
+
+<h1>Quality Attribute Annotation Scheme</h1>
+
+
+<h1 id="quality-attribute-annotation-scheme">Quality Attribute
+Annotation Scheme</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, quality-attributes, annotation, grammar, ir,
+architecture</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 4 — add quality attribute
+annotations to UUID-tracked DSL constructs for architectural decision
+support.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Architectural decisions require quality attribute analysis: which
+aggregates change frequently (volatility), which require high
+availability, which have strict consistency requirements, which handle
+large data volumes. This metadata drives service decomposition,
+infrastructure provisioning, and SLA definitions.</p>
+<p>Currently this knowledge is tacit or lives in external documents. It
+should be expressible in the domain model so generators can produce
+quality-attribute-aware output and documentation includes architectural
+decision rationale.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Same annotation mechanism as compliance (reuse the scheme
+pattern)</li>
+<li>Quality attributes differ per project — must be user-definable</li>
+<li>Must apply to any UUID-tracked construct (aggregates, entities,
+contexts)</li>
+<li>Generators need quality metadata for infrastructure hints
+(partitioning, isolation levels)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-quality_scheme-with-quality-annotations-chosen">Option
+1: QUALITY_SCHEME with @quality annotations (chosen)</h3>
+<p>Same mechanism as COMPLIANCE_SCHEME — user-defined schemes,
+<code>@quality Scheme:Tag</code>.</p>
+<ul>
+<li>Good, because identical mechanism to compliance — grammar investment
+amortized</li>
+<li>Good, because user-definable vocabulary per project</li>
+<li>Good, because generators can derive infrastructure hints</li>
+</ul>
+<h3
+id="option-2-combine-with-compliance-into-single-annotation_scheme">Option
+2: Combine with compliance into single ANNOTATION_SCHEME</h3>
+<p>A single <code>ANNOTATION_SCHEME</code> with a <code>KIND</code>
+discriminator.</p>
+<ul>
+<li>Good, because fewer grammar rules</li>
+<li>Bad, because <code>@compliance</code> and <code>@quality</code> have
+very different generator implications</li>
+<li>Bad, because loses semantic clarity in the DSL —
+<code>@annotate</code> is too generic</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "QUALITY_SCHEME with @quality annotations", because
+separate keywords preserve semantic clarity while sharing the same
+underlying mechanism. <code>@compliance</code> and <code>@quality</code>
+read differently, serve different audiences, and drive different
+generator behavior.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<h4 id="mus-project-file--scheme-definition">.mus project file — scheme
+definition</h4>
+<pre><code>QUALITY_SCHEME Volatility {
+    RARELY   DOC &quot;Schema and data change less than once per quarter&quot;;
+    NORMAL   DOC &quot;Regular change cadence — monthly or per-sprint&quot;;
+    OFTEN    DOC &quot;High-frequency changes — multiple times per week&quot;;
+}
+
+QUALITY_SCHEME Criticality {
+    AVAILABILITY_HIGH      DOC &quot;99.99% uptime SLA — failover required&quot;;
+    AVAILABILITY_NORMAL    DOC &quot;99.9% uptime SLA — standard redundancy&quot;;
+    CONSISTENCY_STRONG     DOC &quot;ACID required — no eventual consistency&quot;;
+    CONSISTENCY_EVENTUAL   DOC &quot;Eventual consistency acceptable&quot;;
+    SECURITY_HIGH          DOC &quot;Encryption at rest and in transit, audit logging&quot;;
+}
+
+QUALITY_SCHEME DataVolume {
+    TINY    DOC &quot;&lt; 10K rows expected&quot;;
+    NORMAL  DOC &quot;10K–10M rows expected&quot;;
+    HUGE    DOC &quot;10M+ rows expected — partitioning recommended&quot;;
+}</code></pre>
+<h4 id="ddd-model--annotations">.ddd model — annotations</h4>
+<pre class="ddd"><code>ENTITY AuditLog @uuid &quot;...&quot; @quality Volatility:OFTEN DataVolume:HUGE
+    IDENTIFIED_BY id ( ... )
+
+AGGREGATE Order @uuid &quot;...&quot;
+    @quality Criticality:CONSISTENCY_STRONG Criticality:AVAILABILITY_HIGH
+    ROOT Order EVENT_SOURCED;</code></pre>
+<h3 id="peg-grammar">PEG Grammar</h3>
+<pre class="peg"><code>QualityAnnotation &lt;- &#39;@quality&#39; QualityTag+
+QualityTag        &lt;- IDENTIFIER &#39;:&#39; IDENTIFIER</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>Every protobuf IR message that carries a UUID also carries
+<code>repeated QualityTag quality_tags</code></li>
+<li><code>QualityTag</code> message:
+<code>string scheme = 1; string tag = 2;</code></li>
+<li>Scheme definitions stored at project level in the IR</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: architect-scoped docs include
+quality attribute matrix per context. SLA recommendations derived from
+criticality tags.</li>
+<li><strong>Heatmap</strong>: volatility heatmap, data volume heatmap,
+criticality heatmap.</li>
+<li><strong>PostgreSQL</strong>: HUGE data volume → table partitioning
+hints in generated comments. STRONG consistency → explicit
+<code>SERIALIZABLE</code> isolation level in transaction wrappers.</li>
+<li><strong>Infrastructure</strong>: feeds future Terraform/Kubernetes
+generators with sizing hints.</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Quality attributes formalized in the model, not in external
+documents</li>
+<li>Generators can produce infrastructure-aware output</li>
+<li>Architect documentation automatically includes quality analysis</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Adds annotation verbosity alongside compliance annotations</li>
+<li>Quality scheme design requires architectural expertise</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 4</li>
+<li><a href="20260331-compliance-annotation-scheme.html">ADR 20260331
+Compliance Annotations</a> — same mechanism, different concern</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding <code>@quality</code> annotations to UUID-tracked
+constructs</li>
+<li>When generating documentation that includes quality attribute
+analysis</li>
+<li>When generating infrastructure hints (partitioning, isolation,
+SLA)</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Regulatory compliance concerns (use <code>@compliance</code>
+instead)</li>
+<li>Runtime performance metrics (quality annotations are design-time,
+not runtime)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for QualityAnnotation</li>
+<li>Parser validation: referenced scheme:tag must exist in project
+QUALITY_SCHEME</li>
+<li>Generators emit quality-aware output only when annotations are
+present</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — QualityAnnotation
+grammar rule</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — QualityTag IR
+type</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — architect
+documentation generators</li>
+<li><code>toolchain/muscomp/src/generators/postgres/</code> —
+partitioning hints, isolation levels</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

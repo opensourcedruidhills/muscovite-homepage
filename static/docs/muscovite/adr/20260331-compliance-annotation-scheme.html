@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compliance Annotation Scheme — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Compliance Annotation Scheme</span>
+</nav>
+
+<h1>Compliance Annotation Scheme</h1>
+
+
+<h1 id="compliance-annotation-scheme">Compliance Annotation Scheme</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, compliance, gdpr, hipaa, annotation, grammar, ir,
+generators</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 3 — add regulatory compliance
+annotations to any UUID-tracked DSL construct.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Regulated industries require formal classification of data elements
+for privacy (DSGVO/GDPR), health data (HIPAA), financial controls (SOX,
+PCI-DSS), and information security (ISO 27001). Today this
+classification lives in external spreadsheets and Confluence pages that
+drift from the code within weeks.</p>
+<p>Muscovite's domain model is the single source of truth for schema,
+code, and documentation — but not for regulatory classification. The
+classification should live in the model itself, propagate through the
+IR, and drive generator behavior: auditor-facing documentation,
+compliance heatmaps, column-level access policies, and field masking
+rules.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Consulting engagements in healthcare, finance, public sector require
+formal data classification</li>
+<li>Classification must be per-field granular (not just per-entity)</li>
+<li>Scheme vocabularies differ per regulation (GDPR vs. HIPAA vs.
+PCI-DSS)</li>
+<li>Must apply to any UUID-tracked construct — fields, events,
+transitions, saga steps</li>
+<li>Annotation mechanism must be reusable (same pattern as quality
+annotations)</li>
+<li>Grammar-first mandate (ADR 20260211)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-compliance_scheme-with-compliance-annotations-chosen">Option
+1: COMPLIANCE_SCHEME with @compliance annotations (chosen)</h3>
+<p>User-defined schemes in <code>.mus</code>;
+<code>@compliance Scheme:Tag</code> annotations on any UUID-tracked
+construct in <code>.ddd</code> files.</p>
+<ul>
+<li>Good, because scheme is user-definable per
+engagement/regulation</li>
+<li>Good, because applies to any UUID-tracked construct uniformly</li>
+<li>Good, because multiple tags per construct (a field can be both
+DSGVO:PII and ISO27001:CONFIDENTIAL)</li>
+<li>Good, because annotation mechanism is reused for quality attributes
+(Extension 4)</li>
+<li>Bad, because verbose on heavily-annotated fields</li>
+</ul>
+<h3 id="option-2-built-in-piisensitivepublic-enum">Option 2: Built-in
+PII/SENSITIVE/PUBLIC enum</h3>
+<p>Hardcoded classification levels on fields.</p>
+<ul>
+<li>Good, because simple</li>
+<li>Bad, because one-size-fits-all — cannot represent GDPR Art. 9
+distinctions</li>
+<li>Bad, because only applies to fields, not events/transitions/saga
+steps</li>
+</ul>
+<h3 id="option-3-external-classification-file-complianceyaml">Option 3:
+External classification file (.compliance.yaml)</h3>
+<p>Side-by-side YAML file mapping UUIDs to classifications.</p>
+<ul>
+<li>Good, because no grammar changes needed</li>
+<li>Bad, because drifts from the model (the exact problem being
+solved)</li>
+<li>Bad, because not visible in the DSL — auditors must cross-reference
+two files</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "COMPLIANCE_SCHEME with @compliance annotations",
+because it places regulatory classification inside the model as a
+first-class concern, uses the same scheme mechanism as other annotation
+types, and supports per-engagement vocabularies.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<h4 id="mus-project-file--scheme-definition">.mus project file — scheme
+definition</h4>
+<pre><code>COMPLIANCE_SCHEME DSGVO {
+    PII
+        DOC &quot;Personally identifiable information — Art. 4(1) GDPR&quot;;
+    SENSITIVE_HEALTH
+        DOC &quot;Special category health data — Art. 9(1) GDPR&quot;;
+    FINANCIAL
+        DOC &quot;Payment and banking data&quot;;
+    MINOR
+        DOC &quot;Data relating to persons under 16 — Art. 8 GDPR&quot;;
+    RETENTION_LIMITED
+        DOC &quot;Subject to storage limitation — Art. 5(1)(e) GDPR&quot;;
+}
+
+COMPLIANCE_SCHEME ISO27001 {
+    CONFIDENTIAL
+        DOC &quot;Annex A.8.2 — Information classification: confidential&quot;;
+    INTERNAL
+        DOC &quot;Internal use only&quot;;
+    PUBLIC
+        DOC &quot;Publicly accessible&quot;;
+}</code></pre>
+<h4 id="ddd-model--annotations">.ddd model — annotations</h4>
+<pre class="ddd"><code>ENTITY Patient @uuid &quot;...&quot; IDENTIFIED_BY id (
+    id           UUID   NOT_NULL @uuid &quot;...&quot;,
+    mrn          TEXT   NOT_NULL @uuid &quot;...&quot; @compliance DSGVO:PII ISO27001:CONFIDENTIAL,
+    given_name   TEXT   NOT_NULL @uuid &quot;...&quot; @compliance DSGVO:PII,
+    diagnosis    TEXT            @uuid &quot;...&quot; @compliance DSGVO:SENSITIVE_HEALTH,
+    ssn          TEXT            @uuid &quot;...&quot; @compliance DSGVO:PII PCI_DSS:CARDHOLDER_DATA
+)</code></pre>
+<p>Annotations are valid on any grammar rule that accepts
+<code>UuidAnnotation</code> — entities, fields, value objects, events,
+commands, sagas, saga steps, state machine transitions, extension
+points, aggregates, relationships, projections, policies,
+specifications, services, repositories, strong types, lookup tables, and
+any future UUID-tracked construct.</p>
+<h3 id="peg-grammar">PEG Grammar</h3>
+<pre class="peg"><code>ComplianceAnnotation &lt;- &#39;@compliance&#39; ComplianceTag+
+ComplianceTag        &lt;- IDENTIFIER &#39;:&#39; IDENTIFIER</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>Every protobuf IR message that carries a UUID also carries
+<code>repeated ComplianceTag compliance_tags</code></li>
+<li><code>ComplianceTag</code> message:
+<code>string scheme = 1; string tag = 2;</code></li>
+<li>Scheme definitions stored at project level in the IR</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>PostgreSQL</strong>:
+<code>COMMENT ON COLUMN ... IS 'DSGVO:PII'</code>. Optional: row-level
+security policy stubs, column-level encryption annotations, retention
+trigger stubs.</li>
+<li><strong>C++ DBA</strong>: PII field accessors routed through
+auditable wrapper. Deletion service method generated for entities with
+PII fields (GDPR Art. 17 right to erasure).</li>
+<li><strong>gRPC</strong>: <code>sensitive = true</code> in proto field
+comments. Field masking for non-privileged service accounts.</li>
+<li><strong>Documentation</strong>: auditor-scoped docs list all tagged
+fields, storage locations, access paths, retention policies. Generates
+GDPR Article 30 record of processing activities. ISO 27001 control
+mapping per entity.</li>
+<li><strong>Heatmap</strong>: compliance density per context — risk
+visualization for stakeholder review.</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Regulatory classification becomes part of the single source of
+truth</li>
+<li>Auditor documentation generated automatically from the model</li>
+<li>Compliance drift eliminated — classification travels with the field
+definition</li>
+<li>GDPR Article 30 reports generated, not hand-authored</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Annotation verbosity on heavily-regulated entities</li>
+<li>Scheme definitions require domain expertise to author correctly</li>
+<li>Generator complexity increases for compliance-aware output</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 3</li>
+<li><a href="20260331-quality-attribute-annotation-scheme.html">ADR
+20260331 Quality Annotations</a> — same mechanism, different
+concern</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding <code>@compliance</code> annotations to any UUID-tracked
+construct</li>
+<li>When generating documentation for regulated industries</li>
+<li>When building generators that produce compliance-aware output
+(masking, RLS, audit)</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Non-regulated domains where compliance classification is not
+required</li>
+<li>Quality attributes (use <code>@quality</code> annotation instead —
+separate ADR)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for ComplianceAnnotation</li>
+<li>Parser validation: referenced scheme:tag must exist in project
+COMPLIANCE_SCHEME</li>
+<li>Generator-specific validation per target (e.g., PII fields must have
+retention policy)</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — ComplianceAnnotation
+grammar rule</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — ComplianceTag IR
+type</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — auditor
+documentation generators</li>
+<li><code>toolchain/muscomp/src/generators/postgres/</code> — COMMENT
+ON, RLS stubs</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain/Subdomain Hierarchy with User-Definable
+Classification — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Domain/Subdomain Hierarchy with User-Definable
+Classification</span>
+</nav>
+
+<h1>Domain/Subdomain Hierarchy with User-Definable Classification</h1>
+
+
+<h1
+id="domainsubdomain-hierarchy-with-user-definable-classification">Domain/Subdomain
+Hierarchy with User-Definable Classification</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, strategic, domain, classification, grammar, ir</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 1 — add strategic DDD domain
+hierarchy to the Muscovite DSL.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite has <code>CONTEXT</code> as a flat construct. There is no
+way to express that contexts belong to a domain, that domains have
+subdomains, or that some domains are strategically more important than
+others (core vs. supporting vs. generic). During brownfield extraction,
+AI agents discover bounded contexts but cannot classify them — a
+classification that drives prioritization, resource allocation, and
+documentation scoping.</p>
+<p>Evans' strategic DDD vocabulary (domains, subdomains,
+core/supporting/generic classification) is missing from the DSL
+entirely. This forces strategic reasoning into external documents that
+drift from the model.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Brownfield modernization use case requires domain classification
+before entity modeling</li>
+<li>Classification vocabularies differ per engagement (healthcare vs.
+finance vs. public sector)</li>
+<li>Must be purely additive — existing models without DOMAIN/SUBDOMAIN
+continue unchanged</li>
+<li>Grammar-first mandate (ADR 20260211) — PEG grammar changes before
+parser/IR</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-hardcoded-coresupportinggeneric-enum">Option 1:
+Hardcoded Core/Supporting/Generic enum</h3>
+<p>Built-in <code>CLASSIFICATION</code> enum with Evans' three
+values.</p>
+<ul>
+<li>Good, because simple and immediately recognizable</li>
+<li>Bad, because clients need custom vocabularies (e.g.,
+"revenue-generating" vs. "cost-center")</li>
+<li>Bad, because adding new classifications requires grammar
+changes</li>
+</ul>
+<h3 id="option-2-user-definable-classification_scheme-chosen">Option 2:
+User-definable CLASSIFICATION_SCHEME (chosen)</h3>
+<p>A <code>CLASSIFICATION_SCHEME</code> in the <code>.mus</code> project
+file defines the vocabulary. DOMAIN and SUBDOMAIN reference scheme
+entries.</p>
+<ul>
+<li>Good, because each engagement defines its own strategic
+taxonomy</li>
+<li>Good, because adding classifications requires no grammar or tool
+changes</li>
+<li>Good, because the scheme mechanism is reusable (same pattern as
+COMPLIANCE_SCHEME)</li>
+<li>Bad, because slightly more complex than a fixed enum</li>
+</ul>
+<h3 id="option-3-free-text-tags-on-contexts">Option 3: Free-text tags on
+contexts</h3>
+<p><code>CONTEXT Foo @tag "core" @tag "clinical"</code> — unstructured
+metadata.</p>
+<ul>
+<li>Good, because maximally flexible</li>
+<li>Bad, because no validation, no scheme, no consistency across the
+model</li>
+<li>Bad, because generators cannot reliably drive behavior from
+unstructured tags</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "User-definable CLASSIFICATION_SCHEME", because it
+balances expressiveness with structure. The scheme pattern is reused
+across four extensions (classification, compliance, quality,
+governance), amortizing the grammar investment.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<h4 id="mus-project-file--scheme-definition">.mus project file — scheme
+definition</h4>
+<pre><code>CLASSIFICATION_SCHEME DomainClassification {
+    CORE_DOMAIN
+        DOC &quot;Differentiating business capability — maximum investment&quot;;
+    SUPPORTING_DOMAIN
+        DOC &quot;Necessary but not differentiating — build or buy&quot;;
+    GENERIC_SUBDOMAIN
+        DOC &quot;Commodity capability — buy or open-source&quot;;
+}</code></pre>
+<h4 id="ddd-domain-model--usage">.ddd domain model — usage</h4>
+<pre class="ddd"><code>DOMAIN Healthcare @uuid &quot;...&quot; CLASSIFICATION DomainClassification:CORE_DOMAIN {
+
+    SUBDOMAIN ClinicalCare @uuid &quot;...&quot;
+        CLASSIFICATION DomainClassification:CORE_DOMAIN {
+
+        SUBDOMAIN EmergencyMedicine @uuid &quot;...&quot;
+            CLASSIFICATION DomainClassification:CORE_DOMAIN
+            DOC &quot;Time-critical patient care workflows&quot;;
+    }
+
+    SUBDOMAIN Billing @uuid &quot;...&quot;
+        CLASSIFICATION DomainClassification:SUPPORTING_DOMAIN
+        DOC &quot;Insurance claims and payment processing&quot;;
+}</code></pre>
+<h4 id="context-implements-clause">Context implements clause</h4>
+<pre class="ddd"><code>CONTEXT EmergencyDepartment @uuid &quot;...&quot;
+    IMPLEMENTS EmergencyMedicine
+{ ... }</code></pre>
+<h3 id="dag-rules">DAG Rules</h3>
+<ul>
+<li>Domains can contain zero or more subdomains; nesting is arbitrarily
+deep</li>
+<li>A context <code>IMPLEMENTS</code> exactly one subdomain (or domain,
+if no subdomains exist)</li>
+<li>Multiple contexts can implement the same subdomain</li>
+<li>The graph must be acyclic — no circular containment</li>
+<li>Every domain/subdomain carries a <code>@uuid</code> for semantic
+diff tracking</li>
+<li>Classification is optional on each node — inherits from parent if
+omitted</li>
+</ul>
+<h3 id="peg-grammar-additions">PEG Grammar Additions</h3>
+<pre class="peg"><code>Domain             &lt;- &#39;DOMAIN&#39; IDENTIFIER UuidAnnotation
+                      ClassificationClause? &#39;{&#39; DomainBody &#39;}&#39; DocClause?
+DomainBody         &lt;- (Subdomain / DocClause)*
+Subdomain          &lt;- &#39;SUBDOMAIN&#39; IDENTIFIER UuidAnnotation
+                      ClassificationClause? (&#39;{&#39; DomainBody &#39;}&#39;)? DocClause?
+ClassificationClause &lt;- &#39;CLASSIFICATION&#39; IDENTIFIER &#39;:&#39; IDENTIFIER
+ImplementsClause   &lt;- &#39;IMPLEMENTS&#39; IDENTIFIER</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>New IR node types: <code>Domain</code>, <code>Subdomain</code> with
+parent references (UUIDs)</li>
+<li><code>Context</code> gains an <code>implements</code> field (UUID
+reference to domain/subdomain)</li>
+<li>Classification stored as <code>scheme_name:tag_name</code> string
+pair</li>
+<li>Protobuf IR schema adds <code>DomainNode</code> message with
+<code>repeated DomainNode children</code></li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: domain hierarchy diagram,
+classification legend, per-domain scoped reports. Auditor docs show only
+CORE_DOMAIN contexts. C-level docs show the full taxonomy.</li>
+<li><strong>Heatmap</strong>: classification-colored context maps. Core
+= red (high attention), generic = grey (commodity).</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Strategic DDD vocabulary formalized in the model</li>
+<li>AI extraction agents can classify discovered contexts using the
+scheme</li>
+<li>Documentation generators produce domain-scoped reports
+automatically</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Grammar complexity increases (new top-level constructs)</li>
+<li>DAG cycle detection required in validation</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 1</li>
+<li><a href="20260211-grammar-first-dsl-changes.html">ADR 20260211</a> —
+grammar-first mandate</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding domain hierarchy or classification constructs to the
+DSL</li>
+<li>When generating documentation that needs strategic domain
+context</li>
+<li>When building brownfield extraction pipelines that classify bounded
+contexts</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Greenfield projects with a single bounded context (DOMAIN is
+optional)</li>
+<li>Tactical DDD constructs (entities, aggregates, value objects) —
+unchanged</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for DOMAIN/SUBDOMAIN</li>
+<li>Parser validation: DAG cycle detection, IMPLEMENTS target
+resolution</li>
+<li>Classification scheme validation: referenced tags must exist in the
+scheme</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — grammar additions</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> —
+<code>Domain</code>, <code>Subdomain</code> IR nodes</li>
+<li><code>toolchain/muscomp/src/parser/ir_builder.cpp</code> — parse
+DOMAIN/SUBDOMAIN</li>
+<li><code>toolchain/muscomp/src/validation/</code> — DAG cycle
+detection</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

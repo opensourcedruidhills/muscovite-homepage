@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Current/Target Context Map
+States — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Current/Target Context Map States</span>
+</nav>
+
+<h1>Current/Target Context Map States</h1>
+
+
+<h1 id="currenttarget-context-map-states">Current/Target Context Map
+States</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, strategic, context-map, brownfield, grammar, ir</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 2 — add CURRENT/TARGET state to
+MAP blocks for brownfield modernization.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Brownfield modernization requires modeling two realities: the legacy
+system as it exists today, and the target architecture being built.
+Currently the <code>MAP</code> block has no concept of state — it models
+one reality. During extraction, the AI discovers the current landscape.
+The architect defines the target. But there is no formal way to express
+both states and track convergence from CURRENT to TARGET topology.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Brownfield consulting engagements need before/after
+visualization</li>
+<li>Must be backward compatible — MAP without STATE retains current
+behavior</li>
+<li>Both maps must coexist in the same project for convergence
+tracking</li>
+<li>Grammar-first mandate (ADR 20260211)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-state-clause-on-map-block-chosen">Option 1: STATE
+clause on MAP block (chosen)</h3>
+<p><code>MAP STATE CURRENT { ... }</code> and
+<code>MAP STATE TARGET { ... }</code> as two separate blocks.</p>
+<ul>
+<li>Good, because explicit and readable</li>
+<li>Good, because backward compatible (MAP without STATE is
+UNSPECIFIED)</li>
+<li>Good, because generators can select which state to render</li>
+<li>Bad, because contexts may appear in both maps with different
+relationships</li>
+</ul>
+<h3 id="option-2-versioned-map-blocks">Option 2: Versioned MAP
+blocks</h3>
+<p><code>MAP VERSION "2024-Q1" { ... }</code> with arbitrary version
+strings.</p>
+<ul>
+<li>Good, because supports more than two states</li>
+<li>Bad, because no semantic meaning — generators can't distinguish
+current from target</li>
+<li>Bad, because opens the door to unbounded proliferation</li>
+</ul>
+<h3 id="option-3-annotations-on-individual-relationships">Option 3:
+Annotations on individual relationships</h3>
+<p><code>PatientAdmin -&gt; Billing : SHARED_KERNEL @state CURRENT</code></p>
+<ul>
+<li>Good, because fine-grained per-relationship</li>
+<li>Bad, because clutters the relationship syntax</li>
+<li>Bad, because hard to visualize as a coherent map</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "STATE clause on MAP block", because it provides
+exactly the two states needed for brownfield modernization with clear
+semantics and full backward compatibility.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>MAP STATE CURRENT {
+    PatientAdmin -&gt; Billing : SHARED_KERNEL VIA SHARED_DB
+        DOC &quot;Legacy: both contexts read the same patient table&quot;;
+    Reporting &lt;- PatientAdmin : CONFORMIST VIA SHARED_DB
+        DOC &quot;Legacy: reporting queries patient tables directly&quot;;
+}
+
+MAP STATE TARGET {
+    PatientAdmin -&gt; Billing : CUSTOMER_SUPPLIER VIA GRPC
+        DOC &quot;Target: billing consumes patient events via gRPC&quot;;
+    Reporting &lt;- PatientAdmin : ANTICORRUPTION_LAYER VIA EVENTS
+        DOC &quot;Target: reporting subscribes to domain events&quot;;
+}</code></pre>
+<h3 id="rules">Rules</h3>
+<ul>
+<li>A project may have at most one <code>CURRENT</code> map and one
+<code>TARGET</code> map</li>
+<li>Both are optional — greenfield projects have only
+<code>TARGET</code> (or no state)</li>
+<li><code>MAP</code> without <code>STATE</code> retains current behavior
+(state = UNSPECIFIED)</li>
+<li>Contexts in <code>CURRENT</code> not in <code>TARGET</code> are
+legacy-only (expected to be retired)</li>
+<li>Contexts in <code>TARGET</code> not in <code>CURRENT</code> are new
+(being built)</li>
+</ul>
+<h3 id="peg-grammar-changes">PEG Grammar Changes</h3>
+<pre class="peg"><code>MapBlock &lt;- &#39;MAP&#39; MapState? &#39;{&#39; MapEntry* &#39;}&#39;
+MapState &lt;- &#39;STATE&#39; (&#39;CURRENT&#39; / &#39;TARGET&#39;)</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li><code>MapBlock</code> gains a <code>state</code> field:
+<code>CURRENT</code>, <code>TARGET</code>, or
+<code>UNSPECIFIED</code></li>
+<li>Both maps coexist in the IR; generators select which to render</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: side-by-side or overlay diagrams
+showing current vs. target. Diff highlighting for changed relationships.
+Migration progress tracking.</li>
+<li><strong>Heatmap</strong>: convergence heatmap — contexts that have
+completed transition vs. those still in CURRENT topology.</li>
+<li><strong>Validation</strong>: warn if a CURRENT relationship type is
+SHARED_DB and the TARGET relationship for the same context pair is still
+SHARED_DB (no improvement planned).</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Brownfield modernization has formal before/after representation</li>
+<li>Convergence tracking is derivable from the model</li>
+<li>AI extraction agents can populate CURRENT maps automatically</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Two maps to maintain for brownfield projects</li>
+<li>Validation rules become more complex (cross-map consistency)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 2</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modeling brownfield systems with legacy and target
+architectures</li>
+<li>When generating context map documentation with migration
+progress</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Greenfield projects (single MAP block without STATE is
+sufficient)</li>
+<li>The MAP block without STATE clause — existing behavior
+unchanged</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar enforces STATE keyword placement</li>
+<li>Parser validation: at most one CURRENT and one TARGET map per
+project</li>
+<li>Generators select map state via configuration flag</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — MapBlock grammar
+change</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — MapState enum</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — context map
+diagram generators</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

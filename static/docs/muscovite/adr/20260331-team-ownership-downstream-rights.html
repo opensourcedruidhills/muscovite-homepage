@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team-Type Contexts with Ownership and Downstream
+Rights — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Team-Type Contexts with Ownership and Downstream Rights</span>
+</nav>
+
+<h1>Team-Type Contexts with Ownership and Downstream Rights</h1>
+
+
+<h1
+id="team-type-contexts-with-ownership-and-downstream-rights">Team-Type
+Contexts with Ownership and Downstream Rights</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, strategic, team, ownership, governance, conways-law,
+grammar, ir</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 6 — add TEAM ownership and
+DOWNSTREAM_RIGHTS to contexts and relationships for organizational
+modeling.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Conway's Law: system architecture mirrors organizational structure.
+Muscovite models technical relationships between contexts
+(CUSTOMER_SUPPLIER, ACL, etc.) but not organizational ownership. During
+consulting engagements, understanding who owns what — and what
+governance rights downstream consumers have — is critical for planning
+migration sequences, staffing, and communication.</p>
+<p>Currently, team ownership lives in external project documentation. It
+should be part of the model so generators can produce team-scoped
+documentation, ownership heatmaps, and organizational risk analysis.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Consulting deliverables require org-chart overlays on context
+maps</li>
+<li>Downstream governance rights affect API evolution strategy</li>
+<li>Governance vocabularies differ per organization — must be
+user-definable</li>
+<li>Must be optional — not all projects model organizational
+concerns</li>
+<li>Grammar-first mandate (ADR 20260211)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3
+id="option-1-team-owner-governance_scheme-with-downstream_rights-chosen">Option
+1: TEAM, OWNER, GOVERNANCE_SCHEME with DOWNSTREAM_RIGHTS (chosen)</h3>
+<p>Teams defined in <code>.mus</code>, contexts declare OWNER,
+relationships declare DOWNSTREAM_RIGHTS using a user-defined
+GOVERNANCE_SCHEME.</p>
+<ul>
+<li>Good, because organizational modeling is explicit and
+structured</li>
+<li>Good, because governance vocabulary is user-definable (same scheme
+pattern)</li>
+<li>Good, because generators produce team-scoped documentation
+automatically</li>
+<li>Bad, because adds organizational concerns to a technical DSL</li>
+</ul>
+<h3 id="option-2-owner-as-free-text-annotation">Option 2: OWNER as
+free-text annotation</h3>
+<p><code>CONTEXT Foo @uuid "..." OWNER "Backend Platform Team"</code></p>
+<ul>
+<li>Good, because simple, no TEAM construct needed</li>
+<li>Bad, because no validation (typos in team names)</li>
+<li>Bad, because no team metadata (size, location, contact)</li>
+<li>Bad, because downstream rights have no structured vocabulary</li>
+</ul>
+<h3 id="option-3-external-raci-matrix">Option 3: External RACI
+matrix</h3>
+<p>Side-by-side YAML mapping contexts to team responsibilities.</p>
+<ul>
+<li>Good, because no grammar changes</li>
+<li>Bad, because drifts from the model</li>
+<li>Bad, because not visible in context map visualizations</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "TEAM, OWNER, GOVERNANCE_SCHEME with
+DOWNSTREAM_RIGHTS", because structured team definitions with validated
+ownership references provide the organizational modeling that consulting
+engagements require.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<h4 id="mus-project-file--team-definitions">.mus project file — team
+definitions</h4>
+<pre><code>TEAM BackendPlatform @uuid &quot;...&quot;
+    DOC &quot;Core platform team — 5 engineers, Berlin office&quot;;
+
+TEAM ClinicalApps @uuid &quot;...&quot;
+    DOC &quot;Clinical applications team — 8 engineers, remote&quot;;
+
+TEAM ExternalPartner @uuid &quot;...&quot;
+    DOC &quot;Third-party integration partner — Acme Health Ltd.&quot;;</code></pre>
+<h4 id="mus-project-file--governance-scheme">.mus project file —
+governance scheme</h4>
+<pre><code>GOVERNANCE_SCHEME DownstreamRights {
+    CONFORMIST
+        DOC &quot;Downstream accepts upstream model without influence&quot;;
+    OPINION_LEADER
+        DOC &quot;Downstream can suggest changes; upstream decides&quot;;
+    DECISION_MAKER
+        DOC &quot;Downstream drives API evolution for their use cases&quot;;
+    VETO_RIGHT
+        DOC &quot;Downstream can block upstream changes that break their contract&quot;;
+    MONOPOLIST
+        DOC &quot;Downstream is the sole consumer — effectively co-owns the API&quot;;
+}</code></pre>
+<h4 id="ddd-model--ownership-on-contexts">.ddd model — ownership on
+contexts</h4>
+<pre class="ddd"><code>CONTEXT PatientManagement @uuid &quot;...&quot;
+    OWNER BackendPlatform
+{ ... }</code></pre>
+<h4 id="ddd-model--downstream-rights-on-relationships">.ddd model —
+downstream rights on relationships</h4>
+<pre class="ddd"><code>MAP STATE TARGET {
+    PatientManagement -&gt; ClinicalWorkflow : CUSTOMER_SUPPLIER VIA GRPC
+        DOWNSTREAM_RIGHTS DECISION_MAKER
+        DOC &quot;Clinical team drives API evolution for patient queries&quot;;
+
+    PatientManagement -&gt; Reporting : CUSTOMER_SUPPLIER VIA EVENTS
+        DOWNSTREAM_RIGHTS CONFORMIST
+        DOC &quot;Reporting consumes events as-is, no influence on schema&quot;;
+}</code></pre>
+<h3 id="peg-grammar-changes">PEG Grammar Changes</h3>
+<pre class="peg"><code>TeamDecl           &lt;- &#39;TEAM&#39; IDENTIFIER UuidAnnotation DocClause?
+OwnerClause        &lt;- &#39;OWNER&#39; IDENTIFIER
+DownstreamRightsClause &lt;- &#39;DOWNSTREAM_RIGHTS&#39; IDENTIFIER</code></pre>
+<p><code>OwnerClause</code> is added as optional to the
+<code>Context</code> rule. <code>DownstreamRightsClause</code> is added
+as optional to the <code>ContextRelationship</code> rule.</p>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>New IR node type: <code>Team</code> with name, UUID,
+documentation</li>
+<li><code>Context</code> gains optional <code>owner</code> field (UUID
+reference to team)</li>
+<li><code>ContextRelationship</code> gains optional
+<code>downstream_rights</code> field (scheme:tag)</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: org-chart overlay on context map.
+Team-scoped docs show "your team owns these contexts, depends on these
+contexts, with these governance rights." Manager-scoped docs show
+staffing implications. C-level docs show organizational risk.</li>
+<li><strong>Heatmap</strong>: ownership density — which team owns the
+most contexts? Which contexts have no owner (risk)?</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Conway's Law becomes visible in the model</li>
+<li>Team-scoped documentation generated automatically</li>
+<li>Organizational risk (unowned contexts, single-team bottlenecks) is
+derivable</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Organizational information changes more frequently than technical
+structure</li>
+<li>Team definitions may need synchronization with external HR/org
+systems</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 6</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding TEAM definitions or OWNER clauses to contexts</li>
+<li>When adding DOWNSTREAM_RIGHTS to context map relationships</li>
+<li>When generating team-scoped or manager-scoped documentation</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Projects without organizational modeling needs</li>
+<li>Technical relationship types (CUSTOMER_SUPPLIER etc.) —
+unchanged</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for TEAM, OWNER, DOWNSTREAM_RIGHTS</li>
+<li>Parser validation: OWNER references must resolve to defined
+TEAMs</li>
+<li>DOWNSTREAM_RIGHTS references must resolve to GOVERNANCE_SCHEME
+tags</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — TEAM, OWNER,
+DOWNSTREAM_RIGHTS rules</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — Team IR node,
+owner field on Context</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — team-scoped
+documentation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

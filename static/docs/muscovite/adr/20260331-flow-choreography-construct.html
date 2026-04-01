@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Choreography Construct — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Flow Choreography Construct</span>
+</nav>
+
+<h1>Flow Choreography Construct</h1>
+
+
+<h1 id="flow-choreography-construct">Flow Choreography Construct</h1>
+<ul>
+<li>Status: draft</li>
+<li>Deciders: Johannes Lochmann (Architect)</li>
+<li>Date: 2026-03-31</li>
+<li>Tags: dsl, ddd, flow, choreography, events, commands, documentation,
+grammar, ir</li>
+<li>Supersedes: none</li>
+</ul>
+<p>Technical Story: RFC-001 Extension 7 — add FLOW as a declarative
+event/command choreography construct for process documentation and
+validation.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite expresses event-driven behavior through POLICY (event →
+action), SAGA (multi-step orchestration), and COMMAND (with EMITS
+clause). These are powerful but distributed — to understand the full
+event chain for a business process, you must read multiple constructs
+across the context and mentally reconstruct the flow.</p>
+<p>There is no single construct that shows "when X happens, Y and Z
+follow, then W completes the process." This makes it hard for domain
+experts to review the event chain and for architects to validate that
+the declared behavior matches the intended process.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Domain experts need readable business process overviews</li>
+<li>Architects need to validate that event chains are complete and
+consistent</li>
+<li>Flows are documentation/validation constructs — they do NOT replace
+underlying declarations</li>
+<li>Must support parallel (AND), exclusive (XOR), and inclusive (OR)
+branching</li>
+<li>Grammar-first mandate (ADR 20260211)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<h3 id="option-1-flow-construct-with-branching-operators-chosen">Option
+1: FLOW construct with branching operators (chosen)</h3>
+<p>A <code>FLOW</code> block inside a <code>CONTEXT</code> that chains
+events and commands with <code>+</code> (AND), <code>X</code> (XOR), and
+<code>O</code> (OR) operators.</p>
+<ul>
+<li>Good, because readable overview of complete event chains</li>
+<li>Good, because cross-validates against COMMAND/EVENT/POLICY/SAGA
+declarations</li>
+<li>Good, because generates sequence diagrams directly</li>
+<li>Good, because branching operators express parallelism and exclusive
+outcomes</li>
+<li>Bad, because duplicate declaration (flow + underlying
+constructs)</li>
+</ul>
+<h3 id="option-2-auto-derive-flows-from-existing-constructs">Option 2:
+Auto-derive flows from existing constructs</h3>
+<p>Walk COMMAND → EMITS → POLICY → COMMAND chains to reconstruct flows
+automatically.</p>
+<ul>
+<li>Good, because no additional DSL constructs</li>
+<li>Bad, because implicit — the full chain is a derivation, not a
+declaration</li>
+<li>Bad, because cannot express intended parallelism vs. incidental
+ordering</li>
+<li>Bad, because errors in the chain are hard to diagnose without an
+explicit reference</li>
+</ul>
+<h3 id="option-3-external-bpmnsequence-diagram-files">Option 3: External
+BPMN/sequence diagram files</h3>
+<p>Side-by-side <code>.bpmn</code> or <code>.puml</code> files alongside
+<code>.ddd</code> models.</p>
+<ul>
+<li>Good, because mature diagramming tooling</li>
+<li>Bad, because drifts from the model</li>
+<li>Bad, because not validated against actual COMMAND/EVENT
+declarations</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "FLOW construct with branching operators", because
+explicit flow declarations serve as both readable documentation and
+validation baseline. The redundancy with underlying constructs is
+intentional — the flow is the "what should happen" against which the
+"what is declared" is validated.</p>
+<h3 id="dsl-syntax">DSL Syntax</h3>
+<pre class="ddd"><code>FLOW OrderFulfillment @uuid &quot;...&quot; {
+
+    COMMAND PlaceOrder
+        DELEGATES_TO OrderAggregate
+        EMITS OrderPlaced;
+
+    EVENT OrderPlaced
+        TRIGGERS ValidatePayment + CheckInventory
+        DOC &quot;Both validation and inventory check run in parallel&quot;;
+
+    COMMAND ValidatePayment
+        DELEGATES_TO PaymentAggregate
+        EMITS PaymentApproved X PaymentDeclined
+        DOC &quot;Exactly one outcome&quot;;
+
+    EVENT PaymentApproved
+        TRIGGERS ReserveInventory;
+
+    EVENT PaymentDeclined
+        TRIGGERS CancelOrder;
+
+    COMMAND ReserveInventory
+        DELEGATES_TO InventoryAggregate
+        EMITS InventoryReserved X InventoryUnavailable;
+
+    EVENT InventoryReserved
+        TRIGGERS ShipOrder;
+
+    EVENT InventoryUnavailable
+        TRIGGERS CancelOrder + RefundPayment
+        DOC &quot;Both cancellation and refund on stockout&quot;;
+
+    COMMAND ShipOrder
+        DELEGATES_TO FulfillmentAggregate
+        EMITS OrderShipped;
+
+    EVENT OrderShipped COMPLETES;
+
+    DOC &quot;End-to-end order fulfillment from placement to shipping&quot;;
+}</code></pre>
+<h3 id="operators">Operators</h3>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>AND — all targets triggered in parallel</td>
+<td><code>TRIGGERS A + B</code></td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>XOR — exactly one target triggered</td>
+<td><code>EMITS Success X Failure</code></td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>OR — one or more targets triggered</td>
+<td><code>TRIGGERS A O B</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="rules">Rules</h3>
+<ul>
+<li><code>FLOW</code> is declared inside a <code>CONTEXT</code>
+block</li>
+<li>References to commands and events must resolve within the context or
+imported contexts</li>
+<li><code>DELEGATES_TO</code> references an aggregate within the
+context</li>
+<li><code>EMITS</code> references one or more events with optional
+branching operators</li>
+<li><code>TRIGGERS</code> references one or more commands with optional
+branching operators</li>
+<li><code>COMPLETES</code> marks terminal events in the flow</li>
+<li>A flow does NOT replace underlying COMMAND/EVENT/POLICY/SAGA
+declarations — it is a documentation/validation overlay</li>
+<li>Flows carry <code>@uuid</code> for semantic diff tracking</li>
+<li>Flows can carry <code>@compliance</code> and <code>@quality</code>
+annotations</li>
+</ul>
+<h3 id="peg-grammar">PEG Grammar</h3>
+<pre class="peg"><code>Flow             &lt;- &#39;FLOW&#39; IDENTIFIER UuidAnnotation ComplianceAnnotation*
+                    QualityAnnotation*
+                    &#39;{&#39; FlowStep+ DocClause? &#39;}&#39;
+
+FlowStep         &lt;- FlowCommand / FlowEvent / DocClause
+
+FlowCommand      &lt;- &#39;COMMAND&#39; IDENTIFIER
+                    DelegatesToClause?
+                    EmitsClause?
+                    DocClause? &#39;;&#39;?
+
+FlowEvent        &lt;- &#39;EVENT&#39; IDENTIFIER
+                    ( TriggersClause / CompletesClause )?
+                    DocClause? &#39;;&#39;?
+
+DelegatesToClause &lt;- &#39;DELEGATES_TO&#39; IDENTIFIER
+EmitsClause      &lt;- &#39;EMITS&#39; FlowTargetList
+TriggersClause   &lt;- &#39;TRIGGERS&#39; FlowTargetList
+CompletesClause  &lt;- &#39;COMPLETES&#39;
+FlowTargetList   &lt;- IDENTIFIER ( FlowOperator IDENTIFIER )*
+FlowOperator     &lt;- &#39;+&#39; / &#39;X&#39; / &#39;O&#39;</code></pre>
+<h3 id="ir-implications">IR Implications</h3>
+<ul>
+<li>New IR node type: <code>Flow</code> containing ordered
+<code>FlowStep</code> entries</li>
+<li>Each step references commands/events by UUID</li>
+<li>Operators stored as enum: AND, XOR, OR</li>
+</ul>
+<h3 id="generator-implications">Generator Implications</h3>
+<ul>
+<li><strong>Documentation</strong>: sequence diagrams generated directly
+from flow declarations. Each flow produces a Mermaid sequence diagram
+showing the complete event chain with parallel/exclusive branching.
+Domain-expert docs show business process flows. Developer docs show the
+same flows with aggregate/service annotations.</li>
+<li><strong>Validation</strong>: cross-check flow declarations against
+actual COMMAND/EVENT/POLICY/SAGA definitions. Warn if a flow references
+an event that no command emits, or a command that no event
+triggers.</li>
+<li><strong>Test generator</strong>: flow declarations feed generated
+integration test skeletons that exercise the complete happy path and
+each branching alternative.</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Business processes are readable as single constructs</li>
+<li>Sequence diagrams generated from the model</li>
+<li>Cross-validation catches inconsistencies between flow intent and
+actual declarations</li>
+<li>Integration test skeletons derived from flows</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Redundancy between flows and underlying COMMAND/EVENT/POLICY/SAGA
+declarations</li>
+<li>Flows must be maintained alongside the constructs they describe</li>
+<li>Branching operators (<code>X</code>, <code>O</code>) may confuse
+non-technical readers</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="../../rfc/RFC-001-strategic-ddd-extensions.html">RFC-001</a>
+— parent RFC, Extension 7</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding FLOW choreography constructs to a bounded context</li>
+<li>When generating sequence diagrams or process documentation</li>
+<li>When validating that declared flows are consistent with
+COMMAND/EVENT declarations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>Individual COMMAND/EVENT/POLICY/SAGA declarations (unchanged)</li>
+<li>Infrastructure concerns (flow is a domain/documentation
+construct)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar rules for Flow/FlowStep/FlowOperator</li>
+<li>Parser validation: command/event references must resolve within
+context</li>
+<li>Cross-validation: flow steps must match actual COMMAND/EVENT
+declarations</li>
+<li>COMPLETES required: every flow must have at least one terminal
+event</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — Flow grammar rules</li>
+<li><code>toolchain/muscomp/src/ir/types.hpp</code> — Flow, FlowStep,
+FlowOperator IR nodes</li>
+<li><code>toolchain/muscomp/src/generators/docs/</code> — sequence
+diagram generator</li>
+<li><code>toolchain/muscomp/src/validation/</code> — flow
+cross-validation</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
