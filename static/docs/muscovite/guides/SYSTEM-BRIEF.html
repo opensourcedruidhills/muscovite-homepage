@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 2.3.0 | <strong>Generated</strong>:
-2026-04-02 | <strong>Commit</strong>: 154586b0 |
+<p><strong>Version</strong>: 2.4.0 | <strong>Generated</strong>:
+2026-04-03 | <strong>Commit</strong>: 2a5c8ff1 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -191,7 +191,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>367</td>
+<td>369</td>
 </tr>
 <tr>
 <td>Known types (type-registry.rkt)</td>
@@ -299,12 +299,29 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="230----2026-04-02">[2.3.0] -- 2026-04-02</h2>
+<h2 id="240----2026-04-02">[2.4.0] -- 2026-04-02</h2>
 <h3 id="added">Added</h3>
 <ul>
-<li>(FTR-626,627): extract libmuscomp-gen-cpp shared library</li>
+<li>(FTR-628): extract libmuscomp-parser shared library (5 .cpp, 28 test
+files)</li>
+<li>(FTR-629): extract libmuscomp-validators shared library (16 .cpp, 4
+test files)</li>
+<li>(FTR-630): remove muscomp_lib monolith — CLI links 17 shared
+libraries directly</li>
 </ul>
 <h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>(governance): complete v2.4.0 FTRs, update iteration status</li>
+</ul>
+<h2 id="230----2026-04-02">[2.3.0] -- 2026-04-02</h2>
+<h3 id="added-1">Added</h3>
+<ul>
+<li>(FTR-626): extract libmuscomp-gen-cpp shared library (34 .cpp, 4
+test files)</li>
+<li>(FTR-624,625,627): cpp-dba dependency audit, coupling refactor,
+per-sub-module tests</li>
+</ul>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>(governance): complete v2.3.0 FTRs, add retrospective and release
 checklist</li>
@@ -312,12 +329,12 @@ checklist</li>
 <li>remove stale workflow/versions/v2.2.0 (archived to completed/)</li>
 </ul>
 <h2 id="220----2026-04-02">[2.2.0] -- 2026-04-02</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>(FTR-621..623): extract postgres, grpc, qt generator shared
 libraries</li>
 </ul>
-<h3 id="maintenance-1">Maintenance</h3>
+<h3 id="maintenance-2">Maintenance</h3>
 <ul>
 <li>remove stale workflow/versions/v2.1.0 (archived to completed/)</li>
 <li>(governance): complete v2.2.0 FTRs, add retrospective and release
@@ -328,26 +345,6 @@ checklist</li>
 <ul>
 <li>Merge main (v2.1.0 release) into develop</li>
 <li>Merge feature/v2.2.0-medium-large-extraction into develop</li>
-</ul>
-<h2 id="210----2026-04-02">[2.1.0] -- 2026-04-02</h2>
-<h3 id="added-2">Added</h3>
-<ul>
-<li>(FTR-676): add .golden-config.json support to golden-diff
-runner</li>
-<li>(FTR-615..620): extract 8 generator shared libraries from
-muscomp_lib</li>
-</ul>
-<h3 id="maintenance-2">Maintenance</h3>
-<ul>
-<li>(governance): complete v2.1.0 FTRs, add retrospective and release
-checklist</li>
-<li>add v2.1.0 execution plan (Rule 31)</li>
-<li>assign FTR-676 to v2.1.0 iteration (Rule 30)</li>
-<li>remove stale workflow/versions/v2.0.0 (archived to completed/)</li>
-</ul>
-<h3 id="other-1">Other</h3>
-<ul>
-<li>Merge feature/v2.1.0-generator-extraction into develop</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -396,7 +393,7 @@ checklist</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>154586b0</code> (project:
+<p>Last measured at commit <code>2a5c8ff1</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -409,7 +406,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>781.6s</td>
+<td>2184.2s</td>
 <td>297 compilation steps</td>
 </tr>
 <tr>
@@ -419,7 +416,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 43 recorded runs.</p>
+<p>Build history: 44 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -439,7 +436,7 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>172.2s</td>
+<td>338.7s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -454,9 +451,9 @@ muscovite):</p>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (42.7s)</li>
-<li><strong>slow</strong>: 56/56 passed (97.8s)</li>
-<li><strong>integration</strong>: 12/12 passed (31.7s)</li>
+<li><strong>fast</strong>: 30/30 passed (60.5s)</li>
+<li><strong>slow</strong>: 56/56 passed (223.9s)</li>
+<li><strong>integration</strong>: 12/12 passed (54.2s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -473,6 +470,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v2.4.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>19/19</td>
+</tr>
 <tr>
 <td>v2.3.0</td>
 <td>8</td>
@@ -545,17 +550,9 @@ muscovite):</p>
 <td>98/98</td>
 <td>19/19</td>
 </tr>
-<tr>
-<td>v1.77.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>97/97</td>
-<td>19/19</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v2.3.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v2.4.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -616,11 +613,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>2.3.0</td>
+<td>2.4.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2136 (since 2025-11-17)</td>
+<td>2153 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
