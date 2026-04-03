@@ -189,6 +189,11 @@ for Async Operations</h1>
 <li>Updated: 2026-03-03 — Qt 6.11.0 available; vendor strategy replaced
 with native <code>Qt6::TaskTree</code></li>
 </ul>
+<p><strong>Note (2026-04):</strong> openSUSE Tumbleweed now ships Qt
+6.11.0 as system packages. The custom <code>~/opt/Qt</code> installation
+documented below is no longer required. Install via
+<code>sudo zypper install qt6-base-devel qt6-tasktree-devel ...</code>
+instead.</p>
 <p>Technical Story: FTR-189 — Adopt Qt's TaskTree library as the async
 orchestration layer for all gRPC calls in generated Qt clients.
 Originally planned as vendored from qt-creator; now uses native
@@ -313,9 +318,9 @@ as a first-party Qt module in 6.11.0.</p>
 </tbody>
 </table>
 <h3 id="qt-611-native-integration">Qt 6.11 Native Integration</h3>
-<p><strong>Qt 6.11.0</strong> (installed at
-<code>~/opt/Qt/6.11.0/gcc_64</code>) ships <code>Qt6::TaskTree</code> as
-a first-party module. No vendoring required.</p>
+<p><strong>Qt 6.11.0</strong> (available as system packages on openSUSE
+Tumbleweed) ships <code>Qt6::TaskTree</code> as a first-party module. No
+vendoring required.</p>
 <p><strong>Namespace</strong>: <code>QtTaskTree::</code> (not
 <code>Tasking::</code> as in qt-creator)</p>
 <p><strong>CMake</strong>:</p>
@@ -420,8 +425,8 @@ need translation</li>
 </ul>
 <h2 id="links">Links</h2>
 <ul>
-<li>Qt 6.11 TaskTree:
-<code>~/opt/Qt/6.11.0/gcc_64/include/QtTaskTree/</code></li>
+<li>Qt 6.11 TaskTree: system package <code>qt6-tasktree-devel</code>
+(headers in <code>/usr/include/qt6/QtTaskTree/</code>)</li>
 <li>Pattern reference: <a
 href="../QT-WIDGETS-PATTERNS.html"><code>doc/QT-WIDGETS-PATTERNS.md</code></a>
 §1 (Async gRPC)</li>

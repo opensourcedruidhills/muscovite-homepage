@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 2.5.0 | <strong>Generated</strong>:
-2026-04-03 | <strong>Commit</strong>: 21897364 |
+<p><strong>Version</strong>: 2.6.0 | <strong>Generated</strong>:
+2026-04-03 | <strong>Commit</strong>: 2e2fd1ff |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -299,13 +299,50 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
+<h2 id="260----2026-04-04">[2.6.0] -- 2026-04-04</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>(FTR-636): C factory functions for all 14 plugin libraries —
+<code>muscomp_create_generator()</code> entry point</li>
+<li>(FTR-637): InProcessDynamic plugin loader — dlopen/RTLD_NOW,
+PluginRegistry, <code>--plugin-dir</code> CLI flag</li>
+<li>(FTR-638): standalone executable wrappers — 12
+<code>muscomp-gen-*</code> binaries (protobuf stdin → generated
+files)</li>
+<li>(FTR-639): self-hosting bootstrap — <code>muscovite-ir.ddd</code>
+(116 entities modeling muscomp's own IR), proto-ir generator,
+<code>tools/generate-ir-ddd.py</code></li>
+<li>(FTR-640): CMake <code>muscomp_generate()</code> integration
+function (<code>cmake/MuscompGenerate.cmake</code>)</li>
+<li>(FTR-641): third-party generator SDK documentation
+(<code>doc/GENERATOR-SDK.md</code>,
+<code>doc/PLUGIN-DISTRIBUTION.md</code>,
+<code>examples/hello-generator/</code>)</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>(FTR-679): migrate from custom Qt install
+(<code>~/opt/Qt/6.11.0/gcc_64</code>) to system packages — removed
+custom <code>CMAKE_PREFIX_PATH</code> from CMakePresets.json</li>
+<li><code>FileWriter::write()</code> is now virtual (enables
+InMemoryFileWriter for plugin adapters)</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><code>MIGRATION-STATUS.md</code> — stale since v1.77.0 (FTR-505
+completed)</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>(governance): complete v2.6.0 FTRs, update iteration status</li>
+</ul>
 <h2 id="250----2026-04-03">[2.5.0] -- 2026-04-03</h2>
 <h3 id="fixed">Fixed</h3>
 <ul>
 <li>(release): use --no-renames in copy loop to propagate git mv
 deletions (BFX-024 follow-up)</li>
 </ul>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>(FTR-631): define protobuf IR schema — 7 .proto files covering 109
 IR structs</li>
@@ -323,12 +360,12 @@ options, backward compatible)</li>
 <li>Fix ProjectItem AST wrapper handling in ir_builder.cpp (was silently
 dropping project-level config)</li>
 </ul>
-<h3 id="maintenance">Maintenance</h3>
+<h3 id="maintenance-1">Maintenance</h3>
 <ul>
 <li>(governance): complete v2.5.0 FTRs, update iteration status</li>
 </ul>
 <h2 id="240----2026-04-02">[2.4.0] -- 2026-04-02</h2>
-<h3 id="added-1">Added</h3>
+<h3 id="added-2">Added</h3>
 <ul>
 <li>(FTR-628): extract libmuscomp-parser shared library (5 .cpp, 28 test
 files)</li>
@@ -337,24 +374,9 @@ test files)</li>
 <li>(FTR-630): remove muscomp_lib monolith — CLI links 17 shared
 libraries directly</li>
 </ul>
-<h3 id="maintenance-1">Maintenance</h3>
-<ul>
-<li>(governance): complete v2.4.0 FTRs, update iteration status</li>
-</ul>
-<h2 id="230----2026-04-02">[2.3.0] -- 2026-04-02</h2>
-<h3 id="added-2">Added</h3>
-<ul>
-<li>(FTR-626): extract libmuscomp-gen-cpp shared library (34 .cpp, 4
-test files)</li>
-<li>(FTR-624,625,627): cpp-dba dependency audit, coupling refactor,
-per-sub-module tests</li>
-</ul>
 <h3 id="maintenance-2">Maintenance</h3>
 <ul>
-<li>(governance): complete v2.3.0 FTRs, add retrospective and release
-checklist</li>
-<li>update homepage submodule to v2.2.0 docs</li>
-<li>remove stale workflow/versions/v2.2.0 (archived to completed/)</li>
+<li>(governance): complete v2.4.0 FTRs, update iteration status</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -403,7 +425,7 @@ checklist</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>21897364</code> (project:
+<p>Last measured at commit <code>2e2fd1ff</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -416,7 +438,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>1374.5s</td>
+<td>732.1s</td>
 <td>297 compilation steps</td>
 </tr>
 <tr>
@@ -426,7 +448,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 45 recorded runs.</p>
+<p>Build history: 46 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -446,24 +468,24 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>211.6s</td>
+<td>146.6s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
-<td>19 tests</td>
-<td>19</td>
+<td>3 tests</td>
+<td>3</td>
 <td>0</td>
 <td>100%</td>
-<td>0.2s</td>
+<td>0.0s</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (46.6s)</li>
-<li><strong>slow</strong>: 56/56 passed (128.7s)</li>
-<li><strong>integration</strong>: 12/12 passed (36.2s)</li>
+<li><strong>fast</strong>: 30/30 passed (42.4s)</li>
+<li><strong>slow</strong>: 56/56 passed (82.4s)</li>
+<li><strong>integration</strong>: 12/12 passed (21.7s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -480,6 +502,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v2.6.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>3/3</td>
+</tr>
 <tr>
 <td>v2.5.0</td>
 <td>8</td>
@@ -552,17 +582,9 @@ muscovite):</p>
 <td>98/98</td>
 <td>19/19</td>
 </tr>
-<tr>
-<td>v1.78.1</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>98/98</td>
-<td>19/19</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v2.5.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v2.6.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -623,11 +645,11 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>2.5.0</td>
+<td>2.6.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2155 (since 2025-11-17)</td>
+<td>2178 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
