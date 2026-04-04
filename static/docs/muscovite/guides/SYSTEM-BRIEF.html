@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 2.7.0 | <strong>Generated</strong>:
-2026-04-04 | <strong>Commit</strong>: 305ef4af |
+<p><strong>Version</strong>: 2.8.0 | <strong>Generated</strong>:
+2026-04-04 | <strong>Commit</strong>: 3dbc4d7e |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -134,7 +134,7 @@ systems.</p>
 <li><strong>docs</strong> (13 modules, 5298 lines)</li>
 <li><strong>grpc</strong> (31 modules, 8664 lines)</li>
 <li><strong>messaging</strong> (2 modules, 596 lines)</li>
-<li><strong>postgres</strong> (30 modules, 8772 lines)</li>
+<li><strong>postgres</strong> (53 modules, 8959 lines)</li>
 <li><strong>qt</strong> (60 modules, 18156 lines)</li>
 <li><strong>search</strong> (4 modules, 1010 lines)</li>
 <li><strong>standalone-infra</strong> (3 modules, 700 lines)</li>
@@ -220,7 +220,7 @@ lifecycle.</td>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-144418-lines">Layer 0 — Racket (144418
+<h3 id="layer-0--racket-144605-lines">Layer 0 — Racket (144605
 lines)</h3>
 <table>
 <thead>
@@ -240,7 +240,7 @@ lines)</h3>
 </tr>
 <tr>
 <td>Generator: postgres</td>
-<td>8772</td>
+<td>8959</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
@@ -299,8 +299,56 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="270----2026-04-04">[2.7.0] -- 2026-04-04</h2>
+<h2 id="280----2026-04-04">[2.8.0] -- 2026-04-04</h2>
 <h3 id="test-metrics">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Racket (Layer 0)</td>
+<td>98/98 suites</td>
+<td>0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>C++ (Layer 1+2)</td>
+<td>-15/5 tests</td>
+<td>20</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Gates</strong></td>
+<td><strong>8</strong></td>
+<td><strong>0</strong></td>
+<td><strong>✅ ALL GREEN</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Regressions</strong>: 0 (vs v2.7.0)</li>
+<li><strong>Skipped layers</strong>: 0</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>v2.8.0 — Sqitch decoupling + CMake modernization (11 FTRs)</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>v2.8.0 governance — mark all FTRs complete, fix version stamps</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>handover: post v2.7.0 release session state</li>
+</ul>
+<h2 id="270----2026-04-04">[2.7.0] -- 2026-04-04</h2>
+<h3 id="test-metrics-1">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -335,13 +383,13 @@ QML line counts.</p>
 <li><strong>Regressions</strong>: 0 (vs v2.6.2)</li>
 <li><strong>Skipped layers</strong>: 0</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>clang-tidy NOLINT for parse_int_field string_view.data()
 (FTR-533)</li>
 <li>proto_type_converters.cpp build errors (FTR-533 follow-up)</li>
 </ul>
-<h3 id="other">Other</h3>
+<h3 id="other-1">Other</h3>
 <ul>
 <li>v2.7.0: mark all 13 FTR files complete</li>
 <li>v2.7.0: add release checklist</li>
@@ -364,7 +412,7 @@ QML line counts.</p>
 completely</li>
 </ul>
 <h2 id="262----2026-04-04">[2.6.2] -- 2026-04-04</h2>
-<h3 id="test-metrics-1">Test Metrics</h3>
+<h3 id="test-metrics-2">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -399,11 +447,11 @@ completely</li>
 <li><strong>Regressions</strong>: 0 (vs v2.6.1)</li>
 <li><strong>Skipped layers</strong>: 0</li>
 </ul>
-<h3 id="fixed-1">Fixed</h3>
+<h3 id="fixed-2">Fixed</h3>
 <ul>
 <li>correct muscomp .gitignore path for generated/</li>
 </ul>
-<h3 id="other-1">Other</h3>
+<h3 id="other-2">Other</h3>
 <ul>
 <li>Merge fix: correct muscomp .gitignore path</li>
 <li>Merge governance prep for v2.6.2</li>
@@ -421,69 +469,6 @@ blocks</li>
 <li>Merge BFX-027: Fix protoc LD_LIBRARY_PATH missing protobuf lib
 dir</li>
 <li>BFX-027: Fix protoc LD_LIBRARY_PATH missing protobuf lib dir</li>
-</ul>
-<h2 id="261----2026-04-03">[2.6.1] -- 2026-04-03</h2>
-<h3 id="test-metrics-2">Test Metrics</h3>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Passed</th>
-<th>Failed</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Racket (Layer 0)</td>
-<td>98/98 suites</td>
-<td>0</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>C++ (Layer 1+2)</td>
-<td>3/3 tests</td>
-<td>0</td>
-<td>✅</td>
-</tr>
-<tr>
-<td><strong>Gates</strong></td>
-<td><strong>8</strong></td>
-<td><strong>0</strong></td>
-<td><strong>✅ ALL GREEN</strong></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>Regressions</strong>: 0 (vs v2.6.0)</li>
-<li><strong>Skipped layers</strong>: 0</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>Merge governance: FTR status fixes + RELEASE-CHECKLIST for
-v2.6.1</li>
-<li>governance: fix FTR statuses, AC boxes, versions + RELEASE-CHECKLIST
-for v2.6.1</li>
-<li>Merge retrospective: v2.6.1 learnings + FTR-682, FTR-683</li>
-<li>retrospective: v2.6.1 release learnings + improvement FTRs 682,
-683</li>
-<li>Merge governance: v2.6.1 status complete</li>
-<li>governance: v2.6.1 — all 5 items complete, ready for release</li>
-<li>Merge FTR-680: Complete .mus project parser — all 9 config block
-types</li>
-<li>FTR-680: Complete .mus project parser — all 9 config block
-types</li>
-<li>Merge FTR-678: Proto round-trip golden tests</li>
-<li>FTR-678: Proto round-trip golden tests</li>
-<li>Merge FTR-681: Split ir_builder.cpp into domain-specific
-modules</li>
-<li>FTR-681: Split ir_builder.cpp into domain-specific modules</li>
-<li>Merge BFX-025, BFX-026: release.sh CHANGELOG regex + homepage
-pre-clean fixes</li>
-<li>BFX-025, BFX-026: Fix release.sh CHANGELOG regex and homepage
-pre-clean</li>
-<li>iteration: plan v2.6.1 hotfix — parser completion, ir_builder split,
-release fixes</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
@@ -508,7 +493,7 @@ release fixes</li>
 <tbody>
 <tr>
 <td>Bytecode files (<code>.zo</code>)</td>
-<td>272</td>
+<td>274</td>
 </tr>
 <tr>
 <td>Cache size</td>
@@ -519,7 +504,7 @@ release fixes</li>
 <p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
 (or CMake target <code>racket-compile</code>). Gitignored — safe to
 delete.</p>
-<p>Last measured at commit <code>305ef4af</code> (project:
+<p>Last measured at commit <code>3dbc4d7e</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -532,7 +517,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>457.4s</td>
+<td>762.2s</td>
 <td>298 compilation steps</td>
 </tr>
 <tr>
@@ -542,7 +527,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 49 recorded runs.</p>
+<p>Build history: 50 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -562,7 +547,7 @@ muscovite):</p>
 <td>98</td>
 <td>0</td>
 <td>100%</td>
-<td>133.3s</td>
+<td>162.5s</td>
 </tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
@@ -577,9 +562,9 @@ muscovite):</p>
 <p><strong>Racket tier breakdown</strong> (from
 <code>metrics/racket-test-results.json</code>):</p>
 <ul>
-<li><strong>fast</strong>: 30/30 passed (36.5s)</li>
-<li><strong>slow</strong>: 56/56 passed (75.0s)</li>
-<li><strong>integration</strong>: 12/12 passed (21.8s)</li>
+<li><strong>fast</strong>: 30/30 passed (39.3s)</li>
+<li><strong>slow</strong>: 56/56 passed (98.7s)</li>
+<li><strong>integration</strong>: 12/12 passed (24.4s)</li>
 </ul>
 <p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
 <code>tools/extract-test-metrics.sh</code></p>
@@ -596,6 +581,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v2.8.0</td>
+<td>8</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>98/98</td>
+<td>-15/5</td>
+</tr>
 <tr>
 <td>v2.7.0</td>
 <td>8</td>
@@ -668,17 +661,9 @@ muscovite):</p>
 <td>98/98</td>
 <td>19/19</td>
 </tr>
-<tr>
-<td>v2.0.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>98/98</td>
-<td>19/19</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v2.7.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v2.8.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -739,15 +724,15 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>2.7.0</td>
+<td>2.8.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2227 (since 2025-11-17)</td>
+<td>2231 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>Racket source</td>
-<td>144418 lines</td>
+<td>144605 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
