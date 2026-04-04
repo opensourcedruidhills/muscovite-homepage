@@ -113,153 +113,1199 @@
 
 
 <h1 id="muscovite-dsl-reference">Muscovite DSL Reference</h1>
-<blockquote>
-<p><strong>Version</strong>: v1.6.0 | <strong>Formal Grammar</strong>:
-<a
-href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-| <strong>Rules</strong>: 390</p>
-</blockquote>
-<p>The Muscovite DSL (<code>.ddd</code> files) is a declarative language
-for specifying domain models. The <a
-href="../dslgen/grammar/muscovite.peg">formal PEG grammar</a> is the
-authoritative syntax specification. This document is
-<strong>auto-generated</strong> from the grammar, the type registry, and
-example <code>.ddd</code> files.</p>
-<blockquote>
-<p>🔄 <strong>Generated file</strong> — do not edit manually.
-Regenerate:
-<code>cd dslgen &amp;&amp; racket tools/generate-dsl-reference.rkt</code></p>
-</blockquote>
-<hr />
-<h2 id="quick-reference">Quick Reference</h2>
+<p><em>Auto-generated from the PEG grammar by muscomp. Do not edit
+manually.</em></p>
+<h2 id="overview">Overview</h2>
+<p>The Muscovite DSL uses <code>.ddd</code> files to define domain
+models following Domain-Driven Design principles. The grammar is defined
+in PEG (Parsing Expression Grammar) notation.</p>
+<h2 id="keywords">Keywords</h2>
 <table>
 <thead>
 <tr>
-<th>Construct</th>
 <th>Keyword</th>
-<th>Grammar Rule</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Bounded Context</td>
-<td><code>CONTEXT</code></td>
-<td><code>Context</code></td>
+<td><code>ACCORDION</code></td>
 </tr>
 <tr>
-<td>Entity</td>
-<td><code>ENTITY</code></td>
-<td><code>Entity</code></td>
+<td><code>ACL</code></td>
 </tr>
 <tr>
-<td>Field List and Fields</td>
-<td><code>(field)</code></td>
-<td><code>Field</code></td>
+<td><code>ACTION</code></td>
 </tr>
 <tr>
-<td>Value Object</td>
-<td><code>VALUE_OBJECT</code></td>
-<td><code>ValueObject</code></td>
+<td><code>ACTIONS</code></td>
 </tr>
 <tr>
-<td>Strong Type</td>
-<td><code>STRONG_TYPE</code></td>
-<td><code>StrongType</code></td>
+<td><code>ADVISORY</code></td>
 </tr>
 <tr>
-<td>Aggregate</td>
+<td><code>AFTER</code></td>
+</tr>
+<tr>
 <td><code>AGGREGATE</code></td>
-<td><code>Aggregate</code></td>
 </tr>
 <tr>
-<td>Domain Event</td>
-<td><code>EVENT</code></td>
-<td><code>DomainEvent</code></td>
+<td><code>ALL</code></td>
 </tr>
 <tr>
-<td>Sourced Event</td>
-<td><code>SOURCED_EVENT</code></td>
-<td><code>SourcedEvent</code></td>
+<td><code>AND</code></td>
 </tr>
 <tr>
-<td>Command</td>
-<td><code>COMMAND</code></td>
-<td><code>Command</code></td>
+<td><code>ANTICORRUPTION_LAYER</code></td>
 </tr>
 <tr>
-<td>Repository</td>
-<td><code>REPOSITORY</code></td>
-<td><code>Repository</code></td>
+<td><code>APPLIES_TO</code></td>
 </tr>
 <tr>
-<td>Specification</td>
-<td><code>SPECIFICATION</code></td>
-<td><code>Specification</code></td>
+<td><code>APP_NAME</code></td>
 </tr>
 <tr>
-<td>Projection</td>
-<td><code>PROJECTION</code></td>
-<td><code>Projection</code></td>
+<td><code>ARC</code></td>
 </tr>
 <tr>
-<td>Domain Service</td>
-<td><code>SERVICE</code></td>
-<td><code>DomainService</code></td>
+<td><code>ASC</code></td>
 </tr>
 <tr>
-<td>Policy</td>
-<td><code>POLICY</code></td>
-<td><code>Policy</code></td>
+<td><code>AUTO</code></td>
 </tr>
 <tr>
-<td>Saga</td>
-<td><code>SAGA</code></td>
-<td><code>Saga</code></td>
+<td><code>AVG</code></td>
 </tr>
 <tr>
-<td>Relationships Block</td>
-<td><code>RELATIONSHIPS</code></td>
-<td><code>RelationshipsBlock</code></td>
+<td><code>AVRO</code></td>
 </tr>
 <tr>
-<td>Arc Constraint</td>
-<td><code>(arc)</code></td>
-<td><code>ArcConstraint</code></td>
+<td><code>BACKEND</code></td>
 </tr>
 <tr>
-<td>CHECK Constraint</td>
+<td><code>BACKOFF</code></td>
+</tr>
+<tr>
+<td><code>BASE</code></td>
+</tr>
+<tr>
+<td><code>BATCH_SIZE</code></td>
+</tr>
+<tr>
+<td><code>BEFORE</code></td>
+</tr>
+<tr>
+<td><code>BETWEEN</code></td>
+</tr>
+<tr>
+<td><code>BIGINT</code></td>
+</tr>
+<tr>
+<td><code>BITEMPORAL</code></td>
+</tr>
+<tr>
+<td><code>BODY</code></td>
+</tr>
+<tr>
+<td><code>BOOL</code></td>
+</tr>
+<tr>
+<td><code>BOOLEAN</code></td>
+</tr>
+<tr>
+<td><code>BOTH</code></td>
+</tr>
+<tr>
+<td><code>BUILTIN</code></td>
+</tr>
+<tr>
+<td><code>BYTEA</code></td>
+</tr>
+<tr>
+<td><code>CALLS</code></td>
+</tr>
+<tr>
+<td><code>CANCELLED</code></td>
+</tr>
+<tr>
+<td><code>CAPABILITIES</code></td>
+</tr>
+<tr>
+<td><code>CARD</code></td>
+</tr>
+<tr>
+<td><code>CASCADE</code></td>
+</tr>
+<tr>
+<td><code>CASE</code></td>
+</tr>
+<tr>
 <td><code>CHECK</code></td>
-<td><code>CheckConstraint</code></td>
 </tr>
 <tr>
-<td>Lookup Table</td>
-<td><code>LOOKUP_TABLE</code></td>
-<td><code>LookupTable</code></td>
+<td><code>CHILDREN</code></td>
 </tr>
 <tr>
-<td>IMPORT</td>
-<td><code>IMPORT_JSON</code></td>
-<td><code>Import</code></td>
+<td><code>CIRCUIT_BREAKER</code></td>
 </tr>
 <tr>
-<td>PRESENTATION Block</td>
-<td><code>PRESENTATION</code></td>
-<td><code>PresentationBlock</code></td>
+<td><code>CLASS</code></td>
 </tr>
 <tr>
-<td>INSTRUCT Block</td>
-<td><code>INSTRUCT</code></td>
-<td><code>InstructBlock</code></td>
+<td><code>CLASSIFICATION</code></td>
 </tr>
 <tr>
-<td>GROUNDING Block</td>
+<td><code>CLIENT_ID</code></td>
+</tr>
+<tr>
+<td><code>COERCE_DATE</code></td>
+</tr>
+<tr>
+<td><code>COERCE_DECIMAL</code></td>
+</tr>
+<tr>
+<td><code>COERCE_TIMESTAMP</code></td>
+</tr>
+<tr>
+<td><code>COMMAND</code></td>
+</tr>
+<tr>
+<td><code>COMPENSATE</code></td>
+</tr>
+<tr>
+<td><code>COMPENSATES_WITH</code></td>
+</tr>
+<tr>
+<td><code>COMPLETED</code></td>
+</tr>
+<tr>
+<td><code>COMPUTED</code></td>
+</tr>
+<tr>
+<td><code>CONCURRENCY</code></td>
+</tr>
+<tr>
+<td><code>CONFORMIST</code></td>
+</tr>
+<tr>
+<td><code>CONSTRAINTS</code></td>
+</tr>
+<tr>
+<td><code>CONTAINS</code></td>
+</tr>
+<tr>
+<td><code>CONTEXT</code></td>
+</tr>
+<tr>
+<td><code>CONTEXTS</code></td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+</tr>
+<tr>
+<td><code>COPY_BOOL</code></td>
+</tr>
+<tr>
+<td><code>COPY_UUID</code></td>
+</tr>
+<tr>
+<td><code>CORRELATE_BY</code></td>
+</tr>
+<tr>
+<td><code>COUNT</code></td>
+</tr>
+<tr>
+<td><code>CPP_DBA</code></td>
+</tr>
+<tr>
+<td><code>CPP_DBA_TEST</code></td>
+</tr>
+<tr>
+<td><code>CUSTOMER_SUPPLIER</code></td>
+</tr>
+<tr>
+<td><code>DATABASE</code></td>
+</tr>
+<tr>
+<td><code>DATE</code></td>
+</tr>
+<tr>
+<td><code>DATETIME</code></td>
+</tr>
+<tr>
+<td><code>DB_LEVEL</code></td>
+</tr>
+<tr>
+<td><code>DEADLINE_BUFFER</code></td>
+</tr>
+<tr>
+<td><code>DECIDE</code></td>
+</tr>
+<tr>
+<td><code>DECIMAL</code></td>
+</tr>
+<tr>
+<td><code>DEFAULT</code></td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+</tr>
+<tr>
+<td><code>DELTA</code></td>
+</tr>
+<tr>
+<td><code>DESC</code></td>
+</tr>
+<tr>
+<td><code>DESCRIPTION</code></td>
+</tr>
+<tr>
+<td><code>DETAIL</code></td>
+</tr>
+<tr>
+<td><code>DIALECT</code></td>
+</tr>
+<tr>
+<td><code>DIRECTORY</code></td>
+</tr>
+<tr>
+<td><code>DISPLAY_FORMAT</code></td>
+</tr>
+<tr>
+<td><code>DOC</code></td>
+</tr>
+<tr>
+<td><code>DOMAIN</code></td>
+</tr>
+<tr>
+<td><code>EFFECT</code></td>
+</tr>
+<tr>
+<td><code>ELSE</code></td>
+</tr>
+<tr>
+<td><code>EMBEDDED</code></td>
+</tr>
+<tr>
+<td><code>EMBEDS</code></td>
+</tr>
+<tr>
+<td><code>EMIT</code></td>
+</tr>
+<tr>
+<td><code>EMITS</code></td>
+</tr>
+<tr>
+<td><code>EMPTY</code></td>
+</tr>
+<tr>
+<td><code>ENABLED</code></td>
+</tr>
+<tr>
+<td><code>ENFORCE_AT</code></td>
+</tr>
+<tr>
+<td><code>ENSURES</code></td>
+</tr>
+<tr>
+<td><code>ENTITY</code></td>
+</tr>
+<tr>
+<td><code>ENTRY</code></td>
+</tr>
+<tr>
+<td><code>EVENT</code></td>
+</tr>
+<tr>
+<td><code>EVENTS</code></td>
+</tr>
+<tr>
+<td><code>EVENT_SOURCED</code></td>
+</tr>
+<tr>
+<td><code>EVENT_SOURCING</code></td>
+</tr>
+<tr>
+<td><code>EXAMPLES</code></td>
+</tr>
+<tr>
+<td><code>EXIT</code></td>
+</tr>
+<tr>
+<td><code>EXPORT_INTERVAL</code></td>
+</tr>
+<tr>
+<td><code>EXTENDS</code></td>
+</tr>
+<tr>
+<td><code>EXTENSION_POINT</code></td>
+</tr>
+<tr>
+<td><code>FAILED</code></td>
+</tr>
+<tr>
+<td><code>FAILURE</code></td>
+</tr>
+<tr>
+<td><code>FAILURE_THRESHOLD</code></td>
+</tr>
+<tr>
+<td><code>FALSE</code></td>
+</tr>
+<tr>
+<td><code>FIELD</code></td>
+</tr>
+<tr>
+<td><code>FILTER</code></td>
+</tr>
+<tr>
+<td><code>FLAT</code></td>
+</tr>
+<tr>
+<td><code>FLOAT</code></td>
+</tr>
+<tr>
+<td><code>FOR</code></td>
+</tr>
+<tr>
+<td><code>FOREIGN</code></td>
+</tr>
+<tr>
+<td><code>FOREIGN_TYPE</code></td>
+</tr>
+<tr>
+<td><code>FORM</code></td>
+</tr>
+<tr>
+<td><code>FORMAT</code></td>
+</tr>
+<tr>
+<td><code>FORM_FACTOR</code></td>
+</tr>
+<tr>
+<td><code>FROM</code></td>
+</tr>
+<tr>
+<td><code>FRONTEND</code></td>
+</tr>
+<tr>
+<td><code>FRONTENDS</code></td>
+</tr>
+<tr>
+<td><code>FULL</code></td>
+</tr>
+<tr>
+<td><code>GENERATE</code></td>
+</tr>
+<tr>
+<td><code>GEOGRAPHY</code></td>
+</tr>
+<tr>
+<td><code>GEOMETRY</code></td>
+</tr>
+<tr>
+<td><code>GEOMETRYCOLLECTION</code></td>
+</tr>
+<tr>
+<td><code>GRANULARITY</code></td>
+</tr>
+<tr>
 <td><code>GROUNDING</code></td>
-<td><code>Grounding</code></td>
 </tr>
 <tr>
-<td>Context Map</td>
+<td><code>GROUPING</code></td>
+</tr>
+<tr>
+<td><code>GRPC</code></td>
+</tr>
+<tr>
+<td><code>GRPC_DEADLINE</code></td>
+</tr>
+<tr>
+<td><code>GRPC_DEFAULT_DEADLINE</code></td>
+</tr>
+<tr>
+<td><code>GRPC_MAX_DEADLINE</code></td>
+</tr>
+<tr>
+<td><code>GUARD</code></td>
+</tr>
+<tr>
+<td><code>HANDLER</code></td>
+</tr>
+<tr>
+<td><code>HAS</code></td>
+</tr>
+<tr>
+<td><code>HEADERS</code></td>
+</tr>
+<tr>
+<td><code>HOST</code></td>
+</tr>
+<tr>
+<td><code>HYBRID</code></td>
+</tr>
+<tr>
+<td><code>IDEMPOTENCY_TTL</code></td>
+</tr>
+<tr>
+<td><code>IDENTIFIED_BY</code></td>
+</tr>
+<tr>
+<td><code>IF</code></td>
+</tr>
+<tr>
+<td><code>IMMUTABLE</code></td>
+</tr>
+<tr>
+<td><code>IMPLEMENTS</code></td>
+</tr>
+<tr>
+<td><code>IMPORT</code></td>
+</tr>
+<tr>
+<td><code>IMPORT_JSON</code></td>
+</tr>
+<tr>
+<td><code>IN</code></td>
+</tr>
+<tr>
+<td><code>INCLUDE</code></td>
+</tr>
+<tr>
+<td><code>INDEX</code></td>
+</tr>
+<tr>
+<td><code>INDEX_PREFIX</code></td>
+</tr>
+<tr>
+<td><code>INITIAL</code></td>
+</tr>
+<tr>
+<td><code>INLINE</code></td>
+</tr>
+<tr>
+<td><code>INOUT</code></td>
+</tr>
+<tr>
+<td><code>INPUTS</code></td>
+</tr>
+<tr>
+<td><code>INSERT</code></td>
+</tr>
+<tr>
+<td><code>INSERT_OR_UPDATE</code></td>
+</tr>
+<tr>
+<td><code>INSTRUCT</code></td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+</tr>
+<tr>
+<td><code>INTEGER</code></td>
+</tr>
+<tr>
+<td><code>INTENT</code></td>
+</tr>
+<tr>
+<td><code>INTERFACE</code></td>
+</tr>
+<tr>
+<td><code>INTERSECTS</code></td>
+</tr>
+<tr>
+<td><code>INTERVAL</code></td>
+</tr>
+<tr>
+<td><code>INTO</code></td>
+</tr>
+<tr>
+<td><code>INVARIANT</code></td>
+</tr>
+<tr>
+<td><code>INVOKE</code></td>
+</tr>
+<tr>
+<td><code>IS</code></td>
+</tr>
+<tr>
+<td><code>JETSTREAM_ENABLED</code></td>
+</tr>
+<tr>
+<td><code>JITTER</code></td>
+</tr>
+<tr>
+<td><code>JSON</code></td>
+</tr>
+<tr>
+<td><code>JSONB</code></td>
+</tr>
+<tr>
+<td><code>JSON_SCHEMA</code></td>
+</tr>
+<tr>
+<td><code>KEYWORD</code></td>
+</tr>
+<tr>
+<td><code>KEY_CONCEPTS</code></td>
+</tr>
+<tr>
+<td><code>LANGUAGE</code></td>
+</tr>
+<tr>
+<td><code>LAYER</code></td>
+</tr>
+<tr>
+<td><code>LAYOUT</code></td>
+</tr>
+<tr>
+<td><code>LAYOUT_PROFILE</code></td>
+</tr>
+<tr>
+<td><code>LEGACY_PROCEDURE</code></td>
+</tr>
+<tr>
+<td><code>LEGACY_VIEW</code></td>
+</tr>
+<tr>
+<td><code>LET</code></td>
+</tr>
+<tr>
+<td><code>LIKE</code></td>
+</tr>
+<tr>
+<td><code>LINESTRING</code></td>
+</tr>
+<tr>
+<td><code>LINESTRINGZ</code></td>
+</tr>
+<tr>
+<td><code>LIVE</code></td>
+</tr>
+<tr>
+<td><code>LOCALGRPC</code></td>
+</tr>
+<tr>
+<td><code>LOCK_TIMEOUT</code></td>
+</tr>
+<tr>
+<td><code>LOOKUP</code></td>
+</tr>
+<tr>
+<td><code>LOOKUP_TABLE</code></td>
+</tr>
+<tr>
+<td><code>MANY</code></td>
+</tr>
+<tr>
 <td><code>MAP</code></td>
-<td><code>MapBlock</code></td>
+</tr>
+<tr>
+<td><code>MAPPING</code></td>
+</tr>
+<tr>
+<td><code>MASTER</code></td>
+</tr>
+<tr>
+<td><code>MATCH</code></td>
+</tr>
+<tr>
+<td><code>MATCHES</code></td>
+</tr>
+<tr>
+<td><code>MATERIALIZED</code></td>
+</tr>
+<tr>
+<td><code>MAX</code></td>
+</tr>
+<tr>
+<td><code>MAX_DEPTH</code></td>
+</tr>
+<tr>
+<td><code>MAX_RETRIES</code></td>
+</tr>
+<tr>
+<td><code>MDI</code></td>
+</tr>
+<tr>
+<td><code>MESSAGING</code></td>
+</tr>
+<tr>
+<td><code>MICROSECOND</code></td>
+</tr>
+<tr>
+<td><code>MILLISECOND</code></td>
+</tr>
+<tr>
+<td><code>MIN</code></td>
+</tr>
+<tr>
+<td><code>MIN_REMAINING</code></td>
+</tr>
+<tr>
+<td><code>MODE</code></td>
+</tr>
+<tr>
+<td><code>MULTILINESTRING</code></td>
+</tr>
+<tr>
+<td><code>MULTIPOINT</code></td>
+</tr>
+<tr>
+<td><code>MULTIPOLYGON</code></td>
+</tr>
+<tr>
+<td><code>NATS_URL</code></td>
+</tr>
+<tr>
+<td><code>NATURAL_KEY</code></td>
+</tr>
+<tr>
+<td><code>NONNEGATIVE</code></td>
+</tr>
+<tr>
+<td><code>NOT</code></td>
+</tr>
+<tr>
+<td><code>NOTIFY</code></td>
+</tr>
+<tr>
+<td><code>NOT_EMPTY</code></td>
+</tr>
+<tr>
+<td><code>NOT_EQUAL</code></td>
+</tr>
+<tr>
+<td><code>NOT_IN_FUTURE</code></td>
+</tr>
+<tr>
+<td><code>NOT_IN_PAST</code></td>
+</tr>
+<tr>
+<td><code>NOT_NULL</code></td>
+</tr>
+<tr>
+<td><code>NOW</code></td>
+</tr>
+<tr>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>NUMERIC</code></td>
+</tr>
+<tr>
+<td><code>OAUTH2</code></td>
+</tr>
+<tr>
+<td><code>OF</code></td>
+</tr>
+<tr>
+<td><code>ON</code></td>
+</tr>
+<tr>
+<td><code>ONCOMMIT</code></td>
+</tr>
+<tr>
+<td><code>ONE</code></td>
+</tr>
+<tr>
+<td><code>ONSAVE</code></td>
+</tr>
+<tr>
+<td><code>ONVALIDATE</code></td>
+</tr>
+<tr>
+<td><code>ON_CONNECTION_ERROR</code></td>
+</tr>
+<tr>
+<td><code>ON_DEADLOCK</code></td>
+</tr>
+<tr>
+<td><code>ON_DEMAND</code></td>
+</tr>
+<tr>
+<td><code>ON_EVENT</code></td>
+</tr>
+<tr>
+<td><code>ON_HALF_OPEN</code></td>
+</tr>
+<tr>
+<td><code>ON_OPEN</code></td>
+</tr>
+<tr>
+<td><code>ON_SERIALIZATION_FAILURE</code></td>
+</tr>
+<tr>
+<td><code>ON_TRIP</code></td>
+</tr>
+<tr>
+<td><code>OPEN_HOST_SERVICE</code></td>
+</tr>
+<tr>
+<td><code>OPTIMISTIC</code></td>
+</tr>
+<tr>
+<td><code>OPTIONAL</code></td>
+</tr>
+<tr>
+<td><code>OR</code></td>
+</tr>
+<tr>
+<td><code>OTHERWISE</code></td>
+</tr>
+<tr>
+<td><code>OTLP_ENDPOINT</code></td>
+</tr>
+<tr>
+<td><code>OUT</code></td>
+</tr>
+<tr>
+<td><code>OUTBOX</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT</code></td>
+</tr>
+<tr>
+<td><code>OWNED</code></td>
+</tr>
+<tr>
+<td><code>PARAMS</code></td>
+</tr>
+<tr>
+<td><code>PARTNERSHIP</code></td>
+</tr>
+<tr>
+<td><code>PASSWORD</code></td>
+</tr>
+<tr>
+<td><code>PATTERN</code></td>
+</tr>
+<tr>
+<td><code>PLAN</code></td>
+</tr>
+<tr>
+<td><code>PLUGIN</code></td>
+</tr>
+<tr>
+<td><code>POINT</code></td>
+</tr>
+<tr>
+<td><code>POINTZ</code></td>
+</tr>
+<tr>
+<td><code>POLICY</code></td>
+</tr>
+<tr>
+<td><code>POLL_INTERVAL</code></td>
+</tr>
+<tr>
+<td><code>POLYGON</code></td>
+</tr>
+<tr>
+<td><code>POLYGONZ</code></td>
+</tr>
+<tr>
+<td><code>POOL_MAX</code></td>
+</tr>
+<tr>
+<td><code>POOL_MIN</code></td>
+</tr>
+<tr>
+<td><code>PORT</code></td>
+</tr>
+<tr>
+<td><code>POSITIVE_INT</code></td>
+</tr>
+<tr>
+<td><code>POSITIVE_INTEGER</code></td>
+</tr>
+<tr>
+<td><code>PRECISION_LEVEL</code></td>
+</tr>
+<tr>
+<td><code>PROJECT</code></td>
+</tr>
+<tr>
+<td><code>PROJECTION</code></td>
+</tr>
+<tr>
+<td><code>PROTOBUF</code></td>
+</tr>
+<tr>
+<td><code>PROVIDER</code></td>
+</tr>
+<tr>
+<td><code>PROVIDES</code></td>
+</tr>
+<tr>
+<td><code>PUBLISHED_LANGUAGE</code></td>
+</tr>
+<tr>
+<td><code>QML</code></td>
+</tr>
+<tr>
+<td><code>QT</code></td>
+</tr>
+<tr>
+<td><code>QTREMOTEOBJECTS</code></td>
+</tr>
+<tr>
+<td><code>QTWIDGET</code></td>
+</tr>
+<tr>
+<td><code>QT_WIDGETS</code></td>
+</tr>
+<tr>
+<td><code>QUEUE_GROUP</code></td>
+</tr>
+<tr>
+<td><code>REALM</code></td>
+</tr>
+<tr>
+<td><code>REDUCE</code></td>
+</tr>
+<tr>
+<td><code>REFERENCES</code></td>
+</tr>
+<tr>
+<td><code>REFRESH</code></td>
+</tr>
+<tr>
+<td><code>RELATIONSHIPS</code></td>
+</tr>
+<tr>
+<td><code>REPOSITORY</code></td>
+</tr>
+<tr>
+<td><code>REQUIRED</code></td>
+</tr>
+<tr>
+<td><code>REQUIRES</code></td>
+</tr>
+<tr>
+<td><code>REST</code></td>
+</tr>
+<tr>
+<td><code>RETRY</code></td>
+</tr>
+<tr>
+<td><code>RETURNS</code></td>
+</tr>
+<tr>
+<td><code>ROOT</code></td>
+</tr>
+<tr>
+<td><code>SAGA</code></td>
+</tr>
+<tr>
+<td><code>SAME_DAY</code></td>
+</tr>
+<tr>
+<td><code>SAMPLING_RATE</code></td>
+</tr>
+<tr>
+<td><code>SCHEDULED</code></td>
+</tr>
+<tr>
+<td><code>SEARCH</code></td>
+</tr>
+<tr>
+<td><code>SEARCHABLE</code></td>
+</tr>
+<tr>
+<td><code>SECOND</code></td>
+</tr>
+<tr>
+<td><code>SECTIONS</code></td>
+</tr>
+<tr>
+<td><code>SECURITY</code></td>
+</tr>
+<tr>
+<td><code>SEED</code></td>
+</tr>
+<tr>
+<td><code>SEED_JSON</code></td>
+</tr>
+<tr>
+<td><code>SEED_VALUES</code></td>
+</tr>
+<tr>
+<td><code>SEPARATE_WAYS</code></td>
+</tr>
+<tr>
+<td><code>SERVER</code></td>
+</tr>
+<tr>
+<td><code>SERVICE</code></td>
+</tr>
+<tr>
+<td><code>SERVICE_NAME</code></td>
+</tr>
+<tr>
+<td><code>SHARED</code></td>
+</tr>
+<tr>
+<td><code>SHARED_DB</code></td>
+</tr>
+<tr>
+<td><code>SHARED_KERNEL</code></td>
+</tr>
+<tr>
+<td><code>SHORT</code></td>
+</tr>
+<tr>
+<td><code>SIDEBAR</code></td>
+</tr>
+<tr>
+<td><code>SIDEEFFECT</code></td>
+</tr>
+<tr>
+<td><code>SMALLINT</code></td>
+</tr>
+<tr>
+<td><code>SNAPSHOT</code></td>
+</tr>
+<tr>
+<td><code>SOURCE</code></td>
+</tr>
+<tr>
+<td><code>SOURCED_EVENT</code></td>
+</tr>
+<tr>
+<td><code>SOURCE_TABLES</code></td>
+</tr>
+<tr>
+<td><code>SPATIAL</code></td>
+</tr>
+<tr>
+<td><code>SPECIFICATION</code></td>
+</tr>
+<tr>
+<td><code>SPEC_PATH</code></td>
+</tr>
+<tr>
+<td><code>SQITCH</code></td>
+</tr>
+<tr>
+<td><code>SQITCH_PROJECT</code></td>
+</tr>
+<tr>
+<td><code>SRID</code></td>
+</tr>
+<tr>
+<td><code>SSL_ENABLED</code></td>
+</tr>
+<tr>
+<td><code>STARTUP_CONTEXT</code></td>
+</tr>
+<tr>
+<td><code>STATE</code></td>
+</tr>
+<tr>
+<td><code>STATE_MACHINE</code></td>
+</tr>
+<tr>
+<td><code>STEP</code></td>
+</tr>
+<tr>
+<td><code>STRATEGY</code></td>
+</tr>
+<tr>
+<td><code>STRING</code></td>
+</tr>
+<tr>
+<td><code>STRONG_TYPE</code></td>
+</tr>
+<tr>
+<td><code>STYLE</code></td>
+</tr>
+<tr>
+<td><code>SUBJECT</code></td>
+</tr>
+<tr>
+<td><code>SUBSET</code></td>
+</tr>
+<tr>
+<td><code>SUCCESS</code></td>
+</tr>
+<tr>
+<td><code>SUM</code></td>
+</tr>
+<tr>
+<td><code>SYNCVIRTUAL</code></td>
+</tr>
+<tr>
+<td><code>SYNONYMS</code></td>
+</tr>
+<tr>
+<td><code>SYSTEM_TIME</code></td>
+</tr>
+<tr>
+<td><code>TABLE</code></td>
+</tr>
+<tr>
+<td><code>TABS</code></td>
+</tr>
+<tr>
+<td><code>TARGET</code></td>
+</tr>
+<tr>
+<td><code>TELEMETRY</code></td>
+</tr>
+<tr>
+<td><code>TERMINAL</code></td>
+</tr>
+<tr>
+<td><code>TEXT</code></td>
+</tr>
+<tr>
+<td><code>THEME</code></td>
+</tr>
+<tr>
+<td><code>THEN</code></td>
+</tr>
+<tr>
+<td><code>TIME</code></td>
+</tr>
+<tr>
+<td><code>TIMEOUT</code></td>
+</tr>
+<tr>
+<td><code>TIMESTAMP</code></td>
+</tr>
+<tr>
+<td><code>TIMESTAMPTZ</code></td>
+</tr>
+<tr>
+<td><code>TLAPLUS</code></td>
+</tr>
+<tr>
+<td><code>TO</code></td>
+</tr>
+<tr>
+<td><code>TRANSITION</code></td>
+</tr>
+<tr>
+<td><code>TRANSLATE</code></td>
+</tr>
+<tr>
+<td><code>TRANSPORT</code></td>
+</tr>
+<tr>
+<td><code>TRIGGER</code></td>
+</tr>
+<tr>
+<td><code>TRIGGERED_BY</code></td>
+</tr>
+<tr>
+<td><code>TRUE</code></td>
+</tr>
+<tr>
+<td><code>TYPE</code></td>
+</tr>
+<tr>
+<td><code>UIWIDGET</code></td>
+</tr>
+<tr>
+<td><code>UNIQUE</code></td>
+</tr>
+<tr>
+<td><code>UPDATE</code></td>
+</tr>
+<tr>
+<td><code>URI</code></td>
+</tr>
+<tr>
+<td><code>USERNAME</code></td>
+</tr>
+<tr>
+<td><code>USES</code></td>
+</tr>
+<tr>
+<td><code>UUID</code></td>
+</tr>
+<tr>
+<td><code>VALIDATE_EMAIL</code></td>
+</tr>
+<tr>
+<td><code>VALIDATE_PHONE</code></td>
+</tr>
+<tr>
+<td><code>VALIDATE_POSTAL_CODE</code></td>
+</tr>
+<tr>
+<td><code>VALIDATION</code></td>
+</tr>
+<tr>
+<td><code>VALIDATOR</code></td>
+</tr>
+<tr>
+<td><code>VALID_TIME</code></td>
+</tr>
+<tr>
+<td><code>VALUE</code></td>
+</tr>
+<tr>
+<td><code>VALUE_OBJECT</code></td>
+</tr>
+<tr>
+<td><code>VARCHAR</code></td>
+</tr>
+<tr>
+<td><code>VERSION</code></td>
+</tr>
+<tr>
+<td><code>VIA</code></td>
+</tr>
+<tr>
+<td><code>VIEW_ENTITY</code></td>
+</tr>
+<tr>
+<td><code>WHEN</code></td>
+</tr>
+<tr>
+<td><code>WHERE</code></td>
+</tr>
+<tr>
+<td><code>WIZARD</code></td>
+</tr>
+<tr>
+<td><code>WORKERS</code></td>
+</tr>
+<tr>
+<td><code>XML</code></td>
+</tr>
+<tr>
+<td><code>XML_SCHEMA</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="field-types">Field Types</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BIGINT</code></td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+</tr>
+<tr>
+<td><code>INTEGER</code></td>
+</tr>
+<tr>
+<td><code>TEXT</code></td>
+</tr>
+<tr>
+<td><code>UUID</code></td>
+</tr>
+<tr>
+<td><code>VARCHAR</code></td>
 </tr>
 </tbody>
 </table>
@@ -268,378 +1314,229 @@ Regenerate:
 <thead>
 <tr>
 <th>Annotation</th>
-<th>Scope</th>
-<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>@uuid "..."</code></td>
-<td>All constructs, fields</td>
-<td>Stable identity for semantic diff</td>
+<td><code>@AFTER</code></td>
 </tr>
 <tr>
-<td><code>@required</code></td>
-<td>Fields</td>
-<td>NOT NULL constraint</td>
+<td><code>@BEFORE</code></td>
 </tr>
 <tr>
-<td><code>@unique</code></td>
-<td>Fields</td>
-<td>UNIQUE constraint</td>
+<td><code>@BUILTIN</code></td>
 </tr>
 <tr>
-<td><code>@spatial-queryable</code></td>
-<td>Fields</td>
-<td>Generate spatial query RPCs</td>
+<td><code>@CASCADE</code></td>
 </tr>
 <tr>
-<td><code>@searchable</code></td>
-<td>Fields</td>
-<td>OpenSearch full-text index</td>
+<td><code>@EMBEDDED</code></td>
 </tr>
 <tr>
-<td><code>@inline</code></td>
-<td>Value objects</td>
-<td>Mixin — fields flattened into parent</td>
+<td><code>@IMMUTABLE</code></td>
 </tr>
 <tr>
-<td><code>@owned</code></td>
-<td>Value objects</td>
-<td>Child table with CASCADE delete</td>
+<td><code>@INLINE</code></td>
 </tr>
 <tr>
-<td><code>@shared</code></td>
-<td>Value objects</td>
-<td>Dimension/lookup table</td>
+<td><code>@MAX</code></td>
 </tr>
 <tr>
-<td><code>@cascade</code></td>
-<td>Relationships</td>
-<td>CASCADE delete</td>
+<td><code>@MIN</code></td>
 </tr>
 <tr>
-<td><code>@embedded</code></td>
-<td>Relationships</td>
-<td>Show child embedded in parent UI</td>
+<td><code>@NOT_EMPTY</code></td>
 </tr>
 <tr>
-<td><code>@builtin</code></td>
-<td>Contexts</td>
-<td>Framework-provided context</td>
+<td><code>@NOT_EQUAL</code></td>
 </tr>
 <tr>
-<td><code>@constants</code></td>
-<td>Lookup tables</td>
-<td>Generate compile-time C++ constants</td>
+<td><code>@NOT_IN_FUTURE</code></td>
+</tr>
+<tr>
+<td><code>@NOT_IN_PAST</code></td>
+</tr>
+<tr>
+<td><code>@OWNED</code></td>
+</tr>
+<tr>
+<td><code>@PATTERN</code></td>
+</tr>
+<tr>
+<td><code>@REQUIRED</code></td>
+</tr>
+<tr>
+<td><code>@SAME_DAY</code></td>
+</tr>
+<tr>
+<td><code>@SEARCHABLE</code></td>
+</tr>
+<tr>
+<td><code>@SHARED</code></td>
+</tr>
+<tr>
+<td><code>@SOURCE</code></td>
+</tr>
+<tr>
+<td><code>@UNIQUE</code></td>
+</tr>
+<tr>
+<td><code>@UUID</code></td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="data-types-cross-layer-mappings">Data Types (Cross-Layer
-Mappings)</h2>
-<p>Generated live from <a
-href="../dslgen/model/type-registry.rkt"><code>dslgen/model/type-registry.rkt</code></a>.
-Unknown types cause generation to <strong>fail</strong> (strict
-policy).</p>
-<table>
-<thead>
-<tr>
-<th>DSL Type</th>
-<th>PostgreSQL</th>
-<th>C++ DBA</th>
-<th>gRPC Proto</th>
-<th>Qt Widget</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Primitives</strong></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>UUID</td>
-<td><code>UUID</code></td>
-<td><code>boost::uuids::uuid</code></td>
-<td><code>muscovite.common.UUID</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>String</td>
-<td><code>TEXT</code></td>
-<td><code>std::string</code></td>
-<td><code>string</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Integer</td>
-<td><code>INTEGER</code></td>
-<td><code>std::int32_t</code></td>
-<td><code>int32</code></td>
-<td><code>QSpinBox</code></td>
-</tr>
-<tr>
-<td>BigInteger</td>
-<td><code>BIGINT</code></td>
-<td><code>std::int64_t</code></td>
-<td><code>int64</code></td>
-<td><code>QSpinBox</code></td>
-</tr>
-<tr>
-<td>Decimal</td>
-<td><code>NUMERIC</code></td>
-<td><code>muscovite::dba::Decimal</code></td>
-<td><code>muscovite.common.Decimal</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Boolean</td>
-<td><code>BOOLEAN</code></td>
-<td><code>bool</code></td>
-<td><code>bool</code></td>
-<td><code>QCheckBox</code></td>
-</tr>
-<tr>
-<td><strong>Temporal</strong></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Date</td>
-<td><code>DATE</code></td>
-<td><code>muscovite::dba::Date</code></td>
-<td><code>muscovite.common.Date</code></td>
-<td><code>QDateEdit</code></td>
-</tr>
-<tr>
-<td>Time</td>
-<td><code>TIME</code></td>
-<td><code>muscovite::dba::TimeOfDay</code></td>
-<td><code>muscovite.common.TimeOfDay</code></td>
-<td><code>QTimeEdit</code></td>
-</tr>
-<tr>
-<td>DateTime</td>
-<td><code>TIMESTAMPTZ</code></td>
-<td><code>muscovite::dba::Timestamp</code></td>
-<td><code>muscovite.common.Timestamp</code></td>
-<td><code>QDateTimeEdit</code></td>
-</tr>
-<tr>
-<td>Interval</td>
-<td><code>INTERVAL</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Interval</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td><strong>Strong Types</strong></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Email</td>
-<td><code>TEXT</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Email</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Phone</td>
-<td><code>TEXT</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Phone</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>PostalCode</td>
-<td><code>TEXT</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.PostalCode</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>URL</td>
-<td><code>TEXT</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Url</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>PositiveInteger</td>
-<td><code>INTEGER</code></td>
-<td><code>std::int32_t</code></td>
-<td><code>int32</code></td>
-<td><code>QSpinBox</code></td>
-</tr>
-<tr>
-<td>PositiveDecimal</td>
-<td><code>NUMERIC</code></td>
-<td><code>muscovite::dba::Decimal</code></td>
-<td><code>muscovite.common.PositiveDecimal</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Latitude</td>
-<td><code>NUMERIC</code></td>
-<td><code>muscovite::dba::Decimal</code></td>
-<td><code>muscovite.common.Decimal</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Longitude</td>
-<td><code>NUMERIC</code></td>
-<td><code>muscovite::dba::Decimal</code></td>
-<td><code>muscovite.common.Decimal</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td><strong>Spatial (PostGIS)</strong></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Point</td>
-<td><code>GEOGRAPHY(POINT, 4326)</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Point</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>LineString</td>
-<td><code>GEOGRAPHY(LINESTRING, 4326)</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.LineString</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Polygon</td>
-<td><code>GEOGRAPHY(POLYGON, 4326)</code></td>
-<td><code>std::string</code></td>
-<td><code>muscovite.common.Polygon</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-<tr>
-<td>Geography</td>
-<td><code>GEOGRAPHY</code></td>
-<td><code>std::string</code></td>
-<td><code>string</code></td>
-<td><code>QLineEdit</code></td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> Section III for
-accessor/mutator patterns.</p>
-<hr />
-<h2 id="grammar-reference">Grammar Reference</h2>
-<p>Each section below corresponds to a numbered section in the <a
-href="../dslgen/grammar/muscovite.peg">PEG grammar</a>. Sections 35+ are
-internal/lexical and omitted.</p>
+<h2 id="grammar-rules">Grammar Rules</h2>
+<h3
+id="1-constraint-for-ai-generation--llms-follow-this-grammar-to-produce">1.
+Constraint for AI generation — LLMs follow this grammar to produce</h3>
+<p>syntactically valid .ddd files</p>
+<h3
+id="2-specification-for-parser-evolution--grammar-changes-drive-parser">2.
+Specification for parser evolution — grammar changes drive parser</h3>
+<p>changes (not the reverse)</p>
+<h3 id="3-living-documentation--the-grammar-is-the-dsl-reference">3.
+Living documentation — the grammar IS the DSL reference</h3>
+<p>Notation: 'KEYWORD' Literal keyword (case-insensitive in lexer,
+uppercase canonical) <Rule> Non-terminal reference e1 / e2 Ordered
+choice (try e1 first) e* Zero or more e+ One or more e? Optional !e
+Not-predicate (negative lookahead) &amp;e And-predicate (positive
+lookahead) ( ... ) Grouping</p>
+<h1 id="comment">Comment</h1>
+<p>Lexical conventions:</p>
+<ul>
+<li>Comments: '--' to end-of-line, '/* ... */' block</li>
+<li>Strings: double-quoted "..." or single-quoted '...' with
+escapes</li>
+<li>Numbers: integer or decimal (e.g., 42, 3.14, -89)</li>
+<li>Identifiers: [a-zA-Z_][a-zA-Z0-9_-]*</li>
+<li>Keywords: case-insensitive (CONTEXT = context = Context)</li>
+<li>Annotations: '@' prefix (e.g., @uuid, @required, @unique)</li>
+<li>Operators: -&gt;, &lt;-, &lt;-&gt;, =, !=, &lt;, &lt;=, &gt;, &gt;=,
+~, &amp;&amp;, ||</li>
+<li>Punctuation: ( ) { } [ ] , ; . : @ ?</li>
+<li>Variable refs: $identifier (in policy/saga parameter
+expressions)</li>
+</ul>
 <h3 id="1-top-level-program">1. Top-Level Program</h3>
-<pre class="peg"><code>Program              &lt;- Spacing ( ProjectBlock / Context / MapBlock )* EOF
-ProjectBlock         &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody &#39;}&#39;</code></pre>
+<p>See sections 45–53 for project DSL constructs</p>
+<pre class="peg"><code>Program &lt;- Spacing ( ProjectBlock / Context / MapBlock )* EOF
+ProjectBlock &lt;- &#39;PROJECT&#39; IDENTIFIER &#39;{&#39; ProjectBody &#39;}&#39;</code></pre>
 <h3 id="2-bounded-context">2. Bounded Context</h3>
-<pre class="peg"><code>Context              &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
-BuiltinAnnotation    &lt;- &#39;@&#39; &#39;BUILTIN&#39;
-ContextBody          &lt;- ContextItem*
-ContextItem          &lt;- Grounding / ConcurrencyBlock / LookupTable / ContextDefault / StrongType / ValueObject / ViewEntity / Entity / Import / MappingBlock / LegacyView / LegacyProcedure / Aggregate / SourcedEvent / DomainEvent / Command / Repository / Specification / DomainService / Policy / Saga / StateMachine / Projection / ExtensionPoint / ForeignContext / Effect</code></pre>
+<pre class="peg"><code>Context &lt;- &#39;CONTEXT&#39; IDENTIFIER BuiltinAnnotation? UuidAnnotation
+BuiltinAnnotation &lt;- &#39;@&#39; &#39;BUILTIN&#39;
+ContextBody &lt;- ContextItem*
+ContextItem &lt;- Grounding</code></pre>
 <h3 id="3-entity">3. Entity</h3>
 <p>VIEW_ENTITY: read-only view-sourced entity (FTR-432). Identical to
 ENTITY for field declarations but generates read-only code.</p>
-<pre class="peg"><code>Entity               &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation StorageAnnotation?
-ViewEntity           &lt;- &#39;VIEW_ENTITY&#39; IDENTIFIER UuidAnnotation
-ExtendsClause        &lt;- &#39;EXTENDS&#39; IDENTIFIER
-EntityClause         &lt;- CheckConstraint / UsesClause / HasClause / RelationshipsBlock / ConcurrencyBlock / BitemporalBlock / InstructBlock / PresentationBlock / SeedBlock / NaturalKeyClause / SourceAnnotation / DocClause / SynonymsClause / LifecycleHook</code></pre>
+<pre class="peg"><code>Entity &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation StorageAnnotation?
+ViewEntity &lt;- &#39;VIEW_ENTITY&#39; IDENTIFIER UuidAnnotation
+ExtendsClause &lt;- &#39;EXTENDS&#39; IDENTIFIER
+EntityClause &lt;- CheckConstraint</code></pre>
 <h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
-<pre class="peg"><code>FieldList            &lt;- &#39;(&#39; ( Field ( &#39;,&#39; Field )* )? &#39;)&#39;
-Field                &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation* FieldDocClause?
-FieldDocClause       &lt;- &#39;DOC&#39; STRING
-FieldName            &lt;- IDENTIFIER / ContextualKeyword
-DefaultClause        &lt;- &#39;DEFAULT&#39; DefaultValue
-DefaultValue         &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39; / &#39;NOW&#39; &#39;(&#39; &#39;)&#39; / IDENTIFIER &#39;(&#39; &#39;)&#39;  # function call default
-FieldAnnotation      &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / &#39;@&#39; &#39;SPATIAL-QUERYABLE&#39; / &#39;@&#39; &#39;SEARCHABLE&#39; / &#39;@&#39; &#39;IMMUTABLE&#39; / FieldConstraint / SourceAnnotation / UuidAnnotation
-FieldConstraint      &lt;- &#39;@&#39; &#39;MIN&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;MAX&#39; &#39;(&#39; NUMBER &#39;)&#39; / &#39;@&#39; &#39;NOT_EMPTY&#39; / &#39;@&#39; &#39;NOT_IN_FUTURE&#39; / &#39;@&#39; &#39;NOT_IN_PAST&#39; / &#39;@&#39; &#39;PATTERN&#39; &#39;(&#39; STRING &#39;)&#39; / CrossFieldConstraint
-CrossFieldConstraint &lt;- &#39;@&#39; &#39;AFTER&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;BEFORE&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;SAME_DAY&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;@&#39; &#39;NOT_EQUAL&#39; &#39;(&#39; IDENTIFIER &#39;)&#39;
-SourceAnnotation     &lt;- &#39;@&#39; &#39;SOURCE&#39; STRING</code></pre>
+<p>ADR 20260310-field-level-documentation-in-dsl Optional documentation
+for individual fields Some keywords can be field names (e.g., 'type',
+'value', 'point') ADR 20260307-field-constraint-annotations Half-open
+ranges: @MIN without @MAX (lower-bounded only) or vice versa ADR
+20260307-cross-field-constraint-syntax Cross-field: relative? = #t,
+value = referenced field symbol External reference traceability (e.g.,
+"FHIR R4: Patient.birthDate")</p>
+<pre class="peg"><code>FieldList &lt;- &#39;(&#39; ( Field ( &#39;,&#39; Field )* )? &#39;)&#39;
+Field &lt;- FieldName TypeSpec DefaultClause? FieldAnnotation* FieldDocClause?
+FieldDocClause &lt;- &#39;DOC&#39; STRING
+FieldName &lt;- IDENTIFIER / ContextualKeyword
+DefaultClause &lt;- &#39;DEFAULT&#39; DefaultValue
+DefaultValue &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39; / &#39;NOW&#39; &#39;(&#39; &#39;)&#39;
+FieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39;
+FieldConstraint &lt;- &#39;@&#39; &#39;MIN&#39; &#39;(&#39; NUMBER &#39;)&#39;
+CrossFieldConstraint &lt;- &#39;@&#39; &#39;AFTER&#39; &#39;(&#39; IDENTIFIER &#39;)&#39;
+SourceAnnotation &lt;- &#39;@&#39; &#39;SOURCE&#39; STRING</code></pre>
 <h3 id="5-type-specification">5. Type Specification</h3>
-<pre class="peg"><code>TypeSpec             &lt;- ForbiddenType / BaseType ArraySuffix? OptionalMarker? NullClause?
-ForbiddenType        &lt;- &#39;JSONB&#39; / &#39;JSON&#39;
-BaseType             &lt;- &#39;UUID&#39; / &#39;STRING&#39; / &#39;VARCHAR&#39; ( &#39;(&#39; NUMBER &#39;)&#39; )? / &#39;TEXT&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / &#39;SMALLINT&#39; / ( &#39;DECIMAL&#39; / &#39;NUMERIC&#39; ) DecimalPrecision? / &#39;FLOAT&#39; / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;TIME&#39; / &#39;INTERVAL&#39; / &#39;BYTEA&#39; / &#39;XML&#39; / &#39;POSITIVE_INTEGER&#39; / &#39;POSITIVE_INT&#39; / GeospatialType / QualifiedIdentifier  # length ignored, maps to TEXT
-DecimalPrecision     &lt;- &#39;(&#39; NUMBER ( &#39;,&#39; NUMBER )? &#39;)&#39;
-GeospatialType       &lt;- GeospatialTypeName SridClause?
-GeospatialTypeName   &lt;- &#39;POINT&#39; / &#39;POINTZ&#39; / &#39;LINESTRING&#39; / &#39;LINESTRINGZ&#39; / &#39;POLYGON&#39; / &#39;POLYGONZ&#39; / &#39;MULTIPOINT&#39; / &#39;MULTILINESTRING&#39; / &#39;MULTIPOLYGON&#39; / &#39;GEOMETRYCOLLECTION&#39; / &#39;GEOMETRY&#39; / &#39;GEOGRAPHY&#39;
-SridClause           &lt;- &#39;(&#39; NUMBER &#39;)&#39; / &#39;SRID&#39; NUMBER  # e.g., POINT(4326)
-ArraySuffix          &lt;- &#39;[&#39; &#39;]&#39;
-OptionalMarker       &lt;- &#39;?&#39;
-NullClause           &lt;- &#39;NOT_NULL&#39;</code></pre>
+<p>JSONB/JSON types cause parse error (enforced by ADR)</p>
+<pre class="peg"><code>TypeSpec &lt;- ForbiddenType / BaseType ArraySuffix? OptionalMarker? NullClause?
+ForbiddenType &lt;- &#39;JSONB&#39; / &#39;JSON&#39;
+BaseType &lt;- &#39;UUID&#39;
+DecimalPrecision &lt;- &#39;(&#39; NUMBER ( &#39;,&#39; NUMBER )? &#39;)&#39;
+GeospatialType &lt;- GeospatialTypeName SridClause?
+GeospatialTypeName &lt;- &#39;POINT&#39; / &#39;POINTZ&#39;
+SridClause &lt;- &#39;(&#39; NUMBER &#39;)&#39;                       # e.g., POINT(4326)
+ArraySuffix &lt;- &#39;[&#39; &#39;]&#39;
+OptionalMarker &lt;- &#39;?&#39;
+NullClause &lt;- &#39;NOT_NULL&#39;</code></pre>
 <h3 id="6-uuid-annotation">6. UUID Annotation</h3>
-<pre class="peg"><code>UuidAnnotation       &lt;- &#39;@&#39; &#39;UUID&#39; STRING / !( &#39;@&#39; &#39;UUID&#39; )  # UUID string validated:</code></pre>
+<p>Mandatory on: CONTEXT, ENTITY, VALUE_OBJECT, STRONG_TYPE,
+LOOKUP_TABLE, PROJECTION, fields, relationships Auto-generated on:
+AGGREGATE, EVENT, SOURCED_EVENT, COMMAND, REPOSITORY, SPECIFICATION,
+SERVICE, POLICY, SAGA</p>
+<pre class="peg"><code>UuidAnnotation &lt;- &#39;@&#39; &#39;UUID&#39; STRING                    # UUID string validated:</code></pre>
 <h3 id="7-value-object">7. Value Object</h3>
-<pre class="peg"><code>ValueObject          &lt;- &#39;VALUE_OBJECT&#39; IDENTIFIER UuidAnnotation StorageAnnotation?
-StorageAnnotation    &lt;- &#39;@&#39; &#39;storage&#39; ( &#39;table&#39; / &#39;TABLE&#39; / &#39;jsonb&#39; / &#39;JSONB&#39; / &#39;inline&#39; / &#39;INLINE&#39; / &#39;hybrid&#39; / &#39;HYBRID&#39; ) / &#39;@&#39; &#39;INLINE&#39; / &#39;@&#39; &#39;OWNED&#39; / &#39;@&#39; &#39;SHARED&#39;  # fields flattened into parent (mixin)
-ValueObjectClause    &lt;- ComputedClause / ImmutableClause / NaturalKeyClause / CheckConstraint / SourceAnnotation / DocClause / SynonymsClause
-ComputedClause       &lt;- &#39;COMPUTED&#39; IDENTIFIER &#39;ON&#39; ComputeTiming &#39;:&#39; SqlExpression &#39;;&#39;?
-ComputeTiming        &lt;- &#39;INSERT&#39; / &#39;UPDATE&#39; / &#39;INSERT_OR_UPDATE&#39;
-ImmutableClause      &lt;- &#39;IMMUTABLE&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
-NaturalKeyClause     &lt;- &#39;NATURAL_KEY&#39; &#39;(&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39; &#39;;&#39;?</code></pre>
+<p>Default for Entity: @storage table, ValueObject: @storage inline
+Required when storage mode is @shared</p>
+<pre class="peg"><code>ValueObject &lt;- &#39;VALUE_OBJECT&#39; IDENTIFIER UuidAnnotation StorageAnnotation?
+StorageAnnotation &lt;- &#39;@&#39; &#39;storage&#39; ( &#39;table&#39; / &#39;TABLE&#39; / &#39;jsonb&#39; / &#39;JSONB&#39; / &#39;inline&#39; / &#39;INLINE&#39; / &#39;hybrid&#39; / &#39;HYBRID&#39; )
+ValueObjectClause &lt;- ComputedClause
+ComputedClause &lt;- &#39;COMPUTED&#39; IDENTIFIER &#39;ON&#39; ComputeTiming &#39;:&#39; SqlExpression &#39;;&#39;?
+ComputeTiming &lt;- &#39;INSERT&#39; / &#39;UPDATE&#39; / &#39;INSERT_OR_UPDATE&#39;
+ImmutableClause &lt;- &#39;IMMUTABLE&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
+NaturalKeyClause &lt;- &#39;NATURAL_KEY&#39; &#39;(&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39; &#39;;&#39;?</code></pre>
 <h3 id="8-strong-type-postgresql-domain">8. Strong Type (PostgreSQL
 DOMAIN)</h3>
-<pre class="peg"><code>StrongType           &lt;- &#39;STRONG_TYPE&#39; IDENTIFIER StrongTypeBase UuidAnnotation
-StrongTypeBase       &lt;- &#39;TEXT&#39; / &#39;VARCHAR&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39; / &#39;DECIMAL&#39; / &#39;NUMERIC&#39; / &#39;BOOLEAN&#39; / &#39;BOOL&#39; / &#39;DATE&#39; / &#39;DATETIME&#39; / &#39;TIMESTAMP&#39; / &#39;TIMESTAMPTZ&#39; / &#39;UUID&#39;
-StrongTypeCheck      &lt;- &#39;CHECK&#39; IDENTIFIER &#39;:&#39; CheckExpression
-CheckExpression      &lt;- ( !( &#39;CHECK&#39; / &#39;DEFAULT&#39; / &#39;DOC&#39; / &#39;;&#39; / EOF ) . )+</code></pre>
+<p>Tokens collected until terminating keyword</p>
+<pre class="peg"><code>StrongType &lt;- &#39;STRONG_TYPE&#39; IDENTIFIER StrongTypeBase UuidAnnotation
+StrongTypeBase &lt;- &#39;TEXT&#39; / &#39;VARCHAR&#39; / &#39;INTEGER&#39; / &#39;INT&#39; / &#39;BIGINT&#39;
+StrongTypeCheck &lt;- &#39;CHECK&#39; IDENTIFIER &#39;:&#39; CheckExpression
+CheckExpression &lt;- ( !( &#39;CHECK&#39; / &#39;DEFAULT&#39; / &#39;DOC&#39; / &#39;;&#39; / EOF ) . )+</code></pre>
 <h3 id="9-aggregate">9. Aggregate</h3>
-<p>9b. Layout Profile Grammar (FTR-412 — merged from muscovite-lay.peg)
-Layout rules for <code>.lay</code> profile files. Merged into the
+<p>NOTE: LAYOUT blocks removed from .ddd grammar (FTR-134). Layout
+directives are valid only in .lay profile files (section 9b).</p>
+<pre class="peg"><code>Aggregate &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
+ContainsClause &lt;- &#39;(&#39; &#39;CONTAINS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39;
+EmbedsClause &lt;- &#39;EMBEDS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
+EventSourcedClause &lt;- &#39;EVENT_SOURCED&#39;
+GrpcDeadlineClause &lt;- &#39;GRPC_DEADLINE&#39; STRING</code></pre>
+<h3
+id="9b-layout-profile-grammar-ftr-412--merged-from-muscovite-laypeg">9b.
+Layout Profile Grammar (FTR-412 — merged from muscovite-lay.peg)</h3>
+<p>Layout rules for <code>.lay</code> profile files. Merged into the
 canonical grammar to eliminate duplication drift risk (12 rules were
 duplicated between muscovite.peg and the former muscovite-lay.peg). The
 <code>.lay</code> file type, parser (lay-parser.rkt), and IR
 (lay-types.rkt) remain separate. ADR: 20260314-grammar-reunification.md
 (partially supersedes ADR 20260223) NOTE: LAYOUT blocks remain rejected
 in .ddd files by the parser (FTR-134). These rules are valid only in
-.lay files parsed by lay-parser.rkt. NOTE: LayProgram is intentionally
+.lay files parsed by lay-parser.rkt. --- Top-Level Program (alternate
+entry point for .lay files) --- NOTE: LayProgram is intentionally
 unreferenced from Program. It is a separate start rule used by
-lay-parser.rkt (cpp-peglib: parser.parse("LayProgram", ...)).</p>
-<pre class="peg"><code>Aggregate            &lt;- &#39;AGGREGATE&#39; IDENTIFIER UuidAnnotation? &#39;ROOT&#39; IDENTIFIER
-ContainsClause       &lt;- &#39;(&#39; &#39;CONTAINS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;)&#39;
-EmbedsClause         &lt;- &#39;EMBEDS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
-EventSourcedClause   &lt;- &#39;EVENT_SOURCED&#39;
-GrpcDeadlineClause   &lt;- &#39;GRPC_DEADLINE&#39; STRING
-LayProgram           &lt;- Spacing LayoutProfile EOF
-LayoutProfile        &lt;- &#39;LAYOUT_PROFILE&#39; ProfileName? FormFactorDefault? &#39;{&#39; LayoutEntry* &#39;}&#39;
-ProfileName          &lt;- STRING
-FormFactorDefault    &lt;- &#39;FORM_FACTOR&#39; FormFactorValue
-FormFactorValue      &lt;- &#39;desktop&#39; / &#39;tablet&#39; / &#39;mobile&#39; / &#39;watch&#39; / &#39;embedded&#39;
-LayoutEntry          &lt;- &#39;LAYOUT&#39; FormFactorQualifier? QualifiedAggName &#39;{&#39; LayoutDirective+ &#39;}&#39;
-FormFactorQualifier  &lt;- FormFactorValue
-QualifiedAggName     &lt;- IDENTIFIER &#39;.&#39; IDENTIFIER
-LayoutDirective      &lt;- MasterDirective / DetailDirective
-MasterDirective      &lt;- &#39;MASTER&#39; &#39;{&#39; MasterClause+ &#39;}&#39;
-MasterClause         &lt;- &#39;TABLE&#39; &#39;:&#39; FieldRefList &#39;;&#39;
-DetailDirective      &lt;- &#39;DETAIL&#39; &#39;{&#39; DetailClause+ &#39;}&#39;
-DetailClause         &lt;- StyleClause / GroupingClause / ActionsClause / ChildrenClause
-ChildrenClause       &lt;- &#39;CHILDREN&#39; &#39;:&#39; &#39;[&#39; ChildTabSpec ( &#39;,&#39; ChildTabSpec )* &#39;]&#39; &#39;;&#39;
-ChildTabSpec         &lt;- IDENTIFIER ( &#39;as&#39; STRING )?
-StyleClause          &lt;- &#39;STYLE&#39; &#39;:&#39; LayoutStyle &#39;;&#39;
-LayoutStyle          &lt;- &#39;FORM&#39; / &#39;SIDEBAR&#39; / &#39;CARD&#39; / &#39;WIZARD&#39;
-GroupingClause       &lt;- &#39;GROUPING&#39; &#39;:&#39; GroupingMode &#39;;&#39;
-GroupingMode         &lt;- &#39;TABS&#39; / &#39;SECTIONS&#39; / &#39;ACCORDION&#39; / &#39;FLAT&#39;
-ActionsClause        &lt;- &#39;ACTIONS&#39; &#39;:&#39; FieldRefList &#39;;&#39;
-FieldRefList         &lt;- &#39;[&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;]&#39;</code></pre>
+lay-parser.rkt (cpp-peglib: parser.parse("LayProgram", ...)). --- Layout
+Profile --- --- Layout Entry --- --- Layout Directives --- --- Master
+Directive --- --- Detail Directive --- --- Children Clause (FTR-103) ---
+--- Style, Grouping, Actions --- --- Field Reference List ---</p>
+<pre class="peg"><code>LayProgram &lt;- Spacing LayoutProfile EOF
+LayoutProfile &lt;- &#39;LAYOUT_PROFILE&#39; ProfileName? FormFactorDefault? &#39;{&#39; LayoutEntry* &#39;}&#39;
+ProfileName &lt;- STRING
+FormFactorDefault &lt;- &#39;FORM_FACTOR&#39; FormFactorValue
+FormFactorValue &lt;- &#39;desktop&#39; / &#39;tablet&#39; / &#39;mobile&#39; / &#39;watch&#39; / &#39;embedded&#39;
+LayoutEntry &lt;- &#39;LAYOUT&#39; FormFactorQualifier? QualifiedAggName &#39;{&#39; LayoutDirective+ &#39;}&#39;
+FormFactorQualifier &lt;- FormFactorValue
+QualifiedAggName &lt;- IDENTIFIER &#39;.&#39; IDENTIFIER
+LayoutDirective &lt;- MasterDirective
+MasterDirective &lt;- &#39;MASTER&#39; &#39;{&#39; MasterClause+ &#39;}&#39;
+MasterClause &lt;- &#39;TABLE&#39; &#39;:&#39; FieldRefList &#39;;&#39;
+DetailDirective &lt;- &#39;DETAIL&#39; &#39;{&#39; DetailClause+ &#39;}&#39;
+DetailClause &lt;- StyleClause
+ChildrenClause &lt;- &#39;CHILDREN&#39; &#39;:&#39; &#39;[&#39; ChildTabSpec ( &#39;,&#39; ChildTabSpec )* &#39;]&#39; &#39;;&#39;
+ChildTabSpec &lt;- IDENTIFIER ( &#39;as&#39; STRING )?
+StyleClause &lt;- &#39;STYLE&#39; &#39;:&#39; LayoutStyle &#39;;&#39;
+LayoutStyle &lt;- &#39;FORM&#39; / &#39;SIDEBAR&#39; / &#39;CARD&#39; / &#39;WIZARD&#39;
+GroupingClause &lt;- &#39;GROUPING&#39; &#39;:&#39; GroupingMode &#39;;&#39;
+GroupingMode &lt;- &#39;TABS&#39; / &#39;SECTIONS&#39; / &#39;ACCORDION&#39; / &#39;FLAT&#39;
+ActionsClause &lt;- &#39;ACTIONS&#39; &#39;:&#39; FieldRefList &#39;;&#39;
+FieldRefList &lt;- &#39;[&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;]&#39;</code></pre>
 <h3 id="10-domain-event">10. Domain Event</h3>
-<pre class="peg"><code>DomainEvent          &lt;- &#39;EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
+<pre class="peg"><code>DomainEvent &lt;- &#39;EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
 <h3 id="11-sourced-event-event-sourcing--adr-20260204">11. Sourced Event
 (Event Sourcing — ADR 20260204)</h3>
-<pre class="peg"><code>SourcedEvent         &lt;- &#39;SOURCED_EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
+<pre class="peg"><code>SourcedEvent &lt;- &#39;SOURCED_EVENT&#39; IDENTIFIER UuidAnnotation? FieldList</code></pre>
 <h3
 id="12-command-behavioral-sovereignty--adr-20260307-command-behavioral-evolution">12.
 Command (Behavioral Sovereignty — ADR
@@ -649,195 +1546,237 @@ Command (Behavioral Sovereignty — ADR
 change) + PLAN (external effect) Execution order: REQUIRES → DECIDE →
 ENSURES → apply intents → COMMIT ── ENSURES: postcondition clause
 ─────────────────────────────────────── Evaluated after DECIDE, rolls
-back transaction on failure 12b. Effect Catalog (ADR
-20260307-effect-catalog) Context-scoped external side effect
-declaration. PLAN references these.</p>
-<pre class="peg"><code>Command              &lt;- &#39;COMMAND&#39; IDENTIFIER &#39;ON&#39; IDENTIFIER FieldList
-RequiresClause       &lt;- &#39;REQUIRES&#39; IDENTIFIER &#39;:&#39; Expression
-EmitsClause          &lt;- &#39;EMITS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
-DecideBlock          &lt;- &#39;DECIDE&#39; &#39;{&#39; DecideStatement+ &#39;}&#39;
-DecideStatement      &lt;- LetStatement / EmitStatement / PlanStatement / IfStatement
-LetStatement         &lt;- &#39;LET&#39; IDENTIFIER &#39;=&#39; Expression &#39;;&#39;
-EmitStatement        &lt;- &#39;EMIT&#39; IDENTIFIER ( &#39;(&#39; ArgumentList? &#39;)&#39; )? &#39;;&#39;
-PlanStatement        &lt;- &#39;PLAN&#39; IDENTIFIER ( &#39;(&#39; ArgumentList? &#39;)&#39; )? &#39;;&#39;
-IfStatement          &lt;- &#39;IF&#39; Expression &#39;{&#39; DecideStatement+ &#39;}&#39;
-ArgumentList         &lt;- NamedArgument ( &#39;,&#39; NamedArgument )*
-NamedArgument        &lt;- IDENTIFIER &#39;:&#39; Expression
-EnsuresClause        &lt;- &#39;ENSURES&#39; IDENTIFIER &#39;:&#39; Expression
-Effect               &lt;- &#39;EFFECT&#39; IDENTIFIER FieldList DocClause? &#39;;&#39;?</code></pre>
+back transaction on failure</p>
+<pre class="peg"><code>Command &lt;- &#39;COMMAND&#39; IDENTIFIER &#39;ON&#39; IDENTIFIER FieldList
+RequiresClause &lt;- &#39;REQUIRES&#39; IDENTIFIER &#39;:&#39; Expression
+EmitsClause &lt;- &#39;EMITS&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
+DecideBlock &lt;- &#39;DECIDE&#39; &#39;{&#39; DecideStatement+ &#39;}&#39;
+DecideStatement &lt;- LetStatement
+LetStatement &lt;- &#39;LET&#39; IDENTIFIER &#39;=&#39; Expression &#39;;&#39;
+EmitStatement &lt;- &#39;EMIT&#39; IDENTIFIER ( &#39;(&#39; ArgumentList? &#39;)&#39; )? &#39;;&#39;
+PlanStatement &lt;- &#39;PLAN&#39; IDENTIFIER ( &#39;(&#39; ArgumentList? &#39;)&#39; )? &#39;;&#39;
+IfStatement &lt;- &#39;IF&#39; Expression &#39;{&#39; DecideStatement+ &#39;}&#39;
+ArgumentList &lt;- NamedArgument ( &#39;,&#39; NamedArgument )*
+NamedArgument &lt;- IDENTIFIER &#39;:&#39; Expression
+EnsuresClause &lt;- &#39;ENSURES&#39; IDENTIFIER &#39;:&#39; Expression</code></pre>
+<h3 id="12b-effect-catalog-adr-20260307-effect-catalog">12b. Effect
+Catalog (ADR 20260307-effect-catalog)</h3>
+<p>Context-scoped external side effect declaration. PLAN references
+these.</p>
+<pre class="peg"><code>Effect &lt;- &#39;EFFECT&#39; IDENTIFIER FieldList DocClause? &#39;;&#39;?</code></pre>
 <h3 id="13-repository">13. Repository</h3>
-<pre class="peg"><code>Repository           &lt;- &#39;REPOSITORY&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER
-RepositoryMethod     &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
+<pre class="peg"><code>Repository &lt;- &#39;REPOSITORY&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER
+RepositoryMethod &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
 <h3 id="14-specification">14. Specification</h3>
-<pre class="peg"><code>Specification        &lt;- &#39;SPECIFICATION&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER</code></pre>
+<pre class="peg"><code>Specification &lt;- &#39;SPECIFICATION&#39; IDENTIFIER &#39;FOR&#39; IDENTIFIER</code></pre>
 <h3 id="15-projection-cqrs-read-model--adr-20260203">15. Projection
 (CQRS Read Model — ADR 20260203)</h3>
-<pre class="peg"><code>Projection           &lt;- &#39;PROJECTION&#39; IDENTIFIER UuidAnnotation FieldList
-FromClause           &lt;- &#39;FROM&#39; STRING
-RefreshMode          &lt;- &#39;LIVE&#39; / &#39;ON_DEMAND&#39; / &#39;SCHEDULED&#39; STRING / &#39;ON_EVENT&#39; EventTypeList  # cron expression
-EventTypeList        &lt;- QualifiedIdentifier ( &#39;,&#39; QualifiedIdentifier )*
-HandlerClause        &lt;- &#39;HANDLER&#39; IDENTIFIER</code></pre>
+<pre class="peg"><code>Projection &lt;- &#39;PROJECTION&#39; IDENTIFIER UuidAnnotation FieldList
+FromClause &lt;- &#39;FROM&#39; STRING
+RefreshMode &lt;- &#39;LIVE&#39;
+EventTypeList &lt;- QualifiedIdentifier ( &#39;,&#39; QualifiedIdentifier )*
+HandlerClause &lt;- &#39;HANDLER&#39; IDENTIFIER</code></pre>
 <h3 id="16-domain-service">16. Domain Service</h3>
-<pre class="peg"><code>DomainService        &lt;- &#39;SERVICE&#39; IDENTIFIER
-ServiceMethod        &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
+<pre class="peg"><code>DomainService &lt;- &#39;SERVICE&#39; IDENTIFIER
+ServiceMethod &lt;- IDENTIFIER FieldList &#39;-&gt;&#39; TypeSpec</code></pre>
 <h3 id="17-policy">17. Policy</h3>
-<pre class="peg"><code>Policy               &lt;- &#39;POLICY&#39; IDENTIFIER &#39;WHEN&#39; IDENTIFIER
-WhereClause          &lt;- &#39;WHERE&#39; SqlExpression
-OtherwiseClause      &lt;- &#39;OTHERWISE&#39; PolicyAction
-RetryClause          &lt;- &#39;RETRY&#39; NUMBER
-TimeoutClause        &lt;- &#39;TIMEOUT&#39; TimeoutDuration
-TimeoutDuration      &lt;- STRING / NUMBER IDENTIFIER?  # e.g., &quot;30s&quot;, &quot;5m&quot;
-PolicyAction         &lt;- &#39;EMIT&#39; IDENTIFIER ActionParams? / &#39;INVOKE&#39; IDENTIFIER ActionParams? / &#39;NOTIFY&#39; IDENTIFIER ActionParams? / IDENTIFIER ( &#39;.&#39; IDENTIFIER )? ActionParams?
-ActionParams         &lt;- &#39;(&#39; ( ActionParam ( &#39;,&#39; ActionParam )* )? &#39;)&#39;
-ActionParam          &lt;- IDENTIFIER &#39;=&#39; ParamValue
-ParamValue           &lt;- STRING / NUMBER / &#39;$&#39; IDENTIFIER / IDENTIFIER ( &#39;.&#39; IDENTIFIER )?  # event field reference</code></pre>
+<pre class="peg"><code>Policy &lt;- &#39;POLICY&#39; IDENTIFIER &#39;WHEN&#39; IDENTIFIER
+WhereClause &lt;- &#39;WHERE&#39; SqlExpression
+OtherwiseClause &lt;- &#39;OTHERWISE&#39; PolicyAction
+RetryClause &lt;- &#39;RETRY&#39; NUMBER
+TimeoutClause &lt;- &#39;TIMEOUT&#39; TimeoutDuration
+TimeoutDuration &lt;- STRING                               # e.g., &quot;30s&quot;, &quot;5m&quot;
+PolicyAction &lt;- &#39;EMIT&#39; IDENTIFIER ActionParams?
+ActionParams &lt;- &#39;(&#39; ( ActionParam ( &#39;,&#39; ActionParam )* )? &#39;)&#39;
+ActionParam &lt;- IDENTIFIER &#39;=&#39; ParamValue
+ParamValue &lt;- STRING</code></pre>
 <h3 id="18-saga">18. Saga</h3>
-<p>18b. State Machine (Entity Lifecycle — ADR 20260221) Context-level
-construct for formal intra-entity lifecycle modeling. Generates state
-lookup tables, transition log, C++ state machine class, gRPC transition
-RPCs, and Qt state-aware UI. Example: STATE_MACHINE OrderLifecycle @uuid
-"..." FOR Order { STATE Draft DOC "Order being composed"; STATE
-Submitted DOC "Order submitted for processing"; STATE Fulfilled DOC
-"Order shipped and delivered"; STATE Cancelled DOC "Order cancelled";
-INITIAL Draft; TERMINAL Fulfilled, Cancelled; TRANSITION Draft -&gt;
-Submitted ON OrderSubmitted; TRANSITION Submitted -&gt; Fulfilled ON
-ShipmentDelivered GUARD "NOT has_shipped"; TRANSITION Draft -&gt;
-Cancelled ON OrderCancelled; } 18c. Extension Point (Plugin System — ADR
-20260223) Context-level construct declaring a typed extension contract.
-Code generation is driven by PLUGIN wiring in .mus (FTR-137). No
-generated code from EXTENSION_POINT alone — grammar + IR + validation
-only. Example: EXTENSION_POINT PasswordValidator @uuid "..." { CLASS:
+<pre class="peg"><code>Saga &lt;- &#39;SAGA&#39; IDENTIFIER UuidAnnotation?
+CorrelateClause &lt;- &#39;CORRELATE_BY&#39; IDENTIFIER
+SagaOutcome &lt;- &#39;ON&#39; ( &#39;COMPLETED&#39; / &#39;FAILED&#39; / &#39;CANCELLED&#39; ) PolicyAction
+SagaStep &lt;- &#39;STEP&#39; IDENTIFIER
+SagaTransition &lt;- &#39;ON&#39; ( &#39;SUCCESS&#39; / &#39;FAILURE&#39; / &#39;TIMEOUT&#39; ) IDENTIFIER
+SagaTarget &lt;- &#39;COMPLETED&#39;
+CompensatesClause &lt;- &#39;COMPENSATES_WITH&#39; CompensationItem ( &#39;,&#39; CompensationItem )*
+CompensationItem &lt;- IDENTIFIER ActionParams?</code></pre>
+<h3 id="18b-state-machine-entity-lifecycle--adr-20260221">18b. State
+Machine (Entity Lifecycle — ADR 20260221)</h3>
+<p>Context-level construct for formal intra-entity lifecycle modeling.
+Generates state lookup tables, transition log, C++ state machine class,
+gRPC transition RPCs, and Qt state-aware UI. Example: STATE_MACHINE
+OrderLifecycle @uuid "..." FOR Order { STATE Draft DOC "Order being
+composed"; STATE Submitted DOC "Order submitted for processing"; STATE
+Fulfilled DOC "Order shipped and delivered"; STATE Cancelled DOC "Order
+cancelled"; INITIAL Draft; TERMINAL Fulfilled, Cancelled; TRANSITION
+Draft -&gt; Submitted ON OrderSubmitted; TRANSITION Submitted -&gt;
+Fulfilled ON ShipmentDelivered GUARD "NOT has_shipped"; TRANSITION Draft
+-&gt; Cancelled ON OrderCancelled; }</p>
+<pre class="peg"><code>StateMachine &lt;- &#39;STATE_MACHINE&#39; IDENTIFIER UuidAnnotation?
+SmEnforceAt &lt;- &#39;ENFORCE_AT&#39; &#39;DB_LEVEL&#39;
+SmBody &lt;- SmItem*
+SmItem &lt;- SmState / SmInitial / SmTerminal / SmTransition
+SmState &lt;- &#39;STATE&#39; IDENTIFIER SmEntryExit? SmEntryExit?
+SmEntryExit &lt;- ( &#39;ENTRY&#39; / &#39;EXIT&#39; ) IDENTIFIER
+SmInitial &lt;- &#39;INITIAL&#39; IDENTIFIER &#39;;&#39;?
+SmTerminal &lt;- &#39;TERMINAL&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
+SmTransition &lt;- &#39;TRANSITION&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
+SmGuard &lt;- &#39;GUARD&#39; STRING
+SmAction &lt;- &#39;ACTION&#39; IDENTIFIER</code></pre>
+<h3 id="18c-extension-point-plugin-system--adr-20260223">18c. Extension
+Point (Plugin System — ADR 20260223)</h3>
+<p>Context-level construct declaring a typed extension contract. Code
+generation is driven by PLUGIN wiring in .mus (FTR-137). No generated
+code from EXTENSION_POINT alone — grammar + IR + validation only.
+Example: EXTENSION_POINT PasswordValidator @uuid "..." { CLASS:
 Validator; TARGET: User; LAYER: Backend; INTERFACE: SyncVirtual; DOC
 "Validates password strength before user creation"; }</p>
-<pre class="peg"><code>Saga                 &lt;- &#39;SAGA&#39; IDENTIFIER UuidAnnotation?
-CorrelateClause      &lt;- &#39;CORRELATE_BY&#39; IDENTIFIER
-SagaOutcome          &lt;- &#39;ON&#39; ( &#39;COMPLETED&#39; / &#39;FAILED&#39; / &#39;CANCELLED&#39; ) PolicyAction
-SagaStep             &lt;- &#39;STEP&#39; IDENTIFIER
-SagaTransition       &lt;- &#39;ON&#39; ( &#39;SUCCESS&#39; / &#39;FAILURE&#39; / &#39;TIMEOUT&#39; ) IDENTIFIER
-SagaTarget           &lt;- &#39;COMPLETED&#39; / &#39;FAILED&#39; / &#39;CANCELLED&#39; / &#39;COMPENSATE&#39; ( &#39;-&gt;&#39; ( &#39;FAILED&#39; / &#39;CANCELLED&#39; / IDENTIFIER ) )? / IDENTIFIER  # next step name
-CompensatesClause    &lt;- &#39;COMPENSATES_WITH&#39; CompensationItem ( &#39;,&#39; CompensationItem )*
-CompensationItem     &lt;- IDENTIFIER ActionParams?
-StateMachine         &lt;- &#39;STATE_MACHINE&#39; IDENTIFIER UuidAnnotation?
-SmEnforceAt          &lt;- &#39;ENFORCE_AT&#39; &#39;DB_LEVEL&#39;
-SmBody               &lt;- SmItem*
-SmItem               &lt;- SmState / SmInitial / SmTerminal / SmTransition
-SmState              &lt;- &#39;STATE&#39; IDENTIFIER SmEntryExit? SmEntryExit?
-SmEntryExit          &lt;- ( &#39;ENTRY&#39; / &#39;EXIT&#39; ) IDENTIFIER
-SmInitial            &lt;- &#39;INITIAL&#39; IDENTIFIER &#39;;&#39;?
-SmTerminal           &lt;- &#39;TERMINAL&#39; IDENTIFIER ( &#39;,&#39; IDENTIFIER )* &#39;;&#39;?
-SmTransition         &lt;- &#39;TRANSITION&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
-SmGuard              &lt;- &#39;GUARD&#39; STRING
-SmAction             &lt;- &#39;ACTION&#39; IDENTIFIER
-ExtensionPoint       &lt;- &#39;EXTENSION_POINT&#39; IDENTIFIER UuidAnnotation
-ExtensionPointBody   &lt;- ExtensionPointItem+
-ExtensionPointItem   &lt;- EpClassClause / EpTargetClause / EpTriggerClause / EpLayerClause / EpInterfaceClause / DocClause
-EpClassClause        &lt;- &#39;CLASS&#39; &#39;:&#39; EpClassName &#39;;&#39;?
-EpClassName          &lt;- &#39;VALIDATOR&#39; / &#39;SIDEEFFECT&#39; / &#39;UIWIDGET&#39;
-EpTargetClause       &lt;- &#39;TARGET&#39; &#39;:&#39; QualifiedIdentifier &#39;;&#39;?
-EpTriggerClause      &lt;- &#39;TRIGGER&#39; &#39;:&#39; EpTriggerName &#39;;&#39;?
-EpTriggerName        &lt;- &#39;ONCOMMIT&#39; / &#39;ONVALIDATE&#39; / &#39;ONSAVE&#39;
-EpLayerClause        &lt;- &#39;LAYER&#39; &#39;:&#39; EpLayerName &#39;;&#39;?
-EpLayerName          &lt;- &#39;BACKEND&#39; / &#39;FRONTEND&#39; / &#39;BOTH&#39;
-EpInterfaceClause    &lt;- &#39;INTERFACE&#39; &#39;:&#39; EpInterfaceName &#39;;&#39;?
-EpInterfaceName      &lt;- &#39;SYNCVIRTUAL&#39; / &#39;LOCALGRPC&#39; / &#39;QTWIDGET&#39; / &#39;QTREMOTEOBJECTS&#39;</code></pre>
+<pre class="peg"><code>ExtensionPoint &lt;- &#39;EXTENSION_POINT&#39; IDENTIFIER UuidAnnotation
+ExtensionPointBody &lt;- ExtensionPointItem+
+ExtensionPointItem &lt;- EpClassClause
+EpClassClause &lt;- &#39;CLASS&#39; &#39;:&#39; EpClassName &#39;;&#39;?
+EpClassName &lt;- &#39;VALIDATOR&#39; / &#39;SIDEEFFECT&#39; / &#39;UIWIDGET&#39;
+EpTargetClause &lt;- &#39;TARGET&#39; &#39;:&#39; QualifiedIdentifier &#39;;&#39;?
+EpTriggerClause &lt;- &#39;TRIGGER&#39; &#39;:&#39; EpTriggerName &#39;;&#39;?
+EpTriggerName &lt;- &#39;ONCOMMIT&#39; / &#39;ONVALIDATE&#39; / &#39;ONSAVE&#39;
+EpLayerClause &lt;- &#39;LAYER&#39; &#39;:&#39; EpLayerName &#39;;&#39;?
+EpLayerName &lt;- &#39;BACKEND&#39; / &#39;FRONTEND&#39; / &#39;BOTH&#39;
+EpInterfaceClause &lt;- &#39;INTERFACE&#39; &#39;:&#39; EpInterfaceName &#39;;&#39;?
+EpInterfaceName &lt;- &#39;SYNCVIRTUAL&#39; / &#39;LOCALGRPC&#39; / &#39;QTWIDGET&#39; / &#39;QTREMOTEOBJECTS&#39;</code></pre>
 <h3 id="19-relationships-block">19. Relationships Block</h3>
-<pre class="peg"><code>RelationshipsBlock   &lt;- &#39;RELATIONSHIPS&#39; &#39;{&#39; ( Relationship / ArcConstraint )* &#39;}&#39;
-Relationship         &lt;- RelName DirectionArrow RelTarget ArraySuffix?
-RelName              &lt;- IDENTIFIER / ContextualKeyword  # role name
-DirectionArrow       &lt;- &#39;-&gt;&#39; / &#39;&lt;-&#39; / &#39;&lt;-&gt;&#39;
-RelTarget            &lt;- QualifiedIdentifier  # Context.Entity or Entity
-CardinalityClause    &lt;- &#39;REQUIRED&#39; / &#39;OPTIONAL&#39;
-MultiplicityClause   &lt;- &#39;ONE&#39; / &#39;MANY&#39;
-MinMaxClause         &lt;- ( &#39;MIN&#39; NUMBER )? ( &#39;MAX&#39; NUMBER )?
-ViaFieldClause       &lt;- &#39;VIA&#39; IDENTIFIER  # explicit FK field name
-RelAnnotation        &lt;- &#39;@&#39; &#39;CASCADE&#39; / &#39;@&#39; &#39;EMBEDDED&#39; / UuidAnnotation</code></pre>
+<pre class="peg"><code>RelationshipsBlock &lt;- &#39;RELATIONSHIPS&#39; &#39;{&#39; ( Relationship / ArcConstraint )* &#39;}&#39;
+Relationship &lt;- RelName DirectionArrow RelTarget ArraySuffix?
+RelName &lt;- IDENTIFIER / ContextualKeyword       # role name
+DirectionArrow &lt;- &#39;-&gt;&#39; / &#39;&lt;-&#39; / &#39;&lt;-&gt;&#39;
+RelTarget &lt;- QualifiedIdentifier                  # Context.Entity or Entity
+CardinalityClause &lt;- &#39;REQUIRED&#39; / &#39;OPTIONAL&#39;
+MultiplicityClause &lt;- &#39;ONE&#39; / &#39;MANY&#39;
+MinMaxClause &lt;- ( &#39;MIN&#39; NUMBER )? ( &#39;MAX&#39; NUMBER )?
+ViaFieldClause &lt;- &#39;VIA&#39; IDENTIFIER                    # explicit FK field name
+RelAnnotation &lt;- &#39;@&#39; &#39;CASCADE&#39;</code></pre>
 <h3 id="20-arc-constraint-n-of-m-relationship">20. Arc Constraint
 (N-of-M Relationship)</h3>
-<pre class="peg"><code>ArcConstraint        &lt;- IDENTIFIER UuidAnnotation? &#39;ARC&#39;</code></pre>
+<pre class="peg"><code>ArcConstraint &lt;- IDENTIFIER UuidAnnotation? &#39;ARC&#39;</code></pre>
 <h3 id="21-check-constraint">21. CHECK Constraint</h3>
-<pre class="peg"><code>CheckConstraint      &lt;- &#39;CHECK&#39; IDENTIFIER UuidAnnotation? &#39;:&#39; SqlExpression</code></pre>
+<pre class="peg"><code>CheckConstraint &lt;- &#39;CHECK&#39; IDENTIFIER UuidAnnotation? &#39;:&#39; SqlExpression</code></pre>
 <h3 id="22-uses--has-clauses-value-object-references">22. USES / HAS
 Clauses (Value Object References)</h3>
-<pre class="peg"><code>UsesClause           &lt;- &#39;USES&#39; QualifiedIdentifier UuidAnnotation? &#39;;&#39;?
-HasClause            &lt;- &#39;HAS&#39; IDENTIFIER QualifiedIdentifier ArraySuffix?</code></pre>
+<p>@inline mixin — fields flattened into parent table @owned or @shared
+reference</p>
+<pre class="peg"><code>UsesClause &lt;- &#39;USES&#39; QualifiedIdentifier UuidAnnotation? &#39;;&#39;?
+HasClause &lt;- &#39;HAS&#39; IDENTIFIER QualifiedIdentifier ArraySuffix?</code></pre>
 <h3 id="23-lookup-table">23. Lookup Table</h3>
-<pre class="peg"><code>LookupTable          &lt;- &#39;LOOKUP_TABLE&#39; IDENTIFIER UuidAnnotation
-SeedValueRow         &lt;- &#39;(&#39; SeedValueLiteral ( &#39;,&#39; SeedValueLiteral )* &#39;)&#39;
-SeedValueLiteral     &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;
-ExtraFieldList       &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
-ExtraField           &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation* FieldDocClause?
-ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39;</code></pre>
+<p>Auto-generates standard columns: id (UUID PK), code (TEXT UNIQUE),
+display (TEXT), definition (TEXT), is_active (BOOLEAN), sort_order
+(INTEGER)</p>
+<pre class="peg"><code>LookupTable &lt;- &#39;LOOKUP_TABLE&#39; IDENTIFIER UuidAnnotation
+SeedValueRow &lt;- &#39;(&#39; SeedValueLiteral ( &#39;,&#39; SeedValueLiteral )* &#39;)&#39;
+SeedValueLiteral &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;
+ExtraFieldList &lt;- &#39;(&#39; ( ExtraField ( &#39;,&#39; ExtraField )* )? &#39;)&#39;
+ExtraField &lt;- FieldName TypeSpec DefaultClause? ExtraFieldAnnotation* FieldDocClause?
+ExtraFieldAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39;</code></pre>
 <h3 id="24-import-seed-data-file-and-dsl-file-import">24. IMPORT (Seed
 Data File and DSL File Import)</h3>
-<pre class="peg"><code>Import               &lt;- ImportDslFile / ImportJson
-ImportDslFile        &lt;- &#39;IMPORT&#39; STRING &#39;;&#39;?
-ImportJson           &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>
+<p>Import another .ddd file for cross-context type references CSV format
+rejected per ADR 20260108</p>
+<pre class="peg"><code>Import &lt;- ImportDslFile / ImportJson
+ImportDslFile &lt;- &#39;IMPORT&#39; STRING &#39;;&#39;?
+ImportJson &lt;- &#39;IMPORT_JSON&#39; STRING &#39;INTO&#39; IDENTIFIER &#39;;&#39;?</code></pre>
 <h3 id="25-seed-block-inline-test-data">25. SEED Block (Inline Test
 Data)</h3>
-<pre class="peg"><code>SeedBlock            &lt;- &#39;SEED&#39; STRING &#39;{&#39; SeedRow* &#39;}&#39;
-SeedRow              &lt;- &#39;(&#39; SeedValue ( &#39;,&#39; SeedValue )* &#39;)&#39; &#39;,&#39;?
-SeedValue            &lt;- NUMBER / STRING / &#39;NULL&#39; / &#39;TRUE&#39; / &#39;FALSE&#39; / IDENTIFIER</code></pre>
+<pre class="peg"><code>SeedBlock &lt;- &#39;SEED&#39; STRING &#39;{&#39; SeedRow* &#39;}&#39;
+SeedRow &lt;- &#39;(&#39; SeedValue ( &#39;,&#39; SeedValue )* &#39;)&#39; &#39;,&#39;?
+SeedValue &lt;- NUMBER / STRING / &#39;NULL&#39; / &#39;TRUE&#39; / &#39;FALSE&#39; / IDENTIFIER</code></pre>
 <h3 id="26-display_format-block-ui-display-hints">26. DISPLAY_FORMAT
 Block (UI Display Hints)</h3>
 <p>DISPLAY_FORMAT is the only accepted keyword (FTR-134). PRESENTATION
 is rejected with a helpful error message. TABLE: is rejected inside
-DISPLAY_FORMAT (column selection belongs in .lay files).</p>
-<pre class="peg"><code>PresentationBlock    &lt;- &#39;DISPLAY_FORMAT&#39; &#39;(&#39; DisplayFormat ( &#39;,&#39; DisplayFormat )* &#39;)&#39;
-DisplayFormat        &lt;- ( &#39;SHORT&#39; / &#39;FULL&#39; ) &#39;:&#39; STRING ( &#39;OR&#39; STRING )?</code></pre>
+DISPLAY_FORMAT (column selection belongs in .lay files). Patterns use
+{field_name} placeholders OR provides fallback expression</p>
+<pre class="peg"><code>PresentationBlock &lt;- &#39;DISPLAY_FORMAT&#39; &#39;(&#39; DisplayFormat ( &#39;,&#39; DisplayFormat )* &#39;)&#39;
+DisplayFormat &lt;- ( &#39;SHORT&#39; / &#39;FULL&#39; ) &#39;:&#39; STRING ( &#39;OR&#39; STRING )?</code></pre>
 <h3 id="27-instruct-block-muscovite-embedded-prompts--adr-20260205">27.
 INSTRUCT Block (Muscovite Embedded Prompts — ADR 20260205)</h3>
-<pre class="peg"><code>InstructBlock        &lt;- &#39;INSTRUCT&#39; InstructQualifier? IDENTIFIER &#39;{&#39;
-InstructQualifier    &lt;- &#39;VALIDATION&#39; / &#39;SAGA&#39;
-InstructField        &lt;- &#39;INTENT&#39; &#39;:&#39; STRING / &#39;INPUTS&#39; &#39;:&#39; &#39;{&#39; QualifiedIdentifier ( &#39;,&#39; QualifiedIdentifier )* &#39;}&#39; / &#39;OUTPUT&#39; &#39;:&#39; IDENTIFIER / &#39;STRATEGY&#39; &#39;:&#39; IDENTIFIER</code></pre>
+<pre class="peg"><code>InstructBlock &lt;- &#39;INSTRUCT&#39; InstructQualifier? IDENTIFIER &#39;{&#39;
+InstructQualifier &lt;- &#39;VALIDATION&#39; / &#39;SAGA&#39;
+InstructField &lt;- &#39;INTENT&#39; &#39;:&#39; STRING</code></pre>
 <h3 id="28-grounding-block-context-ai-anchoring">28. GROUNDING Block
 (Context AI Anchoring)</h3>
-<pre class="peg"><code>Grounding            &lt;- &#39;GROUNDING&#39; &#39;{&#39; GroundingField* &#39;}&#39;
-GroundingField       &lt;- &#39;DOMAIN&#39; STRING &#39;;&#39;? / &#39;KEY_CONCEPTS&#39; StringList &#39;;&#39;? / &#39;DIALECT&#39; IDENTIFIER &#39;;&#39;? / &#39;PRECISION_LEVEL&#39; IDENTIFIER &#39;;&#39;? / &#39;CONSTRAINTS&#39; StringList &#39;;&#39;? / &#39;EXAMPLES&#39; StringList &#39;;&#39;? / DocClause &#39;;&#39;?
-StringList           &lt;- &#39;[&#39; STRING ( &#39;,&#39; STRING )* &#39;]&#39; / STRING ( &#39;,&#39; STRING )*</code></pre>
+<pre class="peg"><code>Grounding &lt;- &#39;GROUNDING&#39; &#39;{&#39; GroundingField* &#39;}&#39;
+GroundingField &lt;- &#39;DOMAIN&#39; STRING &#39;;&#39;?
+StringList &lt;- &#39;[&#39; STRING ( &#39;,&#39; STRING )* &#39;]&#39;</code></pre>
 <h3 id="29-context-default-value-object-defaults">29. Context Default
 (Value Object Defaults)</h3>
-<pre class="peg"><code>ContextDefault       &lt;- &#39;DEFAULT&#39; IDENTIFIER IDENTIFIER &#39;=&#39;
-DefaultFieldValue    &lt;- IDENTIFIER &#39;=&#39; DefaultLiteral
-DefaultLiteral       &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;</code></pre>
+<pre class="peg"><code>ContextDefault &lt;- &#39;DEFAULT&#39; IDENTIFIER IDENTIFIER &#39;=&#39;
+DefaultFieldValue &lt;- IDENTIFIER &#39;=&#39; DefaultLiteral
+DefaultLiteral &lt;- STRING / NUMBER / &#39;TRUE&#39; / &#39;FALSE&#39; / &#39;NULL&#39;</code></pre>
 <h3 id="30-context-map">30. Context Map</h3>
-<pre class="peg"><code>MapBlock             &lt;- &#39;MAP&#39; &#39;{&#39; MapEntry* &#39;}&#39;
-MapEntry             &lt;- LanguageDecl / AclDecl / OhsDecl / ContextRelationship</code></pre>
+<pre class="peg"><code>MapBlock &lt;- &#39;MAP&#39; &#39;{&#39; MapEntry* &#39;}&#39;
+MapEntry &lt;- LanguageDecl</code></pre>
 <h3 id="31-context-relationship">31. Context Relationship</h3>
-<pre class="peg"><code>ContextRelationship  &lt;- IDENTIFIER ( &#39;-&gt;&#39; / &#39;&lt;-&#39; ) IDENTIFIER &#39;:&#39;
-RelationshipType     &lt;- &#39;CUSTOMER_SUPPLIER&#39; / &#39;PARTNERSHIP&#39; / &#39;SHARED_KERNEL&#39; / &#39;CONFORMIST&#39; / &#39;ANTICORRUPTION_LAYER&#39; / &#39;OPEN_HOST_SERVICE&#39; / &#39;PUBLISHED_LANGUAGE&#39; / &#39;SEPARATE_WAYS&#39;
-ViaProtocolClause    &lt;- &#39;VIA&#39; Protocol
-Protocol             &lt;- &#39;GRPC&#39; / &#39;REST&#39; / &#39;EVENTS&#39; / &#39;MESSAGING&#39; / &#39;SHARED_DB&#39;</code></pre>
+<pre class="peg"><code>ContextRelationship &lt;- IDENTIFIER ( &#39;-&gt;&#39; / &#39;&lt;-&#39; ) IDENTIFIER &#39;:&#39;
+RelationshipType &lt;- &#39;CUSTOMER_SUPPLIER&#39;
+ViaProtocolClause &lt;- &#39;VIA&#39; Protocol
+Protocol &lt;- &#39;GRPC&#39; / &#39;REST&#39; / &#39;EVENTS&#39; / &#39;MESSAGING&#39; / &#39;SHARED_DB&#39;</code></pre>
 <h3 id="32-open-host-service-declaration">32. Open Host Service
 Declaration</h3>
-<pre class="peg"><code>OhsDecl              &lt;- IDENTIFIER &#39;PROVIDES&#39; IDENTIFIER &#39;:&#39; &#39;OPEN_HOST_SERVICE&#39;</code></pre>
+<pre class="peg"><code>OhsDecl &lt;- IDENTIFIER &#39;PROVIDES&#39; IDENTIFIER &#39;:&#39; &#39;OPEN_HOST_SERVICE&#39;</code></pre>
 <h3 id="33-published-language-declaration">33. Published Language
 Declaration</h3>
-<pre class="peg"><code>LanguageDecl         &lt;- &#39;LANGUAGE&#39; IDENTIFIER &#39;FORMAT&#39; Format
-Format               &lt;- &#39;PROTOBUF&#39; / &#39;JSON_SCHEMA&#39; / &#39;AVRO&#39; / &#39;XML_SCHEMA&#39;</code></pre>
+<pre class="peg"><code>LanguageDecl &lt;- &#39;LANGUAGE&#39; IDENTIFIER &#39;FORMAT&#39; Format
+Format &lt;- &#39;PROTOBUF&#39; / &#39;JSON_SCHEMA&#39; / &#39;AVRO&#39; / &#39;XML_SCHEMA&#39;</code></pre>
 <h3 id="34-anti-corruption-layer">34. Anti-Corruption Layer</h3>
-<p>35a. MAPPING Block (Brownfield Migration Factory — FTR-080, ADR
-20260224-002) MAPPING blocks define field-level transformations between
-legacy schema structures and Muscovite target entities. Used by the
-migration factory generators to produce type-safe extractor and
-transformer components. Example: MAPPING LegacyCustomer @uuid "..." {
-FROM "legacy_customers" INTO Customer; FIELD customer_id -&gt; id
-COPY_UUID; FIELD fname -&gt; given_name @required COPY; FIELD lname
--&gt; family_name @required COPY; FIELD customer_email -&gt; email
-@unique VALIDATE_EMAIL; FIELD birth_dt -&gt; birth_date COERCE_DATE
-format="MM/dd/yyyy"; FIELD is_active -&gt; active DEFAULT true
-COPY_BOOL; FIELD created_ts -&gt; created_at COERCE_TIMESTAMP; DOC "Maps
-legacy customer table to Patient entity"; } 35b. LEGACY_VIEW (Brownfield
-Extraction — FTR-427, ADR 20260313) LEGACY_VIEW captures the definition
-of a database view discovered during brownfield extraction. The BODY
-clause holds the raw SQL definition as a triple-quoted string.
-SOURCE_TABLES lists the tables the view reads from. CALLS lists stored
-procedures or functions the view references. Example: LEGACY_VIEW
-ActivePatients @uuid "..." { SOURCE_TABLES patients, appointments;
-MATERIALIZED false; DOC "Patients with appointments in the last 30
-days"; BODY """ SELECT p.* FROM patients p JOIN appointments a ON
-a.patient_id = p.id WHERE a.date &gt; NOW() - INTERVAL '30 days' """; }
-35c. LEGACY_PROCEDURE (Brownfield Extraction — FTR-427, ADR 20260313)
-LEGACY_PROCEDURE captures the definition of a stored procedure or
+<pre class="peg"><code>AclDecl &lt;- &#39;ACL&#39; IDENTIFIER &#39;FROM&#39; IDENTIFIER &#39;TO&#39; IDENTIFIER
+Translator &lt;- IDENTIFIER &#39;-&gt;&#39; IDENTIFIER &#39;{&#39; TranslatorMapping* &#39;}&#39;
+TranslatorMapping &lt;- IDENTIFIER &#39;=&#39; MappingExpr &#39;,&#39;?
+MappingExpr &lt;- &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39;</code></pre>
+<h3
+id="35a-mapping-block-brownfield-migration-factory--ftr-080-adr-20260224-002">35a.
+MAPPING Block (Brownfield Migration Factory — FTR-080, ADR
+20260224-002)</h3>
+<p>MAPPING blocks define field-level transformations between legacy
+schema structures and Muscovite target entities. Used by the migration
+factory generators to produce type-safe extractor and transformer
+components. Example: MAPPING LegacyCustomer @uuid "..." { FROM
+"legacy_customers" INTO Customer;</p>
+<p>FIELD customer_id -&gt; id COPY_UUID; FIELD fname -&gt; given_name
+@required COPY; FIELD lname -&gt; family_name @required COPY; FIELD
+customer_email -&gt; email @unique VALIDATE_EMAIL; FIELD birth_dt -&gt;
+birth_date COERCE_DATE format="MM/dd/yyyy"; FIELD is_active -&gt; active
+DEFAULT true COPY_BOOL; FIELD created_ts -&gt; created_at
+COERCE_TIMESTAMP;</p>
+<p>DOC "Maps legacy customer table to Patient entity"; }</p>
+<pre class="peg"><code>MappingBlock &lt;- &#39;MAPPING&#39; IDENTIFIER UuidAnnotation
+MappingBody &lt;- MappingFromInto MappingField* MappingClause*
+MappingFromInto &lt;- &#39;FROM&#39; STRING &#39;INTO&#39; QualifiedIdentifier &#39;;&#39;
+MappingField &lt;- &#39;FIELD&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
+MappingAnnotation &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / UuidAnnotation
+FieldTransform &lt;- &#39;COPY&#39;
+CoerceOptions &lt;- IDENTIFIER &#39;=&#39; STRING
+MappingClause &lt;- DocClause / SynonymsClause</code></pre>
+<h3
+id="35b-legacy_view-brownfield-extraction--ftr-427-adr-20260313">35b.
+LEGACY_VIEW (Brownfield Extraction — FTR-427, ADR 20260313)</h3>
+<p>LEGACY_VIEW captures the definition of a database view discovered
+during brownfield extraction. The BODY clause holds the raw SQL
+definition as a triple-quoted string. SOURCE_TABLES lists the tables the
+view reads from. CALLS lists stored procedures or functions the view
+references. Example: LEGACY_VIEW ActivePatients @uuid "..." {
+SOURCE_TABLES patients, appointments; MATERIALIZED false; DOC "Patients
+with appointments in the last 30 days"; BODY """ SELECT p.* FROM
+patients p JOIN appointments a ON a.patient_id = p.id WHERE a.date &gt;
+NOW() - INTERVAL '30 days' """; }</p>
+<pre class="peg"><code>LegacyView &lt;- &#39;LEGACY_VIEW&#39; IDENTIFIER UuidAnnotation
+LegacyViewBody &lt;- LegacyViewClause*
+LegacyViewClause &lt;- LegacyViewSourceTables
+LegacyViewSourceTables &lt;- &#39;SOURCE_TABLES&#39; IdentifierList &#39;;&#39;
+LegacyViewCalls &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
+LegacyViewMaterialized &lt;- &#39;MATERIALIZED&#39; BooleanLiteral &#39;;&#39;
+LegacyViewBody_ &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;
+IdentifierList &lt;- IDENTIFIER ( &#39;,&#39; IDENTIFIER )*</code></pre>
+<h3
+id="35c-legacy_procedure-brownfield-extraction--ftr-427-adr-20260313">35c.
+LEGACY_PROCEDURE (Brownfield Extraction — FTR-427, ADR 20260313)</h3>
+<p>LEGACY_PROCEDURE captures the definition of a stored procedure or
 function discovered during brownfield extraction. PARAMS declares typed
 parameters with direction (IN/OUT/INOUT). CLASSIFICATION categorizes the
 procedure for migration planning (e.g., 'data_access', 'business_logic',
@@ -846,150 +1785,367 @@ PARAMS ( account_id INTEGER IN, balance DECIMAL(19,4) OUT ); RETURNS
 DECIMAL(19,4); REFERENCES accounts, transactions; CALLS AuditLog;
 CLASSIFICATION "business_logic"; DOC "Calculate current balance from
 transaction history"; BODY """ SELECT SUM(amount) INTO balance FROM
-transactions WHERE account_id = $1 """; } 35d. FOREIGN CONTEXT
-(Anti-Corruption Layer — FTR-144, ADR 20260223) Typed ACL constructs for
-interfacing with external systems. FOREIGN_TYPE declares the shape of
-external data structures. TRANSLATE rules define declarative field-level
-mappings. The TRANSLATE sub-grammar is intentionally restricted: no
-IF/CASE/WHEN, no lambdas, no function calls (except type casts via
-::TYPE). Complex logic belongs in Layer 2 Sidecar files. Example:
-FOREIGN CONTEXT PaymentGateway @uuid "..." { FOREIGN_TYPE
-PaymentResponse @uuid "..." ( transaction_id TEXT NOT_NULL @uuid "...",
-amount_cents INTEGER NOT_NULL @uuid "...", currency_code TEXT NOT_NULL
-@uuid "...", status_text TEXT NOT_NULL @uuid "..." ) DOC "External
-payment gateway response"; TRANSLATE Payment FROM PaymentResponse @uuid
-"..." { id &lt;- transaction_id::UUID, amount &lt;- amount_cents / 100,
-currency &lt;- currency_code, is_approved &lt;- status_text ==
-"APPROVED" }; }</p>
-<pre class="peg"><code>AclDecl              &lt;- &#39;ACL&#39; IDENTIFIER &#39;FROM&#39; IDENTIFIER &#39;TO&#39; IDENTIFIER
-Translator           &lt;- IDENTIFIER &#39;-&gt;&#39; IDENTIFIER &#39;{&#39; TranslatorMapping* &#39;}&#39;
-TranslatorMapping    &lt;- IDENTIFIER &#39;=&#39; MappingExpr &#39;,&#39;?
-MappingExpr          &lt;- &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / &#39;TRANSLATE&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; / IDENTIFIER  # direct field mapping
-MappingBlock         &lt;- &#39;MAPPING&#39; IDENTIFIER UuidAnnotation
-MappingBody          &lt;- MappingFromInto MappingField* MappingClause*
-MappingFromInto      &lt;- &#39;FROM&#39; STRING &#39;INTO&#39; QualifiedIdentifier &#39;;&#39;
-MappingField         &lt;- &#39;FIELD&#39; IDENTIFIER &#39;-&gt;&#39; IDENTIFIER
-MappingAnnotation    &lt;- &#39;@&#39; &#39;REQUIRED&#39; / &#39;@&#39; &#39;UNIQUE&#39; / UuidAnnotation
-FieldTransform       &lt;- &#39;COPY&#39; / &#39;COPY_UUID&#39; / &#39;COPY_BOOL&#39; / &#39;VALIDATE_EMAIL&#39; / &#39;VALIDATE_PHONE&#39; / &#39;VALIDATE_POSTAL_CODE&#39; / &#39;COERCE_DATE&#39; CoerceOptions? / &#39;COERCE_TIMESTAMP&#39; CoerceOptions? / &#39;COERCE_DECIMAL&#39; CoerceOptions? / &#39;DEFAULT&#39; DefaultValue CoerceOptions? / &#39;LOOKUP&#39; &#39;(&#39; IDENTIFIER &#39;)&#39; CoerceOptions?
-CoerceOptions        &lt;- IDENTIFIER &#39;=&#39; STRING
-MappingClause        &lt;- DocClause / SynonymsClause
-LegacyView           &lt;- &#39;LEGACY_VIEW&#39; IDENTIFIER UuidAnnotation
-LegacyViewBody       &lt;- LegacyViewClause*
-LegacyViewClause     &lt;- LegacyViewSourceTables / LegacyViewCalls / LegacyViewMaterialized / LegacyViewBody_ / Field / DocClause
-LegacyViewSourceTables &lt;- &#39;SOURCE_TABLES&#39; IdentifierList &#39;;&#39;
-LegacyViewCalls      &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
-LegacyViewMaterialized &lt;- &#39;MATERIALIZED&#39; BooleanLiteral &#39;;&#39;
-LegacyViewBody_      &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;
-IdentifierList       &lt;- IDENTIFIER ( &#39;,&#39; IDENTIFIER )*
-LegacyProcedure      &lt;- &#39;LEGACY_PROCEDURE&#39; IDENTIFIER UuidAnnotation
-LegacyProcBody       &lt;- LegacyProcClause*
-LegacyProcClause     &lt;- LegacyProcParams / LegacyProcReturns / LegacyProcReferences / LegacyProcCalls / LegacyProcClassification / LegacyProcBody_ / DocClause
-LegacyProcParams     &lt;- &#39;PARAMS&#39; &#39;(&#39; ProcParam ( &#39;,&#39; ProcParam )* &#39;)&#39; &#39;;&#39;
-ProcParam            &lt;- IDENTIFIER TypeSpec ParamDirection
-ParamDirection       &lt;- &#39;IN&#39; / &#39;OUT&#39; / &#39;INOUT&#39;
-LegacyProcReturns    &lt;- &#39;RETURNS&#39; TypeSpec &#39;;&#39;
+transactions WHERE account_id = $1 """; }</p>
+<pre class="peg"><code>LegacyProcedure &lt;- &#39;LEGACY_PROCEDURE&#39; IDENTIFIER UuidAnnotation
+LegacyProcBody &lt;- LegacyProcClause*
+LegacyProcClause &lt;- LegacyProcParams
+LegacyProcParams &lt;- &#39;PARAMS&#39; &#39;(&#39; ProcParam ( &#39;,&#39; ProcParam )* &#39;)&#39; &#39;;&#39;
+ProcParam &lt;- IDENTIFIER TypeSpec ParamDirection
+ParamDirection &lt;- &#39;IN&#39; / &#39;OUT&#39; / &#39;INOUT&#39;
+LegacyProcReturns &lt;- &#39;RETURNS&#39; TypeSpec &#39;;&#39;
 LegacyProcReferences &lt;- &#39;REFERENCES&#39; IdentifierList &#39;;&#39;
-LegacyProcCalls      &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
+LegacyProcCalls &lt;- &#39;CALLS&#39; IdentifierList &#39;;&#39;
 LegacyProcClassification &lt;- &#39;CLASSIFICATION&#39; STRING &#39;;&#39;
-LegacyProcBody_      &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;
-ForeignContext       &lt;- &#39;FOREIGN&#39; &#39;CONTEXT&#39; IDENTIFIER UuidAnnotation
-ForeignContextItem   &lt;- ForeignType / TranslateRule / DocClause
-ForeignType          &lt;- &#39;FOREIGN_TYPE&#39; IDENTIFIER UuidAnnotation
-TranslateRule        &lt;- &#39;TRANSLATE&#39; QualifiedIdentifier &#39;FROM&#39; QualifiedIdentifier
-FieldMappingList     &lt;- FieldMapping ( &#39;,&#39; FieldMapping )* &#39;,&#39;?
-FieldMapping         &lt;- IDENTIFIER &#39;&lt;-&#39; TranslateExpr
-TranslateExpr        &lt;- TranslateArith / TranslateComparison / TranslateConcat / TranslateCast / TranslateNull / QualifiedIdentifier  # simple field reference
-TranslateCast        &lt;- QualifiedIdentifier &#39;::&#39; IDENTIFIER
-TranslateArith       &lt;- QualifiedIdentifier ( &#39;+&#39; / &#39;-&#39; / &#39;*&#39; / &#39;/&#39; ) ( NUMBER / QualifiedIdentifier )
-TranslateComparison  &lt;- QualifiedIdentifier &#39;==&#39; STRING
-TranslateConcat      &lt;- QualifiedIdentifier &#39;||&#39; ( STRING / QualifiedIdentifier )
-TranslateNull        &lt;- QualifiedIdentifier &#39;??&#39; ( STRING / NUMBER )</code></pre>
-<hr />
-<h2 id="examples-from-exampleshello-world">Examples (from
-<code>examples/hello-world/</code>)</h2>
-<p>These examples are extracted from the <a
-href="../examples/hello-world/">hello-world</a> project — a minimal
-working Muscovite project.</p>
-<h3 id="entity-with-relationships">Entity with Relationships</h3>
-<h3 id="aggregate-with-embedded-children">Aggregate with Embedded
-Children</h3>
-<h3 id="lookup-table">Lookup Table</h3>
-<pre class="ddd"><code>LOOKUP_TABLE Priority @uuid &quot;...&quot;
-    SEED_JSON &quot;seeds/basedata/priority.json&quot;
-    DOC &quot;Priority levels for tasks&quot;;</code></pre>
-<h3 id="domain-event">Domain Event</h3>
-<h3 id="embedded-child-entity">Embedded Child Entity</h3>
-<hr />
-<h2 id="forbidden-patterns">Forbidden Patterns</h2>
-<table>
-<thead>
-<tr>
-<th>❌ Pattern</th>
-<th>✅ Alternative</th>
-<th>ADR</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>VARCHAR(n)</td>
-<td>TEXT</td>
-<td>20251223</td>
-</tr>
-<tr>
-<td>TIMESTAMP (no TZ)</td>
-<td>TIMESTAMPTZ</td>
-<td>20251223</td>
-</tr>
-<tr>
-<td>JSON/JSONB columns</td>
-<td>Typed fields</td>
-<td>—</td>
-</tr>
-<tr>
-<td>CHECK-based enums</td>
-<td>LOOKUP_TABLE</td>
-<td>20260116</td>
-</tr>
-<tr>
-<td>Implicit FK from _id</td>
-<td>Explicit RELATIONSHIPS {}</td>
-<td>20260106</td>
-</tr>
-<tr>
-<td>Stored procedures</td>
-<td>Domain services (C++)</td>
-<td>20260120</td>
-</tr>
-<tr>
-<td>Manual edits to generated code</td>
-<td>Fix the generator</td>
-<td>—</td>
-</tr>
-<tr>
-<td>Runtime lookup for framework constants</td>
-<td>Compile-time lookup:: constants</td>
-<td>20260212</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="related-documents">Related Documents</h2>
-<ul>
-<li><a
-href="../dslgen/grammar/muscovite.peg"><code>dslgen/grammar/muscovite.peg</code></a>
-— Formal PEG grammar (authoritative)</li>
-<li><a href="GROUND-TRUTH.html">GROUND-TRUTH.md</a> — Racket IR structs,
-type mappings, naming conventions</li>
-<li><a href="CONTEXT.html">CONTEXT.md</a> — AI-first project context</li>
-<li><a href="VISION.html">VISION.md</a> — Architectural vision with
-extended examples</li>
-<li><a href="adr/">Architecture Decision Records</a> — Design
-rationale</li>
-</ul>
-<hr />
-<p><em>Auto-generated by
-<code>dslgen/tools/generate-dsl-reference.rkt</code> from PEG grammar +
-type registry + example files.</em></p>
+LegacyProcBody_ &lt;- &#39;BODY&#39; ( TRIPLE_STRING / STRING ) &#39;;&#39;</code></pre>
+<h3
+id="35d-foreign-context-anti-corruption-layer--ftr-144-adr-20260223">35d.
+FOREIGN CONTEXT (Anti-Corruption Layer — FTR-144, ADR 20260223)</h3>
+<p>Typed ACL constructs for interfacing with external systems.
+FOREIGN_TYPE declares the shape of external data structures. TRANSLATE
+rules define declarative field-level mappings. The TRANSLATE sub-grammar
+is intentionally restricted: no IF/CASE/WHEN, no lambdas, no function
+calls (except type casts via ::TYPE). Complex logic belongs in Layer 2
+Sidecar files. Example: FOREIGN CONTEXT PaymentGateway @uuid "..." {
+FOREIGN_TYPE PaymentResponse @uuid "..." ( transaction_id TEXT NOT_NULL
+@uuid "...", amount_cents INTEGER NOT_NULL @uuid "...", currency_code
+TEXT NOT_NULL @uuid "...", status_text TEXT NOT_NULL @uuid "..." ) DOC
+"External payment gateway response"; TRANSLATE Payment FROM
+PaymentResponse @uuid "..." { id &lt;- transaction_id::UUID, amount
+&lt;- amount_cents / 100, currency &lt;- currency_code, is_approved
+&lt;- status_text == "APPROVED" }; }</p>
+<pre class="peg"><code>ForeignContext &lt;- &#39;FOREIGN&#39; &#39;CONTEXT&#39; IDENTIFIER UuidAnnotation
+ForeignContextItem &lt;- ForeignType / TranslateRule / DocClause
+ForeignType &lt;- &#39;FOREIGN_TYPE&#39; IDENTIFIER UuidAnnotation
+TranslateRule &lt;- &#39;TRANSLATE&#39; QualifiedIdentifier &#39;FROM&#39; QualifiedIdentifier
+FieldMappingList &lt;- FieldMapping ( &#39;,&#39; FieldMapping )* &#39;,&#39;?
+FieldMapping &lt;- IDENTIFIER &#39;&lt;-&#39; TranslateExpr
+TranslateExpr &lt;- TranslateArith
+TranslateCast &lt;- QualifiedIdentifier &#39;::&#39; IDENTIFIER
+TranslateArith &lt;- QualifiedIdentifier ( &#39;+&#39; / &#39;-&#39; / &#39;*&#39; / &#39;/&#39; ) ( NUMBER / QualifiedIdentifier )
+TranslateComparison &lt;- QualifiedIdentifier &#39;==&#39; STRING
+TranslateConcat &lt;- QualifiedIdentifier &#39;||&#39; ( STRING / QualifiedIdentifier )
+TranslateNull &lt;- QualifiedIdentifier &#39;??&#39; ( STRING / NUMBER )</code></pre>
+<h3
+id="36-concurrency-control-block-optimistic-locking--advisory-locks--ftr-062">36.
+Concurrency Control Block (Optimistic Locking + Advisory Locks —
+FTR-062)</h3>
+<p>Configurable at three levels with inheritance: Context level —
+default for all aggregates in the context Aggregate level — override for
+a specific aggregate Entity level — override for a specific entity
+Nested entities inherit from aggregate root. Aggregate roots inherit
+from context default. No CONCURRENCY block = off (backward compatible).
+Example: CONTEXT Patient @uuid "..." { CONCURRENCY { OPTIMISTIC version;
+ADVISORY; LOCK_TIMEOUT "5m"; } ENTITY Patient @uuid "..." IDENTIFIED_BY
+id (...) -- inherits OPTIMISTIC + ADVISORY from context } AGGREGATE
+Order @uuid "..." ROOT Order CONCURRENCY { OPTIMISTIC version; } DOC
+"Order with optimistic locking only";</p>
+<pre class="peg"><code>ConcurrencyBlock &lt;- &#39;CONCURRENCY&#39; &#39;{&#39; ConcurrencyClause+ &#39;}&#39;
+ConcurrencyClause &lt;- OptimisticClause
+OptimisticClause &lt;- &#39;OPTIMISTIC&#39; IDENTIFIER &#39;;&#39;          # version field name
+AdvisoryClause &lt;- &#39;ADVISORY&#39; &#39;;&#39;
+LockTimeoutClause &lt;- &#39;LOCK_TIMEOUT&#39; STRING &#39;;&#39;            # e.g., &quot;5m&quot;, &quot;30s&quot;</code></pre>
+<h3 id="36b-bitemporal-data-support-adr-20260221-ftr-107">36b.
+Bitemporal Data Support (ADR 20260221, FTR-107)</h3>
+<p>Declares dual-timeline temporal semantics on an entity. VALID_TIME:
+application-controlled time range (business validity). SYSTEM_TIME AUTO:
+auto-managed system transaction time. GRANULARITY: MICROSECOND (default)
+| MILLISECOND | SECOND Example: ENTITY Contract @uuid "..."
+IDENTIFIED_BY id (...) BITEMPORAL { VALID_TIME valid_from, valid_to;
+SYSTEM_TIME AUTO; GRANULARITY MICROSECOND; }</p>
+<pre class="peg"><code>BitemporalBlock &lt;- &#39;BITEMPORAL&#39; &#39;{&#39; BitemporalItem+ &#39;}&#39;
+BitemporalItem &lt;- ValidTimeClause
+ValidTimeClause &lt;- &#39;VALID_TIME&#39; IDENTIFIER &#39;,&#39; IDENTIFIER &#39;;&#39;
+SystemTimeClause &lt;- &#39;SYSTEM_TIME&#39; &#39;AUTO&#39; &#39;;&#39;
+GranularityClause &lt;- &#39;GRANULARITY&#39; GranularityUnit &#39;;&#39;
+GranularityUnit &lt;- &#39;MICROSECOND&#39; / &#39;MILLISECOND&#39; / &#39;SECOND&#39;
+StrategyClause &lt;- &#39;STRATEGY&#39; StrategyType &#39;;&#39;
+StrategyType &lt;- &#39;SNAPSHOT&#39; / &#39;DELTA&#39; / &#39;EVENT_SOURCED&#39;</code></pre>
+<h3 id="36-sql-expression-opaque-fragments">36. SQL Expression (Opaque
+Fragments)</h3>
+<p>SQL expressions are collected as raw token sequences until a
+terminating keyword is encountered at parenthesis depth 0. The parser
+does NOT deeply parse SQL — it treats these as opaque strings.
+Terminators: DOC, SYNONYMS, CHECK, RELATIONSHIPS, USES, HAS, EMITS,
+REQUIRES, THEN, OTHERWISE, RETRY, TIMEOUT, ;, ), }</p>
+<pre class="peg"><code>SqlExpression &lt;- ( !SqlTerminator SqlToken )+
+SqlTerminator &lt;- &amp;( &#39;DOC&#39; / &#39;SYNONYMS&#39; / &#39;CHECK&#39; / &#39;RELATIONSHIPS&#39;
+SqlToken &lt;- STRING / NUMBER / IDENTIFIER / KEYWORD / OPERATOR</code></pre>
+<h3 id="37-expression-grammar-for-check-constraints-where-clauses">37.
+Expression Grammar (for CHECK constraints, WHERE clauses)</h3>
+<p>Precedence-climbing expression parser used internally. Precedence
+(highest to lowest): 6: * / % 5: + - 4: &lt; &lt;= &gt; &gt;= IN NOT_IN
+BETWEEN IS_EMPTY INTERSECTS SUBSET_OF CONTAINS_ALL 3: = != &lt;&gt; ==
+&lt;=&gt; LIKE MATCHES ~ 2: AND &amp;&amp; 1: OR || ── Computation
+expressions (Tier 2 — ADR 20260307-functional-expression-language) ──
+List Comprehensions (Tier 3 — ADR
+20260307-functional-expression-language) Lambda expressions are
+single-expression, no closures over mutable state. Bounded by collection
+length — preserves non-Turing-complete guarantee. ── Aggregation
+Built-ins (Tier 3 — ADR 20260307-functional-expression-language,
+FTR-299) Single-argument aggregate functions over typed collections.</p>
+<pre class="peg"><code>Expression &lt;- OrExpr
+OrExpr &lt;- AndExpr ( ( &#39;OR&#39; / &#39;||&#39; ) AndExpr )*
+AndExpr &lt;- CompareExpr ( ( &#39;AND&#39; / &#39;&amp;&amp;&#39; ) CompareExpr )*
+CompareExpr &lt;- RangeExpr ( CompareOp RangeExpr )*
+CompareOp &lt;- &#39;=&#39; / &#39;!=&#39; / &#39;&lt;&gt;&#39; / &#39;LIKE&#39; / &#39;MATCHES&#39; / &#39;~&#39;
+RangeExpr &lt;- AddExpr ( CollectionOp / RangeOp AddExpr )*
+CollectionOp &lt;- &#39;NOT&#39; &#39;IN&#39; ListLiteral
+RangeOp &lt;- &#39;&lt;&#39; / &#39;&lt;=&#39; / &#39;&gt;&#39; / &#39;&gt;=&#39; / &#39;BETWEEN&#39;
+ListLiteral &lt;- &#39;(&#39; Expression ( &#39;,&#39; Expression )* &#39;)&#39;
+ListOrExpr &lt;- ListLiteral / AddExpr
+AddExpr &lt;- MulExpr ( ( &#39;+&#39; / &#39;-&#39; ) MulExpr )*
+MulExpr &lt;- UnaryExpr ( ( &#39;*&#39; / &#39;/&#39; / &#39;%&#39; ) UnaryExpr )*
+UnaryExpr &lt;- ( &#39;NOT&#39; / &#39;!&#39; / &#39;-&#39; ) UnaryExpr
+PrimaryExpr &lt;- &#39;(&#39; Expression &#39;)&#39;
+IfExpr &lt;- &#39;IF&#39; Expression &#39;THEN&#39; Expression &#39;ELSE&#39; Expression
+LetExpr &lt;- &#39;LET&#39; IDENTIFIER &#39;=&#39; Expression &#39;IN&#39; Expression
+MatchExpr &lt;- &#39;MATCH&#39; Expression &#39;{&#39; MatchCase+ DefaultCase &#39;}&#39;
+MatchCase &lt;- &#39;CASE&#39; Expression &#39;=&gt;&#39; Expression &#39;,&#39;?
+DefaultCase &lt;- &#39;DEFAULT&#39; &#39;=&gt;&#39; Expression &#39;,&#39;?
+MapExpr &lt;- &#39;MAP&#39; &#39;(&#39; Expression &#39;,&#39; IDENTIFIER &#39;-&gt;&#39; Expression &#39;)&#39;
+FilterExpr &lt;- &#39;FILTER&#39; &#39;(&#39; Expression &#39;,&#39; IDENTIFIER &#39;-&gt;&#39; Expression &#39;)&#39;
+ReduceExpr &lt;- &#39;REDUCE&#39; &#39;(&#39; Expression &#39;,&#39; Expression &#39;,&#39; IDENTIFIER IDENTIFIER &#39;-&gt;&#39; Expression &#39;)&#39;
+AggregationCall &lt;- (&#39;SUM&#39; / &#39;COUNT&#39; / &#39;MIN&#39; / &#39;MAX&#39; / &#39;AVG&#39;) &#39;(&#39; Expression &#39;)&#39;</code></pre>
+<h3 id="38-doc-and-synonyms-clauses">38. DOC and SYNONYMS Clauses</h3>
+<pre class="peg"><code>DocClause &lt;- &#39;DOC&#39; STRING
+SynonymsClause &lt;- &#39;SYNONYMS&#39; STRING ( &#39;,&#39; STRING )*</code></pre>
+<h3 id="39-qualified-identifier">39. Qualified Identifier</h3>
+<p>Context.Entity or just Entity</p>
+<pre class="peg"><code>QualifiedIdentifier &lt;- IDENTIFIER ( &#39;.&#39; IDENTIFIER )?</code></pre>
+<h3 id="40-contextual-keywords">40. Contextual Keywords</h3>
+<p>These keywords can appear as identifiers in field-name position:</p>
+<pre class="peg"><code>ContextualKeyword &lt;- &#39;POINT&#39; / &#39;LINESTRING&#39; / &#39;POLYGON&#39; / &#39;GEOMETRY&#39; / &#39;GEOGRAPHY&#39;</code></pre>
+<h3 id="41-lexical-terminals">41. Lexical Terminals</h3>
+<p>All identifiers are checked case-insensitively against the keyword
+set and promoted to keyword tokens</p>
+<pre class="peg"><code>IDENTIFIER &lt;- [a-zA-Z_] [a-zA-Z0-9_-]*
+STRING &lt;- &#39;&quot;&#39; ( &#39;\\&#39; . / !&#39;&quot;&#39; . )* &#39;&quot;&#39;
+TRIPLE_STRING &lt;- &#39;&quot;&quot;&quot;&#39; ( !&#39;&quot;&quot;&quot;&#39; . )* &#39;&quot;&quot;&quot;&#39;
+NUMBER &lt;- &#39;-&#39;? [0-9]+ ( &#39;.&#39; [0-9]+ )?
+OPERATOR &lt;- &#39;-&gt;&#39; / &#39;&lt;-&gt;&#39; / &#39;&lt;-&#39; / &#39;&lt;=&#39; / &#39;&gt;=&#39; / &#39;!=&#39; / &#39;&amp;&amp;&#39; / &#39;||&#39;
+KEYWORD &lt;- # see keyword set in lexer.rkt (100+ reserved words)</code></pre>
+<h3 id="42-spacing-and-comments">42. Spacing and Comments</h3>
+<pre class="peg"><code>Spacing &lt;- ( Whitespace / LineComment / BlockComment )*
+Whitespace &lt;- [ \t\n\r]+
+LineComment &lt;- &#39;--&#39; ( ![\n] . )* &#39;\n&#39;?
+BlockComment &lt;- &#39;/*&#39; ( !&#39;*/&#39; . )* &#39;*/&#39;
+BracedBlock &lt;- &#39;{&#39; ( BracedBlock / !&#39;}&#39; . )* &#39;}&#39;    # balanced brace matching
+EOF &lt;- !.</code></pre>
+<h3
+id="43-index-declaration-reserved--not-referenced-from-any-production">43.
+Index Declaration (Reserved — not referenced from any production)</h3>
+<p>Planned future feature. Uncomment and wire into EntityClause when
+implemented. IndexDecl &lt;- 'INDEX' IDENTIFIER 'ON' '(' IndexColumn (
+',' IndexColumn )* ')' IndexColumn &lt;- IDENTIFIER ( 'ASC' / 'DESC'
+)?</p>
+<h3 id="44-lifecycle-hooks-ftr-579">44. Lifecycle Hooks (FTR-579)</h3>
+<p>Entity lifecycle hooks for triggering actions before/after
+insert/update/delete. PROJECT DSL — Sections 45–53 The Project DSL
+(<code>.mus</code> files) configures build targets, output directories,
+databases, capabilities, and context file includes. It is a separate
+language from the Modeling DSL (<code>.ddd</code> files, sections 1–43).
+Grammar-first: ADR 20260211 + ADR 20260213</p>
+<pre class="peg"><code>LifecycleHook &lt;- ( &#39;BEFORE&#39; / &#39;AFTER&#39; )</code></pre>
+<h3 id="45-project-body">45. Project Body</h3>
+<p>A PROJECT block contains metadata (description, version) followed by
+zero or more configuration sections in any order.</p>
+<pre class="peg"><code>ProjectBody &lt;- ProjectItem*
+ProjectItem &lt;- ProjectDescription
+IdempotencyTtl &lt;- &#39;IDEMPOTENCY_TTL&#39; STRING
+ProjectDescription &lt;- &#39;DESCRIPTION&#39; STRING
+ProjectVersion &lt;- &#39;VERSION&#39; STRING</code></pre>
+<h3 id="46-output-configuration">46. Output Configuration</h3>
+<p>Specifies where generated artifacts are written and the Sqitch
+project name. Example: OUTPUT { directory "generated" sqitch_project
+"database" }</p>
+<pre class="peg"><code>OutputBlock &lt;- &#39;OUTPUT&#39; &#39;{&#39; OutputDirective* &#39;}&#39;
+OutputDirective &lt;- OutputDirectory / OutputSqitchProject
+OutputDirectory &lt;- &#39;DIRECTORY&#39; STRING
+OutputSqitchProject &lt;- &#39;SQITCH_PROJECT&#39; STRING</code></pre>
+<h3 id="47-database-targets-ftr-413-resiliency-directives">47. Database
+Targets (FTR-413: resiliency directives)</h3>
+<p>Named database connection targets (development, test, production,
+etc.). Each target has a Sqitch-format URI, optional description, pool
+sizing, and an optional RETRY block for transaction retry policy.
+Example: DATABASE development { URI
+"db:pg://postgres:postgres@localhost:5555/mydb" DESCRIPTION "Local
+Docker PostgreSQL" POOL_MIN 4 POOL_MAX 20 RETRY { MAX_RETRIES 5 BACKOFF
+Exponential BASE "100ms" MAX "5s" ON_CONNECTION_ERROR true
+ON_SERIALIZATION_FAILURE true ON_DEADLOCK true MIN_REMAINING "200ms" }
+}</p>
+<pre class="peg"><code>DatabaseBlock &lt;- &#39;DATABASE&#39; IDENTIFIER &#39;{&#39; DatabaseDirective* &#39;}&#39;
+DatabaseDirective &lt;- DatabaseUri
+DatabaseUri &lt;- &#39;URI&#39; STRING
+DatabaseDescription &lt;- &#39;DESCRIPTION&#39; STRING
+DatabasePoolMin &lt;- &#39;POOL_MIN&#39; NUMBER
+DatabasePoolMax &lt;- &#39;POOL_MAX&#39; NUMBER
+DatabaseRetryBlock &lt;- &#39;RETRY&#39; &#39;{&#39; DatabaseRetryDirective+ &#39;}&#39;
+DatabaseRetryDirective &lt;- DbRetryMaxRetries
+DbRetryMaxRetries &lt;- &#39;MAX_RETRIES&#39; NUMBER
+DbRetryBackoff &lt;- &#39;BACKOFF&#39; BackoffAlgorithm BackoffParams*
+DbRetryOnConnectionError &lt;- &#39;ON_CONNECTION_ERROR&#39; BooleanLiteral
+DbRetryOnSerializationFailure &lt;- &#39;ON_SERIALIZATION_FAILURE&#39; BooleanLiteral
+DbRetryOnDeadlock &lt;- &#39;ON_DEADLOCK&#39; BooleanLiteral
+DbRetryMinRemaining &lt;- &#39;MIN_REMAINING&#39; STRING</code></pre>
+<h3 id="48-generation-options">48. Generation Options</h3>
+<p>Boolean flags controlling which generator targets to run. Open
+format: arbitrary generator names with optional key-value options.
+Example: GENERATE { postgres { output_dir: "custom/" } grpc {}
+my-custom-gen { format: "v2", verbose: "true" } } Legacy format
+(backward compatible): GENERATE { SQITCH TRUE CPP_DBA TRUE }</p>
+<pre class="peg"><code>GenerateBlock &lt;- &#39;GENERATE&#39; &#39;{&#39; (GenerateDirective / GeneratorEntry)* &#39;}&#39;
+GeneratorEntry &lt;- IDENTIFIER &#39;{&#39; GeneratorOption* &#39;}&#39;
+GeneratorOption &lt;- IDENTIFIER &#39;:&#39; (STRING / IDENTIFIER) &#39;,&#39;?
+GenerateDirective &lt;- GenerateTarget BooleanLiteral
+GenerateTarget &lt;- &#39;SQITCH&#39; / &#39;CPP_DBA&#39; / &#39;CPP_DBA_TEST&#39;
+BooleanLiteral &lt;- &#39;TRUE&#39; / &#39;FALSE&#39;</code></pre>
+<h3 id="49-context-file-includes">49. Context File Includes</h3>
+<p>Ordered list of <code>.ddd</code> context files to load and generate
+from. Order matters: dependency contexts must be listed before
+dependents. Example: CONTEXTS { include "contexts/basedata.ddd" include
+"contexts/patient.ddd" }</p>
+<pre class="peg"><code>ContextsBlock &lt;- &#39;CONTEXTS&#39; &#39;{&#39; ContextInclude* &#39;}&#39;
+ContextInclude &lt;- &#39;INCLUDE&#39; STRING</code></pre>
+<h3 id="50-capabilities">50. Capabilities</h3>
+<p>Declares built-in infrastructure modules to enable. Each capability
+loads framework-provided bounded contexts and configures generator
+behavior. Example: CAPABILITIES { security spatial }</p>
+<pre class="peg"><code>CapabilitiesBlock &lt;- &#39;CAPABILITIES&#39; &#39;{&#39; CapabilityName+ &#39;}&#39;
+CapabilityName &lt;- &#39;SECURITY&#39; / &#39;SPATIAL&#39; / &#39;SAGA&#39; / &#39;EVENT_SOURCING&#39;</code></pre>
+<h3 id="51-oauth2-configuration">51. OAuth2 Configuration</h3>
+<p>Configures OAuth2 authentication for the gRPC server. Mode "builtin"
+uses the muscovite security module; mode "external" delegates to an
+external provider. Example: OAUTH2 { enabled true mode "builtin"
+provider "keycloak" realm "<a
+href="https://keycloak.example.com/realms/myapp">https://keycloak.example.com/realms/myapp</a>"
+client_id "muscovite-server" }</p>
+<pre class="peg"><code>OAuth2Block &lt;- &#39;OAUTH2&#39; &#39;{&#39; OAuth2Directive* &#39;}&#39;
+OAuth2Directive &lt;- OAuth2Enabled / OAuth2Mode / OAuth2Provider
+OAuth2Enabled &lt;- &#39;ENABLED&#39; BooleanLiteral
+OAuth2Mode &lt;- &#39;MODE&#39; STRING
+OAuth2Provider &lt;- &#39;PROVIDER&#39; STRING
+OAuth2Realm &lt;- &#39;REALM&#39; STRING
+OAuth2ClientId &lt;- &#39;CLIENT_ID&#39; STRING</code></pre>
+<h3 id="52-frontend-configuration">52. Frontend Configuration</h3>
+<p>Configures UI frontend generation targets with target-specific
+settings. Each frontend block contains key-value directives. Example:
+FRONTENDS { qt_widgets { enabled true app_name "My Desktop App" style
+"Fusion" theme "Light" mdi true startup_context "Dashboard" } }</p>
+<pre class="peg"><code>FrontendsBlock &lt;- &#39;FRONTENDS&#39; &#39;{&#39; FrontendTarget* &#39;}&#39;
+FrontendTarget &lt;- FrontendTargetName &#39;{&#39; FrontendDirective* &#39;}&#39;
+FrontendTargetName &lt;- &#39;QT_WIDGETS&#39; / &#39;QML&#39;
+FrontendDirective &lt;- FrontendEnabled / FrontendAppName / FrontendStyle
+FrontendEnabled &lt;- &#39;ENABLED&#39; BooleanLiteral
+FrontendAppName &lt;- &#39;APP_NAME&#39; STRING
+FrontendStyle &lt;- &#39;STYLE&#39; STRING
+FrontendTheme &lt;- &#39;THEME&#39; STRING
+FrontendMdi &lt;- &#39;MDI&#39; BooleanLiteral
+FrontendStartupContext &lt;- &#39;STARTUP_CONTEXT&#39; STRING</code></pre>
+<h3 id="53-plugin-system--project-level-wiring-ftr-137-adr-20260223">53.
+Plugin System — Project-Level Wiring (FTR-137, ADR 20260223)</h3>
+<p>PLUGIN blocks in .mus connect implementation code to EXTENSION_POINT
+contracts declared in .ddd files. Each plugin names an extension point
+via IMPLEMENTS, declares its transport mechanism, and optionally
+configures a circuit breaker for resilience. Cross-reference validation
+ensures IMPLEMENTS targets resolve to declared EXTENSION_POINTs.
+TRANSPORT compatibility is checked against the extension point's
+CLASS/LAYER/INTERFACE matrix. Example: PLUGIN AuditTrailPlugin {
+IMPLEMENTS Security.AuditLogger TRANSPORT SyncVirtual CIRCUIT_BREAKER {
+FAILURE_THRESHOLD 5 TIMEOUT "30s" BACKOFF Exponential BASE "100ms" MAX
+"10s" JITTER 15 ON_OPEN Warn ON_HALF_OPEN Probe ON_TRIP Emit } }</p>
+<pre class="peg"><code>PluginBlock &lt;- &#39;PLUGIN&#39; IDENTIFIER &#39;{&#39; PluginDirective+ &#39;}&#39;
+PluginDirective &lt;- PluginImplements / PluginTransport / PluginCircuitBreaker
+PluginImplements &lt;- &#39;IMPLEMENTS&#39; QualifiedOrSimpleId
+PluginTransport &lt;- &#39;TRANSPORT&#39; TransportType
+TransportType &lt;- &#39;SYNCVIRTUAL&#39; / &#39;LOCALGRPC&#39; / &#39;QTREMOTEOBJECTS&#39;
+PluginCircuitBreaker &lt;- &#39;CIRCUIT_BREAKER&#39; &#39;{&#39; CbDirective+ &#39;}&#39;
+CbDirective &lt;- CbFailureThreshold / CbTimeout / CbBackoff
+CbFailureThreshold &lt;- &#39;FAILURE_THRESHOLD&#39; NUMBER
+CbTimeout &lt;- &#39;TIMEOUT&#39; STRING
+CbBackoff &lt;- &#39;BACKOFF&#39; BackoffAlgorithm BackoffParams*
+BackoffAlgorithm &lt;- &#39;Exponential&#39; / &#39;Linear&#39; / &#39;Fixed&#39;
+BackoffParams &lt;- &#39;BASE&#39; STRING / &#39;MAX&#39; STRING / &#39;INTERVAL&#39; STRING
+CbOnOpen &lt;- &#39;ON_OPEN&#39; FailureModeAction
+CbOnHalfOpen &lt;- &#39;ON_HALF_OPEN&#39; FailureModeAction
+CbOnTrip &lt;- &#39;ON_TRIP&#39; FailureModeAction
+FailureModeAction &lt;- &#39;Warn&#39; / &#39;Block&#39; / &#39;Ignore&#39; / &#39;Probe&#39; / &#39;Emit&#39;
+QualifiedOrSimpleId &lt;- IDENTIFIER ( &#39;.&#39; IDENTIFIER )?</code></pre>
+<h3 id="54-server-configuration-ftr-232-adr-20260228">54. Server
+Configuration (FTR-232, ADR 20260228)</h3>
+<p>PROJECT-level gRPC/database timeout defaults. Per-aggregate overrides
+via GRPC_DEADLINE on AGGREGATE (FTR-231). Duration format: "Ns"
+(seconds) or "Nms" (milliseconds). Example: SERVER {
+GRPC_DEFAULT_DEADLINE "5s" GRPC_MAX_DEADLINE "30s" DEADLINE_BUFFER
+"100ms" }</p>
+<pre class="peg"><code>ServerBlock &lt;- &#39;SERVER&#39; &#39;{&#39; ServerDirective* &#39;}&#39;
+ServerDirective &lt;- ServerGrpcDefaultDeadline
+ServerGrpcDefaultDeadline &lt;- &#39;GRPC_DEFAULT_DEADLINE&#39; STRING
+ServerGrpcMaxDeadline &lt;- &#39;GRPC_MAX_DEADLINE&#39; STRING
+ServerDeadlineBuffer &lt;- &#39;DEADLINE_BUFFER&#39; STRING</code></pre>
+<h3 id="55-telemetry-configuration-ftr-239">55. Telemetry Configuration
+(FTR-239)</h3>
+<p>OTLP (OpenTelemetry Protocol) observability configuration. Requires
+TELEMETRY capability in CAPABILITIES block. Example: TELEMETRY {
+OTLP_ENDPOINT "http://collector:4317" SERVICE_NAME "fhir-health-server"
+SAMPLING_RATE 1.0 EXPORT_INTERVAL "30s" HEADERS { Authorization "Bearer
+token123" X-Custom "value" } }</p>
+<pre class="peg"><code>TelemetryBlock &lt;- &#39;TELEMETRY&#39; &#39;{&#39; TelemetryItem* &#39;}&#39;
+TelemetryItem &lt;- TelemetryEndpoint
+TelemetryEndpoint &lt;- &#39;OTLP_ENDPOINT&#39; STRING &#39;;&#39;?
+TelemetryServiceName &lt;- &#39;SERVICE_NAME&#39; STRING &#39;;&#39;?
+TelemetrySampling &lt;- &#39;SAMPLING_RATE&#39; NUMBER &#39;;&#39;?
+TelemetryInterval &lt;- &#39;EXPORT_INTERVAL&#39; STRING &#39;;&#39;?
+TelemetryHeaders &lt;- &#39;HEADERS&#39; &#39;{&#39; HeaderItem* &#39;}&#39;
+HeaderItem &lt;- IDENTIFIER STRING &#39;;&#39;?</code></pre>
+<h3 id="56-outbox-configuration-ftr-415">56. Outbox Configuration
+(FTR-415)</h3>
+<p>Reliable event publishing to NATS via outbox pattern. All directives
+are optional — omitting defaults to framework values. Example: OUTBOX {
+ENABLED true NATS_URL "nats://localhost:4222" POLL_INTERVAL "100ms"
+BATCH_SIZE 100 RETRY { MAX_RETRIES 5 BACKOFF Exponential BASE "100ms"
+MAX "30s" } }</p>
+<pre class="peg"><code>OutboxBlock &lt;- &#39;OUTBOX&#39; &#39;{&#39; OutboxDirective* &#39;}&#39;
+OutboxDirective &lt;- OutboxEnabled
+OutboxEnabled &lt;- &#39;ENABLED&#39; BooleanLiteral
+OutboxNatsUrl &lt;- &#39;NATS_URL&#39; STRING
+OutboxPollInterval &lt;- &#39;POLL_INTERVAL&#39; STRING
+OutboxBatchSize &lt;- &#39;BATCH_SIZE&#39; NUMBER
+OutboxRetryBlock &lt;- &#39;RETRY&#39; &#39;{&#39; OutboxRetryDirective+ &#39;}&#39;
+OutboxRetryDirective &lt;- OutboxMaxRetries / OutboxBackoff
+OutboxMaxRetries &lt;- &#39;MAX_RETRIES&#39; NUMBER
+OutboxBackoff &lt;- &#39;BACKOFF&#39; BackoffAlgorithm BackoffParams*</code></pre>
+<h3 id="57a-project-dsl--searchblock-ftr-683">57a. Project DSL —
+SearchBlock (FTR-683)</h3>
+<pre class="peg"><code>SearchBlock &lt;- &#39;SEARCH&#39; &#39;{&#39; SearchDirective* &#39;}&#39;
+SearchDirective &lt;- SearchHost
+SearchHost &lt;- &#39;HOST&#39; STRING
+SearchPort &lt;- &#39;PORT&#39; NUMBER
+SearchIndexPrefix &lt;- &#39;INDEX_PREFIX&#39; STRING
+SearchSslEnabled &lt;- &#39;SSL_ENABLED&#39; BooleanLiteral
+SearchUsername &lt;- &#39;USERNAME&#39; STRING
+SearchPassword &lt;- &#39;PASSWORD&#39; STRING</code></pre>
+<h3 id="57b-project-dsl--messagingblock-ftr-683">57b. Project DSL —
+MessagingBlock (FTR-683)</h3>
+<pre class="peg"><code>MessagingBlock &lt;- &#39;MESSAGING&#39; &#39;{&#39; MessagingDirective* &#39;}&#39;
+MessagingDirective &lt;- MessagingHost
+MessagingHost &lt;- &#39;HOST&#39; STRING
+MessagingPort &lt;- &#39;PORT&#39; NUMBER
+MessagingSubject &lt;- &#39;SUBJECT&#39; STRING
+MessagingQueueGroup &lt;- &#39;QUEUE_GROUP&#39; STRING
+MessagingJetstreamEnabled &lt;- &#39;JETSTREAM_ENABLED&#39; BooleanLiteral</code></pre>
+<h3 id="57c-project-dsl--tlaplusblock-ftr-683">57c. Project DSL —
+TLAPlusBlock (FTR-683)</h3>
+<pre class="peg"><code>TLAPlusBlock &lt;- &#39;TLAPLUS&#39; &#39;{&#39; TLAPlusDirective* &#39;}&#39;
+TLAPlusDirective &lt;- TLAPlusSpecPath
+TLAPlusSpecPath &lt;- &#39;SPEC_PATH&#39; STRING
+TLAPlusInvariant &lt;- &#39;INVARIANT&#39; STRING
+TLAPlusMaxDepth &lt;- &#39;MAX_DEPTH&#39; NUMBER
+TLAPlusWorkers &lt;- &#39;WORKERS&#39; NUMBER</code></pre>
+<h3 id="58-project-dsl--shared-terminals">58. Project DSL — Shared
+Terminals</h3>
+<p>BooleanLiteral and other shared terminals used by project DSL rules
+are defined above (section 48). STRING, IDENTIFIER, and NUMBER are
+shared with the modeling DSL (section 41).</p>
 
 <footer>
   Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial

@@ -207,7 +207,7 @@ change must respect this separation.</strong></p>
 <tr>
 <td><strong>Layer 0</strong></td>
 <td>The Brain (Generator/IR)</td>
-<td><code>dslgen/</code> (Racket)</td>
+<td><code>toolchain/muscomp/</code> (Racket)</td>
 <td>Defines the DSL IR, owns all templates and code generation</td>
 </tr>
 <tr>
@@ -296,8 +296,8 @@ transition log, gRPC RPCs, Qt state-aware UI</td>
 <h2 id="i-core-ir-structs--summary">I. Core IR Structs — Summary</h2>
 <blockquote>
 <p><strong>Source of truth</strong>:
-<code>dslgen/model/ddd-types.rkt</code>. Read that file directly for
-exact field definitions. Use
+<code>toolchain/muscomp/src/model/ddd-types.cpp/.hpp</code>. Read that
+file directly for exact field definitions. Use
 <code>(make-&lt;struct&gt; name #:field value ...)</code> constructors —
 never positional args.</p>
 </blockquote>
@@ -451,7 +451,7 @@ mappings</td>
 <code>expr-compare</code>, <code>expr-field-ref</code>,
 <code>expr-literal</code>, <code>expr-in-list</code>,
 <code>expr-is-null</code>, <code>expr-func-call</code>. See
-<code>ddd-types.rkt:804–852</code>.</p>
+<code>ddd-types.cpp/.hpp:804–852</code>.</p>
 <h3 id="outbox-pattern-adr-20260120">Outbox Pattern (ADR 20260120)</h3>
 <p>Sagas use <code>PLAN</code> (outbox insert) not direct side-effects.
 Sqitch: <code>{schema}-table-outbox</code>. C++:
@@ -617,8 +617,9 @@ Layers</h3>
 </tr>
 </tbody>
 </table>
-<h3 id="racket-name-converters-dslgenmodelddd-typesrkt">Racket Name
-Converters (dslgen/model/ddd-types.rkt)</h3>
+<h3
+id="racket-name-converters-toolchainmuscompsrcmodelddd-typescpphpp">Racket
+Name Converters (toolchain/muscomp/src/model/ddd-types.cpp/.hpp)</h3>
 <p>Key functions: <code>symbol-&gt;sql-id</code> (snake_case),
 <code>symbol-&gt;cpp-type</code>/<code>symbol-&gt;cpp-class</code>
 (PascalCase), <code>symbol-&gt;cpp-field</code> (camelCase).</p>
@@ -661,38 +662,37 @@ parent)</em> | <em>(via Patient RPCs)</em> |</p>
 Children accessed via parent DomainService. DomainService orchestrates
 the three-tier validation pipeline (FTR-270, ADR 20260307).</p>
 <hr />
-<h2 id="iii-type-mappings-type-registryrkt">III. Type Mappings
-(type-registry.rkt)</h2>
+<h2 id="iii-type-mappings-type-registrycpphpp">III. Type Mappings
+(type-registry.cpp/.hpp)</h2>
 <h3 id="strict-policy">STRICT POLICY</h3>
 <p><strong>Unknown types cause generation to FAIL</strong>. No silent
 fallbacks.</p>
 <h3 id="known-types-registry">Known Types Registry</h3>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> KNOWN-TYPES</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>set</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Primitives</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   &#39;UUID &#39;uuid &#39;String &#39;string &#39;TEXT &#39;Text &#39;text &#39;VARCHAR &#39;varchar</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>   &#39;Integer &#39;integer &#39;INT &#39;int &#39;BIGINT &#39;bigint &#39;Boolean &#39;boolean</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   &#39;Decimal &#39;decimal &#39;NUMERIC &#39;numeric &#39;Money &#39;money</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Temporal</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   &#39;Date &#39;date &#39;DateTime &#39;datetime &#39;Timestamp &#39;timestamp &#39;TIMESTAMPTZ</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   &#39;Interval &#39;interval</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Strong Types (String-based domains)</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   &#39;Email &#39;email &#39;Phone &#39;phone &#39;PostalCode &#39;postalcode &#39;URL &#39;url</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>   &#39;Code &#39;code &#39;NonEmptyString &#39;CountryCode &#39;LanguageCode</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Strong Types (Numeric domains)</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   &#39;PositiveInteger &#39;positiveinteger &#39;PositiveDecimal &#39;positivedecimal</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>   &#39;Latitude &#39;latitude &#39;Longitude &#39;longitude</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Spatial (PostGIS)</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>   &#39;Point &#39;point &#39;LineString &#39;linestring &#39;Polygon &#39;polygon</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>   &#39;Geometry &#39;geometry &#39;Geography &#39;geography</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>   <span class="co">;; Special</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>   &#39;JSON &#39;json &#39;JSONB &#39;jsonb<span class="op">))</span></span></code></pre></div>
+<pre><code>(define KNOWN-TYPES
+  (set
+   ;; Primitives
+   &#39;UUID &#39;uuid &#39;String &#39;string &#39;TEXT &#39;Text &#39;text &#39;VARCHAR &#39;varchar
+   &#39;Integer &#39;integer &#39;INT &#39;int &#39;BIGINT &#39;bigint &#39;Boolean &#39;boolean
+   &#39;Decimal &#39;decimal &#39;NUMERIC &#39;numeric &#39;Money &#39;money
+   
+   ;; Temporal
+   &#39;Date &#39;date &#39;DateTime &#39;datetime &#39;Timestamp &#39;timestamp &#39;TIMESTAMPTZ
+   &#39;Interval &#39;interval
+   
+   ;; Strong Types (String-based domains)
+   &#39;Email &#39;email &#39;Phone &#39;phone &#39;PostalCode &#39;postalcode &#39;URL &#39;url
+   &#39;Code &#39;code &#39;NonEmptyString &#39;CountryCode &#39;LanguageCode
+   
+   ;; Strong Types (Numeric domains)
+   &#39;PositiveInteger &#39;positiveinteger &#39;PositiveDecimal &#39;positivedecimal
+   &#39;Latitude &#39;latitude &#39;Longitude &#39;longitude
+   
+   ;; Spatial (PostGIS)
+   &#39;Point &#39;point &#39;LineString &#39;linestring &#39;Polygon &#39;polygon
+   &#39;Geometry &#39;geometry &#39;Geography &#39;geography
+   
+   ;; Special
+   &#39;JSON &#39;json &#39;JSONB &#39;jsonb))</code></pre>
 <h3 id="type-mapping-table">Type Mapping Table</h3>
 <table>
 <thead>
@@ -935,22 +935,20 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb2-1"><a hr
 <h3 id="accessormutator-patterns-grpc">Accessor/Mutator Patterns
 (gRPC)</h3>
 <p><strong>Reading from proto</strong>:</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>type-&gt;proto-accessor-pattern type-sym<span class="op">)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> type-sym</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>String Integer Boolean<span class="op">)</span> &#39;direct<span class="op">]</span>          <span class="co">; req.field_name()</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>UUID Decimal Email Phone<span class="op">)</span> &#39;value<span class="op">]</span>         <span class="co">; req.field_name().value()</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>DateTime Timestamp<span class="op">)</span> &#39;seconds<span class="op">]</span>             <span class="co">; req.field_name().seconds()</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Date<span class="op">)</span> &#39;date-fields<span class="op">]</span>                       <span class="co">; req.field_name().year(), .month(), .day()</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Point LineString Polygon<span class="op">)</span> &#39;wkt<span class="op">]))</span>         <span class="co">; wkt_to_spatial(req.field_name())</span></span></code></pre></div>
+<pre><code>(define (type-&gt;proto-accessor-pattern type-sym)
+  (case type-sym
+    [(String Integer Boolean) &#39;direct]          ; req.field_name()
+    [(UUID Decimal Email Phone) &#39;value]         ; req.field_name().value()
+    [(DateTime Timestamp) &#39;seconds]             ; req.field_name().seconds()
+    [(Date) &#39;date-fields]                       ; req.field_name().year(), .month(), .day()
+    [(Point LineString Polygon) &#39;wkt]))         ; wkt_to_spatial(req.field_name())</code></pre>
 <p><strong>Writing to proto</strong>:</p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="ex">define</span><span class="fu"> </span><span class="op">(</span>type-&gt;proto-mutator-pattern type-sym<span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span><span class="kw">case</span> type-sym</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>String Integer Boolean<span class="op">)</span> &#39;set<span class="op">]</span>             <span class="co">; req.set_field_name(val)</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>UUID Decimal Email Phone<span class="op">)</span> &#39;mutable-value<span class="op">]</span> <span class="co">; req.mutable_field_name()-&gt;set_value(val)</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>DateTime Timestamp<span class="op">)</span> &#39;mutable-seconds<span class="op">]</span>     <span class="co">; req.mutable_field_name()-&gt;set_seconds(val)</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[(</span>Date<span class="op">)</span> &#39;mutable-date<span class="op">]))</span>                    <span class="co">; set year/month/day</span></span></code></pre></div>
+<pre><code>(define (type-&gt;proto-mutator-pattern type-sym)
+  (case type-sym
+    [(String Integer Boolean) &#39;set]             ; req.set_field_name(val)
+    [(UUID Decimal Email Phone) &#39;mutable-value] ; req.mutable_field_name()-&gt;set_value(val)
+    [(DateTime Timestamp) &#39;mutable-seconds]     ; req.mutable_field_name()-&gt;set_seconds(val)
+    [(Date) &#39;mutable-date]))                    ; set year/month/day</code></pre>
 <hr />
 <h2 id="iv-database-schema-conventions-mandatory">IV. Database Schema
 Conventions (MANDATORY)</h2>
@@ -1181,8 +1179,8 @@ Migrations (ADRs 20260109-*)</h2>
 )</code></pre>
 <h3 id="migration-generation">Migration Generation</h3>
 <div class="sourceCode" id="cb16"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dslgen/migration</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--repo</span> ../../examples/fhir-health</span></code></pre></div>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> toolchain/muscomp/migration</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">muscomp</span> <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--repo</span> ../../examples/fhir-health</span></code></pre></div>
 <p><strong>Detects</strong>: | Change | Detection | Generated SQL |
 |--------|-----------|---------------| | Add field | New UUID |
 <code>ALTER TABLE ADD COLUMN</code> | | Rename field | Same UUID,
@@ -1204,16 +1202,15 @@ Blocks (MEP - Muscovite Embedded Prompts)</h2>
 Guidance</h3>
 <p><strong>Per ADR 20260205</strong>: INSTRUCT blocks embed
 domain-specific AI prompts in the DSL.</p>
-<div class="sourceCode" id="cb17"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="kw">struct</span> instruct-spec</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">(</span>uuid      <span class="co">; String: stable UUID</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>   name      <span class="co">; Symbol: instruction name</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>   intent    <span class="co">; String: natural language intent</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>   inputs    <span class="co">; List of string: inputs</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   output    <span class="co">; Symbol or #f: output type/code</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>   strategy  <span class="co">; Symbol: &#39;deterministic, etc.</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>   doc<span class="op">)</span>      <span class="co">; String or #f</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  #:transparent<span class="op">)</span></span></code></pre></div>
+<pre><code>(struct instruct-spec
+  (uuid      ; String: stable UUID
+   name      ; Symbol: instruction name
+   intent    ; String: natural language intent
+   inputs    ; List of string: inputs
+   output    ; Symbol or #f: output type/code
+   strategy  ; Symbol: &#39;deterministic, etc.
+   doc)      ; String or #f
+  #:transparent)</code></pre>
 <h3 id="dsl-syntax-proposed">DSL Syntax (Proposed)</h3>
 <pre class="ddd"><code>ENTITY Patient (...) {
     INSTRUCT calculate_bmi @uuid &quot;...&quot; (
@@ -1466,85 +1463,85 @@ conclusions</td>
 <td>Copilot rules, points to CONTEXT.md</td>
 </tr>
 <tr>
-<td><code>dslgen/model/ddd-types.rkt</code></td>
+<td><code>toolchain/muscomp/src/model/ddd-types.cpp/.hpp</code></td>
 <td>Core struct definitions (entity, aggregate, field, etc.)</td>
 </tr>
 <tr>
-<td><code>dslgen/model/ir-serialization.rkt</code></td>
+<td><code>toolchain/muscomp/src/model/ir-serialization.cpp/.hpp</code></td>
 <td>JSON IR serialization (all constructs: entity, aggregate,
 relationship, value-object, strong-type, lookup-table, repository,
 service, specification, policy, saga, command, layout-spec)</td>
 </tr>
 <tr>
-<td><code>dslgen/model/type-registry.rkt</code></td>
+<td><code>toolchain/muscomp/src/model/type-registry.cpp/.hpp</code></td>
 <td>Type mappings (DSL → PostgreSQL, C++, Proto, Qt)</td>
 </tr>
 <tr>
-<td><code>dslgen/parser/parser.rkt</code></td>
+<td><code>toolchain/muscomp/src/parser/parser.cpp/.hpp</code></td>
 <td>DSL parser (recursive descent)</td>
 </tr>
 <tr>
-<td><code>dslgen/parser/lexer.rkt</code></td>
+<td><code>toolchain/muscomp/src/parser/lexer.cpp/.hpp</code></td>
 <td>Tokenizer</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/postgres/</code></td>
+<td><code>toolchain/muscomp/src/generators/postgres/</code></td>
 <td>PostgreSQL/Sqitch migration generators</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/cpp/dba/</code></td>
+<td><code>toolchain/muscomp/src/generators/cpp/dba/</code></td>
 <td>C++ DBA layer (entities, repositories, services)</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/grpc/</code></td>
+<td><code>toolchain/muscomp/src/generators/grpc/</code></td>
 <td>gRPC proto + service stubs</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/cmake/cmake-ir.rkt</code></td>
+<td><code>toolchain/muscomp/src/generators/cmake/cmake-ir.cpp/.hpp</code></td>
 <td>CMake IR structs (22 struct types for typed CMake generation)</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/cmake/cmake-emitter.rkt</code></td>
+<td><code>toolchain/muscomp/src/generators/cmake/cmake-emitter.cpp/.hpp</code></td>
 <td>CMake IR → CMakeLists.txt serializer</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/qt/widgets-views.rkt</code></td>
+<td><code>toolchain/muscomp/src/generators/qt/widgets-views.cpp/.hpp</code></td>
 <td>Qt Widgets client</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/qt/quick-views.rkt</code></td>
+<td><code>toolchain/muscomp/src/generators/qt/quick-views.cpp/.hpp</code></td>
 <td>Qt Quick/QML client</td>
 </tr>
 <tr>
-<td><code>dslgen/generators/messaging/nats-subjects.rkt</code></td>
+<td><code>toolchain/muscomp/src/generators/messaging/nats-subjects.cpp/.hpp</code></td>
 <td>NATS subject schema, stream scripts, AsciiDoc (FTR-247)</td>
 </tr>
 <tr>
-<td><code>dslgen/migration/migrate.rkt</code></td>
+<td><code>toolchain/muscomp/migration/migrate.cpp/.hpp</code></td>
 <td>Semantic diff migration CLI</td>
 </tr>
 <tr>
-<td><code>dslgen/migration/diff-model.rkt</code></td>
+<td><code>toolchain/muscomp/migration/diff-model.cpp/.hpp</code></td>
 <td>Model diff algorithm</td>
 </tr>
 <tr>
-<td><code>dslgen/targets/target-config.rkt</code></td>
+<td><code>toolchain/muscomp/targets/target-config.cpp/.hpp</code></td>
 <td>Target config struct + resolution functions</td>
 </tr>
 <tr>
-<td><code>dslgen/targets/qt-widgets-desktop.rkt</code></td>
+<td><code>toolchain/muscomp/targets/qt-widgets-desktop.cpp/.hpp</code></td>
 <td>Qt Widgets Desktop target configuration</td>
 </tr>
 <tr>
-<td><code>dslgen/targets/qt-qml-desktop.rkt</code></td>
+<td><code>toolchain/muscomp/targets/qt-qml-desktop.cpp/.hpp</code></td>
 <td>Qt QML Desktop target configuration</td>
 </tr>
 <tr>
-<td><code>dslgen/tests/test-cmake-emitter.rkt</code></td>
+<td><code>toolchain/muscomp/tests/test-cmake-emitter.cpp/.hpp</code></td>
 <td>CMake emitter unit tests (33 tests, FTR-024)</td>
 </tr>
 <tr>
-<td><code>dslgen/tests/test-generator-coverage.rkt</code></td>
+<td><code>toolchain/muscomp/tests/test-generator-coverage.cpp/.hpp</code></td>
 <td>Generator content pattern tests (55 tests, FTR-026)</td>
 </tr>
 <tr>
@@ -1566,7 +1563,7 @@ service, specification, policy, saga, command, layout-spec)</td>
 <tr>
 <td>IR</td>
 <td>Intermediate Representation — Racket structs in
-<code>dslgen/model/ddd-types.rkt</code></td>
+<code>toolchain/muscomp/src/model/ddd-types.cpp/.hpp</code></td>
 </tr>
 <tr>
 <td>Semantic diff</td>
@@ -1608,7 +1605,7 @@ lines</td>
 <li><label><input type="checkbox" />No manual edits to
 <code>examples/*/generated/</code></label></li>
 <li><label><input type="checkbox" />Type mappings via
-<code>type-registry.rkt</code>, naming via
+<code>type-registry.cpp/.hpp</code>, naming via
 <code>symbol-&gt;cpp-class</code>/<code>symbol-&gt;sql-id</code></label></li>
 <li><label><input type="checkbox" />FKs have explicit
 <code>RELATIONSHIPS</code> block; strings <code>TEXT</code>; datetimes

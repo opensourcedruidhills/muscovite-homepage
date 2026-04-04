@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++26 Contracts for Domain
+Safety — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>C++26 Contracts for Domain Safety</span>
+</nav>
+
+<h1>C++26 Contracts for Domain Safety</h1>
+
+
+<h1 id="c26-contracts-for-domain-safety">C++26 Contracts for Domain
+Safety</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-04</li>
+<li>Tags: c++26, contracts, safety, generators, framework</li>
+</ul>
+<p>Technical Story: Muscovite roadmap v3.0–v3.1 — mapping DSL
+constraints to C++26 contracts.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>C++26 introduces language-level contracts: <code>pre</code>
+(preconditions), <code>post</code> (postconditions), and
+<code>contract_assert</code> (in-body assertions). These replace the
+need for Microsoft GSL (<code>Expects</code>/<code>Ensures</code>) and C
+<code>assert()</code> macros with a standardized, toolchain-integrated
+mechanism.</p>
+<p>Muscovite's DSL already declares constraints (<code>REQUIRED</code>,
+unique fields, value ranges, foreign key relationships) that imply
+runtime invariants. Currently, these constraints are enforced only at
+the database level (NOT NULL, UNIQUE constraints) and partially in
+generated validation code. The C++ layer has no systematic contract
+enforcement — invalid data can propagate through gRPC services and
+repositories before hitting a database error.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>DSL constraints are the canonical truth — contracts should be
+projections of the model</li>
+<li>Contracts catch violations at the C++ API boundary, before database
+round-trips</li>
+<li>Healthcare/geosciences domains require demonstrable safety
+guarantees</li>
+<li>Contract violation semantics must be configurable (enforce vs.
+observe vs. ignore)</li>
+<li>Generated code volume must not explode — contracts should be
+targeted, not exhaustive</li>
+<li>Framework APIs (repository, service_base, type_converters) have
+implicit preconditions that are currently undocumented</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>DSL-driven contracts only</strong> — Generate contracts from
+DSL constraints; no framework changes</li>
+<li><strong>Framework-first contracts</strong> — Add contracts to
+framework APIs; no generator changes</li>
+<li><strong>Both layers</strong> — Contracts in framework APIs (v3.0) +
+generated contracts from DSL (v3.1)</li>
+<li><strong>Adopt-on-touch</strong> — Add contracts when touching code,
+no systematic pass</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Both layers" (option 3), phased:</p>
+<p><strong>Phase 1 (v3.0.0)</strong>: Framework contracts — add
+<code>pre</code>/<code>post</code> to public framework APIs:</p>
+<ul>
+<li><code>repository&lt;T&gt;::insert()</code> —
+<code>pre(!entity.id().is_nil())</code></li>
+<li><code>repository&lt;T&gt;::find_by_id()</code> —
+<code>pre(!id.is_nil())</code></li>
+<li><code>service_base</code> —
+<code>pre(context.is_authenticated())</code></li>
+<li><code>type_converters</code> — <code>pre</code> on nullable-to-value
+conversions</li>
+</ul>
+<p><strong>Phase 2 (v3.1.0)</strong>: Generated contracts from DSL
+constraints:</p>
+<ul>
+<li><code>REQUIRED</code> fields → <code>pre(field.has_value())</code>
+on insert/update methods</li>
+<li>Value ranges (when DSL supports them) →
+<code>pre(value &gt;= min &amp;&amp; value &lt;= max)</code></li>
+<li>Foreign key fields → <code>pre(!fk_id.is_nil())</code> on
+relationship accessors</li>
+<li>Entity invariants → <code>contract_assert</code> in
+constructors</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>DSL constraints enforced at every layer (DB + C++ API +
+contracts)</li>
+<li>Invalid data caught before database round-trip (faster failure,
+clearer errors)</li>
+<li>Systematic documentation of API preconditions (contracts are
+self-documenting)</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Generated code grows (each contract is an additional line per
+function)</li>
+<li>C++26 contract semantics are still debated in the committee (risk of
+C++29 changes)</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="https://herbsutter.com/2025/10/01/my-other-cppcon-talk-video-is-now-available-the-joy-of-c26-contracts-and-some-myth-conceptions/">Herb
+Sutter CppCon 2025 contracts talk</a></li>
+<li>Supersedes: need for Microsoft GSL
+<code>Expects</code>/<code>Ensures</code></li>
+<li>Related: <a
+href="20260404-cpp26-standard-adoption-timeline.html">C++26 adoption
+timeline</a></li>
+<li>Related: ADR 20260327 adopt-on-touch contract policy (Racket
+contracts — same philosophy, different layer)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When adding or modifying public framework APIs (add
+<code>pre</code>/<code>post</code>)</li>
+<li>When generating C++ code from DSL entities with REQUIRED fields or
+relationships</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>v2.x development (C++23 — no contracts syntax available)</li>
+<li>Private/internal helper functions (contracts are for API
+boundaries)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Generator code emits contracts from DSL constraints</li>
+<li>Framework headers have contracts on public APIs</li>
+<li>clang-tidy: enable contract-related diagnostics when available</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>framework/dba/include/muscovite/dba/repository.hpp</code> —
+repository contracts</li>
+<li><code>framework/grpc/include/muscovite/grpc/service_base.hpp</code>
+— service contracts</li>
+<li><code>framework/dba/include/muscovite/dba/type_converters.hpp</code>
+— converter contracts</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

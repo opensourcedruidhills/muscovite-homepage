@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostgreSQL Quantity Storage
+Strategy — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>PostgreSQL Quantity Storage Strategy</span>
+</nav>
+
+<h1>PostgreSQL Quantity Storage Strategy</h1>
+
+
+<h1 id="postgresql-quantity-storage-strategy">PostgreSQL Quantity
+Storage Strategy</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-04</li>
+<li>Tags: units, postgresql, storage, domain-types</li>
+</ul>
+<p>Technical Story: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a>, Decision 3</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When a DSL entity declares
+<code>depth QUANTITY&lt;Length, km&gt;</code>, the PostgreSQL generator
+must decide how to store the quantity value. Two viable strategies
+exist:</p>
+<ul>
+<li><strong>Strategy A</strong>: Use the <code>postgresql-unit</code>
+extension, which provides a native <code>unit</code> column type with
+built-in dimensional analysis
+(<code>SELECT depth @ 'm' FROM drill_hole</code>)</li>
+<li><strong>Strategy B</strong>: Use <code>CREATE DOMAIN</code> types
+(e.g., <code>CREATE DOMAIN length_km AS NUMERIC</code>), which are
+portable across all PostgreSQL installations without extensions</li>
+</ul>
+<p>The choice affects portability, query capabilities, deployment
+complexity, and dimensional safety at the database level.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Portability: many deployments (managed cloud PostgreSQL) cannot
+install extensions</li>
+<li>Dimensional safety: preventing unit confusion at the SQL level</li>
+<li>Query capabilities: unit conversion in SQL
+(<code>SELECT depth @ 'km' FROM ...</code>)</li>
+<li>Deployment complexity: extension installation, version management,
+CI setup</li>
+<li>Licensing: extension must be compatible with AGPL-3.0 + Commercial
+dual license</li>
+<li>DSL philosophy: project-level configuration, not
+one-size-fits-all</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Domain types (portable, default)</strong> —
+<code>CREATE DOMAIN pressure_mmhg AS NUMERIC</code></li>
+<li><strong>postgresql-unit extension</strong> — Native
+<code>unit</code> column type with dimensional analysis</li>
+<li><strong>Both, project-configurable</strong> — Default to domain
+types, opt-in to extension via <code>.mus</code></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Both, project-configurable" (option 3), with domain
+types as the default and postgresql-unit as an opt-in. The storage
+strategy is declared in the <code>.mus</code> project file:</p>
+<pre><code>PROJECT &quot;fhir-health&quot; {
+    -- Default: domain types (portable, no extension needed)
+    QUANTITY_STORAGE domain_types;
+
+    -- Alternative: postgresql-unit extension (full dimensional analysis)
+    -- QUANTITY_STORAGE postgresql_unit;
+}</code></pre>
+<p><strong>Strategy A: postgresql-unit extension</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extension provides the &#39;unit&#39; column type</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> EXTENSION <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> unit;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> vital_sign (</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>          UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    systolic    unit <span class="kw">NOT</span> <span class="kw">NULL</span>,       <span class="co">-- stores &#39;120 mm[Hg]&#39;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    diastolic   unit <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    temperature unit <span class="kw">NOT</span> <span class="kw">NULL</span>        <span class="co">-- stores &#39;37.2 Cel&#39;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Dimensional analysis in SQL:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> systolic @ <span class="st">&#39;Pa&#39;</span> <span class="kw">FROM</span> vital_sign;  <span class="co">-- convert mmHg → Pascal</span></span></code></pre></div>
+<p><strong>Strategy B: Domain types (default)</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> pressure_mmhg <span class="kw">AS</span> <span class="dt">NUMERIC</span>;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> temperature_cel <span class="kw">AS</span> <span class="dt">NUMERIC</span>;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> length_km <span class="kw">AS</span> <span class="dt">NUMERIC</span>;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> drill_hole (</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>          UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid(),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">depth</span>       length_km <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    temperature temperature_cel <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- No in-SQL conversion — C++ layer handles unit conversion</span></span></code></pre></div>
+<h3 id="licensing-note">Licensing Note</h3>
+<p>The <code>postgresql-unit</code> extension is licensed under the
+<strong>PostgreSQL License</strong> (BSD-like), which is compatible with
+both AGPL-3.0 and Commercial licensing. Muscovite does not bundle the
+extension — it generates SQL that uses it when the project opts in.</p>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Default (domain types) works everywhere — no extension installation
+required</li>
+<li>Projects that need in-SQL dimensional analysis can opt into
+postgresql-unit</li>
+<li>Domain types provide semantic naming (<code>length_km</code> vs bare
+<code>NUMERIC</code>)</li>
+<li>Configuration is explicit in <code>.mus</code> — no hidden
+deployment requirements</li>
+<li>Sqitch migrations generated correctly for both strategies</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Two code paths in the PostgreSQL generator (domain types vs
+extension)</li>
+<li>Domain types have no dimensional safety — <code>pressure_mmhg</code>
+and <code>length_km</code> are both <code>NUMERIC</code> underneath, and
+PostgreSQL will not prevent mixing them in arithmetic</li>
+<li>postgresql-unit requires extension installation on every database
+instance</li>
+<li>Testing must cover both strategies</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-domain-types-only-portable">Option 1: Domain Types Only
+(Portable)</h3>
+<p><code>CREATE DOMAIN pressure_mmhg AS NUMERIC</code> — semantic
+naming, no extension required.</p>
+<ul>
+<li>Good, because works on any PostgreSQL installation (including
+managed cloud)</li>
+<li>Good, because no extension version management or CI setup</li>
+<li>Good, because domain types provide semantic naming in DDL and error
+messages</li>
+<li>Good, because Sqitch migrations are standard SQL</li>
+<li>Bad, because no dimensional safety — PostgreSQL treats domains as
+aliases</li>
+<li>Bad, because no in-SQL unit conversion (must be done in C++
+layer)</li>
+<li>Bad, because <code>pressure_mmhg + length_km</code> compiles without
+error in SQL</li>
+</ul>
+<h3 id="option-2-postgresql-unit-extension-only">Option 2:
+postgresql-unit Extension Only</h3>
+<p>Native <code>unit</code> column type with built-in dimensional
+analysis.</p>
+<ul>
+<li>Good, because full dimensional safety in SQL (mixing dimensions is a
+runtime error)</li>
+<li>Good, because in-SQL unit conversion:
+<code>SELECT depth @ 'km' FROM ...</code></li>
+<li>Good, because values self-describe their unit
+(<code>'120 mm[Hg]'</code>)</li>
+<li>Good, because PostgreSQL License (BSD-like) — compatible with
+Muscovite licensing</li>
+<li>Bad, because requires extension installation on every database
+instance</li>
+<li>Bad, because managed cloud PostgreSQL (RDS, Cloud SQL) may not
+support custom extensions</li>
+<li>Bad, because extension version must be tracked and tested</li>
+<li>Bad, because single-vendor dependency for a core storage
+mechanism</li>
+</ul>
+<h3 id="option-3-both-project-configurable">Option 3: Both,
+Project-Configurable</h3>
+<p>Default to domain types; opt-in to postgresql-unit via
+<code>.mus</code> project configuration.</p>
+<ul>
+<li>Good, because portable default — works everywhere out of the
+box</li>
+<li>Good, because projects that need dimensional safety can opt in</li>
+<li>Good, because configuration is explicit and auditable in
+<code>.mus</code> file</li>
+<li>Good, because each strategy generates idiomatic SQL for its
+approach</li>
+<li>Bad, because two code paths in the PostgreSQL generator</li>
+<li>Bad, because both strategies must be tested in CI</li>
+<li>Bad, because project owners must understand the trade-off to
+choose</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Origin: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a></li>
+<li>Related: <a
+href="20260404-qudt-driven-unit-standard-library.html">QUDT-driven unit
+standard library</a></li>
+<li>Related: <a href="20260404-typed-proto-quantity-messages.html">Typed
+proto quantity messages</a></li>
+<li>Related: <a
+href="20260404-quantity-storage-unit-convention.html">Quantity storage
+unit convention</a></li>
+<li>Related: <a href="20260404-dsl-quantity-syntax-design.html">DSL
+quantity syntax design</a></li>
+<li>Related: ADR 20251223 — <a
+href="20251223-use-text-for-all-postgresql-strings.html">Use TEXT for all
+PostgreSQL strings</a></li>
+<li>Related: ADR 20260108 — <a href="20260108-no-postgresql-enums.html">No
+PostgreSQL enums</a></li>
+<li>External: <a
+href="https://github.com/df7cb/postgresql-unit">postgresql-unit
+extension</a> (PostgreSQL License)</li>
+<li>External: <a href="https://ucum.org/">UCUM — Unified Code for Units
+of Measure</a></li>
+<li>External: <a href="https://www.iso.org/standard/76921.html">ISO
+80000 — Quantities and units</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating PostgreSQL DDL (Sqitch plans) for entities with
+<code>QUANTITY</code> fields</li>
+<li>When generating <code>CREATE DOMAIN</code> statements for quantity
+types</li>
+<li>When generating SQL that references postgresql-unit extension
+features</li>
+<li>When modifying the <code>.mus</code> project file schema to add
+<code>QUANTITY_STORAGE</code> setting</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>When generating protobuf messages (see <a
+href="20260404-typed-proto-quantity-messages.html">typed proto
+messages</a>)</li>
+<li>When generating C++ code (C++ always uses mp-units regardless of
+storage strategy)</li>
+<li>When working with non-quantity fields (TEXT, DECIMAL, DATE,
+etc.)</li>
+<li>When working on the QUDT-to-DDD generator tool</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PostgreSQL generator reads <code>QUANTITY_STORAGE</code> from
+<code>.mus</code> project configuration</li>
+<li>Default is <code>domain_types</code> if not specified</li>
+<li>Generator emits <code>CREATE EXTENSION IF NOT EXISTS unit;</code>
+only when <code>postgresql_unit</code> is selected</li>
+<li>Racket tests verify both strategies produce valid SQL</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/postgres/quantity.rkt</code> — PostgreSQL
+quantity DDL generator (to be created)</li>
+<li><code>dslgen/generators/postgres/sqitch-unified.rkt</code> — Sqitch
+plan generator (to be modified)</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — IR types for quantity
+fields (to be extended)</li>
+<li><code>dslgen/model/mus-types.rkt</code> — Project configuration
+types (to be extended with <code>QUANTITY_STORAGE</code>)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -397,15 +397,15 @@ type checker needs sequential package loading.</p>
 evidence across passes requires consistent ordering.</p>
 <h2 id="14-grammar-synchronization">14. Grammar Synchronization</h2>
 <p>🟡 <strong>The PEG grammar (<code>grammar/muscovite.peg</code>) must
-be synced from <code>dslgen/grammar/muscovite.peg</code></strong> at
-build time. A <code>go generate</code> directive or Makefile target
-handles this.</p>
+be synced from <code>grammar/muscovite.peg</code></strong> at build
+time. A <code>go generate</code> directive or Makefile target handles
+this.</p>
 <p>🟡 <strong>The Go PEG validator is regenerated</strong> when the
 grammar changes. CI enforces that the generated validator matches the
 current grammar.</p>
 <p>🔴 <strong>FORBIDDEN</strong>: Modifying the grammar copy in the
-go-extractor — the <code>dslgen/grammar/</code> copy is the single
-source of truth (ADR 20260211).</p>
+go-extractor — the <code>toolchain/muscomp/grammar/</code> copy is the
+single source of truth (ADR 20260211).</p>
 <h2 id="15-spdx-headers">15. SPDX Headers</h2>
 <p>🟡 <strong>All Go source files</strong> must include the SPDX
 header:</p>

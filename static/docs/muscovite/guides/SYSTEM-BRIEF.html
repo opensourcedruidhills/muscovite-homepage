@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 2.8.0 | <strong>Generated</strong>:
-2026-04-04 | <strong>Commit</strong>: 3dbc4d7e |
+<p><strong>Version</strong>: 2.9.0 | <strong>Generated</strong>:
+2026-04-04 | <strong>Commit</strong>: 76378f4c |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -127,18 +127,21 @@ compiler</strong>. It compiles declarative domain models
 (<code>.ddd</code> files) into complete, deployable software
 systems.</p>
 <p><strong>Generator targets</strong> (from
-<code>dslgen/generators/</code>):</p>
+<code>toolchain/muscomp/src/generators/</code>):</p>
 <ul>
-<li><strong>cmake</strong> (5 modules, 2087 lines)</li>
-<li><strong>cpp</strong> (80 modules, 23279 lines)</li>
-<li><strong>docs</strong> (13 modules, 5298 lines)</li>
-<li><strong>grpc</strong> (31 modules, 8664 lines)</li>
-<li><strong>messaging</strong> (2 modules, 596 lines)</li>
-<li><strong>postgres</strong> (53 modules, 8959 lines)</li>
-<li><strong>qt</strong> (60 modules, 18156 lines)</li>
-<li><strong>search</strong> (4 modules, 1010 lines)</li>
-<li><strong>standalone-infra</strong> (3 modules, 700 lines)</li>
-<li><strong>tlaplus</strong> (4 modules, 784 lines)</li>
+<li><strong>cmake</strong> (3 files, 18 lines)</li>
+<li><strong>cpp</strong> (69 files, 718 lines)</li>
+<li><strong>diagrams</strong> (8 files, 80 lines)</li>
+<li><strong>docs</strong> (7 files, 54 lines)</li>
+<li><strong>grpc</strong> (27 files, 353 lines)</li>
+<li><strong>messaging</strong> (5 files, 36 lines)</li>
+<li><strong>postgres</strong> (33 files, 453 lines)</li>
+<li><strong>proto_ir</strong> (3 files, 19 lines)</li>
+<li><strong>qt</strong> (63 files, 701 lines)</li>
+<li><strong>search</strong> (9 files, 73 lines)</li>
+<li><strong>standalone</strong> (7 files, 61 lines)</li>
+<li><strong>testdata</strong> (9 files, 204 lines)</li>
+<li><strong>tlaplus</strong> (9 files, 77 lines)</li>
 </ul>
 <p><strong>Dual-licensed</strong>: AGPL-3.0 + Commercial. Copyright ©
 2025-2026 Johannes Lochmann.</p>
@@ -156,7 +159,7 @@ Governance</h2>
 <tbody>
 <tr>
 <td><strong>Layer 0 — Brain</strong></td>
-<td>`dslgen/` (Racket)</td>
+<td>`toolchain/muscomp/` (C++)</td>
 <td>DSL parser, IR model, all generators</td>
 </tr>
 <tr>
@@ -194,8 +197,8 @@ lifecycle.</td>
 <td>390</td>
 </tr>
 <tr>
-<td>Known types (type-registry.rkt)</td>
-<td>53</td>
+<td>Known types</td>
+<td>0</td>
 </tr>
 <tr>
 <td>DSL model files (.ddd)</td>
@@ -215,13 +218,12 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>234</td>
+<td>244</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--racket-144605-lines">Layer 0 — Racket (144605
-lines)</h3>
+<h3 id="layer-0--muscomp-8101-lines">Layer 0 — muscomp (8101 lines)</h3>
 <table>
 <thead>
 <tr>
@@ -231,40 +233,28 @@ lines)</h3>
 </thead>
 <tbody>
 <tr>
-<td>Model (IR structs)</td>
-<td>5664</td>
-</tr>
-<tr>
-<td>Parser</td>
-<td>6810</td>
-</tr>
-<tr>
 <td>Generator: postgres</td>
-<td>8959</td>
+<td>453</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
-<td>23279</td>
+<td>718</td>
 </tr>
 <tr>
 <td>Generator: grpc</td>
-<td>8664</td>
+<td>353</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>18156</td>
+<td>701</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
-<td>2087</td>
+<td>18</td>
 </tr>
 <tr>
 <td>Generator: docs</td>
-<td>5298</td>
-</tr>
-<tr>
-<td>Tests</td>
-<td>35585</td>
+<td>54</td>
 </tr>
 </tbody>
 </table>
@@ -299,8 +289,139 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="280----2026-04-04">[2.8.0] -- 2026-04-04</h2>
+<h2 id="290----2026-04-05">[2.9.0] -- 2026-04-05</h2>
 <h3 id="test-metrics">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>muscomp (compiler)</td>
+<td>0/0 tests</td>
+<td>0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>C++ (Layer 1+2)</td>
+<td>-15/5 tests</td>
+<td>20</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Gates</strong></td>
+<td><strong>6</strong></td>
+<td><strong>0</strong></td>
+<td><strong>✅ ALL GREEN</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Regressions</strong>: 0 (vs v2.8.0)</li>
+<li><strong>Skipped layers</strong>: 0</li>
+</ul>
+<h3 id="warning-breaking-racket-retirement">⚠️ BREAKING: Racket
+Retirement</h3>
+<p>Muscovite v2.9.0 <strong>removes the Racket generator pipeline
+entirely</strong>. The <code>dslgen/</code> directory (~350 files, ~177K
+lines) has been deleted. All generation is now handled by the native C++
+compiler <code>muscomp</code>. Racket is no longer a build
+dependency.</p>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>FTR-687</strong>: Hardened stdlib —
+<code>_GLIBCXX_ASSERTIONS</code> enabled project-wide via
+<code>cmake/HardenedStdlib.cmake</code> and all Conan profiles. Catches
+undefined behavior (out-of-bounds, invalid iterators) at runtime in
+debug and release builds.</li>
+<li><strong>FTR-684</strong>: CMake grammar freshness —
+<code>CMAKE_CONFIGURE_DEPENDS</code> on <code>muscovite.peg</code>
+ensures muscomp automatically reconfigures when the PEG grammar changes.
+Eliminates the stale-grammar bug from v2.6.2.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>FTR-688</strong>: All scripts and quality gates switched
+from Racket to muscomp:
+<ul>
+<li><code>release.sh</code>: Racket gates → muscomp build + tests + DSL
+lint</li>
+<li><code>agent-pr.sh</code>: Racket gates → muscomp equivalents</li>
+<li><code>lint-ddd.sh</code>: rewritten to use
+<code>muscomp --lint-only</code></li>
+<li><code>collect-release-metrics.sh</code>: racket layers → muscomp
+layers</li>
+<li><code>generate-dsl-reference.sh</code>:
+<code>muscomp --generate-dsl-reference</code></li>
+<li><code>validate-examples.sh</code>,
+<code>generate-audience-reports.sh</code>,
+<code>run-tlaplus-check.sh</code></li>
+<li><code>update-readme-metrics.sh</code>,
+<code>generate-system-brief.sh</code>,
+<code>metrics-trend.sh</code></li>
+<li>All CMake modules (DatabaseProject, Documentation, ExternalExamples,
+etc.)</li>
+</ul></li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li><strong>FTR-689</strong>: Deleted <code>dslgen/</code> — entire
+Racket codebase (~177K lines)
+<ul>
+<li>Grammar relocated: <code>dslgen/grammar/muscovite.peg</code> →
+<code>grammar/muscovite.peg</code></li>
+<li><code>doc/RACKET-PATTERNS.md</code> archived to
+<code>doc/archive/</code></li>
+<li>Racket test files, tools, and bytecode compilation removed</li>
+</ul></li>
+<li><strong>FTR-690</strong>: Purged Racket references from 37
+documentation files, 4 prompt files deleted, all AI agent commands
+updated. ADRs preserved as historical records.</li>
+<li><code>tools/collect-racket-coverage.sh</code> (no longer
+applicable)</li>
+</ul>
+<h3 id="test-metrics-1">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>muscomp (Layer 0)</td>
+<td>27/27 tests</td>
+<td>0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>C++ (Layer 1+2)</td>
+<td>274/274 tests</td>
+<td>0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Gates</strong></td>
+<td><strong>2</strong></td>
+<td><strong>0</strong></td>
+<td><strong>✅ ALL GREEN</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Regressions</strong>: 0 (vs v2.8.0)</li>
+<li><strong>Skipped layers</strong>: Racket (retired)</li>
+</ul>
+<h2 id="280----2026-04-04">[2.8.0] -- 2026-04-04</h2>
+<h3 id="test-metrics-2">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -335,7 +456,7 @@ QML line counts.</p>
 <li><strong>Regressions</strong>: 0 (vs v2.7.0)</li>
 <li><strong>Skipped layers</strong>: 0</li>
 </ul>
-<h3 id="added">Added</h3>
+<h3 id="added-1">Added</h3>
 <ul>
 <li>v2.8.0 — Sqitch decoupling + CMake modernization (11 FTRs)</li>
 </ul>
@@ -348,7 +469,7 @@ QML line counts.</p>
 <li>handover: post v2.7.0 release session state</li>
 </ul>
 <h2 id="270----2026-04-04">[2.7.0] -- 2026-04-04</h2>
-<h3 id="test-metrics-1">Test Metrics</h3>
+<h3 id="test-metrics-3">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -411,65 +532,6 @@ QML line counts.</p>
 <li>FTR-683 follow-up: remove parse_project_ast dead code
 completely</li>
 </ul>
-<h2 id="262----2026-04-04">[2.6.2] -- 2026-04-04</h2>
-<h3 id="test-metrics-2">Test Metrics</h3>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Passed</th>
-<th>Failed</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Racket (Layer 0)</td>
-<td>98/98 suites</td>
-<td>0</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>C++ (Layer 1+2)</td>
-<td>4/5 tests</td>
-<td>1</td>
-<td>❌</td>
-</tr>
-<tr>
-<td><strong>Gates</strong></td>
-<td><strong>8</strong></td>
-<td><strong>0</strong></td>
-<td><strong>✅ ALL GREEN</strong></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>Regressions</strong>: 0 (vs v2.6.1)</li>
-<li><strong>Skipped layers</strong>: 0</li>
-</ul>
-<h3 id="fixed-2">Fixed</h3>
-<ul>
-<li>correct muscomp .gitignore path for generated/</li>
-</ul>
-<h3 id="other-2">Other</h3>
-<ul>
-<li>Merge fix: correct muscomp .gitignore path</li>
-<li>Merge governance prep for v2.6.2</li>
-<li>v2.6.2 governance: retrospective, release checklist, FTR
-statuses</li>
-<li>Merge FTR-683: Add PEG grammar for Search, Messaging, TLAPlus
-blocks</li>
-<li>FTR-683: Add PEG grammar for Search, Messaging, TLAPlus blocks</li>
-<li>Merge FTR-682: Fix pre-existing muscomp test failures</li>
-<li>FTR-682: Fix pre-existing muscomp test failures</li>
-<li>Merge: Add FTR-669 to v2.6.2 iteration</li>
-<li>Add FTR-669 (Unified FileWriter) to v2.6.2 iteration</li>
-<li>Merge v2.6.2 iteration plan</li>
-<li>Plan v2.6.2 hotfix: BFX-027 + FTR-682 + FTR-683</li>
-<li>Merge BFX-027: Fix protoc LD_LIBRARY_PATH missing protobuf lib
-dir</li>
-<li>BFX-027: Fix protoc LD_LIBRARY_PATH missing protobuf lib dir</li>
-</ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
@@ -477,34 +539,7 @@ dir</li>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
 <p>0 ideas in backlog.</p>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
-<h3 id="racket-byte-compilation">Racket Byte Compilation</h3>
-<p>The <code>compiled/</code> directories throughout
-<code>dslgen/</code> are Racket's bytecode cache (<code>.zo</code> files
-+ <code>.dep</code> dependency trackers), produced by
-<code>raco make generate.rkt</code>. They reduce generator startup from
-~71s to &lt;10s.</p>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Bytecode files (<code>.zo</code>)</td>
-<td>274</td>
-</tr>
-<tr>
-<td>Cache size</td>
-<td>12M</td>
-</tr>
-</tbody>
-</table>
-<p>Regenerate: <code>cd dslgen &amp;&amp; raco make generate.rkt</code>
-(or CMake target <code>racket-compile</code>). Gitignored — safe to
-delete.</p>
-<p>Last measured at commit <code>3dbc4d7e</code> (project:
+<p>Last measured at commit <code>76378f4c</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -517,7 +552,7 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>762.2s</td>
+<td>835.9s</td>
 <td>298 compilation steps</td>
 </tr>
 <tr>
@@ -527,13 +562,13 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 50 recorded runs.</p>
+<p>Build history: 51 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
 <tr>
 <th>Layer</th>
-<th>Suites/Tests</th>
+<th>Tests</th>
 <th>Passed</th>
 <th>Failed</th>
 <th>Pass Rate</th>
@@ -541,14 +576,6 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>Racket (Layer 0)</td>
-<td>98 suites</td>
-<td>98</td>
-<td>0</td>
-<td>100%</td>
-<td>162.5s</td>
-</tr>
 <tr>
 <td>C++ (Layer 1+2)</td>
 <td>5 tests</td>
@@ -559,14 +586,8 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Racket tier breakdown</strong> (from
-<code>metrics/racket-test-results.json</code>):</p>
-<ul>
-<li><strong>fast</strong>: 30/30 passed (39.3s)</li>
-<li><strong>slow</strong>: 56/56 passed (98.7s)</li>
-<li><strong>integration</strong>: 12/12 passed (24.4s)</li>
-</ul>
-<p>Regenerate: <code>racket dslgen/tests/run-all-tests.rkt</code> +
+<p>Regenerate:
+<code>cd toolchain/muscomp &amp;&amp; ctest --preset debug</code> +
 <code>tools/extract-test-metrics.sh</code></p>
 <h3 id="regression-tracking">Regression Tracking</h3>
 <table>
@@ -576,17 +597,25 @@ muscovite):</p>
 <th>Layers Passed</th>
 <th>Layers Failed</th>
 <th>Regressions</th>
-<th>Racket Suites</th>
+<th>MC Tests</th>
 <th>C++ Tests</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>v2.9.0</td>
+<td>6</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>0/0</td>
+<td>-15/5</td>
+</tr>
+<tr>
 <td>v2.8.0</td>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>-15/5</td>
 </tr>
 <tr>
@@ -594,7 +623,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>-15/5</td>
 </tr>
 <tr>
@@ -602,7 +631,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>4/5</td>
 </tr>
 <tr>
@@ -610,7 +639,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>3/3</td>
 </tr>
 <tr>
@@ -618,7 +647,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>3/3</td>
 </tr>
 <tr>
@@ -626,7 +655,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>19/19</td>
 </tr>
 <tr>
@@ -634,7 +663,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>19/19</td>
 </tr>
 <tr>
@@ -642,7 +671,7 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>19/19</td>
 </tr>
 <tr>
@@ -650,20 +679,12 @@ muscovite):</p>
 <td>8</td>
 <td>0</td>
 <td>✅ 0</td>
-<td>98/98</td>
-<td>19/19</td>
-</tr>
-<tr>
-<td>v2.1.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>98/98</td>
+<td>0/0</td>
 <td>19/19</td>
 </tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v2.8.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v2.9.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -701,7 +722,7 @@ muscovite):</p>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (234)</td>
+<td>Architecture decision records (244)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -724,15 +745,15 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>2.8.0</td>
+<td>2.9.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2231 (since 2025-11-17)</td>
+<td>2256 (since 2025-11-17)</td>
 </tr>
 <tr>
-<td>Racket source</td>
-<td>144605 lines</td>
+<td>muscomp compiler</td>
+<td>8101 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
@@ -740,15 +761,15 @@ muscovite):</p>
 </tr>
 <tr>
 <td>Generator targets</td>
-<td>10</td>
+<td>13</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>234</td>
+<td>244</td>
 </tr>
 <tr>
-<td>Racket tests</td>
-<td>35585 lines</td>
+<td>muscomp tests</td>
+<td>2519 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

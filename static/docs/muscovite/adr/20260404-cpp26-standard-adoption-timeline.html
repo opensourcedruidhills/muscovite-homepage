@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++26 Standard Adoption
+Timeline — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>C++26 Standard Adoption Timeline</span>
+</nav>
+
+<h1>C++26 Standard Adoption Timeline</h1>
+
+
+<h1 id="c26-standard-adoption-timeline">C++26 Standard Adoption
+Timeline</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-04</li>
+<li>Tags: c++26, compiler, toolchain, strategy</li>
+</ul>
+<p>Technical Story: Muscovite roadmap v3.0 planning — when and how to
+adopt C++26.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>C++26 has been finalized (ISO meeting, March 2026). GCC trunk already
+has reflection and contracts merged. Muscovite currently targets C++23
+(gnu23) with GCC on Linux.</p>
+<p>C++26 brings four major features relevant to Muscovite: reflection,
+contracts, hardened standard library, and std::execution. Adopting C++26
+changes the minimum compiler requirement for both the framework and all
+consumer repos (fhir-health, geosciences, hello-world), making this a
+major version boundary.</p>
+<p>The question is: when to adopt, and how to manage the transition for
+consumers.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>GCC 16 (expected mid-2026) will ship with C++26 support including
+reflection and contracts</li>
+<li>Hardened stdlib and no-UB-uninit are free safety wins requiring only
+a recompile</li>
+<li>Consumer repos pin <code>MUSCOVITE_CPP_VERSION</code> via
+FetchContent — they must also upgrade compilers</li>
+<li>Healthcare and geosciences domains benefit from demonstrable safety
+improvements</li>
+<li>C++23 → C++26 is not backward compatible (contracts syntax,
+reflection API are new)</li>
+<li>Clang C++26 support may lag GCC by 6-12 months (relevant for
+multi-compiler consumers)</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>GCC 16 day-one adoption</strong> — Flip to gnu26 as soon as
+GCC 16 releases</li>
+<li><strong>GCC 16 + 6 months</strong> — Wait for one point release (GCC
+16.1) to stabilize</li>
+<li><strong>Parallel support period</strong> — Maintain both gnu23 and
+gnu26 Conan profiles temporarily</li>
+<li><strong>Wait for Clang parity</strong> — Adopt only when both GCC
+and Clang have full C++26</li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: TBD — to be decided when GCC 16 release date is
+confirmed.</p>
+<p><strong>Leaning toward option 2</strong> (GCC 16 + stabilization)
+with option 3 as transition mechanism:</p>
+<ul>
+<li>v2.x remains gnu23 (no disruption to current iteration
+pipeline)</li>
+<li>v3.0.0 targets gnu26, released after GCC 16.1 proves stable</li>
+<li>A 1-release overlap period where muscovite-cpp v2.last supports both
+profiles</li>
+<li>Consumer repos get a migration guide with the v3.0.0 release</li>
+</ul>
+<h3
+id="implementation-checklist-when-decision-is-accepted">Implementation
+Checklist (when decision is accepted)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" />Update
+<code>conan_profiles/{debug,release,relwithdebinfo}</code>:
+<code>compiler.cppstd=gnu26</code></label></li>
+<li><label><input type="checkbox" />Update <code>CMakeLists.txt</code>
+root: minimum C++ standard assertion</label></li>
+<li><label><input type="checkbox" />Update generated CMake templates:
+generated projects target C++26</label></li>
+<li><label><input type="checkbox" />Update <code>.clang-tidy</code>:
+enable new <code>cppcoreguidelines-*</code> checks available in
+C++26</label></li>
+<li><label><input type="checkbox" />Update
+<code>doc/CPP-PATTERNS.md</code>: new patterns for contracts,
+reflection</label></li>
+<li><label><input type="checkbox" />Create consumer migration
+guide</label></li>
+<li><label><input type="checkbox" />Tag muscovite-cpp
+v3.0.0</label></li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Access to contracts, reflection, hardened stdlib,
+std::execution</li>
+<li>Safety improvements for healthcare/geosciences domains
+(demonstrable, measurable)</li>
+<li>Positions Muscovite at the leading edge of C++ practice</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Forces consumer repos to upgrade compilers (breaking change)</li>
+<li>Clang users may be temporarily blocked</li>
+<li>CI infrastructure must upgrade to GCC 16+</li>
+<li>Two-profile transition period adds maintenance overhead</li>
+</ul>
+<h2 id="compiler-research-findings-2026-04-04">Compiler Research
+Findings (2026-04-04)</h2>
+<p>GCC trunk has reflection (<code>-freflection</code>), contracts, and
+P2795 (no-UB uninit reads) merged and awaiting GCC 16 release (expected
+April–May 2026, following yearly cadence). Clang has
+<strong>none</strong> of these features — no timeline visible.
+<code>std::execution</code> is not implemented in either compiler.</p>
+<p>Hardened stdlib (<code>_GLIBCXX_ASSERTIONS</code>) is available since
+GCC 12 and works with C++23. Adopted early as FTR-687 in v2.9.0 — no
+need to wait for C++26.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>GCC trunk</th>
+<th>GCC 16</th>
+<th>Clang</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reflection</td>
+<td>✅ <code>-freflection</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>v3.2+</td>
+</tr>
+<tr>
+<td>Contracts</td>
+<td>✅ <code>-std=c++2c</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>v3.0</td>
+</tr>
+<tr>
+<td>Hardened stdlib</td>
+<td>✅ NOW</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>v2.9.0 (FTR-687)</strong></td>
+</tr>
+<tr>
+<td>Uninit UB removal</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>v3.0 (free)</td>
+</tr>
+<tr>
+<td>std::execution</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>Defer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="links">Links</h2>
+<ul>
+<li><a
+href="https://herbsutter.com/2026/03/29/c26-is-done-trip-report-march-2026-iso-c-standards-meeting-london-croydon-uk/">Herb
+Sutter trip report: C++26 is done</a></li>
+<li>Related: <a
+href="20260404-hardened-stdlib-safety-baseline.html">Hardened stdlib
+ADR</a></li>
+<li>Related: <a
+href="20260404-cpp26-contracts-for-domain-safety.html">Contracts
+ADR</a></li>
+<li>Related: <a
+href="20260404-reflection-impact-on-code-generation.html">Reflection
+ADR</a></li>
+<li>Related: <a
+href="20260404-std-execution-structured-concurrency.html">std::execution
+ADR</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When modifying Conan profiles, CMake minimum version, or
+<code>compiler.cppstd</code> settings</li>
+<li>When planning iterations that depend on C++26 features</li>
+<li>When updating consumer repo documentation or migration guides</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>v2.x development — remains on C++23 until this ADR is accepted</li>
+<li>Racket generator code — unaffected by C++ standard version</li>
+<li>Database/Sqitch layer — unaffected</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Conan profile <code>compiler.cppstd</code> setting is the single
+source of truth</li>
+<li>CI builds verify the compiler version matches the profile
+requirement</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>conan_profiles/debug</code>:
+<code>compiler.cppstd=gnu23</code> → <code>gnu26</code></li>
+<li><code>conan_profiles/release</code>:
+<code>compiler.cppstd=gnu23</code> → <code>gnu26</code></li>
+<li><code>dslgen/generators/cmake/build-system-packaging.rkt</code>:
+generated CMake C++ standard</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

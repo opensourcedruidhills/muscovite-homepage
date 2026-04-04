@@ -188,9 +188,9 @@ generated output (Layer 2) must use the canonical form. This document is
 the single source of truth for "how to write C++ in this project."</p>
 <p><strong>Scope</strong>: All <code>.hpp</code>/<code>.cpp</code> files
 in <code>framework/</code> (Layer 1) and all C++ generator output in
-<code>dslgen/generators/cpp/</code> and
-<code>dslgen/generators/grpc/</code> (Layer 0 → Layer 2). Qt-specific
-patterns are in <a
+<code>toolchain/muscomp/src/generators/cpp/</code> and
+<code>toolchain/muscomp/src/generators/grpc/</code> (Layer 0 → Layer 2).
+Qt-specific patterns are in <a
 href="QT-WIDGETS-PATTERNS.html">QT-WIDGETS-PATTERNS.md</a> and <a
 href="QML-PATTERNS.html">QML-PATTERNS.md</a>.</p>
 <p><strong>Sibling to</strong>: <a
@@ -260,8 +260,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#c
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — std::optional for errors (loses error information)</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>optional<span class="op">&lt;</span>Patient<span class="op">&gt;</span> find_by_id<span class="op">(</span><span class="at">const</span> uuid<span class="op">&amp;</span> id<span class="op">);</span>  <span class="co">// Why did it fail?</span></span></code></pre></div>
-<p><strong>Generator files</strong>: <code>dba/unified.rkt</code>,
-<code>grpc/cpp-service-v2.rkt</code></p>
+<p><strong>Generator files</strong>: <code>dba/unified.cpp/.hpp</code>,
+<code>grpc/cpp-service-v2.cpp/.hpp</code></p>
 <hr />
 <h2 id="2-attribute-annotations">2. Attribute Annotations</h2>
 <h3 id="2a-nodiscard">2a. <code>[[nodiscard]]</code></h3>
@@ -300,8 +300,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#c
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> to_string<span class="op">()</span> <span class="at">const</span> <span class="op">-&gt;</span> <span class="bu">std::</span>string<span class="op">;</span>  <span class="co">// If it can&#39;t throw, mark noexcept</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade D — ~30 move operations and ~50
 converters missing <code>noexcept</code>. <strong>Generator
-files</strong>: <code>dba/unified.rkt</code> (entity structs),
-<code>grpc/cpp-service-v2.rkt</code></p>
+files</strong>: <code>dba/unified.cpp/.hpp</code> (entity structs),
+<code>grpc/cpp-service-v2.cpp/.hpp</code></p>
 <hr />
 <h2 id="3-ranges-and-views-stdranges">3. Ranges and Views
 (std::ranges)</h2>
@@ -355,8 +355,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#c
 Framework: grade C — 28 uses (auth, validation, search, geo). Generated
 code still emits 1,231 <code>reserve</code> + <code>push_back</code>
 patterns alongside ranges for certain code paths. <strong>Generator
-files</strong>: <code>dba/unified.rkt</code> (query result mapping),
-<code>grpc/cpp-service-v2.rkt</code> (response building)</p>
+files</strong>: <code>dba/unified.cpp/.hpp</code> (query result
+mapping), <code>grpc/cpp-service-v2.cpp/.hpp</code> (response
+building)</p>
 <hr />
 <h2 id="4-structured-bindings">4. Structured Bindings</h2>
 <p><strong>CANONICAL</strong>: Use structured bindings for multi-value
@@ -388,7 +389,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade F — zero structured bindings in
 generated or framework code. <strong>Generator files</strong>:
-<code>dba/unified.rkt</code> (row mapping in repositories)</p>
+<code>dba/unified.cpp/.hpp</code> (row mapping in repositories)</p>
 <hr />
 <h2 id="5-concepts-and-constraints">5. Concepts and Constraints</h2>
 <p><strong>CANONICAL</strong>: Use C++20 concepts to constrain template
@@ -421,7 +422,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#
 <p><strong>Audit</strong>: Current grade B+ — 12 concepts defined in
 framework (auth, validation, search, DBA).
 <code>to_param&lt;T&gt;</code> still unconstrained. <strong>Generator
-files</strong>: <code>dba/unified.rkt</code>, framework
+files</strong>: <code>dba/unified.cpp/.hpp</code>, framework
 <code>dba/repository.hpp</code></p>
 <hr />
 <h2 id="6-designated-initializers">6. Designated Initializers</h2>
@@ -445,7 +446,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#
 <div class="sourceCode" id="cb14"><pre
 class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — positional construction (fragile, order-dependent)</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> patient <span class="op">=</span> Patient<span class="op">{</span>uuid<span class="op">,</span> <span class="st">&quot;MRN-001&quot;</span><span class="op">,</span> <span class="st">&quot;Smith&quot;</span><span class="op">,</span> <span class="kw">true</span><span class="op">};</span></span></code></pre></div>
-<p><strong>Generator files</strong>: <code>dba/unified.rkt</code>
+<p><strong>Generator files</strong>: <code>dba/unified.cpp/.hpp</code>
 (entity struct construction from DB rows)</p>
 <hr />
 <h2 id="7-string-handling">7. String Handling</h2>
@@ -473,8 +474,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSERT INTO patient.patient (id, mrn) VALUES ($1, $2)&quot;</span><span class="op">,</span> id<span class="op">,</span> mrn<span class="op">);</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade D for string_view, B- for SQL
 extraction. <strong>Generator files</strong>:
-<code>dba/unified.rkt</code> (repository methods),
-<code>grpc/cpp-service-v2.rkt</code></p>
+<code>dba/unified.cpp/.hpp</code> (repository methods),
+<code>grpc/cpp-service-v2.cpp/.hpp</code></p>
 <h3 id="7b-stdformat-over-fmtformat">7b. <code>std::format</code> over
 <code>fmt::format</code></h3>
 <p><strong>CANONICAL</strong>: Use <code>std::format</code> (C++20) for
@@ -517,7 +518,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> find_by_id<span class="op">(</span><span class="at">const</span> <span class="ex">boost::</span>uuids::uuid<span class="op">&amp;</span> id<span class="op">)</span> <span class="op">-&gt;</span> <span class="bu">std::</span>expected<span class="op">&lt;</span>Patient<span class="op">,</span> Error<span class="op">&gt;;</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade B — query service generators
 sometimes omit const. <strong>Generator files</strong>:
-<code>dba/unified.rkt</code>, <code>grpc/cpp-service-v2.rkt</code></p>
+<code>dba/unified.cpp/.hpp</code>,
+<code>grpc/cpp-service-v2.cpp/.hpp</code></p>
 <hr />
 <h2 id="9-forward-declarations">9. Forward Declarations</h2>
 <p><strong>CANONICAL</strong>: Use forward declarations in headers to
@@ -543,8 +545,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;muscovite/dba/connection_pool.hpp&gt;</span><span class="pp">  </span><span class="co">// Only need reference/pointer</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade D+ in Qt framework (barely
 used), B in DBA framework. <strong>Generator files</strong>:
-<code>dba/unified.rkt</code> (header generation),
-<code>grpc/cpp-service-v2.rkt</code></p>
+<code>dba/unified.cpp/.hpp</code> (header generation),
+<code>grpc/cpp-service-v2.cpp/.hpp</code></p>
 <hr />
 <h2 id="10-headersource-separation">10. Header/Source Separation</h2>
 <p><strong>CANONICAL</strong>: Headers contain declarations only.
@@ -589,8 +591,8 @@ offenders: <code>geography.hpp</code> (781 lines),
 <code>transactor.hpp</code> (390 lines),
 <code>infrastructure_state_machine.hpp</code> (294 lines),
 <code>entity_edit_dialog.hpp</code> (270 lines). <strong>Generator
-files</strong>: <code>dba/unified.rkt</code> (generates proper split),
-framework <code>qt/</code> and <code>dba/</code> need manual
+files</strong>: <code>dba/unified.cpp/.hpp</code> (generates proper
+split), framework <code>qt/</code> and <code>dba/</code> need manual
 retrofit.</p>
 <hr />
 <h2 id="11-namespace-structure">11. Namespace Structure</h2>
@@ -672,8 +674,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb30-1"><a href="#
 <p><strong>Audit</strong>: Current grade A for most code, but
 <code>proto_type_converters.hpp</code> (416 lines) uses C89-style
 function signatures and manual buffer construction — needs full rewrite.
-<strong>Generator files</strong>: <code>grpc/cpp-service-v2.rkt</code>
-(proto converter generation)</p>
+<strong>Generator files</strong>:
+<code>grpc/cpp-service-v2.cpp/.hpp</code> (proto converter
+generation)</p>
 <hr />
 <h2 id="14-sql-query-management">14. SQL Query Management</h2>
 <p><strong>CANONICAL</strong>: Extract SQL queries to
@@ -703,7 +706,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb32-1"><a href="#
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;VALUES ($1, $2, $3, $4) RETURNING id&quot;</span><span class="op">,</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    req<span class="op">.</span>id<span class="op">,</span> req<span class="op">.</span>mrn<span class="op">,</span> req<span class="op">.</span>family_name<span class="op">,</span> req<span class="op">.</span>active<span class="op">);</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade B- — many queries still inline.
-<strong>Generator files</strong>: <code>dba/unified.rkt</code>
+<strong>Generator files</strong>: <code>dba/unified.cpp/.hpp</code>
 (repository SQL generation)</p>
 <hr />
 <h2 id="15-duplicate-code-elimination">15. Duplicate Code
@@ -734,7 +737,8 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#
 <p><strong>Audit</strong>: <code>uuid_to_string</code> duplicated in
 multiple generated service files. Proto type converters duplicated
 across contexts instead of shared. <strong>Generator files</strong>:
-<code>grpc/cpp-service-v2.rkt</code>, <code>dba/unified.rkt</code></p>
+<code>grpc/cpp-service-v2.cpp/.hpp</code>,
+<code>dba/unified.cpp/.hpp</code></p>
 <hr />
 <h2 id="16-include-guards">16. Include Guards</h2>
 <p><strong>CANONICAL</strong>: Use <code>#pragma once</code> for all
@@ -832,7 +836,7 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb39-1"><a href="#
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> status_id <span class="op">=</span> query<span class="op">(</span><span class="st">&quot;SELECT id FROM saga_status WHERE code = &#39;completed&#39;&quot;</span><span class="op">);</span></span></code></pre></div>
 <p><strong>Audit</strong>: Current grade B- — constexpr header
 generation works, but not applied everywhere. <strong>Generator
-files</strong>: <code>cpp/lookup-constants.rkt</code></p>
+files</strong>: <code>cpp/lookup-constants.cpp/.hpp</code></p>
 <hr />
 <h2 id="19-testing-patterns-doctest">19. Testing Patterns (doctest)</h2>
 <p><strong>CANONICAL</strong>: All new C++ tests MUST use doctest BDD
@@ -890,7 +894,46 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb43-1"><a href="#
 <span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> result <span class="op">=</span> txn<span class="op">.</span>exec<span class="op">(</span><span class="st">&quot;SELECT * FROM patient WHERE id = &#39;&quot;</span> <span class="op">+</span> id_str <span class="op">+</span> <span class="st">&quot;&#39;&quot;</span><span class="op">);</span></span></code></pre></div>
 <p><strong>Audit</strong>: <code>exec_params</code> fully eliminated
 (FTR-047 resolved). Maintain compliance. <strong>Generator
-files</strong>: <code>dba/unified.rkt</code></p>
+files</strong>: <code>dba/unified.cpp/.hpp</code></p>
+<hr />
+<h2 id="21-hardened-standard-library-ftr-687">21. Hardened Standard
+Library (FTR-687)</h2>
+<p><strong>CANONICAL</strong>: All Muscovite builds enable
+<code>_GLIBCXX_ASSERTIONS</code> for bounds-checked standard container
+operations. This is a project-wide compile definition — no per-target
+opt-in required.</p>
+<p>ADR: <code>20260404-hardened-stdlib-safety-baseline.md</code></p>
+<p><strong>What it catches</strong>: Out-of-bounds access on
+<code>vector</code>, <code>span</code>, <code>string</code>,
+<code>string_view</code>, <code>array</code>, and other libstdc++
+containers. Violations produce a controlled <code>std::abort()</code>
+with a diagnostic message instead of silent undefined behavior.</p>
+<p><strong>Overhead</strong>: ~0.3% per Google's production
+measurements. Negligible for Muscovite's CRUD workload (healthcare FHIR,
+geosciences).</p>
+<p><strong>Where it is set</strong>:</p>
+<ul>
+<li><code>cmake/HardenedStdlib.cmake</code> — project-wide
+<code>add_compile_definitions(_GLIBCXX_ASSERTIONS)</code></li>
+<li><code>conan_profiles/*</code> —
+<code>tools.build:cxxflags=["-D_GLIBCXX_ASSERTIONS"]</code> for
+dependency builds</li>
+<li>Generated consumer <code>CMakeLists.txt</code> —
+<code>add_compile_definitions(_GLIBCXX_ASSERTIONS)</code></li>
+</ul>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ CANONICAL — bounds-checked by default, no action needed</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> v <span class="op">=</span> <span class="bu">std::</span>vector<span class="op">{</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">};</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span> x <span class="op">=</span> v<span class="op">[</span><span class="dv">5</span><span class="op">];</span>  <span class="co">// Runtime abort with diagnostic (not silent UB)</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ ACCEPTABLE — opt-out for proven hot paths (extremely rare)</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#undef _GLIBCXX_ASSERTIONS</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Justification: Inner loop processes 10M elements/sec, profiling shows</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">// bounds checks add measurable overhead. Covered by dedicated fuzz tests.</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ ANTI-PATTERN — disabling project-wide for &quot;performance&quot;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">// The 0.3% overhead is negligible. Profile before opting out.</span></span></code></pre></div>
 <hr />
 <h2 id="quick-reference-card">Quick Reference Card</h2>
 <table>
@@ -1003,34 +1046,34 @@ files</strong>: <code>dba/unified.rkt</code></p>
 <hr />
 <h2 id="audit-commands">Audit Commands</h2>
 <p>Track modernization progress:</p>
-<div class="sourceCode" id="cb44"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count reserve+push_back loops (should trend toward zero)</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;reserve(&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Count range usage (should trend upward)</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;std::ranges\|std::views&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count structured bindings (should trend upward)</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;auto \[&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing noexcept on moves</span></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;&amp;&amp;)&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> noexcept <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Concepts defined</span></span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;concept &quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Deprecated exec_params (should be zero)</span></span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;exec_params&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="co"># C legacy functions (should trend toward zero)</span></span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;atoi\|atof\|sprintf\|strlen\|strcmp\|M_PI&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="co"># string_view adoption (should trend upward)</span></span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;string_view&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Implementation in headers (non-inline, non-template, non-constexpr — manual review)</span></span>
-<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Focus on files &gt;200 lines:</span></span>
-<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> framework/ <span class="at">-name</span> <span class="st">&quot;*.hpp&quot;</span> <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">&#39;lines=$(wc -l &lt; &quot;$1&quot;); [ &quot;$lines&quot; -gt 200 ] &amp;&amp; echo &quot;$lines $1&quot;&#39;</span> _ {} <span class="dt">\;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count reserve+push_back loops (should trend toward zero)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;reserve(&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Count range usage (should trend upward)</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;std::ranges\|std::views&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Count structured bindings (should trend upward)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;auto \[&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing noexcept on moves</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;&amp;&amp;)&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> noexcept <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Concepts defined</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;concept &quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Deprecated exec_params (should be zero)</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;exec_params&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="co"># C legacy functions (should trend toward zero)</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;atoi\|atof\|sprintf\|strlen\|strcmp\|M_PI&quot;</span> framework/ examples/<span class="pp">*</span>/generated/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.cpp&quot;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="co"># string_view adoption (should trend upward)</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="st">&quot;string_view&quot;</span> framework/ <span class="at">--include</span><span class="op">=</span><span class="st">&quot;*.hpp&quot;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Implementation in headers (non-inline, non-template, non-constexpr — manual review)</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Focus on files &gt;200 lines:</span></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> framework/ <span class="at">-name</span> <span class="st">&quot;*.hpp&quot;</span> <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">&#39;lines=$(wc -l &lt; &quot;$1&quot;); [ &quot;$lines&quot; -gt 200 ] &amp;&amp; echo &quot;$lines $1&quot;&#39;</span> _ {} <span class="dt">\;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-rn</span></span></code></pre></div>
 <hr />
 <h2 id="generator-cross-reference">Generator Cross-Reference</h2>
 <table>
@@ -1044,28 +1087,28 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href=
 <tbody>
 <tr>
 <td>std::expected</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td><code>dba/repository.hpp</code></td>
 </tr>
 <tr>
 <td>[[nodiscard]]</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td>— (generated only)</td>
 </tr>
 <tr>
 <td>noexcept</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td><code>dba/*.hpp</code></td>
 </tr>
 <tr>
 <td>ranges/views</td>
-<td><code>dba/unified.rkt</code>,
-<code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code>,
+<code>grpc/cpp-service-v2.cpp/.hpp</code></td>
 <td><code>dba/*.cpp</code></td>
 </tr>
 <tr>
 <td>structured bindings</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td>—</td>
 </tr>
 <tr>
@@ -1075,33 +1118,33 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href=
 </tr>
 <tr>
 <td>designated init</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td>—</td>
 </tr>
 <tr>
 <td>string_view</td>
-<td><code>dba/unified.rkt</code>,
-<code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code>,
+<code>grpc/cpp-service-v2.cpp/.hpp</code></td>
 <td><code>dba/*.hpp</code></td>
 </tr>
 <tr>
 <td>constexpr SQL</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td>—</td>
 </tr>
 <tr>
 <td>proto converters</td>
-<td><code>grpc/cpp-service-v2.rkt</code></td>
+<td><code>grpc/cpp-service-v2.cpp/.hpp</code></td>
 <td><code>grpc/type_mapping.hpp</code></td>
 </tr>
 <tr>
 <td>lookup constants</td>
-<td><code>cpp/lookup-constants.rkt</code></td>
+<td><code>cpp/lookup-constants.cpp/.hpp</code></td>
 <td>—</td>
 </tr>
 <tr>
 <td>pqxx API</td>
-<td><code>dba/unified.rkt</code></td>
+<td><code>dba/unified.cpp/.hpp</code></td>
 <td><code>dba/repository.hpp</code></td>
 </tr>
 <tr>

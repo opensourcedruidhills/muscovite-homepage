@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSL Quantity Syntax Design — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>DSL Quantity Syntax Design</span>
+</nav>
+
+<h1>DSL Quantity Syntax Design</h1>
+
+
+<h1 id="dsl-quantity-syntax-design">DSL Quantity Syntax Design</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-04</li>
+<li>Tags: units, dsl, syntax, grammar</li>
+</ul>
+<p>Technical Story: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a>, Decision 5</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite's DSL needs syntax for declaring quantity fields on
+entities. The core question is how unit symbols with SI prefixes are
+written: as concatenated symbols (<code>km</code>, <code>mg</code>,
+<code>µm</code>) that match conventional notation, or as compositional
+expressions (<code>kilo metre</code>, <code>milli gram</code>) that make
+the prefix explicit.</p>
+<p>Beyond field declarations, the DSL also needs syntax for:</p>
+<ul>
+<li>Importing unit systems
+(<code>IMPORT "muscovite://units/si"</code>)</li>
+<li>Declaring custom dimensions
+(<code>DIMENSION Density = Mass / Length^3</code>)</li>
+<li>Declaring custom units
+(<code>UNIT millidarcy = 9.869233e-16 m^2</code>)</li>
+<li>Configuring prefixes available in a project</li>
+</ul>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Readability: DSL should look natural to domain experts
+(geoscientists, clinicians)</li>
+<li>Familiarity: <code>km</code>, <code>mg</code>, <code>mmHg</code> are
+universally recognized; <code>kilo metre</code> is not</li>
+<li>Consistency with UCUM: UCUM uses concatenated symbols
+(<code>km</code>, <code>mg</code>, <code>mm[Hg]</code>)</li>
+<li>Compiler complexity: concatenated symbols require prefix resolution
+in the compiler</li>
+<li>Ambiguity: some concatenated symbols could be ambiguous (mitigated
+by standard library)</li>
+<li>Grammar simplicity: compositional syntax has simpler
+tokenization</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Concatenated unit symbols</strong> —
+<code>QUANTITY&lt;Length, km&gt;</code>,
+<code>QUANTITY&lt;Pressure, mmHg&gt;</code></li>
+<li><strong>Compositional syntax</strong> —
+<code>QUANTITY&lt;Length, kilo metre&gt;</code>,
+<code>QUANTITY&lt;Pressure, milli metre Hg&gt;</code></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Concatenated unit symbols" (option 1), because it
+matches how scientists, engineers, and clinicians actually write and
+think about units.</p>
+<h3 id="field-declaration-syntax">Field Declaration Syntax</h3>
+<pre><code>field_name QUANTITY&lt;Dimension, unit_symbol&gt;</code></pre>
+<p>Examples:</p>
+<pre><code>depth         QUANTITY&lt;Length, km&gt;
+diameter      QUANTITY&lt;Length, mm&gt;
+weight        QUANTITY&lt;Mass, kg&gt;
+temperature   QUANTITY&lt;Temperature, Cel&gt;
+systolic      QUANTITY&lt;Pressure, mmHg&gt;
+core_density  QUANTITY&lt;Density, kg/m3&gt;
+wavelength    QUANTITY&lt;Length, µm&gt;</code></pre>
+<p>The compiler resolves prefixed symbols internally:</p>
+<ul>
+<li><code>km</code> → prefix <code>kilo</code> + base unit
+<code>metre</code> → factor 1000, dimension <code>Length</code></li>
+<li><code>mg</code> → prefix <code>milli</code> + base unit
+<code>gram</code> → factor 0.001, dimension <code>Mass</code></li>
+<li><code>mmHg</code> → named unit (not a prefix composition), dimension
+<code>Pressure</code></li>
+<li><code>kg/m3</code> → derived unit expression, dimension
+<code>Density</code></li>
+</ul>
+<h3 id="unit-system-import-syntax">Unit System Import Syntax</h3>
+<pre><code>IMPORT &quot;muscovite://units/si&quot;;          -- 7 base + prefixes + 22 derived
+IMPORT &quot;muscovite://units/medical&quot;;     -- mmHg, mg/dL, IU/L, Cel, ...
+IMPORT &quot;muscovite://units/geoscience&quot;;  -- mGal, ppm, Ma, ...</code></pre>
+<h3 id="dimension-declaration-syntax">Dimension Declaration Syntax</h3>
+<p>For custom or derived dimensions not in the standard library:</p>
+<pre><code>DIMENSION Density = Mass / Length^3;
+DIMENSION Velocity = Length / Time;
+DIMENSION Concentration = Amount / Volume;</code></pre>
+<h3 id="unit-declaration-syntax">Unit Declaration Syntax</h3>
+<p>For custom units not in the standard library:</p>
+<pre><code>UNIT millidarcy = 9.869233e-16 m^2;
+UNIT Ma = 3.1536e13 s;                 -- megayear in seconds</code></pre>
+<h3 id="prefix-configuration">Prefix Configuration</h3>
+<p>Projects can restrict which prefixes are available (to prevent
+nonsensical combinations):</p>
+<pre><code>PROJECT &quot;fhir-health&quot; {
+    PREFIXES micro, milli, centi, deci, deca, hecto, kilo, mega;
+}</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Natural syntax: <code>QUANTITY&lt;Length, km&gt;</code> reads like
+documentation</li>
+<li>Consistent with UCUM encoding (which healthcare systems already
+use)</li>
+<li>Domain experts can read and write DSL files without learning a new
+unit notation</li>
+<li>Prefix resolution is a compiler concern, invisible to DSL
+authors</li>
+<li>Derived units (<code>kg/m3</code>) use familiar mathematical
+notation</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Compiler must implement prefix resolution (decompose <code>km</code>
+→ <code>kilo</code> + <code>metre</code>)</li>
+<li>Some symbols could theoretically be ambiguous (e.g., is
+<code>mGal</code> milli-Gal or mega-litre?) — resolved by standard
+library precedence rules</li>
+<li>Unicode symbols (<code>µm</code>) require UTF-8 handling in the
+parser (UCUM uses <code>u</code> instead)</li>
+<li>Grammar is more complex: unit symbols are looked up, not tokenized
+from parts</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-concatenated-unit-symbols">Option 1: Concatenated Unit
+Symbols</h3>
+<p><code>QUANTITY&lt;Length, km&gt;</code> — prefix is part of the
+symbol, compiler resolves it.</p>
+<ul>
+<li>Good, because matches universal scientific notation
+(<code>km</code>, <code>mg</code>, <code>mmHg</code>)</li>
+<li>Good, because consistent with UCUM standard encoding</li>
+<li>Good, because shorter, more readable DSL declarations</li>
+<li>Good, because domain experts immediately understand the syntax</li>
+<li>Good, because derived unit expressions (<code>kg/m3</code>) look
+natural</li>
+<li>Bad, because compiler must implement prefix resolution
+algorithm</li>
+<li>Bad, because potential ambiguity in rare cases (resolved by standard
+library)</li>
+<li>Bad, because Unicode symbols (<code>µm</code>) require UTF-8 parser
+support</li>
+</ul>
+<h3 id="option-2-compositional-syntax">Option 2: Compositional
+Syntax</h3>
+<p><code>QUANTITY&lt;Length, kilo metre&gt;</code> — prefix and base
+unit are separate tokens.</p>
+<ul>
+<li>Good, because simpler tokenization (prefix and unit are separate
+tokens)</li>
+<li>Good, because no ambiguity — prefix is always explicit</li>
+<li>Good, because no prefix resolution needed in the compiler</li>
+<li>Bad, because unnatural — nobody writes "kilo metre" in practice</li>
+<li>Bad, because verbose:
+<code>QUANTITY&lt;Pressure, milli metre mercury&gt;</code> vs
+<code>QUANTITY&lt;Pressure, mmHg&gt;</code></li>
+<li>Bad, because breaks consistency with UCUM, ISO 80000, and scientific
+convention</li>
+<li>Bad, because domain experts must learn an unfamiliar notation</li>
+<li>Bad, because derived units become awkward:
+<code>kilo gram / metre^3</code> vs <code>kg/m3</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Origin: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a></li>
+<li>Related: <a
+href="20260404-qudt-driven-unit-standard-library.html">QUDT-driven unit
+standard library</a></li>
+<li>Related: <a href="20260404-typed-proto-quantity-messages.html">Typed
+proto quantity messages</a></li>
+<li>Related: <a
+href="20260404-postgresql-quantity-storage-strategy.html">PostgreSQL
+quantity storage strategy</a></li>
+<li>Related: <a
+href="20260404-quantity-storage-unit-convention.html">Quantity storage
+unit convention</a></li>
+<li>Related: ADR 20260211 — <a
+href="20260211-grammar-first-language-evolution.html">Grammar-first
+language evolution</a></li>
+<li>Related: ADR 20260316 — <a
+href="20260316-contextual-keywords-by-default.html">Contextual keywords by
+default</a></li>
+<li>External: <a href="https://ucum.org/">UCUM — Unified Code for Units
+of Measure</a></li>
+<li>External: <a href="https://www.iso.org/standard/76921.html">ISO
+80000 — Quantities and units</a></li>
+<li>External: <a href="https://qudt.org/">QUDT ontology</a></li>
+<li>External: <a href="https://mpusz.github.io/mp-units/">mp-units C++
+library</a> (MIT license)</li>
+<li>External: <a href="https://bford.info/pub/lang/peg.pdf">PEG grammar
+reference</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When extending the PEG grammar
+(<code>dslgen/grammar/muscovite.peg</code>) with QUANTITY syntax</li>
+<li>When implementing the parser for QUANTITY field declarations</li>
+<li>When implementing prefix resolution in the DSL compiler (decomposing
+<code>km</code> → <code>kilo</code> + <code>metre</code>)</li>
+<li>When writing documentation or examples that show QUANTITY field
+syntax</li>
+<li>When adding new keywords: <code>QUANTITY</code>,
+<code>DIMENSION</code>, <code>UNIT</code>, <code>PREFIXES</code>,
+<code>UNIT_SYSTEM</code></li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>When working on generator output (generators consume the parsed IR,
+not raw syntax)</li>
+<li>When working on proto or PostgreSQL representation (see the
+respective ADRs)</li>
+<li>When editing existing non-quantity DSL constructs (ENTITY, CONTEXT,
+RELATIONSHIP, etc.)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>PEG grammar defines the QUANTITY syntax rule (grammar-first, per ADR
+20260211)</li>
+<li>Grammar conformance tests verify parsing of all documented
+examples</li>
+<li>New keywords (<code>QUANTITY</code>, <code>DIMENSION</code>,
+<code>UNIT</code>, <code>PREFIXES</code>) must follow contextual keyword
+rules (ADR 20260316) — they are contextual within entity field
+declarations</li>
+<li><code>lint-ddd.sh</code> validates QUANTITY declarations against
+imported unit systems</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/grammar/muscovite.peg</code> — PEG grammar with
+QUANTITY rule (to be extended)</li>
+<li><code>dslgen/parser/parser.rkt</code> — Parser implementation for
+QUANTITY fields (to be extended)</li>
+<li><code>dslgen/parser/lexer.rkt</code> — Lexer with QUANTITY-related
+keywords (to be extended)</li>
+<li><code>dslgen/model/ddd-types.rkt</code> — IR struct for quantity
+fields (to be extended)</li>
+<li><code>dslgen/stdlib/units/si.ddd</code> — SI standard library (to be
+created)</li>
+<li><code>dslgen/tests/test-grammar-conformance.rkt</code> — Grammar
+tests (to be extended)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

@@ -215,7 +215,8 @@ coding constraints)</p>
 <hr />
 <h2 id="1-uuid-default-functions">1. UUID Default Functions</h2>
 <p><strong>CANONICAL</strong>: Use <code>(uuid-default-fn)</code> from
-<code>sqitch-common.rkt</code> (returns <code>"uuidv7()"</code>).</p>
+<code>sqitch-common.cpp/.hpp</code> (returns
+<code>"uuidv7()"</code>).</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ✅ CANONICAL</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> uuidv7()</span>
@@ -224,18 +225,21 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#c
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">id</span> UUID <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">DEFAULT</span> gen_random_uuid()</span></code></pre></div>
 <p><strong>Rationale</strong>: UUIDv7 provides time-ordered UUIDs that
 improve B-tree index locality and enable temporal ordering without a
-separate <code>created_at</code> column. <code>sqitch-common.rkt</code>
-L61-63 defines the single source of truth.</p>
+separate <code>created_at</code> column.
+<code>sqitch-common.cpp/.hpp</code> L61-63 defines the single source of
+truth.</p>
 <p><strong>Affected files</strong> (current violations):</p>
 <ul>
-<li><code>sqitch-event-changes.rkt</code> — 4 occurrences (L38, L159,
-L180, L200)</li>
-<li><code>sqitch-state-machine.rkt</code> — 2 occurrences (L121,
+<li><code>sqitch-event-changes.cpp/.hpp</code> — 4 occurrences (L38,
+L159, L180, L200)</li>
+<li><code>sqitch-state-machine.cpp/.hpp</code> — 2 occurrences (L121,
 L220)</li>
-<li><code>sqitch-saga.rkt</code> — 3 occurrences (L132, L151, L166)</li>
-<li><code>sqitch-events.rkt</code> — 2 occurrences (L46, L150)</li>
-<li><code>migration-sql-deploy.rkt</code> — 1 occurrence (L174)</li>
-<li><code>sqitch-bitemporal.rkt</code> — 1 occurrence (system
+<li><code>sqitch-saga.cpp/.hpp</code> — 3 occurrences (L132, L151,
+L166)</li>
+<li><code>sqitch-events.cpp/.hpp</code> — 2 occurrences (L46, L150)</li>
+<li><code>migration-sql-deploy.cpp/.hpp</code> — 1 occurrence
+(L174)</li>
+<li><code>sqitch-bitemporal.cpp/.hpp</code> — 1 occurrence (system
 trigger)</li>
 </ul>
 <p><strong>FTR</strong>: FTR-159</p>
@@ -259,15 +263,15 @@ Inline <code>REFERENCES</code> produces auto-generated names like
 <code>encounter_patient_id_fkey</code> that vary across PostgreSQL
 versions.</p>
 <p><strong>Reference implementation</strong>:
-<code>migration-sql-deploy.rkt</code> L127 already uses named FK
+<code>migration-sql-deploy.cpp/.hpp</code> L127 already uses named FK
 constraints.</p>
 <p><strong>Affected files</strong> (current violations):</p>
 <ul>
-<li><code>sqitch-entity.rkt</code> — L66, L111</li>
-<li><code>sqitch-entity-columns.rkt</code> — L93, L112, L146</li>
-<li><code>sqitch-state-machine.rkt</code> — L113, L122-126,
+<li><code>sqitch-entity.cpp/.hpp</code> — L66, L111</li>
+<li><code>sqitch-entity-columns.cpp/.hpp</code> — L93, L112, L146</li>
+<li><code>sqitch-state-machine.cpp/.hpp</code> — L113, L122-126,
 L221-223</li>
-<li><code>sqitch-event-changes.rkt</code> — L181, L201</li>
+<li><code>sqitch-event-changes.cpp/.hpp</code> — L181, L201</li>
 </ul>
 <p><strong>FTR</strong>: FTR-160</p>
 <hr />
@@ -289,8 +293,8 @@ on FK columns (unlike MySQL InnoDB). Without indexes, <code>JOIN</code>
 through FK and <code>CASCADE DELETE</code> from parent trigger
 sequential scans.</p>
 <p><strong>Existing infrastructure</strong>:
-<code>indexes-triggers.rkt</code> L58 generates metadata-driven indexes
-but does not systematically cover all FK columns.</p>
+<code>indexes-triggers.cpp/.hpp</code> L58 generates metadata-driven
+indexes but does not systematically cover all FK columns.</p>
 <p><strong>FTR</strong>: FTR-161</p>
 <hr />
 <h2 id="4-column-and-object-documentation-comment-on">4. Column and
@@ -316,17 +320,17 @@ gap):</p>
 <tr>
 <td>COLUMN</td>
 <td>✅</td>
-<td><code>sqitch-entity-columns.rkt:490-525</code></td>
+<td><code>sqitch-entity-columns.cpp/.hpp:490-525</code></td>
 </tr>
 <tr>
 <td>CONSTRAINT (FK)</td>
 <td>✅</td>
-<td><code>sqitch-entity-columns.rkt:526-543</code></td>
+<td><code>sqitch-entity-columns.cpp/.hpp:526-543</code></td>
 </tr>
 <tr>
 <td>CONSTRAINT (CHECK)</td>
 <td>✅</td>
-<td><code>sqitch-entity-columns.rkt:545-557</code></td>
+<td><code>sqitch-entity-columns.cpp/.hpp:545-557</code></td>
 </tr>
 <tr>
 <td>TRIGGER</td>
@@ -336,12 +340,12 @@ gap):</p>
 <tr>
 <td>VIEW / MATERIALIZED VIEW</td>
 <td>✅</td>
-<td><code>sqitch-projections.rkt:149-150</code></td>
+<td><code>sqitch-projections.cpp/.hpp:149-150</code></td>
 </tr>
 <tr>
 <td>DOMAIN</td>
 <td>✅</td>
-<td><code>sqitch-entity-domains.rkt:78-79</code></td>
+<td><code>sqitch-entity-domains.cpp/.hpp:78-79</code></td>
 </tr>
 <tr>
 <td>FUNCTION</td>
@@ -400,7 +404,7 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#c
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMENT</span> <span class="kw">ON</span> <span class="kw">CONSTRAINT</span> chk_patient_birth_date <span class="kw">ON</span> patient.patient</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">IS</span> <span class="st">&#39;Birth date must not be in the future&#39;</span>;</span></code></pre></div>
 <p><strong>Implementation</strong>: The <code>sql-comment-on</code>
-helper in <code>sqitch-common.rkt:279-288</code> handles all object
+helper in <code>sqitch-common.cpp/.hpp:279-288</code> handles all object
 types uniformly. It accepts an optional <code>#:source</code> keyword
 for provenance tracking. Column comments use field-level DOC from the
 DSL (grammar: <code>FieldDocClause</code>, parser:
@@ -430,8 +434,9 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#c
 PostgreSQL-specific escape string syntax. Standard <code>'...'</code>
 quoting with <code>''</code> for embedded quotes is SQL-standard and
 portable. No seed data requires backslash escapes.</p>
-<p><strong>Affected file</strong>: <code>sqitch-unified-seeds.rkt</code>
-<code>sql-escape-value</code> (L68-85).</p>
+<p><strong>Affected file</strong>:
+<code>sqitch-unified-seeds.cpp/.hpp</code> <code>sql-escape-value</code>
+(L68-85).</p>
 <p><strong>FTR</strong>: FTR-163</p>
 <hr />
 <h2 id="6-idempotent-seed-data">6. Idempotent Seed Data</h2>
@@ -460,8 +465,9 @@ duplicate key violation on second run.
 <p><strong>Additional improvement</strong>: Multi-row
 <code>VALUES</code> instead of one <code>INSERT</code> per row (reduces
 round-trips).</p>
-<p><strong>Affected file</strong>: <code>sqitch-unified-seeds.rkt</code>
-INSERT generation (L136-141).</p>
+<p><strong>Affected file</strong>:
+<code>sqitch-unified-seeds.cpp/.hpp</code> INSERT generation
+(L136-141).</p>
 <p><strong>FTR</strong>: FTR-163</p>
 <hr />
 <h2 id="7-sql-object-naming-conventions">7. SQL Object Naming
@@ -651,7 +657,7 @@ inside a transaction block.</p>
 <p><strong>CANONICAL</strong>: A Racket test scans generated SQL output
 for pattern violations.</p>
 <div class="sourceCode" id="cb12"><pre
-class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; test-postgres-patterns.rkt</span></span>
+class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">;; test-postgres-patterns.cpp/.hpp</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">;; Scans generated SQL files and asserts:</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">;; - No gen_random_uuid() (except documented exceptions)</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All FK constraints have fk_ prefix</span></span>
@@ -661,7 +667,7 @@ class="sourceCode racket"><code class="sourceCode racket"><span id="cb12-1"><a h
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">;; - All verify scripts use DO $$ ... </span><span class="re">END</span><span class="co"> $$ structure</span></span></code></pre></div>
 <p><strong>Rationale</strong>: Patterns enforced by tests cannot
 regress. This is the PostgreSQL equivalent of
-<code>test-grammar-conformance.rkt</code> for DSL syntax.</p>
+<code>test-grammar-conformance.cpp/.hpp</code> for DSL syntax.</p>
 <p><strong>FTR</strong>: FTR-166</p>
 <hr />
 <h2 id="13-outbox-table-infrastructure">13. Outbox Table
@@ -694,7 +700,8 @@ working set.</p>
 <p><code>JSONB</code> is permitted here because the outbox serializes
 typed C++ effect structs — it is infrastructure, not domain data (see
 §9).</p>
-<p><strong>Generator</strong>: <code>sqitch-outbox.rkt:34-56</code></p>
+<p><strong>Generator</strong>:
+<code>sqitch-outbox.cpp/.hpp:34-56</code></p>
 <hr />
 <h2 id="14-cqrs-projection-views">14. CQRS Projection Views</h2>
 <p><strong>CANONICAL</strong>: Projections generate as
@@ -721,7 +728,7 @@ read queries.</p>
 <p>ON_EVENT projections generate as regular tables with explicit
 <code>COMMENT ON TABLE</code>.</p>
 <p><strong>Generator</strong>:
-<code>sqitch-projections.rkt:146-198</code></p>
+<code>sqitch-projections.cpp/.hpp:146-198</code></p>
 <hr />
 <h2 id="15-bitemporal-data--gist-indexes">15. Bitemporal Data &amp; GiST
 Indexes</h2>
@@ -771,8 +778,8 @@ only.</p>
 (<code>ST_Contains</code>, <code>ST_Intersects</code>, etc.) on PostGIS
 types.</p>
 <p><strong>Generator</strong>:
-<code>sqitch-entity-columns.rkt:388-426</code> (bitemporal),
-<code>sqitch-entity-columns.rkt:470-476</code> (spatial GiST)</p>
+<code>sqitch-entity-columns.cpp/.hpp:388-426</code> (bitemporal),
+<code>sqitch-entity-columns.cpp/.hpp:470-476</code> (spatial GiST)</p>
 <p><strong>ADR</strong>: 20260221 (bitemporal design), FTR-107/108</p>
 <hr />
 <h2 id="16-postgresql-domain-strong-types">16. PostgreSQL DOMAIN Strong
@@ -796,7 +803,7 @@ SQL inserts outside the application. They appear in
 <code>information_schema.domains</code> and provide self-documenting
 column types in <code>\d+</code> output.</p>
 <p><strong>Generator</strong>:
-<code>sqitch-entity-domains.rkt:31-79</code></p>
+<code>sqitch-entity-domains.cpp/.hpp:31-79</code></p>
 <p><strong>ADR</strong>: 20260119</p>
 <hr />
 <h2 id="17-uuidv5-seeded-lookup-tables">17. UUIDv5-Seeded Lookup
@@ -837,8 +844,9 @@ class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb18-1"><a href="#
 <p><strong>Framework lookup codes</strong>: <code>saga_status</code> (6
 codes), <code>saga_step_result</code> (3 codes), plus per-saga
 <code>{saga_name}_step</code> tables with one entry per named step.</p>
-<p><strong>Generator</strong>: <code>saga-lookup-tables.rkt:48-75</code>
-(codes), <code>saga-lookup-tables.rkt:200-240</code> (SQL)</p>
+<p><strong>Generator</strong>:
+<code>saga-lookup-tables.cpp/.hpp:48-75</code> (codes),
+<code>saga-lookup-tables.cpp/.hpp:200-240</code> (SQL)</p>
 <p><strong>ADR</strong>: 20260212 (compile-time lookup constants)</p>
 <hr />
 <h2 id="quick-reference-file--patterns">Quick Reference: File →
@@ -852,65 +860,65 @@ Patterns</h2>
 </thead>
 <tbody>
 <tr>
-<td><code>sqitch-common.rkt</code></td>
+<td><code>sqitch-common.cpp/.hpp</code></td>
 <td>§1 (uuid-default-fn), §4 (sql-comment-on helper), §7 (naming
 functions)</td>
 </tr>
 <tr>
-<td><code>sqitch-entity.rkt</code></td>
+<td><code>sqitch-entity.cpp/.hpp</code></td>
 <td>§2 (inline REFERENCES), §7 (naming)</td>
 </tr>
 <tr>
-<td><code>sqitch-entity-columns.rkt</code></td>
+<td><code>sqitch-entity-columns.cpp/.hpp</code></td>
 <td>§2 (FK), §3 (FK indexes), §4 (COMMENT ON COLUMN/CONSTRAINT), §7
 (naming), §15 (bitemporal EXCLUDE)</td>
 </tr>
 <tr>
-<td><code>sqitch-entity-domains.rkt</code></td>
+<td><code>sqitch-entity-domains.cpp/.hpp</code></td>
 <td>§16 (CREATE DOMAIN), §4 (COMMENT ON DOMAIN)</td>
 </tr>
 <tr>
-<td><code>sqitch-unified-seeds.rkt</code></td>
+<td><code>sqitch-unified-seeds.cpp/.hpp</code></td>
 <td>§5 (E' quoting), §6 (ON CONFLICT), §7 (naming)</td>
 </tr>
 <tr>
-<td><code>sqitch-state-machine.rkt</code></td>
+<td><code>sqitch-state-machine.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §2 (inline REFERENCES), §7 (naming)</td>
 </tr>
 <tr>
-<td><code>sqitch-event-changes.rkt</code></td>
+<td><code>sqitch-event-changes.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §2 (inline REFERENCES), §9 (JSONB)</td>
 </tr>
 <tr>
-<td><code>sqitch-events.rkt</code></td>
+<td><code>sqitch-events.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §9 (JSONB)</td>
 </tr>
 <tr>
-<td><code>sqitch-saga.rkt</code></td>
+<td><code>sqitch-saga.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §7 (naming), §17 (UUIDv5 lookups)</td>
 </tr>
 <tr>
-<td><code>sqitch-outbox.rkt</code></td>
+<td><code>sqitch-outbox.cpp/.hpp</code></td>
 <td>§9 (JSONB exception), §13 (outbox infrastructure)</td>
 </tr>
 <tr>
-<td><code>sqitch-projections.rkt</code></td>
+<td><code>sqitch-projections.cpp/.hpp</code></td>
 <td>§14 (CQRS projections), §4 (COMMENT ON MATERIALIZED VIEW)</td>
 </tr>
 <tr>
-<td><code>saga-lookup-tables.rkt</code></td>
+<td><code>saga-lookup-tables.cpp/.hpp</code></td>
 <td>§17 (UUIDv5 lookups), §6 (ON CONFLICT seeds)</td>
 </tr>
 <tr>
-<td><code>migration-sql-deploy.rkt</code></td>
+<td><code>migration-sql-deploy.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §2 (✅ already has named FKs)</td>
 </tr>
 <tr>
-<td><code>indexes-triggers.rkt</code></td>
+<td><code>indexes-triggers.cpp/.hpp</code></td>
 <td>§3 (FK indexes), §7 (naming)</td>
 </tr>
 <tr>
-<td><code>sqitch-bitemporal.rkt</code></td>
+<td><code>sqitch-bitemporal.cpp/.hpp</code></td>
 <td>§1 (gen_random_uuid), §15 (btree_gist)</td>
 </tr>
 <tr>

@@ -438,8 +438,9 @@ providing a deterministic constraint for agents and preventing the
        ↓                    ↓                        ↓
   doc/DSL.md (auto)   Generators (emit)       doc/CONTEXT.md (metrics)</code></pre>
 <p>The grammar conformance test
-(<code>test-grammar-conformance.rkt</code>) enforces 98%+ keyword parity
-between grammar and parser, with zero opaque stub rules permitted.</p>
+(<code>test-grammar-conformance.cpp/.hpp</code>) enforces 98%+ keyword
+parity between grammar and parser, with zero opaque stub rules
+permitted.</p>
 <hr />
 <h2 id="relationships-and-foreign-keys">Relationships and Foreign
 Keys</h2>
@@ -1076,7 +1077,7 @@ Safe, Semantic Migrations</h2>
 between versions:</p>
 <div class="sourceCode" id="cb30"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare git versions and generate migration</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.rkt <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--output</span> migrations/</span></code></pre></div>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">racket</span> migrate.cpp/.hpp <span class="at">--from</span> v1.0.0 <span class="at">--to</span> HEAD <span class="at">--output</span> migrations/</span></code></pre></div>
 <p><strong>The migration system detects:</strong></p>
 <table>
 <thead>
@@ -1464,8 +1465,8 @@ asset; the generators are replaceable.</p>
 <h3 id="formal-grammar-governance-achieved">Formal Grammar Governance
 (Achieved)</h3>
 <p>The DSL is formally specified by a <strong>208-rule PEG
-grammar</strong> (<code>dslgen/grammar/muscovite.peg</code>) that serves
-three roles simultaneously:</p>
+grammar</strong> (<code>grammar/muscovite.peg</code>) that serves three
+roles simultaneously:</p>
 <ol type="1">
 <li><strong>Constraint for AI generation</strong> — LLMs follow the
 formal grammar to produce syntactically valid <code>.ddd</code> files,

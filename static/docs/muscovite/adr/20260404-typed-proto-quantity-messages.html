@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typed Proto Quantity Messages — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Typed Proto Quantity Messages</span>
+</nav>
+
+<h1>Typed Proto Quantity Messages</h1>
+
+
+<h1 id="typed-proto-quantity-messages">Typed Proto Quantity
+Messages</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-04</li>
+<li>Tags: units, proto, grpc, fhir, type-safety</li>
+</ul>
+<p>Technical Story: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a>, Decision 2</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>When a DSL entity declares
+<code>systolic QUANTITY&lt;Pressure, mmHg&gt;</code>, the protobuf
+generator must decide how to represent that field in the
+<code>.proto</code> file. The two extremes are:</p>
+<ol type="1">
+<li><strong>Typed messages</strong> — one proto message per dimension
+(<code>Pressure</code>, <code>Length</code>, <code>Mass</code>), each
+with a dimension-specific unit enum and a <code>ucum_code</code> string
+field</li>
+<li><strong>Generic Quantity</strong> — a single
+<code>Quantity { double value; string unit; }</code> message reused for
+all fields (FHIR-style)</li>
+</ol>
+<p>This decision affects compile-time safety, proto surface area, FHIR
+interoperability, and the complexity of generated C++ converters.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Type safety: prevent accidentally passing a <code>Length</code>
+where a <code>Pressure</code> is expected</li>
+<li>FHIR interoperability: healthcare systems exchange quantities as
+UCUM-coded strings</li>
+<li>Proto surface area: number of generated <code>.proto</code> files
+and messages</li>
+<li>Converter complexity: C++ <code>from_proto</code> /
+<code>to_proto</code> code per dimension</li>
+<li>IDE support: proto enums provide auto-completion for unit
+selection</li>
+<li>Backward compatibility: adding new units to an enum is
+backward-compatible in proto3</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ol type="1">
+<li><strong>Typed messages with <code>ucum_code</code> field</strong> —
+Per-dimension messages with enum + UCUM string</li>
+<li><strong>Generic FHIR-style Quantity</strong> — Single
+<code>Quantity { double value; string unit; }</code></li>
+<li><strong>Typed wrapper around generic</strong> —
+<code>message Pressure { Quantity quantity = 1; }</code></li>
+</ol>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Typed messages with <code>ucum_code</code> field"
+(option 1), because it provides compile-time type safety through
+per-dimension messages and enums, while the <code>ucum_code</code>
+string field preserves FHIR wire compatibility.</p>
+<p>The key insight: <strong>enums give compile-time safety, the UCUM
+field gives interop — best of both worlds.</strong></p>
+<p>Each <code>DIMENSION</code> in the DSL generates:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode protobuf"><code class="sourceCode protobuf"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// muscovite/quantities/pressure.proto</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> PressureUnit {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    PRESSURE_UNIT_UNSPECIFIED <span class="op">=</span> <span class="dv">0</span>;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    PRESSURE_UNIT_PASCAL <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    PRESSURE_UNIT_KILOPASCAL <span class="op">=</span> <span class="dv">2</span>;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    PRESSURE_UNIT_MMHG <span class="op">=</span> <span class="dv">6</span>;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ... auto-generated from QUDT standard library</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> Pressure {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> value <span class="op">=</span> <span class="dv">1</span>;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    PressureUnit unit <span class="op">=</span> <span class="dv">2</span>;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> ucum_code <span class="op">=</span> <span class="dv">3</span>;  <span class="co">// FHIR wire encoding: &quot;mm[Hg]&quot;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The <code>ucum_code</code> field is:</p>
+<ul>
+<li>Set by the C++ converter when serializing to proto (from the unit
+enum's UCUM mapping)</li>
+<li>Used by FHIR-facing services as the canonical wire encoding</li>
+<li>Informational when the enum is present (enum is authoritative, UCUM
+is for interop)</li>
+</ul>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Compile-time type safety: gRPC service accepting
+<code>Pressure</code> cannot receive <code>Length</code></li>
+<li>IDE auto-completion: proto enums list available units per
+dimension</li>
+<li>FHIR compatibility: <code>ucum_code</code> field carries UCUM
+encoding for healthcare interop</li>
+<li>Backward-compatible evolution: new enum values can be added without
+breaking clients</li>
+<li>Generated converters are per-dimension, making <code>switch</code>
+statements exhaustive</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Larger proto surface: one <code>.proto</code> file per dimension
+(mitigated: only dimensions used in the project are generated)</li>
+<li>More generated code: per-dimension converter functions in C++</li>
+<li>Proto enum names are verbose
+(<code>PRESSURE_UNIT_KILOPASCAL</code>), required by proto3 naming</li>
+</ul>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
+<h3 id="option-1-typed-messages-with-ucum_code-field">Option 1: Typed
+Messages with <code>ucum_code</code> Field</h3>
+<p>Per-dimension message with unit enum and UCUM string for FHIR
+interop.</p>
+<ul>
+<li>Good, because compile-time type safety at the proto/gRPC level</li>
+<li>Good, because enum provides IDE auto-completion for unit
+selection</li>
+<li>Good, because <code>ucum_code</code> preserves FHIR wire
+compatibility</li>
+<li>Good, because <code>switch</code> on enum is exhaustive — compiler
+catches missing cases</li>
+<li>Good, because backward-compatible: adding enum values is a
+non-breaking change</li>
+<li>Bad, because larger proto surface (one file per dimension)</li>
+<li>Bad, because verbose enum names required by proto3 scoping
+rules</li>
+<li>Bad, because dual representation (enum + UCUM string) requires
+consistency enforcement</li>
+</ul>
+<h3 id="option-2-generic-fhir-style-quantity">Option 2: Generic
+FHIR-Style Quantity</h3>
+<p>Single reusable message:
+<code>Quantity { double value; string unit; }</code>.</p>
+<ul>
+<li>Good, because minimal proto surface (one message for all
+quantities)</li>
+<li>Good, because directly FHIR-compatible wire format</li>
+<li>Good, because simpler generated code (one converter handles
+all)</li>
+<li>Bad, because stringly-typed — no compile-time safety</li>
+<li>Bad, because typos in unit strings (<code>"mmhg"</code> vs
+<code>"mm[Hg]"</code>) are runtime errors</li>
+<li>Bad, because no IDE auto-completion for valid units</li>
+<li>Bad, because dimension violations (<code>Length</code> value in
+<code>Pressure</code> field) undetectable at compile time</li>
+</ul>
+<h3 id="option-3-typed-wrapper-around-generic">Option 3: Typed Wrapper
+Around Generic</h3>
+<p><code>message Pressure { Quantity quantity = 1; }</code> — type name
+gives safety, generic inside.</p>
+<ul>
+<li>Good, because type name prevents dimension confusion at the service
+boundary</li>
+<li>Good, because reuses single <code>Quantity</code> definition</li>
+<li>Bad, because extra nesting level in proto messages</li>
+<li>Bad, because still stringly-typed inside the wrapper (unit is a
+string)</li>
+<li>Bad, because no enum auto-completion for units</li>
+<li>Bad, because awkward access pattern:
+<code>request.systolic().quantity().value()</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li>Origin: <a
+href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
+— DSL-Native Units of Measure</a></li>
+<li>Related: <a
+href="20260404-qudt-driven-unit-standard-library.html">QUDT-driven unit
+standard library</a></li>
+<li>Related: <a
+href="20260404-postgresql-quantity-storage-strategy.html">PostgreSQL
+quantity storage strategy</a></li>
+<li>Related: <a
+href="20260404-quantity-storage-unit-convention.html">Quantity storage
+unit convention</a></li>
+<li>Related: <a href="20260404-dsl-quantity-syntax-design.html">DSL
+quantity syntax design</a></li>
+<li>External: <a
+href="https://hl7.org/fhir/datatypes.html#Quantity">FHIR Quantity data
+type</a></li>
+<li>External: <a href="https://ucum.org/">UCUM — Unified Code for Units
+of Measure</a></li>
+<li>External: <a
+href="https://protobuf.dev/programming-guides/dos-donts/#enums">Protocol
+Buffers enum best practices</a></li>
+<li>External: <a href="https://mpusz.github.io/mp-units/">mp-units C++
+library</a> (MIT license)</li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating <code>.proto</code> files for entities that contain
+<code>QUANTITY</code> fields</li>
+<li>When generating C++ proto converter functions
+(<code>from_proto</code> / <code>to_proto</code>) for quantities</li>
+<li>When designing gRPC service interfaces that accept or return
+quantity values</li>
+<li>When mapping DSL <code>QUANTITY&lt;Dimension, unit&gt;</code> fields
+to protobuf representations</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>When working with non-quantity fields (TEXT, DECIMAL, DATE,
+etc.)</li>
+<li>When generating PostgreSQL DDL (see <a
+href="20260404-postgresql-quantity-storage-strategy.html">PostgreSQL
+storage strategy</a>)</li>
+<li>When generating QML display code (QML uses string-based unit
+display)</li>
+<li>When working on the QUDT-to-DDD generator (that produces the
+standard library)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>Proto generator (<code>dslgen/generators/proto/</code>) emits
+per-dimension messages with enums</li>
+<li>C++ converter generator emits
+<code>from_proto</code>/<code>to_proto</code> with exhaustive
+<code>switch</code> on enum</li>
+<li>clang-tidy: <code>-Wswitch</code> ensures all enum cases handled in
+converters</li>
+<li>Proto lint: <code>ucum_code</code> field must be present on every
+quantity message</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>dslgen/generators/proto/quantity.rkt</code> — Proto quantity
+message generator (to be created)</li>
+<li><code>proto/muscovite/quantities/</code> — Generated proto files
+directory (to be created)</li>
+<li><code>framework/grpc/include/muscovite/grpc/quantity_converters.hpp</code>
+— Proto converters (to be created)</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>
