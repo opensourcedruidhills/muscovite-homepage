@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.6.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.7.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -122,7 +122,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Retry policy for transient errors. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00033">33</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00035">35</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="ab99aa20be16d08296c86da107c5b3974" name="ab99aa20be16d08296c86da107c5b3974"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab99aa20be16d08296c86da107c5b3974">&#9670;&#160;</a></span>backoff_multiplier</h2>
@@ -138,7 +138,7 @@ Public Attributes</h2></td></tr>
 
 <p>Delay multiplier per retry. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00036">36</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00038">38</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -157,9 +157,9 @@ Public Attributes</h2></td></tr>
 <p>Deadline time point for retry budget enforcement (FTR-235) When set (non-default), the retry loop checks remaining time before each attempt and skips retry if insufficient. Default: max() means no deadline. </p>
 <dl class="section see"><dt>See also</dt><dd>ADR 20260228 — gRPC resilience sandwich </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00047">47</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00049">49</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00341">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00527">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00343">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00529">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>
@@ -177,7 +177,7 @@ Public Attributes</h2></td></tr>
 
 <p>Initial backoff delay. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00035">35</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00037">37</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -195,7 +195,7 @@ Public Attributes</h2></td></tr>
 
 <p>Maximum backoff delay. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00037">37</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00039">39</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -213,9 +213,9 @@ Public Attributes</h2></td></tr>
 
 <p>Maximum retry attempts. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00034">34</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00036">36</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00453">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00263">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00455">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>
@@ -234,7 +234,7 @@ Public Attributes</h2></td></tr>
 <p>Minimum remaining time to allow another retry attempt (FTR-235) Prevents wasteful retries near deadline expiry. Retry is skipped when remaining time &lt; min_remaining_for_retry. </p>
 <dl class="section see"><dt>See also</dt><dd>FTR-235 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00053">53</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00055">55</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
 </div>
 </div>
@@ -252,9 +252,9 @@ Public Attributes</h2></td></tr>
 
 <p>Retry connection errors. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00041">41</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00043">43</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00453">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00263">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00455">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>
@@ -272,9 +272,9 @@ Public Attributes</h2></td></tr>
 
 <p>Retry deadlocks. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00040">40</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00042">42</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00453">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00263">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00455">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>
@@ -292,9 +292,9 @@ Public Attributes</h2></td></tr>
 
 <p>Retry serialization conflicts. </p>
 
-<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00039">39</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="transactor_8hpp_source.html#l00041">41</a> of file <a class="el" href="transactor_8hpp_source.html">transactor.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00261">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00453">muscovite::dba::execute_uow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="transactor_8hpp_source.html#l00263">muscovite::dba::execute()</a>, and <a class="el" href="transactor_8hpp_source.html#l00455">muscovite::dba::execute_uow()</a>.</p>
 
 </div>
 </div>

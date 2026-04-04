@@ -1,5 +1,7 @@
 var NAVTREEINDEX9 =
 {
+"structmuscovite_1_1server_1_1security_1_1Principal.html#a47b855003eb1b7b10c8122307a88e120":[3,0,0,6,0,11,5],
+"structmuscovite_1_1server_1_1security_1_1Principal.html#a5872371877b18550a65d91c12573a3f8":[3,0,0,6,0,11,3],
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a64bb32355c4db625eb223ac605bc8038":[3,0,0,6,0,11,7],
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a772e17bb589d9c770761c605e1684923":[3,0,0,6,0,11,2],
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a81416b5a634d4507a1c5d94dc38e5519":[3,0,0,6,0,11,0],
@@ -102,8 +104,8 @@ var NAVTREEINDEX9 =
 "type__converters_8cpp_source.html":[4,0,0,0,1,9],
 "type__converters_8hpp.html":[4,0,0,0,0,0,0,22],
 "type__converters_8hpp_source.html":[4,0,0,0,0,0,0,22],
-"type__mapping_8cpp.html":[4,0,0,2,2,7],
-"type__mapping_8cpp_source.html":[4,0,0,2,2,7],
+"type__mapping_8cpp.html":[4,0,0,2,2,8],
+"type__mapping_8cpp_source.html":[4,0,0,2,2,8],
 "types_8hpp.html":[4,0,0,9,0,0,0,15],
 "types_8hpp_source.html":[4,0,0,9,0,0,0,15],
 "unit__of__work_8cpp.html":[4,0,0,0,1,10],

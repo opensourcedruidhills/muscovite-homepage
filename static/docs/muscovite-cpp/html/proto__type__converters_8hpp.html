@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.6.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.7.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -95,20 +95,13 @@ $(function(){initNavTree('proto__type__converters_8hpp.html','',''); });
 
 <p>Bidirectional converters between protobuf string fields and C++ domain types.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;charconv&gt;</code><br />
-<code>#include &lt;chrono&gt;</code><br />
+<div class="textblock"><code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
-<code>#include &lt;format&gt;</code><br />
-<code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
-<code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;string_view&gt;</code><br />
 <code>#include &lt;boost/multiprecision/cpp_dec_float.hpp&gt;</code><br />
 <code>#include &lt;boost/uuid/uuid.hpp&gt;</code><br />
-<code>#include &lt;boost/uuid/uuid_generators.hpp&gt;</code><br />
-<code>#include &lt;boost/uuid/uuid_io.hpp&gt;</code><br />
-<code>#include &lt;spdlog/spdlog.h&gt;</code><br />
 </div>
 <p><a href="proto__type__converters_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -127,9 +120,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a63e55292975a0ce71f35442ccf0fe97d" id="r_a63e55292975a0ce71f35442ccf0fe97d"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a63e55292975a0ce71f35442ccf0fe97d">muscovite::grpc::bool_to_string</a> (bool value) noexcept -&gt; std::string</td></tr>
 <tr class="memdesc:a63e55292975a0ce71f35442ccf0fe97d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert bool to protobuf string.  <br /></td></tr>
 <tr class="memitem:a033c66fa2288a1c59fd4d8e7db9e9848" id="r_a033c66fa2288a1c59fd4d8e7db9e9848"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a033c66fa2288a1c59fd4d8e7db9e9848">muscovite::grpc::date_to_string</a> (const std::chrono::year_month_day &amp;date) -&gt; std::string</td></tr>
-<tr class="memdesc:a033c66fa2288a1c59fd4d8e7db9e9848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::year_month_day to ISO 8601 string.  <br /></td></tr>
+<tr class="memdesc:a033c66fa2288a1c59fd4d8e7db9e9848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::year_month_day to protobuf string (ISO 8601).  <br /></td></tr>
 <tr class="memitem:adde63191230f9b934aeefaaf4301c612" id="r_adde63191230f9b934aeefaaf4301c612"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#adde63191230f9b934aeefaaf4301c612">muscovite::grpc::decimal_to_string</a> (const <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:adde63191230f9b934aeefaaf4301c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string with full precision.  <br /></td></tr>
+<tr class="memdesc:adde63191230f9b934aeefaaf4301c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string.  <br /></td></tr>
 <tr class="memitem:a4d258eb5d715c708ddf1f6407549530d" id="r_a4d258eb5d715c708ddf1f6407549530d"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a4d258eb5d715c708ddf1f6407549530d">muscovite::grpc::int32_to_string</a> (std::int32_t value) -&gt; std::string</td></tr>
 <tr class="memdesc:a4d258eb5d715c708ddf1f6407549530d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::int32_t to protobuf string.  <br /></td></tr>
 <tr class="memitem:aaca6c6f802243a68e3cf3cdd4040c222" id="r_aaca6c6f802243a68e3cf3cdd4040c222"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#aaca6c6f802243a68e3cf3cdd4040c222">muscovite::grpc::int64_to_string</a> (std::int64_t value) -&gt; std::string</td></tr>
@@ -139,9 +132,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a5479dae485659373f7e927404a7f25f4" id="r_a5479dae485659373f7e927404a7f25f4"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a5479dae485659373f7e927404a7f25f4">muscovite::grpc::optional_date_to_string</a> (const std::optional&lt; std::chrono::year_month_day &gt; &amp;date) -&gt; std::string</td></tr>
 <tr class="memdesc:a5479dae485659373f7e927404a7f25f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional date to protobuf string.  <br /></td></tr>
 <tr class="memitem:a1a43037db4d74bac8c7f001314702e5f" id="r_a1a43037db4d74bac8c7f001314702e5f"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a1a43037db4d74bac8c7f001314702e5f">muscovite::grpc::optional_decimal_to_string</a> (const std::optional&lt; <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &gt; &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:a1a43037db4d74bac8c7f001314702e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string.  <br /></td></tr>
+<tr class="memdesc:a1a43037db4d74bac8c7f001314702e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional decimal to protobuf string.  <br /></td></tr>
 <tr class="memitem:a1eff7735ab7abbe9ecfa331397c31373" id="r_a1eff7735ab7abbe9ecfa331397c31373"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a1eff7735ab7abbe9ecfa331397c31373">muscovite::grpc::optional_int64_to_string</a> (const std::optional&lt; std::int64_t &gt; &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:a1eff7735ab7abbe9ecfa331397c31373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional std::int64_t to protobuf string (empty string if not set).  <br /></td></tr>
+<tr class="memdesc:a1eff7735ab7abbe9ecfa331397c31373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional int64 to protobuf string.  <br /></td></tr>
 <tr class="memitem:a8fa997183a5106a906a5ac948be681f4" id="r_a8fa997183a5106a906a5ac948be681f4"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a8fa997183a5106a906a5ac948be681f4">muscovite::grpc::optional_string_from_proto</a> (std::string_view str) -&gt; std::optional&lt; std::string &gt;</td></tr>
 <tr class="memdesc:a8fa997183a5106a906a5ac948be681f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert protobuf string to optional string (empty = not set).  <br /></td></tr>
 <tr class="memitem:a46133bfeced06b9136566f4512a5d157" id="r_a46133bfeced06b9136566f4512a5d157"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a46133bfeced06b9136566f4512a5d157">muscovite::grpc::optional_string_to_bool</a> (std::string_view str) noexcept -&gt; std::optional&lt; bool &gt;</td></tr>
@@ -149,9 +142,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a593c588199501f57ef8f614243c8c498" id="r_a593c588199501f57ef8f614243c8c498"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a593c588199501f57ef8f614243c8c498">muscovite::grpc::optional_string_to_date</a> (std::string_view str) -&gt; std::optional&lt; std::chrono::year_month_day &gt;</td></tr>
 <tr class="memdesc:a593c588199501f57ef8f614243c8c498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional date.  <br /></td></tr>
 <tr class="memitem:acc0eebb065c91b779c042df30216515a" id="r_acc0eebb065c91b779c042df30216515a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#acc0eebb065c91b779c042df30216515a">muscovite::grpc::optional_string_to_decimal</a> (std::string_view str) -&gt; std::optional&lt; <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &gt;</td></tr>
-<tr class="memdesc:acc0eebb065c91b779c042df30216515a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>.  <br /></td></tr>
+<tr class="memdesc:acc0eebb065c91b779c042df30216515a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional decimal.  <br /></td></tr>
 <tr class="memitem:a760d0da498a3c118eadf86c9e645ec54" id="r_a760d0da498a3c118eadf86c9e645ec54"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a760d0da498a3c118eadf86c9e645ec54">muscovite::grpc::optional_string_to_int64</a> (std::string_view str) -&gt; std::optional&lt; std::int64_t &gt;</td></tr>
-<tr class="memdesc:a760d0da498a3c118eadf86c9e645ec54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional std::int64_t.  <br /></td></tr>
+<tr class="memdesc:a760d0da498a3c118eadf86c9e645ec54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional int64.  <br /></td></tr>
 <tr class="memitem:a151058326b7345d43d63600f2d6748b9" id="r_a151058326b7345d43d63600f2d6748b9"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a151058326b7345d43d63600f2d6748b9">muscovite::grpc::optional_string_to_proto</a> (const std::optional&lt; std::string &gt; &amp;str) -&gt; std::string</td></tr>
 <tr class="memdesc:a151058326b7345d43d63600f2d6748b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional string to protobuf string (empty if not set).  <br /></td></tr>
 <tr class="memitem:afb30ae969f1f2c56ed8d86c269092b36" id="r_afb30ae969f1f2c56ed8d86c269092b36"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#afb30ae969f1f2c56ed8d86c269092b36">muscovite::grpc::optional_string_to_string</a> (std::string_view str) -&gt; std::optional&lt; std::string &gt;</td></tr>
@@ -168,28 +161,26 @@ Functions</h2></td></tr>
 <tr class="memdesc:a0ad48bb2682692899f7f235f0551cdca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional timestamp to protobuf string.  <br /></td></tr>
 <tr class="memitem:a6a872782ab4aace00f7a3dc1ba1795af" id="r_a6a872782ab4aace00f7a3dc1ba1795af"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a6a872782ab4aace00f7a3dc1ba1795af">muscovite::grpc::optional_uuid_to_string</a> (const std::optional&lt; boost::uuids::uuid &gt; &amp;id) noexcept -&gt; std::string</td></tr>
 <tr class="memdesc:a6a872782ab4aace00f7a3dc1ba1795af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional UUID to string (empty string if not set).  <br /></td></tr>
-<tr class="memitem:a5266ddb85c44ecb828106fe23c4a08b3" id="r_a5266ddb85c44ecb828106fe23c4a08b3"><td class="memItemLeft">constexpr auto&#160;</td><td class="memItemRight"><a class="el" href="#a5266ddb85c44ecb828106fe23c4a08b3">muscovite::grpc::detail::parse_int_field</a> (const char *begin, const char *end, int &amp;value) noexcept -&gt; bool</td></tr>
-<tr class="memdesc:a5266ddb85c44ecb828106fe23c4a08b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse an integer field from a string_view range using std::from_chars.  <br /></td></tr>
 <tr class="memitem:a3ebac7bbc4b60485d0a3f55963c92c75" id="r_a3ebac7bbc4b60485d0a3f55963c92c75"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a3ebac7bbc4b60485d0a3f55963c92c75">muscovite::grpc::string_to_bool</a> (std::string_view str) noexcept -&gt; bool</td></tr>
 <tr class="memdesc:a3ebac7bbc4b60485d0a3f55963c92c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to bool.  <br /></td></tr>
 <tr class="memitem:aa73fa16d9bad6a5cfbd39ca45ced68bc" id="r_aa73fa16d9bad6a5cfbd39ca45ced68bc"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#aa73fa16d9bad6a5cfbd39ca45ced68bc">muscovite::grpc::string_to_date</a> (std::string_view str) -&gt; std::chrono::year_month_day</td></tr>
 <tr class="memdesc:aa73fa16d9bad6a5cfbd39ca45ced68bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (ISO 8601 YYYY-MM-DD) to std::chrono::year_month_day.  <br /></td></tr>
 <tr class="memitem:a79780dd7e74aeda93de3d345ee1b8d5a" id="r_a79780dd7e74aeda93de3d345ee1b8d5a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a79780dd7e74aeda93de3d345ee1b8d5a">muscovite::grpc::string_to_decimal</a> (std::string_view str) -&gt; <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a></td></tr>
-<tr class="memdesc:a79780dd7e74aeda93de3d345ee1b8d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to <a class="el" href="namespacemuscovite_1_1grpc.html#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>.  <br /></td></tr>
+<tr class="memdesc:a79780dd7e74aeda93de3d345ee1b8d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to boost::multiprecision::cpp_dec_float_50.  <br /></td></tr>
 <tr class="memitem:ab6abf4fdb8a7bbce13fabaaefb677f24" id="r_ab6abf4fdb8a7bbce13fabaaefb677f24"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#ab6abf4fdb8a7bbce13fabaaefb677f24">muscovite::grpc::string_to_int32</a> (std::string_view str) -&gt; std::int32_t</td></tr>
 <tr class="memdesc:ab6abf4fdb8a7bbce13fabaaefb677f24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to std::int32_t using std::from_chars.  <br /></td></tr>
 <tr class="memitem:a257417200b1a2886f6a1bbeaa37b667d" id="r_a257417200b1a2886f6a1bbeaa37b667d"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a257417200b1a2886f6a1bbeaa37b667d">muscovite::grpc::string_to_int64</a> (std::string_view str) -&gt; std::int64_t</td></tr>
 <tr class="memdesc:a257417200b1a2886f6a1bbeaa37b667d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to std::int64_t using std::from_chars.  <br /></td></tr>
 <tr class="memitem:ad3a8795b8952941deaf933b6ae24a1d6" id="r_ad3a8795b8952941deaf933b6ae24a1d6"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#ad3a8795b8952941deaf933b6ae24a1d6">muscovite::grpc::string_to_time</a> (std::string_view str) -&gt; std::chrono::microseconds</td></tr>
-<tr class="memdesc:ad3a8795b8952941deaf933b6ae24a1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (HH:MM:SS or HH:MM:SS.ffffff) to std::chrono::microseconds.  <br /></td></tr>
+<tr class="memdesc:ad3a8795b8952941deaf933b6ae24a1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (HH:MM:SS[.fraction]) to std::chrono::microseconds since midnight.  <br /></td></tr>
 <tr class="memitem:abc08ebae0bdff6de61eecfcc7729c7d6" id="r_abc08ebae0bdff6de61eecfcc7729c7d6"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#abc08ebae0bdff6de61eecfcc7729c7d6">muscovite::grpc::string_to_timestamp</a> (std::string_view str) -&gt; std::chrono::system_clock::time_point</td></tr>
 <tr class="memdesc:abc08ebae0bdff6de61eecfcc7729c7d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (ISO 8601) to std::chrono::system_clock::time_point.  <br /></td></tr>
 <tr class="memitem:a6326dc220e12d8e85af8bcafc8096d2a" id="r_a6326dc220e12d8e85af8bcafc8096d2a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a6326dc220e12d8e85af8bcafc8096d2a">muscovite::grpc::string_to_uuid</a> (std::string_view s) -&gt; boost::uuids::uuid</td></tr>
 <tr class="memdesc:a6326dc220e12d8e85af8bcafc8096d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert string to boost::uuids::uuid.  <br /></td></tr>
 <tr class="memitem:af54abd14181b78a11c304b46eaeb4654" id="r_af54abd14181b78a11c304b46eaeb4654"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#af54abd14181b78a11c304b46eaeb4654">muscovite::grpc::time_to_string</a> (const std::chrono::microseconds &amp;time) -&gt; std::string</td></tr>
-<tr class="memdesc:af54abd14181b78a11c304b46eaeb4654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::microseconds (time of day) to HH:MM:SS[.ffffff] string.  <br /></td></tr>
+<tr class="memdesc:af54abd14181b78a11c304b46eaeb4654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::microseconds since midnight to protobuf string.  <br /></td></tr>
 <tr class="memitem:ab5023cf8079b3dfa14939e1666e5459e" id="r_ab5023cf8079b3dfa14939e1666e5459e"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#ab5023cf8079b3dfa14939e1666e5459e">muscovite::grpc::timestamp_to_string</a> (const std::chrono::system_clock::time_point &amp;ts) -&gt; std::string</td></tr>
-<tr class="memdesc:ab5023cf8079b3dfa14939e1666e5459e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::system_clock::time_point to ISO 8601 string.  <br /></td></tr>
+<tr class="memdesc:ab5023cf8079b3dfa14939e1666e5459e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::system_clock::time_point to protobuf string.  <br /></td></tr>
 <tr class="memitem:a9df30eaf9a975ff30ded5eeb26c20474" id="r_a9df30eaf9a975ff30ded5eeb26c20474"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="namespacemuscovite_1_1grpc.html#a9df30eaf9a975ff30ded5eeb26c20474">muscovite::grpc::uuid_to_string</a> (const boost::uuids::uuid &amp;id) noexcept -&gt; std::string</td></tr>
 <tr class="memdesc:a9df30eaf9a975ff30ded5eeb26c20474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert boost::uuids::uuid to string representation.  <br /></td></tr>
 </table>
@@ -197,60 +188,14 @@ Functions</h2></td></tr>
 <div class="textblock"><p>Bidirectional converters between protobuf string fields and C++ domain types. </p>
 <dl class="section see"><dt>See also</dt><dd>ADR 20260119 — strong types across all layers </dd>
 <dd>
-FTR-209 — C89→C++23 rewrite (nullptr, static_cast, [[nodiscard]], noexcept, string_view)</dd></dl>
+FTR-209 — C89→C++23 rewrite (nullptr, static_cast, [[nodiscard]], noexcept, string_view) </dd>
+<dd>
+FTR-533 — Split fat header: implementations moved to .cpp</dd></dl>
 <p>Protobuf represents all domain types as strings. These converters provide type-safe conversion between protobuf wire format and C++ strong types (UUID, Decimal, Date, Timestamp, TimeOfDay) used throughout the framework.</p>
 <dl class="section note"><dt>Note</dt><dd>This header is included by every generated gRPC service (~57 files). Changes here affect the entire build. </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
-</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a5266ddb85c44ecb828106fe23c4a08b3" name="a5266ddb85c44ecb828106fe23c4a08b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5266ddb85c44ecb828106fe23c4a08b3">&#9670;&#160;</a></span>parse_int_field()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto muscovite::grpc::detail::parse_int_field </td>
-          <td>(</td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>begin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;) -&gt; bool</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel constexpr">constexpr</span><span class="mlabel noexcept">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Parse an integer field from a string_view range using std::from_chars. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">begin</td><td>Start pointer. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">end</td><td>End pointer. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Parsed integer. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if parsing succeeded and consumed all characters. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00214">214</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

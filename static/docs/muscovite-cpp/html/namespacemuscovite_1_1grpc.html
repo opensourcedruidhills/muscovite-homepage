@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.6.2</span>
+   <div id="projectname">Muscovite C++ Framework<span id="projectnumber">&#160;2.7.0</span>
    </div>
    <div id="projectbrief">C++ framework for Muscovite-generated domain applications</div>
   </td>
@@ -134,13 +134,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a90689104a9d40e202ae922a3d7768591" id="r_a90689104a9d40e202ae922a3d7768591"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a90689104a9d40e202ae922a3d7768591">date_to_iso8601</a> (const std::chrono::year_month_day &amp;date) -&gt; std::string</td></tr>
 <tr class="memdesc:a90689104a9d40e202ae922a3d7768591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert year_month_day to ISO 8601 date string.  <br /></td></tr>
 <tr class="memitem:a033c66fa2288a1c59fd4d8e7db9e9848" id="r_a033c66fa2288a1c59fd4d8e7db9e9848"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a033c66fa2288a1c59fd4d8e7db9e9848">date_to_string</a> (const std::chrono::year_month_day &amp;date) -&gt; std::string</td></tr>
-<tr class="memdesc:a033c66fa2288a1c59fd4d8e7db9e9848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::year_month_day to ISO 8601 string.  <br /></td></tr>
+<tr class="memdesc:a033c66fa2288a1c59fd4d8e7db9e9848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::year_month_day to protobuf string (ISO 8601).  <br /></td></tr>
 <tr class="memitem:a7f6fbdd0925ae86d75b02f0b2d743a9d" id="r_a7f6fbdd0925ae86d75b02f0b2d743a9d"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a7f6fbdd0925ae86d75b02f0b2d743a9d">decimal_from_proto</a> (const proto::Decimal &amp;src) -&gt; <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a></td></tr>
 <tr class="memdesc:a7f6fbdd0925ae86d75b02f0b2d743a9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert proto <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> (explicit helper for generator).  <br /></td></tr>
 <tr class="memitem:a1184c651b500c40782b1eb917d6b0d7d" id="r_a1184c651b500c40782b1eb917d6b0d7d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1184c651b500c40782b1eb917d6b0d7d">decimal_to_proto</a> (const <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &amp;src, proto::Decimal *dst)</td></tr>
 <tr class="memdesc:a1184c651b500c40782b1eb917d6b0d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to proto <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> (explicit helper for generator).  <br /></td></tr>
 <tr class="memitem:adde63191230f9b934aeefaaf4301c612" id="r_adde63191230f9b934aeefaaf4301c612"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#adde63191230f9b934aeefaaf4301c612">decimal_to_string</a> (const <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:adde63191230f9b934aeefaaf4301c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string with full precision.  <br /></td></tr>
+<tr class="memdesc:adde63191230f9b934aeefaaf4301c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string.  <br /></td></tr>
 <tr class="memitem:ab74afb4c030b6473c9ff5ca42452686f" id="r_ab74afb4c030b6473c9ff5ca42452686f"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ab74afb4c030b6473c9ff5ca42452686f">from_proto</a> (const proto::Date &amp;src) -&gt; std::chrono::year_month_day</td></tr>
 <tr class="memdesc:ab74afb4c030b6473c9ff5ca42452686f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert proto Date to chrono year_month_day.  <br /></td></tr>
 <tr class="memitem:a3820e7c4e9445fd69b6ebaba52629a52" id="r_a3820e7c4e9445fd69b6ebaba52629a52"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a3820e7c4e9445fd69b6ebaba52629a52">from_proto</a> (const proto::Decimal &amp;src) -&gt; <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a></td></tr>
@@ -177,9 +177,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a5479dae485659373f7e927404a7f25f4" id="r_a5479dae485659373f7e927404a7f25f4"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a5479dae485659373f7e927404a7f25f4">optional_date_to_string</a> (const std::optional&lt; std::chrono::year_month_day &gt; &amp;date) -&gt; std::string</td></tr>
 <tr class="memdesc:a5479dae485659373f7e927404a7f25f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional date to protobuf string.  <br /></td></tr>
 <tr class="memitem:a1a43037db4d74bac8c7f001314702e5f" id="r_a1a43037db4d74bac8c7f001314702e5f"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a1a43037db4d74bac8c7f001314702e5f">optional_decimal_to_string</a> (const std::optional&lt; <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &gt; &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:a1a43037db4d74bac8c7f001314702e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string.  <br /></td></tr>
+<tr class="memdesc:a1a43037db4d74bac8c7f001314702e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional decimal to protobuf string.  <br /></td></tr>
 <tr class="memitem:a1eff7735ab7abbe9ecfa331397c31373" id="r_a1eff7735ab7abbe9ecfa331397c31373"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a1eff7735ab7abbe9ecfa331397c31373">optional_int64_to_string</a> (const std::optional&lt; std::int64_t &gt; &amp;value) -&gt; std::string</td></tr>
-<tr class="memdesc:a1eff7735ab7abbe9ecfa331397c31373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional std::int64_t to protobuf string (empty string if not set).  <br /></td></tr>
+<tr class="memdesc:a1eff7735ab7abbe9ecfa331397c31373"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional int64 to protobuf string.  <br /></td></tr>
 <tr class="memitem:a8fa997183a5106a906a5ac948be681f4" id="r_a8fa997183a5106a906a5ac948be681f4"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a8fa997183a5106a906a5ac948be681f4">optional_string_from_proto</a> (std::string_view str) -&gt; std::optional&lt; std::string &gt;</td></tr>
 <tr class="memdesc:a8fa997183a5106a906a5ac948be681f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert protobuf string to optional string (empty = not set).  <br /></td></tr>
 <tr class="memitem:a46133bfeced06b9136566f4512a5d157" id="r_a46133bfeced06b9136566f4512a5d157"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a46133bfeced06b9136566f4512a5d157">optional_string_to_bool</a> (std::string_view str) noexcept -&gt; std::optional&lt; bool &gt;</td></tr>
@@ -187,9 +187,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a593c588199501f57ef8f614243c8c498" id="r_a593c588199501f57ef8f614243c8c498"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a593c588199501f57ef8f614243c8c498">optional_string_to_date</a> (std::string_view str) -&gt; std::optional&lt; std::chrono::year_month_day &gt;</td></tr>
 <tr class="memdesc:a593c588199501f57ef8f614243c8c498"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional date.  <br /></td></tr>
 <tr class="memitem:acc0eebb065c91b779c042df30216515a" id="r_acc0eebb065c91b779c042df30216515a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#acc0eebb065c91b779c042df30216515a">optional_string_to_decimal</a> (std::string_view str) -&gt; std::optional&lt; <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &gt;</td></tr>
-<tr class="memdesc:acc0eebb065c91b779c042df30216515a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>.  <br /></td></tr>
+<tr class="memdesc:acc0eebb065c91b779c042df30216515a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional decimal.  <br /></td></tr>
 <tr class="memitem:a760d0da498a3c118eadf86c9e645ec54" id="r_a760d0da498a3c118eadf86c9e645ec54"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a760d0da498a3c118eadf86c9e645ec54">optional_string_to_int64</a> (std::string_view str) -&gt; std::optional&lt; std::int64_t &gt;</td></tr>
-<tr class="memdesc:a760d0da498a3c118eadf86c9e645ec54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional std::int64_t.  <br /></td></tr>
+<tr class="memdesc:a760d0da498a3c118eadf86c9e645ec54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse optional protobuf string to optional int64.  <br /></td></tr>
 <tr class="memitem:a151058326b7345d43d63600f2d6748b9" id="r_a151058326b7345d43d63600f2d6748b9"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a151058326b7345d43d63600f2d6748b9">optional_string_to_proto</a> (const std::optional&lt; std::string &gt; &amp;str) -&gt; std::string</td></tr>
 <tr class="memdesc:a151058326b7345d43d63600f2d6748b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert optional string to protobuf string (empty if not set).  <br /></td></tr>
 <tr class="memitem:afb30ae969f1f2c56ed8d86c269092b36" id="r_afb30ae969f1f2c56ed8d86c269092b36"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#afb30ae969f1f2c56ed8d86c269092b36">optional_string_to_string</a> (std::string_view str) -&gt; std::optional&lt; std::string &gt;</td></tr>
@@ -214,23 +214,23 @@ Functions</h2></td></tr>
 <tr class="memitem:aa73fa16d9bad6a5cfbd39ca45ced68bc" id="r_aa73fa16d9bad6a5cfbd39ca45ced68bc"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#aa73fa16d9bad6a5cfbd39ca45ced68bc">string_to_date</a> (std::string_view str) -&gt; std::chrono::year_month_day</td></tr>
 <tr class="memdesc:aa73fa16d9bad6a5cfbd39ca45ced68bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (ISO 8601 YYYY-MM-DD) to std::chrono::year_month_day.  <br /></td></tr>
 <tr class="memitem:a79780dd7e74aeda93de3d345ee1b8d5a" id="r_a79780dd7e74aeda93de3d345ee1b8d5a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a79780dd7e74aeda93de3d345ee1b8d5a">string_to_decimal</a> (std::string_view str) -&gt; <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a></td></tr>
-<tr class="memdesc:a79780dd7e74aeda93de3d345ee1b8d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>.  <br /></td></tr>
+<tr class="memdesc:a79780dd7e74aeda93de3d345ee1b8d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to boost::multiprecision::cpp_dec_float_50.  <br /></td></tr>
 <tr class="memitem:ab6abf4fdb8a7bbce13fabaaefb677f24" id="r_ab6abf4fdb8a7bbce13fabaaefb677f24"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ab6abf4fdb8a7bbce13fabaaefb677f24">string_to_int32</a> (std::string_view str) -&gt; std::int32_t</td></tr>
 <tr class="memdesc:ab6abf4fdb8a7bbce13fabaaefb677f24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to std::int32_t using std::from_chars.  <br /></td></tr>
 <tr class="memitem:a257417200b1a2886f6a1bbeaa37b667d" id="r_a257417200b1a2886f6a1bbeaa37b667d"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a257417200b1a2886f6a1bbeaa37b667d">string_to_int64</a> (std::string_view str) -&gt; std::int64_t</td></tr>
 <tr class="memdesc:a257417200b1a2886f6a1bbeaa37b667d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string to std::int64_t using std::from_chars.  <br /></td></tr>
 <tr class="memitem:ad3a8795b8952941deaf933b6ae24a1d6" id="r_ad3a8795b8952941deaf933b6ae24a1d6"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ad3a8795b8952941deaf933b6ae24a1d6">string_to_time</a> (std::string_view str) -&gt; std::chrono::microseconds</td></tr>
-<tr class="memdesc:ad3a8795b8952941deaf933b6ae24a1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (HH:MM:SS or HH:MM:SS.ffffff) to std::chrono::microseconds.  <br /></td></tr>
+<tr class="memdesc:ad3a8795b8952941deaf933b6ae24a1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (HH:MM:SS[.fraction]) to std::chrono::microseconds since midnight.  <br /></td></tr>
 <tr class="memitem:abc08ebae0bdff6de61eecfcc7729c7d6" id="r_abc08ebae0bdff6de61eecfcc7729c7d6"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#abc08ebae0bdff6de61eecfcc7729c7d6">string_to_timestamp</a> (std::string_view str) -&gt; std::chrono::system_clock::time_point</td></tr>
 <tr class="memdesc:abc08ebae0bdff6de61eecfcc7729c7d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse protobuf string (ISO 8601) to std::chrono::system_clock::time_point.  <br /></td></tr>
 <tr class="memitem:a6326dc220e12d8e85af8bcafc8096d2a" id="r_a6326dc220e12d8e85af8bcafc8096d2a"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a6326dc220e12d8e85af8bcafc8096d2a">string_to_uuid</a> (std::string_view s) -&gt; boost::uuids::uuid</td></tr>
 <tr class="memdesc:a6326dc220e12d8e85af8bcafc8096d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert string to boost::uuids::uuid.  <br /></td></tr>
 <tr class="memitem:af54abd14181b78a11c304b46eaeb4654" id="r_af54abd14181b78a11c304b46eaeb4654"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#af54abd14181b78a11c304b46eaeb4654">time_to_string</a> (const std::chrono::microseconds &amp;time) -&gt; std::string</td></tr>
-<tr class="memdesc:af54abd14181b78a11c304b46eaeb4654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::microseconds (time of day) to HH:MM:SS[.ffffff] string.  <br /></td></tr>
+<tr class="memdesc:af54abd14181b78a11c304b46eaeb4654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::microseconds since midnight to protobuf string.  <br /></td></tr>
 <tr class="memitem:a900cbfa2dbee0625644966343a2c76b1" id="r_a900cbfa2dbee0625644966343a2c76b1"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#a900cbfa2dbee0625644966343a2c76b1">timestamp_to_iso8601</a> (const std::chrono::system_clock::time_point &amp;ts) -&gt; std::string</td></tr>
 <tr class="memdesc:a900cbfa2dbee0625644966343a2c76b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert system_clock::time_point to ISO 8601 UTC string.  <br /></td></tr>
 <tr class="memitem:ab5023cf8079b3dfa14939e1666e5459e" id="r_ab5023cf8079b3dfa14939e1666e5459e"><td class="memItemLeft">auto&#160;</td><td class="memItemRight"><a class="el" href="#ab5023cf8079b3dfa14939e1666e5459e">timestamp_to_string</a> (const std::chrono::system_clock::time_point &amp;ts) -&gt; std::string</td></tr>
-<tr class="memdesc:ab5023cf8079b3dfa14939e1666e5459e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::system_clock::time_point to ISO 8601 string.  <br /></td></tr>
+<tr class="memdesc:ab5023cf8079b3dfa14939e1666e5459e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert std::chrono::system_clock::time_point to protobuf string.  <br /></td></tr>
 <tr class="memitem:af666b726db018151c0f7129814e204af" id="r_af666b726db018151c0f7129814e204af"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af666b726db018151c0f7129814e204af">to_proto</a> (const boost::uuids::uuid &amp;src, proto::UUID *dst)</td></tr>
 <tr class="memdesc:af666b726db018151c0f7129814e204af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert boost::uuid to proto UUID.  <br /></td></tr>
 <tr class="memitem:ad3880bb08d19ba83b120a09c5d01e147" id="r_ad3880bb08d19ba83b120a09c5d01e147"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad3880bb08d19ba83b120a09c5d01e147">to_proto</a> (const <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e">Decimal</a> &amp;src, proto::Decimal *dst)</td></tr>
@@ -317,7 +317,7 @@ Usage</h2>
 
 <p><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> type alias (50 digits). </p>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00040">40</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00034">34</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
 
 </div>
 </div>
@@ -377,7 +377,7 @@ Usage</h2>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -391,9 +391,9 @@ Usage</h2>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>"true" or "false". </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00511">511</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00439">439</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00518">optional_bool_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00443">optional_bool_to_string()</a>.</p>
 
 </div>
 </div>
@@ -451,23 +451,23 @@ Usage</h2>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert std::chrono::year_month_day to ISO 8601 string. </p>
+<p>Convert std::chrono::year_month_day to protobuf string (ISO 8601). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">date</td><td>The date to serialize. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>String in YYYY-MM-DD format. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>ISO 8601 YYYY-MM-DD string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00254">254</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00190">190</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00264">optional_date_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00197">optional_date_to_string()</a>.</p>
 
 </div>
 </div>
@@ -547,23 +547,23 @@ Usage</h2>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string with full precision. </p>
+<p>Convert <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>The <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to serialize. </td></tr>
+    <tr><td class="paramname">value</td><td>The decimal to serialize. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>String with max_digits10 precision. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00179">179</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00131">131</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00196">optional_decimal_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00142">optional_decimal_to_string()</a>.</p>
 
 </div>
 </div>
@@ -797,7 +797,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -809,9 +809,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> string representation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00115">115</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00082">82</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -833,7 +833,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -845,11 +845,11 @@ template&lt;typename Proto, typename T&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> string representation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00139">139</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00102">102</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00146">optional_int64_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00106">optional_int64_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1217,7 +1217,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1231,9 +1231,9 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>"true", "false", or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00518">518</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00443">443</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00511">bool_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00439">bool_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1255,7 +1255,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1263,15 +1263,15 @@ template&lt;typename Proto, typename T&gt; </div>
 <p>Convert optional date to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">date</td><td>Optional date value. </td></tr>
+    <tr><td class="paramname">date</td><td>Optional date. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ISO 8601 string or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00264">264</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00197">197</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00254">date_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00190">date_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1293,23 +1293,23 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert optional <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> to protobuf string. </p>
+<p>Convert optional decimal to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>Optional <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> value. </td></tr>
+    <tr><td class="paramname">value</td><td>Optional decimal. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Precision string or empty string. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00196">196</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00142">142</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00179">decimal_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00131">decimal_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1331,23 +1331,23 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert optional std::int64_t to protobuf string (empty string if not set). </p>
+<p>Convert optional int64 to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">value</td><td>Optional integer value. </td></tr>
+    <tr><td class="paramname">value</td><td>Optional integer. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> string or empty string. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>String representation or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00146">146</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00106">106</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00139">int64_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00102">int64_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1369,7 +1369,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1383,7 +1383,7 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The string value or std::nullopt if empty. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00463">463</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00403">403</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -1405,7 +1405,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1419,9 +1419,9 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Parsed boolean or std::nullopt if empty. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00528">528</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00450">450</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00497">string_to_bool()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00428">string_to_bool()</a>.</p>
 
 </div>
 </div>
@@ -1443,7 +1443,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1463,9 +1463,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00275">275</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00204">204</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00225">string_to_date()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00162">string_to_date()</a>.</p>
 
 </div>
 </div>
@@ -1487,21 +1487,29 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Parse optional protobuf string to optional <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>. </p>
+<p>Parse optional protobuf string to optional decimal. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> string; empty yields std::nullopt. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Parsed <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> or std::nullopt if empty. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed decimal or std::nullopt if empty. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if non-empty but invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00186">186</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00135">135</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00124">string_to_decimal()</a>.</p>
 
 </div>
 </div>
@@ -1523,12 +1531,12 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Parse optional protobuf string to optional std::int64_t. </p>
+<p>Parse optional protobuf string to optional int64. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td>Integer string; empty yields std::nullopt. </td></tr>
@@ -1543,9 +1551,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00157">157</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00113">113</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00123">string_to_int64()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00086">string_to_int64()</a>.</p>
 
 </div>
 </div>
@@ -1567,7 +1575,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1581,7 +1589,7 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>String value or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00483">483</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00417">417</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -1603,7 +1611,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1617,7 +1625,7 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The string value or std::nullopt if empty. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00473">473</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00410">410</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -1639,7 +1647,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1651,7 +1659,7 @@ template&lt;typename Proto, typename T&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Parsed duration or std::nullopt if empty. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed time or std::nullopt if empty. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>if non-empty but malformed. </td></tr>
@@ -1659,9 +1667,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00449">449</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00392">392</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00370">string_to_time()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00313">string_to_time()</a>.</p>
 
 </div>
 </div>
@@ -1683,7 +1691,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1695,7 +1703,7 @@ template&lt;typename Proto, typename T&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Parsed time point or std::nullopt if empty. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed timestamp or std::nullopt if empty. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>if non-empty but malformed. </td></tr>
@@ -1703,9 +1711,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00355">355</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00306">306</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00286">string_to_timestamp()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00211">string_to_timestamp()</a>.</p>
 
 </div>
 </div>
@@ -1785,7 +1793,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1793,15 +1801,15 @@ template&lt;typename Proto, typename T&gt; </div>
 <p>Convert optional time to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">time</td><td>Optional duration since midnight. </td></tr>
+    <tr><td class="paramname">time</td><td>Optional time. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Formatted time string or empty string. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>HH:MM:SS string or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00438">438</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00385">385</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00419">time_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00369">time_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1823,7 +1831,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1831,15 +1839,15 @@ template&lt;typename Proto, typename T&gt; </div>
 <p>Convert optional timestamp to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ts</td><td>Optional time point. </td></tr>
+    <tr><td class="paramname">ts</td><td>Optional timestamp. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ISO 8601 string or empty string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00344">344</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00299">299</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="proto__type__converters_8hpp_source.html#l00331">timestamp_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="proto__type__converters_8cpp_source.html#l00286">timestamp_to_string()</a>.</p>
 
 </div>
 </div>
@@ -1991,7 +1999,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2005,9 +2013,9 @@ template&lt;typename Proto, typename T&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Parsed boolean; ambiguous values default to false with a warning. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00497">497</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00428">428</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00528">optional_string_to_bool()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00450">optional_string_to_bool()</a>.</p>
 
 </div>
 </div>
@@ -2029,7 +2037,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2049,9 +2057,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00225">225</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00162">162</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00275">optional_string_to_date()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00204">optional_string_to_date()</a>.</p>
 
 </div>
 </div>
@@ -2073,22 +2081,29 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Parse protobuf string to <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a>. </p>
+<p>Parse protobuf string to boost::multiprecision::cpp_dec_float_50. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">str</td><td><a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> number string (e.g. "123.45"). </td></tr>
+    <tr><td class="paramname">str</td><td>Non-empty decimal string. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Parsed <a class="el" href="#a0ecc8370b66fb4e982e29a1b4323aa0e" title="Decimal type alias (50 digits).">Decimal</a> value. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>boost::multiprecision constructor requires std::string (no string_view overload). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed decimal value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if <code class="param">str</code> is empty or not a valid decimal. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00172">172</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00124">124</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00135">optional_string_to_decimal()</a>.</p>
 
 </div>
 </div>
@@ -2110,7 +2125,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2130,7 +2145,7 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00099">99</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00066">66</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
 </div>
 </div>
@@ -2152,7 +2167,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2172,9 +2187,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00123">123</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00086">86</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00157">optional_string_to_int64()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00113">optional_string_to_int64()</a>.</p>
 
 </div>
 </div>
@@ -2196,29 +2211,29 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Parse protobuf string (HH:MM:SS or HH:MM:SS.ffffff) to std::chrono::microseconds. </p>
+<p>Parse protobuf string (HH:MM:SS[.fraction]) to std::chrono::microseconds since midnight. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">str</td><td>Time-of-day string. </td></tr>
+    <tr><td class="paramname">str</td><td>Time string in HH:MM:SS[.microseconds] format. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Duration since midnight in microseconds. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed time as microseconds since midnight. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>if <code class="param">str</code> is empty, malformed, or out of range. </td></tr>
+    <tr><td class="paramname">std::invalid_argument</td><td>if <code class="param">str</code> is empty or malformed. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00370">370</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00313">313</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00449">optional_string_to_time()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00392">optional_string_to_time()</a>.</p>
 
 </div>
 </div>
@@ -2240,7 +2255,7 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2248,11 +2263,11 @@ template&lt;typename Proto, typename T&gt; </div>
 <p>Parse protobuf string (ISO 8601) to std::chrono::system_clock::time_point. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">str</td><td>Timestamp string (e.g. "2024-12-25T10:30:45Z"). </td></tr>
+    <tr><td class="paramname">str</td><td>Timestamp string in ISO 8601 format (YYYY-MM-DDTHH:MM:SS[.fff]Z). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Parsed time point in UTC. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Parsed timestamp value. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::invalid_argument</td><td>if <code class="param">str</code> is empty or malformed. </td></tr>
@@ -2260,9 +2275,9 @@ template&lt;typename Proto, typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00286">286</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00211">211</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00355">optional_string_to_timestamp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00306">optional_string_to_timestamp()</a>.</p>
 
 </div>
 </div>
@@ -2342,23 +2357,23 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert std::chrono::microseconds (time of day) to HH:MM:SS[.ffffff] string. </p>
+<p>Convert std::chrono::microseconds since midnight to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">time</td><td>Duration since midnight. </td></tr>
+    <tr><td class="paramname">time</td><td>Time as microseconds since midnight. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Formatted time string (fractional part omitted if zero). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>HH:MM:SS.microseconds string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00419">419</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00369">369</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00438">optional_time_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00385">optional_time_to_string()</a>.</p>
 
 </div>
 </div>
@@ -2416,23 +2431,23 @@ template&lt;typename Proto, typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Convert std::chrono::system_clock::time_point to ISO 8601 string. </p>
+<p>Convert std::chrono::system_clock::time_point to protobuf string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ts</td><td>The time point to serialize (UTC). </td></tr>
+    <tr><td class="paramname">ts</td><td>The timestamp to serialize. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>String in "YYYY-MM-DDThh:mm:ssZ" format. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>ISO 8601 timestamp string with milliseconds and Z suffix. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="proto__type__converters_8hpp_source.html#l00331">331</a> of file <a class="el" href="proto__type__converters_8hpp_source.html">proto_type_converters.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="proto__type__converters_8cpp_source.html#l00286">286</a> of file <a class="el" href="proto__type__converters_8cpp_source.html">proto_type_converters.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="proto__type__converters_8hpp_source.html#l00344">optional_timestamp_to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="proto__type__converters_8cpp_source.html#l00299">optional_timestamp_to_string()</a>.</p>
 
 </div>
 </div>

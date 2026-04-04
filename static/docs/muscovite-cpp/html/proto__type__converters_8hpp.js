@@ -23,7 +23,6 @@ var proto__type__converters_8hpp =
     [ "muscovite::grpc::optional_time_to_string", "namespacemuscovite_1_1grpc.html#a32ce171a321680b3a503532ff51ae6ad", null ],
     [ "muscovite::grpc::optional_timestamp_to_string", "namespacemuscovite_1_1grpc.html#a0ad48bb2682692899f7f235f0551cdca", null ],
     [ "muscovite::grpc::optional_uuid_to_string", "namespacemuscovite_1_1grpc.html#a6a872782ab4aace00f7a3dc1ba1795af", null ],
-    [ "muscovite::grpc::detail::parse_int_field", "proto__type__converters_8hpp.html#a5266ddb85c44ecb828106fe23c4a08b3", null ],
     [ "muscovite::grpc::string_to_bool", "namespacemuscovite_1_1grpc.html#a3ebac7bbc4b60485d0a3f55963c92c75", null ],
     [ "muscovite::grpc::string_to_date", "namespacemuscovite_1_1grpc.html#aa73fa16d9bad6a5cfbd39ca45ced68bc", null ],
     [ "muscovite::grpc::string_to_decimal", "namespacemuscovite_1_1grpc.html#a79780dd7e74aeda93de3d345ee1b8d5a", null ],

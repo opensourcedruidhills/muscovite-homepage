@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"structmuscovite_1_1dba_1_1RetryPolicy.html#afa5d59d987b4ff7a748ecb9ad6682928":[3,0,0,0,44,5],
+"structmuscovite_1_1geo_1_1srid__3857.html":[3,0,0,1,8],
 "structmuscovite_1_1geo_1_1srid__4258.html":[3,0,0,1,9],
 "structmuscovite_1_1geo_1_1srid__4269.html":[3,0,0,1,10],
 "structmuscovite_1_1geo_1_1srid__4326.html":[3,0,0,1,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a1263ff02a3661bb5997d63f322ac1c74":[3,0,0,6,0,11,9],
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a1a1e62154c1fb7d75c02df9cc71b4129":[3,0,0,6,0,11,11],
 "structmuscovite_1_1server_1_1security_1_1Principal.html#a1b7d42a170b9cd9349af166bf92ff3e4":[3,0,0,6,0,11,1],
-"structmuscovite_1_1server_1_1security_1_1Principal.html#a1c8f34a9af04099ba68d2e170b06d8c8":[3,0,0,6,0,11,6],
-"structmuscovite_1_1server_1_1security_1_1Principal.html#a47b855003eb1b7b10c8122307a88e120":[3,0,0,6,0,11,5],
-"structmuscovite_1_1server_1_1security_1_1Principal.html#a5872371877b18550a65d91c12573a3f8":[3,0,0,6,0,11,3]
+"structmuscovite_1_1server_1_1security_1_1Principal.html#a1c8f34a9af04099ba68d2e170b06d8c8":[3,0,0,6,0,11,6]
 };

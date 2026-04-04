@@ -5,6 +5,7 @@ var dir_b15b27ee4727f14b15772d1e5b4d5a75 =
     [ "actor_context.cpp", "actor__context_8cpp.html", null ],
     [ "correlation.cpp", "correlation_8cpp.html", null ],
     [ "error_mapping.cpp", "error__mapping_8cpp.html", "error__mapping_8cpp" ],
+    [ "proto_type_converters.cpp", "proto__type__converters_8cpp.html", "proto__type__converters_8cpp" ],
     [ "server.cpp", "grpc_2src_2server_8cpp.html", null ],
     [ "service_base.cpp", "service__base_8cpp.html", null ],
     [ "type_mapping.cpp", "type__mapping_8cpp.html", "type__mapping_8cpp" ]

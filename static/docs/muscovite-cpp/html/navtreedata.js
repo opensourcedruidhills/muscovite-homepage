@@ -71,9 +71,9 @@ var NAVTREEINDEX =
 "classmuscovite_1_1server_1_1security_1_1PasswordService.html#aa078c0e0b94622f08aba55f753289933",
 "dir_06d5cc1ad5e45ef0cdbf69a01c57a0b2.html",
 "group__service__impl_8cpp_source.html",
-"qt__phone_8hpp.html",
-"structmuscovite_1_1geo_1_1srid__4258.html",
-"structmuscovite_1_1server_1_1security_1_1Principal.html#a64bb32355c4db625eb223ac605bc8038"
+"qt__email_8hpp.html",
+"structmuscovite_1_1dba_1_1RetryPolicy.html#afa5d59d987b4ff7a748ecb9ad6682928",
+"structmuscovite_1_1server_1_1security_1_1Principal.html#a47b855003eb1b7b10c8122307a88e120"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';
