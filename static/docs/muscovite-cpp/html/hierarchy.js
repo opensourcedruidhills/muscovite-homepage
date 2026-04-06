@@ -91,6 +91,7 @@ var hierarchy =
     [ "std::hash&lt; muscovite::types::BoundedInteger&lt; Min, Max &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html", null ],
     [ "std::hash&lt; muscovite::types::BoundedString&lt; MinLen, MaxLen &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedString_3_01MinLen_00_01MaxLen_01_4_01_4.html", null ],
     [ "std::hash&lt; muscovite::types::PatternString&lt; Pattern &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1PatternString_3_01Pattern_01_4_01_4.html", null ],
+    [ "std::hash&lt; muscovite::types::TaggedId&lt; Entity &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1TaggedId_3_01Entity_01_4_01_4.html", null ],
     [ "muscovite::search::IndexResponse", "structmuscovite_1_1search_1_1IndexResponse.html", null ],
     [ "muscovite::dba::InfrastructureStateMachineBase&lt; BackoffPolicy &gt;", "classmuscovite_1_1dba_1_1InfrastructureStateMachineBase.html", null ],
     [ "muscovite::dba::JetStreamPublishAck", "structmuscovite_1_1dba_1_1JetStreamPublishAck.html", null ],
@@ -313,6 +314,7 @@ var hierarchy =
     [ "muscovite::messaging::Subscription", "classmuscovite_1_1messaging_1_1Subscription.html", [
       [ "muscovite::messaging::InMemorySubscription", "classmuscovite_1_1messaging_1_1InMemorySubscription.html", null ]
     ] ],
+    [ "muscovite::types::TaggedId&lt; Entity &gt;", "structmuscovite_1_1types_1_1TaggedId.html", null ],
     [ "muscovite::telemetry::TelemetryConfig", "structmuscovite_1_1telemetry_1_1TelemetryConfig.html", null ],
     [ "muscovite::dba::TestTransactionFixture", "classmuscovite_1_1dba_1_1TestTransactionFixture.html", null ],
     [ "muscovite::qt::Theme", "classmuscovite_1_1qt_1_1Theme.html", null ],

@@ -126,13 +126,18 @@ href="../../workflow/ideas/IDEA-134-dsl-native-units-of-measure.html">IDEA-134
 — DSL-Native Units of Measure</a>, Decision 1</p>
 <h2 id="context-and-problem-statement">Context and Problem
 Statement</h2>
-<p>Muscovite needs a standard library of unit and dimension definitions
-that projects can import (<code>IMPORT "muscovite://units/si"</code>).
-This library must cover the 7 SI base dimensions, all SI prefixes, 22+
-named derived dimensions, and domain-specific packs (medical,
-geoscience, engineering). The question is how to author and maintain
-these definitions: hand-code them from ISO 80000 tables, or generate
-them from a machine-readable ontology?</p>
+<p>Muscovite needs a <strong>canonical unit database</strong> — the
+single source of truth for all unit and dimension definitions. This
+database feeds every layer: the DSL standard library (<code>.ddd</code>
+files that projects import), the postgresql-unit extension (which uses
+GNU Units, rooted in the same NIST/SI data), mp-units in C++ (which
+implements ISO 80000), and the typed proto messages. All layers must
+agree on dimensions, conversion factors, and symbols.</p>
+<p>The library must cover the 7 SI base dimensions, all 24 SI prefixes,
+22+ named derived dimensions, chemistry units (mol, u/Da, eV, Å, M), and
+domain-specific packs (medical, geoscience). The question is how to
+author and maintain these definitions: hand-code them from ISO 80000
+tables, or derive them from a machine-readable ontology?</p>
 <h2 id="decision-drivers">Decision Drivers</h2>
 <ul>
 <li>Completeness: 2500+ units across SI, medical, and geoscience

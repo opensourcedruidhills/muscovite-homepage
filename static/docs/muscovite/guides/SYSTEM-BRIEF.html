@@ -114,8 +114,8 @@
 
 <h1 id="muscovite-system-brief">Muscovite System Brief</h1>
 <blockquote>
-<p><strong>Version</strong>: 2.9.0 | <strong>Generated</strong>:
-2026-04-04 | <strong>Commit</strong>: 76378f4c |
+<p><strong>Version</strong>: 2.10.0 | <strong>Generated</strong>:
+2026-04-06 | <strong>Commit</strong>: 1e5ce349 |
 <strong>Branch</strong>: main All content derived from live project
 sources. No hardcoded lists. Regenerate:
 <code>workflow/scripts/generate-system-brief.sh</code></p>
@@ -135,9 +135,9 @@ systems.</p>
 <li><strong>docs</strong> (7 files, 54 lines)</li>
 <li><strong>grpc</strong> (27 files, 353 lines)</li>
 <li><strong>messaging</strong> (5 files, 36 lines)</li>
-<li><strong>postgres</strong> (33 files, 453 lines)</li>
+<li><strong>postgres</strong> (35 files, 475 lines)</li>
 <li><strong>proto_ir</strong> (3 files, 19 lines)</li>
-<li><strong>qt</strong> (63 files, 701 lines)</li>
+<li><strong>qt</strong> (63 files, 704 lines)</li>
 <li><strong>search</strong> (9 files, 73 lines)</li>
 <li><strong>standalone</strong> (7 files, 61 lines)</li>
 <li><strong>testdata</strong> (9 files, 204 lines)</li>
@@ -194,7 +194,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>PEG grammar rules</td>
-<td>390</td>
+<td>391</td>
 </tr>
 <tr>
 <td>Known types</td>
@@ -218,12 +218,12 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>244</td>
+<td>245</td>
 </tr>
 </tbody>
 </table>
 <h2 id="4-codebase-metrics-per-area">4. Codebase Metrics (per area)</h2>
-<h3 id="layer-0--muscomp-8101-lines">Layer 0 — muscomp (8101 lines)</h3>
+<h3 id="layer-0--muscomp-8332-lines">Layer 0 — muscomp (8332 lines)</h3>
 <table>
 <thead>
 <tr>
@@ -234,7 +234,7 @@ lifecycle.</td>
 <tbody>
 <tr>
 <td>Generator: postgres</td>
-<td>453</td>
+<td>475</td>
 </tr>
 <tr>
 <td>Generator: cpp</td>
@@ -246,7 +246,7 @@ lifecycle.</td>
 </tr>
 <tr>
 <td>Generator: qt</td>
-<td>701</td>
+<td>704</td>
 </tr>
 <tr>
 <td>Generator: cmake</td>
@@ -258,7 +258,7 @@ lifecycle.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="layer-1--c-framework-43701-lines">Layer 1 — C++ Framework (43701
+<h3 id="layer-1--c-framework-43838-lines">Layer 1 — C++ Framework (43838
 lines)</h3>
 <table>
 <thead>
@@ -270,11 +270,11 @@ lines)</h3>
 <tbody>
 <tr>
 <td>Headers (.hpp)</td>
-<td>17587</td>
+<td>17638</td>
 </tr>
 <tr>
 <td>Sources (.cpp)</td>
-<td>26114</td>
+<td>26200</td>
 </tr>
 <tr>
 <td>C++ Tests</td>
@@ -289,8 +289,78 @@ their own lifecycle and publish their own generated output metrics. See
 individual consumer repo releases for per-project C++, SQL, Proto, and
 QML line counts.</p>
 <h2 id="6-recent-releases">6. Recent Releases</h2>
-<h2 id="290----2026-04-05">[2.9.0] -- 2026-04-05</h2>
+<h2 id="2100----2026-04-06">[2.10.0] -- 2026-04-06</h2>
 <h3 id="test-metrics">Test Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Passed</th>
+<th>Failed</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>muscomp (compiler)</td>
+<td>0/0 tests</td>
+<td>0</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>C++ (Layer 1+2)</td>
+<td>-15/5 tests</td>
+<td>20</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Gates</strong></td>
+<td><strong>6</strong></td>
+<td><strong>0</strong></td>
+<td><strong>✅ ALL GREEN</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Regressions</strong>: 0 (vs v2.9.0)</li>
+<li><strong>Skipped layers</strong>: 0</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>correct IR target-agnosticism claim in HISTORY.md + file
+FTR-708</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>back-merge v2.9.0 release to develop</li>
+<li>expand v2.11.0 to 20 FTRs — fold deferred into iteration</li>
+<li>renumber FTR-712..715 → FTR-719..722 (resolve ID collision)</li>
+<li>file FTR-712..715 — muscomp code quality improvements</li>
+<li>file FTR-711 — hello-world DB deploy as blocking release gate</li>
+<li>file FTR-710 — distinguish test suite count from assertion
+count</li>
+<li>file FTR-709 — downgrade debug logging in
+ir_builder_entities.cpp</li>
+</ul>
+<h3 id="other">Other</h3>
+<ul>
+<li>Session handover: v2.11.0 expanded to 20 FTRs, 6 themes</li>
+<li>Plan iteration v2.11.0: 15 FTRs across 5 themes</li>
+<li>Session handover: 21 v2.11.0 candidates, Codex audit FTRs
+719-722</li>
+<li>Session handover: v2.10.0-rc1 + FTR-714..718 filed for v2.11.0</li>
+<li>Renumber shell migration FTRs: 709-713 → 714-718 (resolve ID
+collision)</li>
+<li>File FTR-709..713: Shell-to-Python migration plan for v2.11.0</li>
+<li>Add PLAN.json import to Pre-Flight and Session Handover
+sections</li>
+<li>Add persistent plan state: tools/sync-plan.py + PLAN.json
+convention</li>
+<li>Session handover: v2.10.0-rc1 released</li>
+<li>release: v2.9.0</li>
+</ul>
+<h2 id="290----2026-04-05">[2.9.0] -- 2026-04-05</h2>
+<h3 id="test-metrics-1">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -385,7 +455,7 @@ updated. ADRs preserved as historical records.</li>
 <li><code>tools/collect-racket-coverage.sh</code> (no longer
 applicable)</li>
 </ul>
-<h3 id="test-metrics-1">Test Metrics</h3>
+<h3 id="test-metrics-2">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -421,7 +491,7 @@ applicable)</li>
 <li><strong>Skipped layers</strong>: Racket (retired)</li>
 </ul>
 <h2 id="280----2026-04-04">[2.8.0] -- 2026-04-04</h2>
-<h3 id="test-metrics-2">Test Metrics</h3>
+<h3 id="test-metrics-3">Test Metrics</h3>
 <table>
 <thead>
 <tr>
@@ -460,86 +530,37 @@ applicable)</li>
 <ul>
 <li>v2.8.0 — Sqitch decoupling + CMake modernization (11 FTRs)</li>
 </ul>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed-1">Fixed</h3>
 <ul>
 <li>v2.8.0 governance — mark all FTRs complete, fix version stamps</li>
 </ul>
-<h3 id="other">Other</h3>
-<ul>
-<li>handover: post v2.7.0 release session state</li>
-</ul>
-<h2 id="270----2026-04-04">[2.7.0] -- 2026-04-04</h2>
-<h3 id="test-metrics-3">Test Metrics</h3>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Passed</th>
-<th>Failed</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Racket (Layer 0)</td>
-<td>98/98 suites</td>
-<td>0</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>C++ (Layer 1+2)</td>
-<td>-15/5 tests</td>
-<td>20</td>
-<td>❌</td>
-</tr>
-<tr>
-<td><strong>Gates</strong></td>
-<td><strong>8</strong></td>
-<td><strong>0</strong></td>
-<td><strong>✅ ALL GREEN</strong></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>Regressions</strong>: 0 (vs v2.6.2)</li>
-<li><strong>Skipped layers</strong>: 0</li>
-</ul>
-<h3 id="fixed-1">Fixed</h3>
-<ul>
-<li>clang-tidy NOLINT for parse_int_field string_view.data()
-(FTR-533)</li>
-<li>proto_type_converters.cpp build errors (FTR-533 follow-up)</li>
-</ul>
 <h3 id="other-1">Other</h3>
 <ul>
-<li>v2.7.0: mark all 13 FTR files complete</li>
-<li>v2.7.0: add release checklist</li>
-<li>v2.7.0: release retrospective + FTR-685 improvement (Rule
-29/30)</li>
-<li>Merge feature/v2.7.0-iteration into develop</li>
-<li>v2.7.0: mark all 13 FTRs complete in ITERATION.md</li>
-<li>v2.7.0: split proto_type_converters.hpp into header + impl
-(FTR-533)</li>
-<li>v2.7.0: structured bindings in outbox_metrics (FTR-532)</li>
-<li>v2.7.0: ADR evaluations for qmltc and Qt TaskTree (FTR-529/534)</li>
-<li>v2.7.0: Qt 6.11 QML generator modernization
-(FTR-523/524/526/528/535)</li>
-<li>Merge: add Rule 33 — session handover governance (IRON)</li>
-<li>governance: add Rule 33 — session handover (IRON)</li>
-<li>Merge: make unchecked ITERATION.md boxes a release blocker</li>
-<li>Merge: remove parse_project_ast dead code (FTR-683 follow-up)</li>
-<li>governance: make unchecked ITERATION.md boxes a release blocker</li>
-<li>FTR-683 follow-up: remove parse_project_ast dead code
-completely</li>
+<li>handover: post v2.7.0 release session state</li>
 </ul>
 <h2 id="7-current-work">7. Current Work</h2>
 <p>No active iteration.</p>
 <h2 id="8-planned-work">8. Planned Work</h2>
-<p>No planned iterations.</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v2.11.0</td>
+<td>Harden muscomp code quality (Codex audit), add DB deploy release
+gate, begin muscdb pipeline, complete shell-to-Python migration, retire
+Sqitch, complete governance backlog</td>
+</tr>
+</tbody>
+</table>
 <h2 id="9-ideas-backlog">9. Ideas Backlog</h2>
 <p>0 ideas in backlog.</p>
 <h2 id="10-build-metrics">10. Build Metrics</h2>
-<p>Last measured at commit <code>76378f4c</code> (project:
+<p>Last measured at commit <code>1e5ce349</code> (project:
 muscovite):</p>
 <table>
 <thead>
@@ -552,8 +573,8 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>S1: Framework build</td>
-<td>835.9s</td>
-<td>298 compilation steps</td>
+<td>1144.1s</td>
+<td>302 compilation steps</td>
 </tr>
 <tr>
 <td>S2: DSL generation</td>
@@ -562,7 +583,7 @@ muscovite):</p>
 </tr>
 </tbody>
 </table>
-<p>Build history: 51 recorded runs.</p>
+<p>Build history: 52 recorded runs.</p>
 <h2 id="11-test-execution-metrics">11. Test Execution Metrics</h2>
 <table>
 <thead>
@@ -602,6 +623,14 @@ muscovite):</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v2.10.0</td>
+<td>6</td>
+<td>0</td>
+<td>✅ 0</td>
+<td>0/0</td>
+<td>-15/5</td>
+</tr>
 <tr>
 <td>v2.9.0</td>
 <td>6</td>
@@ -674,17 +703,9 @@ muscovite):</p>
 <td>0/0</td>
 <td>19/19</td>
 </tr>
-<tr>
-<td>v2.2.0</td>
-<td>8</td>
-<td>0</td>
-<td>✅ 0</td>
-<td>0/0</td>
-<td>19/19</td>
-</tr>
 </tbody>
 </table>
-<p><strong>✅ No regressions in latest release (v2.9.0).</strong></p>
+<p><strong>✅ No regressions in latest release (v2.10.0).</strong></p>
 <h2 id="12-user-profile">12. User Profile</h2>
 <p>Staff Engineer (10+ years), DDD/CQRS expert. See
 .github/copilot-instructions.md §User Profile.</p>
@@ -722,7 +743,7 @@ muscovite):</p>
 </tr>
 <tr>
 <td><code>doc/adr/</code></td>
-<td>Architecture decision records (244)</td>
+<td>Architecture decision records (245)</td>
 </tr>
 <tr>
 <td><code>CHANGELOG.md</code></td>
@@ -745,19 +766,19 @@ muscovite):</p>
 <tbody>
 <tr>
 <td>Version</td>
-<td>2.9.0</td>
+<td>2.10.0</td>
 </tr>
 <tr>
 <td>Git commits</td>
-<td>2256 (since 2025-11-17)</td>
+<td>2314 (since 2025-11-17)</td>
 </tr>
 <tr>
 <td>muscomp compiler</td>
-<td>8101 lines</td>
+<td>8332 lines</td>
 </tr>
 <tr>
 <td>C++ framework</td>
-<td>43701 lines</td>
+<td>43838 lines</td>
 </tr>
 <tr>
 <td>Generator targets</td>
@@ -765,11 +786,11 @@ muscovite):</p>
 </tr>
 <tr>
 <td>ADRs</td>
-<td>244</td>
+<td>245</td>
 </tr>
 <tr>
 <td>muscomp tests</td>
-<td>2519 lines</td>
+<td>2534 lines</td>
 </tr>
 <tr>
 <td>C++ tests</td>

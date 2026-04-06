@@ -263,6 +263,7 @@ var annotated_dup =
         [ "PostalCode", "classmuscovite_1_1types_1_1PostalCode.html", "classmuscovite_1_1types_1_1PostalCode" ],
         [ "StringLiteral", "structmuscovite_1_1types_1_1StringLiteral.html", null ],
         [ "strong_type_base", "classmuscovite_1_1types_1_1strong__type__base.html", "classmuscovite_1_1types_1_1strong__type__base" ],
+        [ "TaggedId", "structmuscovite_1_1types_1_1TaggedId.html", "structmuscovite_1_1types_1_1TaggedId" ],
         [ "Unconstrained", "structmuscovite_1_1types_1_1Unconstrained.html", null ],
         [ "Url", "classmuscovite_1_1types_1_1Url.html", "classmuscovite_1_1types_1_1Url" ]
       ] ],
@@ -284,7 +285,8 @@ var annotated_dup =
       [ "hash&lt; muscovite::types::BoundedDecimal&lt; Min, Max &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedDecimal_3_01Min_00_01Max_01_4_01_4.html", null ],
       [ "hash&lt; muscovite::types::BoundedInteger&lt; Min, Max &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedInteger_3_01Min_00_01Max_01_4_01_4.html", null ],
       [ "hash&lt; muscovite::types::BoundedString&lt; MinLen, MaxLen &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1BoundedString_3_01MinLen_00_01MaxLen_01_4_01_4.html", null ],
-      [ "hash&lt; muscovite::types::PatternString&lt; Pattern &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1PatternString_3_01Pattern_01_4_01_4.html", null ]
+      [ "hash&lt; muscovite::types::PatternString&lt; Pattern &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1PatternString_3_01Pattern_01_4_01_4.html", null ],
+      [ "hash&lt; muscovite::types::TaggedId&lt; Entity &gt; &gt;", "structstd_1_1hash_3_01muscovite_1_1types_1_1TaggedId_3_01Entity_01_4_01_4.html", null ]
     ] ],
     [ "JsCtxDeleter", "structJsCtxDeleter.html", null ],
     [ "NatsOptionsDeleter", "structNatsOptionsDeleter.html", null ]

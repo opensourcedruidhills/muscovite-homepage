@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Muscovite-Commercial -->
+<!-- Copyright (c) 2025-2026 Johannes Lochmann -->
+<!--
+  This software is dual-licensed:
+   - GNU Affero General Public License v3 (AGPL-3.0), see LICENSE-AGPL
+   - Commercial license, contact muscovite-licensing@johanneslochmann.net
+-->
+<!-- Pandoc standalone HTML template for Muscovite documentation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Native Database Deployer —
+muscdb — Muscovite Documentation</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #1d1d1d;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --nav-bg: #f9fafb;
+      --max-width: 52rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --fg: #e2e8f0;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfc;
+        --border: #334155;
+        --code-bg: #1e293b;
+        --nav-bg: #16213e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    nav.breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    nav.breadcrumb a { color: var(--accent); text-decoration: none; }
+    nav.breadcrumb a:hover { text-decoration: underline; }
+    nav.breadcrumb span.sep { margin: 0 0.4rem; color: var(--border); }
+    h1 { font-size: 1.8rem; margin: 1rem 0 0.8rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    h2 { font-size: 1.4rem; margin: 1.6rem 0 0.6rem; }
+    h3 { font-size: 1.15rem; margin: 1.3rem 0 0.5rem; }
+    h4, h5, h6 { font-size: 1rem; margin: 1rem 0 0.4rem; }
+    p { margin: 0.6rem 0; }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      border: 1px solid var(--border);
+    }
+    pre code { background: none; padding: 0; font-size: 0.85em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.8rem; text-align: left; }
+    th { background: var(--nav-bg); font-weight: 600; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 0.8rem 0;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.8rem; }
+    li { margin: 0.2rem 0; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+    .metadata { font-size: 0.85rem; color: var(--fg); opacity: 0.7; margin-bottom: 1rem; }
+  </style>
+  <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<nav class="breadcrumb">
+  <a href="/docs/">Docs</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/">muscovite</a>
+  <span class="sep">/</span>
+  <a href="/docs/muscovite/adr/">adr</a>
+  <span class="sep">/</span>
+  <span>Native Database Deployer — muscdb</span>
+</nav>
+
+<h1>Native Database Deployer — muscdb</h1>
+
+
+<h1 id="native-database-deployer--muscdb">Native Database Deployer —
+muscdb</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Deciders: Johannes Lochmann</li>
+<li>Date: 2026-04-05</li>
+<li>Tags: postgresql, deployment, migration, muscdb, infrastructure</li>
+<li>Supersedes: <a
+href="20251223-deploy-database-via-sqitch-only.html">20251223-deploy-database-via-sqitch-only</a></li>
+</ul>
+<p>Technical Story: Replace Sqitch with a native C++ deployer
+(<code>muscdb</code>) that uses libpqxx and tracks state in a
+<code>muscovite</code> schema, eliminating the external Perl
+dependency.</p>
+<h2 id="context-and-problem-statement">Context and Problem
+Statement</h2>
+<p>Muscovite generates deploy/revert/verify SQL scripts and a
+<code>sqitch.plan</code> manifest. The actual deployment is delegated to
+Sqitch — a Perl-based tool that:</p>
+<ol type="1">
+<li>Requires a Perl runtime + CPAN dependencies (App::Sqitch,
+DBD::Pg)</li>
+<li>Uses its own <code>sqitch.*</code> schema tables for state
+tracking</li>
+<li>Has its own plan file format (<code>sqitch.plan</code>) with bespoke
+dependency syntax</li>
+<li>Uses <code>db:pg://</code> URIs instead of standard PostgreSQL
+<code>postgresql://</code> URIs</li>
+<li>Is an external dependency we don't control</li>
+</ol>
+<p>After v2.8.0 (FTR-536/537), the generator layer is already
+tool-agnostic: files are named <code>pg-*</code>, the core struct is
+<code>db-change</code>, and a <code>deployer</code> interface exists
+with Sqitch as a pluggable backend. The SQL generation has zero Sqitch
+coupling — only the output writer (<code>sqitch-output.rkt</code>, now
+<code>sqitch_plan.cpp</code> in muscomp) and the manifest format are
+Sqitch-specific.</p>
+<p>Meanwhile, Muscovite already manages infrastructure deployment for
+NATS messaging, OpenSearch, Docker, and telemetry via DSL-declared
+configuration blocks. Database deployment is the only infrastructure
+concern still delegated to an external tool.</p>
+<h2 id="decision-drivers">Decision Drivers</h2>
+<ul>
+<li>Eliminate external Perl/CPAN dependency (Sqitch is the last Perl
+dependency)</li>
+<li>Use standard PostgreSQL connection mechanisms (libpq environment
+variables)</li>
+<li>Make deployment state part of the Muscovite-managed database
+schema</li>
+<li>Unify infrastructure deployment under the DSL (like MESSAGING,
+SEARCH, TELEMETRY)</li>
+<li>Preserve deploy/revert/verify triplet structure (proven
+pattern)</li>
+<li>Leverage existing <code>deployer</code> interface (FTR-537) — this
+is the second backend</li>
+</ul>
+<h2 id="considered-options">Considered Options</h2>
+<ul>
+<li><strong>Keep Sqitch</strong> — status quo, external dependency,
+works but alien to the toolchain</li>
+<li><strong>Adopt Flyway/Liquibase</strong> — Java dependency, even
+worse than Perl</li>
+<li><strong>Shell script deployer</strong> — fragile, no transaction
+safety, no state tracking</li>
+<li><strong>Native C++ deployer (muscdb)</strong> — libpqxx, zero
+external deps, full control</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome</h2>
+<p>Chosen option: "Native C++ deployer (muscdb)", because it eliminates
+the last external runtime dependency, integrates with the existing
+libpqxx ecosystem (framework already uses it), and inherits PostgreSQL
+connection config via standard libpq environment variables
+(<code>PGHOST</code>, <code>PGPORT</code>, <code>PGUSER</code>,
+<code>PGPASSWORD</code>, <code>PGDATABASE</code>).</p>
+<h3 id="architecture">Architecture</h3>
+<pre class="mermaid"><code>flowchart TD
+    subgraph DSL[&quot;Project DSL (.mus)&quot;]
+        DEP[&quot;DEPLOYMENT {&lt;br/&gt;schema &amp;quot;muscovite&amp;quot;&lt;br/&gt;strategy sequential&lt;br/&gt;profiles dev qa prod&lt;br/&gt;}&quot;]
+        DB[&quot;DATABASE development {&lt;br/&gt;uri &amp;quot;postgresql://...&amp;quot;&lt;br/&gt;}&quot;]
+    end
+
+    subgraph Generator[&quot;muscomp postgres generator&quot;]
+        GEN[&quot;pg-migration-generator&quot;] --&gt; DEPLOY_SQL[&quot;deploy/*.sql&quot;]
+        GEN --&gt; REVERT_SQL[&quot;revert/*.sql&quot;]
+        GEN --&gt; VERIFY_SQL[&quot;verify/*.sql&quot;]
+        GEN --&gt; MANIFEST[&quot;manifest.json&quot;]
+        GEN --&gt; PROFILES[&quot;deployment-profiles/&lt;br/&gt;dev.env.example&lt;br/&gt;qa.env.example&lt;br/&gt;prod.env.example&quot;]
+    end
+
+    subgraph muscdb[&quot;muscdb CLI&quot;]
+        DEPLOY_CMD[&quot;muscdb deploy --profile dev&quot;]
+        VERIFY_CMD[&quot;muscdb verify --profile qa&quot;]
+        REVERT_CMD[&quot;muscdb revert --profile dev&quot;]
+        STATUS_CMD[&quot;muscdb status --profile prod&quot;]
+    end
+
+    subgraph DB_Schema[&quot;PostgreSQL&quot;]
+        MUSCO_SCHEMA[&quot;muscovite.deployment_log&quot;]
+        MUSCO_LOCK[&quot;muscovite.deploy_lock&quot;]
+        USER_SCHEMAS[&quot;user schemas&lt;br/&gt;(basedata, patient, ...)&quot;]
+    end
+
+    DEP --&gt; GEN
+    MANIFEST --&gt; DEPLOY_CMD
+    DEPLOY_SQL --&gt; DEPLOY_CMD
+    PROFILES --&gt; DEPLOY_CMD
+    DEPLOY_CMD --&gt; MUSCO_SCHEMA
+    DEPLOY_CMD --&gt; USER_SCHEMAS
+    VERIFY_CMD --&gt; MUSCO_SCHEMA
+    REVERT_CMD --&gt; MUSCO_SCHEMA</code></pre>
+<h3 id="positive-consequences">Positive Consequences</h3>
+<ul>
+<li>Zero external runtime dependencies (C++ binary, statically
+linked)</li>
+<li>libpq env vars work automatically (<code>PGHOST</code>,
+<code>PGPORT</code>, etc.)</li>
+<li>Deployment state is queryable via standard SQL
+(<code>SELECT * FROM muscovite.deployment_log</code>)</li>
+<li>Advisory locks prevent concurrent deployments
+(PostgreSQL-native)</li>
+<li>Safety policies from the migration engine can be enforced at deploy
+time</li>
+<li>One fewer language runtime in CI/CD pipelines</li>
+<li>muscdb ships alongside muscomp — same build system, same Conan
+deps</li>
+</ul>
+<h3 id="negative-consequences">Negative Consequences</h3>
+<ul>
+<li>Must implement and maintain a deployer (Sqitch is
+battle-tested)</li>
+<li>Consumer repos using <code>sqitch deploy</code> directly need
+migration path</li>
+<li>New CLI to learn (mitigated: subcommands mirror Sqitch's)</li>
+</ul>
+<h2 id="implementation">Implementation</h2>
+<h3 id="1-the-muscovite-schema">1. The <code>muscovite</code>
+Schema</h3>
+<p>muscdb bootstraps a <code>muscovite</code> schema on first deploy.
+This replaces Sqitch's <code>sqitch.*</code> tables.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">SCHEMA</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> muscovite;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> muscovite.deployment_log (</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span>              BIGINT <span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span> IDENTITY <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    change_name     TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    project_name    TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    deployed_at     TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> now(),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    deployed_by     TEXT <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> current_user,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    deploy_hash     TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    note            TEXT,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    dependencies    TEXT[] <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;{}&#39;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">UNIQUE</span> <span class="kw">INDEX</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> uq_deployment_change</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> muscovite.deployment_log (project_name, change_name);</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> muscovite.deploy_lock (</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    project_name    TEXT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    locked_at       TIMESTAMPTZ <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> now(),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    locked_by       TEXT <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> current_user,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    pid             <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> pg_backend_pid()</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><strong>Design notes:</strong></p>
+<ul>
+<li><code>deploy_hash</code> is SHA-256 of the deploy script content —
+detects tampering</li>
+<li><code>dependencies</code> array stores change names this change
+depends on</li>
+<li>Advisory lock (<code>pg_advisory_lock</code>) preferred over the
+lock table for short-lived deploy sessions; table is for
+observability</li>
+<li><code>BIGINT GENERATED ALWAYS AS IDENTITY</code> — not UUID, because
+this is an append-only log where ordering matters</li>
+</ul>
+<h3 id="2-the-muscdb-cli">2. The <code>muscdb</code> CLI</h3>
+<p>Lives at <code>toolchain/muscdb/</code> alongside
+<code>toolchain/muscomp/</code>. Shares Conan profile and libpqxx
+dependency.</p>
+<pre><code>muscdb deploy  --profile PROFILE [--dir DIR] [--dry-run] [--allow-destructive]
+muscdb verify  --profile PROFILE [--dir DIR]
+muscdb revert  --profile PROFILE [--dir DIR] [--to CHANGE]
+muscdb status  --profile PROFILE
+muscdb log     --profile PROFILE [--limit N]</code></pre>
+<p><strong>Connection resolution</strong> (in priority order):</p>
+<ol type="1">
+<li>Profile file: <code>deployment-profiles/{profile}.env</code> (see
+§2a below)</li>
+<li>libpq environment variables: <code>PGHOST</code>,
+<code>PGPORT</code>, <code>PGUSER</code>, <code>PGPASSWORD</code>,
+<code>PGDATABASE</code></li>
+<li><code>--uri postgresql://user:pass@host:port/dbname</code> (explicit
+override)</li>
+<li><code>~/.pgpass</code> (standard PostgreSQL)</li>
+</ol>
+<p>This is the key advantage over Sqitch: libpqxx uses libpq under the
+hood, so all standard PostgreSQL connection mechanisms work without any
+adapter code.</p>
+<h3 id="2a-deployment-profiles">2a. Deployment Profiles</h3>
+<p>Every project declares at least three deployment profiles:
+<code>dev</code>, <code>qa</code>, <code>prod</code>. Access credentials
+<strong>MUST NOT</strong> be committed to git. Instead, muscdb reads
+non-committed environment files that source libpq variables.</p>
+<p><strong>Generated by muscomp</strong> (once, gitignored, user-owned
+after creation):</p>
+<pre><code>generated/{project}/deployment-profiles/
+├── dev.env              ← actual credentials (gitignored)
+├── qa.env               ← actual credentials (gitignored)
+├── prod.env             ← actual credentials (gitignored)
+├── dev.env.example      ← committed template (no secrets)
+├── qa.env.example       ← committed template (no secrets)
+└── prod.env.example     ← committed template (no secrets)</code></pre>
+<p><strong>Example <code>dev.env</code></strong> (gitignored, never
+committed):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deployment profile: dev</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Source: muscovite DEPLOYMENT block</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="va">PGHOST</span><span class="op">=</span>localhost</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="va">PGPORT</span><span class="op">=</span>5555</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="va">PGUSER</span><span class="op">=</span>postgres</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="va">PGPASSWORD</span><span class="op">=</span>postgres</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="va">PGDATABASE</span><span class="op">=</span>fhir_health</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="va">MUSCDB_PROJECT</span><span class="op">=</span>fhirhealth</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="va">MUSCDB_SCHEMA</span><span class="op">=</span>muscovite</span></code></pre></div>
+<p><strong>Example <code>dev.env.example</code></strong> (committed
+template):</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deployment profile: dev</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy to dev.env and fill in credentials. NEVER commit dev.env.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="va">PGHOST</span><span class="op">=</span>localhost</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="va">PGPORT</span><span class="op">=</span>5555</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="va">PGUSER</span><span class="op">=</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="va">PGPASSWORD</span><span class="op">=</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="va">PGDATABASE</span><span class="op">=</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="va">MUSCDB_PROJECT</span><span class="op">=</span>fhirhealth</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="va">MUSCDB_SCHEMA</span><span class="op">=</span>muscovite</span></code></pre></div>
+<p><strong>Profile resolution:</strong></p>
+<ol type="1">
+<li>muscdb reads <code>--profile dev</code> → looks for
+<code>deployment-profiles/dev.env</code></li>
+<li>File is sourced as environment variables (key=value,
+shell-compatible)</li>
+<li>Variables are set as libpq environment — libpqxx picks them up
+automatically</li>
+<li>Any variable already set in the environment takes precedence
+(12-factor friendly)</li>
+</ol>
+<p><strong>Gitignore rule</strong> (generated into project
+<code>.gitignore</code>):</p>
+<pre><code>deployment-profiles/*.env
+!deployment-profiles/*.env.example</code></pre>
+<p><strong>CI/CD integration:</strong> In CI, profiles are populated
+from pipeline secrets — no file needed:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">PGHOST</span><span class="kw">:</span><span class="at"> ${{ secrets.QA_DB_HOST }}</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">PGPASSWORD</span><span class="kw">:</span><span class="at"> ${{ secrets.QA_DB_PASSWORD }}</span></span></code></pre></div>
+<p>muscdb falls back to libpq env vars when no profile file exists.</p>
+<p><strong>Deploy algorithm:</strong></p>
+<ol type="1">
+<li>Acquire advisory lock
+(<code>pg_advisory_lock(hashtext(project_name))</code>)</li>
+<li>Read <code>manifest.json</code> — topological order of changes with
+dependencies</li>
+<li>Read <code>muscovite.deployment_log</code> — which changes are
+already deployed</li>
+<li>Compute delta: changes in manifest not yet in log</li>
+<li>For each pending change (in dependency order): a. <code>BEGIN</code>
+b. Execute <code>deploy/{change_name}.sql</code> c.
+<code>INSERT INTO muscovite.deployment_log (...)</code> d.
+<code>COMMIT</code></li>
+<li>Release advisory lock</li>
+</ol>
+<p><strong>Revert algorithm:</strong></p>
+<ol type="1">
+<li>Acquire advisory lock</li>
+<li>Read deployment log — what's deployed</li>
+<li>Compute reverse dependency order</li>
+<li>For each change to revert (reverse order): a. <code>BEGIN</code> b.
+Execute <code>revert/{change_name}.sql</code> c.
+<code>DELETE FROM muscovite.deployment_log WHERE change_name = ...</code>
+d. <code>COMMIT</code></li>
+<li>Release advisory lock</li>
+</ol>
+<h3 id="3-manifest-format--manifestjson">3. Manifest Format —
+<code>manifest.json</code></h3>
+<p>Replaces <code>sqitch.plan</code>. Generated by muscomp.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;1.0&quot;</span><span class="fu">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;project&quot;</span><span class="fu">:</span> <span class="st">&quot;fhirhealth&quot;</span><span class="fu">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;generated_at&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-04-05T06:00:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;changes&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;schemas/basedata&quot;</span><span class="fu">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;note&quot;</span><span class="fu">:</span> <span class="st">&quot;Basedata schema&quot;</span><span class="fu">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;dependencies&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;deploy&quot;</span><span class="fu">:</span> <span class="st">&quot;deploy/schemas/basedata.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;revert&quot;</span><span class="fu">:</span> <span class="st">&quot;revert/schemas/basedata.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;verify&quot;</span><span class="fu">:</span> <span class="st">&quot;verify/schemas/basedata.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;hash&quot;</span><span class="fu">:</span> <span class="st">&quot;sha256:a1b2c3...&quot;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;tables/basedata/clinical_status&quot;</span><span class="fu">,</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;note&quot;</span><span class="fu">:</span> <span class="st">&quot;ClinicalStatus lookup table&quot;</span><span class="fu">,</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;dependencies&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;schemas/basedata&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;deploy&quot;</span><span class="fu">:</span> <span class="st">&quot;deploy/tables/basedata/clinical_status.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;revert&quot;</span><span class="fu">:</span> <span class="st">&quot;revert/tables/basedata/clinical_status.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;verify&quot;</span><span class="fu">:</span> <span class="st">&quot;verify/tables/basedata/clinical_status.sql&quot;</span><span class="fu">,</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;hash&quot;</span><span class="fu">:</span> <span class="st">&quot;sha256:d4e5f6...&quot;</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="4-dsl-integration--deployment-block">4. DSL Integration —
+DEPLOYMENT Block</h3>
+<p>Database deployment becomes a first-class project DSL concern,
+alongside MESSAGING, SEARCH, and TELEMETRY. The existing
+<code>sqitch_project</code> directive in the OUTPUT block is
+deprecated.</p>
+<p><strong>Before (Sqitch-era):</strong></p>
+<pre><code>OUTPUT {
+    directory &quot;generated&quot;
+    sqitch_project &quot;fhirhealth&quot;
+}
+
+DATABASE development {
+    uri &quot;db:pg://postgres:postgres@localhost:5555/fhir_health&quot;
+}</code></pre>
+<p><strong>After (native deployer):</strong></p>
+<pre><code>DEPLOYMENT {
+    project &quot;fhirhealth&quot;
+    schema &quot;muscovite&quot;
+    strategy sequential
+    profiles dev qa prod
+}
+
+DATABASE development {
+    uri &quot;postgresql://postgres:postgres@localhost:5555/fhir_health&quot;
+    description &quot;Local Docker PostgreSQL&quot;
+}</code></pre>
+<p><strong>Grammar addition:</strong></p>
+<pre class="peg"><code>ProjectItem          &lt;- ... / DeploymentBlock
+
+DeploymentBlock      &lt;- &#39;DEPLOYMENT&#39; &#39;{&#39; DeploymentDirective* &#39;}&#39;
+DeploymentDirective  &lt;- DeploymentProject
+                      / DeploymentSchema
+                      / DeploymentStrategy
+                      / DeploymentProfiles
+DeploymentProject    &lt;- &#39;PROJECT&#39; STRING
+DeploymentSchema     &lt;- &#39;SCHEMA&#39; STRING
+DeploymentStrategy   &lt;- &#39;STRATEGY&#39; (&#39;SEQUENTIAL&#39; / &#39;TRANSACTIONAL&#39;)
+DeploymentProfiles   &lt;- &#39;PROFILES&#39; IDENTIFIER+</code></pre>
+<p><strong>Rationale for DSL over external config:</strong></p>
+<ul>
+<li>Muscovite already declares MESSAGING (NATS), SEARCH (OpenSearch),
+TELEMETRY (OpenTelemetry) as project-level infrastructure blocks</li>
+<li>Database deployment is infrastructure — same category</li>
+<li>The project name, schema name, and strategy are properties of the
+domain model, not of the deployment environment</li>
+<li>muscomp needs this information at generation time to produce the
+manifest</li>
+<li>Keeps all infrastructure declarations in one place (the
+<code>.mus</code> file)</li>
+</ul>
+<p><strong>Migration path for <code>sqitch_project</code>:</strong></p>
+<ul>
+<li><code>sqitch_project</code> remains valid for one release cycle
+(backward compat)</li>
+<li>muscomp emits a deprecation warning: "sqitch_project is deprecated;
+use DEPLOYMENT { project ... }"</li>
+<li>If both <code>sqitch_project</code> and <code>DEPLOYMENT</code> are
+present, <code>DEPLOYMENT</code> wins</li>
+</ul>
+<h3 id="5-cmake-integration">5. CMake Integration</h3>
+<p>The <code>MUSCOVITE_DEPLOYER</code> cache variable (FTR-537) gains a
+<code>native</code> option:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode cmake"><code class="sourceCode cmake"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span>(MUSCOVITE_DEPLOYER <span class="st">&quot;native&quot;</span> <span class="ot">CACHE</span> <span class="ot">STRING</span> <span class="st">&quot;Database deployer: native | sqitch&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(MUSCOVITE_DEPLOYER <span class="ot">STREQUAL</span> <span class="st">&quot;native&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_deploy_cmd</span> <span class="st">&quot;</span><span class="dv">${MUSCDB_EXECUTABLE}</span><span class="st"> deploy --profile dev --dir </span><span class="dv">${</span><span class="va">_migration_dir</span><span class="dv">}</span><span class="st">&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_verify_cmd</span> <span class="st">&quot;</span><span class="dv">${MUSCDB_EXECUTABLE}</span><span class="st"> verify --profile dev --dir </span><span class="dv">${</span><span class="va">_migration_dir</span><span class="dv">}</span><span class="st">&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_revert_cmd</span> <span class="st">&quot;</span><span class="dv">${MUSCDB_EXECUTABLE}</span><span class="st"> revert --profile dev --dir </span><span class="dv">${</span><span class="va">_migration_dir</span><span class="dv">}</span><span class="st">&quot;</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">elseif</span>(MUSCOVITE_DEPLOYER <span class="ot">STREQUAL</span> <span class="st">&quot;sqitch&quot;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Legacy fallback — removed after Sqitch sunset</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_deploy_cmd</span> <span class="st">&quot;sqitch deploy </span><span class="dv">${</span><span class="va">_db_uri</span><span class="dv">}</span><span class="st">&quot;</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_verify_cmd</span> <span class="st">&quot;sqitch verify </span><span class="dv">${</span><span class="va">_db_uri</span><span class="dv">}</span><span class="st">&quot;</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>(<span class="va">_revert_cmd</span> <span class="st">&quot;sqitch revert </span><span class="dv">${</span><span class="va">_db_uri</span><span class="dv">}</span><span class="st"> -y&quot;</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="cf">endif</span>()</span></code></pre></div>
+<h3 id="6-sqitch-migration-path">6. Sqitch Migration Path</h3>
+<p>For existing projects with Sqitch deployment history:</p>
+<pre><code>muscdb import-sqitch --uri URI --dir DIR</code></pre>
+<p>This reads Sqitch's <code>sqitch.changes</code> table and populates
+<code>muscovite.deployment_log</code> with equivalent entries, then
+generates <code>manifest.json</code> from the existing
+deploy/revert/verify directory structure. One-time migration,
+idempotent.</p>
+<h2 id="phasing">Phasing</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Scope</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><code>muscovite</code> schema DDL + <code>manifest.json</code>
+generator in muscomp</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><code>muscdb</code> CLI: deploy + verify + revert + status +
+profiles</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>DEPLOYMENT block in grammar + parser + IR (incl.
+<code>profiles</code> directive)</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Deployment profile generation (<code>.env</code> /
+<code>.env.example</code> / <code>.gitignore</code>)</td>
+<td>Phase 2, 3</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>CMake integration (<code>MUSCOVITE_DEPLOYER=native</code> as
+default)</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td><code>muscdb import-sqitch</code> migration tool</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>Sqitch removal — full purge (see §7 below)</td>
+<td>Phase 4, 5, 6</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-sqitch-removal--full-purge">7. Sqitch Removal — Full
+Purge</h3>
+<p>Once muscdb is the default deployer and <code>import-sqitch</code>
+exists for migration, all Sqitch references must be removed from the
+project. This is a dedicated phase because Sqitch is deeply embedded
+across documentation, agent instructions, build scripts, metrics, and
+governance artifacts.</p>
+<p><strong>Removal scope</strong> (audit: 435 files, 1,724 reference
+lines):</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Files</th>
+<th>Refs</th>
+<th>Key Files</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Generators</strong></td>
+<td>11</td>
+<td>~47</td>
+<td><code>postgres_generator.cpp</code> (21),
+<code>sqitch_plan.cpp/hpp</code> (15),
+<code>sqitch_state_machine.cpp/hpp</code></td>
+<td>Rewrite/delete — replace with manifest generation</td>
+</tr>
+<tr>
+<td><strong>IR system</strong></td>
+<td>5</td>
+<td>~6</td>
+<td><code>types.hpp</code> (<code>sqitch_project</code> field),
+<code>json_serializer.cpp</code>, <code>json_deserializer.cpp</code>,
+<code>ir_to_proto.cpp</code>, <code>proto_to_ir.cpp</code></td>
+<td>Remove <code>sqitch_project</code> field, add
+<code>deployment_project</code></td>
+</tr>
+<tr>
+<td><strong>Grammar</strong></td>
+<td>1</td>
+<td>~8</td>
+<td><code>muscovite.peg</code>: <code>OutputSqitchProject</code>,
+<code>SQITCH_PROJECT</code>, <code>'SQITCH'</code> in
+GenerateTarget</td>
+<td>Remove directives, add DEPLOYMENT block</td>
+</tr>
+<tr>
+<td><strong>CMake/Build</strong></td>
+<td>7</td>
+<td>~101</td>
+<td><code>DatabaseProject.cmake</code> (52 — <strong>highest
+impact</strong>), <code>ExternalExamples.cmake</code> (14)</td>
+<td>Refactor to muscdb targets</td>
+</tr>
+<tr>
+<td><strong>Tools/Scripts</strong></td>
+<td>3</td>
+<td>~68</td>
+<td><code>test-sqitch-deploy.sh</code> (26),
+<code>test-pgtap-execution.sh</code> (23),
+<code>db-fixture-setup.sh</code> (12)</td>
+<td>Rewrite for muscdb</td>
+</tr>
+<tr>
+<td><strong>Tests</strong></td>
+<td>17</td>
+<td>~66</td>
+<td><code>test_postgres_generator.cpp</code> (10),
+<code>test_manifest.cpp</code> (9),
+<code>test_migration_system.cpp</code> (7)</td>
+<td>Update assertions + golden files</td>
+</tr>
+<tr>
+<td><strong>Documentation</strong></td>
+<td>47</td>
+<td>~450</td>
+<td><code>POSTGRES-PATTERNS.md</code> (39), ADR migration-sql (35), ADR
+sqitch-only (15), <code>README.md</code> (8)</td>
+<td>Update or mark superseded</td>
+</tr>
+<tr>
+<td><strong>Workflow/Gov</strong></td>
+<td>43</td>
+<td>~550</td>
+<td><code>CHANGELOG.md</code> (31), FTR-536/537/543 (128 combined)</td>
+<td>Historical — update active refs only</td>
+</tr>
+<tr>
+<td><strong>Agent instructions</strong></td>
+<td>5</td>
+<td>~40</td>
+<td><code>AGENTS.md</code>,
+<code>.github/copilot-instructions.md</code>, context prompts</td>
+<td>Replace with muscdb vocabulary</td>
+</tr>
+<tr>
+<td><strong>Database URIs</strong></td>
+<td>~30</td>
+<td>~60</td>
+<td><code>db:pg://</code> format scattered across <code>.mus</code>,
+<code>.md</code>, <code>.cmake</code></td>
+<td>Replace with <code>postgresql://</code> standard URIs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Execution strategy</strong> (per Rule 28): This phase will
+touch &gt;100 files. Use a Python script
+(<code>tools/purge-sqitch-references.py</code>) for mechanical
+replacements (URI format, identifier renames), with manual review for
+semantic changes (ADR status updates, documentation rewrites).</p>
+<p><strong>Validation:</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After purge, zero sqitch references should remain outside of:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. This ADR (historical context)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. The import-sqitch command documentation</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Git history (immutable)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-ri</span> <span class="st">&#39;sqitch&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.md&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.cmake&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.cpp&#39;</span> <span class="dt">\</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.hpp&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.peg&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.sh&#39;</span> <span class="at">--include</span><span class="op">=</span><span class="st">&#39;*.py&#39;</span> <span class="dt">\</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--exclude-dir</span><span class="op">=</span>build <span class="at">--exclude-dir</span><span class="op">=</span>.git <span class="dt">\</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;import-sqitch&#39;</span> <span class="dt">\</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;20260405-native-database-deployer-muscdb.md&#39;</span> <span class="dt">\</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;AGENT_COORDINATION_LEARNINGS.md&#39;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected: empty output</span></span></code></pre></div>
+<h2 id="links">Links</h2>
+<ul>
+<li>Supersedes: <a
+href="20251223-deploy-database-via-sqitch-only.html">Deploy database via
+Sqitch only</a></li>
+<li>Refined by: <a
+href="../../../workflow/completed/v2.8.0/FTR-536-rename-sqitch-abstractions-to-migration.html">FTR-536
+— Rename Sqitch abstractions</a></li>
+<li>Refined by: <a
+href="../../../workflow/completed/v2.8.0/FTR-537-deployer-interface-abstraction.html">FTR-537
+— Deployer interface abstraction</a></li>
+<li>Related: <a href="20260109-migration-sql-generation.html">Migration
+SQL generation via Sqitch</a></li>
+<li>Related: <a
+href="20260116-incremental-migration-integration-plan.html">Incremental
+migration integration plan</a></li>
+</ul>
+<h2 id="ai-agent-guidance">AI Agent Guidance</h2>
+<h3 id="when-this-decision-applies">When This Decision Applies</h3>
+<ul>
+<li>When generating database deployment artifacts (manifest,
+deploy/revert/verify SQL)</li>
+<li>When implementing or modifying <code>muscdb</code> CLI</li>
+<li>When adding DEPLOYMENT block support to parser/IR/generators</li>
+<li>When writing CMake database targets (<code>db-setup-*</code>,
+<code>db-deploy-*</code>, etc.)</li>
+<li>When documenting database deployment workflows</li>
+</ul>
+<h3 id="when-this-decision-does-not-apply">When This Decision Does NOT
+Apply</h3>
+<ul>
+<li>SQL generation logic itself (unchanged — deploy/revert/verify
+scripts are tool-agnostic)</li>
+<li>Non-PostgreSQL targets</li>
+<li>Consumer repos that choose to keep Sqitch (their choice via
+<code>MUSCOVITE_DEPLOYER</code>)</li>
+</ul>
+<h3 id="enforcement">Enforcement</h3>
+<ul>
+<li>muscomp generates <code>manifest.json</code> alongside
+deploy/revert/verify directories</li>
+<li><code>muscdb</code> is the default deployer when
+<code>MUSCOVITE_DEPLOYER=native</code></li>
+<li>Grammar conformance tests verify DEPLOYMENT block parsing</li>
+<li><code>tools/lint-ddd.sh</code> warns on <code>sqitch_project</code>
+usage after deprecation</li>
+</ul>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>toolchain/muscdb/</code> — muscdb CLI source (new)</li>
+<li><code>toolchain/muscomp/src/generators/postgres/sqitch_plan.cpp</code>
+→ <code>manifest_generator.cpp</code></li>
+<li><code>toolchain/muscomp/src/generators/postgres/postgres_generator.cpp</code>
+— manifest integration</li>
+<li><code>grammar/muscovite.peg</code> — DEPLOYMENT block grammar</li>
+<li><code>cmake/DatabaseProject.cmake</code> — CMake deployer
+integration</li>
+</ul>
+
+<footer>
+  Muscovite Documentation — © 2025–2026 Johannes Lochmann — AGPL-3.0 / Commercial
+</footer>
+</body>
+</html>

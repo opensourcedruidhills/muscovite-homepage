@@ -887,6 +887,9 @@ in PEG (Parsing Expression Grammar) notation.</p>
 <td><code>PLUGIN</code></td>
 </tr>
 <tr>
+<td><code>PLURAL</code></td>
+</tr>
+<tr>
 <td><code>POINT</code></td>
 </tr>
 <tr>
@@ -1432,7 +1435,8 @@ ENTITY for field declarations but generates read-only code.</p>
 <pre class="peg"><code>Entity &lt;- &#39;ENTITY&#39; IDENTIFIER ExtendsClause? UuidAnnotation StorageAnnotation?
 ViewEntity &lt;- &#39;VIEW_ENTITY&#39; IDENTIFIER UuidAnnotation
 ExtendsClause &lt;- &#39;EXTENDS&#39; IDENTIFIER
-EntityClause &lt;- CheckConstraint</code></pre>
+EntityClause &lt;- PluralClause
+PluralClause &lt;- &#39;PLURAL&#39; STRING</code></pre>
 <h3 id="4-field-list-and-fields">4. Field List and Fields</h3>
 <p>ADR 20260310-field-level-documentation-in-dsl Optional documentation
 for individual fields Some keywords can be field names (e.g., 'type',

@@ -231,19 +231,29 @@ one-size-fits-all</li>
 types, opt-in to extension via <code>.mus</code></li>
 </ol>
 <h2 id="decision-outcome">Decision Outcome</h2>
-<p>Chosen option: "Both, project-configurable" (option 3), with domain
-types as the default and postgresql-unit as an opt-in. The storage
-strategy is declared in the <code>.mus</code> project file:</p>
+<p>Chosen option: "Both, project-configurable" (option 3), with
+<strong>postgresql-unit as the primary/default</strong> and domain types
+as a fallback for environments that cannot install extensions. The
+storage strategy is declared in the <code>.mus</code> project file:</p>
 <pre><code>PROJECT &quot;fhir-health&quot; {
-    -- Default: domain types (portable, no extension needed)
-    QUANTITY_STORAGE domain_types;
+    -- Default: postgresql-unit (full dimensional analysis in SQL)
+    QUANTITY_STORAGE postgresql_unit;
 
-    -- Alternative: postgresql-unit extension (full dimensional analysis)
-    -- QUANTITY_STORAGE postgresql_unit;
+    -- Fallback for managed cloud PG without extension support:
+    -- QUANTITY_STORAGE domain_types;
 }</code></pre>
-<p><strong>Strategy A: postgresql-unit extension</strong></p>
+<p><strong>Rationale for making postgresql-unit the default</strong>: If
+a project declares units and dimensions in the DSL, it deserves
+dimensional safety at every layer — not just in C++ (mp-units) and Proto
+(typed messages), but also in SQL. Domain types are <code>NUMERIC</code>
+aliases that silently allow <code>pressure_mmhg + length_km</code>. The
+postgresql-unit extension catches this at the database level, completing
+the safety chain. The extension uses the same unit definition database
+(GNU Units, rooted in NIST/SI) that UCUM and mp-units derive from,
+ensuring consistency across all layers.</p>
+<p><strong>Primary strategy: postgresql-unit extension</strong></p>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extension provides the &#39;unit&#39; column type</span></span>
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extension provides the &#39;unit&#39; column type with dimensional analysis</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> EXTENSION <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> unit;</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> vital_sign (</span>
@@ -254,8 +264,17 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#c
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>);</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- Dimensional analysis in SQL:</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> systolic @ <span class="st">&#39;Pa&#39;</span> <span class="kw">FROM</span> vital_sign;  <span class="co">-- convert mmHg → Pascal</span></span></code></pre></div>
-<p><strong>Strategy B: Domain types (default)</strong></p>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> systolic @ <span class="st">&#39;Pa&#39;</span> <span class="kw">FROM</span> vital_sign;  <span class="co">-- convert mmHg → Pascal</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> temperature @ <span class="st">&#39;K&#39;</span> <span class="kw">FROM</span> vital_sign; <span class="co">-- Celsius → Kelvin</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- Dimensional safety:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> systolic <span class="op">+</span> temperature;  <span class="co">-- ERROR: dimension mismatch</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">-- Periodic table with real units:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> symbol, atomic_mass <span class="kw">FROM</span> element</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> atomic_mass <span class="op">&gt;</span> <span class="st">&#39;100 u&#39;</span>:<span class="ch">:unit</span>;</span></code></pre></div>
+<p><strong>Fallback strategy: Domain types (for managed cloud
+PG)</strong></p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> pressure_mmhg <span class="kw">AS</span> <span class="dt">NUMERIC</span>;</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DOMAIN</span> temperature_cel <span class="kw">AS</span> <span class="dt">NUMERIC</span>;</span>
@@ -267,33 +286,38 @@ class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#c
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    temperature temperature_cel <span class="kw">NOT</span> <span class="kw">NULL</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>);</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- No in-SQL conversion — C++ layer handles unit conversion</span></span></code></pre></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- No in-SQL conversion — C++ layer handles unit conversion</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- No dimensional safety — domain types are NUMERIC aliases</span></span></code></pre></div>
 <h3 id="licensing-note">Licensing Note</h3>
 <p>The <code>postgresql-unit</code> extension is licensed under the
 <strong>PostgreSQL License</strong> (BSD-like), which is compatible with
 both AGPL-3.0 and Commercial licensing. Muscovite does not bundle the
-extension — it generates SQL that uses it when the project opts in.</p>
+extension — it generates SQL that uses it when the project opts in
+(default).</p>
 <h3 id="positive-consequences">Positive Consequences</h3>
 <ul>
-<li>Default (domain types) works everywhere — no extension installation
-required</li>
-<li>Projects that need in-SQL dimensional analysis can opt into
-postgresql-unit</li>
-<li>Domain types provide semantic naming (<code>length_km</code> vs bare
-<code>NUMERIC</code>)</li>
-<li>Configuration is explicit in <code>.mus</code> — no hidden
-deployment requirements</li>
-<li>Sqitch migrations generated correctly for both strategies</li>
+<li>Dimensional safety in SQL by default —
+<code>pressure + length</code> is a runtime error</li>
+<li>In-SQL unit conversion:
+<code>SELECT depth @ 'km' FROM drill_hole</code></li>
+<li>Consistency: same unit definitions (NIST/SI) as mp-units (C++) and
+UCUM (Proto)</li>
+<li>Values self-describe their unit: <code>'120 mm[Hg]'</code> not just
+<code>120</code></li>
+<li>Fallback (domain types) works on managed cloud PG without extension
+support</li>
+<li>Configuration is explicit in <code>.mus</code> — deployment
+requirements are auditable</li>
 </ul>
 <h3 id="negative-consequences">Negative Consequences</h3>
 <ul>
-<li>Two code paths in the PostgreSQL generator (domain types vs
-extension)</li>
-<li>Domain types have no dimensional safety — <code>pressure_mmhg</code>
-and <code>length_km</code> are both <code>NUMERIC</code> underneath, and
-PostgreSQL will not prevent mixing them in arithmetic</li>
-<li>postgresql-unit requires extension installation on every database
+<li>Two code paths in the PostgreSQL generator (extension vs domain
+types)</li>
+<li>Default requires extension installation on every database
 instance</li>
+<li>Managed cloud PostgreSQL (RDS, Cloud SQL) may require domain_types
+fallback</li>
+<li>Extension version must be tracked and tested</li>
 <li>Testing must cover both strategies</li>
 </ul>
 <h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options</h2>
